@@ -819,7 +819,7 @@ async def get_single_account_events(
                     theater = results[4]
                     stygian = results[5]
                     
-            # =========================================
+                        # =========================================
             # DIRE PRESTIGE / DISTURBANCE OUTBREAK
             # =========================================
 
@@ -845,12 +845,9 @@ async def get_single_account_events(
                     )
 
                     if outbreak is None:
-                        # The Stygian event exists, but its
-                        # Disturbance Outbreak is no longer active.
-                        dire_prestige_data["ended"] = True
                         continue
 
-                    # Disturbance Outbreak is active.
+                    # Disturbance Outbreak data is available.
                     dire_prestige_data.update({
                         "active": True,
                         "ended": False,
@@ -859,6 +856,13 @@ async def get_single_account_events(
                     })
 
                     break
+
+                # A Stygian event exists, but none has an active outbreak.
+                if (
+                    dire_prestige_data["available"]
+                    and not dire_prestige_data["active"]
+                ):
+                    dire_prestige_data["ended"] = True
 
             except Exception as error:
                 print(
