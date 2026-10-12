@@ -820,6 +820,7 @@ async def get_single_account_events(
                     theater = results[4]
                     stygian = results[5]
                     
+            
             # =========================================
             # DIRE PRESTIGE / DISTURBANCE OUTBREAK
             # =========================================
@@ -833,38 +834,43 @@ async def get_single_account_events(
             }
 
             try:
-                for event in event_calendar.events:
+                stygian_calendar_events = [
+                    event
+                    for event in event_calendar.events
+                    if event.stygian_detail is not None
+                ]
 
-                    if event.stygian_detail is None:
-                        continue
-
-                    # A Stygian event exists in the calendar.
+                for event in stygian_calendar_events:
                     dire_prestige_data["available"] = True
 
                     outbreak = (
                         event.stygian_detail.disturbance_outbreak
                     )
 
-                    if outbreak is None:
-                        continue
+                    if outbreak is not None:
+                        dire_prestige_data.update({
+                            "active": True,
+                            "ended": False,
+                            "progress": outbreak.progress,
+                            "max_progress": outbreak.max_progress,
+                        })
+                        break
 
-                    # Disturbance Outbreak data is available.
-                    dire_prestige_data.update({
-                        "active": True,
-                        "ended": False,
-                        "progress": outbreak.progress,
-                        "max_progress": outbreak.max_progress,
-                    })
+                # If the Stygian event exists but its Outbreak
+                # data is absent, the Outbreak is no longer active.
+                if (
+                    dire_prestige_data["available"]
+                    and not dire_prestige_data["active"]
+                ):
+                    dire_prestige_data["ended"] = True
 
-                    break
-
-                # =========================================
-                # DISTURBANCE OUTBREAK STATUS
-                # =========================================
-
-                if dire_prestige_data["available"]:
-                    if not dire_prestige_data["active"]:
-                        dire_prestige_data["ended"] = True
+                # DEBUG: inspect the values actually being returned.
+                print(
+                    "[Dire Prestige DEBUG] "
+                    f"UID={account['genshin_uid']} | "
+                    f"Calendar events={len(stygian_calendar_events)} | "
+                    f"Data={dire_prestige_data}"
+                )
 
             except Exception as error:
                 print(
@@ -872,7 +878,7 @@ async def get_single_account_events(
                     f"UID: {account['genshin_uid']} | "
                     f"{type(error).__name__}: {error}"
                 )
-            
+
             stygian_data["dire_prestige"] = dire_prestige_data
 
 
