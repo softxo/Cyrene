@@ -132,6 +132,14 @@
                     Wishes
                 </button>
 
+                <button
+                    type="button"
+                    class="events-overview-tab"
+                    data-overview-tab="custom"
+                >
+                    Custom
+                </button>
+
             </div>
 
         {% endif %}
@@ -1827,7 +1835,9 @@
 
                                 {% if item.stygian.dire_prestige.ended %}
 
-                                    <strong>Outbreak Ended</strong>
+                                    <span class="overview-endgame-card-empty">
+                                        Outbreak Ended
+                                    </span>
 
                                 {% elif item.stygian.dire_prestige.available
                                     and item.stygian.dire_prestige.active %}
@@ -1998,6 +2008,23 @@
 
             {% endif %}
 
+        </div>
+
+        <!-- CUSTOM EVENTS OVERVIEW -->
+
+        <div
+            class="events-overview-panel"
+            data-overview-panel="custom"
+        >
+            <div class="events-account-empty-content">
+                <span class="events-account-empty-title">
+                    No Custom Events
+                </span>
+
+                <span class="events-account-empty-description">
+                    Create your own events and track their duration here.
+                </span>
+            </div>
         </div>
 
 
