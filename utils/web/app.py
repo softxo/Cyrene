@@ -877,14 +877,6 @@ async def get_single_account_events(
                 ):
                     dire_prestige_data["ended"] = True
 
-                # DEBUG: inspect the values actually being returned.
-                print(
-                    "[Dire Prestige DEBUG] "
-                    f"UID={account['genshin_uid']} | "
-                    f"Calendar events={len(stygian_calendar_events)} | "
-                    f"Data={dire_prestige_data}"
-                )
-
             except Exception as error:
                 print(
                     f"[Events API] Dire Prestige FAILED | "
