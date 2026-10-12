@@ -715,6 +715,7 @@ async def get_single_account_events(
         "dire_prestige": {
             "available": False,
             "active": False,
+            "ended": False,
             "progress": 0,
             "max_progress": 0,
         },
@@ -819,7 +820,7 @@ async def get_single_account_events(
                     theater = results[4]
                     stygian = results[5]
                     
-                        # =========================================
+            # =========================================
             # DIRE PRESTIGE / DISTURBANCE OUTBREAK
             # =========================================
 
@@ -871,6 +872,8 @@ async def get_single_account_events(
                     f"UID: {account['genshin_uid']} | "
                     f"{type(error).__name__}: {error}"
                 )
+            
+            stygian_data["dire_prestige"] = dire_prestige_data
 
 
             # =========================================
