@@ -173,9 +173,17 @@ function initCustomEvents() {
         form.elements.account_scope.value =
             event?.account_scope ?? "all";
 
-        if (event?.account_id != null) {
-            form.elements.account_id.value = String(event.account_id);
-        }
+        const accountDropdown = $("[data-custom-account-select]", form);
+
+        const defaultAccountId = accountDropdown?.querySelector(
+            "[data-account-id]"
+        )?.dataset.accountId ?? "";
+
+        updateAccountDropdown(
+            event?.account_id != null
+                ? String(event.account_id)
+                : defaultAccountId
+        );
 
         form.elements.start_at.value =
             toLocalInputValue(event?.start_at);
@@ -228,6 +236,85 @@ function initCustomEvents() {
         document.body.style.overflow = "hidden";
 
         form.elements.title.focus();
+    }
+
+    // =========================================
+    // CUSTOM ACCOUNT DROPDOWN
+    // =========================================
+
+    function updateAccountDropdown(selectedId) {
+        const dropdown = $("[data-custom-account-select]", form);
+        if (!dropdown) return;
+
+        const hiddenInput = dropdown.querySelector(
+            'input[name="account_id"]'
+        );
+
+        const valueElement = dropdown.querySelector(
+            ".custom-select-value"
+        );
+
+        const options = Array.from(
+            dropdown.querySelectorAll("[data-account-id]")
+        );
+
+        const selectedOption = options.find(
+            option => option.dataset.accountId === String(selectedId)
+        );
+
+        if (hiddenInput) {
+            hiddenInput.value = selectedOption
+                ? selectedOption.dataset.accountId
+                : "";
+        }
+
+        if (valueElement) {
+            valueElement.textContent = selectedOption
+                ? selectedOption.textContent.trim()
+                : "Select an account";
+        }
+
+        options.forEach(option => {
+            const isSelected = option === selectedOption;
+
+            option.classList.toggle("active", isSelected);
+            option.setAttribute("aria-selected", String(isSelected));
+        });
+    }
+
+    function initialiseAccountDropdown() {
+        const dropdown = $("[data-custom-account-select]", form);
+        if (!dropdown) return;
+
+        const button = dropdown.querySelector(".custom-select-button");
+        const menu = dropdown.querySelector(".custom-select-menu");
+
+        if (!button || !menu) return;
+
+        button.addEventListener("click", () => {
+            const isOpen = dropdown.classList.toggle("open");
+            button.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        dropdown.querySelectorAll("[data-account-id]").forEach(option => {
+            option.addEventListener("click", () => {
+                updateAccountDropdown(option.dataset.accountId);
+
+                dropdown.classList.remove("open");
+                button.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        document.addEventListener("click", event => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove("open");
+                button.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        updateAccountDropdown(
+            dropdown.querySelector("[data-account-id]")?.dataset.accountId
+        );
     }
 
     function closeModal() {
@@ -803,8 +890,10 @@ function initCustomEvents() {
     // INITIALISE
     // =========================================
 
+    initialiseAccountDropdown();
     updateConditionalFields();
     loadEvents();
+    
 }
 
 window.initCustomEvents = initCustomEvents;

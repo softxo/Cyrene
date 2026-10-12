@@ -1550,20 +1550,36 @@
                         </div>
                     </div>
 
-                    <label
-                        class="events-custom-field"
-                        data-custom-account-field
-                        hidden
-                    >
+                    <label class="events-custom-field" data-custom-account-field hidden>
                         <span>Account</span>
-                        <select name="account_id">
-                            {% for account in accounts %}
-                            <option value="{{ account.id }}">
-                                {{ account.nickname or account.genshin_uid }}
-                                · {{ account.genshin_uid }}
-                            </option>
-                            {% endfor %}
-                        </select>
+
+                        <div class="custom-select events-custom-account-select" data-custom-account-select>
+                            <button
+                                class="custom-select-button"
+                                type="button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                            >
+                                <span class="custom-select-value">Select an account</span>
+                                <span class="custom-select-arrow"></span>
+                            </button>
+
+                            <div class="custom-select-menu" role="listbox">
+                                {% for account in accounts %}
+                                <button
+                                    class="custom-select-option{% if loop.first %} active{% endif %}"
+                                    type="button"
+                                    role="option"
+                                    data-account-id="{{ account.id }}"
+                                    aria-selected="{{ 'true' if loop.first else 'false' }}"
+                                >
+                                    {{ account.nickname or account.genshin_uid }} · {{ account.genshin_uid }}
+                                </button>
+                                {% endfor %}
+                            </div>
+
+                            <input type="hidden" name="account_id" value="{{ accounts[0].id if accounts else '' }}">
+                        </div>
                     </label>
 
                     <div class="events-custom-form-row">

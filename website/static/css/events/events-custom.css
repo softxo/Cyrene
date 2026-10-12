@@ -213,132 +213,306 @@
     background: var(--custom-event-colour);
 }
 
+/* =========================================================
+   CUSTOM EVENTS — MODAL
+   Theme-aware styling using Cyrene's global variables.
+   ========================================================= */
+
 .events-custom-modal[hidden],
 .events-custom-section [hidden] {
     display: none !important;
 }
 
+
+/* =============================
+   MODAL OVERLAY
+   ============================= */
+
 .events-custom-modal {
     position: fixed;
     z-index: 1000;
     inset: 0;
+
     display: grid;
     place-items: center;
+
     padding: 24px;
+
+    box-sizing: border-box;
 }
 
 .events-custom-modal-backdrop {
     position: absolute;
     inset: 0;
+
     background: rgba(5, 7, 15, 0.72);
-    backdrop-filter: blur(5px);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
+
+
+/* =============================
+   MODAL PANEL
+   ============================= */
 
 .events-custom-dialog {
     position: relative;
     z-index: 1;
-    width: min(100%, 650px);
+
+    width: min(100%, 680px);
     max-height: min(88vh, 900px);
+
+    overflow-x: hidden;
     overflow-y: auto;
-    padding: 24px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
-    border-radius: 18px;
-    background: var(--background-secondary, #171923);
-    color: var(--text-primary, #f5f5f8);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+
+    padding: 26px;
+
+    box-sizing: border-box;
+
+    background: var(--surface);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.32),
+        0 0 0 1px var(--accent-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-border) transparent;
 }
+
+
+/* =============================
+   MODAL HEADER
+   ============================= */
 
 .events-custom-dialog-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
     gap: 16px;
-    margin-bottom: 24px;
+
+    margin-bottom: 26px;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
 }
 
 .events-custom-eyebrow {
-    color: var(--accent, #9297ff);
+    display: inline-block;
+
+    color: var(--accent);
+
     font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 0.13em;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 .events-custom-dialog-header h2 {
-    margin: 6px 0 0;
-    font-size: 1.35rem;
+    margin: 7px 0 0;
+
+    color: var(--text);
+
+    font-family: "Outfit", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
 }
 
+
+/* =============================
+   CLOSE BUTTON
+   ============================= */
+
 .events-custom-close {
+    display: inline-flex;
+    flex: 0 0 36px;
+
+    align-items: center;
+    justify-content: center;
+
     width: 36px;
     height: 36px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    padding: 0;
+
+    border: 1px solid var(--border);
     border-radius: 9px;
-    background: transparent;
-    color: inherit;
-    font-size: 1.5rem;
+
+    background: var(--background);
+    color: var(--text-muted);
+
+    font: inherit;
+    font-size: 1.4rem;
+    line-height: 1;
+
     cursor: pointer;
+
+    transition:
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
 }
+
+.events-custom-close:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+
+.events-custom-close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =============================
+   FORM LAYOUT
+   ============================= */
 
 .events-custom-dialog form {
     display: grid;
-    gap: 18px;
+    gap: 22px;
 }
 
 .events-custom-field {
     display: grid;
-    gap: 8px;
+    gap: 9px;
+
     min-width: 0;
-    color: var(--text-primary, inherit);
+
+    color: var(--text);
+
     font-size: 0.86rem;
     font-weight: 650;
 }
 
 .events-custom-field small {
-    color: var(--text-secondary, #999);
+    color: var(--text-muted);
+
+    font-size: 0.78rem;
     font-weight: 400;
+    line-height: 1.55;
 }
+
+
+/* =============================
+   TEXT INPUTS AND SELECTS
+   ============================= */
 
 .events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]),
 .events-custom-field textarea,
 .events-custom-field select {
     width: 100%;
     min-width: 0;
+    min-height: 42px;
+
     box-sizing: border-box;
     padding: 11px 12px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+
+    border: 1px solid var(--border);
     border-radius: 9px;
+
     outline: none;
-    background: var(--input-background, rgba(128, 128, 150, 0.08));
-    color: inherit;
-    font: inherit;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.88rem;
     font-weight: 400;
+    line-height: 1.45;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
 }
 
 .events-custom-field textarea {
+    min-height: 90px;
     resize: vertical;
 }
 
-.events-custom-field input:focus,
+.events-custom-field select {
+    cursor: pointer;
+}
+
+.events-custom-field select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+
+/* Hover and focus states use the active theme accent. */
+
+.events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]):hover,
+.events-custom-field textarea:hover,
+.events-custom-field select:hover {
+    border-color: var(--accent-border);
+}
+
+.events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]):focus,
 .events-custom-field textarea:focus,
 .events-custom-field select:focus {
-    border-color: var(--accent, #7c83ff);
+    border-color: var(--accent);
+
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
+
+.events-custom-field input::placeholder,
+.events-custom-field textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+
+/* =============================
+   COLOUR PICKER
+   ============================= */
 
 .events-custom-field input[type="color"] {
     width: 100%;
     height: 42px;
+
+    box-sizing: border-box;
     padding: 4px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+
+    border: 1px solid var(--border);
     border-radius: 9px;
-    background: transparent;
+
+    background: var(--background);
+
     cursor: pointer;
 }
+
+.events-custom-field input[type="color"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =============================
+   FORM ROWS
+   ============================= */
 
 .events-custom-form-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 14px;
 }
+
+
+/* =============================
+   SCHEDULE OPTIONS
+   ============================= */
 
 .events-custom-scope {
     display: grid;
@@ -346,61 +520,126 @@
     gap: 10px;
 }
 
-.events-custom-scope label,
-.events-custom-weekdays label {
+/* Account scope cards */
+.events-custom-scope label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     min-width: 0;
-    padding: 10px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    min-height: 44px;
+    padding: 11px 13px;
+
+    border: 1px solid var(--border);
     border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.events-custom-scope label:hover {
+    border-color: var(--accent-border);
+}
+
+.events-custom-scope label:has(input[type="radio"]:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+/* Custom radio circles */
+.events-custom-scope input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: grid;
+    place-items: center;
+    flex: 0 0 17px;
+
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 50%;
+
+    background: var(--background);
     cursor: pointer;
 }
 
-.events-custom-scope label:has(input:checked),
-.events-custom-weekdays label:has(input:checked) {
-    border-color: var(--accent, #7c83ff);
-    background: rgba(124, 131, 255, 0.1);
+.events-custom-scope input[type="radio"]::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+
+    transform: scale(0);
+    transition: transform 140ms ease;
 }
 
-.events-custom-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 6px;
+.events-custom-scope input[type="radio"]:checked {
+    border-color: var(--accent);
 }
 
-.events-custom-weekdays label {
-    justify-content: center;
-    padding: 9px 3px;
-    font-size: 0.76rem;
+.events-custom-scope input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+.events-custom-scope input[type="radio"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 .events-custom-weekdays input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    accent-color: var(--accent);
 }
+
+/* =============================
+   OBJECTIVES / PROGRESS
+   ============================= */
 
 .events-custom-progress-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 12px;
 }
 
 .events-custom-add-objective {
+    padding: 6px 0;
+
     border: 0;
     background: transparent;
-    color: var(--accent, #9297ff);
+
+    color: var(--accent);
+
     font: inherit;
     font-size: 0.82rem;
+    font-weight: 650;
+
     cursor: pointer;
+}
+
+.events-custom-add-objective:hover {
+    filter: brightness(1.12);
+    text-decoration: underline;
 }
 
 .events-custom-objective {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 76px 76px 34px;
+    grid-template-columns: minmax(0, 1fr) 76px 76px 36px;
+
     gap: 8px;
     margin-top: 10px;
 }
@@ -408,51 +647,151 @@
 .events-custom-objective input {
     width: 100%;
     min-width: 0;
+    min-height: 38px;
+
     box-sizing: border-box;
     padding: 9px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+
+    border: 1px solid var(--border);
     border-radius: 8px;
-    background: var(--input-background, rgba(128, 128, 150, 0.08));
-    color: inherit;
+
+    background: var(--background);
+    color: var(--text);
+
     font: inherit;
+    font-size: 0.82rem;
+}
+
+.events-custom-objective input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .events-custom-objective-remove {
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    padding: 0;
+
+    border: 1px solid var(--border);
     border-radius: 8px;
+
     background: transparent;
-    color: #ef7777;
+    color: #e87979;
+
     cursor: pointer;
+    transition: background 160ms ease;
 }
+
+.events-custom-objective-remove:hover {
+    background: rgba(232, 121, 121, 0.1);
+}
+
+
+/* =============================
+   FORM ERRORS
+   ============================= */
 
 .events-custom-error {
     margin: 0;
-    color: #ff8585;
+    padding: 11px 13px;
+
+    border: 1px solid rgba(232, 121, 121, 0.3);
+    border-radius: 9px;
+
+    background: rgba(232, 121, 121, 0.08);
+    color: #e87979;
+
     font-size: 0.86rem;
     line-height: 1.5;
 }
 
+
+/* =============================
+   FORM ACTIONS
+   ============================= */
+
 .events-custom-form-actions {
     display: flex;
     justify-content: flex-end;
+
     gap: 10px;
-    padding-top: 6px;
+
+    margin-top: 2px;
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border);
+}
+
+.events-custom-cancel,
+.events-custom-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+    padding: 10px 16px;
+
+    border-radius: 9px;
+
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
 }
 
 .events-custom-cancel {
-    min-height: 42px;
-    padding: 10px 15px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
-    border-radius: 9px;
+    border: 1px solid var(--border);
+
     background: transparent;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.events-custom-cancel:hover {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.events-custom-save {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--background);
+
+    box-shadow: 0 3px 12px var(--accent-glow);
+}
+
+.events-custom-save:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 4px 18px var(--accent-glow);
+}
+
+.events-custom-save:active,
+.events-custom-cancel:active {
+    transform: translateY(1px);
 }
 
 .events-custom-save:disabled {
     opacity: 0.6;
     cursor: wait;
+    box-shadow: none;
+}
+
+.events-custom-save:focus-visible,
+.events-custom-cancel:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 @media (max-width: 640px) {
@@ -485,4 +824,333 @@
     .events-custom-card-heading {
         flex-direction: column;
     }
+
+    .events-custom-modal {
+        padding: 12px;
+    }
+
+    .events-custom-dialog {
+        width: 100%;
+        max-height: 92vh;
+        padding: 18px;
+        border-radius: 13px;
+    }
+
+    .events-custom-dialog-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+    }
+
+    .events-custom-dialog-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .events-custom-form-actions {
+        position: sticky;
+        bottom: -18px;
+
+        margin: 0 -18px -18px;
+        padding: 14px 18px;
+
+        background: var(--surface);
+    }
+}
+
+/* =========================================================
+   CUSTOM EVENTS — NATIVE CONTROL POLISH
+   ========================================================= */
+
+.events-custom-dialog input,
+.events-custom-dialog select,
+.events-custom-dialog textarea,
+.events-custom-dialog button {
+    color-scheme: dark;
+}
+
+[data-theme="light-blue"] .events-custom-dialog input,
+[data-theme="light-blue"] .events-custom-dialog select,
+[data-theme="light-blue"] .events-custom-dialog textarea,
+[data-theme="light-blue"] .events-custom-dialog button,
+[data-theme="light-pink"] .events-custom-dialog input,
+[data-theme="light-pink"] .events-custom-dialog select,
+[data-theme="light-pink"] .events-custom-dialog textarea,
+[data-theme="light-pink"] .events-custom-dialog button {
+    color-scheme: light;
+}
+
+/* DATE AND TIME PICKERS */
+.events-custom-dialog input[type="date"],
+.events-custom-dialog input[type="datetime-local"],
+.events-custom-dialog input[type="time"] {
+    min-height: 42px;
+    color: var(--text);
+    color-scheme: inherit;
+    accent-color: var(--accent);
+}
+
+.events-custom-dialog input[type="date"]::-webkit-calendar-picker-indicator,
+.events-custom-dialog input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.events-custom-dialog input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+/* NUMBER INPUTS */
+.events-custom-dialog input[type="number"],
+.events-custom-dialog .events-custom-objective input[type="number"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    font-variant-numeric: tabular-nums;
+}
+
+/* COLOUR PICKER */
+.events-custom-dialog input[type="color"] {
+    appearance: none;
+    -webkit-appearance: none;
+    overflow: hidden;
+    min-height: 42px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    cursor: pointer;
+}
+
+.events-custom-dialog input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.events-custom-dialog input[type="color"]::-webkit-color-swatch {
+    border: 0;
+    border-radius: 5px;
+}
+
+.events-custom-dialog input[type="color"]::-moz-color-swatch {
+    border: 0;
+    border-radius: 5px;
+}
+
+/* RADIO BUTTONS / ACCOUNT CIRCLES */
+.events-custom-dialog input[type="radio"],
+.events-custom-dialog input[type="checkbox"] {
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* Consistent focus indicators for keyboard navigation. */
+.events-custom-dialog input[type="radio"]:focus-visible,
+.events-custom-dialog input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEME-AWARE DROPDOWNS
+   ========================================================= */
+
+.events-custom-dialog select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    box-sizing: border-box;
+
+    padding: 10px 40px 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background-color: var(--background);
+    background-repeat: no-repeat;
+    background-position: right 13px center;
+    background-size: 15px;
+
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.45;
+
+    cursor: pointer;
+
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background-color 180ms ease;
+}
+
+/* Blue */
+[data-theme="blue"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238f9cff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Pink */
+[data-theme="pink"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e889b5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Light blue */
+[data-theme="light-blue"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236675e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Light pink */
+[data-theme="light-pink"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d7659b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Hover and keyboard focus */
+.events-custom-dialog select:hover {
+    border-color: var(--accent);
+}
+
+.events-custom-dialog select:focus,
+.events-custom-dialog select:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Option colours */
+.events-custom-dialog select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — NUMBER INPUT SPINNERS
+   ========================================================= */
+
+.events-custom-dialog input[type="number"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    color: var(--text);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Chromium browsers: retain native arrows and use the site accent. */
+.events-custom-dialog input[type="number"]::-webkit-inner-spin-button,
+.events-custom-dialog input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    cursor: pointer;
+    accent-color: var(--accent);
+}
+
+.events-custom-dialog input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — ACCOUNT SELECTOR
+   ========================================================= */
+
+.events-custom-account-select {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.events-custom-account-select .custom-select-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.88rem;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.events-custom-account-select .custom-select-button:hover,
+.events-custom-account-select.open .custom-select-button {
+    border-color: var(--accent);
+}
+
+.events-custom-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.events-custom-account-select .custom-select-arrow {
+    flex: 0 0 8px;
+}
+
+.events-custom-account-select .custom-select-menu {
+    position: absolute;
+    z-index: 1010;
+    top: calc(100% + 6px);
+    right: 0;
+    left: 0;
+
+    display: none;
+    max-height: 220px;
+    overflow-y: auto;
+
+    padding: 5px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--surface);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.events-custom-account-select.open .custom-select-menu {
+    display: block;
+}
+
+.events-custom-account-select .custom-select-option {
+    display: block;
+    width: 100%;
+    padding: 10px 11px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--text);
+
+    font: inherit;
+    font-size: 0.84rem;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.events-custom-account-select .custom-select-option:hover,
+.events-custom-account-select .custom-select-option.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.events-custom-account-select .custom-select-button:focus-visible,
+.events-custom-account-select .custom-select-option:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
