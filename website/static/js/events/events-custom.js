@@ -191,8 +191,10 @@ function initCustomEvents() {
         form.elements.end_at.value =
             toLocalInputValue(event?.end_at);
 
-        form.elements.recurrence_type.value =
-            event?.recurrence?.type ?? "none";
+        updateFormDropdown(
+            "recurrence_type",
+            event?.recurrence?.type ?? "none"
+        );
 
         form.elements.recurrence_interval.value =
             event?.recurrence?.interval ?? 1;
@@ -200,10 +202,12 @@ function initCustomEvents() {
         form.elements.colour.value =
             event?.colour ?? "#7c83ff";
 
-        form.elements.reminder_minutes.value =
+        updateFormDropdown(
+            "reminder_minutes",
             event?.reminder_minutes == null
                 ? ""
-                : String(event.reminder_minutes);
+                : String(event.reminder_minutes)
+        );
 
         const weekdays = event?.recurrence?.weekdays ?? [];
 
@@ -317,6 +321,107 @@ function initCustomEvents() {
         );
     }
 
+    // =========================================
+    // SCHEDULE AND REMINDER DROPDOWNS
+    // =========================================
+
+    function updateFormDropdown(name, selectedValue) {
+        const dropdown = $(
+            `[data-custom-dropdown="${name}"]`,
+            form
+        );
+
+        if (!dropdown) return;
+
+        const hiddenInput = dropdown.querySelector(
+            `input[name="${name}"]`
+        );
+
+        const valueElement = dropdown.querySelector(
+            ".custom-select-value"
+        );
+
+        const options = Array.from(
+            dropdown.querySelectorAll("[data-value]")
+        );
+
+        const selectedOption = options.find(
+            option => option.dataset.value === String(selectedValue)
+        );
+
+        if (hiddenInput) {
+            hiddenInput.value = selectedOption
+                ? selectedOption.dataset.value
+                : "";
+        }
+
+        if (valueElement) {
+            valueElement.textContent = selectedOption
+                ? selectedOption.textContent.trim()
+                : "Select an option";
+        }
+
+        options.forEach(option => {
+            const selected = option === selectedOption;
+
+            option.classList.toggle("active", selected);
+            option.setAttribute("aria-selected", String(selected));
+        });
+    }
+
+    function initialiseFormDropdowns() {
+        $$("[data-custom-dropdown]", form).forEach(dropdown => {
+            const button = dropdown.querySelector(
+                ".custom-select-button"
+            );
+
+            if (!button) return;
+
+            const name = dropdown.dataset.customDropdown;
+
+            button.addEventListener("click", () => {
+                const isOpen = dropdown.classList.toggle("open");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+            });
+
+            dropdown.querySelectorAll("[data-value]").forEach(option => {
+                option.addEventListener("click", () => {
+                    updateFormDropdown(name, option.dataset.value);
+
+                    dropdown.classList.remove("open");
+                    button.setAttribute("aria-expanded", "false");
+
+                    const hiddenInput = dropdown.querySelector(
+                        `input[name="${name}"]`
+                    );
+
+                    if (hiddenInput) {
+                        hiddenInput.dispatchEvent(
+                            new Event("change", { bubbles: true })
+                        );
+                    }
+                });
+            });
+        });
+
+        // Close the menus when clicking outside them.
+        document.addEventListener("click", event => {
+            $$("[data-custom-dropdown]", form).forEach(dropdown => {
+                if (dropdown.contains(event.target)) return;
+
+                dropdown.classList.remove("open");
+
+                dropdown.querySelector(
+                    ".custom-select-button"
+                )?.setAttribute("aria-expanded", "false");
+            });
+        });
+    }
+
     function closeModal() {
         modal.hidden = true;
         document.body.style.overflow = "";
@@ -420,13 +525,6 @@ function initCustomEvents() {
             removeButton
         );
 
-        row.append(
-            titleInput,
-            currentInput,
-            targetInput,
-            removeButton
-        );
-
         container.append(row);
 
         row.querySelectorAll('input[type="number"]').forEach(
@@ -447,65 +545,112 @@ function initCustomEvents() {
 
         const wrapper = document.createElement("div");
         wrapper.className = "events-custom-number";
+        wrapper.dataset.customSpinnerWrapper = "";
 
         input.parentNode.insertBefore(wrapper, input);
         wrapper.append(input);
 
-        const controls = document.createElement("div");
-        controls.className = "events-custom-number-controls";
+        const spinner = document.createElement("div");
+        spinner.className = "number-spinner";
 
-        function makeSpinnerButton(direction, label) {
+        function changeValue(direction) {
+            if (input.disabled || input.readOnly) {
+                return;
+            }
+
+            const step = Number(input.step) || 1;
+            const min = input.min === "" ? -Infinity : Number(input.min);
+            const max = input.max === "" ? Infinity : Number(input.max);
+
+            const current = input.value === ""
+                ? (Number.isFinite(min) ? min : 0)
+                : Number(input.value);
+
+            const next = direction === "up"
+                ? Math.min(current + step, max)
+                : Math.max(current - step, min);
+
+            if (next === current) {
+                return;
+            }
+
+            input.value = String(next);
+
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        function createButton(direction, label) {
             const button = document.createElement("button");
 
             button.type = "button";
-            button.className =
-                `events-custom-number-button ${direction}`;
-
+            button.className = "number-spinner-button";
+            button.dataset.direction = direction;
             button.setAttribute("aria-label", label);
-            button.textContent = direction === "up" ? "▲" : "▼";
 
-            button.addEventListener("click", () => {
-                if (input.disabled) return;
+            const arrow = document.createElement("span");
+            arrow.className = "spinner-arrow";
+            button.append(arrow);
 
-                const step = Number(input.step) || 1;
-                const current = Number(
-                    input.value || input.min || 0
-                );
+            let holdTimeout = null;
+            let holdInterval = null;
 
-                const min = input.min === ""
-                    ? -Infinity
-                    : Number(input.min);
+            function stopHolding() {
+                if (holdTimeout !== null) {
+                    clearTimeout(holdTimeout);
+                    holdTimeout = null;
+                }
 
-                const max = input.max === ""
-                    ? Infinity
-                    : Number(input.max);
+                if (holdInterval !== null) {
+                    clearInterval(holdInterval);
+                    holdInterval = null;
+                }
+            }
 
-                const next = direction === "up"
-                    ? current + step
-                    : current - step;
+            function startHolding(event) {
+                if (event.type === "mousedown" && event.button !== 0) {
+                    return;
+                }
 
-                input.value = String(
-                    Math.min(max, Math.max(min, next))
-                );
+                event.preventDefault();
+                stopHolding();
+                changeValue(direction);
 
-                input.dispatchEvent(
-                    new Event("input", { bubbles: true })
-                );
+                holdTimeout = setTimeout(() => {
+                    holdInterval = setInterval(() => {
+                        changeValue(direction);
+                    }, 50);
 
-                input.dispatchEvent(
-                    new Event("change", { bubbles: true })
-                );
+                    holdTimeout = null;
+                }, 350);
+            }
+
+            button.addEventListener("mousedown", startHolding);
+            button.addEventListener("mouseup", stopHolding);
+            button.addEventListener("mouseleave", stopHolding);
+
+            button.addEventListener("touchstart", startHolding, {
+                passive: false,
             });
+
+            button.addEventListener("touchend", stopHolding);
+            button.addEventListener("touchcancel", stopHolding);
+
+            button.addEventListener("click", event => {
+                event.preventDefault();
+            });
+
+            window.addEventListener("blur", stopHolding);
 
             return button;
         }
 
-        controls.append(
-            makeSpinnerButton("up", "Increase value"),
-            makeSpinnerButton("down", "Decrease value")
+        spinner.append(
+            createButton("up", "Increase value"),
+            createButton("down", "Decrease value")
         );
 
-        wrapper.append(controls);
+        wrapper.append(spinner);
     }
 
     // Enhance the static number field.
@@ -981,6 +1126,11 @@ function initCustomEvents() {
     // =========================================
 
     initialiseAccountDropdown();
+    initialiseFormDropdowns();
+
+    updateFormDropdown("recurrence_type", "none");
+    updateFormDropdown("reminder_minutes", "");
+
     updateConditionalFields();
     loadEvents();
     

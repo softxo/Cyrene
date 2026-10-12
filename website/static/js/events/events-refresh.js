@@ -19,6 +19,15 @@ window.refreshEvents = async function refreshEvents() {
             return;
         }
 
+        // Preserve the modal and unsaved form data while editing.
+        const customModal = currentPage.querySelector(
+            "[data-custom-modal]"
+        );
+
+        if (customModal && !customModal.hidden) {
+            return;
+        }
+
         // -----------------------------------------
         // Current Page State
         // -----------------------------------------

@@ -1601,27 +1601,40 @@
                         </label>
                     </div>
 
-                    <div class="events-custom-form-row">
-                        <label class="events-custom-field">
-                            <span>Schedule</span>
-                            <select name="recurrence_type">
-                                <option value="none">One-time</option>
-                                <option value="daily">Daily</option>
-                                <option value="weekly">Weekly</option>
-                                <option value="monthly">Monthly</option>
-                            </select>
-                        </label>
+                    <div
+                        class="custom-select events-custom-field-select"
+                        data-custom-dropdown="recurrence_type"
+                    >
+                        <button
+                            class="custom-select-button"
+                            type="button"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                        >
+                            <span class="custom-select-value">One-time</span>
+                            <span class="custom-select-arrow"></span>
+                        </button>
 
-                        <label class="events-custom-field">
-                            <span>Repeat every</span>
-                            <input
-                                type="number"
-                                name="recurrence_interval"
-                                min="1"
-                                max="365"
-                                value="1"
-                            >
-                        </label>
+                        <div class="custom-select-menu" role="listbox">
+                            <button type="button" class="custom-select-option active"
+                                role="option" data-value="none" aria-selected="true">
+                                One-time
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="daily" aria-selected="false">
+                                Daily
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="weekly" aria-selected="false">
+                                Weekly
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="monthly" aria-selected="false">
+                                Monthly
+                            </button>
+                        </div>
+
+                        <input type="hidden" name="recurrence_type" value="none">
                     </div>
 
                     <div
@@ -1653,28 +1666,52 @@
                         </div>
                     </div>
 
-                    <div class="events-custom-form-row">
-                        <label class="events-custom-field">
-                            <span>Event colour</span>
-                            <input
-                                type="color"
-                                name="colour"
-                                value="#7c83ff"
-                            >
-                        </label>
+                    <div
+                        class="custom-select events-custom-field-select"
+                        data-custom-dropdown="reminder_minutes"
+                    >
+                        <button
+                            class="custom-select-button"
+                            type="button"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                        >
+                            <span class="custom-select-value">No reminder</span>
+                            <span class="custom-select-arrow"></span>
+                        </button>
 
-                        <label class="events-custom-field">
-                            <span>Reminder</span>
-                            <select name="reminder_minutes">
-                                <option value="">No reminder</option>
-                                <option value="0">At start</option>
-                                <option value="5">5 minutes before</option>
-                                <option value="15">15 minutes before</option>
-                                <option value="30">30 minutes before</option>
-                                <option value="60">1 hour before</option>
-                                <option value="1440">1 day before</option>
-                            </select>
-                        </label>
+                        <div class="custom-select-menu" role="listbox">
+                            <button type="button" class="custom-select-option active"
+                                role="option" data-value="" aria-selected="true">
+                                No reminder
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="0" aria-selected="false">
+                                At start
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="5" aria-selected="false">
+                                5 minutes before
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="15" aria-selected="false">
+                                15 minutes before
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="30" aria-selected="false">
+                                30 minutes before
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="60" aria-selected="false">
+                                1 hour before
+                            </button>
+                            <button type="button" class="custom-select-option"
+                                role="option" data-value="1440" aria-selected="false">
+                                1 day before
+                            </button>
+                        </div>
+
+                        <input type="hidden" name="reminder_minutes" value="">
                     </div>
 
                     <div class="events-custom-field">
