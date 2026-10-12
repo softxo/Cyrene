@@ -461,6 +461,15 @@ function initCustomEvents() {
         }
 
         intervalField.disabled = recurrenceType === "none";
+
+        const intervalContainer = $(
+            "[data-custom-interval-field]",
+            form
+        );
+
+        if (intervalContainer) {
+            intervalContainer.hidden = recurrenceType === "none";
+        }
     }
 
     form.addEventListener("change", event => {
@@ -1128,8 +1137,15 @@ function initCustomEvents() {
     initialiseAccountDropdown();
     initialiseFormDropdowns();
 
-    updateFormDropdown("recurrence_type", "none");
-    updateFormDropdown("reminder_minutes", "");
+    updateFormDropdown(
+        "recurrence_type",
+        form.elements.recurrence_type.value || "none"
+    );
+
+    updateFormDropdown(
+        "reminder_minutes",
+        form.elements.reminder_minutes.value || ""
+    );
 
     updateConditionalFields();
     loadEvents();

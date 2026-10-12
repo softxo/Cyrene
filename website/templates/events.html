@@ -1635,6 +1635,21 @@
                         </div>
 
                         <input type="hidden" name="recurrence_type" value="none">
+
+                        <label class="events-custom-field" data-custom-interval-field>
+                            <span>Repeat every</span>
+                            <div class="events-custom-number">
+                                <input
+                                    type="number"
+                                    name="recurrence_interval"
+                                    min="1"
+                                    max="365"
+                                    step="1"
+                                    value="1"
+                                    required
+                                >
+                            </div>
+                        </label>
                     </div>
 
                     <div
@@ -1712,6 +1727,15 @@
                         </div>
 
                         <input type="hidden" name="reminder_minutes" value="">
+
+                        <label class="events-custom-field">
+                            <span>Event colour</span>
+                            <input
+                                type="color"
+                                name="colour"
+                                value="#7c83ff"
+                            >
+                        </label>
                     </div>
 
                     <div class="events-custom-field">
