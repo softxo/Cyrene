@@ -857,12 +857,13 @@ async def get_single_account_events(
 
                     break
 
-                # A Stygian event exists, but none has an active outbreak.
-                if (
-                    dire_prestige_data["available"]
-                    and not dire_prestige_data["active"]
-                ):
-                    dire_prestige_data["ended"] = True
+                # =========================================
+                # DISTURBANCE OUTBREAK STATUS
+                # =========================================
+
+                if dire_prestige_data["available"]:
+                    if not dire_prestige_data["active"]:
+                        dire_prestige_data["ended"] = True
 
             except Exception as error:
                 print(
@@ -1530,6 +1531,7 @@ async def get_events_data(
             "best_time": 0,
             "bosses": [],
             "dire_prestige": {
+                "ended": True,
                 "available": False,
                 "active": False,
                 "progress": 0,
