@@ -848,12 +848,25 @@ async def get_single_account_events(
                     )
 
                     if outbreak is not None:
-                        dire_prestige_data.update({
-                            "active": True,
-                            "ended": False,
-                            "progress": outbreak.progress,
-                            "max_progress": outbreak.max_progress,
-                        })
+                        progress = outbreak.progress
+                        max_progress = outbreak.max_progress
+
+                        # A zero maximum indicates that the Outbreak is not active.
+                        if max_progress > 0:
+                            dire_prestige_data.update({
+                                "active": True,
+                                "ended": False,
+                                "progress": progress,
+                                "max_progress": max_progress,
+                            })
+                        else:
+                            dire_prestige_data.update({
+                                "active": False,
+                                "ended": True,
+                                "progress": 0,
+                                "max_progress": 0,
+                            })
+
                         break
 
                 # If the Stygian event exists but its Outbreak
