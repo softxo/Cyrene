@@ -265,6 +265,101 @@ async def initialise_database() -> None:
                 ON web_sessions(expires_at)
             """
         )
+        
+                # =========================================
+        # CUSTOM EVENTS
+        # =========================================
+
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS custom_events (
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                discord_user_id BIGINT NOT NULL,
+
+                title TEXT NOT NULL,
+                description TEXT,
+
+                account_scope TEXT NOT NULL DEFAULT 'all'
+                    CHECK (account_scope IN ('all', 'account')),
+
+                account_id INTEGER
+                    REFERENCES accounts(id) ON DELETE CASCADE,
+
+                start_at TIMESTAMPTZ NOT NULL,
+                end_at TIMESTAMPTZ,
+
+                recurrence JSONB NOT NULL DEFAULT
+                    '{"type": "none"}'::jsonb,
+
+                colour TEXT NOT NULL DEFAULT '#7c83ff',
+                reminder_minutes INTEGER,
+
+                progress JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+                CHECK (
+                    (account_scope = 'all' AND account_id IS NULL)
+                    OR
+                    (account_scope = 'account' AND account_id IS NOT NULL)
+                ),
+
+                CHECK (
+                    end_at IS NULL OR end_at > start_at
+                ),
+
+                CHECK (
+                    reminder_minutes IS NULL
+                    OR reminder_minutes >= 0
+                )
+            )
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_custom_events_user
+            ON custom_events(discord_user_id)
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_custom_events_account
+            ON custom_events(account_id)
+            """
+        )
+
+        # =========================================
+        # CUSTOM EVENT COMPLETIONS
+        # =========================================
+
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS custom_event_completions (
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                event_id BIGINT NOT NULL
+                    REFERENCES custom_events(id) ON DELETE CASCADE,
+
+                discord_user_id BIGINT NOT NULL,
+                occurrence_start TIMESTAMPTZ NOT NULL,
+
+                completed BOOLEAN NOT NULL DEFAULT TRUE,
+                completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+                UNIQUE(event_id, occurrence_start)
+            )
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_custom_event_completions_user
+            ON custom_event_completions(discord_user_id)
+            """
+        )
 
 
 def get_pool() -> AsyncConnectionPool:
@@ -1517,3 +1612,244 @@ async def import_achievement_progress(
                         completed_at
                     )
                 )
+                
+                
+async def create_custom_event(
+    discord_user_id: int,
+    title: str,
+    description: str | None,
+    account_scope: str,
+    account_id: int | None,
+    start_at: datetime,
+    end_at: datetime | None,
+    recurrence: dict,
+    colour: str,
+    reminder_minutes: int | None,
+    progress: list,
+) -> dict:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            INSERT INTO custom_events (
+                discord_user_id,
+                title,
+                description,
+                account_scope,
+                account_id,
+                start_at,
+                end_at,
+                recurrence,
+                colour,
+                reminder_minutes,
+                progress
+            )
+            VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+            )
+            RETURNING *
+            """,
+            (
+                discord_user_id,
+                title,
+                description,
+                account_scope,
+                account_id,
+                start_at,
+                end_at,
+                Jsonb(recurrence),
+                colour,
+                reminder_minutes,
+                Jsonb(progress),
+            ),
+        )
+
+        return await result.fetchone()
+    
+    
+async def get_custom_events(
+    discord_user_id: int,
+    account_id: int | None = None,
+) -> list[dict]:
+    async with get_pool().connection() as connection:
+        if account_id is None:
+            result = await connection.execute(
+                """
+                SELECT *
+                FROM custom_events
+                WHERE discord_user_id = %s
+                ORDER BY start_at ASC, id ASC
+                """,
+                (discord_user_id,),
+            )
+        else:
+            result = await connection.execute(
+                """
+                SELECT *
+                FROM custom_events
+                WHERE discord_user_id = %s
+                  AND (
+                      account_scope = 'all'
+                      OR account_id = %s
+                  )
+                ORDER BY start_at ASC, id ASC
+                """,
+                (discord_user_id, account_id),
+            )
+
+        return await result.fetchall()
+    
+
+async def get_custom_event(
+    discord_user_id: int,
+    event_id: int,
+) -> dict | None:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT *
+            FROM custom_events
+            WHERE id = %s
+              AND discord_user_id = %s
+            LIMIT 1
+            """,
+            (event_id, discord_user_id),
+        )
+
+        return await result.fetchone()
+    
+
+async def update_custom_event(
+    discord_user_id: int,
+    event_id: int,
+    title: str,
+    description: str | None,
+    account_scope: str,
+    account_id: int | None,
+    start_at: datetime,
+    end_at: datetime | None,
+    recurrence: dict,
+    colour: str,
+    reminder_minutes: int | None,
+    progress: list,
+) -> dict | None:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            UPDATE custom_events
+            SET
+                title = %s,
+                description = %s,
+                account_scope = %s,
+                account_id = %s,
+                start_at = %s,
+                end_at = %s,
+                recurrence = %s,
+                colour = %s,
+                reminder_minutes = %s,
+                progress = %s,
+                updated_at = NOW()
+            WHERE id = %s
+              AND discord_user_id = %s
+            RETURNING *
+            """,
+            (
+                title,
+                description,
+                account_scope,
+                account_id,
+                start_at,
+                end_at,
+                Jsonb(recurrence),
+                colour,
+                reminder_minutes,
+                Jsonb(progress),
+                event_id,
+                discord_user_id,
+            ),
+        )
+
+        return await result.fetchone()
+    
+
+async def delete_custom_event(
+    discord_user_id: int,
+    event_id: int,
+) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            DELETE FROM custom_events
+            WHERE id = %s
+              AND discord_user_id = %s
+            RETURNING id
+            """,
+            (event_id, discord_user_id),
+        )
+
+        return await result.fetchone() is not None
+    
+
+async def set_custom_event_completion(
+    discord_user_id: int,
+    event_id: int,
+    occurrence_start: datetime,
+    completed: bool,
+) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            INSERT INTO custom_event_completions (
+                event_id,
+                discord_user_id,
+                occurrence_start,
+                completed,
+                completed_at
+            )
+            SELECT
+                id,
+                discord_user_id,
+                %s,
+                %s,
+                CASE WHEN %s THEN NOW() ELSE NOW() END
+            FROM custom_events
+            WHERE id = %s
+              AND discord_user_id = %s
+            ON CONFLICT (event_id, occurrence_start)
+            DO UPDATE SET
+                completed = EXCLUDED.completed,
+                completed_at = NOW(),
+                discord_user_id = EXCLUDED.discord_user_id
+            RETURNING id
+            """,
+            (
+                occurrence_start,
+                completed,
+                completed,
+                event_id,
+                discord_user_id,
+            ),
+        )
+
+        return await result.fetchone() is not None
+    
+
+async def get_custom_event_completions(
+    discord_user_id: int,
+    event_id: int,
+) -> list[dict]:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT
+                occurrence_start,
+                completed,
+                completed_at
+            FROM custom_event_completions
+            WHERE discord_user_id = %s
+              AND event_id = %s
+            ORDER BY occurrence_start ASC
+            """,
+            (discord_user_id, event_id),
+        )
+
+        return await result.fetchall()
