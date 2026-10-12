@@ -3504,19 +3504,6 @@ html[data-hover-effects="off"] .overview-account-row:hover {
     min-height: 64px;
 }
 
-
-/* Account name occupies the available space */
-
-.events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    gap: 2px;
-    padding: 0;
-    margin: 0;
-}
-
 /* Encounter Points gets one fixed horizontal position */
 
 .events-overview-panel[data-overview-panel="daily"] .overview-encounter-points {
@@ -3560,175 +3547,230 @@ html[data-hover-effects="off"] .overview-account-row:hover {
     background: var(--surface);
 }
 
-
 /* =========================================================
-   OVERVIEW EVENTS — NORMAL-SIZED ENDGAME CARDS
+   ENDGAME OVERVIEW
    ========================================================= */
 
-/* Account row */
-
+/* Account row — match the standard Overview rows */
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
-    display: grid;
-    grid-template-columns: minmax(180px, 0.8fr) minmax(0, 2fr);
-    align-items: start;
-    gap: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 
-    min-height: 64px;
-    padding: 10.5px 20px;
-    margin-bottom: 0;
-
+    min-width: 0;
+    height: 65px;
+    min-height: 65px;
+    margin: 0;
+    padding: 14px 20px;
     box-sizing: border-box;
 
     border: 1px solid var(--border);
     border-radius: 14px;
     background: var(--surface);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
-/* Account name and UID */
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+}
 
+/* Account name and UID — match Resin and Trounce */
 .events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+
+    flex: 0 0 160px;
     min-width: 0;
-    gap: 2px;
-    align-self: center;
-    transform: translateY(1px);
+    margin: 0;
+    transform: none;
 }
 
 .events-overview-panel[data-overview-panel="endgame"] .overview-account-name strong {
-    font-size: 16px;
-    line-height: 1.35;
+    color: var(--text);
+    font: inherit;
     font-weight: 600;
-    overflow-wrap: anywhere;
+    line-height: normal;
 }
 
+/* UID — use the same typography as the other Overview accounts */
 .events-overview-panel[data-overview-panel="endgame"] .overview-account-name span {
+    color: var(--text-secondary);
+    opacity: 0.6;
+    font-family: inherit;
     font-size: 13px;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-    transform: translateY(-1px);
+    font-weight: 400;
+    line-height: normal;
 }
 
-/* Three result cards */
-
+/* Four result cards */
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    flex: 1 1 auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
 
-    width: 100%;
     min-width: 0;
+    margin: 0;
 }
 
-/* Hide the headings and their icons */
-
-.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header {
-    display: none !important;
-}
-
-/* Endgame result cards — compact, normal-sized boxes */
-
+/* Endgame result pills — dark background matching Overview status pills */
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 90%;
+    width: 100%;
     min-width: 0;
-    height: 42px;
-    min-height: 0;
-    padding: 4px 6px;
-    justify-self: center;
-
+    min-height: 42px;
+    padding: 6px 10px;
     box-sizing: border-box;
 
-    background: var(--card-background);
-    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 999px;
 
     text-align: center;
-    transition: border-color 0.2s ease;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card:hover {
-    border-color: var(--accent);
+    background: rgba(0, 0, 0, 0.38);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* Larger, readable results */
-
+/* Record values */
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 5px;
 
     min-width: 0;
+    max-width: 100%;
 
-    color: var(--text-primary);
-    font-size: 16px;
-    line-height: 1.3;
+    color: var(--text);
+    font-size: inherit;
+    line-height: inherit;
+    white-space: nowrap;
 }
 
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value strong {
-    font-size: 16px;
-    font-weight: 700;
+    min-width: 0;
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value img {
-    width: 20px;
-    height: 20px;
-    flex: 0 0 20px;
+    display: block;
+    flex: 0 0 auto;
+
+    width: 17px;
+    height: 17px;
     object-fit: contain;
 }
 
-/* Empty results */
-
-.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-empty {
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card:hover {
-    border-color: var(--accent);
-}
-
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-separator {
-    margin: 0 2px;
-    color: var(--text-secondary);
-    opacity: 0.5;
+    color: var(--text-muted);
+    opacity: 0.7;
 }
 
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-empty {
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 600;
+    color: var(--text-muted);
+    font-size: inherit;
+    white-space: nowrap;
 }
 
-/* Medium screens */
 
-@media (max-width: 800px) {
+/* Card headings: Abyss and Theater */
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header img {
+    display: block;
+    flex: 0 0 auto;
+
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header strong {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+
+/* Tablet: give the account less horizontal space */
+@media (max-width: 900px) {
     .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
-        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        padding: 12px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
+        flex-basis: 125px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
+        gap: 6px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
+        padding: 7px 4px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value {
+        gap: 3px;
+        font-size: 12px;
+    }
+}
+
+
+/* Mobile: account above the four result cards */
+@media (max-width: 650px) {
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
+        align-items: stretch;
+        flex-direction: column;
         gap: 12px;
     }
 
     .events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
-        width: 100%;
+        flex: 0 0 auto;
     }
-}
 
-/* Small screens */
-
-@media (max-width: 500px) {
     .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
-        grid-template-columns: minmax(0, 1fr);
+        flex: 0 0 auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
     }
 
     .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
-        min-height: 48px;
+        min-height: 58px;
     }
 }
-
 
 /* =========================================================
    OVERVIEW WISHES — REUSE MAIN BANNER CARDS

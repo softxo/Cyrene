@@ -557,14 +557,12 @@
 
                                     <img
                                         src="/static/images/events/imaginarium_theater/IT_Stella.webp"
-                                        alt="Stellas"
+                                        alt="Stella"
                                         title="Stellas Earned"
                                         class="it-stella"
                                     >
 
-                                    <strong>
-                                        {{ theater.medals }}
-                                    </strong>
+                                    <strong>{{ theater.medals }}</strong>
 
                                 {% else %}
 
@@ -1088,11 +1086,8 @@
                 ============================= -->
 
             <div
-                class="event-list-item event-daily-item
-                {% if daily and daily.checked %}
-                    completed
-                {% endif %}
                 id="daily-commissions"
+                class="event-list-item event-daily-item{% if daily and daily.checked %} completed{% endif %}"
                 data-account-id="{{ selected_account.id if selected_account else '' }}"
             >
 
@@ -1196,11 +1191,8 @@
             ============================= -->
 
             <div
-                class="event-list-item event-trounce-item
-                {% if trounce and trounce.checked %}
-                    completed
-                {% endif %}
                 id="trounce-domains"
+                class="event-list-item event-trounce-item{% if trounce and trounce.checked %} completed{% endif %}"
             >
                 
                 <div class="event-list-left">
@@ -1708,14 +1700,6 @@
 
                         <div class="overview-endgame-card overview-abyss-card">
 
-                            <div class="overview-endgame-card-header">
-                                <img
-                                    src="/static/images/events/spiral_abyss/Spiral_Abyss.webp"
-                                    alt=""
-                                >
-                                <strong>Abyss</strong>
-                            </div>
-
                             <div class="overview-endgame-card-value">
 
                                 {% if item.abyss.has_data %}
@@ -1748,14 +1732,6 @@
                         <!-- IMAGINARIUM THEATER -->
 
                         <div class="overview-endgame-card overview-theater-card">
-
-                            <div class="overview-endgame-card-header">
-                                <img
-                                    src="/static/images/events/imaginarium_theater/Imaginarium_Theater.webp"
-                                    alt=""
-                                >
-                                <strong>Theater</strong>
-                            </div>
 
                             <div class="overview-endgame-card-value">
 
@@ -1790,19 +1766,10 @@
                             </div>
 
                         </div>
-
-
+                        
                         <!-- STYGIAN ONSLAUGHT -->
 
                         <div class="overview-endgame-card overview-stygian-card">
-
-                            <div class="overview-endgame-card-header">
-                                <img
-                                    src="/static/images/events/stygian_onslaught/Stygian_Onslaught.webp"
-                                    alt=""
-                                >
-                                <strong>Stygian</strong>
-                            </div>
 
                             <div class="overview-endgame-card-value">
 
@@ -1846,28 +1813,43 @@
 
                                 {% endif %}
 
-                                {% if item.stygian.dire_prestige.available %}
-                                    <div class="stygian-dire-prestige">
-                                        <div class="stygian-dire-prestige-header">
-                                            <span class="stygian-dire-prestige-title">
-                                                Dire Prestige
-                                            </span>
-                                        </div>
+                            </div>
 
-                                        {% if item.stygian.dire_prestige.active %}
-                                            <div class="stygian-dire-prestige-progress">
-                                                <span class="stygian-dire-prestige-value">
-                                                    {{ item.stygian.dire_prestige.progress }}
-                                                    /
-                                                    {{ item.stygian.dire_prestige.max_progress }}
-                                                </span>
-                                            </div>
-                                        {% else %}
-                                            <div class="stygian-dire-prestige-inactive">
-                                                No active Dire Prestige progress
-                                            </div>
-                                        {% endif %}
-                                    </div>
+                        </div>
+
+
+                        
+                        <!-- DIRE PRESTIGE -->
+
+                        <div class="overview-endgame-card overview-prestige-card">
+
+                            <div class="overview-endgame-card-value">
+
+                                {% if item.stygian.dire_prestige.ended %}
+
+                                    <strong>Outbreak Ended</strong>
+
+                                {% elif item.stygian.dire_prestige.available
+                                    and item.stygian.dire_prestige.active %}
+
+                                    <img
+                                        src="/static/images/events/stygian_onslaught/Dire_Prestige.png"
+                                        alt="Dire Prestige"
+                                        title="Dire Prestige"
+                                    >
+
+                                    <strong>
+                                        {{ item.stygian.dire_prestige.progress }}/{{ item.stygian.dire_prestige.max_progress }}
+                                    </strong>
+
+                                {% elif item.stygian.dire_prestige.available %}
+
+                                    <strong>Inactive</strong>
+
+                                {% else %}
+
+                                    <strong>—</strong>
+
                                 {% endif %}
 
                             </div>
@@ -1879,9 +1861,9 @@
                 </div>
 
             {% endfor %}
+
         </div>
-
-
+        <!-- End Endgame overview panel -->
 
         <div
             class="events-overview-panel"
