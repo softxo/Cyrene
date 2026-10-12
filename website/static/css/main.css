@@ -1,11 +1,10 @@
 /*
    CYRENE — MAIN STYLESHEET
-   Component styles are split into separate files.
 */
 
 @import url("global.css");
 @import url("settings.css");
 @import url("verification.css");
 @import url("achievements.css");
-@import url("events.css");
+@import url("/static/css/events/events.css");
 @import url("planner.css");

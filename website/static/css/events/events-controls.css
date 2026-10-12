@@ -1,0 +1,348 @@
+/* =========================================================
+   EVENTS — PAGE HEADER, CONTROLS, ACCOUNT SELECTOR AND NAVIGATION TABS
+   ========================================================= */
+
+/* =========================================================
+   EVENTS HEADER
+   ========================================================= */
+
+.events-hero {
+    padding: 28px 32px;
+    margin-bottom: 28px;
+}
+
+.events-hero .hero-content {
+    max-width: 760px;
+}
+
+.events-hero h1 {
+    margin: 6px 0 8px;
+}
+
+.events-hero p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   EVENTS CONTROLS
+   ========================================================= */
+
+.events-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+}
+
+
+/* =========================================================
+   ACCOUNT / OVERVIEW TABS
+   ========================================================= */
+
+.events-account-tabs,
+.events-overview-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* =========================================================
+   EVENTS TAB BUTTONS
+   ========================================================= */
+
+.events-account-tab,
+.events-overview-tab {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 36px;
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--surface);
+    color: var(--text-secondary);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+/* ---------------------------------------------------------
+   Hover
+   --------------------------------------------------------- */
+
+.events-account-tab:hover,
+.events-overview-tab:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--text-primary);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   Active Tab
+   --------------------------------------------------------- */
+
+.events-account-tab.active,
+.events-overview-tab.active {
+    background: var(--surface-container-high);
+    border-color: var(--accent);
+
+    color: var(--accent);
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   Active + Hover
+   --------------------------------------------------------- */
+
+.events-account-tab.active:hover,
+.events-overview-tab.active:hover {
+    background: var(--surface-container-highest);
+
+    border-color: var(--accent);
+
+    color: var(--accent);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+
+/* ---------------------------------------------------------
+   Keyboard Focus
+   --------------------------------------------------------- */
+
+.events-account-tab:focus-visible,
+.events-overview-tab:focus-visible {
+    outline: none;
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px color-mix(
+            in srgb,
+            var(--accent) 18%,
+            transparent
+        );
+}
+
+
+/* ---------------------------------------------------------
+   Pressed
+   --------------------------------------------------------- */
+
+.events-account-tab:active,
+.events-overview-tab:active {
+    transform: translateY(0);
+}
+
+
+/* ---------------------------------------------------------
+   Active + Hover
+   --------------------------------------------------------- */
+
+.events-account-tab.active:hover,
+.events-overview-tab.active:hover {
+    background: var(--surface-container-highest);
+    border-color: color-mix(
+        in srgb,
+        var(--accent) 45%,
+        var(--border)
+    );
+
+    color: var(--accent);
+
+    transform: translateY(-1px);
+}
+
+
+/* ---------------------------------------------------------
+   Keyboard Focus
+   --------------------------------------------------------- */
+
+.events-account-tab:focus-visible,
+.events-overview-tab:focus-visible {
+    outline: none;
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px color-mix(
+            in srgb,
+            var(--accent) 18%,
+            transparent
+        );
+}
+
+
+/* ---------------------------------------------------------
+   Pressed
+   --------------------------------------------------------- */
+
+.events-account-tab:active,
+.events-overview-tab:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RIGHT-SIDE CONTROLS
+   ========================================================= */
+
+.events-controls-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   ACCOUNT SELECTOR
+   ========================================================= */
+
+.events-account-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.events-account-selector .custom-select {
+    min-width: 260px;
+}
+
+.events-account-selector .custom-select-button:focus,
+.events-account-selector .custom-select.open .custom-select-button {
+    border-color: var(--accent);
+    box-shadow:
+        0 0 0 1px color-mix(
+            in srgb,
+            var(--accent) 15%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   SWITCH LAYOUT
+   ========================================================= */
+
+.events-layout-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 14px;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--surface);
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.events-layout-switch:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--accent);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.10);
+}
+
+.events-layout-switch:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.events-layout-switch:focus-visible {
+    outline: none;
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px color-mix(
+            in srgb,
+            var(--accent) 18%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   EVENTS SECTIONS
+   ========================================================= */
+
+.events-section {
+    margin-bottom: 40px;
+}
+
+.events-section .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+.events-section .section-header h2 {
+    margin: 5px 0 0;
+}
+
+

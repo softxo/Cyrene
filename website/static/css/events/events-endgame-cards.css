@@ -1,0 +1,503 @@
+/* =========================================================
+   EVENTS — STYGIAN ONSLAUGHT, IMAGINARIUM THEATER AND SPIRAL ABYSS CARD DETAILS
+   ========================================================= */
+
+/* =========================================================
+   STYGIAN ONSLAUGHT
+   ========================================================= */
+
+.stygian-best-record {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stygian-record {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.stygian-difficulty-icon {
+    width: 32px;
+    height: 32px;
+
+    object-fit: contain;
+}
+
+.stygian-record strong {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.stygian-bosses {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 9px;
+    padding-top: 0;
+
+    box-sizing: border-box;
+}
+
+.stygian-teams-box {
+    width: 100%;
+    height: 205px;
+    min-height: 205px;
+    flex-shrink: 0;
+
+    padding: 14px 18px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.stygian-bosses-row {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+
+    align-items: start;
+    text-align: center;
+}
+
+.stygian-boss {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    min-width: 0;
+}
+
+.stygian-boss strong {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    height: 32px;
+    min-height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 0 1px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 11px;
+
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+
+    opacity: 0.7;
+
+    white-space: normal;
+
+    overflow: visible;
+
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+/*
+ * Medium-length boss names.
+ */
+
+.stygian-boss strong.boss-name-medium {
+    font-size: 9px;
+    line-height: 10px;
+}
+
+/*
+ * Long boss names.
+ */
+
+.stygian-boss strong.boss-name-small {
+    font-size: 8px;
+    line-height: 9px;
+    letter-spacing: 0.1px;
+}
+
+/*
+ * Very long boss names.
+ */
+
+.stygian-boss strong.boss-name-tiny {
+    font-size: 7px;
+    line-height: 8px;
+    letter-spacing: 0;
+}
+
+.stygian-boss-time {
+    font-size: 13px;
+    font-weight: 600;
+    transform: translateY(10px);
+}
+
+.stygian-boss-icon {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    transform: translateY(10px);
+}
+
+.stygian-team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 3px;
+    width: auto;
+    margin-top: 10px;
+    padding: 5px 6px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(10px);
+}
+
+.stygian-character-icon {
+    width: 24px !important;
+    height: 24px !important;
+
+    min-width: 24px !important;
+    min-height: 24px !important;
+
+    max-width: 24px !important;
+    max-height: 24px !important;
+
+    flex: 0 0 24px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   IMAGINARIUM THEATER
+   ========================================================= */
+
+.it-best-record {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.it-record {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.it-act-icon,
+.it-arcanum-icon {
+    width: 32px;
+    height: 32px;
+
+    object-fit: contain;
+}
+
+.it-arcanum-icon {
+    margin-left: -5px;
+}
+
+.it-record strong {
+    font-size: 18px;
+}
+
+.it-stellas {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 22px;
+}
+
+.it-stella-box {
+    width: 100%;
+
+    padding: 7px 4px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.it-stella-row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0;
+
+    flex-wrap: wrap;
+}
+
+.it-stella {
+    width: 27px;
+    height: 27px;
+
+    object-fit: contain;
+
+    opacity: 1;
+}
+
+.it-stella-inactive {
+    opacity: 0.25;
+
+    filter: grayscale(1);
+}
+
+.it-elements {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+.it-elements .event-stat-label {
+    display: block;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+.it-elements-box {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+}
+
+.it-element {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.it-element-icon {
+    display: block;
+
+    width: 26px;
+    height: 26px;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   SPIRAL ABYSS
+   ========================================================= */
+
+.abyss-summary {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.abyss-stat {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    text-align: center;
+}
+
+.abyss-stat strong {
+    font-size: 20px;
+}
+
+.abyss-stars-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.abyss-stars-value img {
+    width: 30px;
+    height: 30px;
+
+    object-fit: contain;
+}
+
+.abyss-teams {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    min-height: 0;
+}
+
+.abyss-teams-box {
+    width: 100%;
+    height: 205px;
+    min-height: 205px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 12px 10px;
+    box-sizing: border-box;
+
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.abyss-chamber {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.abyss-chamber > strong {
+    flex: 0 0 auto;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+}
+
+.abyss-chamber span {
+    padding: 8px 6px;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    font-size: 11px;
+
+    opacity: 0.8;
+}
+
+.abyss-team {
+    width: max-content;
+    max-width: calc(50% - 35px);
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    flex-wrap: wrap;
+}
+
+.abyss-character-icon {
+    width: 30px !important;
+    height: 30px !important;
+
+    min-width: 30px !important;
+    min-height: 30px !important;
+
+    max-width: 30px !important;
+    max-height: 30px !important;
+
+    flex: 0 0 30px;
+
+    display: block;
+
+    padding: 2px;
+
+    box-sizing: border-box;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
