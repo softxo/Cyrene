@@ -420,8 +420,98 @@ function initCustomEvents() {
             removeButton
         );
 
+        row.append(
+            titleInput,
+            currentInput,
+            targetInput,
+            removeButton
+        );
+
         container.append(row);
+
+        row.querySelectorAll('input[type="number"]').forEach(
+            enhanceNumberInput
+        );
     }
+
+    // =========================================
+    // CUSTOM NUMBER SPINNERS
+    // =========================================
+
+    function enhanceNumberInput(input) {
+        if (input.dataset.customSpinner === "true") {
+            return;
+        }
+
+        input.dataset.customSpinner = "true";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "events-custom-number";
+
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.append(input);
+
+        const controls = document.createElement("div");
+        controls.className = "events-custom-number-controls";
+
+        function makeSpinnerButton(direction, label) {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className =
+                `events-custom-number-button ${direction}`;
+
+            button.setAttribute("aria-label", label);
+            button.textContent = direction === "up" ? "▲" : "▼";
+
+            button.addEventListener("click", () => {
+                if (input.disabled) return;
+
+                const step = Number(input.step) || 1;
+                const current = Number(
+                    input.value || input.min || 0
+                );
+
+                const min = input.min === ""
+                    ? -Infinity
+                    : Number(input.min);
+
+                const max = input.max === ""
+                    ? Infinity
+                    : Number(input.max);
+
+                const next = direction === "up"
+                    ? current + step
+                    : current - step;
+
+                input.value = String(
+                    Math.min(max, Math.max(min, next))
+                );
+
+                input.dispatchEvent(
+                    new Event("input", { bubbles: true })
+                );
+
+                input.dispatchEvent(
+                    new Event("change", { bubbles: true })
+                );
+            });
+
+            return button;
+        }
+
+        controls.append(
+            makeSpinnerButton("up", "Increase value"),
+            makeSpinnerButton("down", "Decrease value")
+        );
+
+        wrapper.append(controls);
+    }
+
+    // Enhance the static number field.
+    form.querySelectorAll('input[type="number"]').forEach(
+        enhanceNumberInput
+    );
 
     $("[data-custom-add-objective]", modal)?.addEventListener(
         "click",
