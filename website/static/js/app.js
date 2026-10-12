@@ -25,57 +25,95 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageScripts = {
         "/planner": "/static/js/planner.js",
         "/verify": "/static/js/verification.js",
-        "/events": "/static/js/events.js",
+
+        "/events": [
+            "/static/js/events/events-dropdown.js",
+            "/static/js/events/events-tabs.js",
+            "/static/js/events/events-cards.js",
+            "/static/js/events/events-timers.js",
+            "/static/js/events/events-activity.js",
+            "/static/js/events/events-refresh.js",
+            "/static/js/events/events-custom.js",
+            "/static/js/events/events.js",
+        ],
+
         "/settings": "/static/js/settings.js",
     };
 
     const pageStyles = {
         "/planner": "/static/css/planner.css",
         "/verify": "/static/css/verification.css",
-        "/events": "/static/css/events.css",
+        "/events": "/static/css/events/events.css",
         "/settings": "/static/css/settings.css",
     };
 
     async function loadPageScript(path) {
 
-        const scriptSrc = pageScripts[path];
+        const configuredScripts = pageScripts[path];
 
-        if (!scriptSrc) {
+        if (!configuredScripts) {
             return;
         }
 
-        const existingScript =
-            document.querySelector(
-                `script[data-page-script="${path}"]`
-            );
+        // Support both single-file pages and multi-file pages.
+        const scriptSources =
+            Array.isArray(configuredScripts)
+                ? configuredScripts
+                : [configuredScripts];
 
-        if (existingScript) {
-            return;
+        // Load scripts sequentially to preserve dependencies.
+        for (const scriptSrc of scriptSources) {
+
+            const absoluteSrc =
+                new URL(
+                    scriptSrc,
+                    window.location.origin
+                ).href;
+
+            const existingScript =
+                Array.from(
+                    document.querySelectorAll("script[src]")
+                ).find(
+                    script => script.src === absoluteSrc
+                );
+
+            // Scripts remain loaded when navigating between pages.
+            if (existingScript) {
+                continue;
+            }
+
+            const script =
+                document.createElement("script");
+
+            script.src = scriptSrc;
+            script.dataset.pageScript = path;
+            script.dataset.scriptSrc = scriptSrc;
+
+            // Wait for the script before loading the next one.
+            await new Promise((resolve, reject) => {
+
+                script.addEventListener(
+                    "load",
+                    resolve,
+                    { once: true }
+                );
+
+                script.addEventListener(
+                    "error",
+                    () => reject(
+                        new Error(
+                            `Failed to load page script: ${scriptSrc}`
+                        )
+                    ),
+                    { once: true }
+                );
+
+                document.body.appendChild(script);
+
+            });
+
         }
 
-        const script =
-            document.createElement("script");
-
-        script.src = scriptSrc;
-        script.dataset.pageScript = path;
-
-        document.body.appendChild(script);
-
-        await new Promise((resolve, reject) => {
-
-            script.addEventListener(
-                "load",
-                resolve,
-                { once: true }
-            );
-
-            script.addEventListener(
-                "error",
-                reject,
-                { once: true }
-            );
-
-        });
     }
 
     function loadPageStyle(path) {
@@ -247,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             /*
-             * Initialize page-specific functionality.
+             * Initialise page-specific functionality.
              */
 
             const finalPath =

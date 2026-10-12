@@ -1432,24 +1432,276 @@
         </section>
 
         <section
-            class="events-account-empty"
+            class="events-custom-section"
             data-account-category="custom"
-            {% if request.query_params.get('tab', 'all') != 'custom' %}hidden{% endif %}
         >
+            <div class="events-custom-header">
+                <div>
+                    <h2 class="events-custom-title">Custom Events</h2>
+                    <p class="events-custom-description">
+                        Create and manage your own activities and schedules.
+                    </p>
+                </div>
 
-            <div class="events-account-empty-content">
-
-                <span class="events-account-empty-title">
-                    No Custom Activities
-                </span>
-
-                <span class="events-account-empty-description">
-                    Custom activity layouts will appear here.
-                </span>
-
+                <button
+                    type="button"
+                    class="events-custom-create"
+                    data-custom-create
+                >
+                    <span aria-hidden="true">+</span>
+                    Create Event
+                </button>
             </div>
 
+            <div class="events-custom-list" data-custom-event-list>
+                <div class="events-custom-empty">
+                    <span class="events-custom-empty-title">
+                        Loading Custom Events…
+                    </span>
+                    <span class="events-custom-empty-description">
+                        Your events will appear here.
+                    </span>
+                </div>
+            </div>
         </section>
+
+        <div
+            class="events-custom-modal"
+            data-custom-modal
+            hidden
+        >
+            <div
+                class="events-custom-modal-backdrop"
+                data-custom-close
+            ></div>
+
+            <section
+                class="events-custom-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="custom-event-form-title"
+            >
+                <div class="events-custom-dialog-header">
+                    <div>
+                        <span class="events-custom-eyebrow">
+                            EVENT MANAGER
+                        </span>
+                        <h2 id="custom-event-form-title">
+                            Create Event
+                        </h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="events-custom-close"
+                        data-custom-close
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <form data-custom-form>
+                    <input type="hidden" name="event_id">
+
+                    <label class="events-custom-field">
+                        <span>Event name</span>
+                        <input
+                            type="text"
+                            name="title"
+                            maxlength="120"
+                            placeholder="e.g. Spiral Abyss reset"
+                            required
+                        >
+                    </label>
+
+                    <label class="events-custom-field">
+                        <span>Description <small>(optional)</small></span>
+                        <textarea
+                            name="description"
+                            maxlength="2000"
+                            rows="3"
+                            placeholder="Add notes or objectives…"
+                        ></textarea>
+                    </label>
+
+                    <div class="events-custom-field">
+                        <span>Applies to</span>
+
+                        <div class="events-custom-scope">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="account_scope"
+                                    value="all"
+                                    checked
+                                >
+                                <span>All accounts</span>
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="account_scope"
+                                    value="account"
+                                >
+                                <span>One account</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <label
+                        class="events-custom-field"
+                        data-custom-account-field
+                        hidden
+                    >
+                        <span>Account</span>
+                        <select name="account_id">
+                            {% for account in accounts %}
+                            <option value="{{ account.id }}">
+                                {{ account.nickname or account.genshin_uid }}
+                                · {{ account.genshin_uid }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <div class="events-custom-form-row">
+                        <label class="events-custom-field">
+                            <span>Starts</span>
+                            <input
+                                type="datetime-local"
+                                name="start_at"
+                                required
+                            >
+                        </label>
+
+                        <label class="events-custom-field">
+                            <span>Ends <small>(optional)</small></span>
+                            <input
+                                type="datetime-local"
+                                name="end_at"
+                            >
+                        </label>
+                    </div>
+
+                    <div class="events-custom-form-row">
+                        <label class="events-custom-field">
+                            <span>Schedule</span>
+                            <select name="recurrence_type">
+                                <option value="none">One-time</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </label>
+
+                        <label class="events-custom-field">
+                            <span>Repeat every</span>
+                            <input
+                                type="number"
+                                name="recurrence_interval"
+                                min="1"
+                                max="365"
+                                value="1"
+                            >
+                        </label>
+                    </div>
+
+                    <div
+                        class="events-custom-field"
+                        data-custom-weekdays
+                        hidden
+                    >
+                        <span>Repeat on</span>
+
+                        <div class="events-custom-weekdays">
+                            {% for day, label in [
+                                (0, 'Mon'),
+                                (1, 'Tue'),
+                                (2, 'Wed'),
+                                (3, 'Thu'),
+                                (4, 'Fri'),
+                                (5, 'Sat'),
+                                (6, 'Sun')
+                            ] %}
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="recurrence_weekdays"
+                                    value="{{ day }}"
+                                >
+                                <span>{{ label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="events-custom-form-row">
+                        <label class="events-custom-field">
+                            <span>Event colour</span>
+                            <input
+                                type="color"
+                                name="colour"
+                                value="#7c83ff"
+                            >
+                        </label>
+
+                        <label class="events-custom-field">
+                            <span>Reminder</span>
+                            <select name="reminder_minutes">
+                                <option value="">No reminder</option>
+                                <option value="0">At start</option>
+                                <option value="5">5 minutes before</option>
+                                <option value="15">15 minutes before</option>
+                                <option value="30">30 minutes before</option>
+                                <option value="60">1 hour before</option>
+                                <option value="1440">1 day before</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="events-custom-field">
+                        <div class="events-custom-progress-heading">
+                            <span>Progress objectives</span>
+                            <button
+                                type="button"
+                                class="events-custom-add-objective"
+                                data-custom-add-objective
+                            >
+                                + Add objective
+                            </button>
+                        </div>
+
+                        <div data-custom-objectives></div>
+                    </div>
+
+                    <p
+                        class="events-custom-error"
+                        data-custom-error
+                        role="alert"
+                        hidden
+                    ></p>
+
+                    <div class="events-custom-form-actions">
+                        <button
+                            type="button"
+                            class="events-custom-cancel"
+                            data-custom-close
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="events-custom-save"
+                        >
+                            Save Event
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
 
     {% endif %}
 
@@ -2016,15 +2268,36 @@
             class="events-overview-panel"
             data-overview-panel="custom"
         >
-            <div class="events-account-empty-content">
-                <span class="events-account-empty-title">
-                    No Custom Events
-                </span>
+            <section class="events-custom-section events-custom-overview">
+                <div class="events-custom-header">
+                    <div>
+                        <h2 class="events-custom-title">Custom Events</h2>
+                        <p class="events-custom-description">
+                            Your custom activities across all accounts.
+                        </p>
+                    </div>
 
-                <span class="events-account-empty-description">
-                    Create your own events and track their duration here.
-                </span>
-            </div>
+                    <button
+                        type="button"
+                        class="events-custom-create"
+                        data-custom-create
+                    >
+                        <span aria-hidden="true">+</span>
+                        Create Event
+                    </button>
+                </div>
+
+                <div class="events-custom-list" data-custom-event-list>
+                    <div class="events-custom-empty">
+                        <span class="events-custom-empty-title">
+                            Loading Custom Events…
+                        </span>
+                        <span class="events-custom-empty-description">
+                            Your events will appear here.
+                        </span>
+                    </div>
+                </div>
+            </section>
         </div>
 
 
