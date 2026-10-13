@@ -15,6 +15,13 @@ from .database import (
 CHECK_INTERVAL = 15 * 60
 HOYOLAB_TIMEZONE = ZoneInfo("Asia/Shanghai")
 
+_checkin_wakeup = asyncio.Event()
+
+
+def request_daily_checkin() -> None:
+    """Wake the worker to check enabled accounts immediately."""
+    _checkin_wakeup.set()
+
 
 async def process_daily_checkin_account(
     account: dict,
@@ -104,8 +111,6 @@ async def process_daily_checkin_account(
 
 
 async def daily_checkin_worker() -> None:
-    print("[Daily Check-In] Worker started.")
-
     while True:
         try:
             accounts = await get_daily_checkin_accounts()
@@ -117,21 +122,23 @@ async def daily_checkin_worker() -> None:
                 except asyncio.CancelledError:
                     raise
 
-                except Exception as exc:
-                    print(
-                        "[Daily Check-In] Unexpected account error "
-                        f"for account {account.get('account_id')}: "
-                        f"{type(exc).__name__}: {exc}"
-                    )
+                except Exception:
+                    # Continue processing other accounts if one fails.
+                    continue
 
         except asyncio.CancelledError:
-            print("[Daily Check-In] Worker stopped.")
             raise
 
-        except Exception as exc:
-            print(
-                "[Daily Check-In] Worker cycle failed: "
-                f"{type(exc).__name__}: {exc}"
-            )
+        except Exception:
+            # Retry on the next scheduled check if the database fails.
+            pass
 
-        await asyncio.sleep(CHECK_INTERVAL)
+        _checkin_wakeup.clear()
+
+        try:
+            await asyncio.wait_for(
+                _checkin_wakeup.wait(),
+                timeout=CHECK_INTERVAL,
+            )
+        except asyncio.TimeoutError:
+            pass

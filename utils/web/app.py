@@ -72,6 +72,7 @@ from utils.achievements.importer import import_achievements
 from collections import Counter
 from utils.changing_variables.config import IT_ELEMENTS
 from utils.hoyolab.gift_code_worker import request_gift_code_check
+from utils.hoyolab.daily_checkin_worker import request_daily_checkin
 
 
 
@@ -1054,6 +1055,9 @@ async def set_daily_checkin(
         account_id,
         enabled,
     )
+    
+    if enabled:
+        request_daily_checkin()
 
     return {
         "success": True,
