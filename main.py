@@ -221,6 +221,7 @@ async def main():
                 daily_checkin_worker(),
                 name="daily-checkin-worker",
             )
+            print("[Daily Check-In] Worker task created.")
 
             await asyncio.gather(
                 bot.start(TOKEN),
