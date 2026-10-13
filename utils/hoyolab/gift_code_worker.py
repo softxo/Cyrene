@@ -21,6 +21,14 @@ REDEMPTION_DELAY_SECONDS = 6
 # A processing record older than this is considered abandoned, for example if the application stopped during a redemption.
 STALE_PROCESSING_AFTER = timedelta(minutes=30)
 
+# Allows the website to trigger an immediate check when automatic claiming is enabled.
+gift_code_wakeup = asyncio.Event()
+
+
+def request_gift_code_check() -> None:
+    """Wake the worker so it can check for codes immediately."""
+    gift_code_wakeup.set()
+
 
 async def fetch_active_gift_codes() -> list[dict]:
     """Fetch gift codes currently marked OK by the code feed."""
@@ -292,4 +300,12 @@ async def gift_code_worker() -> None:
                 f"{type(exc).__name__}: {exc}"
             )
 
-        await asyncio.sleep(CHECK_INTERVAL)
+        gift_code_wakeup.clear()
+
+        try:
+            await asyncio.wait_for(
+                gift_code_wakeup.wait(),
+                timeout=CHECK_INTERVAL,
+            )
+        except asyncio.TimeoutError:
+            pass

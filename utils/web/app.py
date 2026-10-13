@@ -69,6 +69,7 @@ from utils.achievements.progress import load_progress
 from utils.achievements.importer import import_achievements
 from collections import Counter
 from utils.changing_variables.config import IT_ELEMENTS
+from utils.hoyolab.gift_code_worker import request_gift_code_check
 
 
 
@@ -982,6 +983,9 @@ async def update_automatic_gift_code_claiming(
         account_id=account_id,
         enabled=enabled,
     )
+
+    if enabled:
+        request_gift_code_check()
 
     return {
         "success": True,
