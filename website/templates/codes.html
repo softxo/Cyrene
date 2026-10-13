@@ -33,16 +33,61 @@
             <span class="codes-count" id="codes-count">0 codes</span>
         </div>
 
+        
         <div class="codes-account-selector">
             <label for="codes-account">Genshin Account</label>
 
-            <select id="codes-account" {% if not accounts %}disabled{% endif %}>
-                {% for account in accounts %}
-                <option value="{{ account.id }}">
-                    {{ account.nickname }} · {{ account.genshin_uid }} ({{ account.genshin_server }})
-                </option>
-                {% endfor %}
-            </select>
+            <div
+                class="custom-select {% if not accounts %}disabled{% endif %}"
+                id="codes-account-select"
+            >
+                <button
+                    type="button"
+                    class="custom-select-button"
+                    id="codes-account-button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    {% if not accounts %}disabled{% endif %}
+                >
+                    <span id="codes-account-label">
+                        {% if accounts %}
+                            {{ accounts[0].nickname }} · {{ accounts[0].genshin_uid }}
+                            ({{ accounts[0].genshin_server }})
+                        {% else %}
+                            No accounts available
+                        {% endif %}
+                    </span>
+
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div
+                    class="custom-select-menu"
+                    id="codes-account-menu"
+                    role="listbox"
+                    aria-labelledby="codes-account-button"
+                >
+                    {% for account in accounts %}
+                    <button
+                        type="button"
+                        class="custom-select-option {% if loop.first %}selected{% endif %}"
+                        role="option"
+                        aria-selected="{{ 'true' if loop.first else 'false' }}"
+                        data-value="{{ account.id }}"
+                        data-label="{{ account.nickname }} · {{ account.genshin_uid }} ({{ account.genshin_server }})"
+                    >
+                        {{ account.nickname }} · {{ account.genshin_uid }}
+                        ({{ account.genshin_server }})
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <input
+                type="hidden"
+                id="codes-account"
+                value="{{ accounts[0].id if accounts else '' }}"
+            >
 
             {% if not accounts %}
             <p class="codes-empty-account">

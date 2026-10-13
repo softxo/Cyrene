@@ -16,6 +16,11 @@
     const refreshButton = document.getElementById("codes-refresh-button");
     const statusBox = document.getElementById("codes-status");
 
+    const accountDropdown = document.getElementById("codes-account-select");
+    const accountButton = document.getElementById("codes-account-button");
+    const accountLabel = document.getElementById("codes-account-label");
+    const accountMenu = document.getElementById("codes-account-menu");
+
     let availableCodes = [];
 
     function showStatus(message, state = "info") {
@@ -28,6 +33,55 @@
         statusBox.textContent = "";
         statusBox.hidden = true;
         delete statusBox.dataset.state;
+    }
+
+    function initialiseAccountDropdown() {
+        if (!accountDropdown || !accountButton || !accountMenu) {
+            return;
+        }
+
+        accountButton.addEventListener("click", () => {
+            if (accountButton.disabled) {
+                return;
+            }
+
+            const isOpen = accountDropdown.classList.toggle("open");
+
+            accountButton.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        accountMenu.querySelectorAll(".custom-select-option").forEach(option => {
+            option.addEventListener("click", () => {
+                accountSelect.value = option.dataset.value;
+                accountLabel.textContent = option.dataset.label;
+
+                accountMenu.querySelectorAll(".custom-select-option").forEach(item => {
+                    const selected = item === option;
+
+                    item.classList.toggle("selected", selected);
+                    item.setAttribute("aria-selected", String(selected));
+                });
+
+                accountDropdown.classList.remove("open");
+                accountButton.setAttribute("aria-expanded", "false");
+
+                clearStatus();
+            });
+        });
+
+        document.addEventListener("click", event => {
+            if (!accountDropdown.contains(event.target)) {
+                accountDropdown.classList.remove("open");
+                accountButton.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                accountDropdown.classList.remove("open");
+                accountButton.setAttribute("aria-expanded", "false");
+            }
+        });
     }
 
     function createElement(tag, className, text) {
@@ -180,6 +234,8 @@
             button.disabled = false;
         }
     }
+
+    initialiseAccountDropdown();
 
     refreshButton.addEventListener("click", fetchCodes);
 

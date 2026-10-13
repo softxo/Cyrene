@@ -63,9 +63,28 @@ async def login_with_password(
             geetest_solver=geetest_solver,
         )
 
-        credentials = credentials_from_web_login(
-            result
+        completed_cookies = await genshin.complete_cookies(
+            result.model_dump()
         )
+
+        credentials = credentials_from_web_login(result)
+
+        for name in (
+            "ltuid",
+            "ltoken",
+            "ltuid_v2",
+            "ltoken_v2",
+            "ltmid_v2",
+            "cookie_token",
+            "account_id",
+            "cookie_token_v2",
+            "account_mid_v2",
+            "account_id_v2",
+        ):
+            value = completed_cookies.get(name)
+
+            if value:
+                setattr(credentials, name, str(value))
 
         return client, credentials
 

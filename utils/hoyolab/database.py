@@ -75,7 +75,16 @@ async def initialise_database() -> None:
             )
             """
         )
-
+        
+        
+        # Add legacy cookies used by some endpoints, including code redemption.
+        await connection.execute(
+            """
+            ALTER TABLE accounts
+                ADD COLUMN IF NOT EXISTS cookie_token TEXT,
+                ADD COLUMN IF NOT EXISTS account_id TEXT
+            """
+        )
 
         await connection.execute(
             """
@@ -442,6 +451,18 @@ async def save_account(
         if credentials.ltoken
         else None
     )
+    
+    encrypted_cookie_token = (
+        crypto.encrypt(credentials.cookie_token)
+        if credentials.cookie_token
+        else None
+    )
+
+    encrypted_account_id = (
+        crypto.encrypt(credentials.account_id)
+        if credentials.account_id
+        else None
+    )
 
     now = datetime.now(timezone.utc).isoformat()
 
@@ -475,7 +496,10 @@ async def save_account(
                 account_id_v2,
 
                 ltuid,
-                ltoken
+                ltoken,
+                
+                cookie_token,
+                account_id
             )
             VALUES (
                 %s, %s, %s,
@@ -485,6 +509,7 @@ async def save_account(
                 %s, %s,
                 %s, %s, %s,
                 %s, %s, %s,
+                %s, %s,
                 %s, %s
             )
 
@@ -513,7 +538,10 @@ async def save_account(
                 account_id_v2 = EXCLUDED.account_id_v2,
 
                 ltuid = EXCLUDED.ltuid,
-                ltoken = EXCLUDED.ltoken
+                ltoken = EXCLUDED.ltoken,
+                
+                cookie_token = EXCLUDED.cookie_token,
+                account_id = EXCLUDED.account_id
             """,
             (
                 discord_user_id,
@@ -542,7 +570,10 @@ async def save_account(
                 encrypted_account_id_v2,
 
                 encrypted_ltuid,
-                encrypted_ltoken
+                encrypted_ltoken,
+                
+                encrypted_cookie_token,
+                encrypted_account_id,
             )
         )
 
@@ -753,7 +784,17 @@ async def get_accounts(
                 crypto.decrypt(row["ltoken"])
                 if row["ltoken"]
                 else None
-            )
+            ),
+            cookie_token=(
+                crypto.decrypt(row["cookie_token"])
+                if row["cookie_token"]
+                else None
+            ),
+            account_id=(
+                crypto.decrypt(row["account_id"])
+                if row["account_id"]
+                else None
+            ),
         )
 
         accounts.append(
@@ -844,8 +885,18 @@ async def get_account(
             crypto.decrypt(row["ltoken"])
             if row["ltoken"]
             else None
-        )
-    )
+        ),
+        cookie_token=(
+            crypto.decrypt(row["cookie_token"])
+            if row["cookie_token"]
+            else None
+        ),
+        account_id=(
+            crypto.decrypt(row["account_id"])
+            if row["account_id"]
+            else None
+        ),
+)
 
     return {
         "id": row["id"],
