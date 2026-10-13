@@ -1033,7 +1033,7 @@ async def set_daily_checkin(
             detail="The enabled value must be a boolean.",
         )
 
-    accounts = await get_accounts(user.user_id)
+    accounts = await get_accounts(user)
 
     account = next(
         (
