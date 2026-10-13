@@ -58,7 +58,12 @@ async def process_daily_checkin_account(
 
     try:
         async with client:
-            reward = await client.claim_daily_reward()
+            if client.genshin_client is None:
+                raise RuntimeError(
+                    "The Genshin client was not initialised."
+                )
+
+            reward = await client.genshin_client.claim_daily_reward()
 
         reward_name = getattr(reward, "name", "Daily reward")
         reward_amount = getattr(reward, "amount", None)
