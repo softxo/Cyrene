@@ -62,51 +62,8 @@ async def login_with_password(
             password,
             geetest_solver=geetest_solver,
         )
-        
-        print(
-            "===== LOGIN RESULT COOKIE FIELDS =====",
-            sorted(
-                key
-                for key, value in result.model_dump().items()
-                if value is not None and (
-                    "cookie" in key.lower()
-                    or "token" in key.lower()
-                    or key in ("account_id", "account_mid_v2", "ltuid", "ltuid_v2")
-                )
-            ),
-            "======================================",
-        )
 
         credentials = credentials_from_web_login(result)
-
-        try:
-            completed_cookies = await genshin.complete_cookies(
-                result.model_dump()
-            )
-
-            for name in (
-                "ltuid",
-                "ltoken",
-                "ltuid_v2",
-                "ltoken_v2",
-                "ltmid_v2",
-                "cookie_token",
-                "account_id",
-                "cookie_token_v2",
-                "account_mid_v2",
-                "account_id_v2",
-            ):
-                value = completed_cookies.get(name)
-
-                if value:
-                    setattr(credentials, name, str(value))
-
-        except Exception as error:
-            print("===== HOYOLAB COOKIE COMPLETION FAILED =====")
-            print(f"Type: {type(error).__name__}")
-            print(f"Module: {type(error).__module__}")
-            print(f"Error: {error}")
-            print("=============================================")
 
         return client, credentials
 
