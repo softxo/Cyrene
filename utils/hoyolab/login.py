@@ -62,21 +62,26 @@ async def login_with_password(
             password,
             geetest_solver=geetest_solver,
         )
+        
+        print(
+            "===== LOGIN RESULT COOKIE FIELDS =====",
+            sorted(
+                key
+                for key, value in result.model_dump().items()
+                if value is not None and (
+                    "cookie" in key.lower()
+                    or "token" in key.lower()
+                    or key in ("account_id", "account_mid_v2", "ltuid", "ltuid_v2")
+                )
+            ),
+            "======================================",
+        )
 
         credentials = credentials_from_web_login(result)
 
         try:
             completed_cookies = await genshin.complete_cookies(
                 result.model_dump()
-            )
-            
-            print(
-                "Login result cookie fields:",
-                sorted(
-                    key
-                    for key, value in result.model_dump().items()
-                    if value is not None and "cookie" in key.lower()
-                )
             )
 
             for name in (
