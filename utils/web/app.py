@@ -1005,8 +1005,9 @@ async def update_automatic_gift_code_claiming(
 @app.post("/api/codes/daily-checkin")
 async def set_daily_checkin(
     request: Request,
+    cyrene_session: str | None = Cookie(default=None),
 ):
-    user = await get_authenticated_user(request)
+    user = await get_authenticated_user(cyrene_session)
 
     if user is None:
         raise HTTPException(
