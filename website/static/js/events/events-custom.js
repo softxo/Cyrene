@@ -449,23 +449,27 @@ function initCustomEvents() {
         const recurrenceType = form.elements.recurrence_type.value;
 
         const accountField = $("[data-custom-account-field]", form);
-        const weekdaysField = $("[data-custom-weekdays]", form);
+        const weekdaysField = $("[data-custom-weekdays-field]", form);
         const intervalField = form.elements.recurrence_interval;
-
-        if (accountField) {
-            accountField.hidden = scope !== "account";
-        }
-
-        if (weekdaysField) {
-            weekdaysField.hidden = recurrenceType !== "weekly";
-        }
-
-        intervalField.disabled = recurrenceType === "none";
-
         const intervalContainer = $(
             "[data-custom-interval-field]",
             form
         );
+
+        // Show the Account dropdown only for One account.
+        if (accountField) {
+            accountField.hidden = scope !== "account";
+        }
+
+        // Show weekday options only for a weekly schedule.
+        if (weekdaysField) {
+            weekdaysField.hidden = recurrenceType !== "weekly";
+        }
+
+        // Disable and hide the repeat interval for one-time events.
+        if (intervalField) {
+            intervalField.disabled = recurrenceType === "none";
+        }
 
         if (intervalContainer) {
             intervalContainer.hidden = recurrenceType === "none";
@@ -846,6 +850,7 @@ function initCustomEvents() {
         card.append(section);
     }
 
+
     function renderEvent(event, list) {
         const completed = (event.completions || []).some(
             completion =>
@@ -868,8 +873,7 @@ function initCustomEvents() {
         accent.setAttribute("aria-hidden", "true");
 
         const content = makeElement("div", "events-custom-card-content");
-        const heading = makeElement("div", "events-custom-card-heading");
-        const textGroup = makeElement("div");
+        const topRow = makeElement("div", "events-custom-card-top-row");
 
         const title = makeElement(
             "h3",
@@ -877,26 +881,16 @@ function initCustomEvents() {
             event.title
         );
 
-        textGroup.append(title);
+        topRow.append(title);
 
-        if (event.description) {
-            textGroup.append(
-                makeElement(
-                    "p",
-                    "events-custom-card-description",
-                    event.description
-                )
-            );
-        }
+        const date = new Date(event.start_at);
+        const dateLabel = new Intl.DateTimeFormat(undefined, {
+            day: "numeric",
+            month: "short"
+        }).format(date);
 
-        const meta = makeElement("div", "events-custom-card-meta");
-
-        meta.append(
-            makeElement(
-                "span",
-                "events-custom-chip",
-                formatDate(event.start_at)
-            ),
+        topRow.append(
+            makeElement("span", "events-custom-chip", dateLabel),
             makeElement(
                 "span",
                 "events-custom-chip",
@@ -911,26 +905,50 @@ function initCustomEvents() {
             )
         );
 
-        if (event.end_at) {
-            meta.append(
+        const countdown = makeElement(
+            "span",
+            "events-custom-countdown",
+            completed ? "Completed" : ""
+        );
+
+        if (!completed) {
+            countdown.dataset.countdownTarget =
+                String(new Date(event.start_at).getTime());
+        }
+
+        topRow.append(countdown);
+        content.append(topRow);
+
+        if (event.description) {
+            content.append(
                 makeElement(
-                    "span",
-                    "events-custom-chip",
-                    `Ends ${formatDate(event.end_at)}`
+                    "p",
+                    "events-custom-card-description",
+                    event.description
                 )
             );
         }
 
-        heading.append(textGroup);
-        content.append(heading, meta);
-
         if (event.reminder_minutes != null) {
-            const reminderLabel = event.reminder_minutes === 0
-                ? "Reminder at start"
-                : `Reminder ${event.reminder_minutes} min before`;
+            let reminderLabel;
+
+            if (event.reminder_minutes === 0) {
+                reminderLabel = "Reminder: at start";
+            } else if (event.reminder_minutes % 60 === 0) {
+                const hours = event.reminder_minutes / 60;
+                reminderLabel =
+                    `Reminder: ${hours} ${hours === 1 ? "hour" : "hours"} before`;
+            } else {
+                reminderLabel =
+                    `Reminder: ${event.reminder_minutes} minutes before`;
+            }
 
             content.append(
-                makeElement("div", "events-custom-card-meta", reminderLabel)
+                makeElement(
+                    "div",
+                    "events-custom-card-reminder",
+                    reminderLabel
+                )
             );
         }
 
@@ -940,7 +958,7 @@ function initCustomEvents() {
 
         actions.append(
             makeButton(
-                completed ? "Mark incomplete" : "Mark complete",
+                completed ? "Mark Incomplete" : "Mark Complete",
                 "",
                 () => toggleCompletion(event, !completed)
             ),
@@ -961,6 +979,7 @@ function initCustomEvents() {
         list.append(card);
     }
 
+
     function renderEmpty(list, message, description) {
         const empty = makeElement("div", "events-custom-empty");
 
@@ -975,6 +994,40 @@ function initCustomEvents() {
 
         list.append(empty);
     }
+
+
+    function updateCustomEventCountdowns() {
+        document.querySelectorAll(
+            ".events-custom-countdown[data-countdown-target]"
+        ).forEach(countdown => {
+            const target = Number(countdown.dataset.countdownTarget);
+            const remaining = target - Date.now();
+
+            if (!Number.isFinite(target)) {
+                countdown.textContent = "—";
+                return;
+            }
+
+            if (remaining <= 0) {
+                countdown.textContent = "Due now";
+                return;
+            }
+
+            const totalMinutes = Math.floor(remaining / 60000);
+            const days = Math.floor(totalMinutes / 1440);
+            const hours = Math.floor((totalMinutes % 1440) / 60);
+            const minutes = totalMinutes % 60;
+
+            if (days > 0) {
+                countdown.textContent = `${days}d ${hours}h`;
+            } else if (hours > 0) {
+                countdown.textContent = `${hours}h ${minutes}m`;
+            } else {
+                countdown.textContent = `${minutes}m`;
+            }
+        });
+    }
+
 
     function renderEvents() {
         const lists = $$("[data-custom-event-list]");
@@ -993,7 +1046,10 @@ function initCustomEvents() {
 
             events.forEach(event => renderEvent(event, list));
         });
+
+        updateCustomEventCountdowns();
     }
+
 
     async function loadEvents() {
         if (loading) return;
@@ -1149,6 +1205,9 @@ function initCustomEvents() {
 
     updateConditionalFields();
     loadEvents();
+
+    updateCustomEventCountdowns();
+    setInterval(updateCustomEventCountdowns, 60_000);
     
 }
 

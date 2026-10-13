@@ -214,15 +214,15 @@
 }
 
 /* =========================================================
-   CUSTOM EVENTS — MODAL
-   Theme-aware styling using Cyrene's global variables.
+   CUSTOM EVENTS — HIDDEN CONDITIONAL FIELDS
+   Ensures hidden modal fields stay hidden despite display rules.
    ========================================================= */
 
 .events-custom-modal[hidden],
+.events-custom-modal [hidden],
 .events-custom-section [hidden] {
     display: none !important;
 }
-
 
 /* =============================
    MODAL OVERLAY
@@ -1193,4 +1193,400 @@
     -webkit-tap-highlight-color: transparent !important;
     outline: 0 !important;
     box-shadow: none !important;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CUSTOM FORM DROPDOWNS
+   ========================================================= */
+
+.events-custom-dialog [data-custom-dropdown] {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Dropdown trigger */
+.events-custom-dialog [data-custom-dropdown] > button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+/* Hover and focus */
+.events-custom-dialog [data-custom-dropdown] > button:hover {
+    border-color: var(--accent);
+}
+
+.events-custom-dialog [data-custom-dropdown] > button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Dropdown options menu */
+.events-custom-dialog [data-custom-dropdown] [role="listbox"],
+.events-custom-dialog [data-custom-dropdown] .events-custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--surface);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+}
+
+/* Individual options */
+.events-custom-dialog [data-custom-dropdown] [data-value] {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+    color: var(--text);
+
+    font: inherit;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.events-custom-dialog [data-custom-dropdown] [data-value]:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CUSTOM DROPDOWN POSITIONING
+   ========================================================= */
+
+.events-custom-dialog .events-custom-field-select {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+.events-custom-dialog .events-custom-field-select > .custom-select-button {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.events-custom-dialog .events-custom-field-select > .custom-select-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEMED WEEKDAY BUTTONS
+   ========================================================= */
+
+.events-custom-dialog .events-custom-weekdays {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.events-custom-dialog .events-custom-day {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.events-custom-dialog .events-custom-day input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.events-custom-dialog .events-custom-day span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 44px;
+    height: 38px;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+/* Selected weekday */
+.events-custom-dialog .events-custom-day input:checked + span {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+/* Hover */
+.events-custom-dialog .events-custom-day:hover span {
+    border-color: var(--accent-border);
+}
+
+/* Keyboard accessibility */
+.events-custom-dialog .events-custom-day input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEMED ADD OBJECTIVE BUTTON
+   ========================================================= */
+
+.events-custom-dialog .events-custom-add-objective {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 0 15px;
+
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+
+    background: var(--accent-soft);
+    color: var(--accent);
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+.events-custom-dialog .events-custom-add-objective:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    text-decoration: none;
+}
+
+.events-custom-dialog .events-custom-add-objective:active {
+    transform: translateY(1px);
+}
+
+.events-custom-dialog .events-custom-add-objective:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.events-custom-dialog .events-custom-add-objective span {
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CONSISTENT CONTROL HEIGHTS
+   ========================================================= */
+
+.events-custom-dialog {
+    --custom-control-height: 42px;
+}
+
+/* Text, number, date, colour and native select controls */
+.events-custom-dialog .events-custom-field > input:not([type="checkbox"]),
+.events-custom-dialog .events-custom-field > select {
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+/* Number inputs and their JavaScript-generated spinner wrappers */
+.events-custom-dialog .events-custom-number {
+    display: flex;
+    align-items: stretch;
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+.events-custom-dialog .events-custom-number > input {
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+/* Keep the spinner controls inside the same overall height */
+.events-custom-dialog .events-custom-number .number-spinner-button {
+    height: 50%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+/* Account selector */
+.events-custom-dialog [data-custom-account-dropdown] .custom-select-button,
+.events-custom-dialog .events-custom-account-select .custom-select-button {
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CUSTOM EVENTS — COMPACT SINGLE-ROW HEADER
+   ========================================================= */
+
+.events-custom-card-content {
+    gap: 10px;
+    padding: 16px 18px;
+    min-width: 0;
+}
+
+.events-custom-card-top-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.events-custom-card-title {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0 4px 0 0;
+    color: var(--text-primary, inherit);
+    font-size: 1rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.events-custom-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.25));
+    border-radius: 7px;
+    background: rgba(128, 128, 150, 0.06);
+    color: var(--text-secondary, #999);
+    font-size: 0.78rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.events-custom-countdown {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: var(--text-primary, inherit);
+    font-size: 0.86rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.events-custom-card-description {
+    margin: 0;
+    color: var(--text-secondary, #999);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.events-custom-card-reminder {
+    color: var(--text-secondary, #999);
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.events-custom-card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+/* Completed events remain visibly distinct. */
+.events-custom-card.is-completed .events-custom-countdown {
+    color: var(--text-secondary, #999);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — RESPONSIVE HEADER
+   ========================================================= */
+
+@media (max-width: 640px) {
+    .events-custom-card-content {
+        padding: 14px;
+    }
+
+    .events-custom-card-top-row {
+        gap: 7px;
+    }
+
+    .events-custom-card-title {
+        flex-basis: 100%;
+        margin-right: 0;
+    }
+
+    .events-custom-countdown {
+        margin-left: auto;
+    }
 }
