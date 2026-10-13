@@ -16,6 +16,8 @@ GIFT_CODES_URL = "https://hoyo-codes.seria.moe/codes?game=genshin"
 # Check for new codes every 15 minutes.
 CHECK_INTERVAL = 15 * 60
 
+REDEMPTION_DELAY_SECONDS = 6
+
 # A processing record older than this is considered abandoned, for example if the application stopped during a redemption.
 STALE_PROCESSING_AFTER = timedelta(minutes=30)
 
@@ -73,16 +75,20 @@ async def fetch_active_gift_codes() -> list[dict]:
 def should_skip_automatic_attempt(
     redemption: dict | None,
 ) -> bool:
-    """Avoid repeating completed or recently attempted redemptions."""
+    """Avoid repeating completed submissions or recent attempts."""
 
     if redemption is None:
         return False
 
     status = redemption.get("status")
 
-    # Do not automatically retry completed submissions or failures.
+    # These codes have already been handled and should not be retried automatically.
     if status in {"submitted", "failed"}:
         return True
+
+    # Cooldown failures can be retried during a later worker cycle.
+    if status == "cooldown":
+        return False
 
     if status == "processing":
         attempted_at = redemption.get("attempted_at")
@@ -99,16 +105,12 @@ def should_skip_automatic_attempt(
                 )
 
         except (TypeError, ValueError):
-            # If the timestamp cannot be interpreted safely, do not risk a duplicate redemption attempt.
             return True
 
         age = datetime.now(timezone.utc) - attempted_at
 
-        if age < STALE_PROCESSING_AFTER:
-            return True
-
-        # The processing record is stale, so it can be attempted again.
-        return False
+        # Avoid duplicating an attempt that may still be running.
+        return age < STALE_PROCESSING_AFTER
 
     # Unknown statuses are skipped conservatively.
     return True
@@ -167,7 +169,6 @@ async def process_account(
                 message,
             )
 
-            # Update our in-memory history for this cycle.
             redemptions[code] = {
                 "status": "submitted",
                 "message": message,
@@ -182,39 +183,69 @@ async def process_account(
             )
 
         except Exception as exc:
-            message = (
-                "Automatic redemption failed. The code may be "
-                "expired, already claimed, unavailable for this "
-                "region, or the account may need to be reconnected."
-            )
+            error_text = str(exc)
+            error_type = type(exc).__name__
+
+            # HoYoLAB limits how frequently codes can be redeemed.
+            if (
+                error_type == "RedemptionCooldown"
+                or "RedemptionCooldown" in error_text
+                or "[-2016]" in error_text
+            ):
+                status = "cooldown"
+                message = (
+                    "HoYoLAB redemption cooldown. "
+                    "This code can be retried automatically later."
+                )
+
+            # This code has already been claimed or used.
+            elif (
+                error_type == "RedemptionClaimed"
+                or "[-2017]" in error_text
+            ):
+                status = "failed"
+                message = (
+                    "This code has already been redeemed or is "
+                    "no longer available for this account."
+                )
+
+            else:
+                status = "failed"
+                message = (
+                    "Automatic redemption failed. The code may be "
+                    "expired, unavailable for this region, or the "
+                    "account may need to be reconnected."
+                )
 
             print(
-                f"[Gift Codes] Failed to submit {code} "
-                f"for account {account_id}: "
-                f"{type(exc).__name__}: {exc}"
+                f"[Gift Codes] {status.capitalize()} for {code} "
+                f"on account {account_id}: "
+                f"{error_type}: {error_text}"
             )
 
             try:
                 await update_gift_code_redemption(
                     account_id,
                     code,
-                    "failed",
+                    status,
                     message,
                 )
             except Exception:
-                # Keep the worker alive even if recording the failure itself encounters a database error.
                 print(
-                    f"[Gift Codes] Could not save failure status "
+                    f"[Gift Codes] Could not save {status} status "
                     f"for account {account_id}, code {code}."
                 )
 
             redemptions[code] = {
-                "status": "failed",
+                "status": status,
                 "message": message,
                 "attempted_at": datetime.now(
                     timezone.utc
                 ).isoformat(),
             }
+
+        # Wait after every attempt, whether it succeeded or failed.
+        await asyncio.sleep(REDEMPTION_DELAY_SECONDS)
 
 
 async def gift_code_worker() -> None:

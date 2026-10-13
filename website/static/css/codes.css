@@ -425,17 +425,285 @@
    AUTOMATIC CLAIMING
    ============================================================ */
 
-.codes-automatic-notice {
-    padding: 16px 18px;
+.codes-automatic-panel {
+    gap: 24px;
+}
 
-    border: 1px dashed var(--border);
+/* ------------------------------------------------------------
+   SETTINGS ROW
+   ------------------------------------------------------------ */
+
+.codes-automatic-settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 20px 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--background);
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.codes-automatic-setting-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.codes-automatic-setting-copy strong {
+    display: block;
+
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.codes-automatic-setting-copy p {
+    margin: 6px 0 0;
+
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* Highlight the settings row when enabled. */
+
+.codes-automatic-panel:has(
+    .codes-toggle input:checked
+) .codes-automatic-settings {
+    border-color: var(--accent-border);
+
+    background: color-mix(
+        in srgb,
+        var(--accent) 4%,
+        var(--background)
+    );
+}
+
+
+/* ------------------------------------------------------------
+   CUSTOM TOGGLE
+   ------------------------------------------------------------ */
+
+.codes-toggle {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    width: 54px;
+    height: 30px;
+
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.codes-toggle input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    margin: 0;
+    padding: 0;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.codes-toggle-slider {
+    position: absolute;
+    inset: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    background: var(--surface-hover);
+
+    cursor: pointer;
+
+    transition:
+        background 0.22s ease,
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.codes-toggle-slider::before {
+    content: "";
+
+    position: absolute;
+    top: 4px;
+    left: 4px;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: var(--text-muted);
+
+    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+
+    transition:
+        transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+        background 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+/* Enabled state. */
+
+.codes-toggle input:checked + .codes-toggle-slider {
+    border-color: var(--accent);
+    background: var(--accent);
+
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.codes-toggle input:checked + .codes-toggle-slider::before {
+    transform: translateX(24px);
+
+    background: var(--background);
+
+    box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+/* Keyboard accessibility. */
+
+.codes-toggle input:focus-visible + .codes-toggle-slider {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Disabled state. */
+
+.codes-toggle input:disabled + .codes-toggle-slider {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.codes-toggle:has(input:disabled) {
+    cursor: not-allowed;
+}
+
+
+/* ------------------------------------------------------------
+   AUTOMATIC CLAIMING STATUS
+   ------------------------------------------------------------ */
+
+.codes-automatic-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--border);
     border-radius: 10px;
 
     background: var(--background);
     color: var(--text-muted);
 
-    font-size: 13px;
-    line-height: 1.7;
+    font-size: 12px;
+    line-height: 1.6;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.codes-automatic-status::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--text-muted);
+}
+
+/* Enabled. */
+
+.codes-automatic-status[data-state="enabled"] {
+    border-color: var(--accent-border);
+
+    background: color-mix(
+        in srgb,
+        var(--accent) 5%,
+        var(--background)
+    );
+
+    color: var(--text);
+}
+
+.codes-automatic-status[data-state="enabled"]::before {
+    background: #22c55e;
+
+    box-shadow: 0 0 8px rgb(34 197 94 / 40%);
+}
+
+/* Saving. */
+
+.codes-automatic-status[data-state="saving"] {
+    border-color: var(--accent-border);
+}
+
+/* Error. */
+
+.codes-automatic-status[data-state="error"] {
+    border-color: var(--error);
+
+    background: color-mix(
+        in srgb,
+        var(--error) 6%,
+        var(--background)
+    );
+
+    color: var(--error);
+}
+
+.codes-automatic-status[data-state="error"]::before {
+    background: var(--error);
+}
+
+
+/* ------------------------------------------------------------
+   RESPONSIVE AUTOMATIC CLAIMING
+   ------------------------------------------------------------ */
+
+@media (max-width: 500px) {
+    .codes-automatic-settings {
+        align-items: center;
+        gap: 14px;
+
+        padding: 16px;
+    }
+
+    .codes-toggle {
+        width: 50px;
+        height: 28px;
+    }
+
+    .codes-toggle-slider::before {
+        width: 18px;
+        height: 18px;
+    }
+
+    .codes-toggle input:checked + .codes-toggle-slider::before {
+        transform: translateX(22px);
+    }
 }
 
 

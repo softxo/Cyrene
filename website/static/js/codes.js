@@ -180,9 +180,15 @@
             return;
         }
 
-        autoClaimStatus.textContent = autoClaimEnabled
-            ? "Automatic claiming is enabled for this account."
-            : "Automatic claiming is disabled for this account.";
+        if (autoClaimEnabled) {
+            autoClaimStatus.textContent =
+                "Automatic claiming is enabled for this account.";
+            autoClaimStatus.dataset.state = "enabled";
+        } else {
+            autoClaimStatus.textContent =
+                "Automatic claiming is disabled for this account.";
+            autoClaimStatus.dataset.state = "disabled";
+        }
     }
 
     async function saveAutoClaimSetting(enabled) {
@@ -193,6 +199,11 @@
         }
 
         autoClaimToggle.disabled = true;
+
+        if (autoClaimStatus) {
+            autoClaimStatus.textContent = "Saving automatic claiming setting…";
+            autoClaimStatus.dataset.state = "saving";
+        }
 
         try {
             const response = await fetch("/api/codes/automatic", {
@@ -216,18 +227,31 @@
                 );
             }
 
-            autoClaimEnabled = data.auto_claim_enabled === true;
-            autoClaimToggle.checked = autoClaimEnabled;
-            updateAutoClaimStatus();
+            // Only update the visible setting if the same account is selected.
+            if (accountSelect?.value === accountId) {
+                autoClaimEnabled = data.auto_claim_enabled === true;
+                autoClaimToggle.checked = autoClaimEnabled;
+                updateAutoClaimStatus();
+            }
         } catch (error) {
-            autoClaimToggle.checked = autoClaimEnabled;
+            if (accountSelect?.value === accountId) {
+                autoClaimToggle.checked = autoClaimEnabled;
 
-            showStatus(
-                error.message || "Unable to save automatic claiming.",
-                "error"
-            );
+                if (autoClaimStatus) {
+                    autoClaimStatus.textContent =
+                        error.message || "Unable to save automatic claiming.";
+                    autoClaimStatus.dataset.state = "error";
+                }
+
+                showStatus(
+                    error.message || "Unable to save automatic claiming.",
+                    "error"
+                );
+            }
         } finally {
-            autoClaimToggle.disabled = false;
+            if (accountSelect?.value === accountId) {
+                autoClaimToggle.disabled = false;
+            }
         }
     }
 
@@ -277,7 +301,8 @@
             );
 
             claimButton.type = "button";
-            claimButton.disabled = !accountSelect || accountSelect.disabled;
+            claimButton.disabled =
+                !accountSelect?.value || accountSelect.disabled;
 
             if (
                 savedStatus === "submitted"
