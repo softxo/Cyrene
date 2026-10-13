@@ -116,18 +116,38 @@
             <div>
                 <h2>Automatic Claiming</h2>
                 <p>
-                    Configure Cyrene to check for new gift codes and attempt
-                    to redeem them for your selected accounts.
+                    Allow Cyrene to check for new gift codes and attempt to
+                    redeem them for this account.
+                </p>
+            </div>
+        </div>
+
+        <div class="codes-automatic-settings">
+            <div class="codes-automatic-setting-copy">
+                <strong>Automatically claim gift codes</strong>
+                <p>
+                    This setting applies only to the selected Genshin account.
+                    It is disabled by default.
                 </p>
             </div>
 
-            <span class="codes-coming-soon">Setup pending</span>
+            <label class="codes-toggle">
+                <input
+                    type="checkbox"
+                    id="codes-auto-claim-toggle"
+                    {% if not accounts %}disabled{% endif %}
+                >
+                <span class="codes-toggle-slider"></span>
+            </label>
         </div>
 
-        <div class="codes-automatic-notice">
-            Automatic claiming is not active yet. Manual claiming is available
-            above; automatic claiming will be connected after its account
-            settings and background scheduler are implemented.
+        <div
+            class="codes-automatic-status"
+            id="codes-automatic-status"
+            role="status"
+            aria-live="polite"
+        >
+            Automatic claiming is disabled.
         </div>
     </section>
 

@@ -30,6 +30,7 @@ from utils.hoyolab.database import (
 )
 from utils.web.app import app as web_app
 from utils.reminders.scheduler import ReminderScheduler
+from utils.hoyolab.gift_code_worker import gift_code_worker
 
 
 
@@ -191,6 +192,7 @@ async def main():
     await initialise_hoyolab_database()
 
     if TOKEN is None:
+        await close_hoyolab_database()
         raise RuntimeError("DISCORD_TOKEN is not set.")
 
     config = uvicorn.Config(
@@ -201,10 +203,16 @@ async def main():
     )
 
     web_server = uvicorn.Server(config)
+    gift_code_task = None
 
     try:
         async with bot:
             await load_cogs()
+
+            gift_code_task = asyncio.create_task(
+                gift_code_worker(),
+                name="gift-code-worker",
+            )
 
             await asyncio.gather(
                 bot.start(TOKEN),
@@ -212,6 +220,14 @@ async def main():
             )
 
     finally:
+        if gift_code_task is not None:
+            gift_code_task.cancel()
+
+            await asyncio.gather(
+                gift_code_task,
+                return_exceptions=True,
+            )
+
         await reminder_scheduler.stop()
         await close_hoyolab_database()
 

@@ -275,7 +275,7 @@ async def initialise_database() -> None:
             """
         )
         
-                # =========================================
+        # =========================================
         # CUSTOM EVENTS
         # =========================================
 
@@ -367,6 +367,39 @@ async def initialise_database() -> None:
             """
             CREATE INDEX IF NOT EXISTS idx_custom_event_completions_user
             ON custom_event_completions(discord_user_id)
+            """
+        )
+        
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS gift_code_settings (
+                account_id INTEGER PRIMARY KEY
+                    REFERENCES accounts(id) ON DELETE CASCADE,
+
+                auto_claim_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+
+                updated_at TIMESTAMPTZ NOT NULL
+                    DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS gift_code_redemptions (
+                id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                account_id INTEGER NOT NULL
+                    REFERENCES accounts(id) ON DELETE CASCADE,
+
+                code TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'failed',
+                message TEXT,
+                attempted_at TIMESTAMPTZ NOT NULL
+                    DEFAULT CURRENT_TIMESTAMP,
+
+                UNIQUE (account_id, code)
+            )
             """
         )
 
@@ -1901,6 +1934,140 @@ async def get_custom_event_completions(
             ORDER BY occurrence_start ASC
             """,
             (discord_user_id, event_id),
+        )
+
+        return await result.fetchall()
+
+    
+async def get_gift_code_settings(account_id: int) -> dict:
+    """Return gift-code settings for an account."""
+
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT auto_claim_enabled
+            FROM gift_code_settings
+            WHERE account_id = %s
+            """,
+            (account_id,),
+        )
+
+        row = await result.fetchone()
+
+    return {
+        "auto_claim_enabled": (
+            row["auto_claim_enabled"] if row else False
+        ),
+    }
+
+
+async def set_gift_code_auto_claim(
+    account_id: int,
+    enabled: bool,
+) -> None:
+    """Persist the automatic gift-code claiming setting."""
+
+    async with get_pool().connection() as connection:
+        await connection.execute(
+            """
+            INSERT INTO gift_code_settings (
+                account_id,
+                auto_claim_enabled,
+                updated_at
+            )
+            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (account_id)
+            DO UPDATE SET
+                auto_claim_enabled = EXCLUDED.auto_claim_enabled,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            (account_id, enabled),
+        )
+
+
+async def get_gift_code_redemptions(
+    account_id: int,
+) -> dict[str, dict]:
+    """Return saved redemption statuses keyed by normalised code."""
+
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT code, status, message, attempted_at
+            FROM gift_code_redemptions
+            WHERE account_id = %s
+            """,
+            (account_id,),
+        )
+
+        rows = await result.fetchall()
+
+    return {
+        row["code"]: {
+            "status": row["status"],
+            "message": row["message"],
+            "attempted_at": (
+                row["attempted_at"].isoformat()
+                if row["attempted_at"]
+                else None
+            ),
+        }
+        for row in rows
+    }
+
+
+async def update_gift_code_redemption(
+    account_id: int,
+    code: str,
+    status: str,
+    message: str | None = None,
+) -> None:
+    """Insert or update the saved status for a code and account."""
+
+    normalised_code = code.strip().upper()
+
+    async with get_pool().connection() as connection:
+        await connection.execute(
+            """
+            INSERT INTO gift_code_redemptions (
+                account_id,
+                code,
+                status,
+                message,
+                attempted_at
+            )
+            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (account_id, code)
+            DO UPDATE SET
+                status = EXCLUDED.status,
+                message = EXCLUDED.message,
+                attempted_at = CURRENT_TIMESTAMP
+            """,
+            (
+                account_id,
+                normalised_code,
+                status,
+                message,
+            ),
+        )
+        
+        
+async def get_gift_code_auto_claim_accounts() -> list[dict]:
+    """Return accounts that have enabled automatic gift-code claiming."""
+
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT
+                a.id AS account_id,
+                a.discord_user_id,
+                a.genshin_uid
+            FROM accounts a
+            INNER JOIN gift_code_settings s
+                ON s.account_id = a.id
+            WHERE s.auto_claim_enabled = TRUE
+            ORDER BY a.id ASC
+            """
         )
 
         return await result.fetchall()

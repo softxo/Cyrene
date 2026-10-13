@@ -21,6 +21,11 @@
     const accountLabel = document.getElementById("codes-account-label");
     const accountMenu = document.getElementById("codes-account-menu");
 
+    const autoClaimToggle = document.getElementById("codes-auto-claim-toggle");
+    const autoClaimStatus = document.getElementById("codes-automatic-status");
+
+    let autoClaimEnabled = false;
+
     let availableCodes = [];
 
     function showStatus(message, state = "info") {
@@ -66,6 +71,7 @@
                 accountButton.setAttribute("aria-expanded", "false");
 
                 clearStatus();
+                fetchCodes();
             });
         });
 
@@ -92,8 +98,28 @@
     }
 
     async function fetchCodes() {
+        const accountId = accountSelect?.value;
+
+        if (!accountId) {
+            availableCodes = [];
+            renderCodes();
+
+            if (autoClaimToggle) {
+                autoClaimToggle.checked = false;
+                autoClaimToggle.disabled = true;
+            }
+
+            if (autoClaimStatus) {
+                autoClaimStatus.textContent =
+                    "Connect a Genshin account to configure automatic claiming.";
+            }
+
+            return;
+        }
+
         refreshButton.disabled = true;
         refreshButton.textContent = "Refreshing…";
+
         list.replaceChildren(
             createElement("div", "codes-loading", "Loading available codes…")
         );
@@ -101,13 +127,16 @@
         clearStatus();
 
         try {
-            const response = await fetch("/api/codes", {
-                method: "GET",
-                credentials: "same-origin",
-                headers: {
-                    Accept: "application/json",
-                },
-            });
+            const response = await fetch(
+                `/api/codes?account_id=${encodeURIComponent(accountId)}`,
+                {
+                    method: "GET",
+                    credentials: "same-origin",
+                    headers: {
+                        Accept: "application/json",
+                    },
+                }
+            );
 
             const data = await response.json();
 
@@ -117,7 +146,18 @@
                 );
             }
 
-            availableCodes = Array.isArray(data.codes) ? data.codes : [];
+            availableCodes = Array.isArray(data.codes)
+                ? data.codes
+                : [];
+
+            autoClaimEnabled = data.auto_claim_enabled === true;
+
+            if (autoClaimToggle) {
+                autoClaimToggle.checked = autoClaimEnabled;
+                autoClaimToggle.disabled = false;
+            }
+
+            updateAutoClaimStatus();
             renderCodes();
         } catch (error) {
             list.replaceChildren(
@@ -127,10 +167,67 @@
                     error.message || "Unable to load gift codes."
                 )
             );
+
             count.textContent = "Unavailable";
         } finally {
             refreshButton.disabled = false;
             refreshButton.textContent = "Refresh Codes";
+        }
+    }
+
+    function updateAutoClaimStatus() {
+        if (!autoClaimStatus) {
+            return;
+        }
+
+        autoClaimStatus.textContent = autoClaimEnabled
+            ? "Automatic claiming is enabled for this account."
+            : "Automatic claiming is disabled for this account.";
+    }
+
+    async function saveAutoClaimSetting(enabled) {
+        const accountId = accountSelect?.value;
+
+        if (!accountId || !autoClaimToggle) {
+            return;
+        }
+
+        autoClaimToggle.disabled = true;
+
+        try {
+            const response = await fetch("/api/codes/automatic", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    account_id: Number(accountId),
+                    enabled,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.detail || "Unable to save automatic claiming."
+                );
+            }
+
+            autoClaimEnabled = data.auto_claim_enabled === true;
+            autoClaimToggle.checked = autoClaimEnabled;
+            updateAutoClaimStatus();
+        } catch (error) {
+            autoClaimToggle.checked = autoClaimEnabled;
+
+            showStatus(
+                error.message || "Unable to save automatic claiming.",
+                "error"
+            );
+        } finally {
+            autoClaimToggle.disabled = false;
         }
     }
 
@@ -165,14 +262,29 @@
                 item.rewards || "Rewards not listed"
             );
 
+            const savedStatus = item.redemption_status;
+
+            const buttonLabel = {
+                submitted: "Submitted",
+                processing: "Claiming…",
+                failed: "Retry",
+            };
+
             const claimButton = createElement(
                 "button",
                 "codes-claim-button",
-                "Claim"
+                buttonLabel[savedStatus] || "Claim"
             );
 
             claimButton.type = "button";
             claimButton.disabled = !accountSelect || accountSelect.disabled;
+
+            if (
+                savedStatus === "submitted"
+                || savedStatus === "processing"
+            ) {
+                claimButton.disabled = true;
+            }
 
             claimButton.addEventListener("click", () => {
                 redeemCode(item.code, claimButton);
@@ -224,6 +336,16 @@
             );
 
             button.textContent = "Submitted";
+            button.disabled = true;
+
+            const item = availableCodes.find(
+                entry => entry.code === code
+            );
+
+            if (item) {
+                item.redemption_status = "submitted";
+                item.redemption_message = data.message;
+            }
         } catch (error) {
             showStatus(
                 `${code}: ${error.message || "Redemption failed."}`,
@@ -236,6 +358,10 @@
     }
 
     initialiseAccountDropdown();
+
+    autoClaimToggle?.addEventListener("change", () => {
+        saveAutoClaimSetting(autoClaimToggle.checked);
+    });
 
     refreshButton.addEventListener("click", fetchCodes);
 

@@ -41,13 +41,16 @@ from utils.web.auth import (
     delete_web_session,
 )
 from utils.hoyolab.database import (
-    get_account,
     get_accounts,
     get_reminders,
     get_reminder,
     create_reminder,
     update_reminder,
     delete_reminder,
+    get_gift_code_settings,
+    set_gift_code_auto_claim,
+    get_gift_code_redemptions,
+    update_gift_code_redemption,
     update_achievement_tier,
     get_event_activity_checks,
     set_event_activity_check,
@@ -682,50 +685,118 @@ async def codes_page(
 @app.get("/api/codes")
 async def get_genshin_codes(
     cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
 ):
-    await get_authenticated_user(cyrene_session)
+    user_id = await get_authenticated_user(cyrene_session)
+
+    accounts = await get_accounts(user_id)
+
+    if not accounts:
+        return {
+            "codes": [],
+            "auto_claim_enabled": False,
+        }
+
+    # Default to the first connected account.
+    if account_id is None:
+        account = accounts[0]
+    else:
+        account = next(
+            (
+                item for item in accounts
+                if item["id"] == account_id
+            ),
+            None,
+        )
+
+        if account is None:
+            raise HTTPException(
+                status_code=404,
+                detail="The selected Genshin account was not found.",
+            )
+
+    selected_account_id = account["id"]
+
+    settings = await get_gift_code_settings(
+        selected_account_id
+    )
+    redemptions = await get_gift_code_redemptions(
+        selected_account_id
+    )
 
     url = "https://hoyo-codes.seria.moe/codes?game=genshin"
 
     try:
         timeout = aiohttp.ClientTimeout(total=15)
 
-        async with aiohttp.ClientSession(timeout=timeout) as session:
+        async with aiohttp.ClientSession(
+            timeout=timeout
+        ) as session:
             async with session.get(url) as response:
                 if response.status != 200:
                     raise HTTPException(
                         status_code=502,
-                        detail="The gift-code service is temporarily unavailable.",
+                        detail=(
+                            "The gift-code service is temporarily "
+                            "unavailable."
+                        ),
                     )
 
                 data = await response.json(content_type=None)
 
-        if not isinstance(data, dict) or not isinstance(data.get("codes"), list):
+        if (
+            not isinstance(data, dict)
+            or not isinstance(data.get("codes"), list)
+        ):
             raise HTTPException(
                 status_code=502,
-                detail="The gift-code service returned an unexpected response.",
+                detail=(
+                    "The gift-code service returned an "
+                    "unexpected response."
+                ),
             )
 
-        codes = [
-            {
-                "code": item["code"],
-                "rewards": item.get("rewards", "Rewards not listed"),
-                "status": item.get("status", "UNKNOWN"),
-            }
-            for item in data["codes"]
-            if isinstance(item, dict)
-            and isinstance(item.get("code"), str)
-            and item.get("status") == "OK"
-        ]
+        codes = []
 
-        return {"codes": codes}
+        for item in data["codes"]:
+            if (
+                not isinstance(item, dict)
+                or not isinstance(item.get("code"), str)
+                or item.get("status") != "OK"
+            ):
+                continue
+
+            code = item["code"].strip()
+            saved = redemptions.get(code.upper(), {})
+
+            codes.append({
+                "code": code,
+                "rewards": item.get(
+                    "rewards",
+                    "Rewards not listed",
+                ),
+                "status": item.get("status", "UNKNOWN"),
+                "redemption_status": saved.get("status"),
+                "redemption_message": saved.get("message"),
+            })
+
+        return {
+            "codes": codes,
+            "auto_claim_enabled": settings["auto_claim_enabled"],
+        }
 
     except HTTPException:
         raise
-    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as exc:
+    except (
+        aiohttp.ClientError,
+        asyncio.TimeoutError,
+        ValueError,
+    ) as exc:
         raise HTTPException(
             status_code=502,
-            detail="Unable to retrieve gift codes. Please try again later.",
+            detail=(
+                "Unable to retrieve gift codes. Please try again later."
+            ),
         ) from exc
 
 
@@ -794,22 +865,52 @@ async def redeem_genshin_code(
             detail="Could not load the selected Genshin account.",
         )
 
+    normalised_code = code.strip().upper()
+
+    # Save the attempt before contacting HoYoLAB.
+    await update_gift_code_redemption(
+        account_id=account_id,
+        code=normalised_code,
+        status="processing",
+        message="Redemption request in progress.",
+    )
+
     try:
         async with client:
             await client.redeem_genshin_code(code.strip())
 
+        await update_gift_code_redemption(
+            account_id=account_id,
+            code=normalised_code,
+            status="submitted",
+            message="The redemption request completed successfully.",
+        )
+
         return {
             "success": True,
             "code": code.strip(),
+            "status": "submitted",
             "message": "The redemption request completed successfully.",
         }
 
     except Exception as exc:
-        # Keep the server log useful without exposing credentials to the browser.
         print(
             f"Gift-code redemption failed for account "
-            f"{account_id}, code {code.strip()}: "
+            f"{account_id}, code {normalised_code}: "
             f"{type(exc).__name__}: {exc}"
+        )
+
+        message = (
+            "Redemption failed. The code may be expired, "
+            "already claimed, unavailable for this region, "
+            "or the account may need to be reconnected."
+        )
+
+        await update_gift_code_redemption(
+            account_id=account_id,
+            code=normalised_code,
+            status="failed",
+            message=message,
         )
 
         return JSONResponse(
@@ -817,13 +918,75 @@ async def redeem_genshin_code(
             content={
                 "success": False,
                 "code": code.strip(),
-                "message": (
-                    "Redemption failed. The code may be expired, "
-                    "already claimed, unavailable for this region, "
-                    "or the account may need to be reconnected."
-                ),
+                "status": "failed",
+                "message": message,
             },
         )
+        
+        
+@app.post("/api/codes/automatic")
+async def update_automatic_gift_code_claiming(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+
+    try:
+        payload = await request.json()
+    except (ValueError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid request body.",
+        )
+
+    if not isinstance(payload, dict):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid request body.",
+        )
+
+    account_id = payload.get("account_id")
+    enabled = payload.get("enabled")
+
+    if not isinstance(enabled, bool):
+        raise HTTPException(
+            status_code=400,
+            detail="A valid enabled setting is required.",
+        )
+
+    try:
+        account_id = int(account_id)
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=400,
+            detail="Select a valid Genshin account.",
+        )
+
+    accounts = await get_accounts(user_id)
+
+    account = next(
+        (
+            item for item in accounts
+            if item["id"] == account_id
+        ),
+        None,
+    )
+
+    if account is None:
+        raise HTTPException(
+            status_code=404,
+            detail="The selected Genshin account was not found.",
+        )
+
+    await set_gift_code_auto_claim(
+        account_id=account_id,
+        enabled=enabled,
+    )
+
+    return {
+        "success": True,
+        "auto_claim_enabled": enabled,
+    }
         
     
 def get_event_activity_period_keys(
