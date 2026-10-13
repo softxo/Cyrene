@@ -24,7 +24,15 @@
     const autoClaimToggle = document.getElementById("codes-auto-claim-toggle");
     const autoClaimStatus = document.getElementById("codes-automatic-status");
 
+    const autoCheckinToggle = document.getElementById(
+        "codes-auto-checkin-toggle"
+    );
+    const autoCheckinStatus = document.getElementById(
+        "codes-auto-checkin-status"
+    );
+
     let autoClaimEnabled = false;
+    let autoCheckinEnabled = false;
 
     let availableCodes = [];
 
@@ -109,6 +117,17 @@
                 autoClaimToggle.disabled = true;
             }
 
+            if (autoCheckinToggle) {
+                autoCheckinToggle.checked = false;
+                autoCheckinToggle.disabled = true;
+            }
+
+            if (autoCheckinStatus) {
+                autoCheckinStatus.textContent =
+                    "Connect a Genshin account to configure automatic daily check-in.";
+                autoCheckinStatus.dataset.state = "disabled";
+            }
+
             if (autoClaimStatus) {
                 autoClaimStatus.textContent =
                     "Connect a Genshin account to configure automatic claiming.";
@@ -152,6 +171,15 @@
 
             autoClaimEnabled = data.auto_claim_enabled === true;
 
+            autoCheckinEnabled = data.auto_checkin_enabled === true;
+
+            if (autoCheckinToggle) {
+                autoCheckinToggle.checked = autoCheckinEnabled;
+                autoCheckinToggle.disabled = false;
+            }
+
+            updateAutoCheckinStatus(data);
+
             if (autoClaimToggle) {
                 autoClaimToggle.checked = autoClaimEnabled;
                 autoClaimToggle.disabled = false;
@@ -188,6 +216,32 @@
             autoClaimStatus.textContent =
                 "Automatic claiming is disabled for this account.";
             autoClaimStatus.dataset.state = "disabled";
+        }
+    }
+
+    function updateAutoCheckinStatus(data = {}) {
+        if (!autoCheckinStatus) {
+            return;
+        }
+
+        if (autoCheckinEnabled) {
+            if (
+                data.checkin_last_status === "claimed"
+                || data.checkin_last_status === "already_claimed"
+            ) {
+                autoCheckinStatus.textContent =
+                    data.checkin_last_message
+                    || "Today's daily check-in has been completed.";
+            } else {
+                autoCheckinStatus.textContent =
+                    "Automatic daily check-in is enabled for this account.";
+            }
+
+            autoCheckinStatus.dataset.state = "enabled";
+        } else {
+            autoCheckinStatus.textContent =
+                "Automatic daily check-in is disabled for this account.";
+            autoCheckinStatus.dataset.state = "disabled";
         }
     }
 
@@ -254,6 +308,73 @@
             }
         }
     }
+
+    async function saveAutoCheckinSetting(enabled) {
+        const accountId = accountSelect?.value;
+
+        if (!accountId || !autoCheckinToggle) {
+            return;
+        }
+
+        autoCheckinToggle.disabled = true;
+
+        if (autoCheckinStatus) {
+            autoCheckinStatus.textContent =
+                "Saving daily check-in setting…";
+            autoCheckinStatus.dataset.state = "saving";
+        }
+
+        try {
+            const response = await fetch("/api/codes/daily-checkin", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    account_id: Number(accountId),
+                    enabled,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.detail || "Unable to save daily check-in setting."
+                );
+            }
+
+            if (accountSelect?.value === accountId) {
+                autoCheckinEnabled = data.auto_checkin_enabled === true;
+                autoCheckinToggle.checked = autoCheckinEnabled;
+                updateAutoCheckinStatus();
+            }
+        } catch (error) {
+            if (accountSelect?.value === accountId) {
+                autoCheckinToggle.checked = autoCheckinEnabled;
+
+                if (autoCheckinStatus) {
+                    autoCheckinStatus.textContent =
+                        error.message
+                        || "Unable to save daily check-in setting.";
+                    autoCheckinStatus.dataset.state = "error";
+                }
+
+                showStatus(
+                    error.message
+                    || "Unable to save daily check-in setting.",
+                    "error"
+                );
+            }
+        } finally {
+            if (accountSelect?.value === accountId) {
+                autoCheckinToggle.disabled = false;
+            }
+        }
+    }
+
 
     function renderCodes() {
         list.replaceChildren();
@@ -386,6 +507,10 @@
 
     autoClaimToggle?.addEventListener("change", () => {
         saveAutoClaimSetting(autoClaimToggle.checked);
+    });
+
+    autoCheckinToggle?.addEventListener("change", () => {
+        saveAutoCheckinSetting(autoCheckinToggle.checked);
     });
 
     refreshButton.addEventListener("click", fetchCodes);

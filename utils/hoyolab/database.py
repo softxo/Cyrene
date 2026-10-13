@@ -402,6 +402,28 @@ async def initialise_database() -> None:
             )
             """
         )
+        
+        # =========================================
+        # DAILY HOYOLAB CHECK-IN SETTINGS
+        # =========================================
+
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS daily_checkin_settings (
+                account_id INTEGER PRIMARY KEY
+                    REFERENCES accounts(id) ON DELETE CASCADE,
+
+                auto_checkin_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+
+                last_claimed_date DATE,
+                last_status TEXT,
+                last_message TEXT,
+
+                updated_at TIMESTAMPTZ NOT NULL
+                    DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
 
 
 def get_pool() -> AsyncConnectionPool:
@@ -2071,3 +2093,123 @@ async def get_gift_code_auto_claim_accounts() -> list[dict]:
         )
 
         return await result.fetchall()
+    
+
+async def get_daily_checkin_settings(
+    account_id: int,
+) -> dict:
+    """Return daily check-in settings for an account."""
+
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT
+                auto_checkin_enabled,
+                last_claimed_date,
+                last_status,
+                last_message
+            FROM daily_checkin_settings
+            WHERE account_id = %s
+            """,
+            (account_id,),
+        )
+
+        row = await result.fetchone()
+
+    return {
+        "auto_checkin_enabled": (
+            row["auto_checkin_enabled"] if row else False
+        ),
+        "last_claimed_date": (
+            row["last_claimed_date"].isoformat()
+            if row and row["last_claimed_date"]
+            else None
+        ),
+        "last_status": row["last_status"] if row else None,
+        "last_message": row["last_message"] if row else None,
+    }
+
+
+async def set_daily_checkin_enabled(
+    account_id: int,
+    enabled: bool,
+) -> None:
+    """Save the automatic daily check-in setting."""
+
+    async with get_pool().connection() as connection:
+        await connection.execute(
+            """
+            INSERT INTO daily_checkin_settings (
+                account_id,
+                auto_checkin_enabled,
+                updated_at
+            )
+            VALUES (%s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (account_id)
+            DO UPDATE SET
+                auto_checkin_enabled = EXCLUDED.auto_checkin_enabled,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            (account_id, enabled),
+        )
+
+
+async def get_daily_checkin_accounts() -> list[dict]:
+    """Return accounts with automatic daily check-in enabled."""
+
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT
+                a.id AS account_id,
+                a.discord_user_id,
+                a.genshin_uid,
+                a.genshin_server
+            FROM accounts a
+            INNER JOIN daily_checkin_settings s
+                ON s.account_id = a.id
+            WHERE s.auto_checkin_enabled = TRUE
+            ORDER BY a.id ASC
+            """
+        )
+
+        return await result.fetchall()
+
+
+async def update_daily_checkin_status(
+    account_id: int,
+    *,
+    status: str,
+    message: str,
+    claimed_date=None,
+) -> None:
+    """Save the latest daily check-in result."""
+
+    async with get_pool().connection() as connection:
+        await connection.execute(
+            """
+            INSERT INTO daily_checkin_settings (
+                account_id,
+                last_claimed_date,
+                last_status,
+                last_message,
+                updated_at
+            )
+            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT (account_id)
+            DO UPDATE SET
+                last_claimed_date = COALESCE(
+                    EXCLUDED.last_claimed_date,
+                    daily_checkin_settings.last_claimed_date
+                ),
+                last_status = EXCLUDED.last_status,
+                last_message = EXCLUDED.last_message,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            (
+                account_id,
+                claimed_date,
+                status,
+                message,
+            ),
+        )

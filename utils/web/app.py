@@ -61,6 +61,8 @@ from utils.hoyolab.database import (
     delete_custom_event,
     set_custom_event_completion,
     get_custom_event_completions,
+    get_daily_checkin_settings,
+    set_daily_checkin_enabled,
 )
 from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.daily_note import get_resin
@@ -721,6 +723,9 @@ async def get_genshin_codes(
     settings = await get_gift_code_settings(
         selected_account_id
     )
+    checkin_settings = await get_daily_checkin_settings(
+        selected_account_id
+    )
     redemptions = await get_gift_code_redemptions(
         selected_account_id
     )
@@ -784,6 +789,10 @@ async def get_genshin_codes(
         return {
             "codes": codes,
             "auto_claim_enabled": settings["auto_claim_enabled"],
+            "auto_checkin_enabled": checkin_settings["auto_checkin_enabled"],
+            "checkin_last_claimed_date": checkin_settings["last_claimed_date"],
+            "checkin_last_status": checkin_settings["last_status"],
+            "checkin_last_message": checkin_settings["last_message"],
         }
 
     except HTTPException:
@@ -990,6 +999,64 @@ async def update_automatic_gift_code_claiming(
     return {
         "success": True,
         "auto_claim_enabled": enabled,
+    }
+    
+
+@app.post("/api/codes/daily-checkin")
+async def set_daily_checkin(
+    request: Request,
+):
+    user = await get_authenticated_user(request)
+
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required.",
+        )
+
+    payload = await request.json()
+
+    try:
+        account_id = int(payload.get("account_id"))
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=400,
+            detail="A valid account ID is required.",
+        )
+
+    enabled = payload.get("enabled")
+
+    if not isinstance(enabled, bool):
+        raise HTTPException(
+            status_code=400,
+            detail="The enabled value must be a boolean.",
+        )
+
+    accounts = await get_accounts(user.user_id)
+
+    account = next(
+        (
+            item
+            for item in accounts
+            if int(item["id"]) == account_id
+        ),
+        None,
+    )
+
+    if account is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Genshin account not found.",
+        )
+
+    await set_daily_checkin_enabled(
+        account_id,
+        enabled,
+    )
+
+    return {
+        "success": True,
+        "auto_checkin_enabled": enabled,
     }
         
     

@@ -31,6 +31,7 @@ from utils.hoyolab.database import (
 from utils.web.app import app as web_app
 from utils.reminders.scheduler import ReminderScheduler
 from utils.hoyolab.gift_code_worker import gift_code_worker
+from utils.hoyolab.daily_checkin_worker import daily_checkin_worker
 
 
 
@@ -203,7 +204,9 @@ async def main():
     )
 
     web_server = uvicorn.Server(config)
+
     gift_code_task = None
+    daily_checkin_task = None
 
     try:
         async with bot:
@@ -212,6 +215,11 @@ async def main():
             gift_code_task = asyncio.create_task(
                 gift_code_worker(),
                 name="gift-code-worker",
+            )
+            
+            daily_checkin_task = asyncio.create_task(
+                daily_checkin_worker(),
+                name="daily-checkin-worker",
             )
 
             await asyncio.gather(
@@ -225,6 +233,14 @@ async def main():
 
             await asyncio.gather(
                 gift_code_task,
+                return_exceptions=True,
+            )
+            
+        if daily_checkin_task is not None:
+            daily_checkin_task.cancel()
+
+            await asyncio.gather(
+                daily_checkin_task,
                 return_exceptions=True,
             )
 

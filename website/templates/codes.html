@@ -151,5 +151,44 @@
         </div>
     </section>
 
+    <section class="codes-panel codes-automatic-panel">
+        <div class="codes-panel-header">
+            <div>
+                <h2>Daily Check-In</h2>
+                <p>
+                    Automatically claim your daily HoYoLAB check-in reward.
+                </p>
+            </div>
+        </div>
+
+        <div class="codes-automatic-settings">
+            <div class="codes-automatic-setting-copy">
+                <strong>Automatically claim daily rewards</strong>
+                <p>
+                    This setting applies only to the selected Genshin account.
+                    It is disabled by default.
+                </p>
+            </div>
+
+            <label class="codes-toggle">
+                <input
+                    type="checkbox"
+                    id="codes-auto-checkin-toggle"
+                    {% if not accounts %}disabled{% endif %}
+                >
+                <span class="codes-toggle-slider"></span>
+            </label>
+        </div>
+
+        <div
+            class="codes-automatic-status"
+            id="codes-auto-checkin-status"
+            role="status"
+            aria-live="polite"
+        >
+            Automatic daily check-in is disabled.
+        </div>
+    </section>
+
 </div>
 {% endblock %}
