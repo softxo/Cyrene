@@ -32,26 +32,9 @@ class HoYoLABClient:
 
         cookies = self.credentials.as_cookies()
 
-        print("===== GENSHIN CLIENT COOKIE CHECK =====")
-        print("Credential cookie names:", sorted(cookies.keys()))
-        print(
-            "V2 cookie token present:",
-            bool(cookies.get("cookie_token_v2")),
-        )
-        print(
-            "Legacy cookie token present:",
-            bool(cookies.get("cookie_token")),
-        )
-        print("======================================")
-
         self.genshin_client = genshin.Client(
             cookies=cookies,
             game=genshin.types.Game.GENSHIN,
-        )
-
-        print(
-            "Genshin client cookie names:",
-            sorted(self.genshin_client.cookie_manager.cookies.keys()),
         )
 
         return self
