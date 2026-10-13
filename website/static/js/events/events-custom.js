@@ -704,7 +704,7 @@ function initCustomEvents() {
 
         if (recurrenceType === "weekly") {
             recurrence.weekdays = $$(
-                'input[name="recurrence_weekdays"]:checked',
+                'input[name="weekdays"]:checked',
                 form
             ).map(input => Number(input.value));
 
@@ -800,6 +800,88 @@ function initCustomEvents() {
         return button;
     }
 
+    async function changeObjectiveProgress(
+        event,
+        objectiveIndex,
+        amount,
+        ui
+    ) {
+        const objective = event.progress?.[objectiveIndex];
+        if (!objective) return;
+
+        const target = Math.max(1, Number(objective.target) || 1);
+        const previous = Math.max(
+            0,
+            Math.min(target, Number(objective.current) || 0)
+        );
+        const next = Math.max(0, Math.min(target, previous + amount));
+
+        if (next === previous) return;
+
+        // Update the data and UI immediately so the bar can animate.
+        objective.current = next;
+
+        ui.value.textContent = `${next}/${target}`;
+        ui.fill.style.width = `${Math.min(100, (next / target) * 100)}%`;
+
+        ui.track.setAttribute("aria-valuenow", String(next));
+
+        ui.increase.disabled = next >= target;
+        ui.decrease.disabled = next <= 0;
+
+        // Prevent overlapping saves for this objective.
+        ui.increase.disabled = true;
+        ui.decrease.disabled = true;
+
+        const payload = {
+            title: event.title,
+            description: event.description || null,
+            account_scope: event.account_scope,
+            account_id: event.account_scope === "account"
+                ? event.account_id
+                : null,
+            start_at: event.start_at,
+            end_at: event.end_at || null,
+            recurrence: event.recurrence || {
+                type: "none",
+                interval: 1
+            },
+            colour: event.colour || "#7c83ff",
+            reminder_minutes: event.reminder_minutes ?? null,
+            progress: event.progress
+        };
+
+        try {
+            await apiRequest(
+                `/api/custom-events/${encodeURIComponent(event.id)}`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify(payload)
+                }
+            );
+        } catch (error) {
+            // Restore the previous value if saving fails.
+            objective.current = previous;
+
+            ui.value.textContent = `${previous}/${target}`;
+            ui.fill.style.width =
+                `${Math.min(100, (previous / target) * 100)}%`;
+
+            ui.track.setAttribute("aria-valuenow", String(previous));
+
+            window.alert(
+                error.message || "Unable to update objective progress."
+            );
+        } finally {
+            // Re-enable only the buttons that are currently valid.
+            const current = Number(objective.current) || 0;
+
+            ui.increase.disabled = current >= target;
+            ui.decrease.disabled = current <= 0;
+        }
+    }
+
+
     function renderProgress(event, card) {
         if (!Array.isArray(event.progress) || !event.progress.length) {
             return;
@@ -807,7 +889,7 @@ function initCustomEvents() {
 
         const section = makeElement("div", "events-custom-progress");
 
-        for (const objective of event.progress) {
+        event.progress.forEach((objective, index) => {
             const current = Math.max(0, Number(objective.current) || 0);
             const target = Math.max(1, Number(objective.target) || 1);
             const percent = Math.min(100, (current / target) * 100);
@@ -817,16 +899,28 @@ function initCustomEvents() {
                 "events-custom-progress-item"
             );
 
+            const heading = makeElement(
+                "div",
+                "events-custom-progress-heading"
+            );
+
             const name = makeElement(
                 "span",
-                "",
+                "events-custom-progress-name",
                 objective.title || "Objective"
             );
 
             const value = makeElement(
                 "span",
-                "",
+                "events-custom-progress-value",
                 `${current}/${target}`
+            );
+
+            heading.append(name, value);
+
+            const controls = makeElement(
+                "div",
+                "events-custom-progress-controls"
             );
 
             const track = makeElement(
@@ -842,12 +936,115 @@ function initCustomEvents() {
             fill.style.width = `${percent}%`;
             fill.style.backgroundColor = event.colour || "#7c83ff";
 
+            track.setAttribute(
+                "role",
+                "progressbar"
+            );
+            track.setAttribute(
+                "aria-label",
+                objective.title || "Objective progress"
+            );
+            track.setAttribute("aria-valuemin", "0");
+            track.setAttribute("aria-valuemax", String(target));
+            track.setAttribute("aria-valuenow", String(current));
+
             track.append(fill);
-            item.append(name, value, track);
+
+            const decreaseButton = makeElement(
+                "button",
+                "events-custom-progress-button",
+                "−"
+            );
+
+            decreaseButton.type = "button";
+            decreaseButton.setAttribute(
+                "aria-label",
+                `Decrease ${objective.title || "objective"} progress`
+            );
+            decreaseButton.disabled = current <= 0;
+
+            decreaseButton.addEventListener("click", () => {
+                changeObjectiveProgress(event, index, -1, {
+                    value,
+                    fill,
+                    increase: increaseButton,
+                    decrease: decreaseButton,
+                    track
+                });
+            });
+
+            const increaseButton = makeElement(
+                "button",
+                "events-custom-progress-button",
+                "+"
+            );
+
+            increaseButton.type = "button";
+            increaseButton.setAttribute(
+                "aria-label",
+                `Increase ${objective.title || "objective"} progress`
+            );
+            increaseButton.disabled = current >= target;
+
+            increaseButton.addEventListener("click", () => {
+                changeObjectiveProgress(event, index, 1, {
+                    value,
+                    fill,
+                    increase: increaseButton,
+                    decrease: decreaseButton,
+                    track
+                });
+            });
+
+            controls.append(track, increaseButton, decreaseButton);
+            item.append(heading, controls);
             section.append(item);
-        }
+        });
 
         card.append(section);
+    }
+
+    
+    function getCustomEventCountdownTarget(event) {
+        const start = new Date(event.start_at);
+
+        if (Number.isNaN(start.getTime())) {
+            return NaN;
+        }
+
+        const recurrence = event.recurrence;
+
+        if (!recurrence || recurrence.type === "none") {
+            return start.getTime();
+        }
+
+        const interval = Math.max(1, Number(recurrence.interval) || 1);
+        const now = new Date();
+
+        // Keep advancing recurring events until the next future occurrence.
+        while (start.getTime() <= now.getTime()) {
+            if (recurrence.type === "daily") {
+                start.setDate(start.getDate() + interval);
+            } else if (recurrence.type === "weekly") {
+                start.setDate(start.getDate() + (7 * interval));
+            } else if (recurrence.type === "monthly") {
+                const day = start.getDate();
+                start.setDate(1);
+                start.setMonth(start.getMonth() + interval);
+
+                const lastDay = new Date(
+                    start.getFullYear(),
+                    start.getMonth() + 1,
+                    0
+                ).getDate();
+
+                start.setDate(Math.min(day, lastDay));
+            } else {
+                return start.getTime();
+            }
+        }
+
+        return start.getTime();
     }
 
 
@@ -911,10 +1108,15 @@ function initCustomEvents() {
             completed ? "Completed" : ""
         );
 
-        if (!completed) {
-            countdown.dataset.countdownTarget =
-                String(new Date(event.start_at).getTime());
-        }
+        const startValue = Number(event.start_at);
+
+        const startTimestamp =
+            Number.isFinite(startValue) && startValue > 0
+                ? (startValue < 1e12 ? startValue * 1000 : startValue)
+                : new Date(event.start_at).getTime();
+
+        countdown.dataset.countdownTarget =
+            String(getCustomEventCountdownTarget(event));
 
         topRow.append(countdown);
         content.append(topRow);
@@ -999,31 +1201,39 @@ function initCustomEvents() {
     function updateCustomEventCountdowns() {
         document.querySelectorAll(
             ".events-custom-countdown[data-countdown-target]"
-        ).forEach(countdown => {
-            const target = Number(countdown.dataset.countdownTarget);
-            const remaining = target - Date.now();
+        ).forEach(timer => {
+            const target = Number(timer.dataset.countdownTarget);
 
             if (!Number.isFinite(target)) {
-                countdown.textContent = "—";
+                timer.textContent = "—";
                 return;
             }
+
+            const remaining = Math.floor((target - Date.now()) / 1000);
+
+            timer.classList.remove("warning", "danger");
 
             if (remaining <= 0) {
-                countdown.textContent = "Due now";
+                timer.textContent = "0m left";
                 return;
             }
 
-            const totalMinutes = Math.floor(remaining / 60000);
-            const days = Math.floor(totalMinutes / 1440);
-            const hours = Math.floor((totalMinutes % 1440) / 60);
-            const minutes = totalMinutes % 60;
+            const days = Math.floor(remaining / 86400);
+            const hours = Math.floor((remaining % 86400) / 3600);
+            const minutes = Math.floor((remaining % 3600) / 60);
 
             if (days > 0) {
-                countdown.textContent = `${days}d ${hours}h`;
+                timer.textContent = `${days}d ${hours}h left`;
             } else if (hours > 0) {
-                countdown.textContent = `${hours}h ${minutes}m`;
+                timer.textContent = `${hours}h ${minutes}m left`;
             } else {
-                countdown.textContent = `${minutes}m`;
+                timer.textContent = `${minutes}m left`;
+            }
+
+            if (remaining < 86400) {
+                timer.classList.add("danger");
+            } else if (remaining < 259200) {
+                timer.classList.add("warning");
             }
         });
     }

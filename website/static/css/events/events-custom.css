@@ -95,7 +95,7 @@
     overflow: hidden;
     border: 1px solid var(--border-color, rgba(150, 150, 170, 0.2));
     border-radius: 14px;
-    background: var(--card-background, rgba(128, 128, 150, 0.04));
+    background: var(--surface);
 }
 
 .events-custom-card-accent {
@@ -186,31 +186,104 @@
     text-decoration: line-through;
 }
 
+/* =========================================================
+   CUSTOM EVENTS — PROGRESS OBJECTIVES
+   ========================================================= */
+
 .events-custom-progress {
     display: grid;
-    gap: 9px;
+    gap: 12px;
+    min-width: 0;
 }
 
 .events-custom-progress-item {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
+    gap: 7px;
+    min-width: 0;
+}
+
+.events-custom-progress-heading {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
     font-size: 0.82rem;
 }
 
+.events-custom-progress-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-progress-value {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary, #999);
+}
+
+.events-custom-progress-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 30px 30px;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
 .events-custom-progress-track {
-    grid-column: 1 / -1;
-    height: 5px;
+    height: 7px;
+    min-width: 0;
     overflow: hidden;
-    border-radius: 99px;
-    background: rgba(128, 128, 150, 0.15);
+    border-radius: 999px;
+    background: rgba(128, 128, 150, 0.18);
 }
 
 .events-custom-progress-fill {
     height: 100%;
     border-radius: inherit;
-    background: var(--custom-event-colour);
+    transition: width 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: width;
+}
+
+.events-custom-progress-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    border-radius: 8px;
+    background: rgba(128, 128, 150, 0.08);
+    color: var(--text-primary, inherit);
+    font: inherit;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        opacity 150ms ease;
+}
+
+.events-custom-progress-button:hover:not(:disabled) {
+    background: color-mix(
+        in srgb,
+        var(--custom-event-colour, #7c83ff) 12%,
+        transparent
+    );
+    border-color: color-mix(
+        in srgb,
+        var(--custom-event-colour, #7c83ff) 45%,
+        var(--border-color, #808096)
+    );
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-progress-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
 }
 
 /* =========================================================
@@ -1588,5 +1661,53 @@
 
     .events-custom-countdown {
         margin-left: auto;
+    }
+}
+
+
+/* =========================================================
+   CUSTOM EVENTS — COUNTDOWN PILL
+   ========================================================= */
+
+.events-custom-countdown {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+    padding: 6px 12px;
+
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.25));
+    border-radius: 999px;
+
+    background: rgba(124, 131, 255, 0.12);
+    color: var(--accent, #7c83ff);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Approaching event: less than three days away. */
+.events-custom-countdown.warning {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+}
+
+/* Urgent: less than one day away. */
+.events-custom-countdown.danger {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+@media (max-width: 640px) {
+    .events-custom-countdown {
+        margin-left: auto;
+        padding: 5px 10px;
     }
 }

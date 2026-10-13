@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageScripts = {
         "/planner": "/static/js/planner.js",
         "/verify": "/static/js/verification.js",
+        "/codes": "/static/js/codes.js",
 
         "/events": [
             "/static/js/events/events-dropdown.js",
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageStyles = {
         "/planner": "/static/css/planner.css",
         "/verify": "/static/css/verification.css",
+        "/codes": "/static/css/codes.css",
         "/events": "/static/css/events/events.css",
         "/settings": "/static/css/settings.css",
     };

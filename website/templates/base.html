@@ -134,12 +134,27 @@
 
         </nav>
 
+        
         <div class="sidebar-bottom">
+
+            <a
+                href="/codes"
+                class="nav-item {% if request.path == '/codes' %}active{% endif %}"
+            >
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Codes.webp"
+                        alt="Codes"
+                    >
+                </span>
+                <span>Codes</span>
+            </a>
 
             <a
                 href="/verify"
                 class="nav-item {% if request.path == '/verify' %}active{% endif %}"
             >
+
                 <span class="nav-icon">
                     <img
                         src="/static/images/ui/ui_icons/Discord.webp"

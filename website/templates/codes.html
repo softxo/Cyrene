@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block title %}Gift Codes | Cyrene{% endblock %}
+
+{% block content %}
+<div class="page codes-page">
+
+    <div class="codes-header">
+        <div>
+            <h1>Gift Codes</h1>
+            <p class="codes-subtitle">
+                Redeem Genshin Impact gift codes and manage automatic claiming.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="codes-refresh-button"
+            id="codes-refresh-button"
+        >
+            Refresh Codes
+        </button>
+    </div>
+
+    <section class="codes-panel">
+        <div class="codes-panel-header">
+            <div>
+                <h2>Available Codes</h2>
+                <p>Claim rewards on one of your connected accounts.</p>
+            </div>
+
+            <span class="codes-count" id="codes-count">0 codes</span>
+        </div>
+
+        <div class="codes-account-selector">
+            <label for="codes-account">Genshin Account</label>
+
+            <select id="codes-account" {% if not accounts %}disabled{% endif %}>
+                {% for account in accounts %}
+                <option value="{{ account.id }}">
+                    {{ account.nickname }} · {{ account.genshin_uid }} ({{ account.genshin_server }})
+                </option>
+                {% endfor %}
+            </select>
+
+            {% if not accounts %}
+            <p class="codes-empty-account">
+                No Genshin accounts connected. Connect an account before claiming codes.
+            </p>
+            {% endif %}
+        </div>
+
+        <div
+            class="codes-status"
+            id="codes-status"
+            role="status"
+            aria-live="polite"
+            hidden
+        ></div>
+
+        <div class="codes-list" id="codes-list">
+            <div class="codes-loading">
+                Loading available codes…
+            </div>
+        </div>
+    </section>
+
+    <section class="codes-panel codes-automatic-panel">
+        <div class="codes-panel-header">
+            <div>
+                <h2>Automatic Claiming</h2>
+                <p>
+                    Configure Cyrene to check for new gift codes and attempt
+                    to redeem them for your selected accounts.
+                </p>
+            </div>
+
+            <span class="codes-coming-soon">Setup pending</span>
+        </div>
+
+        <div class="codes-automatic-notice">
+            Automatic claiming is not active yet. Manual claiming is available
+            above; automatic claiming will be connected after its account
+            settings and background scheduler are implemented.
+        </div>
+    </section>
+
+</div>
+{% endblock %}

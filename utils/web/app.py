@@ -1,5 +1,6 @@
 import typing
 import asyncio
+import aiohttp
 import time
 import tempfile
 import re
@@ -13,7 +14,8 @@ from fastapi import Cookie
 from fastapi import (  
     FastAPI,
     HTTPException,
-    Request
+    Request,
+    Body
 )
 from fastapi.responses import (
     HTMLResponse,
@@ -39,6 +41,7 @@ from utils.web.auth import (
     delete_web_session,
 )
 from utils.hoyolab.database import (
+    get_account,
     get_accounts,
     get_reminders,
     get_reminder,
@@ -636,6 +639,192 @@ async def delete_planner_reminder(
         "success": True,
     }
     
+
+@app.get("/codes", response_class=HTMLResponse)
+async def codes_page(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    session = await get_web_session(cyrene_session)
+
+    if session is None:
+        return RedirectResponse(
+            url="/verify?next=/codes",
+            status_code=303,
+        )
+
+    accounts = await get_accounts(session.user_id)
+
+    codes_accounts = [
+        {
+            "id": account["id"],
+            "genshin_uid": account["genshin_uid"],
+            "nickname": (
+                account.get("cyrene_nickname")
+                or account.get("nickname")
+                or account["genshin_uid"]
+            ),
+            "genshin_server": account["genshin_server"],
+        }
+        for account in accounts
+    ]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="codes.html",
+        context={
+            "request": request,
+            "accounts": codes_accounts,
+        },
+    )
+    
+
+@app.get("/api/codes")
+async def get_genshin_codes(
+    cyrene_session: str | None = Cookie(default=None),
+):
+    await get_authenticated_user(cyrene_session)
+
+    url = "https://hoyo-codes.seria.moe/codes?game=genshin"
+
+    try:
+        timeout = aiohttp.ClientTimeout(total=15)
+
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url) as response:
+                if response.status != 200:
+                    raise HTTPException(
+                        status_code=502,
+                        detail="The gift-code service is temporarily unavailable.",
+                    )
+
+                data = await response.json(content_type=None)
+
+        if not isinstance(data, dict) or not isinstance(data.get("codes"), list):
+            raise HTTPException(
+                status_code=502,
+                detail="The gift-code service returned an unexpected response.",
+            )
+
+        codes = [
+            {
+                "code": item["code"],
+                "rewards": item.get("rewards", "Rewards not listed"),
+                "status": item.get("status", "UNKNOWN"),
+            }
+            for item in data["codes"]
+            if isinstance(item, dict)
+            and isinstance(item.get("code"), str)
+            and item.get("status") == "OK"
+        ]
+
+        return {"codes": codes}
+
+    except HTTPException:
+        raise
+    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="Unable to retrieve gift codes. Please try again later.",
+        ) from exc
+
+
+@app.post("/api/codes/redeem")
+async def redeem_genshin_code(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+
+    try:
+        payload = await request.json()
+    except (ValueError, UnicodeDecodeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid request body.",
+        )
+
+    if not isinstance(payload, dict):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid request body.",
+        )
+
+    code = payload.get("code")
+    account_id = payload.get("account_id")
+
+    if not isinstance(code, str) or not code.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="A gift code is required.",
+        )
+
+    try:
+        account_id = int(account_id)
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=400,
+            detail="Select a valid Genshin account.",
+        )
+
+    # Only allow accounts belonging to the authenticated user.
+    accounts = await get_accounts(user_id)
+    account = next(
+        (
+            item for item in accounts
+            if item["id"] == account_id
+        ),
+        None,
+    )
+
+    if account is None:
+        raise HTTPException(
+            status_code=404,
+            detail="The selected Genshin account was not found.",
+        )
+
+    client = await get_account_client(
+        user_id,
+        account["genshin_uid"],
+    )
+
+    if client is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Could not load the selected Genshin account.",
+        )
+
+    try:
+        async with client:
+            await client.redeem_genshin_code(code.strip())
+
+        return {
+            "success": True,
+            "code": code.strip(),
+            "message": "The redemption request completed successfully.",
+        }
+
+    except Exception as exc:
+        # Keep the server log useful without exposing credentials to the browser.
+        print(
+            f"Gift-code redemption failed for account "
+            f"{account_id}, code {code.strip()}: "
+            f"{type(exc).__name__}: {exc}"
+        )
+
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "code": code.strip(),
+                "message": (
+                    "Redemption failed. The code may be expired, "
+                    "already claimed, unavailable for this region, "
+                    "or the account may need to be reconnected."
+                ),
+            },
+        )
+        
     
 def get_event_activity_period_keys(
     genshin_server: str,

@@ -103,6 +103,20 @@ class HoYoLABClient:
             self.genshin_uid,
             self.genshin_server
         )
+        
+    async def redeem_genshin_code(self, code: str) -> None:
+        """Redeem a Genshin Impact gift code for this account."""
+        if self.genshin_client is None:
+            raise RuntimeError(
+                "HoYoLABClient must be used with 'async with'."
+            )
+
+        await self.genshin_client.redeem_code(
+            code=code,
+            uid=int(self.genshin_uid),
+            game=genshin.types.Game.GENSHIN,
+            region=self.genshin_server,
+        )
 
     async def get_stygian_onslaught(self) -> list:
         if self.genshin_client is None:
