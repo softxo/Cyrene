@@ -348,8 +348,8 @@
 
 .character-constellation img {
     display: block;
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
 }
 
