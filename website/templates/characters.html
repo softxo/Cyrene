@@ -122,7 +122,10 @@
                             >
                             <span>{{ character.element }}</span>
                         </span>
-                        <span>{{ character.rarity }}★</span>
+
+                        <span class="character-rarity">
+                            {{ character.rarity }}★
+                        </span>
                     </div>
 
                     <div class="character-card-footer">
@@ -134,7 +137,8 @@
                             >
                             <span>{{ character.friendship }}</span>
                         </span>
-                        <span>
+
+                        <span class="character-constellation">
                             C{{ character.constellation }}
                         </span>
                     </div>

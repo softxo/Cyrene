@@ -177,9 +177,17 @@ function loadPageStyle(path: string): void {
         return;
     }
 
-    const existingStyle = document.querySelector(
-        `link[data-page-style="${path}"]`,
-    );
+    const absoluteHref = new URL(
+        styleHref,
+        window.location.origin,
+    ).href;
+
+    // Reuse any stylesheet already present in the document.
+    const existingStyle = Array.from(
+        document.querySelectorAll<HTMLLinkElement>(
+            'link[rel="stylesheet"]',
+        ),
+    ).find(link => link.href === absoluteHref);
 
     if (existingStyle) {
         return;

@@ -1,3 +1,4 @@
+
 /* =========================================================
    CHARACTERS PAGE
    ========================================================= */
@@ -9,7 +10,9 @@
     min-width: 0;
 }
 
-/* Page heading and account selector */
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
 
 .characters-header {
     display: flex;
@@ -25,7 +28,7 @@
 
 .characters-header p {
     margin: 6px 0 0;
-    opacity: 0.7;
+    color: var(--text-muted);
 }
 
 /* =========================================================
@@ -73,28 +76,32 @@
     white-space: nowrap;
 }
 
-/* Roster count */
+/* =========================================================
+   ROSTER SUMMARY
+   ========================================================= */
 
 .characters-summary {
-    opacity: 0.75;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
+
 /* =========================================================
-   CHARACTER GRID — COMPACT DESKTOP LAYOUT
+   CHARACTER GRID
+   Compact desktop layout: up to 9 cards per row.
    ========================================================= */
 
 .characters-grid {
     display: grid;
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 10px;
     min-width: 0;
 }
 
 @media (max-width: 1500px) {
     .characters-grid {
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 10px;
+        gap: 9px;
     }
 }
 
@@ -111,7 +118,7 @@
     }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 600px) {
     .characters-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
@@ -124,19 +131,17 @@
     }
 }
 
+
 /* =========================================================
-   CHARACTER CARDS — THEME-AWARE COLOURS
+   CHARACTER CARDS
    ========================================================= */
 
 .character-card {
     min-width: 0;
     overflow: hidden;
-
     border: 1px solid var(--border);
-    border-radius: 12px;
-
+    border-radius: 10px;
     background: var(--surface);
-
     transition:
         transform 160ms ease,
         border-color 160ms ease,
@@ -149,12 +154,13 @@
 }
 
 /* =========================================================
-   CHARACTER CARDS — RARITY BACKGROUNDS
+   CHARACTER PORTRAIT
+   Background colour follows character rarity.
    ========================================================= */
 
 .character-card-image {
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 5 / 6;
     overflow: hidden;
     background: linear-gradient(
         180deg,
@@ -163,7 +169,8 @@
     );
 }
 
-/* 5-star characters — orange-gold */
+/* Five-star characters: orange-gold */
+
 .character-card[data-rarity="5"] .character-card-image {
     background: linear-gradient(
         180deg,
@@ -172,7 +179,8 @@
     );
 }
 
-/* 4-star characters — purple */
+/* Four-star characters: purple */
+
 .character-card[data-rarity="4"] .character-card-image {
     background: linear-gradient(
         180deg,
@@ -188,72 +196,147 @@
     object-fit: cover;
 }
 
+/* Character level badge */
+
 .character-level {
     position: absolute;
     right: 6px;
     bottom: 6px;
-
     padding: 4px 6px;
-
     border: 1px solid var(--border);
     border-radius: 6px;
-
     background: color-mix(
         in srgb,
         var(--background) 90%,
         transparent
     );
-
     color: var(--text);
     font-size: 0.72rem;
     font-weight: 600;
 }
 
+/* =========================================================
+   CHARACTER INFORMATION
+   Row 1: Name
+   Row 2: Element and rarity
+   Row 3: Friendship and constellation
+   ========================================================= */
+
 .character-card-info {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     min-width: 0;
-    padding: 8px;
+    padding: 7px;
 }
+
+/* Character name */
 
 .character-card-info h2 {
     overflow: hidden;
     margin: 0;
-
     color: var(--text);
-    font-size: 0.88rem;
+    font-size: 0.82rem;
+    font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.character-card-meta,
+/* =========================================================
+   ELEMENT AND RARITY ROW
+   ========================================================= */
+
+.character-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+/* Element icon and name */
+
+.character-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.character-element img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
+}
+
+.character-element span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Rarity indicator */
+
+.character-rarity {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   FRIENDSHIP AND CONSTELLATION ROW
+   ========================================================= */
+
 .character-card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 4px;
-
+    min-width: 0;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
     color: var(--text-muted);
     font-size: 0.72rem;
 }
 
-.character-card-footer {
-    padding-top: 6px;
-    border-top: 1px solid var(--border);
+/* Friendship icon and level */
+
+.character-friendship {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    min-width: 0;
+    white-space: nowrap;
 }
 
-.characters-summary {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+.character-friendship img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
 }
+
+/* Constellation level */
+
+.character-constellation {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   EMPTY AND ERROR STATES
+   ========================================================= */
 
 .characters-message {
     padding: 24px;
-
     border: 1px solid var(--border);
     border-radius: 12px;
-
     background: var(--surface);
     color: var(--text);
 }
@@ -271,53 +354,48 @@
     border-color: var(--error);
 }
 
-/* Smaller screens */
+/* =========================================================
+   RESPONSIVE HEADER AND ACCOUNT SELECTOR
+   ========================================================= */
 
 @media (max-width: 600px) {
-    .characters-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-    }
-
-    .characters-card-info {
-        padding: 9px;
-    }
-
     .characters-header {
         align-items: stretch;
     }
 
-    @media (max-width: 600px) {
-        .characters-account-form {
-            align-items: stretch;
-            flex-direction: column;
-        }
-
-        .characters-account-select {
-            width: 100%;
-        }
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
     }
 
-    .characters-account-form select {
+    .characters-account-select {
         width: 100%;
+    }
+
+    .character-card-info {
+        padding: 7px;
+    }
+
+    .character-card-info h2 {
+        font-size: 0.82rem;
+    }
+
+    .character-card-meta,
+    .character-card-footer {
+        font-size: 0.68rem;
     }
 }
 
 /* =========================================================
-   CHARACTER CARDS — ELEMENT ICON
+   REDUCED MOTION
    ========================================================= */
 
-.character-element {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
-}
+@media (prefers-reduced-motion: reduce) {
+    .character-card {
+        transition: none;
+    }
 
-.character-element img {
-    display: block;
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    object-fit: contain;
+    .character-card:hover {
+        transform: none;
+    }
 }

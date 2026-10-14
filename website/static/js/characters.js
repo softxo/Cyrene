@@ -11,10 +11,20 @@ function initCharacters() {
         return;
     }
 
-    form.dataset.initialised = "true";
-
     const select = form.querySelector(
         ".characters-account-select"
+    );
+
+    const button = select?.querySelector(
+        ".custom-select-button"
+    );
+
+    const menu = select?.querySelector(
+        ".custom-select-menu"
+    );
+
+    const valueElement = select?.querySelector(
+        ".custom-select-value"
     );
 
     const hiddenInput = select?.querySelector(
@@ -25,10 +35,42 @@ function initCharacters() {
         ".custom-select-option"
     );
 
-    if (!select || !hiddenInput || !options) {
+    if (
+        !select ||
+        !button ||
+        !menu ||
+        !valueElement ||
+        !hiddenInput ||
+        !options
+    ) {
         return;
     }
 
+    // Mark as initialised only after validation succeeds.
+    form.dataset.initialised = "true";
+
+    function closeDropdown() {
+        select.classList.remove("open");
+        button.setAttribute("aria-expanded", "false");
+    }
+
+    function openDropdown() {
+        select.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+    }
+
+    // Toggle the dropdown menu.
+    button.addEventListener("click", event => {
+        event.preventDefault();
+
+        if (select.classList.contains("open")) {
+            closeDropdown();
+        } else {
+            openDropdown();
+        }
+    });
+
+    // Select an account and submit the form.
     options.forEach(option => {
         option.addEventListener("click", () => {
             const accountId = option.dataset.value;
@@ -38,23 +80,36 @@ function initCharacters() {
             }
 
             hiddenInput.value = accountId;
+            valueElement.textContent = option.textContent.trim();
 
             options.forEach(item => {
                 const isSelected = item === option;
 
-                item.classList.toggle(
-                    "selected",
-                    isSelected
-                );
-
+                item.classList.toggle("selected", isSelected);
                 item.setAttribute(
                     "aria-selected",
                     String(isSelected)
                 );
             });
 
+            closeDropdown();
             form.requestSubmit();
         });
+    });
+
+    // Close when clicking outside the dropdown.
+    document.addEventListener("click", event => {
+        if (!select.contains(event.target)) {
+            closeDropdown();
+        }
+    });
+
+    // Close with Escape.
+    button.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeDropdown();
+            button.focus();
+        }
     });
 }
 
