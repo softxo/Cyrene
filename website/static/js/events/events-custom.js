@@ -31,7 +31,7 @@ function initCustomEvents() {
     // API HELPERS
     // =========================================
 
-    async function apiRequest(url, options = {}) {
+    async function apiRequest(url, options = {}, schema = null) {
         const response = await fetch(url, {
             credentials: "same-origin",
             ...options,
@@ -61,6 +61,23 @@ function initCustomEvents() {
                 data.error ||
                 `Request failed (${response.status}).`
             );
+        }
+
+        if (schema) {
+            const result = schema.safeParse(data);
+
+            if (!result.success) {
+                console.error(
+                    "Custom Events API validation failed:",
+                    result.error.issues
+                );
+
+                throw new Error(
+                    "The server returned unexpected Custom Events data. Please refresh the page."
+                );
+            }
+
+            return result.data;
         }
 
         return data;
@@ -704,7 +721,7 @@ function initCustomEvents() {
 
         if (recurrenceType === "weekly") {
             recurrence.weekdays = $$(
-                'input[name="weekdays"]:checked',
+                'input[name="recurrence_weekdays"]:checked',
                 form
             ).map(input => Number(input.value));
 
@@ -1281,7 +1298,9 @@ function initCustomEvents() {
                 : "";
 
             const data = await apiRequest(
-                `/api/custom-events${suffix}`
+                `/api/custom-events${suffix}`,
+                {},
+                window.CyreneSchemas.customEventsListResponseSchema
             );
 
             events = data.events || [];
@@ -1320,7 +1339,23 @@ function initCustomEvents() {
         }
 
         try {
-            const payload = buildPayload();
+            const rawPayload = buildPayload();
+
+            const validation = window.CyreneSchemas.customEventSchema.safeParse(
+                rawPayload
+            );
+
+            if (!validation.success) {
+                const firstIssue = validation.error.issues[0];
+
+                throw new Error(
+                    firstIssue
+                        ? `${firstIssue.path.join(".")}: ${firstIssue.message}`
+                        : "Please check the event details."
+                );
+            }
+
+            const payload = validation.data;
             const eventId = form.elements.event_id.value;
 
             const result = await apiRequest(
@@ -1330,7 +1365,8 @@ function initCustomEvents() {
                 {
                     method: eventId ? "PUT" : "POST",
                     body: JSON.stringify(payload),
-                }
+                },
+                window.CyreneSchemas.customEventResponseSchema
             );
 
             closeModal();
@@ -1362,9 +1398,9 @@ function initCustomEvents() {
         try {
             await apiRequest(
                 `/api/custom-events/${encodeURIComponent(event.id)}`,
-                { method: "DELETE" }
+                { method: "DELETE" },
+                window.CyreneSchemas.deleteCustomEventResponseSchema
             );
-
             await loadEvents();
         } catch (error) {
             window.alert(error.message || "Unable to delete this event.");
@@ -1385,7 +1421,8 @@ function initCustomEvents() {
                         completed,
                         occurrence_start: event.start_at,
                     }),
-                }
+                },
+                window.CyreneSchemas.customEventCompletionResponseSchema
             );
 
             await loadEvents();

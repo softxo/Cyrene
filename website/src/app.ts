@@ -10,6 +10,22 @@
  * 6. Mobile sidebar
  */
 
+window.CyreneSchemas = {
+    customEventSchema,
+    customEventsListResponseSchema,
+    customEventResponseSchema,
+    deleteCustomEventResponseSchema,
+    customEventCompletionResponseSchema,
+};
+
+import {
+    customEventSchema,
+    customEventsListResponseSchema,
+    customEventResponseSchema,
+    deleteCustomEventResponseSchema,
+    customEventCompletionResponseSchema,
+} from "./schemas/events";
+
 export {};
 
 declare global {
@@ -19,6 +35,15 @@ declare global {
         initAchievements?: () => void;
         initSettings?: () => void;
         initEvents?: () => void;
+
+        CyreneSchemas: {
+            customEventSchema: typeof customEventSchema;
+            customEventsListResponseSchema: typeof customEventsListResponseSchema;
+            customEventResponseSchema: typeof customEventResponseSchema;
+            deleteCustomEventResponseSchema: typeof deleteCustomEventResponseSchema;
+            customEventCompletionResponseSchema:
+                typeof customEventCompletionResponseSchema;
+        };
     }
 }
 
