@@ -1,0 +1,195 @@
+/* =========================================================
+   CHARACTERS PAGE
+   ========================================================= */
+
+.characters-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+
+/* Page heading and account selector */
+
+.characters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.characters-header h1 {
+    margin: 0;
+}
+
+.characters-header p {
+    margin: 6px 0 0;
+    opacity: 0.7;
+}
+
+.characters-account-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.characters-account-form label {
+    opacity: 0.75;
+}
+
+.characters-account-form select {
+    max-width: 100%;
+    padding: 10px 12px;
+    color: inherit;
+    background: var(--card-background, var(--surface-color, #20242d));
+    border: 1px solid var(--border-color, #3a414e);
+    border-radius: 10px;
+}
+
+/* Roster count */
+
+.characters-summary {
+    opacity: 0.75;
+    font-size: 0.9rem;
+}
+
+/* Character card grid */
+
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(155px, 1fr)
+    );
+    gap: 16px;
+}
+
+.character-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-color, #343b48);
+    border-radius: 14px;
+    background: var(--card-background, var(--surface-color, #20242d));
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease;
+}
+
+.character-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-color, #7298ff);
+}
+
+/* Character artwork */
+
+.character-card-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--secondary-background, #292f3b);
+}
+
+.character-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.character-level {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 5px 8px;
+    border: 1px solid #ffffff24;
+    border-radius: 7px;
+    background: #111827d9;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Character information */
+
+.character-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+}
+
+.character-card-info h2 {
+    overflow: hidden;
+    margin: 0;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.character-card-meta,
+.character-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.character-card-meta {
+    opacity: 0.8;
+}
+
+.character-card-footer {
+    padding-top: 9px;
+    border-top: 1px solid var(--border-color, #343b48);
+    opacity: 0.7;
+}
+
+/* Empty, loading and error states */
+
+.characters-message {
+    padding: 28px;
+    border: 1px solid var(--border-color, #343b48);
+    border-radius: 14px;
+    background: var(--card-background, var(--surface-color, #20242d));
+}
+
+.characters-message h2 {
+    margin-top: 0;
+}
+
+.characters-message p {
+    margin-bottom: 0;
+    opacity: 0.75;
+}
+
+.characters-message-error {
+    border-color: #d66b6b80;
+}
+
+/* Smaller screens */
+
+@media (max-width: 600px) {
+    .characters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .characters-card-info {
+        padding: 9px;
+    }
+
+    .characters-header {
+        align-items: stretch;
+    }
+
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-account-form select {
+        width: 100%;
+    }
+}

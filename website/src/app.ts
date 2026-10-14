@@ -92,6 +92,7 @@ const pageScripts: Record<string, string | string[]> = {
 };
 
 const pageStyles: Record<string, string> = {
+    "/characters": "/static/css/characters.css",
     "/planner": "/static/css/planner.css",
     "/verify": "/static/css/verification.css",
     "/codes": "/static/css/codes.css",

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page characters-page">
+
+    <header class="characters-header">
+        <div>
+            <h1>Characters</h1>
+            <p>Your Genshin Impact character roster.</p>
+        </div>
+
+        {% if accounts %}
+        <form method="get" action="/characters" class="characters-account-form">
+            <label for="characters-account">Account</label>
+
+            <select
+                id="characters-account"
+                name="account_id"
+                onchange="this.form.submit()"
+            >
+                {% for account in accounts %}
+                <option
+                    value="{{ account.id }}"
+                    {% if selected_account and account.id == selected_account.id %}
+                    selected
+                    {% endif %}
+                >
+                    {{ account.get("nickname") or account.get("genshin_uid") }}
+                    · {{ account.genshin_uid }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+        {% endif %}
+    </header>
+
+    {% if not accounts %}
+        <div class="characters-message">
+            <h2>No accounts connected</h2>
+            <p>Connect your HoYoLAB account to view your characters.</p>
+            <a href="/verify?next=/characters">Connect account</a>
+        </div>
+
+    {% elif character_error %}
+        <div class="characters-message characters-message-error">
+            <h2>Unable to load characters</h2>
+            <p>{{ character_error }}</p>
+        </div>
+
+    {% elif not characters %}
+        <div class="characters-message">
+            <h2>No characters found</h2>
+            <p>
+                Make sure your character details are visible in your
+                Genshin Impact Battle Chronicle.
+            </p>
+        </div>
+
+    {% else %}
+        <div class="characters-summary">
+            <span>{{ characters | length }} characters</span>
+        </div>
+
+        <div class="characters-grid">
+            {% for character in characters %}
+            <article
+                class="character-card"
+                data-character-id="{{ character.id }}"
+                data-element="{{ character.element | lower }}"
+            >
+                <div class="character-card-image">
+                    <img
+                        src="{{ character.icon }}"
+                        alt="{{ character.name }}"
+                        loading="lazy"
+                    >
+
+                    <span class="character-level">
+                        Lv. {{ character.level }}
+                    </span>
+                </div>
+
+                <div class="character-card-info">
+                    <h2>{{ character.name }}</h2>
+
+                    <div class="character-card-meta">
+                        <span>{{ character.element }}</span>
+                        <span>{{ character.rarity }}★</span>
+                    </div>
+
+                    <div class="character-card-footer">
+                        <span>
+                            Friendship {{ character.friendship }}
+                        </span>
+                        <span>
+                            C{{ character.constellation }}
+                        </span>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

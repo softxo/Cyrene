@@ -10,12 +10,12 @@ from datetime import (
     timezone
 )
 from pathlib import Path
-from fastapi import Cookie
-from fastapi import (  
+from fastapi import (
+    Cookie, 
+    logger,
     FastAPI,
     HTTPException,
-    Request,
-    Body
+    Request
 )
 from fastapi.responses import (
     HTMLResponse,
@@ -2677,6 +2677,73 @@ async def validate_custom_event_payload(
         "reminder_minutes": reminder_minutes,
         "progress": clean_progress,
     }
+    
+
+@app.get("/characters", response_class=HTMLResponse)
+async def characters_page(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    session = await get_web_session(cyrene_session)
+
+    if session is None:
+        return RedirectResponse(
+            url="/verify?next=/characters",
+            status_code=303,
+        )
+
+    user_id = session.user_id
+    accounts = await get_accounts(user_id)
+
+    selected_account = next(
+        (
+            account
+            for account in accounts
+            if account["id"] == account_id
+        ),
+        None,
+    ) if account_id is not None else None
+
+    if selected_account is None and accounts:
+        selected_account = accounts[0]
+
+    characters = []
+    character_error = None
+
+    if selected_account is not None:
+        client = await get_account_client(
+            user_id,
+            selected_account["genshin_uid"],
+        )
+
+        if client is None:
+            character_error = "Unable to load the selected account."
+        else:
+            try:
+                async with client:
+                    characters = await client.get_genshin_characters()
+            except Exception:
+                logger.exception(
+                    "Failed to retrieve characters for account %s",
+                    selected_account["id"],
+                )
+                character_error = (
+                    "Couldn't retrieve characters from HoYoLAB. "
+                    "Please try again later."
+                )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="characters.html",
+        context={
+            "request": request,
+            "accounts": accounts,
+            "selected_account": selected_account,
+            "characters": characters,
+            "character_error": character_error,
+        },
+    )
 
 
 @app.get(

@@ -1,51 +1,21 @@
-import asyncio
-from pathlib import Path
+import inspect
+from genshin.models.genshin.chronicle import characters as models
 
-from utils.exporter.engine import (
-    ExporterEngine,
-)
+for name in ("Character", "GenshinDetailCharacters"):
+    model = getattr(models, name, None)
 
-from utils.exporter.export import (
-    write_export,
-)
+    print(f"\n--- {name} ---")
 
+    if model is None:
+        print("Class not found")
+        continue
 
-async def main():
+    print("Annotations:", getattr(model, "__annotations__", {}))
 
-    engine = ExporterEngine()
+    fields = getattr(model, "model_fields", None)
+    if fields:
+        print("Model fields:", list(fields.keys()))
 
-    result = await engine.export_all()
-
-    output_file = Path(
-        "cyrene_export.json"
-    )
-
-    output_path = write_export(
-        result,
-        output_file,
-    )
-
-    print(
-        f"Exporter version: "
-        f"{result.exporter_version}"
-    )
-
-    print(
-        f"Achievements exported: "
-        f"{len(result.data.get('achievements', []))}"
-    )
-
-    print(
-        f"Errors: "
-        f"{len(result.errors)}"
-    )
-
-    print(
-        f"Export written to: "
-        f"{output_path.resolve()}"
-    )
-
-
-if __name__ == "__main__":
-
-    asyncio.run(main())
+    attrs = getattr(model, "__attrs_attrs__", None)
+    if attrs:
+        print("Attrs fields:", [attr.name for attr in attrs])

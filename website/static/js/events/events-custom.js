@@ -1014,7 +1014,7 @@ function initCustomEvents() {
                 });
             });
 
-            controls.append(track, increaseButton, decreaseButton);
+            controls.append(track, decreaseButton, increaseButton);
             item.append(heading, controls);
             section.append(item);
         });

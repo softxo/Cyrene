@@ -233,3 +233,31 @@ class HoYoLABClient:
         return await client.get_genshin_event_calendar(
             uid=self.genshin_uid,
         )
+        
+    async def get_genshin_characters(self):
+        """Retrieve the character roster from the account's Battle Chronicle."""
+        if self.genshin_client is None:
+            raise RuntimeError(
+                "HoYoLABClient must be used with 'async with'."
+            )
+
+        return await self.genshin_client.get_genshin_characters(
+            uid=int(self.genshin_uid),
+            lang="en-us",
+        )
+
+    async def get_genshin_detailed_characters(
+        self,
+        characters: list[int] | None = None,
+    ):
+        """Retrieve detailed Battle Chronicle data for the account's characters."""
+        if self.genshin_client is None:
+            raise RuntimeError(
+                "HoYoLABClient must be used with 'async with'."
+            )
+
+        return await self.genshin_client.get_genshin_detailed_characters(
+            uid=int(self.genshin_uid),
+            characters=characters,
+            lang="en-us",
+        )
