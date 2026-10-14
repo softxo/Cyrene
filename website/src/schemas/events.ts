@@ -118,7 +118,6 @@ export const customEventCompletionRecordSchema = z.object({
 
 export const customEventRecordSchema = z.object({
     id: z.number().int().positive(),
-    discord_user_id: z.number().int(),
 
     title: z.string(),
     description: z.string().nullable(),

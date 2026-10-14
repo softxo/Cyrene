@@ -68,8 +68,8 @@ function initCustomEvents() {
 
             if (!result.success) {
                 console.error(
-                    "Custom Events API validation failed:",
-                    result.error.issues
+                    "Custom Events API validation failed:\n",
+                    JSON.stringify(result.error.issues, null, 2),
                 );
 
                 throw new Error(
