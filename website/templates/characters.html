@@ -10,26 +10,55 @@
         </div>
 
         {% if accounts %}
-        <form method="get" action="/characters" class="characters-account-form">
-            <label for="characters-account">Account</label>
+        <form
+            method="get"
+            action="/characters"
+            class="characters-account-form"
+            data-characters-account-form
+        >
+            <label for="characters-account-button">Account</label>
 
-            <select
-                id="characters-account"
-                name="account_id"
-                onchange="this.form.submit()"
-            >
-                {% for account in accounts %}
-                <option
-                    value="{{ account.id }}"
-                    {% if selected_account and account.id == selected_account.id %}
-                    selected
-                    {% endif %}
+            <div class="custom-select characters-account-select">
+                <button
+                    id="characters-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
                 >
-                    {{ account.get("nickname") or account.get("genshin_uid") }}
-                    · {{ account.genshin_uid }}
-                </option>
-                {% endfor %}
-            </select>
+                    <span class="custom-select-value">
+                        {% if selected_account %}
+                            {{ selected_account.get("nickname") or selected_account.get("genshin_uid") }}
+                            · {{ selected_account.genshin_uid }}
+                        {% else %}
+                            Select an account
+                        {% endif %}
+                    </span>
+
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if selected_account and account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
+                    >
+                        {{ account.get("nickname") or account.get("genshin_uid") }}
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <input
+                    type="hidden"
+                    name="account_id"
+                    value="{{ selected_account.id if selected_account else '' }}"
+                >
+            </div>
         </form>
         {% endif %}
     </header>

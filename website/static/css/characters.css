@@ -28,23 +28,49 @@
     opacity: 0.7;
 }
 
+/* =========================================================
+   CHARACTER ACCOUNT SELECTOR
+   Uses Cyrene's shared custom-select component.
+   ========================================================= */
+
 .characters-account-form {
     display: flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
 }
 
-.characters-account-form label {
-    opacity: 0.75;
+.characters-account-form > label {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 13px;
 }
 
-.characters-account-form select {
+.characters-account-select {
+    width: 260px;
     max-width: 100%;
-    padding: 10px 12px;
-    color: inherit;
-    background: var(--card-background, var(--surface-color, #20242d));
-    border: 1px solid var(--border-color, #3a414e);
-    border-radius: 10px;
+}
+
+.characters-account-select .custom-select-button {
+    min-height: 39px;
+    background: var(--surface);
+}
+
+.characters-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-account-select .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.characters-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Roster count */
@@ -54,40 +80,79 @@
     font-size: 0.9rem;
 }
 
-/* Character card grid */
+/* =========================================================
+   CHARACTER GRID — COMPACT DESKTOP LAYOUT
+   ========================================================= */
 
 .characters-grid {
     display: grid;
-    grid-template-columns: repeat(
-        auto-fill,
-        minmax(155px, 1fr)
-    );
-    gap: 16px;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
 }
+
+@media (max-width: 1500px) {
+    .characters-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+
+@media (max-width: 1150px) {
+    .characters-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .characters-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 550px) {
+    .characters-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   CHARACTER CARDS — THEME-AWARE COLOURS
+   ========================================================= */
 
 .character-card {
     min-width: 0;
     overflow: hidden;
-    border: 1px solid var(--border-color, #343b48);
-    border-radius: 14px;
-    background: var(--card-background, var(--surface-color, #20242d));
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--surface);
+
     transition:
         transform 160ms ease,
-        border-color 160ms ease;
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
 .character-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-color, #7298ff);
+    transform: translateY(-2px);
+    border-color: var(--accent-border);
 }
-
-/* Character artwork */
 
 .character-card-image {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
-    background: var(--secondary-background, #292f3b);
+    background: var(--surface-hover);
 }
 
 .character-card-image img {
@@ -99,30 +164,39 @@
 
 .character-level {
     position: absolute;
-    right: 8px;
-    bottom: 8px;
-    padding: 5px 8px;
-    border: 1px solid #ffffff24;
-    border-radius: 7px;
-    background: #111827d9;
-    color: #fff;
-    font-size: 0.8rem;
+    right: 6px;
+    bottom: 6px;
+
+    padding: 4px 6px;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    background: color-mix(
+        in srgb,
+        var(--background) 90%,
+        transparent
+    );
+
+    color: var(--text);
+    font-size: 0.72rem;
     font-weight: 600;
 }
-
-/* Character information */
 
 .character-card-info {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 12px;
+    gap: 6px;
+    min-width: 0;
+    padding: 8px;
 }
 
 .character-card-info h2 {
     overflow: hidden;
     margin: 0;
-    font-size: 1rem;
+
+    color: var(--text);
+    font-size: 0.88rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -132,27 +206,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    font-size: 0.8rem;
-}
+    gap: 4px;
 
-.character-card-meta {
-    opacity: 0.8;
+    color: var(--text-muted);
+    font-size: 0.72rem;
 }
 
 .character-card-footer {
-    padding-top: 9px;
-    border-top: 1px solid var(--border-color, #343b48);
-    opacity: 0.7;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
 }
 
-/* Empty, loading and error states */
+.characters-summary {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
 
 .characters-message {
-    padding: 28px;
-    border: 1px solid var(--border-color, #343b48);
-    border-radius: 14px;
-    background: var(--card-background, var(--surface-color, #20242d));
+    padding: 24px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--surface);
+    color: var(--text);
 }
 
 .characters-message h2 {
@@ -161,11 +238,11 @@
 
 .characters-message p {
     margin-bottom: 0;
-    opacity: 0.75;
+    color: var(--text-muted);
 }
 
 .characters-message-error {
-    border-color: #d66b6b80;
+    border-color: var(--error);
 }
 
 /* Smaller screens */
@@ -184,9 +261,15 @@
         align-items: stretch;
     }
 
-    .characters-account-form {
-        align-items: stretch;
-        flex-direction: column;
+    @media (max-width: 600px) {
+        .characters-account-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .characters-account-select {
+            width: 100%;
+        }
     }
 
     .characters-account-form select {
