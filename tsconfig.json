@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "types": ["node"],
+        "moduleResolution": "Bundler",
+        "lib": [
+            "ES2022",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "strict": true,
+        "noEmit": true,
+        "noEmitOnError": true,
+        "rootDir": "website/src",
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "website/src/**/*.ts"
+    ],
+    "exclude": [
+        "website/static/js",
+        "website/build",
+        "node_modules"
+    ]
+}
