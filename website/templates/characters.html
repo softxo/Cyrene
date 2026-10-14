@@ -96,6 +96,7 @@
                 class="character-card"
                 data-character-id="{{ character.id }}"
                 data-element="{{ character.element | lower }}"
+                data-rarity="{{ character.rarity }}"
             >
                 <div class="character-card-image">
                     <img
@@ -113,13 +114,25 @@
                     <h2>{{ character.name }}</h2>
 
                     <div class="character-card-meta">
-                        <span>{{ character.element }}</span>
+                        <span class="character-element">
+                            <img
+                                src="/static/images/characters/Element_{{ character.element }}.webp"
+                                alt="{{ character.element }}"
+                                title="{{ character.element }}"
+                            >
+                            <span>{{ character.element }}</span>
+                        </span>
                         <span>{{ character.rarity }}★</span>
                     </div>
 
                     <div class="character-card-footer">
-                        <span>
-                            Friendship {{ character.friendship }}
+                        <span class="character-friendship">
+                            <img
+                                src="/static/images/characters/Friendship.webp"
+                                alt="Friendship"
+                                title="Friendship"
+                            >
+                            <span>{{ character.friendship }}</span>
                         </span>
                         <span>
                             C{{ character.constellation }}

@@ -148,11 +148,37 @@
     border-color: var(--accent-border);
 }
 
+/* =========================================================
+   CHARACTER CARDS — RARITY BACKGROUNDS
+   ========================================================= */
+
 .character-card-image {
     position: relative;
     aspect-ratio: 4 / 5;
     overflow: hidden;
-    background: var(--surface-hover);
+    background: linear-gradient(
+        180deg,
+        #8055a8 0%,
+        #49345f 100%
+    );
+}
+
+/* 5-star characters — orange-gold */
+.character-card[data-rarity="5"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #d99a43 0%,
+        #87502e 100%
+    );
+}
+
+/* 4-star characters — purple */
+.character-card[data-rarity="4"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #a16acb 0%,
+        #573777 100%
+    );
 }
 
 .character-card-image img {
@@ -275,4 +301,23 @@
     .characters-account-form select {
         width: 100%;
     }
+}
+
+/* =========================================================
+   CHARACTER CARDS — ELEMENT ICON
+   ========================================================= */
+
+.character-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.character-element img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    object-fit: contain;
 }
