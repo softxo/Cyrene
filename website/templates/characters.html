@@ -122,10 +122,16 @@
                             >
                             <span>{{ character.element }}</span>
                         </span>
-
+                        
                         <span class="character-rarity">
-                            {{ character.rarity }}★
+                            {{ character.rarity }}
+                            <img
+                                src="/static/images/characters/Rarity.webp"
+                                alt="Rarity"
+                                title="{{ character.rarity }}-star rarity"
+                            >
                         </span>
+
                     </div>
 
                     <div class="character-card-footer">
@@ -140,7 +146,13 @@
 
                         <span class="character-constellation">
                             C{{ character.constellation }}
+                            <img
+                                src="/static/images/characters/Constellation.webp"
+                                alt="Constellation"
+                                title="Constellation {{ character.constellation }}"
+                            >
                         </span>
+
                     </div>
                 </div>
             </article>

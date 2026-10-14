@@ -279,11 +279,23 @@
     white-space: nowrap;
 }
 
-/* Rarity indicator */
+
+/* Rarity value and icon */
 
 .character-rarity {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
     flex-shrink: 0;
     white-space: nowrap;
+}
+
+.character-rarity img {
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
 }
 
 /* =========================================================
@@ -322,11 +334,23 @@
     object-fit: contain;
 }
 
-/* Constellation level */
+
+/* Constellation value and icon */
 
 .character-constellation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
     flex-shrink: 0;
     white-space: nowrap;
+}
+
+.character-constellation img {
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
 }
 
 /* =========================================================
