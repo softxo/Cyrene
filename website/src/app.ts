@@ -10,14 +10,6 @@
  * 6. Mobile sidebar
  */
 
-window.CyreneSchemas = {
-    customEventSchema,
-    customEventsListResponseSchema,
-    customEventResponseSchema,
-    deleteCustomEventResponseSchema,
-    customEventCompletionResponseSchema,
-};
-
 import {
     customEventSchema,
     customEventsListResponseSchema,
@@ -38,14 +30,25 @@ declare global {
 
         CyreneSchemas: {
             customEventSchema: typeof customEventSchema;
-            customEventsListResponseSchema: typeof customEventsListResponseSchema;
-            customEventResponseSchema: typeof customEventResponseSchema;
-            deleteCustomEventResponseSchema: typeof deleteCustomEventResponseSchema;
+            customEventsListResponseSchema:
+                typeof customEventsListResponseSchema;
+            customEventResponseSchema:
+                typeof customEventResponseSchema;
+            deleteCustomEventResponseSchema:
+                typeof deleteCustomEventResponseSchema;
             customEventCompletionResponseSchema:
                 typeof customEventCompletionResponseSchema;
         };
     }
 }
+
+window.CyreneSchemas = {
+    customEventSchema,
+    customEventsListResponseSchema,
+    customEventResponseSchema,
+    deleteCustomEventResponseSchema,
+    customEventCompletionResponseSchema,
+};
 
 /* =========================================================
    1. HOVER EFFECTS

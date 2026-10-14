@@ -874,7 +874,8 @@ function initCustomEvents() {
                 {
                     method: "PUT",
                     body: JSON.stringify(payload)
-                }
+                },
+                window.CyreneSchemas.customEventResponseSchema
             );
         } catch (error) {
             // Restore the previous value if saving fails.
