@@ -2803,6 +2803,16 @@ async def characters_page(
                             f"UI_AvatarIcon_{data.icon_name}.png"
                         )
                     )
+                    
+                    if owned is not None:
+                        print(
+                            "[CHARACTER WEAPON DEBUG]",
+                            "name =", getattr(owned, "name", None),
+                            "| weapon_type =", getattr(owned, "weapon_type", None),
+                            "| weapon =", getattr(owned, "weapon", None),
+                            "| catalogue weapon_type =", getattr(data, "weapon_type", None),
+                            "| catalogue weapon =", getattr(data, "weapon", None),
+                        )
 
                     characters.append({
                         "id": int(character_id),
