@@ -2864,6 +2864,118 @@ async def characters_page(
             "character_error": character_error,
         },
     )
+    
+    
+@app.get("/api/characters/{character_id}/showcase")
+async def character_showcase_data(
+    character_id: int,
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    """Retrieve detailed build data for an owned character."""
+
+    session = await get_web_session(cyrene_session)
+
+    if session is None:
+        return JSONResponse(
+            status_code=401,
+            content={"error": "Your session has expired."},
+        )
+
+    user_id = session.user_id
+    accounts = await get_accounts(user_id)
+
+    # Use the requested account, or the first account by default.
+    if account_id is not None:
+        selected_account = next(
+            (
+                account
+                for account in accounts
+                if int(account["id"]) == account_id
+            ),
+            None,
+        )
+
+        if selected_account is None:
+            return JSONResponse(
+                status_code=404,
+                content={"error": "Account not found."},
+            )
+    else:
+        selected_account = accounts[0] if accounts else None
+
+    if selected_account is None:
+        return JSONResponse(
+            status_code=404,
+            content={"error": "No linked account found."},
+        )
+
+    client = await get_account_client(
+        user_id,
+        selected_account["genshin_uid"],
+    )
+
+    if client is None:
+        return JSONResponse(
+            status_code=503,
+            content={"error": "Unable to load the selected account."},
+        )
+
+    try:
+        async with client:
+            # Confirm the character belongs to this account.
+            owned_characters = await client.get_genshin_characters()
+
+            if not any(
+                int(character.id) == character_id
+                for character in owned_characters
+            ):
+                return JSONResponse(
+                    status_code=404,
+                    content={
+                        "error": "This character isn't owned by this account."
+                    },
+                )
+
+            # Retrieve detailed data for this character only.
+            detailed_characters = (
+                await client.get_genshin_detailed_characters(
+                    characters=[character_id],
+                )
+            )
+
+        # Convert Pydantic models into JSON-compatible dictionaries.
+        if isinstance(detailed_characters, (list, tuple)):
+            character_data = [
+                character.model_dump(mode="json")
+                if hasattr(character, "model_dump")
+                else character
+                for character in detailed_characters
+            ]
+        elif hasattr(detailed_characters, "model_dump"):
+            character_data = detailed_characters.model_dump(mode="json")
+        else:
+            character_data = detailed_characters
+
+        return {
+            "character_id": character_id,
+            "data": character_data,
+        }
+
+    except Exception:
+        logger.exception(
+            "Failed to retrieve showcase data for character %s "
+            "on account %s",
+            character_id,
+            selected_account["id"],
+        )
+
+        return JSONResponse(
+            status_code=502,
+            content={
+                "error": "Couldn't retrieve detailed character data."
+            },
+        )
 
 
 @app.get(
