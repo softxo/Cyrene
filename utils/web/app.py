@@ -73,6 +73,7 @@ from collections import Counter
 from utils.changing_variables.config import IT_ELEMENTS
 from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.daily_checkin_worker import request_daily_checkin
+from genshin.models.genshin.constants import CHARACTER_NAMES
 
 
 
@@ -2679,7 +2680,10 @@ async def validate_custom_event_payload(
     }
     
 
-@app.get("/characters", response_class=HTMLResponse)
+@app.get(
+    "/characters",
+    response_class=HTMLResponse
+)
 async def characters_page(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
@@ -2722,14 +2726,92 @@ async def characters_page(
         else:
             try:
                 async with client:
-                    characters = await client.get_genshin_characters()
+                    owned_characters = (
+                        await client.get_genshin_characters()
+                    )
+
+                # Index the account's characters by their numeric IDs.
+                owned_by_id = {
+                    int(character.id): character
+                    for character in owned_characters
+                }
+
+                # Get the full character catalogue from genshin.py.
+                catalogue = CHARACTER_NAMES.get("en-us", {})
+
+                for character_id, data in catalogue.items():
+                    owned = owned_by_id.get(int(character_id))
+
+                    # Give the two Traveler variants distinct names.
+                    traveler_names = {
+                        10000005: "Aether",
+                        10000007: "Lumine",
+                    }
+
+                    name = traveler_names.get(
+                        int(character_id),
+                        data.name,
+                    )
+
+                    # Preserve the library's existing portrait convention.
+                    icon = (
+                        owned.icon
+                        if owned is not None
+                        else (
+                            "https://enka.network/ui/"
+                            f"UI_AvatarIcon_{data.icon_name}.png"
+                        )
+                    )
+
+                    characters.append({
+                        "id": int(character_id),
+                        "name": (
+                            owned.name
+                            if owned is not None
+                            else name
+                        ),
+                        "element": (
+                            owned.element
+                            if owned is not None
+                            else data.element
+                        ),
+                        "rarity": (
+                            owned.rarity
+                            if owned is not None
+                            else data.rarity
+                        ),
+                        "icon": icon,
+                        "level": (
+                            owned.level
+                            if owned is not None
+                            else None
+                        ),
+                        "friendship": (
+                            owned.friendship
+                            if owned is not None
+                            else None
+                        ),
+                        "constellation": (
+                            owned.constellation
+                            if owned is not None
+                            else None
+                        ),
+                        "owned": owned is not None,
+                    })
+
+                # Keep the roster in alphabetical order.
+                characters.sort(
+                    key=lambda character: character["name"].casefold()
+                )
+
             except Exception:
                 logger.exception(
                     "Failed to retrieve characters for account %s",
                     selected_account["id"],
                 )
                 character_error = (
-                    "Couldn't retrieve characters from HoYoLAB. "
+                    "Couldn't retrieve characters from HoYoLAB "
+                    "or build the character roster. "
                     "Please try again later."
                 )
 

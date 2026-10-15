@@ -1,21 +1,14 @@
-import inspect
-from genshin.models.genshin.chronicle import characters as models
+import genshin
+import genshin.models.genshin.constants as constants
 
-for name in ("Character", "GenshinDetailCharacters"):
-    model = getattr(models, name, None)
+print("genshin version:", genshin.__version__ if hasattr(genshin, "__version__") else "unknown")
 
-    print(f"\n--- {name} ---")
+print("Available constants:")
+print([
+    name
+    for name in dir(constants)
+    if "CHARACTER" in name.upper() or "DBCHAR" in name.upper()
+])
 
-    if model is None:
-        print("Class not found")
-        continue
-
-    print("Annotations:", getattr(model, "__annotations__", {}))
-
-    fields = getattr(model, "model_fields", None)
-    if fields:
-        print("Model fields:", list(fields.keys()))
-
-    attrs = getattr(model, "__attrs_attrs__", None)
-    if attrs:
-        print("Attrs fields:", [attr.name for attr in attrs])
+print("Character name data:")
+print(getattr(constants, "CHARACTER_NAMES", "Not available"))

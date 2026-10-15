@@ -423,3 +423,35 @@
         transform: none;
     }
 }
+
+
+/* =========================================================
+   UNOWNED CHARACTERS
+   ========================================================= */
+
+.character-card-unowned {
+    opacity: 0.7;
+}
+
+.character-card-unowned .character-card-image img {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.character-unowned-label {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.character-unowned-status {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
