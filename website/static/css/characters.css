@@ -483,8 +483,7 @@
     font-weight: 600;
 }
 
-.characters-search input,
-.characters-filter select {
+.characters-search input {
     width: 100%;
     min-width: 0;
     min-height: 40px;
@@ -501,12 +500,44 @@
         box-shadow 0.2s ease;
 }
 
-.characters-search input:focus,
-.characters-filter select:focus {
+.characters-search input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px
         color-mix(in srgb, var(--accent) 18%, transparent);
 }
+
+/* Match the filter dropdowns to the account selector. */
+
+.characters-filter > .custom-select {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Consistent button height across every filter. */
+
+.characters-filter .custom-select-button {
+    width: 100%;
+    min-height: 40px;
+    background: var(--surface);
+}
+
+/* Prevent long option labels from breaking the toolbar. */
+
+.characters-filter .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Keep long option lists within the viewport area. */
+
+.characters-filter .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Reset button. */
 
 .characters-reset-filters {
     min-height: 40px;

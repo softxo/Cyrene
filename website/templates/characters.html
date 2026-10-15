@@ -99,44 +99,105 @@
             </div>
 
             <div class="characters-filter">
-                <label for="character-sort">Sort by</label>
-                <select id="character-sort" data-character-sort>
-                    <option value="level" selected>Level (highest first)</option>
-                    <option value="name">Name (A–Z)</option>
-                    <option value="rarity">Rarity (highest first)</option>
-                </select>
+                <label id="character-sort-label">Sort by</label>
+                <div class="custom-select" data-character-sort>
+                    <button
+                        type="button"
+                        class="custom-select-button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-labelledby="character-sort-label character-sort-value"
+                    >
+                        <span class="custom-select-value" id="character-sort-value">
+                            Level (highest first)
+                        </span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button type="button" class="custom-select-option selected"
+                            data-value="level" role="option" aria-selected="true">
+                            Level (highest first)
+                        </button>
+                        <button type="button" class="custom-select-option"
+                            data-value="name" role="option" aria-selected="false">
+                            Name (A–Z)
+                        </button>
+                        <button type="button" class="custom-select-option"
+                            data-value="rarity" role="option" aria-selected="false">
+                            Rarity (highest first)
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="characters-filter">
-                <label for="character-rarity-filter">Rarity</label>
-                <select id="character-rarity-filter" data-character-rarity>
-                    <option value="all">All rarities</option>
-                    <option value="5">5-star</option>
-                    <option value="4">4-star</option>
-                </select>
+                <label id="character-rarity-label">Rarity</label>
+                <div class="custom-select" data-character-rarity>
+                    <button type="button" class="custom-select-button"
+                        aria-haspopup="listbox" aria-expanded="false"
+                        aria-labelledby="character-rarity-label character-rarity-value">
+                        <span class="custom-select-value" id="character-rarity-value">All rarities</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button type="button" class="custom-select-option selected"
+                            data-value="all" role="option" aria-selected="true">All rarities</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="5" role="option" aria-selected="false">5-star</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="4" role="option" aria-selected="false">4-star</button>
+                    </div>
+                </div>
             </div>
 
             <div class="characters-filter">
-                <label for="character-element-filter">Element</label>
-                <select id="character-element-filter" data-character-element>
-                    <option value="all">All elements</option>
-                    <option value="anemo">Anemo</option>
-                    <option value="geo">Geo</option>
-                    <option value="electro">Electro</option>
-                    <option value="dendro">Dendro</option>
-                    <option value="hydro">Hydro</option>
-                    <option value="pyro">Pyro</option>
-                    <option value="cryo">Cryo</option>
-                </select>
+                <label id="character-element-label">Element</label>
+                <div class="custom-select" data-character-element>
+                    <button type="button" class="custom-select-button"
+                        aria-haspopup="listbox" aria-expanded="false"
+                        aria-labelledby="character-element-label character-element-value">
+                        <span class="custom-select-value" id="character-element-value">All elements</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button type="button" class="custom-select-option selected"
+                            data-value="all" role="option" aria-selected="true">All elements</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="anemo" role="option" aria-selected="false">Anemo</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="geo" role="option" aria-selected="false">Geo</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="electro" role="option" aria-selected="false">Electro</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="dendro" role="option" aria-selected="false">Dendro</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="hydro" role="option" aria-selected="false">Hydro</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="pyro" role="option" aria-selected="false">Pyro</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="cryo" role="option" aria-selected="false">Cryo</button>
+                    </div>
+                </div>
             </div>
 
             <div class="characters-filter">
-                <label for="character-ownership-filter">Ownership</label>
-                <select id="character-ownership-filter" data-character-ownership>
-                    <option value="all">All characters</option>
-                    <option value="owned">Owned</option>
-                    <option value="unowned">Unowned</option>
-                </select>
+                <label id="character-ownership-label">Ownership</label>
+                <div class="custom-select" data-character-ownership>
+                    <button type="button" class="custom-select-button"
+                        aria-haspopup="listbox" aria-expanded="false"
+                        aria-labelledby="character-ownership-label character-ownership-value">
+                        <span class="custom-select-value" id="character-ownership-value">All characters</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button type="button" class="custom-select-option selected"
+                            data-value="all" role="option" aria-selected="true">All characters</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="owned" role="option" aria-selected="false">Owned</button>
+                        <button type="button" class="custom-select-option"
+                            data-value="unowned" role="option" aria-selected="false">Unowned</button>
+                    </div>
+                </div>
             </div>
 
             <button type="button" class="characters-reset-filters" data-character-reset>

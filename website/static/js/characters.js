@@ -112,6 +112,7 @@ function initCharactersAccountDropdown() {
     });
 }
 
+
 /* =========================================================
    CHARACTER FILTERS AND SORTING
    ========================================================= */
@@ -129,8 +130,6 @@ function initCharactersFilters() {
     ) {
         return;
     }
-
-    toolbar.dataset.initialised = "true";
 
     const searchInput = toolbar.querySelector(
         "[data-character-search]"
@@ -154,12 +153,201 @@ function initCharactersFilters() {
         "[data-character-count]"
     );
 
+    const filterDropdowns = [
+        sortSelect,
+        raritySelect,
+        elementSelect,
+        ownershipSelect
+    ];
+
     const cards = Array.from(
         grid.querySelectorAll(".character-card")
     );
 
+    if (
+        !searchInput ||
+        filterDropdowns.some(dropdown => !dropdown) ||
+        !resetButton
+    ) {
+        return;
+    }
+
+    toolbar.dataset.initialised = "true";
+
+    /* =====================================================
+       CUSTOM FILTER DROPDOWNS
+       ===================================================== */
+
+    function closeDropdown(dropdown) {
+        dropdown.classList.remove("open");
+
+        const button = dropdown.querySelector(
+            ".custom-select-button"
+        );
+
+        button?.setAttribute("aria-expanded", "false");
+    }
+
+    function closeAllDropdowns(except = null) {
+        filterDropdowns.forEach(dropdown => {
+            if (dropdown !== except) {
+                closeDropdown(dropdown);
+            }
+        });
+    }
+
+    function getDropdownValue(dropdown) {
+        return dropdown.querySelector(
+            ".custom-select-option.selected"
+        )?.dataset.value ?? "all";
+    }
+
+    function setDropdownValue(dropdown, value) {
+        const options = dropdown.querySelectorAll(
+            ".custom-select-option"
+        );
+
+        const selectedOption = Array.from(options).find(
+            option => option.dataset.value === value
+        );
+
+        if (!selectedOption) {
+            return;
+        }
+
+        options.forEach(option => {
+            const isSelected = option === selectedOption;
+
+            option.classList.toggle("selected", isSelected);
+            option.setAttribute(
+                "aria-selected",
+                String(isSelected)
+            );
+        });
+
+        const valueElement = dropdown.querySelector(
+            ".custom-select-value"
+        );
+
+        if (valueElement) {
+            valueElement.textContent =
+                selectedOption.textContent.trim();
+        }
+    }
+
+    function initialiseDropdown(dropdown) {
+        const button = dropdown.querySelector(
+            ".custom-select-button"
+        );
+
+        const menu = dropdown.querySelector(
+            ".custom-select-menu"
+        );
+
+        const options = dropdown.querySelectorAll(
+            ".custom-select-option"
+        );
+
+        if (!button || !menu || !options.length) {
+            return;
+        }
+
+        button.addEventListener("click", event => {
+            event.preventDefault();
+
+            const isOpen = dropdown.classList.contains("open");
+
+            closeAllDropdowns(dropdown);
+
+            if (isOpen) {
+                closeDropdown(dropdown);
+            } else {
+                dropdown.classList.add("open");
+                button.setAttribute("aria-expanded", "true");
+            }
+        });
+
+        options.forEach(option => {
+            option.addEventListener("click", () => {
+                const value = option.dataset.value;
+
+                if (value === undefined) {
+                    return;
+                }
+
+                setDropdownValue(dropdown, value);
+                closeDropdown(dropdown);
+
+                applyFilters();
+            });
+        });
+
+        button.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                closeDropdown(dropdown);
+                button.focus();
+            }
+
+            if (
+                event.key === "ArrowDown" &&
+                !dropdown.classList.contains("open")
+            ) {
+                event.preventDefault();
+                closeAllDropdowns(dropdown);
+                dropdown.classList.add("open");
+                button.setAttribute("aria-expanded", "true");
+                dropdown.querySelector(
+                    ".custom-select-option.selected"
+                )?.focus();
+            }
+        });
+
+        options.forEach((option, index) => {
+            option.addEventListener("keydown", event => {
+                let nextIndex = index;
+
+                if (event.key === "ArrowDown") {
+                    nextIndex = (index + 1) % options.length;
+                } else if (event.key === "ArrowUp") {
+                    nextIndex =
+                        (index - 1 + options.length) % options.length;
+                } else if (event.key === "Escape") {
+                    closeDropdown(dropdown);
+                    button.focus();
+                    return;
+                } else if (event.key === "Tab") {
+                    closeDropdown(dropdown);
+                    return;
+                } else {
+                    return;
+                }
+
+                event.preventDefault();
+                options[nextIndex].focus();
+            });
+        });
+    }
+
+    filterDropdowns.forEach(initialiseDropdown);
+
+    /* Close dropdowns when clicking elsewhere. */
+
+    document.addEventListener("click", event => {
+        if (
+            !filterDropdowns.some(
+                dropdown => dropdown.contains(event.target)
+            )
+        ) {
+            closeAllDropdowns();
+        }
+    });
+
+    /* =====================================================
+       SORTING
+       ===================================================== */
+
     function sortCards(visibleCards) {
-        const sortBy = sortSelect.value;
+        const sortBy = getDropdownValue(sortSelect);
 
         visibleCards.sort((a, b) => {
             const aOwned = a.dataset.owned === "true";
@@ -195,7 +383,6 @@ function initCharactersFilters() {
             }
 
             // Default: highest level first.
-            // Unowned characters have no level and remain below owned characters because ownership is sorted first.
             return (
                 bLevel - aLevel ||
                 aName.localeCompare(bName)
@@ -205,18 +392,26 @@ function initCharactersFilters() {
         visibleCards.forEach(card => grid.appendChild(card));
     }
 
+    /* =====================================================
+       APPLY FILTERS
+       ===================================================== */
+
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
-        const rarity = raritySelect.value;
-        const element = elementSelect.value;
-        const ownership = ownershipSelect.value;
+
+        const rarity = getDropdownValue(raritySelect);
+        const element = getDropdownValue(elementSelect);
+        const ownership = getDropdownValue(ownershipSelect);
 
         const visibleCards = [];
 
         cards.forEach(card => {
             const name = card.dataset.name || "";
             const cardRarity = card.dataset.rarity;
-            const cardElement = card.dataset.element;
+            const cardElement = (
+                card.dataset.element || ""
+            ).toLowerCase();
+
             const owned = card.dataset.owned === "true";
 
             const matchesSearch =
@@ -254,19 +449,21 @@ function initCharactersFilters() {
         }
     }
 
+    /* =====================================================
+       RESET FILTERS
+       ===================================================== */
+
     searchInput.addEventListener("input", applyFilters);
-    sortSelect.addEventListener("change", applyFilters);
-    raritySelect.addEventListener("change", applyFilters);
-    elementSelect.addEventListener("change", applyFilters);
-    ownershipSelect.addEventListener("change", applyFilters);
 
     resetButton.addEventListener("click", () => {
         searchInput.value = "";
-        sortSelect.value = "level";
-        raritySelect.value = "all";
-        elementSelect.value = "all";
-        ownershipSelect.value = "all";
 
+        setDropdownValue(sortSelect, "level");
+        setDropdownValue(raritySelect, "all");
+        setDropdownValue(elementSelect, "all");
+        setDropdownValue(ownershipSelect, "all");
+
+        closeAllDropdowns();
         applyFilters();
     });
 
