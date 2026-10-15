@@ -529,4 +529,97 @@ function initCharactersFilters() {
     applyFilters();
 }
 
+/* =========================================================
+   CHARACTER SHOWCASE MODAL
+   ========================================================= */
+
+function initCharacterShowcase() {
+    const page = document.querySelector(".characters-page");
+    const modal = page?.querySelector("[data-character-showcase]");
+    const dialog = modal?.querySelector(".character-showcase-modal");
+    const portrait = modal?.querySelector("[data-showcase-portrait]");
+    const nameElement = modal?.querySelector("#showcase-character-name");
+    const elementElement = modal?.querySelector("[data-showcase-element]");
+    const levelElement = modal?.querySelector("[data-showcase-level]");
+    const statusElement = modal?.querySelector("[data-showcase-status]");
+
+    if (!page || !modal || !dialog || modal.dataset.initialised === "true") {
+        return;
+    }
+
+    modal.dataset.initialised = "true";
+
+    let previouslyFocused = null;
+
+    function openShowcase(card) {
+        if (card.dataset.owned !== "true") {
+            return;
+        }
+
+        previouslyFocused = document.activeElement;
+
+        const image = card.querySelector(".character-card-image img");
+        const name = card.querySelector(".character-card-info h2");
+        const element = card.querySelector(".character-element span");
+
+        if (!image || !name) {
+            return;
+        }
+
+        portrait.src = image.src;
+        portrait.alt = name.textContent.trim();
+
+        nameElement.textContent = name.textContent.trim();
+        elementElement.textContent = element?.textContent.trim() || "";
+        levelElement.textContent = card.dataset.level
+            ? `Level ${card.dataset.level}`
+            : "Level unavailable";
+
+        statusElement.textContent =
+            "Next, we'll connect this showcase to the character's live HoYoLAB build data.";
+
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("character-showcase-open");
+
+        dialog.focus();
+    }
+
+    function closeShowcase() {
+        if (modal.hidden) {
+            return;
+        }
+
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("character-showcase-open");
+
+        if (previouslyFocused?.isConnected) {
+            previouslyFocused.focus();
+        }
+    }
+
+    page.addEventListener("click", event => {
+        const closeButton = event.target.closest("[data-showcase-close]");
+
+        if (closeButton && modal.contains(closeButton)) {
+            closeShowcase();
+            return;
+        }
+
+        const card = event.target.closest(".character-card");
+
+        if (card && page.contains(card)) {
+            openShowcase(card);
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeShowcase();
+        }
+    });
+}
+
 window.initCharacters = initCharacters;
+window.initCharacterShowcase = initCharacterShowcase;

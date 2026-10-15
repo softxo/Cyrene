@@ -358,6 +358,72 @@
             </article>
             {% endfor %}
         </div>
+        
+        <!-- =====================================================
+            CHARACTER SHOWCASE MODAL
+            ===================================================== -->
+
+        <div
+            class="character-showcase"
+            data-character-showcase
+            aria-hidden="true"
+            hidden
+        >
+            <div
+                class="character-showcase-backdrop"
+                data-showcase-close
+            ></div>
+
+            <section
+                class="character-showcase-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="showcase-character-name"
+                tabindex="-1"
+            >
+                <button
+                    type="button"
+                    class="character-showcase-close"
+                    data-showcase-close
+                    aria-label="Close character showcase"
+                >
+                    &times;
+                </button>
+
+                <div class="character-showcase-content">
+                    <header class="character-showcase-header">
+                        <div class="character-showcase-portrait">
+                            <img
+                                data-showcase-portrait
+                                src=""
+                                alt=""
+                            >
+                        </div>
+
+                        <div class="character-showcase-heading">
+                            <p class="character-showcase-eyebrow">
+                                CHARACTER SHOWCASE
+                            </p>
+
+                            <h2 id="showcase-character-name">
+                                Character name
+                            </h2>
+
+                            <p data-showcase-element></p>
+                            <p data-showcase-level></p>
+                        </div>
+                    </header>
+
+                    <div class="character-showcase-placeholder">
+                        <h3>Character build</h3>
+                        <p data-showcase-status>
+                            Detailed character data will appear here.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
     {% endif %}
 
 </div>

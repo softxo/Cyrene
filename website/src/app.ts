@@ -23,6 +23,7 @@ export {};
 declare global {
     interface Window {
         initCharacters?: () => void;
+        initCharacterShowcase?: () => void;
         initPlanner?: () => void;
         initVerify?: () => void;
         initAchievements?: () => void;
@@ -211,6 +212,7 @@ function initialisePage(path: string): void {
     switch (path) {
         case "/characters":
             window.initCharacters?.();
+            window.initCharacterShowcase?.();
             break;
 
         case "/planner":
