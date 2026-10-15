@@ -664,6 +664,12 @@
     object-fit: contain;
 }
 
+/* Smaller rarity star icons */
+.characters-icon-buttons[data-character-rarity] img {
+    width: 19px;
+    height: 19px;
+}
+
 .characters-icon-button span {
     font-size: 0.75rem;
     font-weight: 600;

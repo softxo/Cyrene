@@ -2755,7 +2755,10 @@ async def characters_page(
                             continue
 
                         for attribute in ("weapon_type", "weapon"):
-                            value = getattr(source, attribute, None)
+                            if isinstance(source, dict):
+                                value = source.get(attribute)
+                            else:
+                                value = getattr(source, attribute, None)
 
                             if value is None:
                                 continue
@@ -2763,8 +2766,17 @@ async def characters_page(
                             value = getattr(value, "value", value)
                             value = str(value).strip().lower()
 
-                            if value in weapon_types:
-                                return weapon_types[value]
+                            # Handle values such as "WEAPON_SWORD" or "WeaponType.SWORD".
+                            parts = (
+                                value.replace("_", " ")
+                                .replace("-", " ")
+                                .replace(".", " ")
+                                .split()
+                            )
+
+                            for part in reversed(parts):
+                                if part in weapon_types:
+                                    return weapon_types[part]
 
                     return ""
 
