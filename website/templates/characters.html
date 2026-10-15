@@ -130,23 +130,41 @@
                 </div>
             </div>
 
-            <div class="characters-filter">
+            <div class="characters-filter characters-icon-filter">
                 <label id="character-rarity-label">Rarity</label>
-                <div class="custom-select" data-character-rarity>
-                    <button type="button" class="custom-select-button"
-                        aria-haspopup="listbox" aria-expanded="false"
-                        aria-labelledby="character-rarity-label character-rarity-value">
-                        <span class="custom-select-value" id="character-rarity-value">All rarities</span>
-                        <span class="custom-select-arrow"></span>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-rarity
+                    role="group"
+                    aria-labelledby="character-rarity-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All rarities"
+                        title="All rarities"
+                    >
+                        <span>All</span>
                     </button>
-                    <div class="custom-select-menu" role="listbox">
-                        <button type="button" class="custom-select-option selected"
-                            data-value="all" role="option" aria-selected="true">All rarities</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="5" role="option" aria-selected="false">5-star</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="4" role="option" aria-selected="false">4-star</button>
-                    </div>
+
+                    {% for rarity in [5, 4] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ rarity }}"
+                        aria-pressed="false"
+                        aria-label="{{ rarity }}-star characters"
+                        title="{{ rarity }}-star characters"
+                    >
+                        <img
+                            src="/static/images/characters/Rarity_{{ rarity }}.webp"
+                            alt=""
+                        >
+                    </button>
+                    {% endfor %}
                 </div>
             </div>
             

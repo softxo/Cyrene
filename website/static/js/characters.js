@@ -137,7 +137,7 @@ function initCharactersFilters() {
     const sortSelect = toolbar.querySelector(
         "[data-character-sort]"
     );
-    const raritySelect = toolbar.querySelector(
+    const rarityFilter = toolbar.querySelector(
         "[data-character-rarity]"
     );
     const elementFilter = toolbar.querySelector(
@@ -158,7 +158,6 @@ function initCharactersFilters() {
 
     const filterDropdowns = [
         sortSelect,
-        raritySelect,
         ownershipSelect
     ];
 
@@ -169,6 +168,7 @@ function initCharactersFilters() {
     if (
         !searchInput ||
         filterDropdowns.some(dropdown => !dropdown) ||
+        !rarityFilter ||
         !elementFilter ||
         !weaponFilter ||
         !resetButton
@@ -336,7 +336,7 @@ function initCharactersFilters() {
 
     
     /* =====================================================
-    ELEMENT AND WEAPON ICON FILTERS
+    RARITY, ELEMENT AND WEAPON ICON FILTERS
     ===================================================== */
 
     function getButtonFilterValue(container) {
@@ -371,6 +371,7 @@ function initCharactersFilters() {
         });
     }
 
+    initialiseButtonFilter(rarityFilter);
     initialiseButtonFilter(elementFilter);
     initialiseButtonFilter(weaponFilter);
 
@@ -447,7 +448,7 @@ function initCharactersFilters() {
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
 
-        const rarity = getDropdownValue(raritySelect);
+        const rarity = getButtonFilterValue(rarityFilter);
         const element = getButtonFilterValue(elementFilter);
         const weapon = getButtonFilterValue(weaponFilter);
         const ownership = getDropdownValue(ownershipSelect);
@@ -516,7 +517,7 @@ function initCharactersFilters() {
         searchInput.value = "";
 
         setDropdownValue(sortSelect, "level");
-        setDropdownValue(raritySelect, "all");
+        setButtonFilterValue(rarityFilter, "all");
         setButtonFilterValue(elementFilter, "all");
         setButtonFilterValue(weaponFilter, "all");
         setDropdownValue(ownershipSelect, "all");

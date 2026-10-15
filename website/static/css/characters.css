@@ -462,10 +462,23 @@
 
 .characters-toolbar {
     display: grid;
-    grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(125px, 1fr)) auto;
+    grid-template-columns:
+        minmax(130px, 1fr)       /* Search */
+        minmax(105px, 0.75fr)    /* Sort by */
+        minmax(90px, 0.65fr)     /* Rarity */
+        minmax(235px, 1.5fr)     /* Element */
+        minmax(195px, 1.25fr)    /* Weapon */
+        minmax(105px, 0.75fr)    /* Ownership */
+        max-content;             /* Reset filters */
     align-items: end;
-    gap: 12px;
+    column-gap: 8px;
+    row-gap: 10px;
     min-width: 0;
+}
+
+/* Keep Weapon and Ownership closer together. */
+.characters-toolbar .characters-icon-filter + .characters-filter {
+    margin-left: -5px;
 }
 
 .characters-search,
@@ -495,6 +508,7 @@
     font: inherit;
     font-size: 0.85rem;
     outline: none;
+    box-sizing: border-box;
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease;
