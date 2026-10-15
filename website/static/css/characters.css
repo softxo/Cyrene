@@ -607,3 +607,86 @@
         grid-column: auto;
     }
 }
+
+
+/* =========================================================
+   CHARACTERS — ELEMENT AND WEAPON ICON FILTERS
+   ========================================================= */
+
+.characters-icon-filter {
+    min-width: 0;
+}
+
+.characters-icon-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 40px;
+}
+
+.characters-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+.characters-icon-button img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.characters-icon-button span {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.characters-icon-button:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.characters-icon-button.selected {
+    border-color: var(--accent);
+    background: color-mix(
+        in srgb,
+        var(--accent) 16%,
+        var(--surface)
+    );
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.characters-icon-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+    .characters-icon-buttons {
+        gap: 4px;
+    }
+
+    .characters-icon-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .characters-icon-button img {
+        width: 23px;
+        height: 23px;
+    }
+}

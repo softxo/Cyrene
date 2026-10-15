@@ -2735,9 +2735,38 @@ async def characters_page(
                     int(character.id): character
                     for character in owned_characters
                 }
-
+                
                 # Get the full character catalogue from genshin.py.
                 catalogue = CHARACTER_NAMES.get("en-us", {})
+
+                def get_weapon_type(character, catalogue_data):
+                    """Return a normalised Genshin weapon type."""
+
+                    weapon_types = {
+                        "sword": "Sword",
+                        "claymore": "Claymore",
+                        "polearm": "Polearm",
+                        "bow": "Bow",
+                        "catalyst": "Catalyst",
+                    }
+
+                    for source in (character, catalogue_data):
+                        if source is None:
+                            continue
+
+                        for attribute in ("weapon_type", "weapon"):
+                            value = getattr(source, attribute, None)
+
+                            if value is None:
+                                continue
+
+                            value = getattr(value, "value", value)
+                            value = str(value).strip().lower()
+
+                            if value in weapon_types:
+                                return weapon_types[value]
+
+                    return ""
 
                 for character_id, data in catalogue.items():
                     owned = owned_by_id.get(int(character_id))
@@ -2796,6 +2825,7 @@ async def characters_page(
                             if owned is not None
                             else None
                         ),
+                        "weapon": get_weapon_type(owned, data),
                         "owned": owned is not None,
                     })
 

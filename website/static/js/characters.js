@@ -140,8 +140,11 @@ function initCharactersFilters() {
     const raritySelect = toolbar.querySelector(
         "[data-character-rarity]"
     );
-    const elementSelect = toolbar.querySelector(
+    const elementFilter = toolbar.querySelector(
         "[data-character-element]"
+    );
+    const weaponFilter = toolbar.querySelector(
+        "[data-character-weapon]"
     );
     const ownershipSelect = toolbar.querySelector(
         "[data-character-ownership]"
@@ -156,7 +159,6 @@ function initCharactersFilters() {
     const filterDropdowns = [
         sortSelect,
         raritySelect,
-        elementSelect,
         ownershipSelect
     ];
 
@@ -167,6 +169,8 @@ function initCharactersFilters() {
     if (
         !searchInput ||
         filterDropdowns.some(dropdown => !dropdown) ||
+        !elementFilter ||
+        !weaponFilter ||
         !resetButton
     ) {
         return;
@@ -330,6 +334,46 @@ function initCharactersFilters() {
 
     filterDropdowns.forEach(initialiseDropdown);
 
+    
+    /* =====================================================
+    ELEMENT AND WEAPON ICON FILTERS
+    ===================================================== */
+
+    function getButtonFilterValue(container) {
+        return container.querySelector(
+            ".characters-icon-button.selected"
+        )?.dataset.value ?? "all";
+    }
+
+    function setButtonFilterValue(container, value) {
+        const buttons = container.querySelectorAll(
+            ".characters-icon-button"
+        );
+
+        buttons.forEach(button => {
+            const selected = button.dataset.value === value;
+
+            button.classList.toggle("selected", selected);
+            button.setAttribute("aria-pressed", String(selected));
+        });
+    }
+
+    function initialiseButtonFilter(container) {
+        const buttons = container.querySelectorAll(
+            ".characters-icon-button"
+        );
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                setButtonFilterValue(container, button.dataset.value);
+                applyFilters();
+            });
+        });
+    }
+
+    initialiseButtonFilter(elementFilter);
+    initialiseButtonFilter(weaponFilter);
+
     /* Close dropdowns when clicking elsewhere. */
 
     document.addEventListener("click", event => {
@@ -353,7 +397,7 @@ function initCharactersFilters() {
             const aOwned = a.dataset.owned === "true";
             const bOwned = b.dataset.owned === "true";
 
-            // Always put owned characters first.
+            // Priority 1: Owned characters first.
             if (aOwned !== bOwned) {
                 return aOwned ? -1 : 1;
             }
@@ -368,13 +412,16 @@ function initCharactersFilters() {
             const bName = b.dataset.name || "";
 
             if (sortBy === "name") {
+                // Alphabetical order, with rarity as a tiebreaker.
                 return (
                     aName.localeCompare(bName) ||
+                    bRarity - aRarity ||
                     bLevel - aLevel
                 );
             }
 
             if (sortBy === "rarity") {
+                // Rarity first, then level, then alphabetical order.
                 return (
                     bRarity - aRarity ||
                     bLevel - aLevel ||
@@ -382,9 +429,10 @@ function initCharactersFilters() {
                 );
             }
 
-            // Default: highest level first.
+            // Default: Level first, rarity as the tiebreaker.
             return (
                 bLevel - aLevel ||
+                bRarity - aRarity ||
                 aName.localeCompare(bName)
             );
         });
@@ -400,7 +448,8 @@ function initCharactersFilters() {
         const query = searchInput.value.trim().toLowerCase();
 
         const rarity = getDropdownValue(raritySelect);
-        const element = getDropdownValue(elementSelect);
+        const element = getButtonFilterValue(elementFilter);
+        const weapon = getButtonFilterValue(weaponFilter);
         const ownership = getDropdownValue(ownershipSelect);
 
         const visibleCards = [];
@@ -410,6 +459,10 @@ function initCharactersFilters() {
             const cardRarity = card.dataset.rarity;
             const cardElement = (
                 card.dataset.element || ""
+            ).toLowerCase();
+
+            const cardWeapon = (
+                card.dataset.weapon || ""
             ).toLowerCase();
 
             const owned = card.dataset.owned === "true";
@@ -423,6 +476,9 @@ function initCharactersFilters() {
             const matchesElement =
                 element === "all" || cardElement === element;
 
+            const matchesWeapon =
+                weapon === "all" || cardWeapon === weapon;
+
             const matchesOwnership =
                 ownership === "all" ||
                 (ownership === "owned" && owned) ||
@@ -432,6 +488,7 @@ function initCharactersFilters() {
                 matchesSearch &&
                 matchesRarity &&
                 matchesElement &&
+                matchesWeapon &&
                 matchesOwnership;
 
             card.hidden = !matches;
@@ -460,7 +517,8 @@ function initCharactersFilters() {
 
         setDropdownValue(sortSelect, "level");
         setDropdownValue(raritySelect, "all");
-        setDropdownValue(elementSelect, "all");
+        setButtonFilterValue(elementFilter, "all");
+        setButtonFilterValue(weaponFilter, "all");
         setDropdownValue(ownershipSelect, "all");
 
         closeAllDropdowns();

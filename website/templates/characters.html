@@ -149,34 +149,85 @@
                     </div>
                 </div>
             </div>
-
-            <div class="characters-filter">
+            
+            <div class="characters-filter characters-icon-filter">
                 <label id="character-element-label">Element</label>
-                <div class="custom-select" data-character-element>
-                    <button type="button" class="custom-select-button"
-                        aria-haspopup="listbox" aria-expanded="false"
-                        aria-labelledby="character-element-label character-element-value">
-                        <span class="custom-select-value" id="character-element-value">All elements</span>
-                        <span class="custom-select-arrow"></span>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-element
+                    role="group"
+                    aria-labelledby="character-element-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All elements"
+                        title="All elements"
+                    >
+                        <span>All</span>
                     </button>
-                    <div class="custom-select-menu" role="listbox">
-                        <button type="button" class="custom-select-option selected"
-                            data-value="all" role="option" aria-selected="true">All elements</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="anemo" role="option" aria-selected="false">Anemo</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="geo" role="option" aria-selected="false">Geo</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="electro" role="option" aria-selected="false">Electro</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="dendro" role="option" aria-selected="false">Dendro</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="hydro" role="option" aria-selected="false">Hydro</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="pyro" role="option" aria-selected="false">Pyro</button>
-                        <button type="button" class="custom-select-option"
-                            data-value="cryo" role="option" aria-selected="false">Cryo</button>
-                    </div>
+
+                    {% for element in [
+                        "Anemo", "Geo", "Electro", "Dendro",
+                        "Hydro", "Pyro", "Cryo"
+                    ] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ element | lower }}"
+                        aria-pressed="false"
+                        aria-label="{{ element }}"
+                        title="{{ element }}"
+                    >
+                        <img
+                            src="/static/images/characters/Element_{{ element }}.webp"
+                            alt=""
+                        >
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="characters-filter characters-icon-filter">
+                <label id="character-weapon-label">Weapon</label>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-weapon
+                    role="group"
+                    aria-labelledby="character-weapon-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All weapons"
+                        title="All weapons"
+                    >
+                        <span>All</span>
+                    </button>
+
+                    {% for weapon in [
+                        "Sword", "Claymore", "Polearm", "Bow", "Catalyst"
+                    ] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ weapon | lower }}"
+                        aria-pressed="false"
+                        aria-label="{{ weapon }}"
+                        title="{{ weapon }}"
+                    >
+                        <img
+                            src="/static/images/characters/{{ weapon }}.webp"
+                            alt=""
+                        >
+                    </button>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -219,6 +270,7 @@
                 data-name="{{ character.name | lower }}"
                 data-level="{{ character.level if character.level is not none else '' }}"
                 data-element="{{ character.element | lower }}"
+                data-weapon="{{ character.weapon | lower }}"
                 data-rarity="{{ character.rarity }}"
                 data-owned="{{ 'true' if character.owned else 'false' }}"
             >
