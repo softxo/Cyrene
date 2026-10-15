@@ -2743,40 +2743,31 @@ async def characters_page(
                     """Return a normalised Genshin weapon type."""
 
                     weapon_types = {
-                        "sword": "Sword",
-                        "claymore": "Claymore",
-                        "polearm": "Polearm",
-                        "bow": "Bow",
-                        "catalyst": "Catalyst",
+                        1: "Sword",
+                        10: "Catalyst",
+                        11: "Claymore",
+                        12: "Bow",
+                        13: "Polearm",
                     }
 
                     for source in (character, catalogue_data):
                         if source is None:
                             continue
 
-                        for attribute in ("weapon_type", "weapon"):
-                            if isinstance(source, dict):
-                                value = source.get(attribute)
-                            else:
-                                value = getattr(source, attribute, None)
+                        value = getattr(source, "weapon_type", None)
 
-                            if value is None:
-                                continue
+                        if value is None:
+                            continue
 
-                            value = getattr(value, "value", value)
-                            value = str(value).strip().lower()
+                        value = getattr(value, "value", value)
 
-                            # Handle values such as "WEAPON_SWORD" or "WeaponType.SWORD".
-                            parts = (
-                                value.replace("_", " ")
-                                .replace("-", " ")
-                                .replace(".", " ")
-                                .split()
-                            )
+                        try:
+                            weapon_id = int(value)
+                        except (TypeError, ValueError):
+                            continue
 
-                            for part in reversed(parts):
-                                if part in weapon_types:
-                                    return weapon_types[part]
+                        if weapon_id in weapon_types:
+                            return weapon_types[weapon_id]
 
                     return ""
 
@@ -2803,16 +2794,6 @@ async def characters_page(
                             f"UI_AvatarIcon_{data.icon_name}.png"
                         )
                     )
-                    
-                    if owned is not None:
-                        print(
-                            "[CHARACTER WEAPON DEBUG]",
-                            "name =", getattr(owned, "name", None),
-                            "| weapon_type =", getattr(owned, "weapon_type", None),
-                            "| weapon =", getattr(owned, "weapon", None),
-                            "| catalogue weapon_type =", getattr(data, "weapon_type", None),
-                            "| catalogue weapon =", getattr(data, "weapon", None),
-                        )
 
                     characters.append({
                         "id": int(character_id),
