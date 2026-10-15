@@ -533,6 +533,7 @@ function initCharactersFilters() {
    CHARACTER SHOWCASE MODAL
    ========================================================= */
 
+
 function initCharacterShowcase() {
     const page = document.querySelector(".characters-page");
     const modal = page?.querySelector("[data-character-showcase]");
@@ -542,21 +543,411 @@ function initCharacterShowcase() {
     const elementElement = modal?.querySelector("[data-showcase-element]");
     const levelElement = modal?.querySelector("[data-showcase-level]");
     const statusElement = modal?.querySelector("[data-showcase-status]");
+    const detailsElement = modal?.querySelector("[data-showcase-details]");
 
-    if (!page || !modal || !dialog || modal.dataset.initialised === "true") {
+    if (
+        !page ||
+        !modal ||
+        !dialog ||
+        !portrait ||
+        !nameElement ||
+        !elementElement ||
+        !levelElement ||
+        !statusElement ||
+        !detailsElement ||
+        modal.dataset.initialised === "true"
+    ) {
         return;
     }
 
     modal.dataset.initialised = "true";
 
     let previouslyFocused = null;
+    let activeRequestId = 0;
+
+    function createElement(tag, className, text = "") {
+        const element = document.createElement(tag);
+
+        if (className) {
+            element.className = className;
+        }
+
+        element.textContent = text;
+        return element;
+    }
+
+    function createImage(src, alt, className = "") {
+        const image = createElement("img", className);
+        image.alt = alt;
+        image.loading = "lazy";
+
+        if (src) {
+            image.src = src;
+        }
+
+        return image;
+    }
+
+    function addSection(title, className = "") {
+        const section = createElement(
+            "section",
+            `showcase-section ${className}`.trim()
+        );
+
+        section.append(
+            createElement("h3", "showcase-section-title", title)
+        );
+
+        detailsElement.append(section);
+        return section;
+    }
+
+    function addStatCard(container, label, value) {
+        const stat = createElement("div", "showcase-stat");
+
+        stat.append(
+            createElement("span", "showcase-stat-label", label),
+            createElement("strong", "showcase-stat-value", value ?? "—")
+        );
+
+        container.append(stat);
+    }
+
+    function formatValue(value) {
+        if (value === null || value === undefined || value === "") {
+            return "—";
+        }
+
+        return String(value);
+    }
+
+    function renderWeapon(character) {
+        const weapon = character.weapon;
+
+        if (!weapon) {
+            return;
+        }
+
+        const section = addSection("Weapon", "showcase-weapon-section");
+        const card = createElement("div", "showcase-weapon");
+
+        if (weapon.icon) {
+            card.append(
+                createImage(weapon.icon, weapon.name || "Weapon", "showcase-item-icon")
+            );
+        }
+
+        const info = createElement("div", "showcase-weapon-info");
+
+        info.append(
+            createElement("h4", "", weapon.name || "Unknown weapon"),
+            createElement(
+                "p",
+                "showcase-item-meta",
+                `Level ${formatValue(weapon.level)} · R${formatValue(weapon.refinement)}`
+            )
+        );
+
+        const stats = createElement("div", "showcase-weapon-stats");
+
+        for (const stat of [weapon.main_stat, weapon.sub_stat]) {
+            if (!stat) {
+                continue;
+            }
+
+            const label = stat.info?.name;
+            const value = stat.final ?? stat.value;
+
+            if (label || value !== undefined) {
+                addStatCard(stats, label || "Weapon stat", formatValue(value));
+            }
+        }
+
+        info.append(stats);
+        card.append(info);
+        section.append(card);
+    }
+
+    function renderCombatStats(character) {
+        const properties = character.selected_properties || [];
+        const preferredStats = [
+            "Max HP",
+            "ATK",
+            "DEF",
+            "Elemental Mastery",
+            "CRIT Rate",
+            "CRIT DMG",
+            "Energy Recharge",
+            `${character.element || ""} DMG Bonus`
+        ];
+
+        const propertyMap = new Map(
+            properties
+                .filter(property => property.info?.name)
+                .map(property => [
+                    property.info.name,
+                    property.final ?? property.value
+                ])
+        );
+
+        const statsToShow = preferredStats
+            .filter(name => propertyMap.has(name))
+            .map(name => [name, propertyMap.get(name)]);
+
+        if (!statsToShow.length) {
+            return;
+        }
+
+        const section = addSection("Combat Attributes");
+        const grid = createElement("div", "showcase-stats-grid");
+
+        for (const [label, value] of statsToShow) {
+            addStatCard(grid, label, formatValue(value));
+        }
+
+        section.append(grid);
+    }
+
+    function renderArtifacts(character) {
+        const artifacts = character.artifacts || [];
+
+        if (!artifacts.length) {
+            return;
+        }
+
+        const section = addSection("Artifacts");
+        const grid = createElement("div", "showcase-artifact-grid");
+
+        for (const artifact of artifacts) {
+            const card = createElement("article", "showcase-artifact");
+
+            if (artifact.icon) {
+                card.append(
+                    createImage(
+                        artifact.icon,
+                        artifact.name || "Artifact",
+                        "showcase-item-icon"
+                    )
+                );
+            }
+
+            const info = createElement("div", "showcase-artifact-info");
+
+            info.append(
+                createElement(
+                    "p",
+                    "showcase-artifact-slot",
+                    artifact.pos_name || "Artifact"
+                ),
+                createElement("h4", "showcase-artifact-name", artifact.name || "Unknown artifact"),
+                createElement(
+                    "p",
+                    "showcase-item-meta",
+                    `+${formatValue(artifact.level)}`
+                )
+            );
+
+            if (artifact.main_stat) {
+                const mainStat = artifact.main_stat;
+                const mainValue = mainStat.value ?? mainStat.final;
+
+                info.append(
+                    createElement(
+                        "p",
+                        "showcase-artifact-main-stat",
+                        `${mainStat.info?.name || "Main stat"}: ${formatValue(mainValue)}`
+                    )
+                );
+            }
+
+            const subStats = artifact.sub_stats || [];
+
+            if (subStats.length) {
+                const list = createElement("ul", "showcase-artifact-substats");
+
+                for (const subStat of subStats) {
+                    const label = subStat.info?.name || "Sub-stat";
+                    const value = subStat.value ?? subStat.final;
+
+                    list.append(
+                        createElement("li", "", `${label} ${formatValue(value)}`)
+                    );
+                }
+
+                info.append(list);
+            }
+
+            card.append(info);
+            grid.append(card);
+        }
+
+        section.append(grid);
+    }
+
+    function renderTalents(character) {
+        const skills = character.skills || [];
+        const talents = skills.filter(skill => Number(skill.skill_type) === 1);
+
+        if (!talents.length) {
+            return;
+        }
+
+        const section = addSection("Talents");
+        const grid = createElement("div", "showcase-talent-grid");
+
+        for (const talent of talents) {
+            const card = createElement("article", "showcase-talent");
+
+            if (talent.icon) {
+                card.append(
+                    createImage(
+                        talent.icon,
+                        talent.name || "Talent",
+                        "showcase-talent-icon"
+                    )
+                );
+            }
+
+            const info = createElement("div", "showcase-talent-info");
+
+            info.append(
+                createElement("h4", "", talent.name || "Talent"),
+                createElement(
+                    "p",
+                    "showcase-item-meta",
+                    `Level ${formatValue(talent.level)}`
+                )
+            );
+
+            card.append(info);
+            grid.append(card);
+        }
+
+        section.append(grid);
+    }
+
+    function renderConstellations(character) {
+        const constellations = character.constellations || [];
+
+        if (!constellations.length) {
+            return;
+        }
+
+        const section = addSection("Constellations");
+        const grid = createElement("div", "showcase-constellation-grid");
+
+        for (const constellation of constellations) {
+            const active = Boolean(constellation.activated);
+            const card = createElement(
+                "article",
+                `showcase-constellation${active ? " is-active" : ""}`
+            );
+
+            if (constellation.icon) {
+                card.append(
+                    createImage(
+                        constellation.icon,
+                        constellation.name || `Constellation ${constellation.pos}`,
+                        "showcase-constellation-icon"
+                    )
+                );
+            }
+
+            card.append(
+                createElement("span", "showcase-constellation-number", `C${constellation.pos}`),
+                createElement(
+                    "span",
+                    "showcase-constellation-name",
+                    constellation.name || "Constellation"
+                ),
+                createElement(
+                    "span",
+                    "showcase-constellation-state",
+                    active ? "Unlocked" : "Locked"
+                )
+            );
+
+            grid.append(card);
+        }
+
+        section.append(grid);
+    }
+
+    function renderCharacter(character) {
+        detailsElement.replaceChildren();
+
+        renderWeapon(character);
+        renderCombatStats(character);
+        renderArtifacts(character);
+        renderTalents(character);
+        renderConstellations(character);
+
+        detailsElement.hidden = false;
+    }
+
+    async function loadCharacter(card, requestId) {
+        const characterId = card.dataset.characterId;
+        const accountId = modal.dataset.accountId;
+
+        if (!characterId) {
+            throw new Error("This character card is missing its character ID.");
+        }
+
+        const query = accountId
+            ? `?account_id=${encodeURIComponent(accountId)}`
+            : "";
+
+        const response = await fetch(
+            `/api/characters/${encodeURIComponent(characterId)}/showcase${query}`,
+            {
+                method: "GET",
+                credentials: "same-origin",
+                headers: { Accept: "application/json" }
+            }
+        );
+
+        let payload;
+
+        try {
+            payload = await response.json();
+        } catch {
+            throw new Error("The server returned an invalid response.");
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                payload?.error || "Couldn't retrieve this character's build."
+            );
+        }
+
+        const character = payload?.data?.characters?.[0];
+
+        if (!character) {
+            throw new Error("No detailed build data was returned for this character.");
+        }
+
+        if (requestId !== activeRequestId || modal.hidden) {
+            return;
+        }
+
+        nameElement.textContent = character.name || "Unknown character";
+        elementElement.textContent = character.element || "";
+        levelElement.textContent =
+            `Level ${formatValue(character.level)} · ` +
+            `C${formatValue(character.constellation)} · ` +
+            `Friendship ${formatValue(character.friendship)}`;
+
+        portrait.src = character.display_image || character.icon || "";
+        portrait.alt = character.name || "Character artwork";
+
+        renderCharacter(character);
+        statusElement.textContent = "";
+    }
 
     function openShowcase(card) {
         if (card.dataset.owned !== "true") {
             return;
         }
-
-        previouslyFocused = document.activeElement;
 
         const image = card.querySelector(".character-card-image img");
         const name = card.querySelector(".character-card-info h2");
@@ -566,23 +957,36 @@ function initCharacterShowcase() {
             return;
         }
 
+        previouslyFocused = document.activeElement;
+        const requestId = ++activeRequestId;
+
         portrait.src = image.src;
         portrait.alt = name.textContent.trim();
-
         nameElement.textContent = name.textContent.trim();
         elementElement.textContent = element?.textContent.trim() || "";
         levelElement.textContent = card.dataset.level
             ? `Level ${card.dataset.level}`
             : "Level unavailable";
 
-        statusElement.textContent =
-            "Next, we'll connect this showcase to the character's live HoYoLAB build data.";
+        detailsElement.replaceChildren();
+        detailsElement.hidden = true;
+        statusElement.textContent = "Loading character build…";
 
         modal.hidden = false;
         modal.setAttribute("aria-hidden", "false");
         document.body.classList.add("character-showcase-open");
-
         dialog.focus();
+
+        loadCharacter(card, requestId).catch(error => {
+            if (requestId !== activeRequestId || modal.hidden) {
+                return;
+            }
+
+            statusElement.textContent =
+                error instanceof Error
+                    ? error.message
+                    : "Couldn't retrieve this character's build.";
+        });
     }
 
     function closeShowcase() {
@@ -590,6 +994,7 @@ function initCharacterShowcase() {
             return;
         }
 
+        activeRequestId++;
         modal.hidden = true;
         modal.setAttribute("aria-hidden", "true");
         document.body.classList.remove("character-showcase-open");
@@ -600,6 +1005,10 @@ function initCharacterShowcase() {
     }
 
     page.addEventListener("click", event => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
         const closeButton = event.target.closest("[data-showcase-close]");
 
         if (closeButton && modal.contains(closeButton)) {

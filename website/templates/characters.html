@@ -366,6 +366,7 @@
         <div
             class="character-showcase"
             data-character-showcase
+            data-account-id="{{ selected_account.id if selected_account else '' }}"
             aria-hidden="true"
             hidden
         >
@@ -414,12 +415,23 @@
                         </div>
                     </header>
 
-                    <div class="character-showcase-placeholder">
-                        <h3>Character build</h3>
-                        <p data-showcase-status>
-                            Detailed character data will appear here.
+                    <div class="character-showcase-build">
+                        <p
+                            class="character-showcase-status"
+                            data-showcase-status
+                            role="status"
+                            aria-live="polite"
+                        >
+                            Select a character to load their build.
                         </p>
+
+                        <div
+                            class="character-showcase-details"
+                            data-showcase-details
+                            hidden
+                        ></div>
                     </div>
+
                 </div>
             </section>
         </div>

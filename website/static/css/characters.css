@@ -896,3 +896,345 @@ body.character-showcase-open {
         height: 34px;
     }
 }
+
+
+/* =========================================================
+   CHARACTER SHOWCASE — BUILD CONTENT
+   ========================================================= */
+
+.character-showcase-build {
+    min-width: 0;
+}
+
+.character-showcase-status {
+    margin: 20px 0;
+    color: var(--text-secondary, #a6a6b2);
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.character-showcase-details[hidden] {
+    display: none !important;
+}
+
+.character-showcase-details {
+    display: grid;
+    gap: 24px;
+    padding: 24px 0 8px;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — SECTION HEADINGS
+   ========================================================= */
+
+.showcase-section {
+    min-width: 0;
+}
+
+.showcase-section-title {
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — COMBAT STATS
+   ========================================================= */
+
+.showcase-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.showcase-stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    background: var(--surface, rgba(255, 255, 255, 0.035));
+}
+
+.showcase-stat-label {
+    color: var(--text-secondary, #a6a6b2);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.showcase-stat-value {
+    overflow-wrap: anywhere;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — WEAPON
+   ========================================================= */
+
+.showcase-weapon {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+    border-radius: 14px;
+    background: var(--surface, rgba(255, 255, 255, 0.035));
+}
+
+.showcase-item-icon {
+    flex: 0 0 auto;
+    width: 76px;
+    height: 76px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.showcase-weapon-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.showcase-weapon-info h4,
+.showcase-artifact-name,
+.showcase-talent-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.showcase-item-meta {
+    margin: 6px 0 0;
+    color: var(--text-secondary, #a6a6b2);
+    font-size: 0.8rem;
+}
+
+.showcase-weapon-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.showcase-weapon-stats .showcase-stat {
+    flex: 1 1 120px;
+    padding: 10px;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — ARTIFACTS
+   ========================================================= */
+
+.showcase-artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.showcase-artifact {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    background: var(--surface, rgba(255, 255, 255, 0.035));
+}
+
+.showcase-artifact .showcase-item-icon {
+    width: 64px;
+    height: 64px;
+}
+
+.showcase-artifact-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.showcase-artifact-slot {
+    margin: 0 0 5px;
+    color: var(--text-secondary, #a6a6b2);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.showcase-artifact-main-stat {
+    margin: 10px 0 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.showcase-artifact-substats {
+    display: grid;
+    gap: 5px;
+    margin: 10px 0 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    list-style: none;
+}
+
+.showcase-artifact-substats li {
+    color: var(--text-secondary, #c0c0ca);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — TALENTS
+   ========================================================= */
+
+.showcase-talent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.showcase-talent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    background: var(--surface, rgba(255, 255, 255, 0.035));
+}
+
+.showcase-talent-icon {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.showcase-talent-info {
+    min-width: 0;
+}
+
+.showcase-talent-info h4 {
+    font-size: 0.84rem;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — CONSTELLATIONS
+   ========================================================= */
+
+.showcase-constellation-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.showcase-constellation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 12px 8px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    background: var(--surface, rgba(255, 255, 255, 0.025));
+    opacity: 0.55;
+    text-align: center;
+}
+
+.showcase-constellation.is-active {
+    border-color: var(--accent, #b99aff);
+    background: var(--accent-surface, rgba(185, 154, 255, 0.09));
+    opacity: 1;
+}
+
+.showcase-constellation-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.showcase-constellation-number {
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.showcase-constellation-name {
+    font-size: 0.72rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.showcase-constellation-state {
+    color: var(--text-secondary, #a6a6b2);
+    font-size: 0.68rem;
+}
+
+.showcase-constellation.is-active .showcase-constellation-state {
+    color: var(--accent, #b99aff);
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — RESPONSIVE LAYOUT
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .showcase-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .showcase-talent-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .showcase-constellation-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .character-showcase-details {
+        gap: 20px;
+        padding-top: 18px;
+    }
+
+    .showcase-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .showcase-stat {
+        padding: 11px;
+    }
+
+    .showcase-artifact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .showcase-weapon {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .showcase-weapon .showcase-item-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .showcase-artifact {
+        padding: 12px;
+    }
+
+    .showcase-constellation-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
