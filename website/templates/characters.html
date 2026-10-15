@@ -86,8 +86,68 @@
         </div>
 
     {% else %}
+        <div class="characters-toolbar" data-character-filters>
+            <div class="characters-search">
+                <label for="character-search">Search characters</label>
+                <input
+                    id="character-search"
+                    type="search"
+                    placeholder="Search by name..."
+                    autocomplete="off"
+                    data-character-search
+                >
+            </div>
+
+            <div class="characters-filter">
+                <label for="character-sort">Sort by</label>
+                <select id="character-sort" data-character-sort>
+                    <option value="level" selected>Level (highest first)</option>
+                    <option value="name">Name (A–Z)</option>
+                    <option value="rarity">Rarity (highest first)</option>
+                </select>
+            </div>
+
+            <div class="characters-filter">
+                <label for="character-rarity-filter">Rarity</label>
+                <select id="character-rarity-filter" data-character-rarity>
+                    <option value="all">All rarities</option>
+                    <option value="5">5-star</option>
+                    <option value="4">4-star</option>
+                </select>
+            </div>
+
+            <div class="characters-filter">
+                <label for="character-element-filter">Element</label>
+                <select id="character-element-filter" data-character-element>
+                    <option value="all">All elements</option>
+                    <option value="anemo">Anemo</option>
+                    <option value="geo">Geo</option>
+                    <option value="electro">Electro</option>
+                    <option value="dendro">Dendro</option>
+                    <option value="hydro">Hydro</option>
+                    <option value="pyro">Pyro</option>
+                    <option value="cryo">Cryo</option>
+                </select>
+            </div>
+
+            <div class="characters-filter">
+                <label for="character-ownership-filter">Ownership</label>
+                <select id="character-ownership-filter" data-character-ownership>
+                    <option value="all">All characters</option>
+                    <option value="owned">Owned</option>
+                    <option value="unowned">Unowned</option>
+                </select>
+            </div>
+
+            <button type="button" class="characters-reset-filters" data-character-reset>
+                Reset filters
+            </button>
+        </div>
+
         <div class="characters-summary">
-            <span>{{ characters | length }} characters</span>
+            <span data-character-count>
+                {{ characters | length }} characters
+            </span>
         </div>
 
         <div class="characters-grid">
@@ -95,6 +155,8 @@
             <article
                 class="character-card{% if not character.owned %} character-card-unowned{% endif %}"
                 data-character-id="{{ character.id }}"
+                data-name="{{ character.name | lower }}"
+                data-level="{{ character.level if character.level is not none else '' }}"
                 data-element="{{ character.element | lower }}"
                 data-rarity="{{ character.rarity }}"
                 data-owned="{{ 'true' if character.owned else 'false' }}"

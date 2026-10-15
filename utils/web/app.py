@@ -2799,9 +2799,14 @@ async def characters_page(
                         "owned": owned is not None,
                     })
 
-                # Keep the roster in alphabetical order.
+                # Owned characters first, then highest level to lowest.
+                # Unowned characters remain at the bottom.
                 characters.sort(
-                    key=lambda character: character["name"].casefold()
+                    key=lambda character: (
+                        not character["owned"],
+                        -(character["level"] or 0),
+                        character["name"].casefold(),
+                    )
                 )
 
             except Exception:

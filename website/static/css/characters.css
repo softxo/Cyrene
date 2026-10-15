@@ -455,3 +455,124 @@
     color: var(--text-secondary);
     font-size: 0.72rem;
 }
+
+/* =========================================================
+   CHARACTERS — FILTER TOOLBAR
+   ========================================================= */
+
+.characters-toolbar {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(125px, 1fr)) auto;
+    align-items: end;
+    gap: 12px;
+    min-width: 0;
+}
+
+.characters-search,
+.characters-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.characters-search label,
+.characters-filter label {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.characters-search input,
+.characters-filter select {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.characters-search input:focus,
+.characters-filter select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px
+        color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.characters-reset-filters {
+    min-height: 40px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.characters-reset-filters:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover, var(--surface));
+}
+
+.characters-summary {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.character-card[hidden] {
+    display: none !important;
+}
+
+/* =========================================================
+   CHARACTERS — RESPONSIVE FILTERS
+   ========================================================= */
+
+@media (max-width: 1250px) {
+    .characters-toolbar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .characters-search {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 700px) {
+    .characters-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .characters-search {
+        grid-column: 1 / -1;
+    }
+
+    .characters-reset-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .characters-search {
+        grid-column: auto;
+    }
+}
