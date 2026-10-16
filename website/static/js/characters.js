@@ -621,6 +621,17 @@ function initCharacterShowcase() {
         return String(value);
     }
 
+    function cleanGameText(value) {
+        return String(value ?? "")
+            .replace(/\\n/g, " ")
+            .replace(/<color(?:=[^>]*)?>/gi, "")
+            .replace(/<\/color>/gi, "")
+            .replace(/<[^>]*>/g, "")
+            .replace(/\{LINK#\d+\}/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
     function renderWeapon(character) {
         const weapon = character.weapon;
 
@@ -667,17 +678,18 @@ function initCharacterShowcase() {
         card.append(info);
         section.append(card);
     }
-
+    
     function renderCombatStats(character) {
         const properties = character.selected_properties || [];
+
         const preferredStats = [
+            "CRIT Rate",
+            "CRIT DMG",
+            "Energy Recharge",
             "Max HP",
             "ATK",
             "DEF",
             "Elemental Mastery",
-            "CRIT Rate",
-            "CRIT DMG",
-            "Energy Recharge",
             `${character.element || ""} DMG Bonus`
         ];
 
@@ -692,7 +704,15 @@ function initCharacterShowcase() {
 
         const statsToShow = preferredStats
             .filter(name => propertyMap.has(name))
-            .map(name => [name, propertyMap.get(name)]);
+            .map(name => ({
+                label: name,
+                value: propertyMap.get(name),
+                priority: [
+                    "CRIT Rate",
+                    "CRIT DMG",
+                    "Energy Recharge"
+                ].includes(name)
+            }));
 
         if (!statsToShow.length) {
             return;
@@ -701,8 +721,26 @@ function initCharacterShowcase() {
         const section = addSection("Combat Attributes");
         const grid = createElement("div", "showcase-stats-grid");
 
-        for (const [label, value] of statsToShow) {
-            addStatCard(grid, label, formatValue(value));
+        for (const stat of statsToShow) {
+            const card = createElement(
+                "div",
+                `showcase-stat${stat.priority ? " showcase-stat-priority" : ""}`
+            );
+
+            card.append(
+                createElement(
+                    "span",
+                    "showcase-stat-label",
+                    stat.label
+                ),
+                createElement(
+                    "strong",
+                    "showcase-stat-value",
+                    formatValue(stat.value)
+                )
+            );
+
+            grid.append(card);
         }
 
         section.append(grid);
@@ -739,7 +777,11 @@ function initCharacterShowcase() {
                     "showcase-artifact-slot",
                     artifact.pos_name || "Artifact"
                 ),
-                createElement("h4", "showcase-artifact-name", artifact.name || "Unknown artifact"),
+                createElement(
+                    "h4",
+                    "showcase-artifact-name",
+                    artifact.name || "Unknown artifact"
+                ),
                 createElement(
                     "p",
                     "showcase-item-meta",
@@ -763,14 +805,21 @@ function initCharacterShowcase() {
             const subStats = artifact.sub_stats || [];
 
             if (subStats.length) {
-                const list = createElement("ul", "showcase-artifact-substats");
+                const list = createElement(
+                    "ul",
+                    "showcase-artifact-substats"
+                );
 
                 for (const subStat of subStats) {
                     const label = subStat.info?.name || "Sub-stat";
                     const value = subStat.value ?? subStat.final;
 
                     list.append(
-                        createElement("li", "", `${label} ${formatValue(value)}`)
+                        createElement(
+                            "li",
+                            "",
+                            `${label} ${formatValue(value)}`
+                        )
                     );
                 }
 
@@ -782,6 +831,115 @@ function initCharacterShowcase() {
         }
 
         section.append(grid);
+
+        /* Calculate equipped set counts from the actual artifacts. */
+
+        const setCounts = new Map();
+
+        for (const artifact of artifacts) {
+            const setName = artifact.set?.name;
+
+            if (!setName) {
+                continue;
+            }
+
+            const existing = setCounts.get(setName) || {
+                count: 0,
+                effects: []
+            };
+
+            existing.count += 1;
+
+            for (const effect of artifact.set?.effects || []) {
+                const requiredPieces = Number(effect.required_piece_num);
+                const description = cleanGameText(effect.effect);
+
+                if (
+                    Number.isFinite(requiredPieces) &&
+                    requiredPieces > 0 &&
+                    description &&
+                    !existing.effects.some(item =>
+                        item.requiredPieces === requiredPieces &&
+                        item.description === description
+                    )
+                ) {
+                    existing.effects.push({
+                        requiredPieces,
+                        description
+                    });
+                }
+            }
+
+            setCounts.set(setName, existing);
+        }
+
+        const equippedSets = Array.from(setCounts.entries())
+            .filter(([, set]) => set.count >= 2)
+            .sort((a, b) => b[1].count - a[1].count);
+
+        if (!equippedSets.length) {
+            return;
+        }
+
+        const setSection = createElement(
+            "div",
+            "showcase-artifact-sets"
+        );
+
+        for (const [setName, set] of equippedSets) {
+            const setCard = createElement(
+                "article",
+                "showcase-artifact-set"
+            );
+
+            setCard.append(
+                createElement(
+                    "h4",
+                    "showcase-artifact-set-name",
+                    `${set.count}-Piece Set · ${setName}`
+                )
+            );
+
+            const activeEffects = set.effects
+                .filter(effect => effect.requiredPieces <= set.count)
+                .sort((a, b) => a.requiredPieces - b.requiredPieces);
+
+            if (activeEffects.length) {
+                for (const effect of activeEffects) {
+                    const effectBlock = createElement(
+                        "div",
+                        "showcase-artifact-set-effect"
+                    );
+
+                    effectBlock.append(
+                        createElement(
+                            "strong",
+                            "",
+                            `${effect.requiredPieces}-Piece Bonus`
+                        ),
+                        createElement(
+                            "p",
+                            "",
+                            effect.description
+                        )
+                    );
+
+                    setCard.append(effectBlock);
+                }
+            } else {
+                setCard.append(
+                    createElement(
+                        "p",
+                        "showcase-artifact-set-effect",
+                        "Set bonus details unavailable."
+                    )
+                );
+            }
+
+            setSection.append(setCard);
+        }
+
+        section.append(setSection);
     }
 
     function renderTalents(character) {
@@ -838,6 +996,7 @@ function initCharacterShowcase() {
 
         for (const constellation of constellations) {
             const active = Boolean(constellation.activated);
+            const description = cleanGameText(constellation.effect);
             const card = createElement(
                 "article",
                 `showcase-constellation${active ? " is-active" : ""}`
@@ -850,6 +1009,16 @@ function initCharacterShowcase() {
                         constellation.name || `Constellation ${constellation.pos}`,
                         "showcase-constellation-icon"
                     )
+                );
+            }
+
+            if (description) {
+                card.title = description;
+                card.tabIndex = 0;
+                card.setAttribute(
+                    "aria-label",
+                    `C${constellation.pos}: ${constellation.name || "Constellation"}. ` +
+                    `${active ? "Unlocked." : "Locked."} ${description}`
                 );
             }
 
