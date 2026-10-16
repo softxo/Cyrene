@@ -822,21 +822,15 @@ body.character-showcase-open {
 .enka-build-card {
     --showcase-element-colour: var(--accent);
 
+    position: relative;
+    isolation: isolate;
+
     display: flex;
     flex-direction: column;
     min-width: 0;
     overflow: hidden;
-    background:
-        radial-gradient(
-            ellipse at 0 0,
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 8%,
-                transparent
-            ),
-            transparent 65%
-        ),
-        var(--background);
+
+    background: var(--background);
 }
 
 .enka-build-card[data-element="anemo"] {
@@ -865,6 +859,52 @@ body.character-showcase-open {
 
 .enka-build-card[data-element="cryo"] {
     --showcase-element-colour: #a4e7f1;
+}
+
+/* =========================================================
+   ELEMENTAL VIDEO BACKGROUND
+   Covers the entire build card, including artefacts.
+   ========================================================= */
+
+.enka-element-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/* Darken the edges slightly to preserve text readability. */
+.enka-build-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    pointer-events: none;
+
+    background: radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgb(0 0 0 / 30%) 100%
+    );
+}
+
+/* Keep all actual build content above the video and vignette. */
+.enka-character-layout,
+.enka-artifacts-panel,
+.enka-card-status,
+.enka-card-error {
+    position: relative;
+    z-index: 2;
 }
 
 /* =========================================================
@@ -903,16 +943,15 @@ body.character-showcase-open {
     border: 1px solid var(--enka-border);
     border-radius: 12px;
     isolation: isolate;
-    background:
-        radial-gradient(
-            ellipse at 50% 42%,
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 20%,
-                var(--surface)
-            ),
-            var(--surface) 76%
-        );
+    background: transparent;
+}
+
+.enka-character-layout {
+    background: transparent;
+}
+
+.enka-character-details {
+    background: transparent;
 }
 
 .enka-artwork-stage {
@@ -1041,7 +1080,7 @@ body.character-showcase-open {
     position: absolute;
     z-index: 3;
     right: 10px;
-    bottom: 10px;
+    bottom: 15px;
     left: 10px;
 
     display: grid;
@@ -1067,7 +1106,7 @@ body.character-showcase-open {
 }
 
 .enka-constellation-orbit .enka-progression-item {
-    width: min(100%, 42px);
+    width: min(100%, 46px);
     height: auto;
     aspect-ratio: 1;
     padding: 5px;
@@ -1119,9 +1158,7 @@ body.character-showcase-open {
 }
 
 .enka-constellation-number {
-    color: var(--text);
-    font-size: 0.68rem;
-    font-weight: 800;
+    display: none !important;
 }
 
 /* =========================================================
@@ -1464,6 +1501,8 @@ body.character-showcase-open {
 .enka-artifact-card {
     min-width: 0;
     padding: 18px 10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
     border: 1px solid var(--enka-border);
     border-radius: 7px;
     background: var(--surface-hover, var(--surface));
@@ -1802,7 +1841,7 @@ body.character-showcase-open {
 
     .enka-constellation-orbit {
         right: 7px;
-        bottom: 7px;
+        bottom: 10px;
         left: 7px;
         gap: 3px;
         padding: 6px 5px;
@@ -1945,4 +1984,188 @@ body.character-showcase-open {
     gap: 6px;
     min-width: 0;
     margin: 0 0 0 auto;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — TRANSLUCENT GLASS PANELS
+   Neutral glass instead of pink-tinted surfaces.
+   ========================================================= */
+
+/* Stats, weapon and artefact panels */
+.enka-stats-panel,
+.enka-weapon-panel,
+.enka-artifacts-panel {
+    background: rgb(15 18 28 / 48%);
+    border-color: rgb(255 255 255 / 16%);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Individual artefact cards */
+.enka-artifact-card {
+    background: rgb(15 18 28 / 35%);
+    border-color: rgb(255 255 255 / 14%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Weapon image background */
+.enka-weapon-image {
+    background: rgb(15 18 28 / 45%);
+}
+
+/* Remove the element-colour tint behind artefact icons */
+.enka-artifact-image-wrap {
+    background: rgb(255 255 255 / 7%);
+}
+
+/* Neutral glass for artefact set bonuses */
+.enka-artifact-set {
+    background: rgb(255 255 255 / 6%);
+    border-color: rgb(255 255 255 / 18%);
+}
+
+/* Keep the build card itself neutral and transparent */
+.enka-build-card {
+    background: transparent;
+}
+
+/* Keep the main character area clear of coloured overlays */
+.enka-character-visual {
+    background: transparent;
+}
+
+/* Neutral glass for unlocked constellation icons */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 16%),
+        rgb(15 18 28 / 38%)
+    );
+
+    border-color: rgb(255 255 255 / 30%);
+
+    box-shadow:
+        inset 0 1px 3px rgb(255 255 255 / 12%),
+        0 2px 8px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — REMOVE REMAINING ELEMENT TINTS
+   ========================================================= */
+
+/* Modal outer border */
+.character-showcase-modal {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* Remove the coloured glow from the build card */
+.enka-build-card {
+    background: transparent !important;
+}
+
+/* Neutralise borders on every build panel and artefact */
+.enka-build-card .enka-stats-panel,
+.enka-build-card .enka-weapon-panel,
+.enka-build-card .enka-artifacts-panel,
+.enka-build-card .enka-artifact-card,
+.enka-build-card .enka-weapon-image,
+.enka-build-card .enka-artifact-set,
+.enka-build-card .enka-artifact-image-wrap {
+    border-color: rgb(255 255 255 / 16%) !important;
+}
+
+/* Neutralise talent and constellation borders */
+.enka-build-card .enka-progression-item,
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: rgb(255 255 255 / 24%) !important;
+}
+
+/* Remove the element-coloured border from the artwork stage */
+.enka-build-card .enka-character-visual {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — ELEMENT-TINTED UNLOCKED CONSTELLATIONS
+   ========================================================= */
+
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--showcase-element-colour) 24%, rgb(20 24 36 / 72%)),
+        color-mix(in srgb, var(--showcase-element-colour) 10%, rgb(12 15 24 / 82%))
+    ) !important;
+
+    border: 1px solid
+        color-mix(in srgb, var(--showcase-element-colour) 75%, white 25%) !important;
+
+    box-shadow:
+        inset 0 0 8px
+            color-mix(in srgb, var(--showcase-element-colour) 18%, transparent),
+        0 0 6px
+            color-mix(in srgb, var(--showcase-element-colour) 32%, transparent),
+        0 0 12px
+            color-mix(in srgb, var(--showcase-element-colour) 16%, transparent);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+/* Slightly stronger elemental glow on hover */
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked):hover {
+    border-color: var(--showcase-element-colour) !important;
+
+    box-shadow:
+        inset 0 0 10px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent),
+        0 0 9px
+            color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
+        0 0 16px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
+
+    transform: translateY(-2px);
+}
+
+.enka-artifact-cv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 25px;
+    margin-top: 10px;
+    padding-top: 7px;
+
+    border-top: 1px solid rgb(255 255 255 / 16%);
+
+    color: var(--showcase-element-colour);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Keep the CV readable on smaller screens */
+@media (max-width: 520px) {
+    .enka-artifact-card {
+        padding-top: 14px;
+        padding-bottom: 12px;
+    }
+
+    .enka-artifact-cv {
+        min-height: 23px;
+        margin-top: 8px;
+        padding-top: 6px;
+        font-size: 0.75rem;
+    }
 }

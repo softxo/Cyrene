@@ -1302,7 +1302,75 @@ function initCharacterShowcase() {
                 appendArtifactStat(subStats, property);
             });
 
-            card.append(header, mainStat, subStats);
+            /* Calculate artifact CV from its CRIT substats. */
+            let critRate = 0;
+            let critDamage = 0;
+
+            properties.forEach(property => {
+                const statName = normaliseStatName(
+                    getPropertyName(property)
+                );
+
+                if (
+                    statName !== "critrate" &&
+                    statName !== "criticalrate" &&
+                    statName !== "critdmg" &&
+                    statName !== "criticaldamage"
+                ) {
+                    return;
+                }
+
+                // Prefer the formatted percentage when available.
+                const formattedValue = property?.formatted;
+                const rawValue = property?.final ?? property?.value;
+
+                let value;
+
+                if (
+                    formattedValue !== null &&
+                    formattedValue !== undefined &&
+                    formattedValue !== ""
+                ) {
+                    value = Number.parseFloat(
+                        String(formattedValue).replace(",", ".")
+                    );
+                } else {
+                    value = Number(rawValue);
+
+                    // Some API values represent percentages as ratios.
+                    if (Number.isFinite(value) && Math.abs(value) <= 1) {
+                        value *= 100;
+                    }
+                }
+
+                if (!Number.isFinite(value)) {
+                    return;
+                }
+
+                if (
+                    statName === "critrate" ||
+                    statName === "criticalrate"
+                ) {
+                    critRate = value;
+                } else {
+                    critDamage = value;
+                }
+            });
+
+            const cv = critDamage + (2 * critRate);
+
+            const cvRow = createElement(
+                "div",
+                "enka-artifact-cv",
+                `CV ${cv.toFixed(1)}`
+            );
+
+            cvRow.setAttribute(
+                "aria-label",
+                `Artifact Crit Value: ${cv.toFixed(1)}`
+            );
+
+            card.append(header, mainStat, subStats, cvRow);
             artifactsElement.append(card);
         });
 
