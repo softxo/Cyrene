@@ -538,23 +538,45 @@ function initCharacterShowcase() {
     const page = document.querySelector(".characters-page");
     const modal = page?.querySelector("[data-character-showcase]");
     const dialog = modal?.querySelector(".character-showcase-modal");
+
+    const showcase = modal?.querySelector("[data-showcase-card]");
     const portrait = modal?.querySelector("[data-showcase-portrait]");
     const nameElement = modal?.querySelector("#showcase-character-name");
     const elementElement = modal?.querySelector("[data-showcase-element]");
+    const elementIconElement = modal?.querySelector(
+        "[data-showcase-element-icon]"
+    );
     const levelElement = modal?.querySelector("[data-showcase-level]");
+    const rarityElement = modal?.querySelector("[data-showcase-rarity]");
     const statusElement = modal?.querySelector("[data-showcase-status]");
-    const detailsElement = modal?.querySelector("[data-showcase-details]");
+
+    const weaponElement = modal?.querySelector("[data-showcase-weapon]");
+    const statsElement = modal?.querySelector("[data-showcase-stats]");
+    const artifactsElement = modal?.querySelector("[data-showcase-artifacts]");
+    const setsElement = modal?.querySelector("[data-showcase-sets]");
+    const talentsElement = modal?.querySelector("[data-showcase-talents]");
+    const constellationsElement = modal?.querySelector(
+        "[data-showcase-constellations]"
+    );
+    const errorElement = modal?.querySelector("[data-showcase-error]");
 
     if (
         !page ||
         !modal ||
         !dialog ||
+        !showcase ||
         !portrait ||
         !nameElement ||
         !elementElement ||
         !levelElement ||
         !statusElement ||
-        !detailsElement ||
+        !weaponElement ||
+        !statsElement ||
+        !artifactsElement ||
+        !setsElement ||
+        !talentsElement ||
+        !constellationsElement ||
+        !errorElement ||
         modal.dataset.initialised === "true"
     ) {
         return;
@@ -588,31 +610,6 @@ function initCharacterShowcase() {
         return image;
     }
 
-    function addSection(title, className = "") {
-        const section = createElement(
-            "section",
-            `showcase-section ${className}`.trim()
-        );
-
-        section.append(
-            createElement("h3", "showcase-section-title", title)
-        );
-
-        detailsElement.append(section);
-        return section;
-    }
-
-    function addStatCard(container, label, value) {
-        const stat = createElement("div", "showcase-stat");
-
-        stat.append(
-            createElement("span", "showcase-stat-label", label),
-            createElement("strong", "showcase-stat-value", value ?? "—")
-        );
-
-        container.append(stat);
-    }
-
     function formatValue(value) {
         if (value === null || value === undefined || value === "") {
             return "—";
@@ -631,483 +628,828 @@ function initCharacterShowcase() {
             .replace(/\s+/g, " ")
             .trim();
     }
-    
-    function getStatLabel(stat) {
+
+    function getPropertyName(property) {
         return cleanGameText(
-            stat?.info?.name ??
-            stat?.name ??
-            stat?.type ??
-            "Stat"
+            property?.info?.filter_name ??
+            property?.info?.name ??
+            property?.name ??
+            property?.key ??
+            ""
         );
     }
 
-    function getStatValue(stat) {
+    function getPropertyValue(property) {
         return formatValue(
-            stat?.final ??
-            stat?.value ??
-            stat?.display ??
-            stat?.formatted_value
+            property?.formatted ??
+            property?.final ??
+            property?.value
         );
     }
 
-    function getArtifactStatText(stat) {
-        if (!stat) {
-            return "—";
+    function getProperties(item, ...keys) {
+        for (const key of keys) {
+            if (Array.isArray(item?.[key])) {
+                return item[key];
+            }
         }
 
-        const name = getStatLabel(stat);
-        const value = getStatValue(stat);
-
-        return `${name} ${value}`;
+        return [];
     }
 
-    function getArtifactTooltip(artifact) {
-        const lines = [
-            cleanGameText(artifact.position),
-            cleanGameText(artifact.name),
-            `+${formatValue(artifact.level)}`
+    function getItemImage(item) {
+        return (
+            item?.icon ??
+            item?.image ??
+            item?.icon_url ??
+            ""
+        );
+    }
+
+    function getRarityClass(rarity) {
+        const value = Number(rarity);
+
+        return Number.isFinite(value)
+            ? `rarity-${value}`
+            : "";
+    }
+
+        const SHOWCASE_ICON_PATH =
+        "/static/images/characters/showcase/main/";
+
+    const ELEMENT_DAMAGE_ICONS = {
+        Cryo: "DMG_Cryo.png",
+        Pyro: "DMG_Pyro.png",
+        Hydro: "DMG_Hydro.png",
+        Electro: "DMG_Electro.png",
+        Dendro: "DMG_Dendro.png",
+        Anemo: "DMG_Anemo.png",
+        Geo: "DMG_Geo.png"
+    };
+
+    const STAT_ICON_FILES = {
+        "maxhp": "HP.png",
+        "hp": "HP.png",
+        "atk": "ATK.png",
+        "baseatk": "ATK.png",
+        "def": "DEF.png",
+        "elementalmastery": "Elemental_Mastery.png",
+        "em": "Elemental_Mastery.png",
+        "critrate": "Crit_Rate.png",
+        "criticalrate": "Crit_Rate.png",
+        "critdmg": "Crit_DMG.png",
+        "criticaldamage": "Crit_DMG.png",
+        "energyrecharge": "Energy_Recharge.png",
+        "er": "Energy_Recharge.png",
+        "hppercentage": "HP_Percentage.png",
+        "atkpercentage": "ATK_Percentage.png",
+        "defpercentage": "DEF_Percentage.png",
+        "healingbonus": "HP_Percentage.png",
+        "incominghealingbonus": "HP.png"
+    };
+
+    function normaliseStatName(value) {
+        return String(value ?? "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "");
+    }
+
+    function getElementDamageIcon(element) {
+        const filename = ELEMENT_DAMAGE_ICONS[
+            cleanGameText(element)
         ];
 
-        if (artifact.main_stat) {
-            lines.push(
-                getArtifactStatText(artifact.main_stat)
-            );
-        }
-
-        for (const stat of artifact.substats || []) {
-            lines.push(getArtifactStatText(stat));
-        }
-
-        if (artifact.set?.name) {
-            lines.push(
-                `Set: ${cleanGameText(artifact.set.name)}`
-            );
-        }
-
-        return lines.filter(Boolean).join("\n");
+        return filename ? `${SHOWCASE_ICON_PATH}${filename}` : "";
     }
 
-    function renderWeapon(character) {
-        const weapon = character.weapon;
+    function getStatIcon(statName, element = "") {
+        const normalised = normaliseStatName(statName);
 
-        const section = addSection(
-            "WEAPON",
-            "showcase-weapon-section"
+        const elementalDamageNames = [
+            "cryodmg",
+            "cryodamage",
+            "pyrodmg",
+            "pyrodamage",
+            "hydrodmg",
+            "hydrodamage",
+            "electrodmg",
+            "electrodamage",
+            "dendrodmg",
+            "dendrodamage",
+            "anemodmg",
+            "anemodamage",
+            "geodmg",
+            "geodamage"
+        ];
+
+        if (
+            normalised.includes("elementaldmg") ||
+            normalised.includes("elementaldamage") ||
+            elementalDamageNames.includes(normalised)
+        ) {
+            return getElementDamageIcon(element);
+        }
+
+        const filename = STAT_ICON_FILES[normalised];
+
+        return filename ? `${SHOWCASE_ICON_PATH}${filename}` : "";
+    }
+
+    function appendStatIcon(container, statName, element = "") {
+        const iconPath = getStatIcon(statName, element);
+
+        if (!iconPath) {
+            return;
+        }
+
+        const icon = createImage(
+            iconPath,
+            "",
+            "enka-stat-icon"
         );
 
+        icon.alt = "";
+        icon.setAttribute("aria-hidden", "true");
+        icon.loading = "lazy";
+
+        // Avoid broken-image placeholders if an optional icon is unavailable.
+        icon.addEventListener("error", () => icon.remove(), { once: true });
+
+        container.append(icon);
+    }
+
+    function renderRarityStars(container, rarity) {
+        if (!container) {
+            return;
+        }
+
+        container.replaceChildren();
+
+        const count = Math.max(
+            0,
+            Math.min(5, Number.parseInt(rarity, 10) || 0)
+        );
+
+        container.setAttribute(
+            "aria-label",
+            `${count}-star character`
+        );
+
+        for (let index = 0; index < count; index++) {
+            container.append(
+                createElement("span", "enka-rarity-star", "★")
+            );
+        }
+    }
+
+    function getPropertyIndex(properties) {
+        return new Map(
+            properties.map(property => [
+                normaliseStatName(getPropertyName(property)),
+                property
+            ])
+        );
+    }
+
+    function findProperty(index, names) {
+        for (const name of names) {
+            const match = index.get(normaliseStatName(name));
+
+            if (match) {
+                return match;
+            }
+        }
+
+        return null;
+    }
+
+    function formatMissingStat(value, isPercentage = false) {
+        if (
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            value === "—"
+        ) {
+            return isPercentage ? "0.0%" : "0";
+        }
+
+        return String(value);
+    }
+
+    function getStatDisplayValue(property, isPercentage = false) {
+        if (!property) {
+            return isPercentage ? "0.0%" : "0";
+        }
+
+        // Prefer the API's formatted value, which already includes units.
+        const formatted = property.formatted;
+
+        if (
+            formatted !== null &&
+            formatted !== undefined &&
+            formatted !== ""
+        ) {
+            return String(formatted);
+        }
+
+        const rawValue = property.final ?? property.value;
+
+        if (
+            rawValue === null ||
+            rawValue === undefined ||
+            rawValue === ""
+        ) {
+            return isPercentage ? "0.0%" : "0";
+        }
+
+        if (isPercentage) {
+            const numericValue = Number(rawValue);
+
+            if (Number.isFinite(numericValue)) {
+                // Genshin stat APIs can expose percentage stats as either
+                // percentage points (e.g. 5.0) or ratios (e.g. 0.05).
+                const percentage = Math.abs(numericValue) <= 1
+                    ? numericValue * 100
+                    : numericValue;
+
+                return `${percentage.toFixed(1)}%`;
+            }
+
+            const textValue = String(rawValue);
+
+            return textValue.includes("%")
+                ? textValue
+                : `${textValue}`;
+        }
+
+        return String(rawValue);
+    }
+
+    function getCharacterProperties(character) {
+        return getProperties(
+            character,
+            "selected_properties",
+            "properties",
+            "stats"
+        );
+    }
+
+        function renderWeapon(character) {
+        weaponElement.replaceChildren();
+
+        const weapon = character?.weapon;
+
         if (!weapon) {
-            section.append(
+            weaponElement.append(
                 createElement(
                     "p",
-                    "showcase-empty",
-                    "Weapon data unavailable"
+                    "enka-empty-value",
+                    "No weapon data available"
                 )
             );
             return;
         }
 
-        const weaponCard = createElement(
+        const panel = createElement("div", "enka-weapon-card");
+
+        const imageWrap = createElement(
             "div",
-            "showcase-weapon"
+            `enka-weapon-image ${getRarityClass(weapon.rarity)}`
         );
 
-        const icon = createImage(
-            weapon.icon,
-            weapon.name || "Weapon",
-            "showcase-item-icon"
+        imageWrap.append(
+            createImage(
+                getItemImage(weapon),
+                weapon.name ?? "Equipped weapon",
+                "enka-weapon-icon"
+            )
         );
 
-        const info = createElement(
-            "div",
-            "showcase-weapon-info"
-        );
+        if (weapon.refinement != null) {
+            imageWrap.append(
+                createElement(
+                    "span",
+                    "enka-weapon-refinement",
+                    `R${weapon.refinement}`
+                )
+            );
+        }
+
+        if (weapon.level != null) {
+            imageWrap.append(
+                createElement(
+                    "span",
+                    "enka-weapon-level",
+                    `Lv. ${weapon.level}`
+                )
+            );
+        }
+
+        const info = createElement("div", "enka-weapon-info");
 
         info.append(
             createElement(
                 "h4",
-                "showcase-item-name",
-                cleanGameText(weapon.name)
-            ),
-            createElement(
-                "p",
-                "showcase-item-meta",
-                `Lv. ${formatValue(weapon.level)} · R${formatValue(weapon.refinement)}`
+                "enka-weapon-name",
+                cleanGameText(weapon.name ?? "Unknown weapon")
             )
         );
 
-        const stats = createElement(
-            "div",
-            "showcase-weapon-stats"
-        );
+        const weaponStats = createElement("div", "enka-weapon-stats");
 
-        for (const stat of [
-            weapon.main_stat,
-            weapon.sub_stat
-        ]) {
-            if (!stat) {
-                continue;
+        const mainStat = weapon.main_stat;
+        const subStat = weapon.sub_stat;
+
+        const appendWeaponStat = (property, fallbackName) => {
+            if (!property) {
+                return;
             }
 
-            const line = createElement(
-                "p",
-                "showcase-weapon-stat",
-                `${getStatLabel(stat)} ${getStatValue(stat)}`
-            );
+            const name = getPropertyName(property) || fallbackName;
+            const value = getPropertyValue(property);
 
-            stats.append(line);
-        }
-
-        weaponCard.append(icon, info);
-
-        if (stats.childElementCount > 0) {
-            weaponCard.append(stats);
-        }
-
-        section.append(weaponCard);
-    }
-
-    function renderCombatStats(character) {
-        const properties = character.selected_properties || [];
-
-        const preferredStats = [
-            "CRIT Rate",
-            "CRIT DMG",
-            "Energy Recharge",
-            "Elemental Mastery",
-            "ATK",
-            "Max HP",
-            "DEF"
-        ];
-
-        const propertyMap = new Map();
-
-        for (const property of properties) {
-            const name = cleanGameText(property.info?.name);
-
-            if (!name) {
-                continue;
+            if (value === "—") {
+                return;
             }
 
-            propertyMap.set(
-                name,
-                property.final ?? property.value
-            );
-        }
+            const row = createElement("div", "enka-weapon-stat");
+            appendStatIcon(row, name, character?.element);
 
-        const section = addSection(
-            "COMBAT STATS",
-            "showcase-combat-section"
-        );
-
-        const grid = createElement(
-            "div",
-            "showcase-stats-grid"
-        );
-
-        for (const name of preferredStats) {
-            if (!propertyMap.has(name)) {
-                continue;
-            }
-
-            const stat = createElement(
-                "div",
-                "showcase-stat"
-            );
-
-            stat.append(
+            row.append(
                 createElement(
                     "span",
-                    "showcase-stat-label",
-                    name
+                    "enka-weapon-stat-name",
+                    fallbackName
                 ),
-                createElement(
-                    "strong",
-                    "showcase-stat-value",
-                    formatValue(propertyMap.get(name))
-                )
+                createElement("strong", "enka-weapon-stat-value", value)
             );
 
-            if (
-                name === "CRIT Rate" ||
-                name === "CRIT DMG" ||
-                name === "Energy Recharge"
-            ) {
-                stat.classList.add("showcase-stat-priority");
+            weaponStats.append(row);
+        };
+
+        appendWeaponStat(mainStat, "Base ATK");
+        appendWeaponStat(
+            subStat,
+            getPropertyName(subStat) || "Secondary Stat"
+        );
+
+        info.append(weaponStats);
+        panel.append(imageWrap, info);
+        weaponElement.append(panel);
+    }
+
+        function renderCombatStats(character) {
+        statsElement.replaceChildren();
+
+        const properties = getCharacterProperties(character);
+        const propertyIndex = getPropertyIndex(properties);
+        const element = cleanGameText(character?.element ?? "");
+
+        const elementalDamageNames = [
+            `${element} DMG Bonus`,
+            `${element} Damage Bonus`,
+            `${element} DMG`,
+            `${element} Damage`
+        ];
+
+        const statDefinitions = [
+            {
+                label: "Max HP",
+                names: ["Max HP", "HP", "Max Health"],
+                icon: "HP.png",
+                percentage: false
+            },
+            {
+                label: "Crit Rate",
+                names: ["CRIT Rate", "Crit Rate", "Critical Rate"],
+                icon: "Crit_Rate.png",
+                percentage: true
+            },
+            {
+                label: "ATK",
+                names: ["ATK", "Attack"],
+                icon: "ATK.png",
+                percentage: false
+            },
+            {
+                label: "Crit DMG",
+                names: ["CRIT DMG", "Crit DMG", "Critical Damage"],
+                icon: "Crit_DMG.png",
+                percentage: true
+            },
+            {
+                label: "DEF",
+                names: ["DEF", "Defense"],
+                icon: "DEF.png",
+                percentage: false
+            },
+            {
+                label: "Healing Bonus",
+                names: ["Healing Bonus", "Heal Bonus"],
+                icon: "HP_Percentage.png",
+                percentage: true
+            },
+            {
+                label: "Elemental Mastery",
+                names: ["Elemental Mastery", "EM"],
+                icon: "Elemental_Mastery.png",
+                percentage: false
+            },
+            {
+                label: "Incoming Healing Bonus",
+                names: [
+                    "Incoming Healing Bonus",
+                    "Incoming Heal Bonus"
+                ],
+                icon: "HP.png",
+                percentage: true
+            },
+            {
+                label: "Elemental DMG Bonus",
+                names: elementalDamageNames,
+                icon: getElementDamageIcon(element),
+                percentage: true
+            },
+            {
+                label: "Energy Recharge",
+                names: ["Energy Recharge", "ER"],
+                icon: "Energy_Recharge.png",
+                percentage: true
+            }
+        ];
+
+        const grid = createElement("div", "enka-stat-grid");
+
+        statDefinitions.forEach(definition => {
+            const property = findProperty(
+                propertyIndex,
+                definition.names
+            );
+
+            const row = createElement("div", "enka-stat-row");
+            const label = createElement(
+                "span",
+                "enka-stat-name"
+            );
+
+            const iconPath = definition.icon.startsWith("/")
+                ? definition.icon
+                : `${SHOWCASE_ICON_PATH}${definition.icon}`;
+
+            if (iconPath) {
+                const icon = createImage(
+                    iconPath,
+                    "",
+                    "enka-stat-icon"
+                );
+
+                icon.alt = "";
+                icon.setAttribute("aria-hidden", "true");
+                icon.addEventListener("error", () => icon.remove(), {
+                    once: true
+                });
+
+                label.append(icon);
             }
 
-            grid.append(stat);
-        }
+            label.append(
+                createElement("span", "enka-stat-label", definition.label)
+            );
 
-        if (grid.childElementCount === 0) {
-            grid.append(
+            row.append(
+                label,
                 createElement(
-                    "p",
-                    "showcase-empty",
-                    "Combat stats unavailable"
+                    "strong",
+                    "enka-stat-value",
+                    getStatDisplayValue(
+                        property,
+                        definition.percentage
+                    )
                 )
             );
-        }
 
-        section.append(grid);
+            grid.append(row);
+        });
+
+        statsElement.append(grid);
     }
 
     function renderArtifacts(character) {
-        const artifacts = character.artifacts || [];
+        artifactsElement.replaceChildren();
+        setsElement.replaceChildren();
 
-        const section = addSection(
-            "ARTIFACTS",
-            "showcase-artifacts-section"
-        );
+        const artifacts = Array.isArray(character?.artifacts)
+            ? character.artifacts
+            : [];
 
-        const grid = createElement(
-            "div",
-            "showcase-artifact-grid"
-        );
+        const setCounts = new Map();
 
-        for (const artifact of artifacts) {
-            const artifactCard = createElement(
+        artifacts.forEach(artifact => {
+            const setName = cleanGameText(artifact?.set?.name ?? "");
+
+            if (setName) {
+                setCounts.set(
+                    setName,
+                    (setCounts.get(setName) ?? 0) + 1
+                );
+            }
+        });
+
+        function appendArtifactStat(container, property, className = "") {
+            if (!property) {
+                return;
+            }
+
+            const name = getPropertyName(property);
+            const value = getPropertyValue(property);
+
+            if (!name || value === "—") {
+                return;
+            }
+
+            const row = createElement(
                 "div",
-                "showcase-artifact"
+                className || "enka-artifact-substat"
             );
 
-            const tooltip = getArtifactTooltip(artifact);
+            appendStatIcon(row, name, character?.element);
 
-            artifactCard.title = tooltip;
-            artifactCard.setAttribute("aria-label", tooltip);
-
-            const icon = createImage(
-                artifact.icon,
-                artifact.name || "Artifact",
-                "showcase-item-icon"
+            row.append(
+                createElement("span", "enka-artifact-stat-name", name),
+                createElement("strong", "enka-artifact-stat-value", value)
             );
 
-            const level = createElement(
-                "span",
-                "showcase-artifact-level",
-                `+${formatValue(artifact.level)}`
-            );
-
-            artifactCard.append(icon, level);
-            grid.append(artifactCard);
+            container.append(row);
         }
 
-        if (grid.childElementCount === 0) {
-            grid.append(
-                createElement(
-                    "p",
-                    "showcase-empty",
-                    "Artifact data unavailable"
+        artifacts.forEach(artifact => {
+            const card = createElement(
+                "article",
+                `enka-artifact-card ${getRarityClass(artifact?.rarity)}`
+            );
+
+            const header = createElement("div", "enka-artifact-header");
+
+            const imageWrap = createElement(
+                "div",
+                "enka-artifact-image-wrap"
+            );
+
+            imageWrap.append(
+                createImage(
+                    getItemImage(artifact),
+                    artifact.name ?? artifact.pos_name ?? "Artefact",
+                    "enka-artifact-icon"
                 )
             );
-        }
 
-        section.append(grid);
-
-        // Keep set bonuses compact, while retaining their full descriptions.
-        const setCounts = new Map();
-        const setEffects = new Map();
-
-        for (const artifact of artifacts) {
-            const set = artifact.set;
-
-            if (!set?.name) {
-                continue;
-            }
-
-            const setName = cleanGameText(set.name);
-
-            setCounts.set(
-                setName,
-                (setCounts.get(setName) || 0) + 1
-            );
-
-            if (Array.isArray(set.effects)) {
-                setEffects.set(setName, set.effects);
-            }
-        }
-
-        if (setCounts.size === 0) {
-            return;
-        }
-
-        const sets = createElement(
-            "div",
-            "showcase-artifact-sets"
-        );
-
-        for (const [name, count] of setCounts) {
-            const setInfo = createElement(
-                "div",
-                "showcase-artifact-set"
-            );
-
-            const effects = setEffects.get(name) || [];
-            const activeEffects = effects.filter(effect => {
-                const requiredPieces = Number(
-                    effect?.pieces ??
-                    effect?.required_pieces ??
-                    effect?.count ??
-                    0
+            if (artifact.level != null) {
+                imageWrap.append(
+                    createElement(
+                        "span",
+                        "enka-artifact-level",
+                        `+${artifact.level}`
+                    )
                 );
-
-                return requiredPieces > 0 &&
-                    count >= requiredPieces;
-            });
-
-            const descriptions = activeEffects
-                .map(effect => cleanGameText(
-                    effect.description ??
-                    effect.name ??
-                    ""
-                ))
-                .filter(Boolean);
-
-            setInfo.textContent = `${count}× ${name}`;
-
-            if (descriptions.length > 0) {
-                setInfo.title = descriptions.join("\n");
             }
 
-            sets.append(setInfo);
-        }
-
-        section.append(sets);
-    }
-
-    function renderTalents(character) {
-        const skills = (character.skills || []).filter(
-            skill => Number(skill.skill_type) === 1
-        );
-
-        const section = addSection(
-            "TALENTS",
-            "showcase-talents-section"
-        );
-
-        const grid = createElement(
-            "div",
-            "showcase-talent-grid"
-        );
-
-        for (const skill of skills) {
-            const talent = createElement(
+            const titleWrap = createElement(
                 "div",
-                "showcase-talent"
+                "enka-artifact-title-wrap"
             );
 
-            const name = cleanGameText(skill.name);
-            const level = formatValue(skill.level);
-
-            talent.title = `${name} · Level ${level}`;
-            talent.setAttribute("aria-label", talent.title);
-
-            talent.append(
-                createImage(
-                    skill.icon,
-                    name || "Talent",
-                    "showcase-talent-icon"
+            titleWrap.append(
+                createElement(
+                    "h4",
+                    "enka-artifact-name",
+                    cleanGameText(
+                        artifact.pos_name ??
+                        artifact.name ??
+                        "Artefact"
+                    )
                 ),
                 createElement(
                     "span",
-                    "showcase-talent-level",
-                    level
+                    "enka-artifact-rarity",
+                    "★".repeat(
+                        Math.max(
+                            0,
+                            Math.min(
+                                5,
+                                Number.parseInt(artifact.rarity, 10) || 0
+                            )
+                        )
+                    )
                 )
             );
 
-            grid.append(talent);
-        }
+            header.append(imageWrap, titleWrap);
 
-        if (grid.childElementCount === 0) {
-            grid.append(
+            const mainStat = createElement(
+                "div",
+                "enka-artifact-main-stat"
+            );
+
+            appendArtifactStat(
+                mainStat,
+                artifact.main_stat,
+                "enka-artifact-main-stat-row"
+            );
+
+            const subStats = createElement(
+                "div",
+                "enka-artifact-substats"
+            );
+
+            const properties = Array.isArray(artifact.sub_stats)
+                ? artifact.sub_stats
+                : [];
+
+            properties.slice(0, 4).forEach(property => {
+                appendArtifactStat(subStats, property);
+            });
+
+            card.append(header, mainStat, subStats);
+            artifactsElement.append(card);
+        });
+
+        if (!artifacts.length) {
+            artifactsElement.append(
                 createElement(
                     "p",
-                    "showcase-empty",
+                    "enka-empty-value",
+                    "Artefact data is unavailable"
+                )
+            );
+        }
+
+        setCounts.forEach((count, name) => {
+            const tag = createElement("div", "enka-artifact-set");
+
+            tag.append(
+                createElement(
+                    "strong",
+                    "enka-artifact-set-count",
+                    `${count}pc`
+                ),
+                createElement(
+                    "span",
+                    "enka-artifact-set-name",
+                    name
+                )
+            );
+
+            setsElement.append(tag);
+        });
+    }
+
+    function renderTalents(character) {
+        talentsElement.replaceChildren();
+
+        const skills = Array.isArray(character?.skills)
+            ? character.skills
+            : [];
+
+        const talents = skills
+            .filter(skill => Number(skill.skill_type) === 1)
+            .slice(0, 3);
+
+        talents.forEach((talent, index) => {
+            const item = createElement(
+                "div",
+                "enka-progression-item enka-talent"
+            );
+
+            item.append(
+                createImage(
+                    getItemImage(talent),
+                    talent.name ?? `Talent ${index + 1}`,
+                    "enka-progression-icon"
+                )
+            );
+
+            item.append(
+                createElement(
+                    "span",
+                    "enka-talent-level",
+                    talent.level != null
+                        ? String(talent.level)
+                        : "—"
+                )
+            );
+
+            item.title = cleanGameText(
+                talent.name ?? `Talent ${index + 1}`
+            );
+
+            talentsElement.append(item);
+        });
+
+        if (!talents.length) {
+            talentsElement.append(
+                createElement(
+                    "p",
+                    "enka-empty-value",
                     "Talent data unavailable"
                 )
             );
         }
-
-        section.append(grid);
     }
 
     function renderConstellations(character) {
-        const constellations = character.constellations || [];
+        constellationsElement.replaceChildren();
 
-        if (constellations.length === 0) {
-            return;
-        }
+        const constellations = Array.isArray(character?.constellations)
+            ? character.constellations.slice(0, 6)
+            : [];
 
-        const section = addSection(
-            "CONSTELLATIONS",
-            "showcase-constellations-section"
-        );
-
-        const grid = createElement(
-            "div",
-            "showcase-constellation-grid"
-        );
-
-        for (const constellation of constellations) {
-            const active = Boolean(constellation.activated);
-            const name = cleanGameText(constellation.name);
-            const description = cleanGameText(
-                constellation.description
-            );
+        for (let index = 0; index < 6; index++) {
+            const constellation = constellations[index];
+            const number = index + 1;
+            const activated = constellation?.activated === true;
 
             const item = createElement(
                 "div",
-                `showcase-constellation${active ? " is-active" : ""}`
+                [
+                    "enka-progression-item",
+                    "enka-constellation",
+                    activated ? "is-unlocked" : "is-locked"
+                ].join(" ")
             );
 
-            item.title = [
-                name,
-                description,
-                active ? "Unlocked" : "Locked"
-            ].filter(Boolean).join("\n");
+            item.dataset.index = String(index);
 
-            item.setAttribute("aria-label", item.title);
+            if (constellation && getItemImage(constellation)) {
+                item.append(
+                    createImage(
+                        getItemImage(constellation),
+                        constellation.name ?? `Constellation ${number}`,
+                        "enka-progression-icon"
+                    )
+                );
+            }
 
             item.append(
-                createImage(
-                    constellation.icon,
-                    name || "Constellation",
-                    "showcase-constellation-icon"
-                ),
                 createElement(
                     "span",
-                    "showcase-constellation-number",
-                    formatValue(constellation.pos)
+                    "enka-constellation-number",
+                    String(number)
                 )
             );
 
-            grid.append(item);
+            item.title = cleanGameText(
+                constellation?.name ?? `Constellation ${number}`
+            );
+
+            item.setAttribute(
+                "aria-label",
+                `Constellation ${number}: ${activated ? "unlocked" : "locked"}`
+            );
+
+            constellationsElement.append(item);
+        }
+    }
+
+    function renderCharacter(character) {
+        weaponElement.replaceChildren();
+        statsElement.replaceChildren();
+        artifactsElement.replaceChildren();
+        setsElement.replaceChildren();
+        talentsElement.replaceChildren();
+        constellationsElement.replaceChildren();
+
+        renderWeapon(character);
+        renderCombatStats(character);
+        renderArtifacts(character);
+        renderTalents(character);
+        renderConstellations(character);
+
+        if (elementIconElement) {
+            elementIconElement.replaceChildren();
+
+            const iconPath = getElementDamageIcon(character?.element);
+
+            if (iconPath) {
+                const icon = createImage(
+                    iconPath,
+                    `${character.element} element`,
+                    "enka-element-icon"
+                );
+
+                icon.addEventListener("error", () => icon.remove(), {
+                    once: true
+                });
+
+                elementIconElement.append(icon);
+            }
         }
 
-        section.append(grid);
-    }
+        if (rarityElement) {
+            renderRarityStars(rarityElement, character?.rarity);
+        }
 
-    function renderCharacter(character) {
-        detailsElement.replaceChildren();
-
-        renderWeapon(character);
-        renderCombatStats(character);
-        renderArtifacts(character);
-        renderTalents(character);
-        renderConstellations(character);
-
-        detailsElement.hidden = false;
-    }
-
-    function renderCharacter(character) {
-        detailsElement.replaceChildren();
-
-        renderWeapon(character);
-        renderCombatStats(character);
-        renderArtifacts(character);
-        renderTalents(character);
-        renderConstellations(character);
-
-        detailsElement.hidden = false;
+        errorElement.hidden = true;
+        errorElement.textContent = "";
     }
 
     async function loadCharacter(card, requestId) {
@@ -1155,14 +1497,15 @@ function initCharacterShowcase() {
             return;
         }
 
-        nameElement.textContent = character.name || "Unknown character";
+                nameElement.textContent = character.name || "Unknown character";
         elementElement.textContent = character.element || "";
 
-        modal.dataset.element = String(
+        showcase.dataset.element = String(
             character.element || ""
         ).toLowerCase();
 
-        modal.dataset.rarity = String(character.rarity || "");
+        showcase.dataset.rarity = String(character.rarity || "");
+
         levelElement.textContent =
             `Level ${formatValue(character.level)} · ` +
             `C${formatValue(character.constellation)} · ` +
@@ -1170,6 +1513,30 @@ function initCharacterShowcase() {
 
         portrait.src = character.display_image || character.icon || "";
         portrait.alt = character.name || "Character artwork";
+
+        if (elementIconElement) {
+            elementIconElement.replaceChildren();
+
+            const iconPath = getElementDamageIcon(character.element);
+
+            if (iconPath) {
+                const icon = createImage(
+                    iconPath,
+                    `${character.element} element`,
+                    "enka-element-icon"
+                );
+
+                icon.addEventListener("error", () => icon.remove(), {
+                    once: true
+                });
+
+                elementIconElement.append(icon);
+            }
+        }
+
+        if (rarityElement) {
+            renderRarityStars(rarityElement, character.rarity);
+        }
 
         renderCharacter(character);
         statusElement.textContent = "";
@@ -1204,8 +1571,23 @@ function initCharacterShowcase() {
             ? `Level ${card.dataset.level}`
             : "Level unavailable";
 
-        detailsElement.replaceChildren();
-        detailsElement.hidden = true;
+        weaponElement.replaceChildren();
+        statsElement.replaceChildren();
+        artifactsElement.replaceChildren();
+        setsElement.replaceChildren();
+        talentsElement.replaceChildren();
+        constellationsElement.replaceChildren();
+
+        if (elementIconElement) {
+            elementIconElement.replaceChildren();
+        }
+
+        if (rarityElement) {
+            rarityElement.replaceChildren();
+        }
+
+        errorElement.hidden = true;
+        errorElement.textContent = "";
         statusElement.textContent = "Loading character build…";
 
         modal.hidden = false;
@@ -1218,10 +1600,13 @@ function initCharacterShowcase() {
                 return;
             }
 
-            statusElement.textContent =
+            errorElement.textContent =
                 error instanceof Error
                     ? error.message
                     : "Couldn't retrieve this character's build.";
+
+            errorElement.hidden = false;
+            statusElement.textContent = "";
         });
     }
 

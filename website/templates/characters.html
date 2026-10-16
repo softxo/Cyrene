@@ -359,10 +359,8 @@
             {% endfor %}
         </div>
         
-        <!-- =====================================================
-             COMPACT CHARACTER BUILD SHOWCASE
-             ===================================================== -->
-
+        
+        <!-- ENKACARD-INSPIRED CHARACTER BUILD SHOWCASE -->
         <div
             class="character-showcase"
             data-character-showcase
@@ -389,38 +387,56 @@
                     aria-label="Close character showcase"
                 >&times;</button>
 
-                <div class="character-card-showcase" data-showcase-card>
-                    <!-- Character artwork and identity -->
-                    <div class="showcase-identity">
-                        <img
-                            class="showcase-character-art"
-                            data-showcase-portrait
-                            src=""
-                            alt=""
-                        >
+                <div class="enka-build-card" data-showcase-card data-element="">
+                    <div class="enka-character-layout">
 
-                        <div class="showcase-identity-overlay">
-                            <p class="showcase-character-element" data-showcase-element></p>
-                            <h2 id="showcase-character-name">Character name</h2>
-                            <p class="showcase-character-level" data-showcase-level></p>
-                        </div>
+                        <!-- LEFT: TALENTS, ARTWORK AND CONSTELLATIONS -->
+                        <section class="enka-character-visual" aria-label="Character talents and constellations">
+                            <div class="enka-talent-column" data-showcase-talents></div>
+
+                            <div class="enka-artwork-stage">
+                                <img class="enka-character-art" data-showcase-portrait src="" alt="">
+                            </div>
+
+                            <div class="enka-constellation-orbit" data-showcase-constellations></div>
+                        </section>
+
+                        <!-- RIGHT: CHARACTER IDENTITY AND STATS -->
+                        <section class="enka-character-details">
+                            <header class="enka-character-identity">
+                                <div class="enka-character-element-row">
+                                    <span class="enka-character-element-icon" data-showcase-element-icon></span>
+                                    <p class="enka-character-element" data-showcase-element></p>
+                                </div>
+
+                                <h2 id="showcase-character-name">Character name</h2>
+                                <p class="enka-character-level" data-showcase-level></p>
+                                <div class="enka-character-rarity" data-showcase-rarity></div>
+                            </header>
+
+                            <section class="enka-stats-panel" aria-label="Character stats">
+                                <h3>Character Stats</h3>
+                                <div class="enka-stat-grid" data-showcase-stats></div>
+                            </section>
+
+                            <section class="enka-weapon-panel" aria-label="Equipped weapon">
+                                <h3>Weapon</h3>
+                                <div data-showcase-weapon></div>
+                            </section>
+                        </section>
                     </div>
 
-                    <!-- Build information -->
-                    <div class="showcase-build-content">
-                        <p
-                            class="character-showcase-status"
-                            data-showcase-status
-                            role="status"
-                            aria-live="polite"
-                        >Select a character to load their build.</p>
+                    <!-- BOTTOM: ARTEFACTS -->
+                    <section class="enka-artifacts-panel" aria-label="Equipped artefacts">
+                        <h3>Artifacts</h3>
+                        <div class="enka-artifact-grid" data-showcase-artifacts></div>
+                        <div class="enka-artifact-sets" data-showcase-sets></div>
+                    </section>
 
-                        <div
-                            class="character-showcase-details"
-                            data-showcase-details
-                            hidden
-                        ></div>
-                    </div>
+                    <p class="enka-card-status" data-showcase-status role="status" aria-live="polite">
+                        Select a character to load their build.
+                    </p>
+                    <div class="enka-card-error" data-showcase-error hidden></div>
                 </div>
             </section>
         </div>

@@ -728,20 +728,23 @@
     }
 }
 
-
 /* =========================================================
-   CHARACTER SHOWCASE — COMPACT BUILD CARD
-   Artwork on the left; build information on the right.
+   CHARACTER SHOWCASE — COMPACT ENKACARD-INSPIRED LAYOUT
+   One compact build card with artwork-led styling.
+   Only affects the character showcase.
    ========================================================= */
 
 .character-showcase[hidden],
-.character-showcase-details[hidden] {
+.enka-card-error[hidden] {
     display: none !important;
 }
 
 .character-showcase {
     --showcase-element-colour: var(--accent);
-    --showcase-panel: var(--surface);
+    --enka-panel: #191c27;
+    --enka-panel-raised: #242838;
+    --enka-border: rgb(255 255 255 / 10%);
+    --enka-muted: #a7adbd;
 
     position: fixed;
     inset: 0;
@@ -749,7 +752,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
+    color: #f4f5fa;
 }
 
 .character-showcase-backdrop {
@@ -762,35 +766,36 @@
 .character-showcase-modal {
     position: relative;
     z-index: 1;
-    width: min(760px, calc(100vw - 32px));
-    max-height: min(600px, calc(100vh - 40px));
+    width: min(700px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
     overflow: auto;
     border: 1px solid color-mix(
         in srgb,
         var(--showcase-element-colour) 35%,
-        var(--border)
+        #34394a
     );
     border-radius: 14px;
-    background: var(--background, var(--surface));
-    color: var(--text);
-    box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+    background: #10131c;
+    color: #f4f5fa;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 50%);
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: #454b5d transparent;
     outline: none;
 }
 
 .character-showcase-close {
     position: absolute;
-    top: 9px;
-    right: 9px;
-    z-index: 5;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
     display: grid;
     place-items: center;
     width: 32px;
     height: 32px;
-    border: 1px solid rgb(255 255 255 / 25%);
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 22%);
     border-radius: 50%;
-    background: rgb(12 15 24 / 75%);
+    background: rgb(12 15 24 / 85%);
     color: #fff;
     font-size: 23px;
     line-height: 1;
@@ -799,7 +804,7 @@
 
 .character-showcase-close:hover {
     border-color: var(--showcase-element-colour);
-    background: rgb(30 34 47 / 95%);
+    background: #292e3e;
 }
 
 .character-showcase-close:focus-visible {
@@ -811,485 +816,603 @@
    ELEMENT COLOURS
    ========================================================= */
 
-.character-showcase[data-element="anemo"] {
+.enka-build-card {
+    --showcase-element-colour: var(--accent);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at 0% 0%,
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 12%,
+                transparent
+            ),
+            transparent 60%
+        ),
+        #10131c;
+}
+
+.enka-build-card[data-element="anemo"] {
     --showcase-element-colour: #83d7b0;
 }
 
-.character-showcase[data-element="geo"] {
+.enka-build-card[data-element="geo"] {
     --showcase-element-colour: #f0c66f;
 }
 
-.character-showcase[data-element="electro"] {
+.enka-build-card[data-element="electro"] {
     --showcase-element-colour: #c4a0ff;
 }
 
-.character-showcase[data-element="dendro"] {
+.enka-build-card[data-element="dendro"] {
     --showcase-element-colour: #b3db71;
 }
 
-.character-showcase[data-element="hydro"] {
+.enka-build-card[data-element="hydro"] {
     --showcase-element-colour: #7ccfff;
 }
 
-.character-showcase[data-element="pyro"] {
+.enka-build-card[data-element="pyro"] {
     --showcase-element-colour: #ff967e;
 }
 
-.character-showcase[data-element="cryo"] {
+.enka-build-card[data-element="cryo"] {
     --showcase-element-colour: #a4e7f1;
 }
 
 /* =========================================================
-   MAIN CARD LAYOUT
+   CHARACTER HEADER
+   Artwork is blended into the background, not placed in a
+   separate portrait panel.
    ========================================================= */
 
-.character-card-showcase {
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    min-width: 0;
-    min-height: 390px;
-}
-
-/* =========================================================
-   CHARACTER ARTWORK AND IDENTITY
-   ========================================================= */
-
-.showcase-identity {
+.enka-card-header {
     position: relative;
     isolation: isolate;
     display: flex;
-    align-items: flex-end;
-    min-width: 0;
-    min-height: 390px;
+    align-items: center;
+    min-height: 205px;
+    padding: 22px 24px;
     overflow: hidden;
     background:
         radial-gradient(
-            ellipse at 50% 35%,
+            ellipse at 78% 30%,
             color-mix(
                 in srgb,
-                var(--showcase-element-colour) 34%,
+                var(--showcase-element-colour) 32%,
                 transparent
             ),
-            transparent 72%
+            transparent 60%
         ),
         linear-gradient(
-            155deg,
+            120deg,
             color-mix(
                 in srgb,
-                var(--showcase-element-colour) 20%,
-                var(--surface)
+                var(--showcase-element-colour) 14%,
+                #191d2a
             ),
-            var(--background, var(--surface)) 90%
+            #11141e 78%
         );
 }
 
-.showcase-identity::after {
+.enka-card-header::after {
     position: absolute;
     z-index: 1;
-    inset: 35% 0 0;
+    inset: 0;
     background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgb(8 10 17 / 25%) 40%,
-        rgb(8 10 17 / 88%) 100%
+        90deg,
+        rgb(12 14 22 / 15%) 0%,
+        rgb(12 14 22 / 5%) 50%,
+        rgb(12 14 22 / 30%) 100%
     );
     content: "";
     pointer-events: none;
 }
 
-.showcase-character-art {
+.enka-character-art {
     position: absolute;
-    inset: 0;
     z-index: 0;
+    top: -24px;
+    right: 0;
+    width: 48%;
+    height: calc(100% + 40px);
+    object-fit: contain;
+    object-position: center bottom;
+    filter: drop-shadow(0 6px 18px rgb(0 0 0 / 28%));
+    pointer-events: none;
+}
+
+.enka-character-identity {
+    position: relative;
+    z-index: 2;
+    width: 70%;
+    min-width: 0;
+    padding: 8px 0;
+}
+
+.enka-character-element {
+    margin: 0 0 5px;
+    color: var(--showcase-element-colour);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.enka-character-identity h2 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.65rem, 4vw, 2.25rem);
+    font-weight: 850;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    text-shadow: 0 3px 18px rgb(0 0 0 / 40%);
+}
+
+.enka-character-level {
+    margin: 8px 0 0;
+    color: rgb(245 247 255 / 78%);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Talents and constellations share one compact icon row. */
+
+.enka-build-card [data-showcase-progression] {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 7px;
+    width: min(320px, 100%);
+    margin-top: 13px;
+    min-width: 0;
+}
+
+.enka-character-progression:empty {
+    display: none;
+}
+
+.enka-progression-item {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 36px;
+    aspect-ratio: 1;
+    justify-self: start;
+    padding: 5px;
+    border: 1px solid var(--enka-border);
+    border-radius: 50%;
+    background: rgb(18 21 31 / 75%);
+}
+
+.enka-progression-item.enka-talent {
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 48%,
+        var(--enka-border)
+    );
+}
+
+.enka-progression-item.enka-constellation.is-locked {
+    opacity: 0.35;
+    filter: grayscale(0.8);
+}
+
+.enka-progression-icon {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    object-fit: contain;
 }
 
-.showcase-identity-overlay {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    padding: 20px 18px;
-    color: #fff;
-}
-
-.showcase-character-element {
-    margin: 0 0 5px;
-    color: var(--showcase-element-colour);
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.showcase-identity-overlay h2 {
-    margin: 0;
-    font-size: clamp(1.45rem, 3vw, 2rem);
-    font-weight: 850;
-    letter-spacing: -0.035em;
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-    text-shadow: 0 2px 12px rgb(0 0 0 / 35%);
-}
-
-.showcase-character-level {
-    margin: 7px 0 0;
-    color: rgb(255 255 255 / 80%);
-    font-size: 0.76rem;
-    font-weight: 600;
-}
-
-/* =========================================================
-   BUILD CONTENT
-   ========================================================= */
-
-.showcase-build-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0;
-    min-width: 0;
-    padding: 18px;
-}
-
-.character-showcase-status {
-    margin: 0;
-    padding: 18px 8px;
-    color: var(--text-muted);
-    font-size: 0.84rem;
-    line-height: 1.6;
-    text-align: center;
-}
-
-.character-showcase-details {
+.enka-progression-level {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-    gap: 15px;
-    min-width: 0;
-}
-
-.showcase-section {
-    min-width: 0;
-}
-
-.showcase-section-title {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin: 0 0 9px;
-    color: var(--text-muted);
-    font-size: 0.65rem;
-    font-weight: 850;
-    letter-spacing: 0.12em;
-    line-height: 1.4;
-    text-transform: uppercase;
-}
-
-.showcase-section-title::before {
-    width: 3px;
-    height: 12px;
-    flex: 0 0 3px;
-    border-radius: 3px;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    border: 1px solid #10131c;
+    border-radius: 5px;
     background: var(--showcase-element-colour);
-    content: "";
+    color: #11131a;
+    font-size: 0.58rem;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
 }
 
 /* =========================================================
-   WEAPON
+   WEAPON AND COMBAT STATS
+   Two tightly grouped panels beneath the character header.
    ========================================================= */
 
-.showcase-weapon {
+.enka-build-overview {
     display: grid;
-    grid-template-columns: 54px minmax(0, 1fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 10px;
+    padding: 12px 14px 0;
+}
+
+.enka-weapon-panel,
+.enka-stats-panel,
+.enka-artifacts-panel {
+    min-width: 0;
+    border: 1px solid var(--enka-border);
+    border-radius: 10px;
+    background: var(--enka-panel);
+}
+
+.enka-weapon-panel,
+.enka-stats-panel {
+    padding: 12px;
+}
+
+.enka-weapon-card {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    align-items: start;
     gap: 10px;
     min-width: 0;
 }
 
-.showcase-weapon .showcase-item-icon {
-    display: block;
-    width: 54px;
-    height: 54px;
-    border: 1px solid var(--border);
+.enka-weapon-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 68px;
+    padding: 5px;
+    overflow: hidden;
+    border: 1px solid var(--enka-border);
     border-radius: 8px;
-    background: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 10%,
-        var(--surface)
-    );
+    background: var(--enka-panel-raised);
+}
+
+.enka-weapon-image.rarity-5 {
+    background: linear-gradient(145deg, #76502f, #30241f);
+}
+
+.enka-weapon-image.rarity-4 {
+    background: linear-gradient(145deg, #654b87, #29243b);
+}
+
+.enka-weapon-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
-.showcase-weapon-info {
+.enka-weapon-level {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    background: rgb(8 10 16 / 90%);
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 800;
+}
+
+.enka-weapon-info {
     min-width: 0;
 }
 
-.showcase-item-name {
+.enka-panel-eyebrow {
+    margin: 0 0 4px;
+    color: var(--showcase-element-colour);
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+}
+
+.enka-weapon-name {
     margin: 0;
-    font-size: 0.78rem;
+    color: #f5f6fb;
+    font-size: 0.76rem;
     font-weight: 750;
-    line-height: 1.4;
+    line-height: 1.35;
     overflow-wrap: anywhere;
 }
 
-.showcase-weapon-info h4 {
-    margin: 0;
-    font-size: 0.78rem;
-    font-weight: 750;
-    line-height: 1.4;
-    overflow-wrap: anywhere;
-}
-
-.showcase-item-meta {
+.enka-weapon-refinement {
     margin: 4px 0 0;
-    color: var(--text-muted);
-    font-size: 0.68rem;
-    line-height: 1.4;
+    color: var(--enka-muted);
+    font-size: 0.64rem;
 }
 
-.showcase-weapon-stats {
-    grid-column: 1 / -1;
+.enka-weapon-stats {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px 14px;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    gap: 5px;
     min-width: 0;
-    margin-top: 2px;
+    padding-top: 8px;
+    border-top: 1px solid var(--enka-border);
 }
 
-.showcase-weapon-stat {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 0.69rem;
-    line-height: 1.5;
-}
-
-/* =========================================================
-   COMBAT STATS
-   ========================================================= */
-
-.showcase-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 12px;
-}
-
-.showcase-stat {
+.enka-weapon-stat,
+.enka-stat-row {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 7px;
+    gap: 8px;
     min-width: 0;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
 }
 
-.showcase-stat-label {
-    color: var(--text-muted);
+.enka-weapon-stat span {
+    color: var(--enka-muted);
+    font-size: 0.65rem;
+}
+
+.enka-weapon-stat strong {
+    color: #f5f6fb;
     font-size: 0.68rem;
-    line-height: 1.35;
+    font-weight: 750;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
-.showcase-stat-value {
+/* Combat stats use compact rows rather than oversized tiles. */
+
+.enka-stat-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+}
+
+.enka-stat-row {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-stat-row:last-child {
+    border-bottom: 0;
+}
+
+.enka-stat-name {
+    color: var(--enka-muted);
+    font-size: 0.68rem;
+    line-height: 1.3;
+}
+
+.enka-stat-value {
     flex: 0 0 auto;
-    color: var(--text);
-    font-size: 0.76rem;
+    color: #f5f6fb;
+    font-size: 0.72rem;
     font-weight: 800;
     text-align: right;
     font-variant-numeric: tabular-nums;
     overflow-wrap: anywhere;
 }
 
-.showcase-stat-priority .showcase-stat-value {
-    color: var(--showcase-element-colour);
-}
-
 /* =========================================================
-   ARTEFACT ICON ROW
+   ARTEFACTS
+   Five compact cards in one row, with icons and readable
+   stat lines rather than large image tiles.
    ========================================================= */
 
-.showcase-artifact-grid {
+.enka-artifacts-panel {
+    margin: 10px 14px 0;
+    padding: 11px;
+}
+
+.enka-artifact-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: start;
     gap: 7px;
 }
 
-.showcase-artifact {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.enka-artifact-card {
     min-width: 0;
-    aspect-ratio: 1;
-    padding: 4px;
-    border: 1px solid var(--border);
+    padding: 6px;
+    border: 1px solid var(--enka-border);
     border-radius: 8px;
-    background: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 7%,
-        var(--surface)
-    );
-    cursor: help;
-    transition:
-        border-color 150ms ease,
-        transform 150ms ease;
+    background: #1b1f2b;
 }
 
-.showcase-artifact:hover {
-    transform: translateY(-2px);
-    border-color: var(--showcase-element-colour);
+.enka-artifact-card.rarity-5 {
+    border-color: rgb(215 160 83 / 35%);
 }
 
-.showcase-artifact .showcase-item-icon {
+.enka-artifact-card.rarity-4 {
+    border-color: rgb(165 119 218 / 35%);
+}
+
+.enka-artifact-image-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 6px;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 15%,
+                var(--enka-panel-raised)
+            ),
+            var(--enka-panel-raised)
+        );
+}
+
+.enka-artifact-icon {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: transform 160ms ease;
 }
 
-.showcase-artifact-level {
+.enka-artifact-image-wrap:hover .enka-artifact-icon {
+    transform: scale(1.08);
+}
+
+.enka-artifact-level {
     position: absolute;
     right: 3px;
     bottom: 3px;
     padding: 2px 4px;
-    border: 1px solid rgb(255 255 255 / 14%);
     border-radius: 4px;
-    background: rgb(10 12 18 / 88%);
+    background: rgb(8 10 16 / 90%);
     color: #fff;
-    font-size: 0.59rem;
+    font-size: 0.57rem;
     font-weight: 800;
-    line-height: 1.2;
     font-variant-numeric: tabular-nums;
 }
 
-.showcase-artifact-sets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
+.enka-artifact-name {
+    min-height: 2.4em;
+    margin: 7px 0 5px;
+    color: #f1f2f8;
+    font-size: 0.65rem;
+    font-weight: 750;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-.showcase-artifact-set {
+.enka-artifact-main-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 0;
+    border-top: 1px solid var(--enka-border);
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-artifact-stat-name {
+    color: var(--enka-muted);
+    font-size: 0.59rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-stat-value {
+    color: var(--showcase-element-colour);
+    font-size: 0.7rem;
+    font-weight: 850;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-substats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 7px;
+}
+
+.enka-artifact-substat {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.enka-artifact-substat span {
+    color: var(--enka-muted);
+    font-size: 0.57rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-substat strong {
+    color: #e7eaf4;
+    font-size: 0.63rem;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+/* Artefact set bonuses remain compact beneath the five pieces. */
+
+.enka-artifact-sets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+}
+
+.enka-artifact-set {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     max-width: 100%;
-    padding: 4px 7px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text-muted);
-    font-size: 0.65rem;
-    line-height: 1.4;
+    padding: 5px 7px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 25%,
+        var(--enka-border)
+    );
+    border-radius: 6px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 7%,
+        var(--enka-panel)
+    );
+}
+
+.enka-artifact-set-count {
+    flex-shrink: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.64rem;
+    font-weight: 850;
+}
+
+.enka-artifact-set-name {
+    color: #d9dcea;
+    font-size: 0.64rem;
+    line-height: 1.3;
     overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   TALENTS
+   STATUS AND ERROR MESSAGES
    ========================================================= */
 
-.showcase-talent-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+.enka-empty-value {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 10px 0;
+    color: var(--enka-muted);
+    font-size: 0.72rem;
+    line-height: 1.4;
 }
 
-.showcase-talent {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 43px;
-    height: 43px;
-    padding: 4px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    background: var(--surface);
-    cursor: help;
+.enka-card-status {
+    margin: 0;
+    padding: 10px 14px 12px;
+    color: var(--enka-muted);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    text-align: center;
 }
 
-.showcase-talent-icon {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.showcase-talent-level {
-    position: absolute;
-    right: -3px;
-    bottom: -3px;
-    display: grid;
-    place-items: center;
-    min-width: 17px;
-    height: 17px;
-    padding: 0 3px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background: var(--background, var(--surface));
-    color: var(--text);
-    font-size: 0.61rem;
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-}
-
-/* =========================================================
-   CONSTELLATIONS
-   ========================================================= */
-
-.showcase-constellation-grid {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 5px;
-}
-
-.showcase-constellation {
-    position: relative;
-    display: grid;
-    place-items: center;
-    min-width: 0;
-    aspect-ratio: 1;
-    padding: 5px;
-    border: 1px solid var(--border);
+.enka-card-error {
+    margin: 0 14px 12px;
+    padding: 9px 11px;
+    border: 1px solid rgb(255 115 115 / 35%);
     border-radius: 7px;
-    background: var(--surface);
-    opacity: 0.42;
-    cursor: help;
-}
-
-.showcase-constellation.is-active {
-    border-color: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 65%,
-        var(--border)
-    );
-    background: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 12%,
-        var(--surface)
-    );
-    opacity: 1;
-}
-
-.showcase-constellation-icon {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.showcase-constellation-number {
-    position: absolute;
-    right: 2px;
-    bottom: 2px;
-    display: grid;
-    place-items: center;
-    min-width: 15px;
-    height: 15px;
-    padding: 0 3px;
-    border-radius: 4px;
-    background: rgb(10 12 18 / 85%);
-    color: #fff;
-    font-size: 0.58rem;
-    font-weight: 800;
+    background: rgb(150 40 50 / 15%);
+    color: #ffb6b6;
+    font-size: 0.74rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
 /* =========================================================
@@ -1309,89 +1432,142 @@ body.character-showcase-open {
     outline-offset: 3px;
 }
 
-.showcase-artifact:focus-visible,
-.showcase-talent:focus-visible,
-.showcase-constellation:focus-visible {
-    outline: 2px solid var(--showcase-element-colour);
-    outline-offset: 2px;
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .character-showcase {
+        padding: 8px;
+    }
+
+    .character-showcase-modal {
+        width: calc(100vw - 16px);
+        max-height: calc(100vh - 16px);
+    }
+
+    .enka-card-header {
+        min-height: 185px;
+        padding: 17px;
+    }
+
+    .enka-character-art {
+        right: -5%;
+        width: 52%;
+        height: calc(100% + 20px);
+    }
+
+    .enka-character-identity {
+        width: 76%;
+    }
+
+    .enka-build-overview {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+        padding: 9px 9px 0;
+    }
+
+    .enka-weapon-panel,
+    .enka-stats-panel {
+        padding: 10px;
+    }
+
+    .enka-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 12px;
+    }
+
+    .enka-artifacts-panel {
+        margin: 9px 9px 0;
+        padding: 8px;
+    }
+
+    .enka-artifact-grid {
+        gap: 5px;
+    }
+
+    .enka-artifact-card {
+        padding: 4px;
+    }
+
+    .enka-artifact-name {
+        font-size: 0.61rem;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span {
+        font-size: 0.54rem;
+    }
+
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.59rem;
+    }
+
+    .enka-build-card [data-showcase-progression] {
+        gap: 6px;
+        width: min(300px, 100%);
+    }
 }
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+    .enka-card-header {
+        min-height: 165px;
+        padding: 14px;
+    }
+
+    .enka-character-identity {
+        width: 82%;
+    }
+
+    .enka-character-identity h2 {
+        font-size: 1.5rem;
+    }
+
+    .enka-character-level {
+        font-size: 0.65rem;
+    }
+
+    .enka-build-card [data-showcase-progression] {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        width: 190px;
+        gap: 9px 6px;
+    }
+
+    .enka-progression-item {
+        max-width: 30px;
+        padding: 4px;
+    }
+
+    .enka-weapon-card {
+        grid-template-columns: 54px minmax(0, 1fr);
+        gap: 8px;
+    }
+
+    .enka-weapon-image {
+        width: 54px;
+        height: 60px;
+    }
+
+    .enka-stat-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
     .character-showcase-backdrop {
         backdrop-filter: none;
     }
 
-    .showcase-artifact {
+    .enka-artifact-icon {
         transition: none;
-    }
-
-    .showcase-artifact:hover {
-        transform: none;
-    }
-}
-
-/* =========================================================
-   RESPONSIVE — TABLET
-   ========================================================= */
-
-@media (max-width: 650px) {
-    .character-showcase {
-        padding: 10px;
-    }
-
-    .character-showcase-modal {
-        width: min(460px, calc(100vw - 20px));
-        max-height: calc(100vh - 20px);
-    }
-
-    .character-card-showcase {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .showcase-identity {
-        min-height: 220px;
-        max-height: 250px;
-    }
-
-    .showcase-character-art {
-        object-position: center 30%;
-    }
-
-    .showcase-identity-overlay {
-        padding: 16px;
-    }
-
-    .showcase-identity-overlay h2 {
-        font-size: 1.6rem;
-    }
-
-    .showcase-build-content {
-        padding: 14px;
-    }
-
-    .character-showcase-details {
-        gap: 13px;
-    }
-
-    .showcase-section-title {
-        margin-bottom: 8px;
-    }
-
-    .showcase-constellation-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 360px) {
-    .showcase-stats-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .showcase-artifact-grid {
-        gap: 4px;
-    }
-
-    .showcase-build-content {
-        padding: 10px;
     }
 }
