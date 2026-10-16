@@ -729,16 +729,20 @@
 }
 
 
-
 /* =========================================================
-   CHARACTER SHOWCASE — MODAL
+   CHARACTER SHOWCASE — COMPACT BUILD CARD
+   Artwork on the left; build information on the right.
    ========================================================= */
 
-.character-showcase[hidden] {
+.character-showcase[hidden],
+.character-showcase-details[hidden] {
     display: none !important;
 }
 
 .character-showcase {
+    --showcase-element-colour: var(--accent);
+    --showcase-panel: var(--surface);
+
     position: fixed;
     inset: 0;
     z-index: 1000;
@@ -751,409 +755,545 @@
 .character-showcase-backdrop {
     position: absolute;
     inset: 0;
-    background: rgb(0 0 0 / 78%);
+    background: rgb(5 7 14 / 82%);
     backdrop-filter: blur(8px);
 }
 
 .character-showcase-modal {
     position: relative;
     z-index: 1;
-    width: min(1120px, calc(100vw - 40px));
-    max-height: 90vh;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    width: min(760px, calc(100vw - 32px));
+    max-height: min(600px, calc(100vh - 40px));
+    overflow: auto;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 35%,
+        var(--border)
+    );
+    border-radius: 14px;
     background: var(--background, var(--surface));
     color: var(--text);
     box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
-    outline: none;
-}
-
-.character-showcase-content {
-    max-height: 90vh;
-    overflow-x: hidden;
-    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    outline: none;
 }
 
 .character-showcase-close {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 9px;
+    right: 9px;
     z-index: 5;
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--border);
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgb(255 255 255 / 25%);
     border-radius: 50%;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 25px;
+    background: rgb(12 15 24 / 75%);
+    color: #fff;
+    font-size: 23px;
+    line-height: 1;
     cursor: pointer;
 }
 
+.character-showcase-close:hover {
+    border-color: var(--showcase-element-colour);
+    background: rgb(30 34 47 / 95%);
+}
+
+.character-showcase-close:focus-visible {
+    outline: 2px solid var(--showcase-element-colour);
+    outline-offset: 3px;
+}
+
 /* =========================================================
-   CHARACTER SHOWCASE — HEADER
+   ELEMENT COLOURS
    ========================================================= */
 
-.character-showcase-header {
+.character-showcase[data-element="anemo"] {
+    --showcase-element-colour: #83d7b0;
+}
+
+.character-showcase[data-element="geo"] {
+    --showcase-element-colour: #f0c66f;
+}
+
+.character-showcase[data-element="electro"] {
+    --showcase-element-colour: #c4a0ff;
+}
+
+.character-showcase[data-element="dendro"] {
+    --showcase-element-colour: #b3db71;
+}
+
+.character-showcase[data-element="hydro"] {
+    --showcase-element-colour: #7ccfff;
+}
+
+.character-showcase[data-element="pyro"] {
+    --showcase-element-colour: #ff967e;
+}
+
+.character-showcase[data-element="cryo"] {
+    --showcase-element-colour: #a4e7f1;
+}
+
+/* =========================================================
+   MAIN CARD LAYOUT
+   ========================================================= */
+
+.character-card-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    min-width: 0;
+    min-height: 390px;
+}
+
+/* =========================================================
+   CHARACTER ARTWORK AND IDENTITY
+   ========================================================= */
+
+.showcase-identity {
     position: relative;
+    isolation: isolate;
     display: flex;
-    align-items: center;
-    gap: 22px;
-    min-height: 165px;
-    padding: 22px 60px 22px 24px;
+    align-items: flex-end;
+    min-width: 0;
+    min-height: 390px;
     overflow: hidden;
-    border-bottom: 1px solid var(--border);
     background:
         radial-gradient(
-            ellipse at 15% 50%,
-            color-mix(in srgb, var(--accent) 20%, transparent),
-            transparent 70%
+            ellipse at 50% 35%,
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 34%,
+                transparent
+            ),
+            transparent 72%
         ),
-        var(--surface);
+        linear-gradient(
+            155deg,
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 20%,
+                var(--surface)
+            ),
+            var(--background, var(--surface)) 90%
+        );
 }
 
-.character-showcase-portrait {
-    flex: 0 0 130px;
-    width: 130px;
-    height: 130px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--background, var(--surface));
+.showcase-identity::after {
+    position: absolute;
+    z-index: 1;
+    inset: 35% 0 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgb(8 10 17 / 25%) 40%,
+        rgb(8 10 17 / 88%) 100%
+    );
+    content: "";
+    pointer-events: none;
 }
 
-.character-showcase-portrait img {
+.showcase-character-art {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center bottom;
+    object-fit: cover;
+    object-position: center top;
 }
 
-.character-showcase-heading {
-    min-width: 0;
+.showcase-identity-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px 18px;
+    color: #fff;
 }
 
-.character-showcase-eyebrow {
-    margin: 0 0 6px;
-    color: var(--text-muted);
+.showcase-character-element {
+    margin: 0 0 5px;
+    color: var(--showcase-element-colour);
     font-size: 0.68rem;
     font-weight: 800;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
-.character-showcase-heading h2 {
+.showcase-identity-overlay h2 {
     margin: 0;
-    font-size: clamp(1.5rem, 3vw, 2.1rem);
-    font-weight: 800;
-    line-height: 1.2;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    font-weight: 850;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 35%);
 }
 
-.character-showcase-heading p:not(.character-showcase-eyebrow) {
+.showcase-character-level {
     margin: 7px 0 0;
-    color: var(--text-muted);
-    font-size: 0.82rem;
+    color: rgb(255 255 255 / 80%);
+    font-size: 0.76rem;
+    font-weight: 600;
 }
 
 /* =========================================================
-   CHARACTER SHOWCASE — BUILD GRID
-   Weapon and stats side by side; remaining sections full width.
+   BUILD CONTENT
    ========================================================= */
 
-.character-showcase-build {
+.showcase-build-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
     min-width: 0;
+    padding: 18px;
 }
 
 .character-showcase-status {
-    margin: 20px;
+    margin: 0;
+    padding: 18px 8px;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.84rem;
+    line-height: 1.6;
     text-align: center;
-}
-
-.character-showcase-details[hidden] {
-    display: none !important;
 }
 
 .character-showcase-details {
     display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    align-items: start;
-    gap: 14px;
-    padding: 16px 20px 20px;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 15px;
+    min-width: 0;
 }
 
 .showcase-section {
     min-width: 0;
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: var(--surface);
-}
-
-.showcase-section:has(.showcase-artifact-grid),
-.showcase-section:has(.showcase-talent-grid),
-.showcase-section:has(.showcase-constellation-grid) {
-    grid-column: 1 / -1;
 }
 
 .showcase-section-title {
-    margin: 0 0 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.82rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 9px;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
     text-transform: uppercase;
 }
 
+.showcase-section-title::before {
+    width: 3px;
+    height: 12px;
+    flex: 0 0 3px;
+    border-radius: 3px;
+    background: var(--showcase-element-colour);
+    content: "";
+}
+
 /* =========================================================
-   CHARACTER SHOWCASE — COMBAT STATS
+   WEAPON
+   ========================================================= */
+
+.showcase-weapon {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.showcase-weapon .showcase-item-icon {
+    display: block;
+    width: 54px;
+    height: 54px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 10%,
+        var(--surface)
+    );
+    object-fit: contain;
+}
+
+.showcase-weapon-info {
+    min-width: 0;
+}
+
+.showcase-item-name {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.showcase-weapon-info h4 {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.showcase-item-meta {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    line-height: 1.4;
+}
+
+.showcase-weapon-stats {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 14px;
+    min-width: 0;
+    margin-top: 2px;
+}
+
+.showcase-weapon-stat {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.69rem;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   COMBAT STATS
    ========================================================= */
 
 .showcase-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 14px;
+    gap: 0 12px;
 }
 
 .showcase-stat {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 8px;
+    gap: 7px;
     min-width: 0;
-    padding: 9px 0;
-    border: 0;
+    padding: 6px 0;
     border-bottom: 1px solid var(--border);
-    border-radius: 0;
-    background: transparent;
 }
 
 .showcase-stat-label {
     color: var(--text-muted);
-    font-size: 0.74rem;
-    line-height: 1.4;
+    font-size: 0.68rem;
+    line-height: 1.35;
 }
 
 .showcase-stat-value {
     flex: 0 0 auto;
-    overflow-wrap: anywhere;
-    font-size: 0.84rem;
-    font-weight: 750;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 800;
     text-align: right;
     font-variant-numeric: tabular-nums;
-}
-
-/* =========================================================
-   CHARACTER SHOWCASE — WEAPON
-   ========================================================= */
-
-.showcase-weapon {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-}
-
-.showcase-item-icon {
-    flex: 0 0 auto;
-    width: 68px;
-    height: 68px;
-    border-radius: 9px;
-    object-fit: contain;
-}
-
-.showcase-weapon-info,
-.showcase-artifact-info,
-.showcase-talent-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.showcase-weapon-info h4,
-.showcase-artifact-name,
-.showcase-talent-info h4 {
-    margin: 0;
-    font-size: 0.84rem;
-    font-weight: 750;
     overflow-wrap: anywhere;
 }
 
-.showcase-item-meta {
-    margin: 5px 0 0;
-    color: var(--text-muted);
-    font-size: 0.74rem;
-}
-
-.showcase-weapon-stats {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    margin-top: 8px;
-}
-
-.showcase-weapon-stats .showcase-stat {
-    padding: 7px 0;
+.showcase-stat-priority .showcase-stat-value {
+    color: var(--showcase-element-colour);
 }
 
 /* =========================================================
-   CHARACTER SHOWCASE — ARTEFACTS
-   Five pieces displayed in a single row on desktop.
+   ARTEFACT ICON ROW
    ========================================================= */
 
 .showcase-artifact-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 9px;
+    gap: 7px;
 }
 
 .showcase-artifact {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 7px;
+    align-items: center;
+    justify-content: center;
     min-width: 0;
-    padding: 10px;
+    aspect-ratio: 1;
+    padding: 4px;
     border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background, var(--surface));
+    border-radius: 8px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 7%,
+        var(--surface)
+    );
+    cursor: help;
+    transition:
+        border-color 150ms ease,
+        transform 150ms ease;
+}
+
+.showcase-artifact:hover {
+    transform: translateY(-2px);
+    border-color: var(--showcase-element-colour);
 }
 
 .showcase-artifact .showcase-item-icon {
-    align-self: center;
-    width: 56px;
-    height: 56px;
-}
-
-.showcase-artifact-slot {
-    margin: 0 0 4px;
-    color: var(--text-muted);
-    font-size: 0.64rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.showcase-artifact-name {
-    font-size: 0.74rem;
-    line-height: 1.35;
-}
-
-.showcase-artifact-main-stat {
-    margin: 7px 0 0;
-    font-size: 0.72rem;
-    font-weight: 750;
-    overflow-wrap: anywhere;
-}
-
-.showcase-artifact-substats {
-    display: grid;
-    gap: 4px;
-    margin: 7px 0 0;
-    padding: 7px 0 0;
-    border-top: 1px solid var(--border);
-    list-style: none;
-}
-
-.showcase-artifact-substats li {
-    color: var(--text-muted);
-    font-size: 0.67rem;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-}
-
-/* =========================================================
-   CHARACTER SHOWCASE — TALENTS
-   ========================================================= */
-
-.showcase-talent-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 9px;
-}
-
-.showcase-talent {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    min-width: 0;
-    padding: 9px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background, var(--surface));
-}
-
-.showcase-talent-icon {
-    flex: 0 0 auto;
-    width: 36px;
-    height: 36px;
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
-.showcase-talent-info h4 {
-    font-size: 0.76rem;
-    line-height: 1.35;
+.showcase-artifact-level {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    padding: 2px 4px;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 4px;
+    background: rgb(10 12 18 / 88%);
+    color: #fff;
+    font-size: 0.59rem;
+    font-weight: 800;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.showcase-artifact-sets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.showcase-artifact-set {
+    max-width: 100%;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   CHARACTER SHOWCASE — CONSTELLATIONS
+   TALENTS
+   ========================================================= */
+
+.showcase-talent-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.showcase-talent {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+    cursor: help;
+}
+
+.showcase-talent-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.showcase-talent-level {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    display: grid;
+    place-items: center;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 3px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--background, var(--surface));
+    color: var(--text);
+    font-size: 0.61rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   CONSTELLATIONS
    ========================================================= */
 
 .showcase-constellation-grid {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 9px;
+    gap: 5px;
 }
 
 .showcase-constellation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    position: relative;
+    display: grid;
+    place-items: center;
     min-width: 0;
-    padding: 9px 5px;
+    aspect-ratio: 1;
+    padding: 5px;
     border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background, var(--surface));
-    opacity: 0.5;
-    text-align: center;
+    border-radius: 7px;
+    background: var(--surface);
+    opacity: 0.42;
+    cursor: help;
 }
 
 .showcase-constellation.is-active {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 65%,
+        var(--border)
+    );
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 12%,
+        var(--surface)
+    );
     opacity: 1;
 }
 
 .showcase-constellation-icon {
-    width: 38px;
-    height: 38px;
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
 .showcase-constellation-number {
-    font-size: 0.76rem;
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    display: grid;
+    place-items: center;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border-radius: 4px;
+    background: rgb(10 12 18 / 85%);
+    color: #fff;
+    font-size: 0.58rem;
     font-weight: 800;
 }
 
-.showcase-constellation-name {
-    font-size: 0.66rem;
-    line-height: 1.3;
-    overflow-wrap: anywhere;
-}
-
-.showcase-constellation-state {
-    color: var(--text-muted);
-    font-size: 0.65rem;
-}
-
 /* =========================================================
-   CHARACTER SHOWCASE — INTERACTION
+   INTERACTION AND ACCESSIBILITY
    ========================================================= */
 
 body.character-showcase-open {
@@ -1169,152 +1309,89 @@ body.character-showcase-open {
     outline-offset: 3px;
 }
 
-/* =========================================================
-   CHARACTER SHOWCASE — RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 850px) {
-    .character-showcase-details {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 12px;
-        padding: 12px;
-    }
-
-    .showcase-section:has(.showcase-artifact-grid),
-    .showcase-section:has(.showcase-talent-grid),
-    .showcase-section:has(.showcase-constellation-grid) {
-        grid-column: 1;
-    }
-
-    .showcase-artifact-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .showcase-artifact {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .showcase-artifact .showcase-item-icon {
-        align-self: flex-start;
-        width: 46px;
-        height: 46px;
-    }
-}
-
-@media (max-width: 560px) {
-    .character-showcase {
-        padding: 8px;
-    }
-
-    .character-showcase-modal,
-    .character-showcase-content {
-        max-height: 94vh;
-    }
-
-    .character-showcase-header {
-        gap: 12px;
-        min-height: 110px;
-        padding: 16px 42px 16px 16px;
-    }
-
-    .character-showcase-portrait {
-        flex-basis: 84px;
-        width: 84px;
-        height: 100px;
-    }
-
-    .character-showcase-heading h2 {
-        font-size: 1.35rem;
-    }
-
-    .character-showcase-heading p:not(.character-showcase-eyebrow) {
-        font-size: 0.74rem;
-    }
-
-    .showcase-section {
-        padding: 11px;
-    }
-
-    .showcase-stats-grid {
-        gap: 0 10px;
-    }
-
-    .showcase-artifact-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .showcase-artifact {
-        flex-direction: column;
-    }
-
-    .showcase-artifact .showcase-item-icon {
-        align-self: center;
-        width: 52px;
-        height: 52px;
-    }
-
-    .showcase-talent-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .showcase-constellation-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+.showcase-artifact:focus-visible,
+.showcase-talent:focus-visible,
+.showcase-constellation:focus-visible {
+    outline: 2px solid var(--showcase-element-colour);
+    outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .character-showcase-backdrop {
         backdrop-filter: none;
     }
-}
 
+    .showcase-artifact {
+        transition: none;
+    }
+
+    .showcase-artifact:hover {
+        transform: none;
+    }
+}
 
 /* =========================================================
-   CHARACTER SHOWCASE — ARTIFACT SET BONUSES
+   RESPONSIVE — TABLET
    ========================================================= */
 
-.showcase-artifact-sets {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 12px;
-}
+@media (max-width: 650px) {
+    .character-showcase {
+        padding: 10px;
+    }
 
-.showcase-artifact-set {
-    min-width: 0;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background, var(--surface));
-}
+    .character-showcase-modal {
+        width: min(460px, calc(100vw - 20px));
+        max-height: calc(100vh - 20px);
+    }
 
-.showcase-artifact-set-name {
-    margin: 0;
-    font-size: 0.8rem;
-    font-weight: 750;
-    overflow-wrap: anywhere;
-}
-
-.showcase-artifact-set-effect {
-    margin-top: 8px;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    line-height: 1.5;
-}
-
-.showcase-artifact-set-effect strong {
-    display: block;
-    margin-bottom: 3px;
-    color: var(--text);
-}
-
-.showcase-artifact-set-effect p {
-    margin: 0;
-}
-
-@media (max-width: 560px) {
-    .showcase-artifact-sets {
+    .character-card-showcase {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .showcase-identity {
+        min-height: 220px;
+        max-height: 250px;
+    }
+
+    .showcase-character-art {
+        object-position: center 30%;
+    }
+
+    .showcase-identity-overlay {
+        padding: 16px;
+    }
+
+    .showcase-identity-overlay h2 {
+        font-size: 1.6rem;
+    }
+
+    .showcase-build-content {
+        padding: 14px;
+    }
+
+    .character-showcase-details {
+        gap: 13px;
+    }
+
+    .showcase-section-title {
+        margin-bottom: 8px;
+    }
+
+    .showcase-constellation-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 360px) {
+    .showcase-stats-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .showcase-artifact-grid {
+        gap: 4px;
+    }
+
+    .showcase-build-content {
+        padding: 10px;
     }
 }

@@ -360,8 +360,8 @@
         </div>
         
         <!-- =====================================================
-            CHARACTER SHOWCASE MODAL
-            ===================================================== -->
+             COMPACT CHARACTER BUILD SHOWCASE
+             ===================================================== -->
 
         <div
             class="character-showcase"
@@ -387,43 +387,33 @@
                     class="character-showcase-close"
                     data-showcase-close
                     aria-label="Close character showcase"
-                >
-                    &times;
-                </button>
+                >&times;</button>
 
-                <div class="character-showcase-content">
-                    <header class="character-showcase-header">
-                        <div class="character-showcase-portrait">
-                            <img
-                                data-showcase-portrait
-                                src=""
-                                alt=""
-                            >
+                <div class="character-card-showcase" data-showcase-card>
+                    <!-- Character artwork and identity -->
+                    <div class="showcase-identity">
+                        <img
+                            class="showcase-character-art"
+                            data-showcase-portrait
+                            src=""
+                            alt=""
+                        >
+
+                        <div class="showcase-identity-overlay">
+                            <p class="showcase-character-element" data-showcase-element></p>
+                            <h2 id="showcase-character-name">Character name</h2>
+                            <p class="showcase-character-level" data-showcase-level></p>
                         </div>
+                    </div>
 
-                        <div class="character-showcase-heading">
-                            <p class="character-showcase-eyebrow">
-                                CHARACTER SHOWCASE
-                            </p>
-
-                            <h2 id="showcase-character-name">
-                                Character name
-                            </h2>
-
-                            <p data-showcase-element></p>
-                            <p data-showcase-level></p>
-                        </div>
-                    </header>
-
-                    <div class="character-showcase-build">
+                    <!-- Build information -->
+                    <div class="showcase-build-content">
                         <p
                             class="character-showcase-status"
                             data-showcase-status
                             role="status"
                             aria-live="polite"
-                        >
-                            Select a character to load their build.
-                        </p>
+                        >Select a character to load their build.</p>
 
                         <div
                             class="character-showcase-details"
@@ -431,7 +421,6 @@
                             hidden
                         ></div>
                     </div>
-
                 </div>
             </section>
         </div>

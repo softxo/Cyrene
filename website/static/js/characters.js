@@ -631,54 +631,141 @@ function initCharacterShowcase() {
             .replace(/\s+/g, " ")
             .trim();
     }
+    
+    function getStatLabel(stat) {
+        return cleanGameText(
+            stat?.info?.name ??
+            stat?.name ??
+            stat?.type ??
+            "Stat"
+        );
+    }
+
+    function getStatValue(stat) {
+        return formatValue(
+            stat?.final ??
+            stat?.value ??
+            stat?.display ??
+            stat?.formatted_value
+        );
+    }
+
+    function getArtifactStatText(stat) {
+        if (!stat) {
+            return "—";
+        }
+
+        const name = getStatLabel(stat);
+        const value = getStatValue(stat);
+
+        return `${name} ${value}`;
+    }
+
+    function getArtifactTooltip(artifact) {
+        const lines = [
+            cleanGameText(artifact.position),
+            cleanGameText(artifact.name),
+            `+${formatValue(artifact.level)}`
+        ];
+
+        if (artifact.main_stat) {
+            lines.push(
+                getArtifactStatText(artifact.main_stat)
+            );
+        }
+
+        for (const stat of artifact.substats || []) {
+            lines.push(getArtifactStatText(stat));
+        }
+
+        if (artifact.set?.name) {
+            lines.push(
+                `Set: ${cleanGameText(artifact.set.name)}`
+            );
+        }
+
+        return lines.filter(Boolean).join("\n");
+    }
 
     function renderWeapon(character) {
         const weapon = character.weapon;
 
+        const section = addSection(
+            "WEAPON",
+            "showcase-weapon-section"
+        );
+
         if (!weapon) {
+            section.append(
+                createElement(
+                    "p",
+                    "showcase-empty",
+                    "Weapon data unavailable"
+                )
+            );
             return;
         }
 
-        const section = addSection("Weapon", "showcase-weapon-section");
-        const card = createElement("div", "showcase-weapon");
+        const weaponCard = createElement(
+            "div",
+            "showcase-weapon"
+        );
 
-        if (weapon.icon) {
-            card.append(
-                createImage(weapon.icon, weapon.name || "Weapon", "showcase-item-icon")
-            );
-        }
+        const icon = createImage(
+            weapon.icon,
+            weapon.name || "Weapon",
+            "showcase-item-icon"
+        );
 
-        const info = createElement("div", "showcase-weapon-info");
+        const info = createElement(
+            "div",
+            "showcase-weapon-info"
+        );
 
         info.append(
-            createElement("h4", "", weapon.name || "Unknown weapon"),
+            createElement(
+                "h4",
+                "showcase-item-name",
+                cleanGameText(weapon.name)
+            ),
             createElement(
                 "p",
                 "showcase-item-meta",
-                `Level ${formatValue(weapon.level)} · R${formatValue(weapon.refinement)}`
+                `Lv. ${formatValue(weapon.level)} · R${formatValue(weapon.refinement)}`
             )
         );
 
-        const stats = createElement("div", "showcase-weapon-stats");
+        const stats = createElement(
+            "div",
+            "showcase-weapon-stats"
+        );
 
-        for (const stat of [weapon.main_stat, weapon.sub_stat]) {
+        for (const stat of [
+            weapon.main_stat,
+            weapon.sub_stat
+        ]) {
             if (!stat) {
                 continue;
             }
 
-            const label = stat.info?.name;
-            const value = stat.final ?? stat.value;
+            const line = createElement(
+                "p",
+                "showcase-weapon-stat",
+                `${getStatLabel(stat)} ${getStatValue(stat)}`
+            );
 
-            if (label || value !== undefined) {
-                addStatCard(stats, label || "Weapon stat", formatValue(value));
-            }
+            stats.append(line);
         }
 
-        info.append(stats);
-        card.append(info);
-        section.append(card);
+        weaponCard.append(icon, info);
+
+        if (stats.childElementCount > 0) {
+            weaponCard.append(stats);
+        }
+
+        section.append(weaponCard);
     }
-    
+
     function renderCombatStats(character) {
         const properties = character.selected_properties || [];
 
@@ -686,61 +773,79 @@ function initCharacterShowcase() {
             "CRIT Rate",
             "CRIT DMG",
             "Energy Recharge",
-            "Max HP",
-            "ATK",
-            "DEF",
             "Elemental Mastery",
-            `${character.element || ""} DMG Bonus`
+            "ATK",
+            "Max HP",
+            "DEF"
         ];
 
-        const propertyMap = new Map(
-            properties
-                .filter(property => property.info?.name)
-                .map(property => [
-                    property.info.name,
-                    property.final ?? property.value
-                ])
-        );
+        const propertyMap = new Map();
 
-        const statsToShow = preferredStats
-            .filter(name => propertyMap.has(name))
-            .map(name => ({
-                label: name,
-                value: propertyMap.get(name),
-                priority: [
-                    "CRIT Rate",
-                    "CRIT DMG",
-                    "Energy Recharge"
-                ].includes(name)
-            }));
+        for (const property of properties) {
+            const name = cleanGameText(property.info?.name);
 
-        if (!statsToShow.length) {
-            return;
+            if (!name) {
+                continue;
+            }
+
+            propertyMap.set(
+                name,
+                property.final ?? property.value
+            );
         }
 
-        const section = addSection("Combat Attributes");
-        const grid = createElement("div", "showcase-stats-grid");
+        const section = addSection(
+            "COMBAT STATS",
+            "showcase-combat-section"
+        );
 
-        for (const stat of statsToShow) {
-            const card = createElement(
+        const grid = createElement(
+            "div",
+            "showcase-stats-grid"
+        );
+
+        for (const name of preferredStats) {
+            if (!propertyMap.has(name)) {
+                continue;
+            }
+
+            const stat = createElement(
                 "div",
-                `showcase-stat${stat.priority ? " showcase-stat-priority" : ""}`
+                "showcase-stat"
             );
 
-            card.append(
+            stat.append(
                 createElement(
                     "span",
                     "showcase-stat-label",
-                    stat.label
+                    name
                 ),
                 createElement(
                     "strong",
                     "showcase-stat-value",
-                    formatValue(stat.value)
+                    formatValue(propertyMap.get(name))
                 )
             );
 
-            grid.append(card);
+            if (
+                name === "CRIT Rate" ||
+                name === "CRIT DMG" ||
+                name === "Energy Recharge"
+            ) {
+                stat.classList.add("showcase-stat-priority");
+            }
+
+            grid.append(stat);
+        }
+
+        if (grid.childElementCount === 0) {
+            grid.append(
+                createElement(
+                    "p",
+                    "showcase-empty",
+                    "Combat stats unavailable"
+                )
+            );
         }
 
         section.append(grid);
@@ -749,236 +854,177 @@ function initCharacterShowcase() {
     function renderArtifacts(character) {
         const artifacts = character.artifacts || [];
 
-        if (!artifacts.length) {
-            return;
-        }
+        const section = addSection(
+            "ARTIFACTS",
+            "showcase-artifacts-section"
+        );
 
-        const section = addSection("Artifacts");
-        const grid = createElement("div", "showcase-artifact-grid");
+        const grid = createElement(
+            "div",
+            "showcase-artifact-grid"
+        );
 
         for (const artifact of artifacts) {
-            const card = createElement("article", "showcase-artifact");
-
-            if (artifact.icon) {
-                card.append(
-                    createImage(
-                        artifact.icon,
-                        artifact.name || "Artifact",
-                        "showcase-item-icon"
-                    )
-                );
-            }
-
-            const info = createElement("div", "showcase-artifact-info");
-
-            info.append(
-                createElement(
-                    "p",
-                    "showcase-artifact-slot",
-                    artifact.pos_name || "Artifact"
-                ),
-                createElement(
-                    "h4",
-                    "showcase-artifact-name",
-                    artifact.name || "Unknown artifact"
-                ),
-                createElement(
-                    "p",
-                    "showcase-item-meta",
-                    `+${formatValue(artifact.level)}`
-                )
+            const artifactCard = createElement(
+                "div",
+                "showcase-artifact"
             );
 
-            if (artifact.main_stat) {
-                const mainStat = artifact.main_stat;
-                const mainValue = mainStat.value ?? mainStat.final;
+            const tooltip = getArtifactTooltip(artifact);
 
-                info.append(
-                    createElement(
-                        "p",
-                        "showcase-artifact-main-stat",
-                        `${mainStat.info?.name || "Main stat"}: ${formatValue(mainValue)}`
-                    )
-                );
-            }
+            artifactCard.title = tooltip;
+            artifactCard.setAttribute("aria-label", tooltip);
 
-            const subStats = artifact.sub_stats || [];
+            const icon = createImage(
+                artifact.icon,
+                artifact.name || "Artifact",
+                "showcase-item-icon"
+            );
 
-            if (subStats.length) {
-                const list = createElement(
-                    "ul",
-                    "showcase-artifact-substats"
-                );
+            const level = createElement(
+                "span",
+                "showcase-artifact-level",
+                `+${formatValue(artifact.level)}`
+            );
 
-                for (const subStat of subStats) {
-                    const label = subStat.info?.name || "Sub-stat";
-                    const value = subStat.value ?? subStat.final;
+            artifactCard.append(icon, level);
+            grid.append(artifactCard);
+        }
 
-                    list.append(
-                        createElement(
-                            "li",
-                            "",
-                            `${label} ${formatValue(value)}`
-                        )
-                    );
-                }
-
-                info.append(list);
-            }
-
-            card.append(info);
-            grid.append(card);
+        if (grid.childElementCount === 0) {
+            grid.append(
+                createElement(
+                    "p",
+                    "showcase-empty",
+                    "Artifact data unavailable"
+                )
+            );
         }
 
         section.append(grid);
 
-        /* Calculate equipped set counts from the actual artifacts. */
-
+        // Keep set bonuses compact, while retaining their full descriptions.
         const setCounts = new Map();
+        const setEffects = new Map();
 
         for (const artifact of artifacts) {
-            const setName = artifact.set?.name;
+            const set = artifact.set;
 
-            if (!setName) {
+            if (!set?.name) {
                 continue;
             }
 
-            const existing = setCounts.get(setName) || {
-                count: 0,
-                effects: []
-            };
+            const setName = cleanGameText(set.name);
 
-            existing.count += 1;
+            setCounts.set(
+                setName,
+                (setCounts.get(setName) || 0) + 1
+            );
 
-            for (const effect of artifact.set?.effects || []) {
-                const requiredPieces = Number(effect.required_piece_num);
-                const description = cleanGameText(effect.effect);
-
-                if (
-                    Number.isFinite(requiredPieces) &&
-                    requiredPieces > 0 &&
-                    description &&
-                    !existing.effects.some(item =>
-                        item.requiredPieces === requiredPieces &&
-                        item.description === description
-                    )
-                ) {
-                    existing.effects.push({
-                        requiredPieces,
-                        description
-                    });
-                }
+            if (Array.isArray(set.effects)) {
+                setEffects.set(setName, set.effects);
             }
-
-            setCounts.set(setName, existing);
         }
 
-        const equippedSets = Array.from(setCounts.entries())
-            .filter(([, set]) => set.count >= 2)
-            .sort((a, b) => b[1].count - a[1].count);
-
-        if (!equippedSets.length) {
+        if (setCounts.size === 0) {
             return;
         }
 
-        const setSection = createElement(
+        const sets = createElement(
             "div",
             "showcase-artifact-sets"
         );
 
-        for (const [setName, set] of equippedSets) {
-            const setCard = createElement(
-                "article",
+        for (const [name, count] of setCounts) {
+            const setInfo = createElement(
+                "div",
                 "showcase-artifact-set"
             );
 
-            setCard.append(
-                createElement(
-                    "h4",
-                    "showcase-artifact-set-name",
-                    `${set.count}-Piece Set · ${setName}`
-                )
-            );
-
-            const activeEffects = set.effects
-                .filter(effect => effect.requiredPieces <= set.count)
-                .sort((a, b) => a.requiredPieces - b.requiredPieces);
-
-            if (activeEffects.length) {
-                for (const effect of activeEffects) {
-                    const effectBlock = createElement(
-                        "div",
-                        "showcase-artifact-set-effect"
-                    );
-
-                    effectBlock.append(
-                        createElement(
-                            "strong",
-                            "",
-                            `${effect.requiredPieces}-Piece Bonus`
-                        ),
-                        createElement(
-                            "p",
-                            "",
-                            effect.description
-                        )
-                    );
-
-                    setCard.append(effectBlock);
-                }
-            } else {
-                setCard.append(
-                    createElement(
-                        "p",
-                        "showcase-artifact-set-effect",
-                        "Set bonus details unavailable."
-                    )
+            const effects = setEffects.get(name) || [];
+            const activeEffects = effects.filter(effect => {
+                const requiredPieces = Number(
+                    effect?.pieces ??
+                    effect?.required_pieces ??
+                    effect?.count ??
+                    0
                 );
+
+                return requiredPieces > 0 &&
+                    count >= requiredPieces;
+            });
+
+            const descriptions = activeEffects
+                .map(effect => cleanGameText(
+                    effect.description ??
+                    effect.name ??
+                    ""
+                ))
+                .filter(Boolean);
+
+            setInfo.textContent = `${count}× ${name}`;
+
+            if (descriptions.length > 0) {
+                setInfo.title = descriptions.join("\n");
             }
 
-            setSection.append(setCard);
+            sets.append(setInfo);
         }
 
-        section.append(setSection);
+        section.append(sets);
     }
 
     function renderTalents(character) {
-        const skills = character.skills || [];
-        const talents = skills.filter(skill => Number(skill.skill_type) === 1);
+        const skills = (character.skills || []).filter(
+            skill => Number(skill.skill_type) === 1
+        );
 
-        if (!talents.length) {
-            return;
-        }
+        const section = addSection(
+            "TALENTS",
+            "showcase-talents-section"
+        );
 
-        const section = addSection("Talents");
-        const grid = createElement("div", "showcase-talent-grid");
+        const grid = createElement(
+            "div",
+            "showcase-talent-grid"
+        );
 
-        for (const talent of talents) {
-            const card = createElement("article", "showcase-talent");
+        for (const skill of skills) {
+            const talent = createElement(
+                "div",
+                "showcase-talent"
+            );
 
-            if (talent.icon) {
-                card.append(
-                    createImage(
-                        talent.icon,
-                        talent.name || "Talent",
-                        "showcase-talent-icon"
-                    )
-                );
-            }
+            const name = cleanGameText(skill.name);
+            const level = formatValue(skill.level);
 
-            const info = createElement("div", "showcase-talent-info");
+            talent.title = `${name} · Level ${level}`;
+            talent.setAttribute("aria-label", talent.title);
 
-            info.append(
-                createElement("h4", "", talent.name || "Talent"),
+            talent.append(
+                createImage(
+                    skill.icon,
+                    name || "Talent",
+                    "showcase-talent-icon"
+                ),
                 createElement(
-                    "p",
-                    "showcase-item-meta",
-                    `Level ${formatValue(talent.level)}`
+                    "span",
+                    "showcase-talent-level",
+                    level
                 )
             );
 
-            card.append(info);
-            grid.append(card);
+            grid.append(talent);
+        }
+
+        if (grid.childElementCount === 0) {
+            grid.append(
+                createElement(
+                    "p",
+                    "showcase-empty",
+                    "Talent data unavailable"
+                )
+            );
         }
 
         section.append(grid);
@@ -987,59 +1033,69 @@ function initCharacterShowcase() {
     function renderConstellations(character) {
         const constellations = character.constellations || [];
 
-        if (!constellations.length) {
+        if (constellations.length === 0) {
             return;
         }
 
-        const section = addSection("Constellations");
-        const grid = createElement("div", "showcase-constellation-grid");
+        const section = addSection(
+            "CONSTELLATIONS",
+            "showcase-constellations-section"
+        );
+
+        const grid = createElement(
+            "div",
+            "showcase-constellation-grid"
+        );
 
         for (const constellation of constellations) {
             const active = Boolean(constellation.activated);
-            const description = cleanGameText(constellation.effect);
-            const card = createElement(
-                "article",
+            const name = cleanGameText(constellation.name);
+            const description = cleanGameText(
+                constellation.description
+            );
+
+            const item = createElement(
+                "div",
                 `showcase-constellation${active ? " is-active" : ""}`
             );
 
-            if (constellation.icon) {
-                card.append(
-                    createImage(
-                        constellation.icon,
-                        constellation.name || `Constellation ${constellation.pos}`,
-                        "showcase-constellation-icon"
-                    )
-                );
-            }
+            item.title = [
+                name,
+                description,
+                active ? "Unlocked" : "Locked"
+            ].filter(Boolean).join("\n");
 
-            if (description) {
-                card.title = description;
-                card.tabIndex = 0;
-                card.setAttribute(
-                    "aria-label",
-                    `C${constellation.pos}: ${constellation.name || "Constellation"}. ` +
-                    `${active ? "Unlocked." : "Locked."} ${description}`
-                );
-            }
+            item.setAttribute("aria-label", item.title);
 
-            card.append(
-                createElement("span", "showcase-constellation-number", `C${constellation.pos}`),
-                createElement(
-                    "span",
-                    "showcase-constellation-name",
-                    constellation.name || "Constellation"
+            item.append(
+                createImage(
+                    constellation.icon,
+                    name || "Constellation",
+                    "showcase-constellation-icon"
                 ),
                 createElement(
                     "span",
-                    "showcase-constellation-state",
-                    active ? "Unlocked" : "Locked"
+                    "showcase-constellation-number",
+                    formatValue(constellation.pos)
                 )
             );
 
-            grid.append(card);
+            grid.append(item);
         }
 
         section.append(grid);
+    }
+
+    function renderCharacter(character) {
+        detailsElement.replaceChildren();
+
+        renderWeapon(character);
+        renderCombatStats(character);
+        renderArtifacts(character);
+        renderTalents(character);
+        renderConstellations(character);
+
+        detailsElement.hidden = false;
     }
 
     function renderCharacter(character) {
@@ -1101,6 +1157,12 @@ function initCharacterShowcase() {
 
         nameElement.textContent = character.name || "Unknown character";
         elementElement.textContent = character.element || "";
+
+        modal.dataset.element = String(
+            character.element || ""
+        ).toLowerCase();
+
+        modal.dataset.rarity = String(character.rarity || "");
         levelElement.textContent =
             `Level ${formatValue(character.level)} · ` +
             `C${formatValue(character.constellation)} · ` +
@@ -1133,6 +1195,11 @@ function initCharacterShowcase() {
         portrait.alt = name.textContent.trim();
         nameElement.textContent = name.textContent.trim();
         elementElement.textContent = element?.textContent.trim() || "";
+        modal.dataset.element = (
+            card.dataset.element || ""
+        ).toLowerCase();
+
+        modal.dataset.rarity = card.dataset.rarity || "";
         levelElement.textContent = card.dataset.level
             ? `Level ${card.dataset.level}`
             : "Level unavailable";
