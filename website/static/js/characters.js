@@ -538,6 +538,9 @@ function initCharacterShowcase() {
     const page = document.querySelector(".characters-page");
     const modal = page?.querySelector("[data-character-showcase]");
     const dialog = modal?.querySelector(".character-showcase-modal");
+    const backgroundVideo = modal?.querySelector(
+        "[data-showcase-background]"
+    );
 
     const showcase = modal?.querySelector("[data-showcase-card]");
     const portrait = modal?.querySelector("[data-showcase-portrait]");
@@ -674,8 +677,48 @@ function initCharacterShowcase() {
             : "";
     }
 
-        const SHOWCASE_ICON_PATH =
-        "/static/images/characters/showcase/main/";
+    const SHOWCASE_ICON_PATH = "/static/images/characters/showcase/main/";
+
+    const ELEMENT_BACKGROUND_FILES = {
+        anemo: "Anemo_BG.mp4",
+        geo: "Geo_BG.mp4",
+        electro: "Electro_BG.mp4",
+        dendro: "Dendro_BG.mp4",
+        hydro: "Hydro_BG.mp4",
+        pyro: "Pyro_BG.mp4",
+        cryo: "Cryo_BG.mp4"
+    };
+
+    function setElementBackground(element) {
+        if (!backgroundVideo) {
+            return;
+        }
+
+        const elementKey = String(element || "")
+            .trim()
+            .toLowerCase();
+
+        const filename = ELEMENT_BACKGROUND_FILES[elementKey];
+
+        if (!filename) {
+            backgroundVideo.pause();
+            backgroundVideo.removeAttribute("src");
+            backgroundVideo.load();
+            return;
+        }
+
+        const videoPath = `${SHOWCASE_ICON_PATH}${filename}`;
+
+        if (backgroundVideo.getAttribute("src") !== videoPath) {
+            backgroundVideo.pause();
+            backgroundVideo.src = videoPath;
+            backgroundVideo.load();
+        }
+
+        backgroundVideo.play().catch(() => {
+            // Muted autoplay may be restricted by the browser.
+        });
+    }
 
     const ELEMENT_DAMAGE_ICONS = {
         Cryo: "DMG_Cryo.png",
@@ -998,7 +1041,7 @@ function initCharacterShowcase() {
         weaponElement.append(panel);
     }
 
-        function renderCombatStats(character) {
+    function renderCombatStats(character) {
         statsElement.replaceChildren();
 
         const properties = getCharacterProperties(character);
@@ -1056,11 +1099,8 @@ function initCharacterShowcase() {
                 percentage: false
             },
             {
-                label: "Incoming Healing Bonus",
-                names: [
-                    "Incoming Healing Bonus",
-                    "Incoming Heal Bonus"
-                ],
+                label: "Incoming Healing",
+                names: ["Incoming Healing Bonus", "Incoming Heal Bonus"],
                 icon: "HP.png",
                 percentage: true
             },
@@ -1078,8 +1118,6 @@ function initCharacterShowcase() {
             }
         ];
 
-        const grid = createElement("div", "enka-stat-grid");
-
         statDefinitions.forEach(definition => {
             const property = findProperty(
                 propertyIndex,
@@ -1087,33 +1125,30 @@ function initCharacterShowcase() {
             );
 
             const row = createElement("div", "enka-stat-row");
-            const label = createElement(
-                "span",
-                "enka-stat-name"
-            );
+            const label = createElement("div", "enka-stat-name");
 
             const iconPath = definition.icon.startsWith("/")
                 ? definition.icon
                 : `${SHOWCASE_ICON_PATH}${definition.icon}`;
 
-            if (iconPath) {
-                const icon = createImage(
-                    iconPath,
-                    "",
-                    "enka-stat-icon"
-                );
+            const icon = createImage(iconPath, "", "enka-stat-icon");
 
-                icon.alt = "";
-                icon.setAttribute("aria-hidden", "true");
-                icon.addEventListener("error", () => icon.remove(), {
-                    once: true
-                });
+            icon.alt = "";
+            icon.setAttribute("aria-hidden", "true");
 
-                label.append(icon);
-            }
+            icon.addEventListener(
+                "error",
+                () => icon.remove(),
+                { once: true }
+            );
 
             label.append(
-                createElement("span", "enka-stat-label", definition.label)
+                icon,
+                createElement(
+                    "span",
+                    "enka-stat-label",
+                    definition.label
+                )
             );
 
             row.append(
@@ -1128,10 +1163,8 @@ function initCharacterShowcase() {
                 )
             );
 
-            grid.append(row);
+            statsElement.append(row);
         });
-
-        statsElement.append(grid);
     }
 
     function renderArtifacts(character) {
@@ -1331,7 +1364,7 @@ function initCharacterShowcase() {
             item.append(
                 createElement(
                     "span",
-                    "enka-talent-level",
+                    "enka-progression-level",
                     talent.level != null
                         ? String(talent.level)
                         : "—"
@@ -1497,12 +1530,14 @@ function initCharacterShowcase() {
             return;
         }
 
-                nameElement.textContent = character.name || "Unknown character";
+        nameElement.textContent = character.name || "Unknown character";
         elementElement.textContent = character.element || "";
 
         showcase.dataset.element = String(
             character.element || ""
         ).toLowerCase();
+
+        setElementBackground(character.element);
 
         showcase.dataset.rarity = String(character.rarity || "");
 
@@ -1566,6 +1601,8 @@ function initCharacterShowcase() {
             card.dataset.element || ""
         ).toLowerCase();
 
+        setElementBackground(card.dataset.element);
+
         modal.dataset.rarity = card.dataset.rarity || "";
         levelElement.textContent = card.dataset.level
             ? `Level ${card.dataset.level}`
@@ -1614,6 +1651,8 @@ function initCharacterShowcase() {
         if (modal.hidden) {
             return;
         }
+
+        backgroundVideo?.pause();
 
         activeRequestId++;
         modal.hidden = true;

@@ -606,7 +606,9 @@
 
 @media (max-width: 1250px) {
     .characters-toolbar {
+        display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: end;
     }
 
     .characters-search {
@@ -728,10 +730,9 @@
     }
 }
 
+
 /* =========================================================
-   CHARACTER SHOWCASE — COMPACT ENKACARD-INSPIRED LAYOUT
-   One compact build card with artwork-led styling.
-   Only affects the character showcase.
+   CHARACTER SHOWCASE — MODAL
    ========================================================= */
 
 .character-showcase[hidden],
@@ -741,10 +742,8 @@
 
 .character-showcase {
     --showcase-element-colour: var(--accent);
-    --enka-panel: #191c27;
-    --enka-panel-raised: #242838;
-    --enka-border: rgb(255 255 255 / 10%);
-    --enka-muted: #a7adbd;
+    --enka-border: var(--border);
+    --enka-muted: var(--text-muted);
 
     position: fixed;
     inset: 0;
@@ -752,64 +751,68 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
-    color: #f4f5fa;
+    padding: 12px;
+    color: var(--text);
 }
 
 .character-showcase-backdrop {
     position: absolute;
     inset: 0;
-    background: rgb(5 7 14 / 82%);
-    backdrop-filter: blur(8px);
+    background: rgb(5 7 14 / 78%);
+    backdrop-filter: blur(6px);
 }
 
 .character-showcase-modal {
     position: relative;
     z-index: 1;
-    width: min(700px, calc(100vw - 32px));
-    max-height: calc(100vh - 32px);
+    width: min(1160px, calc(100vw - 32px));
+    height: calc(100% + 20px);
+    max-height: calc(100dvh - 50px);
     overflow: auto;
     border: 1px solid color-mix(
         in srgb,
-        var(--showcase-element-colour) 35%,
-        #34394a
+        var(--showcase-element-colour) 40%,
+        var(--border)
     );
-    border-radius: 14px;
-    background: #10131c;
-    color: #f4f5fa;
-    box-shadow: 0 24px 70px rgb(0 0 0 / 50%);
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: 0 20px 55px rgb(0 0 0 / 40%);
     scrollbar-width: thin;
-    scrollbar-color: #454b5d transparent;
+    scrollbar-color: var(--border) transparent;
     outline: none;
 }
 
 .character-showcase-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 9px;
+    right: 9px;
     z-index: 10;
     display: grid;
     place-items: center;
     width: 32px;
     height: 32px;
     padding: 0;
-    border: 1px solid rgb(255 255 255 / 22%);
+    border: 1px solid var(--border);
     border-radius: 50%;
-    background: rgb(12 15 24 / 85%);
-    color: #fff;
-    font-size: 23px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 22px;
     line-height: 1;
     cursor: pointer;
 }
 
 .character-showcase-close:hover {
     border-color: var(--showcase-element-colour);
-    background: #292e3e;
 }
 
 .character-showcase-close:focus-visible {
     outline: 2px solid var(--showcase-element-colour);
     outline-offset: 3px;
+}
+
+body.character-showcase-open {
+    overflow: hidden;
 }
 
 /* =========================================================
@@ -819,22 +822,21 @@
 .enka-build-card {
     --showcase-element-colour: var(--accent);
 
-    position: relative;
     display: flex;
     flex-direction: column;
     min-width: 0;
     overflow: hidden;
     background:
         radial-gradient(
-            ellipse at 0% 0%,
+            ellipse at 0 0,
             color-mix(
                 in srgb,
-                var(--showcase-element-colour) 12%,
+                var(--showcase-element-colour) 8%,
                 transparent
             ),
-            transparent 60%
+            transparent 65%
         ),
-        #10131c;
+        var(--background);
 }
 
 .enka-build-card[data-element="anemo"] {
@@ -866,143 +868,141 @@
 }
 
 /* =========================================================
-   CHARACTER HEADER
-   Artwork is blended into the background, not placed in a
-   separate portrait panel.
+   MAIN CHARACTER LAYOUT
    ========================================================= */
 
-.enka-card-header {
+.enka-character-layout {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.88fr) minmax(0, 1.12fr);
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px;
+}
+
+.enka-character-visual,
+.enka-character-details {
     position: relative;
-    isolation: isolate;
-    display: flex;
-    align-items: center;
-    min-height: 205px;
-    padding: 22px 24px;
+    min-width: 0;
+}
+
+/* =========================================================
+   CHARACTER ARTWORK — SQUARE STAGE
+   Talent and constellation panels overlay the artwork.
+   ========================================================= */
+
+.enka-character-visual {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
     overflow: hidden;
+    border: 1px solid var(--enka-border);
+    border-radius: 12px;
+    isolation: isolate;
     background:
         radial-gradient(
-            ellipse at 78% 30%,
+            ellipse at 50% 42%,
             color-mix(
                 in srgb,
-                var(--showcase-element-colour) 32%,
-                transparent
+                var(--showcase-element-colour) 20%,
+                var(--surface)
             ),
-            transparent 60%
-        ),
-        linear-gradient(
-            120deg,
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 14%,
-                #191d2a
-            ),
-            #11141e 78%
+            var(--surface) 76%
         );
 }
 
-.enka-card-header::after {
+.enka-artwork-stage {
     position: absolute;
-    z-index: 1;
     inset: 0;
-    background: linear-gradient(
-        90deg,
-        rgb(12 14 22 / 15%) 0%,
-        rgb(12 14 22 / 5%) 50%,
-        rgb(12 14 22 / 30%) 100%
-    );
-    content: "";
-    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    transform: translate(20px, -20px);
 }
 
 .enka-character-art {
-    position: absolute;
-    z-index: 0;
-    top: -24px;
-    right: 0;
-    width: 48%;
-    height: calc(100% + 40px);
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
     object-fit: contain;
-    object-position: center bottom;
-    filter: drop-shadow(0 6px 18px rgb(0 0 0 / 28%));
-    pointer-events: none;
+    object-position: center center;
 }
 
-.enka-character-identity {
-    position: relative;
-    z-index: 2;
-    width: 70%;
-    min-width: 0;
-    padding: 8px 0;
+
+/* =========================================================
+   TALENTS — INDIVIDUAL GLASS CIRCLES
+   No background container around the talent icons.
+   ========================================================= */
+
+.enka-talent-column {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    top: auto;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+
+    z-index: 5;
 }
 
-.enka-character-element {
-    margin: 0 0 5px;
-    color: var(--showcase-element-colour);
-    font-size: 0.67rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-}
-
-.enka-character-identity h2 {
-    margin: 0;
-    color: #fff;
-    font-size: clamp(1.65rem, 4vw, 2.25rem);
-    font-weight: 850;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-    text-shadow: 0 3px 18px rgb(0 0 0 / 40%);
-}
-
-.enka-character-level {
-    margin: 8px 0 0;
-    color: rgb(245 247 255 / 78%);
-    font-size: 0.72rem;
-    font-weight: 600;
-    line-height: 1.5;
-}
-
-/* Talents and constellations share one compact icon row. */
-
-.enka-build-card [data-showcase-progression] {
-    display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-    gap: 7px;
-    width: min(320px, 100%);
-    margin-top: 13px;
-    min-width: 0;
-}
-
-.enka-character-progression:empty {
+.enka-talent-column:empty {
     display: none;
 }
 
+/* Shared progression circle */
 .enka-progression-item {
     position: relative;
     display: grid;
     place-items: center;
-    width: 100%;
-    max-width: 36px;
-    aspect-ratio: 1;
-    justify-self: start;
+
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
     padding: 5px;
-    border: 1px solid var(--enka-border);
+
+    border: 1px solid rgb(255 255 255 / 22%);
     border-radius: 50%;
-    background: rgb(18 21 31 / 75%);
+
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 14%),
+        rgb(255 255 255 / 5%)
+    );
+
+    box-shadow:
+        inset 0 1px 2px rgb(255 255 255 / 18%),
+        0 2px 6px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .enka-progression-item.enka-talent {
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+
     border-color: color-mix(
         in srgb,
-        var(--showcase-element-colour) 48%,
-        var(--enka-border)
+        var(--showcase-element-colour) 65%,
+        rgb(255 255 255 / 45%)
     );
-}
-
-.enka-progression-item.enka-constellation.is-locked {
-    opacity: 0.35;
-    filter: grayscale(0.8);
 }
 
 .enka-progression-icon {
@@ -1016,51 +1016,333 @@
     position: absolute;
     right: -5px;
     bottom: -5px;
+
     display: grid;
     place-items: center;
     min-width: 16px;
     height: 16px;
     padding: 0 3px;
-    border: 1px solid #10131c;
-    border-radius: 5px;
+
+    border: 1px solid var(--background);
+    border-radius: 4px;
     background: var(--showcase-element-colour);
-    color: #11131a;
-    font-size: 0.58rem;
-    font-weight: 900;
+    color: #171923;
+
+    font-size: 0.62rem;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
 }
 
 /* =========================================================
-   WEAPON AND COMBAT STATS
-   Two tightly grouped panels beneath the character header.
+   CONSTELLATIONS — INDIVIDUAL GLASS CIRCLES
    ========================================================= */
 
-.enka-build-overview {
+.enka-constellation-orbit {
+    position: absolute;
+    z-index: 3;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+
     display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: 10px;
-    padding: 12px 14px 0;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 4px;
+
+    width: auto;
+    min-width: 0;
+    padding: 0;
+
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
-.enka-weapon-panel,
+.enka-constellation-orbit:empty {
+    display: none;
+}
+
+.enka-constellation-orbit .enka-progression-item {
+    width: min(100%, 42px);
+    height: auto;
+    aspect-ratio: 1;
+    padding: 5px;
+}
+
+.enka-progression-item.enka-constellation.is-locked {
+    opacity: 0.4;
+    filter: grayscale(0.85);
+}
+
+/* Unlocked constellations inherit the character's element colour. */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 70%,
+        rgb(255 255 255 / 35%)
+    );
+
+    background: linear-gradient(
+        145deg,
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 30%,
+            transparent
+        ),
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 12%,
+            rgb(15 18 28 / 65%)
+        )
+    );
+
+    box-shadow:
+        inset 0 1px 3px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 25%,
+                transparent
+            ),
+        0 0 8px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 18%,
+                transparent
+            );
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.enka-constellation-number {
+    color: var(--text);
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+/* =========================================================
+   CHARACTER IDENTITY
+   ========================================================= */
+
+.enka-character-details {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.enka-character-identity {
+    min-width: 0;
+    padding: 3px 36px 8px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-character-element-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.enka-character-element-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+}
+
+.enka-character-element-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-character-element {
+    margin: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.enka-character-identity h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.enka-character-level {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.enka-character-rarity {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 3px;
+}
+
+.enka-character-rarity img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   PANELS AND HEADINGS
+   ========================================================= */
+
 .enka-stats-panel,
+.enka-weapon-panel,
 .enka-artifacts-panel {
     min-width: 0;
     border: 1px solid var(--enka-border);
-    border-radius: 10px;
-    background: var(--enka-panel);
+    border-radius: 9px;
+    background: var(--surface);
 }
 
-.enka-weapon-panel,
-.enka-stats-panel {
-    padding: 12px;
+.enka-stats-panel,
+.enka-weapon-panel {
+    padding: 9px;
 }
+
+.enka-weapon-panel {
+    transform: translateY(2px);
+    padding-top: 15px;
+    padding-bottom: 16px;
+}
+
+.enka-stats-panel h3,
+.enka-weapon-panel h3,
+.enka-artifacts-panel h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CHARACTER SHOWCASE — CHARACTER STATS
+   ========================================================= */
+
+.enka-stats-panel {
+    min-width: 0;
+}
+
+.enka-stats-panel [data-showcase-stats] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+    min-width: 0;
+}
+
+.enka-stat-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+/* Remove the divider from the final row in each stats column. */
+.enka-stats-panel [data-showcase-stats] > .enka-stat-row:nth-last-child(-n + 2) {
+    border-bottom: none;
+}
+
+.enka-stat-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.enka-stat-icon {
+    display: block;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    object-fit: contain;
+}
+
+.enka-stat-label {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.3;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.enka-stat-value {
+    display: block;
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.3;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+    .enka-stats-panel [data-showcase-stats] {
+        column-gap: 12px;
+    }
+
+    .enka-stat-row {
+        gap: 5px;
+        padding: 7px 0;
+    }
+
+    .enka-stat-name {
+        gap: 4px;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+        flex-basis: 16px;
+    }
+
+    .enka-stat-label {
+        font-size: 0.66rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.68rem;
+    }
+}
+
+
+/* =========================================================
+   WEAPON
+   ========================================================= */
 
 .enka-weapon-card {
     display: grid;
-    grid-template-columns: 62px minmax(0, 1fr);
+    grid-template-columns: 70px minmax(0, 1fr);
     align-items: start;
-    gap: 10px;
+    gap: 9px;
     min-width: 0;
 }
 
@@ -1068,13 +1350,13 @@
     position: relative;
     display: grid;
     place-items: center;
-    width: 62px;
-    height: 68px;
-    padding: 5px;
+    width: 70px;
+    height: 74px;
+    padding: 3px;
     overflow: hidden;
     border: 1px solid var(--enka-border);
-    border-radius: 8px;
-    background: var(--enka-panel-raised);
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
 }
 
 .enka-weapon-image.rarity-5 {
@@ -1092,43 +1374,39 @@
     object-fit: contain;
 }
 
+.enka-weapon-refinement,
 .enka-weapon-level {
     position: absolute;
-    right: 3px;
-    bottom: 3px;
-    padding: 2px 3px;
+    z-index: 1;
+    padding: 2px 4px;
     border-radius: 3px;
-    background: rgb(8 10 16 / 90%);
+    background: rgb(8 10 16 / 88%);
     color: #fff;
     font-size: 0.56rem;
     font-weight: 800;
+}
+
+.enka-weapon-refinement {
+    top: 3px;
+    left: 3px;
+}
+
+.enka-weapon-level {
+    right: 3px;
+    bottom: 3px;
 }
 
 .enka-weapon-info {
     min-width: 0;
 }
 
-.enka-panel-eyebrow {
-    margin: 0 0 4px;
-    color: var(--showcase-element-colour);
-    font-size: 0.56rem;
-    font-weight: 800;
-    letter-spacing: 0.09em;
-}
-
 .enka-weapon-name {
     margin: 0;
-    color: #f5f6fb;
+    color: var(--text);
     font-size: 0.76rem;
-    font-weight: 750;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-}
-
-.enka-weapon-refinement {
-    margin: 4px 0 0;
-    color: var(--enka-muted);
-    font-size: 0.64rem;
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: break-word;
 }
 
 .enka-weapon-stats {
@@ -1137,118 +1415,104 @@
     grid-column: 1 / -1;
     gap: 5px;
     min-width: 0;
-    padding-top: 8px;
+    margin-top: 8px;
+    padding-top: 10px;
     border-top: 1px solid var(--enka-border);
 }
 
-.enka-weapon-stat,
-.enka-stat-row {
+.enka-weapon-stat {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
     min-width: 0;
 }
 
 .enka-weapon-stat span {
-    color: var(--enka-muted);
-    font-size: 0.65rem;
+    flex: 0 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
 }
 
 .enka-weapon-stat strong {
-    color: #f5f6fb;
-    font-size: 0.68rem;
-    font-weight: 750;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-}
-
-/* Combat stats use compact rows rather than oversized tiles. */
-
-.enka-stat-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-}
-
-.enka-stat-row {
-    padding: 6px 0;
-    border-bottom: 1px solid var(--enka-border);
-}
-
-.enka-stat-row:last-child {
-    border-bottom: 0;
-}
-
-.enka-stat-name {
-    color: var(--enka-muted);
-    font-size: 0.68rem;
-    line-height: 1.3;
-}
-
-.enka-stat-value {
     flex: 0 0 auto;
-    color: #f5f6fb;
-    font-size: 0.72rem;
+    color: var(--text);
+    font-size: 0.76rem;
     font-weight: 800;
-    text-align: right;
+    text-align: left;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   ARTEFACTS
-   Five compact cards in one row, with icons and readable
-   stat lines rather than large image tiles.
+   ARTIFACTS
    ========================================================= */
 
 .enka-artifacts-panel {
-    margin: 10px 14px 0;
-    padding: 11px;
+    margin: 0 12px 10px;
+    padding: 27px 12px;
 }
 
 .enka-artifact-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    align-items: start;
-    gap: 7px;
+    align-items: stretch;
+    gap: 10px;
+    min-width: 0;
 }
 
 .enka-artifact-card {
     min-width: 0;
-    padding: 6px;
+    padding: 18px 10px;
     border: 1px solid var(--enka-border);
-    border-radius: 8px;
-    background: #1b1f2b;
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
+}
+
+.enka-artifact-main-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 0 6px;
+    border-top: 1px solid var(--enka-border);
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-artifact-main-stat + .enka-artifact-substat {
+    margin-top: 13px;
 }
 
 .enka-artifact-card.rarity-5 {
-    border-color: rgb(215 160 83 / 35%);
+    border-color: rgb(215 160 83 / 45%);
 }
 
 .enka-artifact-card.rarity-4 {
-    border-color: rgb(165 119 218 / 35%);
+    border-color: rgb(165 119 218 / 45%);
+}
+
+.enka-artifact-header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    margin-bottom: 10px;
 }
 
 .enka-artifact-image-wrap {
     position: relative;
     display: grid;
     place-items: center;
-    width: 100%;
-    aspect-ratio: 1;
-    padding: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 2px;
     overflow: hidden;
-    border-radius: 6px;
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 15%,
-                var(--enka-panel-raised)
-            ),
-            var(--enka-panel-raised)
-        );
+    border-radius: 5px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 12%,
+        var(--surface)
+    );
 }
 
 .enka-artifact-icon {
@@ -1256,11 +1520,10 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: transform 160ms ease;
 }
 
 .enka-artifact-image-wrap:hover .enka-artifact-icon {
-    transform: scale(1.08);
+    transform: scale(1.05);
 }
 
 .enka-artifact-level {
@@ -1268,102 +1531,139 @@
     right: 3px;
     bottom: 3px;
     padding: 2px 4px;
-    border-radius: 4px;
-    background: rgb(8 10 16 / 90%);
+    border-radius: 3px;
+    background: rgb(8 10 16 / 88%);
     color: #fff;
-    font-size: 0.57rem;
+    font-size: 0.56rem;
     font-weight: 800;
     font-variant-numeric: tabular-nums;
 }
 
-.enka-artifact-name {
-    min-height: 2.4em;
-    margin: 7px 0 5px;
-    color: #f1f2f8;
-    font-size: 0.65rem;
-    font-weight: 750;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-}
-
-.enka-artifact-main-stat {
+.enka-artifact-rarity {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
-    padding: 6px 0;
-    border-top: 1px solid var(--enka-border);
-    border-bottom: 1px solid var(--enka-border);
-}
-
-.enka-artifact-stat-name {
-    color: var(--enka-muted);
-    font-size: 0.59rem;
-    line-height: 1.25;
-    overflow-wrap: anywhere;
-}
-
-.enka-artifact-stat-value {
-    color: var(--showcase-element-colour);
-    font-size: 0.7rem;
-    font-weight: 850;
-    font-variant-numeric: tabular-nums;
-    overflow-wrap: anywhere;
-}
-
-.enka-artifact-substats {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-top: 7px;
-}
-
-.enka-artifact-substat {
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 1px;
+    margin-top: 4px;
+}
+
+.enka-artifact-rarity img {
+    display: block;
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+}
+
+.enka-artifact-title-wrap {
     min-width: 0;
 }
 
-.enka-artifact-substat span {
-    color: var(--enka-muted);
-    font-size: 0.57rem;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-}
-
-.enka-artifact-substat strong {
-    color: #e7eaf4;
-    font-size: 0.63rem;
+.enka-artifact-name {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.72rem;
     font-weight: 750;
-    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
     overflow-wrap: anywhere;
 }
 
-/* Artefact set bonuses remain compact beneath the five pieces. */
+.enka-artifact-main-stat-row,
+.enka-artifact-substat {
+    display: grid;
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 7px;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.enka-artifact-substats > .enka-artifact-substat:first-child {
+    margin-top: 5px;
+}
+
+.enka-artifact-main-stat-row {
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    margin-bottom: 5px;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-name {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.enka-artifact-substat:last-child {
+    margin-bottom: 0;
+}
+
+.enka-artifact-stat-name,
+.enka-artifact-substat span {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-stat-value,
+.enka-artifact-substat strong {
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 750;
+    line-height: 1.5;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.enka-artifact-stat-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+}
+
+.enka-artifact-stat-icon,
+.enka-artifact-main-stat-row img,
+.enka-artifact-substat img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    object-fit: contain;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-value {
+    color: var(--showcase-element-colour);
+}
+
+/* =========================================================
+   ARTEFACT SET BONUSES
+   ========================================================= */
 
 .enka-artifact-sets {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 9px;
+    gap: 5px;
+    margin-top: 8px;
 }
 
 .enka-artifact-set {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     max-width: 100%;
     padding: 5px 7px;
     border: 1px solid color-mix(
         in srgb,
-        var(--showcase-element-colour) 25%,
-        var(--enka-border)
+        var(--showcase-element-colour) 28%,
+        var(--border)
     );
-    border-radius: 6px;
+    border-radius: 5px;
     background: color-mix(
         in srgb,
         var(--showcase-element-colour) 7%,
-        var(--enka-panel)
+        var(--surface)
     );
 }
 
@@ -1375,186 +1675,228 @@
 }
 
 .enka-artifact-set-name {
-    color: #d9dcea;
+    color: var(--text);
     font-size: 0.64rem;
     line-height: 1.3;
     overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   STATUS AND ERROR MESSAGES
+   EMPTY VALUES, STATUS AND ERRORS
    ========================================================= */
 
 .enka-empty-value {
     grid-column: 1 / -1;
     margin: 0;
-    padding: 10px 0;
-    color: var(--enka-muted);
+    padding: 8px 0;
+    color: var(--text-muted);
     font-size: 0.72rem;
     line-height: 1.4;
 }
 
 .enka-card-status {
     margin: 0;
-    padding: 10px 14px 12px;
-    color: var(--enka-muted);
+    padding: 5px 12px 9px;
+    color: var(--text-muted);
     font-size: 0.7rem;
     line-height: 1.4;
     text-align: center;
 }
 
 .enka-card-error {
-    margin: 0 14px 12px;
-    padding: 9px 11px;
-    border: 1px solid rgb(255 115 115 / 35%);
-    border-radius: 7px;
-    background: rgb(150 40 50 / 15%);
-    color: #ffb6b6;
+    margin: 0 12px 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--error);
     font-size: 0.74rem;
     line-height: 1.4;
     overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   INTERACTION AND ACCESSIBILITY
-   ========================================================= */
-
-body.character-showcase-open {
-    overflow: hidden;
-}
-
-.character-card[data-owned="true"] {
-    cursor: pointer;
-}
-
-.character-card[data-owned="true"]:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-}
-
-/* =========================================================
    RESPONSIVE — TABLET
    ========================================================= */
 
-@media (max-width: 600px) {
-    .character-showcase {
-        padding: 8px;
-    }
-
+@media (max-width: 800px) {
     .character-showcase-modal {
-        width: calc(100vw - 16px);
-        max-height: calc(100vh - 16px);
+        width: min(680px, calc(100vw - 24px));
     }
 
-    .enka-card-header {
-        min-height: 185px;
-        padding: 17px;
-    }
-
-    .enka-character-art {
-        right: -5%;
-        width: 52%;
-        height: calc(100% + 20px);
-    }
-
-    .enka-character-identity {
-        width: 76%;
-    }
-
-    .enka-build-overview {
+    .enka-character-layout {
         grid-template-columns: minmax(0, 1fr);
-        gap: 8px;
-        padding: 9px 9px 0;
-    }
-
-    .enka-weapon-panel,
-    .enka-stats-panel {
+        gap: 10px;
         padding: 10px;
     }
 
-    .enka-stat-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 12px;
+    .enka-character-visual {
+        width: min(100%, 560px);
+        justify-self: center;
     }
 
-    .enka-artifacts-panel {
-        margin: 9px 9px 0;
-        padding: 8px;
+    .enka-character-details {
+        gap: 8px;
     }
 
     .enka-artifact-grid {
-        gap: 5px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
     }
 
-    .enka-artifact-card {
+    .enka-artifacts-panel {
+        margin: 0 10px 10px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+    .character-showcase {
+        padding: 6px;
+    }
+
+    .character-showcase-modal {
+        width: calc(100vw - 12px);
+        max-height: calc(100dvh - 12px);
+        border-radius: 10px;
+    }
+
+    .enka-character-layout {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .enka-character-visual {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .enka-talent-column {
+        left: 7px;
+        gap: 8px;
+        padding: 7px 5px;
+        border-radius: 14px;
+    }
+
+    .enka-progression-item {
+        width: 34px;
+        height: 34px;
         padding: 4px;
     }
 
+    .enka-talent-column .enka-progression-item {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+    }
+
+    .enka-constellation-orbit .enka-progression-item {
+        width: min(100%, 34px);
+        height: auto;
+        aspect-ratio: 1;
+        padding: 4px;
+    }
+
+    .enka-constellation-orbit {
+        right: 7px;
+        bottom: 7px;
+        left: 7px;
+        gap: 3px;
+        padding: 6px 5px;
+        border-radius: 12px;
+    }
+
+    .enka-character-identity h2 {
+        font-size: 1.35rem;
+    }
+
+    .enka-stats-panel,
+    .enka-weapon-panel {
+        padding: 8px;
+    }
+
+    .enka-stat-grid {
+        column-gap: 8px;
+    }
+
+    .enka-stat-row {
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 4px;
+        padding: 5px 0;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .enka-stat-name {
+        font-size: 0.6rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.67rem;
+    }
+
+    .enka-artifacts-panel {
+        margin: 0 8px 8px;
+        padding: 7px;
+    }
+
+    .enka-artifact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .enka-artifact-card {
+        padding: 14px 7px;
+    }
+
+    .enka-artifact-header {
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .enka-artifact-image-wrap {
+        width: 36px;
+        height: 36px;
+    }
+
     .enka-artifact-name {
-        font-size: 0.61rem;
+        font-size: 0.68rem;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span,
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.7rem;
+    }
+
+    .enka-artifact-main-stat-row,
+    .enka-artifact-substat {
+        grid-template-columns: 14px minmax(0, 1fr) auto;
+        column-gap: 4px;
+    }
+
+    .enka-artifact-stat-icon,
+    .enka-artifact-main-stat-row img,
+    .enka-artifact-substat img {
+        width: 13px;
+        height: 13px;
+        flex-basis: 13px;
     }
 
     .enka-artifact-stat-name,
     .enka-artifact-substat span {
-        font-size: 0.54rem;
+        font-size: 0.68rem;
     }
 
     .enka-artifact-stat-value,
     .enka-artifact-substat strong {
-        font-size: 0.59rem;
-    }
-
-    .enka-build-card [data-showcase-progression] {
-        gap: 6px;
-        width: min(300px, 100%);
-    }
-}
-
-/* =========================================================
-   RESPONSIVE — SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 380px) {
-    .enka-card-header {
-        min-height: 165px;
-        padding: 14px;
-    }
-
-    .enka-character-identity {
-        width: 82%;
-    }
-
-    .enka-character-identity h2 {
-        font-size: 1.5rem;
-    }
-
-    .enka-character-level {
-        font-size: 0.65rem;
-    }
-
-    .enka-build-card [data-showcase-progression] {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        width: 190px;
-        gap: 9px 6px;
-    }
-
-    .enka-progression-item {
-        max-width: 30px;
-        padding: 4px;
-    }
-
-    .enka-weapon-card {
-        grid-template-columns: 54px minmax(0, 1fr);
-        gap: 8px;
-    }
-
-    .enka-weapon-image {
-        width: 54px;
-        height: 60px;
-    }
-
-    .enka-stat-grid {
-        grid-template-columns: minmax(0, 1fr);
+        font-size: 0.68rem;
     }
 }
 
@@ -1563,11 +1905,44 @@ body.character-showcase-open {
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-    .character-showcase-backdrop {
-        backdrop-filter: none;
-    }
-
+    .character-card,
     .enka-artifact-icon {
         transition: none;
     }
+
+    .character-card:hover,
+    .enka-artifact-image-wrap:hover .enka-artifact-icon {
+        transform: none;
+    }
+
+    .character-showcase-backdrop {
+        backdrop-filter: none;
+    }
+}
+/* =========================================================
+   ARTIFACTS — HEADING AND SET BONUS ALIGNMENT
+   ========================================================= */
+
+.enka-artifacts-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.enka-artifacts-heading h3 {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.enka-artifacts-heading .enka-artifact-sets {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    margin: 0 0 0 auto;
 }

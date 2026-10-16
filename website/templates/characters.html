@@ -391,14 +391,40 @@
                     <div class="enka-character-layout">
 
                         <!-- LEFT: TALENTS, ARTWORK AND CONSTELLATIONS -->
+                        
                         <section class="enka-character-visual" aria-label="Character talents and constellations">
+
+                            <!-- Elemental animated background -->
+                            <video
+                                class="enka-element-background"
+                                data-showcase-background
+                                autoplay
+                                loop
+                                muted
+                                playsinline
+                                preload="none"
+                                aria-hidden="true"
+                            ></video>
+
+                            <!-- Character talents -->
                             <div class="enka-talent-column" data-showcase-talents></div>
 
+                            <!-- Character artwork -->
                             <div class="enka-artwork-stage">
-                                <img class="enka-character-art" data-showcase-portrait src="" alt="">
+                                <img
+                                    class="enka-character-art"
+                                    data-showcase-portrait
+                                    src=""
+                                    alt=""
+                                >
                             </div>
 
-                            <div class="enka-constellation-orbit" data-showcase-constellations></div>
+                            <!-- Character constellations -->
+                            <div
+                                class="enka-constellation-orbit"
+                                data-showcase-constellations
+                            ></div>
+
                         </section>
 
                         <!-- RIGHT: CHARACTER IDENTITY AND STATS -->
@@ -426,11 +452,14 @@
                         </section>
                     </div>
 
-                    <!-- BOTTOM: ARTEFACTS -->
+                    <!-- BOTTOM: ARTIFACTS -->
                     <section class="enka-artifacts-panel" aria-label="Equipped artefacts">
-                        <h3>Artifacts</h3>
+                        <div class="enka-artifacts-heading">
+                            <h3>Artifacts</h3>
+                            <div class="enka-artifact-sets" data-showcase-sets></div>
+                        </div>
+
                         <div class="enka-artifact-grid" data-showcase-artifacts></div>
-                        <div class="enka-artifact-sets" data-showcase-sets></div>
                     </section>
 
                     <p class="enka-card-status" data-showcase-status role="status" aria-live="polite">
