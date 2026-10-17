@@ -1,0 +1,320 @@
+/* =========================================================
+   CHARACTER GRID
+   ========================================================= */
+
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+}
+
+@media (max-width: 1500px) {
+    .characters-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 9px;
+    }
+}
+
+@media (max-width: 1150px) {
+    .characters-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .characters-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .characters-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   CHARACTER CARDS
+   ========================================================= */
+
+.character-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.character-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-border);
+}
+
+/* =========================================================
+   CHARACTER PORTRAIT
+   ========================================================= */
+
+.character-card-image {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    background: linear-gradient(
+        180deg,
+        #8055a8 0%,
+        #49345f 100%
+    );
+}
+
+/* Five-star characters: orange-gold */
+.character-card[data-rarity="5"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #d99a43 0%,
+        #87502e 100%
+    );
+}
+
+/* Four-star characters: purple */
+.character-card[data-rarity="4"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #a16acb 0%,
+        #573777 100%
+    );
+}
+
+.character-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Character level badge */
+.character-level {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: color-mix(
+        in srgb,
+        var(--background) 90%,
+        transparent
+    );
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+/* =========================================================
+   CHARACTER INFORMATION
+   ========================================================= */
+
+.character-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    padding: 7px;
+}
+
+/* Character name */
+.character-card-info h2 {
+    overflow: hidden;
+    margin: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ELEMENT AND RARITY ROW
+   ========================================================= */
+
+.character-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+/* Element icon and name */
+.character-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.character-element img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
+}
+
+.character-element span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Rarity value and icon */
+.character-rarity {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.character-rarity img {
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   FRIENDSHIP AND CONSTELLATION ROW
+   ========================================================= */
+
+.character-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+/* Friendship icon and level */
+.character-friendship {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.character-friendship img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
+}
+
+/* Constellation value and icon */
+.character-constellation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.character-constellation img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   EMPTY AND ERROR STATES
+   ========================================================= */
+
+.characters-message {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.characters-message h2 {
+    margin-top: 0;
+}
+
+.characters-message p {
+    margin-bottom: 0;
+    color: var(--text-muted);
+}
+
+.characters-message-error {
+    border-color: var(--error);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .character-card {
+        transition: none;
+    }
+
+    .character-card:hover {
+        transform: none;
+    }
+}
+
+/* =========================================================
+   UNOWNED CHARACTERS
+   ========================================================= */
+
+.character-card-unowned {
+    opacity: 0.7;
+}
+
+.character-card-unowned .character-card-image img {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.character-unowned-label {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.character-unowned-status {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}

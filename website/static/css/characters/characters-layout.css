@@ -1,0 +1,164 @@
+/* =========================================================
+   CHARACTERS PAGE
+   ========================================================= */
+
+.characters-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.characters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.characters-header h1 {
+    margin: 0;
+}
+
+.characters-header p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+}
+
+/* =========================================================
+   CHARACTER ACCOUNT SELECTOR
+   ========================================================= */
+
+.characters-account-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.characters-account-form > label {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.characters-account-select {
+    width: 260px;
+    max-width: 100%;
+}
+
+.characters-account-select .custom-select-button {
+    min-height: 39px;
+    background: var(--surface);
+}
+
+.characters-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-account-select .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.characters-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ROSTER SUMMARY
+   ========================================================= */
+
+.characters-summary {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+   CHARACTERS — PAGE TABS
+   ========================================================= */
+
+.characters-page-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0.35rem;
+    border: 1px solid var(--border-color, rgba(255,255,255,.1));
+    border-radius: 12px;
+    background: var(--surface-secondary, rgba(255,255,255,.035));
+}
+
+.characters-page-tab {
+    padding: 0.65rem 1.15rem;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-secondary, #a9adbb);
+    font: inherit;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease;
+}
+
+.characters-page-tab:hover {
+    background: var(--surface-hover, rgba(255,255,255,.07));
+    color: var(--text-primary, #fff);
+}
+
+.characters-page-tab.active {
+    background: var(--accent-color, #7c83ff);
+    color: #fff;
+}
+
+.characters-panel[hidden],
+.planner-picker[hidden],
+.planner-editor[hidden],
+.planner-character-grid[hidden],
+.planner-empty-state[hidden],
+.planner-picker-character[hidden],
+.planner-picker-empty[hidden] {
+    display: none !important;
+}
+
+/* =========================================================
+   RESPONSIVE HEADER AND ACCOUNT SELECTOR
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .characters-header {
+        align-items: stretch;
+    }
+
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-account-select {
+        width: 100%;
+    }
+
+    .character-card-info {
+        padding: 7px;
+    }
+
+    .character-card-info h2 {
+        font-size: 0.82rem;
+    }
+
+    .character-card-meta,
+    .character-card-footer {
+        font-size: 0.68rem;
+    }
+}
