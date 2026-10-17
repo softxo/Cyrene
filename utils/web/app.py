@@ -2715,6 +2715,33 @@ async def characters_page(
     characters = []
     character_error = None
 
+    # Build the full character catalogue independently of account ownership.
+    character_catalogue = []
+    catalogue = CHARACTER_NAMES.get("en-us", {})
+
+    traveler_names = {
+        10000005: "Aether",
+        10000007: "Lumine",
+    }
+
+    for character_id, data in catalogue.items():
+        character_id = int(character_id)
+
+        character_catalogue.append({
+            "id": character_id,
+            "name": traveler_names.get(character_id, data.name),
+            "element": data.element,
+            "rarity": data.rarity,
+            "icon": (
+                "https://enka.network/ui/"
+                f"UI_AvatarIcon_{data.icon_name}.png"
+            ),
+        })
+
+    character_catalogue.sort(
+        key=lambda character: character["name"].casefold()
+    )
+
     if selected_account is not None:
         client = await get_account_client(
             user_id,
@@ -2862,6 +2889,7 @@ async def characters_page(
             "selected_account": selected_account,
             "characters": characters,
             "character_error": character_error,
+            "character_catalogue": character_catalogue,
         },
     )
     

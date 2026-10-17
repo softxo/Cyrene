@@ -5,6 +5,8 @@
 function initCharacters() {
     initCharactersAccountDropdown();
     initCharactersFilters();
+    initCharactersTabs();
+    initCharacterPlanner();
 }
 
 /* =========================================================
@@ -1307,53 +1309,51 @@ function initCharacterShowcase() {
             let critDamage = 0;
 
             properties.forEach(property => {
-                const statName = normaliseStatName(
-                    getPropertyName(property)
-                );
+                const statName = normaliseStatName([
+                    property?.info?.filter_name,
+                    property?.info?.name,
+                    property?.name,
+                    property?.key
+                ].filter(Boolean).join(" "));
 
-                if (
-                    statName !== "critrate" &&
-                    statName !== "criticalrate" &&
-                    statName !== "critdmg" &&
-                    statName !== "criticaldamage"
-                ) {
+                const isCritRate =
+                    statName.includes("critrate") ||
+                    statName.includes("criticalrate");
+
+                const isCritDamage =
+                    statName.includes("critdmg") ||
+                    statName.includes("critdamage") ||
+                    statName.includes("criticaldamage");
+
+                if (!isCritRate && !isCritDamage) {
                     return;
                 }
 
-                // Prefer the formatted percentage when available.
-                const formattedValue = property?.formatted;
-                const rawValue = property?.final ?? property?.value;
+                const formatted = property?.formatted;
+                const rawValue = formatted ?? property?.final ?? property?.value;
 
-                let value;
-
-                if (
-                    formattedValue !== null &&
-                    formattedValue !== undefined &&
-                    formattedValue !== ""
-                ) {
-                    value = Number.parseFloat(
-                        String(formattedValue).replace(",", ".")
-                    );
-                } else {
-                    value = Number(rawValue);
-
-                    // Some API values represent percentages as ratios.
-                    if (Number.isFinite(value) && Math.abs(value) <= 1) {
-                        value *= 100;
-                    }
+                if (rawValue == null || rawValue === "") {
+                    return;
                 }
+
+                const value = Number.parseFloat(
+                    String(rawValue).replace(/,/g, ".").replace(/%/g, "").trim()
+                );
 
                 if (!Number.isFinite(value)) {
                     return;
                 }
 
-                if (
-                    statName === "critrate" ||
-                    statName === "criticalrate"
-                ) {
-                    critRate = value;
+                // Convert fractional percentages (e.g. 0.078) to percentage points.
+                const percentage =
+                    formatted == null && Math.abs(value) <= 1
+                        ? value * 100
+                        : value;
+
+                if (isCritRate) {
+                    critRate = percentage;
                 } else {
-                    critDamage = value;
+                    critDamage = percentage;
                 }
             });
 

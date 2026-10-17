@@ -4,7 +4,7 @@
 <div class="page characters-page">
 
     <header class="characters-header">
-        <div>
+        <div class="characters-page-heading">
             <h1>Characters</h1>
             <p>Your Genshin Impact character roster.</p>
         </div>
@@ -62,6 +62,31 @@
         </form>
         {% endif %}
     </header>
+
+    <nav class="characters-page-tabs" aria-label="Character pages">
+        <button
+            type="button"
+            class="characters-page-tab active"
+            data-characters-tab="characters"
+            aria-pressed="true"
+        >
+            Characters
+        </button>
+
+        <button
+            type="button"
+            class="characters-page-tab"
+            data-characters-tab="planner"
+            aria-pressed="false"
+        >
+            Planner
+        </button>
+    </nav>
+
+    <section
+        class="characters-panel active"
+        data-characters-panel="characters"
+    >
 
     {% if not accounts %}
         <div class="characters-message">
@@ -471,6 +496,294 @@
         </div>
 
     {% endif %}
+    </section>
+
+    <!-- CHARACTER PLANNER -->
+<section
+    class="characters-panel"
+    data-characters-panel="planner"
+    hidden
+>
+    <header class="planner-header">
+        <div>
+            <h2>Character Planner</h2>
+            <p>Plan your next character build and track the resources you'll need.</p>
+        </div>
+
+        <button
+            type="button"
+            class="planner-add-button"
+            data-planner-add
+        >
+            <span aria-hidden="true">+</span>
+            Add Character
+        </button>
+    </header>
+
+    <div class="planner-empty-state" data-planner-empty>
+        <div class="planner-empty-icon" aria-hidden="true">✦</div>
+        <h3>No characters planned yet</h3>
+        <p>
+            Add any character to start planning their levels, talents,
+            weapon and required materials.
+        </p>
+
+        <button
+            type="button"
+            class="planner-add-button"
+            data-planner-add
+        >
+            Add your first character
+        </button>
+    </div>
+
+    <div
+        class="planner-character-grid"
+        data-planner-grid
+        hidden
+    ></div>
+</section>
+
+<!-- ADD CHARACTER PICKER -->
+<div
+    class="planner-picker"
+    data-planner-picker
+    aria-hidden="true"
+    hidden
+>
+    <div
+        class="planner-picker-backdrop"
+        data-planner-picker-close
+    ></div>
+
+    <section
+        class="planner-picker-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="planner-picker-title"
+        tabindex="-1"
+    >
+        <button
+            type="button"
+            class="planner-modal-close"
+            data-planner-picker-close
+            aria-label="Close character picker"
+        >&times;</button>
+
+        <h2 id="planner-picker-title">Add Character</h2>
+        <p>Select a character to start a progression plan.</p>
+
+        <label for="planner-character-search">Search characters</label>
+        <input
+            id="planner-character-search"
+            type="search"
+            placeholder="Search by name..."
+            autocomplete="off"
+            data-planner-character-search
+        >
+
+        <div
+            class="planner-picker-grid"
+            data-planner-picker-grid
+        >
+            {% for character in character_catalogue %}
+            <button
+                type="button"
+                class="planner-picker-character"
+                data-planner-character-id="{{ character.id }}"
+                data-planner-character-name="{{ character.name }}"
+                data-planner-character-element="{{ character.element }}"
+                data-planner-character-rarity="{{ character.rarity }}"
+                data-planner-character-icon="{{ character.icon }}"
+            >
+                <img
+                    src="{{ character.icon }}"
+                    alt=""
+                    loading="lazy"
+                >
+                <span>{{ character.name }}</span>
+            </button>
+            {% endfor %}
+        </div>
+
+        <p
+            class="planner-picker-empty"
+            data-planner-picker-empty
+            hidden
+        >
+            No matching characters found.
+        </p>
+    </section>
+    
+    </div>
+
+    <!-- CHARACTER PROGRESSION PLANNER -->
+    <div
+        class="planner-editor"
+        data-planner-editor
+        aria-hidden="true"
+        hidden
+    >
+        <div
+            class="planner-editor-backdrop"
+            data-planner-editor-close
+        ></div>
+
+        <section
+            class="planner-editor-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="planner-editor-title"
+            tabindex="-1"
+        >
+            <button
+                type="button"
+                class="planner-modal-close"
+                data-planner-editor-close
+                aria-label="Close progression planner"
+            >&times;</button>
+
+            <header class="planner-editor-header">
+                <img
+                    src=""
+                    alt=""
+                    data-planner-editor-icon
+                >
+
+                <div>
+                    <h2 id="planner-editor-title">Character Plan</h2>
+                    <p data-planner-editor-subtitle></p>
+                </div>
+            </header>
+
+            <form data-planner-form>
+                <section class="planner-editor-section">
+                    <h3>Plan Details</h3>
+
+                    <label for="planner-notes">Notes</label>
+                    <textarea
+                        id="planner-notes"
+                        name="notes"
+                        rows="3"
+                        placeholder="Add your build goals or reminders..."
+                        data-planner-notes
+                    ></textarea>
+
+                    <label for="planner-constellation">
+                        Target Constellation
+                    </label>
+                    <select
+                        id="planner-constellation"
+                        name="constellation"
+                        data-planner-constellation
+                    >
+                        {% for constellation in range(7) %}
+                        <option value="{{ constellation }}">
+                            C{{ constellation }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </section>
+
+                <section class="planner-editor-section">
+                    <h3>Character Level</h3>
+
+                    <label for="planner-level">Target Level</label>
+                    <select
+                        id="planner-level"
+                        name="level"
+                        data-planner-level
+                    >
+                        {% for level in [20, 40, 50, 60, 70, 80, 90] %}
+                        <option
+                            value="{{ level }}"
+                            {% if level == 90 %}selected{% endif %}
+                        >
+                            Level {{ level }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </section>
+
+                <section class="planner-editor-section">
+                    <h3>Talent Levels</h3>
+
+                    <div class="planner-talent-targets">
+                        {% for talent in ["Normal Attack", "Elemental Skill", "Elemental Burst"] %}
+                        <label>
+                            {{ talent }}
+                            <select
+                                name="talent-{{ loop.index }}"
+                                data-planner-talent="{{ loop.index }}"
+                            >
+                                {% for level in range(1, 11) %}
+                                <option
+                                    value="{{ level }}"
+                                    {% if level == 10 %}selected{% endif %}
+                                >
+                                    {{ level }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="planner-editor-section">
+                    <h3>Weapon</h3>
+
+                    <label for="planner-weapon-level">
+                        Target Weapon Level
+                    </label>
+                    <select
+                        id="planner-weapon-level"
+                        name="weapon_level"
+                        data-planner-weapon-level
+                    >
+                        {% for level in [20, 40, 50, 60, 70, 80, 90] %}
+                        <option
+                            value="{{ level }}"
+                            {% if level == 90 %}selected{% endif %}
+                        >
+                            Level {{ level }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </section>
+
+                <section class="planner-goal-cost">
+                    <h3>Goal Cost</h3>
+                    <p>
+                        Material requirements will be calculated from your
+                        selected progression targets.
+                    </p>
+
+                    <div data-planner-cost>
+                        <p>Material calculations aren't connected yet.</p>
+                    </div>
+                </section>
+
+                <footer class="planner-editor-actions">
+                    <button
+                        type="button"
+                        class="planner-secondary-button"
+                        data-planner-editor-close
+                    >
+                        Close
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="planner-save-button"
+                        data-planner-save
+                    >
+                        Save Plan
+                    </button>
+                </footer>
+            </form>
+        </section>
+    </div>
 
 </div>
 {% endblock %}
