@@ -38,14 +38,15 @@
 
 .planner-add-button,
 .planner-save-button {
-    background: var(--accent-color, #7c83ff);
-    color: #fff;
+    background: var(--accent);
+    color: var(--background);
+    border-color: var(--accent);
 }
 
 .planner-secondary-button {
-    border-color: var(--border-color, rgba(255,255,255,.15));
-    background: var(--surface-secondary, rgba(255,255,255,.04));
-    color: var(--text-primary, #fff);
+    border-color: var(--border, rgba(255,255,255,.15));
+    background: var(--surface, rgba(255,255,255,.04));
+    color: var(--text, #fff);
 }
 
 .planner-add-button:hover,
@@ -56,7 +57,7 @@
 
 .planner-empty-state {
     padding: 3rem 1.5rem;
-    border: 1px dashed var(--border-color, rgba(255,255,255,.16));
+    border: 1px dashed var(--border, rgba(255,255,255,.16));
     border-radius: 16px;
     text-align: center;
 }
@@ -73,7 +74,7 @@
 
 .planner-empty-icon {
     margin-bottom: .75rem;
-    color: var(--accent-color, #7c83ff);
+    color: var(--accent);
     font-size: 2rem;
 }
 
@@ -95,10 +96,10 @@
     gap: .65rem;
     min-width: 0;
     padding: 1rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.12));
+    border: 1px solid var(--border, rgba(255,255,255,.12));
     border-radius: 14px;
-    background: var(--surface-secondary, rgba(255,255,255,.035));
-    color: var(--text-primary, #fff);
+    background: var(--surface, rgba(255,255,255,.035));
+    color: var(--text, #fff);
     text-align: center;
 }
 
@@ -132,17 +133,17 @@
 
 .planner-card-actions button {
     padding: .45rem .7rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.14));
+    border: 1px solid var(--border, rgba(255,255,255,.14));
     border-radius: 8px;
     background: transparent;
-    color: var(--text-primary, #fff);
+    color: var(--text, #fff);
     font: inherit;
     font-size: .8rem;
     cursor: pointer;
 }
 
 .planner-card-actions button:hover {
-    border-color: var(--accent-color, #7c83ff);
+    border-color: var(--accent);
 }
 
 /* =========================================================
@@ -175,10 +176,10 @@
     max-height: 88vh;
     overflow: auto;
     padding: 1.5rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.14));
+    border: 1px solid var(--border, rgba(255,255,255,.14));
     border-radius: 18px;
-    background: var(--surface-primary, #171923);
-    color: var(--text-primary, #fff);
+    background: var(--surface, #171923);
+    color: var(--text, #fff);
     box-shadow: 0 24px 80px rgba(0,0,0,.4);
 }
 
@@ -194,10 +195,10 @@
     place-items: center;
     width: 36px;
     height: 36px;
-    border: 1px solid var(--border-color, rgba(255,255,255,.15));
+    border: 1px solid var(--border, rgba(255,255,255,.15));
     border-radius: 10px;
     background: transparent;
-    color: var(--text-primary, #fff);
+    color: var(--text, #fff);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -225,10 +226,10 @@
     width: 100%;
     min-width: 0;
     padding: .7rem .8rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.14));
+    border: 1px solid var(--border, rgba(255,255,255,.14));
     border-radius: 9px;
-    background: var(--surface-secondary, rgba(255,255,255,.04));
-    color: var(--text-primary, #fff);
+    background: var(--surface, rgba(255,255,255,.04));
+    color: var(--text, #fff);
     font: inherit;
 }
 
@@ -238,8 +239,8 @@
 
 .planner-picker-dialog select option,
 .planner-editor-dialog select option {
-    background: var(--surface-primary, #171923);
-    color: var(--text-primary, #fff);
+    background: var(--surface, #171923);
+    color: var(--text, #fff);
 }
 
 .planner-picker-grid {
@@ -255,17 +256,17 @@
     gap: .5rem;
     min-width: 0;
     padding: .65rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.1));
+    border: 1px solid var(--border, rgba(255,255,255,.1));
     border-radius: 12px;
-    background: var(--surface-secondary, rgba(255,255,255,.035));
-    color: var(--text-primary, #fff);
+    background: var(--surface, rgba(255,255,255,.035));
+    color: var(--text, #fff);
     font: inherit;
     cursor: pointer;
     transition: border-color .18s ease, transform .18s ease;
 }
 
 .planner-picker-character:hover {
-    border-color: var(--accent-color, #7c83ff);
+    border-color: var(--accent);
     transform: translateY(-2px);
 }
 
@@ -307,7 +308,7 @@
     flex: 0 0 auto;
     object-fit: contain;
     border-radius: 12px;
-    background: var(--surface-secondary, rgba(255,255,255,.04));
+    background: var(--surface, rgba(255,255,255,.04));
 }
 
 .planner-editor-header p {
@@ -325,7 +326,7 @@
     display: grid;
     gap: .8rem;
     padding: 1rem;
-    border: 1px solid var(--border-color, rgba(255,255,255,.1));
+    border: 1px solid var(--border, rgba(255,255,255,.1));
     border-radius: 12px;
 }
 
@@ -386,5 +387,186 @@
 
     .planner-talent-targets {
         grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   PLANNER — PROGRESSION TABS
+   ========================================================= */
+
+.planner-progression-tabs,
+.planner-talent-tabs {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.planner-progression-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.planner-talent-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 1rem;
+}
+
+.planner-tab,
+.planner-talent-tab {
+    min-width: 0;
+    padding: 0.75rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.planner-tab {
+    font-weight: 700;
+}
+
+.planner-talent-tab {
+    font-size: 0.82rem;
+}
+
+.planner-tab:hover,
+.planner-talent-tab:hover {
+    border-color: var(--accent-border);
+    color: var(--text);
+}
+
+.planner-tab.is-active,
+.planner-talent-tab.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.planner-progression-panel {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.planner-progression-panel[hidden],
+.planner-talent-panel[hidden] {
+    display: none !important;
+}
+
+.planner-panel-heading {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.planner-panel-heading h3,
+.planner-talent-panel h4 {
+    margin: 0;
+    color: var(--text);
+}
+
+.planner-panel-heading p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+}
+
+.planner-talent-panel {
+    display: grid;
+    gap: 0.85rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-level-comparison {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-level-value {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.planner-level-value > span {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.planner-level-value > strong {
+    color: var(--text);
+    font-size: 1.15rem;
+}
+
+.planner-level-value select {
+    width: 100%;
+    min-width: 0;
+}
+
+.planner-level-arrow {
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.planner-goal-cost {
+    display: grid;
+    gap: 0.65rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-goal-cost h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.planner-goal-cost p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.planner-editor-close {
+    color: var(--text-secondary);
+}
+
+.planner-editor-close:hover {
+    color: var(--text);
+}
+
+@media (max-width: 520px) {
+    .planner-talent-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    .planner-level-comparison {
+        gap: 0.45rem;
+        padding: 0.75rem;
+    }
+
+    .planner-level-value > span {
+        font-size: 0.75rem;
+    }
+
+    .planner-level-value > strong {
+        font-size: 1rem;
     }
 }
