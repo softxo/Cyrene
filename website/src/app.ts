@@ -23,7 +23,6 @@ export {};
 declare global {
     interface Window {
         initCharacters?: () => void;
-        initCharacterShowcase?: () => void;
         initPlanner?: () => void;
         initVerify?: () => void;
         initAchievements?: () => void;
@@ -75,7 +74,13 @@ initialiseHoverEffects();
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
-    "/characters": "/static/js/characters.js",
+    "/characters": [
+        "/static/js/characters/characters-filters.js",
+        "/static/js/characters/characters-tabs.js",
+        "/static/js/characters/characters-showcase.js",
+        "/static/js/characters/characters-planner.js",
+        "/static/js/characters/characters.js",
+    ],
     "/planner": "/static/js/planner.js",
     "/verify": "/static/js/verification.js",
     "/codes": "/static/js/codes.js",
@@ -212,7 +217,6 @@ function initialisePage(path: string): void {
     switch (path) {
         case "/characters":
             window.initCharacters?.();
-            window.initCharacterShowcase?.();
             break;
 
         case "/planner":
