@@ -1314,14 +1314,21 @@ async def get_single_account_events(
                 stygian_calendar_events = [
                     event
                     for event in event_calendar.events
-                    if event.stygian_detail is not None
+                    if getattr(event, "stygian_detail", None) is not None
                 ]
 
                 for event in stygian_calendar_events:
                     dire_prestige_data["available"] = True
 
-                    outbreak = (
-                        event.stygian_detail.disturbance_outbreak
+                    stygian_detail = getattr(
+                        event,
+                        "stygian_detail",
+                        None,
+                    )
+                    outbreak = getattr(
+                        stygian_detail,
+                        "disturbance_outbreak",
+                        None,
                     )
 
                     if outbreak is not None:
@@ -1399,7 +1406,11 @@ async def get_single_account_events(
                     )
                     or calendar_event.abyss_detail is not None
                     or calendar_event.theater_detail is not None
-                    or calendar_event.stygian_detail is not None
+                    or getattr(
+                        calendar_event,
+                        "stygian_detail",
+                        None,
+                    ) is not None
                 ):
                     continue
 
