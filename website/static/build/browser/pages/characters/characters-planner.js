@@ -223,8 +223,13 @@ function initCharacterPlanner() {
     const STORAGE_KEY = accountId
         ? `cyrene-character-plans-${accountId}`
         : null;
+    const migrationKey = STORAGE_KEY
+        ? `${STORAGE_KEY}-database-migrated`
+        : null;
     const pickerButtons = Array.from(pickerGrid.querySelectorAll("[data-planner-character-id]"));
-    let plans = loadPlans();
+    let plans = migrationKey && localStorage.getItem(migrationKey) === "true"
+        ? []
+        : loadPlans();
     let plansRevision = 0;
     let databaseSavePromise = Promise.resolve();
     let editingId = null;
@@ -349,7 +354,8 @@ function initCharacterPlanner() {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ plans: snapshot })
+            body: JSON.stringify({ plans: snapshot }),
+            keepalive: true
         });
         if (!response.ok) {
             throw new Error("Could not save Character Planner data.");
@@ -375,15 +381,21 @@ function initCharacterPlanner() {
                 return;
             }
             const databasePlans = normalisePlans(payload?.plans);
-            const migrationKey = `${STORAGE_KEY}-database-migrated`;
             if (databasePlans.length > 0) {
                 plans = databasePlans;
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
                 localStorage.setItem(migrationKey, "true");
                 renderPlans();
             }
-            else if (plans.length > 0) {
+            else if (plans.length > 0 &&
+                localStorage.getItem(migrationKey) !== "true") {
                 await savePlansToDatabase(JSON.parse(JSON.stringify(plans)));
+            }
+            else {
+                plans = [];
+                localStorage.setItem(STORAGE_KEY, "[]");
+                localStorage.setItem(migrationKey, "true");
+                renderPlans();
             }
         }
         catch (error) {
