@@ -12,14 +12,22 @@
         </div>
         {% if accounts %}
         <form method="get" action="/wishes" class="wishes-account-form">
-            <label for="wish-account">Account</label>
-            <select id="wish-account" name="account_id" onchange="this.form.submit()">
-                {% for account in accounts %}
-                <option value="{{ account.id }}" {% if account.id == selected_account.id %}selected{% endif %}>
-                    {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
-                </option>
-                {% endfor %}
-            </select>
+            <label>Account</label>
+            <div class="custom-select" data-wish-select data-submit-on-select>
+                <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="custom-select-value">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }} · {{ selected_account.genshin_uid }}</span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                            type="button" data-value="{{ account.id }}" role="option">
+                        {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="account_id" value="{{ selected_account.id }}">
+            </div>
         </form>
         {% endif %}
     </header>
@@ -47,7 +55,7 @@
 
     <section class="wish-overview" aria-label="Wish summary">
         <article><span>Total wishes</span><strong id="wish-total">—</strong></article>
-        <article><span>Five-stars</span><strong id="wish-five-stars">—</strong></article>
+        <article><span>Five-stars <b class="wish-yellow-star">★</b></span><strong id="wish-five-stars">—</strong></article>
         <article><span>Character pity</span><strong id="wish-character-pity">—</strong></article>
         <article><span>Weapon pity</span><strong id="wish-weapon-pity">—</strong></article>
     </section>
@@ -55,20 +63,46 @@
     <section class="wish-history-card">
         <div class="wish-history-heading">
             <div><span class="wish-card-kicker">ARCHIVE</span><h2>Wish history</h2></div>
-            <select id="wish-filter" aria-label="Filter wish history">
-                <option value="all">All banners</option>
-                <option value="character">Character Event</option>
-                <option value="weapon">Weapon Event</option>
-                <option value="standard">Standard</option>
-                <option value="novice">Novice</option>
-                <option value="chronicled">Chronicled</option>
-            </select>
+            <div class="wish-history-filters">
+                <div class="custom-select wish-banner-select" data-wish-select>
+                    <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">All banners</span><span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button class="custom-select-option selected" type="button" data-value="all">All banners</button>
+                        <button class="custom-select-option" type="button" data-value="character">Character Event</button>
+                        <button class="custom-select-option" type="button" data-value="weapon">Weapon Event</button>
+                        <button class="custom-select-option" type="button" data-value="standard">Standard</button>
+                        <button class="custom-select-option" type="button" data-value="novice">Novice</button>
+                        <button class="custom-select-option" type="button" data-value="chronicled">Chronicled</button>
+                    </div>
+                    <input id="wish-filter" type="hidden" value="all">
+                </div>
+                <div class="wish-rarity-filters" aria-label="Filter by rarity">
+                    <button class="wish-rarity-filter active rarity-5" type="button" data-rarity="5" aria-pressed="true">5★</button>
+                    <button class="wish-rarity-filter active rarity-4" type="button" data-rarity="4" aria-pressed="true">4★</button>
+                    <button class="wish-rarity-filter active rarity-3" type="button" data-rarity="3" aria-pressed="true">3★</button>
+                </div>
+            </div>
         </div>
         <div id="wish-history" class="wish-history-list">
             <p class="wish-loading">Loading wish history…</p>
         </div>
     </section>
     {% endif %}
+</div>
+<div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" hidden>
+    <div class="wish-import-success-backdrop"></div>
+    <div class="wish-import-success-panel">
+        <div class="wish-import-verified-icon" aria-hidden="true">
+            <span class="wish-import-corner top-left"></span><span class="wish-import-corner top-right"></span>
+            <span class="wish-import-corner bottom-left"></span><span class="wish-import-corner bottom-right"></span>
+            <span class="wish-import-scan-line"></span>
+            <svg class="wish-import-check" viewBox="0 0 64 64" focusable="false"><path d="M17 33.5 27.5 44 48 22"></path></svg>
+        </div>
+        <h2>Verified</h2>
+        <p id="wish-import-success-message">Wish history imported successfully.</p>
+    </div>
 </div>
 {% if accounts %}<script src="/static/build/browser/pages/wishes.js"></script>{% endif %}
 {% endblock %}

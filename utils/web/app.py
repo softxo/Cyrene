@@ -105,6 +105,7 @@ from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.daily_checkin_worker import request_daily_checkin
 from genshin.models.genshin.constants import CHARACTER_NAMES
 from utils.web.planner_costs import calculate_planner_costs
+from utils.genshin_db import GenshinDB, GenshinDBError
 
 
 
@@ -4498,7 +4499,11 @@ async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
                     raise HTTPException(status_code=502, detail="Could not contact HoYoverse.") from error
 
                 if not isinstance(payload, dict) or payload.get("retcode") != 0:
-                    message = payload.get("message") or "The wish-history URL has expired."
+                    message = (
+                        payload.get("message")
+                        if isinstance(payload, dict)
+                        else None
+                    ) or "The wish-history URL has expired."
                     raise HTTPException(status_code=400, detail=message)
 
                 page = (payload.get("data") or {}).get("list") or []
@@ -4533,7 +4538,32 @@ async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
                     break
                 end_id = next_end_id
 
-    return list(wishes.values())
+    records = list(wishes.values())
+    unique_items = {
+        (wish["item_type"].casefold(), wish["name"])
+        for wish in records
+    }
+
+    async def resolve_icon(item_type: str, name: str) -> tuple[tuple[str, str], str | None]:
+        folder = "characters" if item_type == "character" else "weapons"
+        try:
+            item = await db.get(folder, name)
+        except GenshinDBError:
+            return (item_type, name), None
+        filename = (item.get("images") or {}).get("filename_icon")
+        icon_url = f"https://enka.network/ui/{filename}.png" if filename else None
+        return (item_type, name), icon_url
+
+    async with aiohttp.ClientSession(timeout=timeout) as catalogue_client:
+        db = GenshinDB(catalogue_client)
+        resolved = dict(await asyncio.gather(*(
+            resolve_icon(item_type, name)
+            for item_type, name in unique_items
+            if item_type in {"character", "weapon"}
+        )))
+    for wish in records:
+        wish["icon_url"] = resolved.get((wish["item_type"].casefold(), wish["name"]))
+    return records
 
 
 @app.get("/api/wishes")

@@ -300,10 +300,18 @@ async def initialise_database() -> None:
                 item_name TEXT NOT NULL,
                 item_type TEXT NOT NULL,
                 rank_type INTEGER NOT NULL,
+                icon_url TEXT,
                 pulled_at TIMESTAMP NOT NULL,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 PRIMARY KEY (account_id, wish_id)
             )
+            """
+        )
+
+        await connection.execute(
+            """
+            ALTER TABLE wish_history
+            ADD COLUMN IF NOT EXISTS icon_url TEXT
             """
         )
 
@@ -2352,6 +2360,7 @@ async def get_wish_history(
                 item_name,
                 item_type,
                 rank_type,
+                icon_url,
                 pulled_at
             FROM wish_history
             WHERE account_id = %s
@@ -2382,10 +2391,13 @@ async def import_wish_history(
                     item_name,
                     item_type,
                     rank_type,
+                    icon_url,
                     pulled_at
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (account_id, wish_id) DO NOTHING
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (account_id, wish_id) DO UPDATE SET
+                    icon_url = COALESCE(EXCLUDED.icon_url, wish_history.icon_url)
+                RETURNING (xmax = 0) AS inserted
                 """,
                 (
                     account_id,
@@ -2395,10 +2407,12 @@ async def import_wish_history(
                     wish["name"],
                     wish["item_type"],
                     wish["rank_type"],
+                    wish.get("icon_url"),
                     wish["pulled_at"],
                 ),
             )
-            imported += result.rowcount
+            saved = await result.fetchone()
+            imported += int(bool(saved and saved["inserted"]))
 
     return imported
                 

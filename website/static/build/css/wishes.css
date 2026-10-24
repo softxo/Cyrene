@@ -4,7 +4,8 @@
 .wishes-header p, .wish-import-card p { color: var(--text-muted); margin: 0; }
 .wishes-account-form { display: grid; gap: 7px; min-width: 260px; }
 .wishes-account-form label { color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
-.wishes-account-form select, #wish-filter, #wish-url { color: var(--text); background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.wishes-account-form .custom-select { min-width: 280px; }
+#wish-url { color: var(--text); background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
 .wish-import-card, .wish-history-card, .wishes-empty { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; }
 .wish-card-kicker { color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
 .wish-import-card h2, .wish-history-card h2 { margin: 5px 0 8px; }
@@ -17,22 +18,59 @@
 .wish-overview article { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
 .wish-overview span { display: block; color: var(--text-muted); font-size: .82rem; margin-bottom: 8px; }
 .wish-overview strong { font-size: 1.65rem; }
+.wish-yellow-star { color: #f1c75b; font-size: 1rem; }
 .wish-history-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-.wish-history-list { display: grid; gap: 8px; }
-.wish-row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 13px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--background); }
+.wish-history-filters { display: flex; align-items: center; gap: 10px; }
+.wish-banner-select { width: 190px; }
+.wish-rarity-filters { display: flex; gap: 6px; }
+.wish-rarity-filter { height: 38px; min-width: 48px; padding: 0 11px; border: 1px solid var(--border); border-radius: 9px; background: var(--background); color: var(--text-muted); cursor: pointer; opacity: .5; }
+.wish-rarity-filter.active { opacity: 1; background: var(--surface-hover); }
+.wish-rarity-filter.rarity-5.active { color: #f1c75b; border-color: rgba(241, 199, 91, .5); }
+.wish-rarity-filter.rarity-4.active { color: #bca4f2; border-color: rgba(188, 164, 242, .45); }
+.wish-rarity-filter.rarity-3.active { color: #9da7bb; }
+.wish-history-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.wish-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 62px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 11px; background: var(--background); }
+.wish-item-icon { width: 42px; height: 42px; border-radius: 9px; object-fit: contain; background: var(--surface-hover); }
+.wish-item-fallback { display: grid; place-items: center; font-weight: 750; color: var(--text-muted); }
 .wish-rarity { font-weight: 800; color: #9a91a0; }
 .wish-row[data-rank="4"] .wish-rarity, .wish-row[data-rank="4"] .wish-name { color: #b69aef; }
 .wish-row[data-rank="5"] { border-color: rgba(230, 180, 90, .42); background: linear-gradient(90deg, rgba(188, 125, 50, .13), var(--background) 55%); }
 .wish-row[data-rank="5"] .wish-rarity, .wish-row[data-rank="5"] .wish-name { color: #e8bd69; }
-.wish-name { display: block; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wish-name-line { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.wish-name { display: block; min-width: 0; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wish-result { flex: 0 0 auto; padding: 2px 6px; border-radius: 999px; font-size: .65rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.wish-result.win { color: #72d9a0; background: rgba(89, 213, 139, .12); }
+.wish-result.loss { color: #ef9a9a; background: rgba(233, 130, 130, .12); }
 .wish-meta, .wish-date, .wish-loading, .wish-empty-message { color: var(--text-muted); font-size: .84rem; }
 .wish-date { text-align: right; }
+.wish-import-success[hidden] { display: none; }
+.wish-import-success { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 20px; }
+.wish-import-success-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(3px); }
+.wish-import-success-panel { position: relative; z-index: 1; width: min(430px, 100%); min-height: 310px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); text-align: center; animation: wish-import-content-in 300ms ease-out both; }
+.wish-import-success-panel h2 { margin: 24px 0 6px; font-size: 30px; }
+.wish-import-success-panel p { margin: 0; color: var(--text-muted); }
+.wish-import-verified-icon { position: relative; width: 112px; height: 112px; color: #59d58b; }
+.wish-import-corner { position: absolute; width: 31px; height: 31px; border-color: currentColor; border-style: solid; opacity: 0; animation: wish-import-frame-in 420ms cubic-bezier(.2,.8,.2,1) forwards; }
+.wish-import-corner.top-left { top: 0; left: 0; border-width: 4px 0 0 4px; border-radius: 14px 0 0; }
+.wish-import-corner.top-right { top: 0; right: 0; border-width: 4px 4px 0 0; border-radius: 0 14px 0 0; }
+.wish-import-corner.bottom-left { bottom: 0; left: 0; border-width: 0 0 4px 4px; border-radius: 0 0 0 14px; }
+.wish-import-corner.bottom-right { right: 0; bottom: 0; border-width: 0 4px 4px 0; border-radius: 0 0 14px; }
+.wish-import-scan-line { position: absolute; top: 18px; right: 16px; left: 16px; height: 2px; border-radius: 999px; background: currentColor; box-shadow: 0 0 12px currentColor; opacity: 0; animation: wish-import-scan 700ms 280ms ease-in-out both; }
+.wish-import-check { position: absolute; inset: 20px; width: 72px; height: 72px; }
+.wish-import-check path { fill: none; stroke: currentColor; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 50; stroke-dashoffset: 50; animation: wish-import-check-draw 440ms 850ms ease-out forwards; }
+@keyframes wish-import-content-in { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+@keyframes wish-import-frame-in { from { opacity: 0; transform: scale(.78); } to { opacity: 1; transform: scale(1); } }
+@keyframes wish-import-scan { 0% { opacity: 0; transform: translateY(0); } 18%,82% { opacity: .9; } 100% { opacity: 0; transform: translateY(74px); } }
+@keyframes wish-import-check-draw { to { stroke-dashoffset: 0; } }
 @media (max-width: 760px) {
     .wishes-page { padding: 28px 18px 50px; }
     .wishes-header { align-items: stretch; flex-direction: column; }
     .wish-overview { grid-template-columns: repeat(2, 1fr); }
     .wish-import-controls { grid-template-columns: 1fr; }
     .wish-history-heading { align-items: stretch; flex-direction: column; }
-    .wish-row { grid-template-columns: 38px minmax(0, 1fr); }
-    .wish-date { grid-column: 2; text-align: left; }
+    .wish-history-filters { align-items: stretch; flex-direction: column; }
+    .wish-banner-select { width: 100%; }
+    .wish-history-list { grid-template-columns: 1fr; }
+    .wish-row { grid-template-columns: 42px minmax(0, 1fr) auto; }
 }
+@media (prefers-reduced-motion: reduce) { .wish-import-success-panel, .wish-import-corner, .wish-import-scan-line, .wish-import-check path { animation-duration: 1ms; animation-delay: 0ms; } }
