@@ -76,29 +76,30 @@ initialiseHoverEffects();
 
 const pageScripts: Record<string, string | string[]> = {
     "/characters": [
-        "/static/js/characters/characters-filters.js",
-        "/static/js/characters/characters-tabs.js",
-        "/static/js/characters/characters-showcase.js",
-        "/static/js/characters/characters-planner.js",
-        "/static/js/characters/characters.js",
+        "/static/build/browser/pages/characters/characters-filters.js",
+        "/static/build/browser/pages/characters/characters-tabs.js",
+        "/static/build/browser/pages/characters/characters-showcase.js",
+        "/static/build/browser/pages/characters/characters-planner.js",
+        "/static/build/browser/pages/characters/characters.js",
     ],
-    "/inventory": "/static/js/inventory.js",
-    "/planner": "/static/js/planner.js",
-    "/verify": "/static/js/verification.js?v=2",
-    "/codes": "/static/js/codes.js",
+    "/achievements": "/static/build/browser/pages/achievements.js",
+    "/inventory": "/static/build/browser/pages/inventory.js",
+    "/planner": "/static/build/browser/pages/planner.js",
+    "/verify": "/static/build/browser/pages/verification.js",
+    "/codes": "/static/build/browser/pages/codes.js",
 
     "/events": [
-        "/static/js/events/events-dropdown.js",
-        "/static/js/events/events-tabs.js",
-        "/static/js/events/events-cards.js",
-        "/static/js/events/events-timers.js",
-        "/static/js/events/events-activity.js",
-        "/static/js/events/events-refresh.js",
-        "/static/js/events/events-custom.js",
-        "/static/js/events/events.js",
+        "/static/build/browser/pages/events/events-dropdown.js",
+        "/static/build/browser/pages/events/events-tabs.js",
+        "/static/build/browser/pages/events/events-cards.js",
+        "/static/build/browser/pages/events/events-timers.js",
+        "/static/build/browser/pages/events/events-activity.js",
+        "/static/build/browser/pages/events/events-refresh.js",
+        "/static/build/browser/pages/events/events-custom.js",
+        "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/js/settings.js?v=4",
+    "/settings": "/static/build/browser/pages/settings.js",
 };
 
 const pageStyles: Record<string, string> = {

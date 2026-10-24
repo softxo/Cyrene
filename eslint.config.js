@@ -7,9 +7,8 @@ export default tseslint.config(
         ignores: [
             "node_modules/**",
             "website/static/build/**",
-            "website/static/js/**",
+            "website/src/browser/**",
             "dist/**",
-            "website/build/**",
         ],
     },
 
