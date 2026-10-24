@@ -20,8 +20,6 @@
         "website/src/**/*.ts"
     ],
     "exclude": [
-        "website/static/js",
-        "website/build",
         "node_modules"
     ]
 }

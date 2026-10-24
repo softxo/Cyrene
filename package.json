@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "vite build",
+    "build": "vite build && npm run build:scripts",
+    "build:scripts": "tsc -p tsconfig.scripts.json",
     "lint": "eslint website/src",
     "test:e2e": "playwright test",
     "prepare": "husky"

@@ -9,9 +9,9 @@
 - `utils/hoyolab/`: HoYoLAB integration and database logic.
 - `website/templates/`: Jinja templates.
 - `website/static/css/`: Website stylesheets.
-- `website/static/js/`: Browser JavaScript.
-- `website/src/`: TypeScript source code.
-- `website/static/build/`: Generated frontend assets.
+- `website/src/browser/`: TypeScript browser source, organised into shared core and page scripts.
+- `website/src/schemas/`: Shared frontend validation schemas.
+- `website/static/build/`: Generated frontend assets; do not edit these directly.
 
 ## Efficient investigation
 
