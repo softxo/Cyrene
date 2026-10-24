@@ -344,6 +344,24 @@ window.initAchievements = function () {
     const achievementHideCompletedInputs = document.querySelectorAll("[data-achievement-hide-completed]");
     const achievementImportButton = document.getElementById("achievement-import-button");
     const achievementImportInput = document.getElementById("achievement-import-input");
+    const achievementImportSuccess = document.getElementById("achievement-import-success");
+    const achievementImportSuccessMessage = document.getElementById("achievement-import-success-message");
+    let achievementImportSuccessTimer = null;
+    function showAchievementImportSuccess(result) {
+        if (!achievementImportSuccess) {
+            return;
+        }
+        if (achievementImportSuccessMessage) {
+            const matched = Number(result?.matched) || 0;
+            achievementImportSuccessMessage.textContent =
+                `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
+        }
+        window.clearTimeout(achievementImportSuccessTimer);
+        achievementImportSuccess.hidden = false;
+        achievementImportSuccessTimer = window.setTimeout(() => {
+            achievementImportSuccess.hidden = true;
+        }, 2200);
+    }
     if (achievementImportButton &&
         achievementImportInput) {
         achievementImportButton.addEventListener("click", () => {
@@ -357,6 +375,7 @@ window.initAchievements = function () {
             const formData = new FormData();
             formData.append("file", file);
             try {
+                achievementImportButton.disabled = true;
                 const response = await fetch(achievementApiUrl("/api/achievements/import"), {
                     method: "POST",
                     body: formData,
@@ -369,11 +388,15 @@ window.initAchievements = function () {
                 console.log("Achievement import:", result);
                 achievementImportInput.value = "";
                 await loadAchievements();
+                showAchievementImportSuccess(result);
             }
             catch (error) {
                 console.error("Achievement import failed:", error);
                 achievementImportInput.value = "";
                 alert(error.message);
+            }
+            finally {
+                achievementImportButton.disabled = false;
             }
         });
     }

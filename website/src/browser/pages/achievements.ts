@@ -795,6 +795,37 @@ window.initAchievements = function () {
                 "achievement-import-input"
             );
 
+        const achievementImportSuccess =
+            document.getElementById(
+                "achievement-import-success"
+            );
+
+        const achievementImportSuccessMessage =
+            document.getElementById(
+                "achievement-import-success-message"
+            );
+
+        let achievementImportSuccessTimer = null;
+
+        function showAchievementImportSuccess(result) {
+            if (!achievementImportSuccess) {
+                return;
+            }
+
+            if (achievementImportSuccessMessage) {
+                const matched = Number(result?.matched) || 0;
+                achievementImportSuccessMessage.textContent =
+                    `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
+            }
+
+            window.clearTimeout(achievementImportSuccessTimer);
+            achievementImportSuccess.hidden = false;
+
+            achievementImportSuccessTimer = window.setTimeout(() => {
+                achievementImportSuccess.hidden = true;
+            }, 2200);
+        }
+
 
         if (
             achievementImportButton &&
@@ -834,6 +865,8 @@ window.initAchievements = function () {
 
                     try {
 
+                        achievementImportButton.disabled = true;
+
                         const response =
                             await fetch(
                                 achievementApiUrl("/api/achievements/import"),
@@ -868,6 +901,7 @@ window.initAchievements = function () {
 
 
                         await loadAchievements();
+                        showAchievementImportSuccess(result);
 
                     } catch (error) {
 
@@ -881,6 +915,10 @@ window.initAchievements = function () {
                         alert(
                             error.message
                         );
+
+                    } finally {
+
+                        achievementImportButton.disabled = false;
 
                     }
 

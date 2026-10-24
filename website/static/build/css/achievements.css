@@ -734,6 +734,189 @@
     background: var(--surface);
 }
 
+.achievement-import-success[hidden] {
+    display: none;
+}
+
+.achievement-import-success {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: grid;
+    place-items: center;
+
+    padding: 20px;
+}
+
+.achievement-import-success-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.achievement-import-success-panel {
+    position: relative;
+    z-index: 1;
+
+    width: min(430px, 100%);
+    min-height: 310px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--surface);
+
+    text-align: center;
+
+    animation: achievement-import-content-in 300ms ease-out both;
+}
+
+.achievement-import-success-panel h2 {
+    margin: 24px 0 6px;
+
+    color: var(--text);
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.achievement-import-success-panel p {
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 15px;
+}
+
+.achievement-import-verified-icon {
+    position: relative;
+
+    width: 112px;
+    height: 112px;
+
+    color: #59d58b;
+}
+
+.achievement-import-corner {
+    position: absolute;
+
+    width: 31px;
+    height: 31px;
+
+    border-color: currentColor;
+    border-style: solid;
+
+    opacity: 0;
+
+    animation: achievement-import-frame-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.achievement-import-corner.top-left {
+    top: 0;
+    left: 0;
+    border-width: 4px 0 0 4px;
+    border-radius: 14px 0 0;
+}
+
+.achievement-import-corner.top-right {
+    top: 0;
+    right: 0;
+    border-width: 4px 4px 0 0;
+    border-radius: 0 14px 0 0;
+}
+
+.achievement-import-corner.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 4px 4px;
+    border-radius: 0 0 0 14px;
+}
+
+.achievement-import-corner.bottom-right {
+    right: 0;
+    bottom: 0;
+    border-width: 0 4px 4px 0;
+    border-radius: 0 0 14px;
+}
+
+.achievement-import-scan-line {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    left: 16px;
+
+    height: 2px;
+
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 12px currentColor;
+
+    opacity: 0;
+
+    animation: achievement-import-scan 700ms 280ms ease-in-out both;
+}
+
+.achievement-import-check {
+    position: absolute;
+    inset: 20px;
+
+    width: 72px;
+    height: 72px;
+}
+
+.achievement-import-check path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+
+    animation: achievement-import-check-draw 440ms 850ms ease-out forwards;
+}
+
+@keyframes achievement-import-content-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes achievement-import-frame-in {
+    from { opacity: 0; transform: scale(0.78); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes achievement-import-scan {
+    0% { opacity: 0; transform: translateY(0); }
+    18%, 82% { opacity: 0.9; }
+    100% { opacity: 0; transform: translateY(74px); }
+}
+
+@keyframes achievement-import-check-draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .achievement-import-success-panel,
+    .achievement-import-corner,
+    .achievement-import-scan-line,
+    .achievement-import-check path {
+        animation-duration: 1ms;
+        animation-delay: 0ms;
+    }
+}
+
 .achievement-back {
     width: 30px;
     height: 30px;
