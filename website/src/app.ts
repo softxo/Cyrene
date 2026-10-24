@@ -84,7 +84,7 @@ const pageScripts: Record<string, string | string[]> = {
     ],
     "/inventory": "/static/js/inventory.js",
     "/planner": "/static/js/planner.js",
-    "/verify": "/static/js/verification.js",
+    "/verify": "/static/js/verification.js?v=2",
     "/codes": "/static/js/codes.js",
 
     "/events": [
@@ -105,7 +105,7 @@ const pageStyles: Record<string, string> = {
     "/characters": "/static/css/characters/characters.css",
     "/inventory": "/static/css/inventory.css",
     "/planner": "/static/css/planner.css",
-    "/verify": "/static/css/verification.css",
+    "/verify": "/static/css/verification.css?v=2",
     "/codes": "/static/css/codes.css",
     "/events": "/static/css/events/events.css",
     "/settings": "/static/css/settings.css",
