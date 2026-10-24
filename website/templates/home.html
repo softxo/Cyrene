@@ -4,137 +4,90 @@
 
 {% block content %}
 
-<div class="page">
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <span class="eyebrow">
-                GENSHIN BOT
-            </span>
+<div class="page home-page">
+    <section class="home-hero">
+        <div class="home-hero-content">
+            <span class="home-eyebrow"><span></span>Your Genshin companion</span>
 
             <h1>
-                Welcome to <span>Cyrene</span>
+                Everything you need,<br>
+                <span>beautifully organised.</span>
             </h1>
 
+            <p>
+                Track your roster, plan upgrades, follow events, and keep
+                your daily progress together in one calm workspace.
+            </p>
+
+            <div class="home-actions">
+                <a href="/characters" class="home-primary-action">
+                    View characters <span aria-hidden="true">→</span>
+                </a>
+                <a href="/events" class="home-secondary-action">Check events</a>
+            </div>
         </div>
 
-    </section>
+        <div class="home-hero-visual" aria-hidden="true">
+            <div class="home-visual-glow"></div>
+            <div class="home-orbit home-orbit-outer"></div>
+            <div class="home-orbit home-orbit-inner"></div>
 
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <div>
-                <h2>Explore</h2>
+            <div class="home-logo-card">
+                <img src="/static/images/ui/ui_icons/Cyrene.png" alt="">
             </div>
 
+            <div class="home-floating-icon home-floating-character">
+                <img src="/static/images/ui/ui_icons/Characters.webp" alt="">
+            </div>
+            <div class="home-floating-icon home-floating-planner">
+                <img src="/static/images/ui/ui_icons/Planner.webp" alt="">
+            </div>
+            <div class="home-floating-icon home-floating-events">
+                <img src="/static/images/ui/ui_icons/Events.webp" alt="">
+            </div>
         </div>
-
-
-        <div class="cards">
-
-            <a href="/characters" class="feature-card">
-
-                <div class="card-icon">
-                    <img
-                        src="/static/images/ui/ui_icons/Characters.webp"
-                        alt="Characters"
-                    >
-                </div>
-
-                <div>
-                    <h3>Characters</h3>
-
-                    <p>
-                        Browse characters and their information.
-                    </p>
-                </div>
-
-                <span class="card-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-            <a href="/weapons" class="feature-card">
-
-                <div class="card-icon">
-                    <img
-                        src="/static/images/ui/ui_icons/Weapons.webp"
-                        alt="Weapons"
-                    >
-                </div>
-
-                <div>
-                    <h3>Weapons</h3>
-
-                    <p>
-                        Explore weapons and their details.
-                    </p>
-                </div>
-
-                <span class="card-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-            <a href="/planner" class="feature-card">
-
-                <div class="card-icon">
-                    <img
-                        src="/static/images/ui/ui_icons/Planner.webp"
-                        alt="Planner"
-                    >
-                </div>
-
-                <div>
-                    <h3>Planner</h3>
-
-                    <p>
-                        Plan your farming and progression.
-                    </p>
-                </div>
-
-                <span class="card-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-            <a href="/achievements" class="feature-card">
-
-                <div class="card-icon">
-                    <img
-                        src="/static/images/ui/ui_icons/Achievements.webp"
-                        alt="Achievements"
-                    >
-                </div>
-
-                <div>
-                    <h3>Achievements</h3>
-
-                    <p>
-                        Keep track of your achievements.
-                    </p>
-                </div>
-
-                <span class="card-arrow">
-                    →
-                </span>
-
-            </a>
-
-        </div>
-
     </section>
 
+    <section class="home-explore">
+        <div class="home-section-heading">
+            <div>
+                <span>QUICK ACCESS</span>
+                <h2>Pick up where you left off</h2>
+            </div>
+            <p>Your most useful Cyrene tools, always close by.</p>
+        </div>
+
+        <div class="home-feature-grid">
+            {% set features = [
+                ('/characters', 'Characters.webp', 'Characters', 'Browse your roster, builds, and progression plans.', 'Roster'),
+                ('/planner', 'Planner.webp', 'Planner', 'Organise farming, reminders, and account resources.', 'Progress'),
+                ('/inventory', 'Inventory.webp', 'Inventory', 'See your HoYoLAB materials in one clear overview.', 'Materials'),
+                ('/events', 'Events.webp', 'Events', 'Follow active content, timers, and custom schedules.', 'Schedule'),
+                ('/achievements', 'Achievements.webp', 'Achievements', 'Track completed goals and uncover what remains.', 'Completion'),
+                ('/codes', 'Codes.webp', 'Codes', 'Manage redemption codes and daily check-in settings.', 'Rewards')
+            ] %}
+
+            {% for href, icon, title, description, label in features %}
+            <a href="{{ href }}" class="home-feature-card">
+                <div class="home-feature-topline">
+                    <div class="home-feature-icon">
+                        <img src="/static/images/ui/ui_icons/{{ icon }}" alt="">
+                    </div>
+                    <span>{{ label }}</span>
+                </div>
+
+                <div class="home-feature-copy">
+                    <h3>{{ title }}</h3>
+                    <p>{{ description }}</p>
+                </div>
+
+                <div class="home-feature-link">
+                    Open {{ title }} <span aria-hidden="true">→</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 
 {% endblock %}
