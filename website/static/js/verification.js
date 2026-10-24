@@ -15,23 +15,11 @@ window.initVerify = function () {
             "verification-status"
         );
 
-    const verificationPanel =
-        document.querySelector(
-            ".verification-panel"
-        );
-
-    const verificationSuccess =
-        document.getElementById(
-            "verification-success"
-        );
-
 
     if (
         !verificationData ||
         !verificationCode ||
-        !verificationStatus ||
-        !verificationPanel ||
-        !verificationSuccess
+        !verificationStatus
     ) {
 
         console.error(
@@ -310,17 +298,8 @@ window.initVerify = function () {
             );
 
 
-            verificationPanel.classList.add(
-                "is-verified"
-            );
-
-            verificationSuccess.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
             verificationStatus.textContent =
-                "Discord connected successfully.";
+                "Successfully connected to Discord.";
 
 
             setTimeout(() => {
@@ -328,7 +307,7 @@ window.initVerify = function () {
                 window.location.href =
                     nextUrl;
 
-            }, 2200);
+            }, 800);
 
 
         } catch (error) {
