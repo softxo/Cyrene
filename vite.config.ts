@@ -14,6 +14,7 @@ export default defineConfig({
             input: {
                 app: `${projectRoot}/website/src/app.ts`,
                 "css/global": `${projectRoot}/website/src/styles/core/global.css`,
+                "css/home": `${projectRoot}/website/src/styles/pages/home.css`,
                 "css/achievements": `${projectRoot}/website/src/styles/pages/achievements.css`,
                 "css/codes": `${projectRoot}/website/src/styles/pages/codes.css`,
                 "css/inventory": `${projectRoot}/website/src/styles/pages/inventory.css`,
