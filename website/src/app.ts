@@ -103,7 +103,7 @@ const pageScripts: Record<string, string | string[]> = {
 };
 
 const pageStyles: Record<string, string> = {
-    "/": "/static/build/css/home.css?v=2",
+    "/": "/static/build/css/home.css?v=3",
     "/achievements": "/static/build/css/achievements.css",
     "/characters": "/static/build/css/characters.css",
     "/inventory": "/static/build/css/inventory.css",
