@@ -5,6 +5,7 @@ import time
 import tempfile
 import re
 import uuid
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from datetime import (
     datetime,
     timedelta,
@@ -77,6 +78,8 @@ from utils.hoyolab.database import (
     get_visible_custom_event,
     get_character_plans,
     replace_character_plans,
+    get_wish_history,
+    import_wish_history,
 )
 from utils.hoyolab.login import login_with_password
 from utils.hoyolab.accounts import get_genshin_accounts
@@ -4394,6 +4397,189 @@ async def api_change_custom_event_account_progress(
     }
     
     
+@app.get(
+    "/wishes",
+    response_class=HTMLResponse,
+)
+async def wishes(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    session = await get_web_session(cyrene_session)
+    if session is None:
+        return RedirectResponse(
+            url="/verify?next=/wishes",
+            status_code=303,
+        )
+
+    accounts = await get_accounts(session.user_id)
+    selected_account = next(
+        (account for account in accounts if account["id"] == account_id),
+        None,
+    ) if account_id is not None else None
+    if selected_account is None and accounts:
+        selected_account = accounts[0]
+
+    return templates.TemplateResponse(
+        request=request,
+        name="wishes.html",
+        context={
+            "request": request,
+            "accounts": accounts,
+            "selected_account": selected_account,
+        },
+    )
+
+
+def _validated_wish_url(value: str) -> str:
+    try:
+        parsed = urlsplit(value.strip())
+        port = parsed.port
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail="Invalid wish-history URL.") from error
+
+    valid_host = (
+        parsed.hostname is not None
+        and (
+            parsed.hostname.endswith(".hoyoverse.com")
+            or parsed.hostname.endswith(".mihoyo.com")
+        )
+    )
+    if (
+        parsed.scheme != "https"
+        or not valid_host
+        or port not in (None, 443)
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.path not in {
+            "/gacha_info/api/getGachaLog",
+            "/gacha_info/api/getLdGachaLog",
+        }
+    ):
+        raise HTTPException(status_code=400, detail="Use a valid HoYoverse wish-history URL.")
+
+    query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    if not query.get("authkey"):
+        raise HTTPException(status_code=400, detail="The wish-history URL has no auth key.")
+    return value.strip()
+
+
+async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
+    parsed = urlsplit(source_url)
+    base_query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    wishes: dict[str, dict] = {}
+    timeout = aiohttp.ClientTimeout(total=20)
+
+    async with aiohttp.ClientSession(timeout=timeout) as client:
+        for gacha_type in ("100", "200", "301", "400", "302", "500"):
+            end_id = "0"
+            for _ in range(50):
+                query = {
+                    **base_query,
+                    "gacha_type": gacha_type,
+                    "page": "1",
+                    "size": "20",
+                    "end_id": end_id,
+                }
+                page_url = urlunsplit((
+                    parsed.scheme,
+                    parsed.netloc,
+                    parsed.path,
+                    urlencode(query),
+                    "",
+                ))
+                try:
+                    async with client.get(page_url, allow_redirects=False) as response:
+                        if response.status != 200:
+                            raise HTTPException(status_code=502, detail="HoYoverse rejected the wish-history request.")
+                        payload = await response.json(content_type=None)
+                except (aiohttp.ClientError, asyncio.TimeoutError) as error:
+                    raise HTTPException(status_code=502, detail="Could not contact HoYoverse.") from error
+
+                if not isinstance(payload, dict) or payload.get("retcode") != 0:
+                    message = payload.get("message") or "The wish-history URL has expired."
+                    raise HTTPException(status_code=400, detail=message)
+
+                page = (payload.get("data") or {}).get("list") or []
+                if not page:
+                    break
+
+                for item in page:
+                    wish_id = str(item.get("id") or "")
+                    uid = str(item.get("uid") or "")
+                    if not wish_id or not uid:
+                        continue
+                    try:
+                        pulled_at = datetime.strptime(
+                            str(item.get("time")),
+                            "%Y-%m-%d %H:%M:%S",
+                        )
+                        rank_type = int(item.get("rank_type"))
+                    except (TypeError, ValueError):
+                        continue
+                    wishes[wish_id] = {
+                        "id": wish_id,
+                        "uid": uid,
+                        "gacha_type": str(item.get("gacha_type") or gacha_type),
+                        "name": str(item.get("name") or "Unknown item"),
+                        "item_type": str(item.get("item_type") or "Item"),
+                        "rank_type": rank_type,
+                        "pulled_at": pulled_at,
+                    }
+
+                next_end_id = str(page[-1].get("id") or "")
+                if not next_end_id or next_end_id == end_id or len(page) < 20:
+                    break
+                end_id = next_end_id
+
+    return list(wishes.values())
+
+
+@app.get("/api/wishes")
+async def wishes_data(
+    account_id: int,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated.")
+    await _get_achievement_account(user_id, account_id)
+    records = await get_wish_history(account_id)
+    return {
+        "wishes": [
+            {
+                **record,
+                "pulled_at": record["pulled_at"].isoformat(),
+            }
+            for record in records
+        ]
+    }
+
+
+@app.post("/api/wishes/import")
+async def import_wishes_api(
+    request: Request,
+    account_id: int,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated.")
+    account = await _get_achievement_account(user_id, account_id)
+    body = await request.json()
+    source_url = _validated_wish_url(str(body.get("url") or ""))
+    wishes = await _fetch_wishes_from_hoyoverse(source_url)
+    returned_uids = {wish["uid"] for wish in wishes}
+    if returned_uids and returned_uids != {str(account["genshin_uid"])}:
+        raise HTTPException(
+            status_code=409,
+            detail="This wish history belongs to a different Genshin account.",
+        )
+    imported = await import_wish_history(account_id, wishes)
+    return {"success": True, "imported": imported, "found": len(wishes)}
+
+
 @app.get(
     "/achievements",
     response_class=HTMLResponse,

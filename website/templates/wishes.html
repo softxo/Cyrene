@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Wishes{% endblock %}
+
+{% block content %}
+<div class="page wishes-page" data-account-id="{{ selected_account.id if selected_account else '' }}">
+    <header class="wishes-header">
+        <div>
+            <span class="eyebrow">HISTORY</span>
+            <h1>Wishes</h1>
+            <p>Import, browse and track your Genshin Impact wish history.</p>
+        </div>
+        {% if accounts %}
+        <form method="get" action="/wishes" class="wishes-account-form">
+            <label for="wish-account">Account</label>
+            <select id="wish-account" name="account_id" onchange="this.form.submit()">
+                {% for account in accounts %}
+                <option value="{{ account.id }}" {% if account.id == selected_account.id %}selected{% endif %}>
+                    {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+        {% endif %}
+    </header>
+
+    {% if not accounts %}
+    <section class="wishes-empty">
+        <h2>No accounts connected</h2>
+        <p>Connect a HoYoLAB account before importing wish history.</p>
+        <a class="button" href="/verify?next=/wishes">Connect account</a>
+    </section>
+    {% else %}
+    <section class="wish-import-card">
+        <div>
+            <span class="wish-card-kicker">CYRENE SCANNER</span>
+            <h2>Import wish history</h2>
+            <p>Paste the URL copied by Wish Scanner. The auth key is used once for the import and is never stored.</p>
+        </div>
+        <div class="wish-import-controls">
+            <input id="wish-url" type="password" autocomplete="off" spellcheck="false"
+                   placeholder="Paste your wish-history URL…" aria-label="Wish-history URL">
+            <button id="wish-import" class="button" type="button">Import wishes</button>
+        </div>
+        <p id="wish-import-status" class="wish-import-status" role="status"></p>
+    </section>
+
+    <section class="wish-overview" aria-label="Wish summary">
+        <article><span>Total wishes</span><strong id="wish-total">—</strong></article>
+        <article><span>Five-stars</span><strong id="wish-five-stars">—</strong></article>
+        <article><span>Character pity</span><strong id="wish-character-pity">—</strong></article>
+        <article><span>Weapon pity</span><strong id="wish-weapon-pity">—</strong></article>
+    </section>
+
+    <section class="wish-history-card">
+        <div class="wish-history-heading">
+            <div><span class="wish-card-kicker">ARCHIVE</span><h2>Wish history</h2></div>
+            <select id="wish-filter" aria-label="Filter wish history">
+                <option value="all">All banners</option>
+                <option value="character">Character Event</option>
+                <option value="weapon">Weapon Event</option>
+                <option value="standard">Standard</option>
+                <option value="novice">Novice</option>
+                <option value="chronicled">Chronicled</option>
+            </select>
+        </div>
+        <div id="wish-history" class="wish-history-list">
+            <p class="wish-loading">Loading wish history…</p>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% if accounts %}<script src="/static/build/browser/pages/wishes.js"></script>{% endif %}
+{% endblock %}

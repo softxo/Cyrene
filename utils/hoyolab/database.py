@@ -286,6 +286,35 @@ async def initialise_database() -> None:
         )
 
         # =========================================
+        # WISH HISTORY
+        # =========================================
+
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS wish_history (
+                account_id INTEGER NOT NULL REFERENCES accounts(id)
+                    ON DELETE CASCADE,
+                wish_id TEXT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                gacha_type TEXT NOT NULL,
+                item_name TEXT NOT NULL,
+                item_type TEXT NOT NULL,
+                rank_type INTEGER NOT NULL,
+                pulled_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                PRIMARY KEY (account_id, wish_id)
+            )
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_wish_history_account_time
+            ON wish_history(account_id, pulled_at DESC, wish_id DESC)
+            """
+        )
+
+        # =========================================
         # EVENT ACTIVITY CHECKS
         # =========================================
 
@@ -2308,6 +2337,70 @@ async def import_achievement_progress(
                         completed_at
                     )
                 )
+
+
+async def get_wish_history(
+    account_id: int,
+) -> list[dict]:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT
+                wish_id,
+                genshin_uid,
+                gacha_type,
+                item_name,
+                item_type,
+                rank_type,
+                pulled_at
+            FROM wish_history
+            WHERE account_id = %s
+            ORDER BY pulled_at DESC, wish_id DESC
+            """,
+            (account_id,),
+        )
+        return await result.fetchall()
+
+
+async def import_wish_history(
+    account_id: int,
+    wishes: list[dict],
+) -> int:
+    if not wishes:
+        return 0
+
+    imported = 0
+    async with get_pool().connection() as connection:
+        for wish in wishes:
+            result = await connection.execute(
+                """
+                INSERT INTO wish_history (
+                    account_id,
+                    wish_id,
+                    genshin_uid,
+                    gacha_type,
+                    item_name,
+                    item_type,
+                    rank_type,
+                    pulled_at
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (account_id, wish_id) DO NOTHING
+                """,
+                (
+                    account_id,
+                    wish["id"],
+                    wish["uid"],
+                    wish["gacha_type"],
+                    wish["name"],
+                    wish["item_type"],
+                    wish["rank_type"],
+                    wish["pulled_at"],
+                ),
+            )
+            imported += result.rowcount
+
+    return imported
                 
                 
 async def create_custom_event(

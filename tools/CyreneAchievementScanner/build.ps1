@@ -22,6 +22,8 @@ foreach ($obsoleteItem in @(
     "CyreneAchievementScanner-x64.zip",
     "CyreneScanner-x64",
     "CyreneScanner-x64.zip",
+    "CyreneScanner-v1.1.0-x64",
+    "CyreneScanner-v1.1.0-x64.zip",
     "CyreneScanner-v$scannerVersion-x64",
     "CyreneScanner-v$scannerVersion-x64.zip"
 )) {

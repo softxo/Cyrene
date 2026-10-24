@@ -191,9 +191,12 @@
                     <TextBlock x:Name="WishSuccessDescription"
                                Text="The wish-history URL has been copied to your clipboard. To scan a different account, close and relaunch Genshin before scanning again."
                                Foreground="{StaticResource MutedBrush}" TextAlignment="Center" TextWrapping="Wrap" />
-                    <Button Content="Copy URL again" Width="160" Margin="0,26,0,0"
-                            Background="{StaticResource AccentBrush}" Foreground="#201018"
-                            Click="CopyWishUrl_Click" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,26,0,0">
+                        <Button Content="Copy URL again" Width="150" Click="CopyWishUrl_Click" />
+                        <Button Content="Open Cyrene" Width="150" Margin="12,0,0,0"
+                                Background="{StaticResource AccentBrush}" Foreground="#201018"
+                                Click="OpenCyreneWishes_Click" />
+                    </StackPanel>
                     <Button Content="Scan another account" Width="180" Margin="0,12,0,0" Click="ResetWish_Click" />
                 </StackPanel>
 

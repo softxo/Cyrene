@@ -231,6 +231,9 @@ public partial class MainWindow : System.Windows.Window
         WishSuccessDescription.Text = "The wish-history URL has been copied again.";
     }
 
+    private void OpenCyreneWishes_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        Process.Start(new ProcessStartInfo("https://cyrene.apps.bot-hosting.cloud/wishes") { UseShellExecute = true });
+
     private void ResetWish_Click(object sender, System.Windows.RoutedEventArgs e)
     {
         _wishUrl = null;
