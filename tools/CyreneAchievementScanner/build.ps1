@@ -1,20 +1,38 @@
 $ErrorActionPreference = "Stop"
 
 $projectDirectory = $PSScriptRoot
+$projectPath = Join-Path $projectDirectory "CyreneAchievementScanner.csproj"
+$projectXml = [xml](Get-Content -Raw -LiteralPath $projectPath)
+$scannerVersion = @($projectXml.Project.PropertyGroup.Version)[0]
+if ([string]::IsNullOrWhiteSpace($scannerVersion)) {
+    throw "The scanner project does not define a Version."
+}
 $vendorDirectory = Join-Path $projectDirectory "vendor"
-$distributionDirectory = Join-Path $projectDirectory "dist"
+$distributionDirectory = Join-Path $projectDirectory "release"
+$publishDirectory = Join-Path $projectDirectory "obj\release-publish"
 $scannerPath = Join-Path $vendorDirectory "YaeAchievement.exe"
-$packageDirectory = Join-Path $distributionDirectory "package"
-$packagePath = Join-Path $distributionDirectory "CyreneAchievementScanner-win-x64.zip"
+$packageDirectory = Join-Path $distributionDirectory "CyreneScanner-v$scannerVersion-x64"
+$packagePath = Join-Path $distributionDirectory "CyreneScanner-v$scannerVersion-x64.zip"
 
 New-Item -ItemType Directory -Force -Path $vendorDirectory | Out-Null
 New-Item -ItemType Directory -Force -Path $distributionDirectory | Out-Null
 
-foreach ($obsoleteFile in @("AchievementScanner.exe", "AchievementScanner.pdb")) {
-    $obsoletePath = Join-Path $distributionDirectory $obsoleteFile
+foreach ($obsoleteItem in @(
+    "CyreneAchievementScanner-x64",
+    "CyreneAchievementScanner-x64.zip",
+    "CyreneScanner-x64",
+    "CyreneScanner-x64.zip",
+    "CyreneScanner-v$scannerVersion-x64",
+    "CyreneScanner-v$scannerVersion-x64.zip"
+)) {
+    $obsoletePath = Join-Path $distributionDirectory $obsoleteItem
     if (Test-Path -LiteralPath $obsoletePath) {
-        Remove-Item -LiteralPath $obsoletePath -Force
+        Remove-Item -LiteralPath $obsoletePath -Recurse -Force
     }
+}
+
+if (Test-Path -LiteralPath $publishDirectory) {
+    Remove-Item -LiteralPath $publishDirectory -Recurse -Force
 }
 
 $headers = @{ "User-Agent" = "Cyrene-AchievementScanner-Build" }
@@ -34,20 +52,6 @@ Invoke-WebRequest `
     -OutFile (Join-Path $vendorDirectory "GPL-3.0.txt") `
     -Headers $headers
 
-Add-Type -AssemblyName System.Drawing
-$applicationIcon = [System.Drawing.Icon]::ExtractAssociatedIcon($scannerPath)
-if ($null -eq $applicationIcon) {
-    throw "Unable to extract the official Yae application icon."
-}
-$iconStream = [System.IO.File]::Create((Join-Path $vendorDirectory "app.ico"))
-try {
-    $applicationIcon.Save($iconStream)
-}
-finally {
-    $iconStream.Dispose()
-    $applicationIcon.Dispose()
-}
-
 $sourceArchiveUrl = "https://github.com/HolographicHat/Yae/archive/refs/tags/$($release.tag_name).zip"
 $sourceArchivePath = Join-Path $distributionDirectory "Yae-$($release.tag_name)-source.zip"
 Invoke-WebRequest -Uri $sourceArchiveUrl -OutFile $sourceArchivePath -Headers $headers
@@ -58,32 +62,30 @@ Licence: GPL-3.0-only
 "@
 
 dotnet publish `
-    (Join-Path $projectDirectory "CyreneAchievementScanner.csproj") `
+    $projectPath `
     -c Release `
     -r win-x64 `
     --self-contained true `
     -p:PublishSingleFile=true `
-    -o $distributionDirectory
+    -o $publishDirectory
 
 if ($LASTEXITCODE -ne 0) {
     throw "AchievementScanner publish failed with exit code $LASTEXITCODE."
 }
 
-if (Test-Path -LiteralPath $packageDirectory) {
-    Remove-Item -LiteralPath $packageDirectory -Recurse -Force
-}
-if (Test-Path -LiteralPath $packagePath) {
-    Remove-Item -LiteralPath $packagePath -Force
-}
-
 New-Item -ItemType Directory -Path $packageDirectory | Out-Null
-Copy-Item -LiteralPath (Join-Path $distributionDirectory "CyreneAchievementScanner.exe") -Destination $packageDirectory
+Copy-Item -LiteralPath (Join-Path $publishDirectory "CyreneScanner.exe") -Destination $packageDirectory
 Copy-Item -LiteralPath (Join-Path $projectDirectory "THIRD_PARTY_NOTICES.md") -Destination $packageDirectory
 Copy-Item -LiteralPath (Join-Path $vendorDirectory "GPL-3.0.txt") -Destination $packageDirectory
 Copy-Item -LiteralPath (Join-Path $vendorDirectory "SOURCE.txt") -Destination $packageDirectory
-Compress-Archive -Path (Join-Path $packageDirectory "*") -DestinationPath $packagePath
-Remove-Item -LiteralPath $packageDirectory -Recurse -Force
+Copy-Item -LiteralPath (Join-Path $projectDirectory "README.md") -Destination (Join-Path $packageDirectory "README.txt")
 
-Write-Host "Built $distributionDirectory\CyreneAchievementScanner.exe"
+$executablePath = Join-Path $packageDirectory "CyreneScanner.exe"
+$checksum = (Get-FileHash -LiteralPath $executablePath -Algorithm SHA256).Hash.ToLowerInvariant()
+Set-Content -Path (Join-Path $packageDirectory "sha-256.txt") -Value "$checksum  CyreneScanner.exe"
+
+Compress-Archive -Path (Join-Path $packageDirectory "*") -DestinationPath $packagePath
+
+Write-Host "Built $executablePath"
 Write-Host "Packaged $packagePath"
 Write-Host "Downloaded corresponding source to $sourceArchivePath"

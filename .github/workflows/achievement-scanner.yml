@@ -27,9 +27,8 @@ jobs:
       - name: Upload scanner
         uses: actions/upload-artifact@v4
         with:
-          name: CyreneAchievementScanner-win-x64
+          name: CyreneScanner-v1.1.0-x64
           path: |
-            tools/CyreneAchievementScanner/dist/CyreneAchievementScanner.exe
-            tools/CyreneAchievementScanner/dist/CyreneAchievementScanner-win-x64.zip
-            tools/CyreneAchievementScanner/dist/Yae-*-source.zip
+            tools/CyreneAchievementScanner/release/CyreneScanner-v*-x64.zip
+            tools/CyreneAchievementScanner/release/Yae-*-source.zip
           if-no-files-found: error
