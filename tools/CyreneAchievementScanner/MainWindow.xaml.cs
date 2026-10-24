@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,18 +12,242 @@ public partial class MainWindow : System.Windows.Window
 {
     private Process? _scanner;
     private CancellationTokenSource? _scanCancellation;
+    private CancellationTokenSource? _wishScanCancellation;
     private string? _scanDirectory;
     private string? _exportPath;
+    private string? _wishUrl;
     private readonly StringBuilder _scannerOutput = new();
 
     public MainWindow()
     {
         InitializeComponent();
+        var version = Assembly.GetExecutingAssembly().GetName().Version;
+        VersionText.Text = version is null
+            ? ""
+            : $"v{version.Major}.{version.Minor}.{version.Build}";
     }
+
+    private void ChooseAchievements_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        ShowPanel(SetupPanel);
+
+    private void ChooseWishes_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        WishStatusText.Text = "";
+        if (string.IsNullOrWhiteSpace(WishGamePathBox.Text))
+        {
+            WishGamePathBox.Text = GamePathBox.Text;
+        }
+        ShowPanel(WishPanel);
+    }
+
+    private void BackToHub_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        _wishScanCancellation?.Cancel();
+        ErrorText.Text = "";
+        WishStatusText.Text = "";
+        ShowPanel(HubPanel);
+    }
+
+    private void BrowseWishGame_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        BrowseExecutable(WishGamePathBox, "Genshin Impact|GenshinImpact.exe;YuanShen.exe");
+
+    private void AutoDetectWishGame_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        WishStatusText.Text = "";
+        var detectedPath = DetectGamePath();
+        if (detectedPath is null)
+        {
+            WishStatusText.Foreground = (System.Windows.Media.Brush)FindResource("ErrorBrush");
+            WishStatusText.Text = "Genshin could not be detected automatically. Use Browse to select the executable.";
+            return;
+        }
+
+        WishGamePathBox.Text = detectedPath;
+    }
+
+    private async void StartWish_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        var gamePath = WishGamePathBox.Text.Trim();
+        WishStatusText.Foreground = (System.Windows.Media.Brush)FindResource("MutedBrush");
+        WishStatusText.Text = "";
+
+        try
+        {
+            ValidateGamePath(gamePath);
+            var baseline = await GetWishScanBaselineAsync(gamePath);
+            _wishScanCancellation = new CancellationTokenSource();
+
+            if (Process.GetProcessesByName("GenshinImpact").Length == 0 &&
+                Process.GetProcessesByName("YuanShen").Length == 0)
+            {
+                Process.Start(new ProcessStartInfo(gamePath)
+                {
+                    UseShellExecute = true,
+                    WorkingDirectory = Path.GetDirectoryName(gamePath),
+                });
+            }
+
+            ShowPanel(WishProgressPanel);
+            _wishUrl = await WaitForWishUrlAsync(gamePath, baseline, _wishScanCancellation.Token);
+            System.Windows.Clipboard.SetText(_wishUrl);
+            ShowPanel(WishSuccessPanel);
+        }
+        catch (OperationCanceledException)
+        {
+            ShowPanel(WishPanel);
+        }
+        catch (Exception error)
+        {
+            ShowPanel(WishPanel);
+            WishStatusText.Foreground = (System.Windows.Media.Brush)FindResource("ErrorBrush");
+            WishStatusText.Text = $"The wish scan could not start: {error.Message}";
+        }
+    }
+
+    private static void ValidateGamePath(string gamePath)
+    {
+        if (!File.Exists(gamePath) ||
+            !(gamePath.EndsWith("GenshinImpact.exe", StringComparison.OrdinalIgnoreCase) ||
+              gamePath.EndsWith("YuanShen.exe", StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOperationException("Select a valid Genshin executable.");
+        }
+    }
+
+    private readonly record struct WishScanBaseline(DateTime CacheModifiedUtc, string? Url);
+
+    private static async Task<WishScanBaseline> GetWishScanBaselineAsync(string gamePath)
+    {
+        try
+        {
+            var cachePath = GetWishCachePath(gamePath);
+            var url = await FindWishUrlAsync(gamePath);
+            return new WishScanBaseline(File.GetLastWriteTimeUtc(cachePath), url);
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            return new WishScanBaseline(DateTime.MinValue, null);
+        }
+    }
+
+    private static async Task<string> WaitForWishUrlAsync(
+        string gamePath,
+        WishScanBaseline baseline,
+        CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                var cachePath = GetWishCachePath(gamePath);
+                var cacheModifiedUtc = File.GetLastWriteTimeUtc(cachePath);
+                if (cacheModifiedUtc > baseline.CacheModifiedUtc)
+                {
+                    var url = await FindWishUrlAsync(gamePath);
+                    if (!string.Equals(url, baseline.Url, StringComparison.Ordinal))
+                    {
+                        return url;
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                // The cache may not exist or may be locked until Wish History opens.
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Chromium can briefly lock its cache while updating it.
+            }
+            catch (InvalidOperationException)
+            {
+                // No valid URL has been written yet; keep waiting.
+            }
+            await Task.Delay(1000, cancellationToken);
+        }
+    }
+
+    private static async Task<string> FindWishUrlAsync(string gamePath)
+    {
+        var cachePath = GetWishCachePath(gamePath);
+
+        var cacheText = await ReadLiveCacheTextAsync(cachePath);
+        foreach (var section in cacheText.Split("1/0/", StringSplitOptions.RemoveEmptyEntries).Reverse())
+        {
+            var url = section.Split('\0', 2)[0];
+            if (!url.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                !(url.Contains("getGachaLog", StringComparison.OrdinalIgnoreCase) ||
+                  url.Contains("getLdGachaLog", StringComparison.OrdinalIgnoreCase)) ||
+                !Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+                !(uri.Host.EndsWith(".hoyoverse.com", StringComparison.OrdinalIgnoreCase) ||
+                  uri.Host.EndsWith(".mihoyo.com", StringComparison.OrdinalIgnoreCase)))
+            {
+                continue;
+            }
+
+            return url;
+        }
+
+        throw new InvalidOperationException("No valid wish-history URL was found. Open Wish History in Genshin and try again before it expires.");
+    }
+
+    private static async Task<string> ReadLiveCacheTextAsync(string cachePath)
+    {
+        await using var cache = new FileStream(
+            cachePath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.ReadWrite | FileShare.Delete,
+            bufferSize: 81920,
+            FileOptions.Asynchronous | FileOptions.SequentialScan);
+        using var memory = new MemoryStream();
+        await cache.CopyToAsync(memory);
+        return Encoding.UTF8.GetString(memory.GetBuffer(), 0, checked((int)memory.Length));
+    }
+
+    private static string GetWishCachePath(string gamePath)
+    {
+        ValidateGamePath(gamePath);
+
+        var executableName = Path.GetFileNameWithoutExtension(gamePath);
+        var dataDirectory = Path.Combine(Path.GetDirectoryName(gamePath)!, $"{executableName}_Data");
+        var webCachesDirectory = Path.Combine(dataDirectory, "webCaches");
+        if (!Directory.Exists(webCachesDirectory))
+        {
+            throw new DirectoryNotFoundException("Genshin's web cache could not be found. Open Wish History in the game, then try again.");
+        }
+
+        return Directory.EnumerateDirectories(webCachesDirectory)
+            .Where(path => Regex.IsMatch(Path.GetFileName(path), @"^\d+\.\d+\.\d+\.\d+$"))
+            .OrderByDescending(path => Path.GetFileName(path), StringComparer.OrdinalIgnoreCase)
+            .Select(path => Path.Combine(path, "Cache", "Cache_Data", "data_2"))
+            .FirstOrDefault(File.Exists)
+            ?? throw new FileNotFoundException("Genshin's wish cache is empty. Open Wish History in the game, then try again.");
+    }
+
+    private void CopyWishUrl_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (_wishUrl is not null) System.Windows.Clipboard.SetText(_wishUrl);
+        WishSuccessDescription.Text = "The wish-history URL has been copied again.";
+    }
+
+    private void ResetWish_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        _wishUrl = null;
+        WishStatusText.Text = "";
+        ShowPanel(WishPanel);
+    }
+
+    private void CancelWish_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        _wishScanCancellation?.Cancel();
+
+    private void OpenStarDbSource_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        Process.Start(new ProcessStartInfo("https://github.com/juliuskreutz/stardb-exporter") { UseShellExecute = true });
 
     protected override void OnClosed(EventArgs e)
     {
         _scanCancellation?.Cancel();
+        _wishScanCancellation?.Cancel();
         if (_scanner is { HasExited: false }) _scanner.Kill(entireProcessTree: true);
         DeleteScanDirectory();
         base.OnClosed(e);
@@ -324,7 +549,11 @@ public partial class MainWindow : System.Windows.Window
 
     private void ShowPanel(System.Windows.UIElement panel)
     {
+        HubPanel.Visibility = System.Windows.Visibility.Collapsed;
         SetupPanel.Visibility = System.Windows.Visibility.Collapsed;
+        WishPanel.Visibility = System.Windows.Visibility.Collapsed;
+        WishProgressPanel.Visibility = System.Windows.Visibility.Collapsed;
+        WishSuccessPanel.Visibility = System.Windows.Visibility.Collapsed;
         ProgressPanel.Visibility = System.Windows.Visibility.Collapsed;
         SuccessPanel.Visibility = System.Windows.Visibility.Collapsed;
         panel.Visibility = System.Windows.Visibility.Visible;

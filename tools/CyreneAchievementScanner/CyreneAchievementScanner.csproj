@@ -5,18 +5,23 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>CyreneAchievementScanner</AssemblyName>
+    <AssemblyName>CyreneScanner</AssemblyName>
     <RootNamespace>CyreneAchievementScanner</RootNamespace>
+    <Version>1.1.0</Version>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <ApplicationIcon Condition="Exists('vendor\app.ico')">vendor\app.ico</ApplicationIcon>
+    <ApplicationIcon>assets\Cyrene-dark.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup Condition="Exists('vendor\YaeAchievement.exe')">
     <EmbeddedResource Include="vendor\YaeAchievement.exe"
                       LogicalName="CyreneAchievementScanner.YaeAchievement.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\Cyrene-dark.ico" />
   </ItemGroup>
 </Project>
