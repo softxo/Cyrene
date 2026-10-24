@@ -1,0 +1,189 @@
+{
+  "id": "odette",
+  "name": "Odette",
+  "title": "Swirling Snow",
+  "description": "A famed Snezhnayan ballerina who blossoms against the frozen landscape with a beauty as sharp as frost.",
+  "affiliation": "Korolevskiy Troupe",
+  "constellation": "Cygnus Olor",
+  "birthday": "20/2",
+  "rarity": 5,
+  "element": "cryo",
+  "weapon": "sword",
+  "version": "7.0",
+  "release": "12-07-2026",
+  "colour": "#a0d7e4",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "\"On This Danceless Morn, She Gazes at Her Reflection\"",
+      "description": [
+        "After unleashing the special Elemental Skill **Adagio: Coda at Dawn's Tolling**, at the dance duet's end Odette will deal an additional instance of **Cryo AoE DMG** to nearby opponents that is considered:",
+        "**Radiance: Stellar-Conduct** or when not in a Radiance state: Stellar-Conduct reaction DMG at 300% of Odette's ATK;",
+        "**Radiance: Stellar Swirl**: Stellar Swirl reaction DMG at 450% of Odette's ATK.",
+        "Additionally, the Ascension Talent \"Spring Rite of the Chosen One\" is also enhanced: now, when the **Solo Dance Double** is summoned, Odette also gains 2 stacks of **Marvelous Splendor**. When Odette is off-field, the rate at which **Marvelous Splendor** is removed is sped up to 2 stacks per second."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "\"I Must See the Snow Swan's Unseen Dream for Myself, She Thought\"",
+      "description": [
+        "The Ascension Talent \"Spring Rite of the Chosen One\" is enhanced as follows: every stack of **Marvelous Splendor** active also increases the character's ATK by 7%.",
+        "Additionally, if Odette is in the **Radiance: Stellar Glimmer** state when there is a **Solo Dance Double** on the field, opponents near the **Dance Double** will also have their corresponding Elemental RES lowered by 20%.",
+        "- **Radiance: Stellar-Conduct**: **Cryo** and **Electro**.",
+        "- **Radiance: Stellar Swirl**: **Cryo** and **Anemo**."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "\"I'll Chase the Shouting Wind Along, Climbing Alone As I Go\"",
+      "description": [
+        "Increases the Level of **Adagio: Phantom Night Dancers** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "\"Up, Up the Long, Delirious, Burning Blue\"",
+      "description": [
+        "The Elemental Burst **Presto: Bluebird Finale** is enhanced as follows: when Odette obtains **Snow Swan's Dream**, Stellar Glimmer reaction DMG dealt by other nearby party members is increased by 50% of **Snow Swan Dream**'s effects.",
+        "Additionally, when a party member deals Stellar Glimmer reaction DMG to an opponent, Odette will also join in with a coordinated attack, dealing an instance of **AoE Cryo DMG**. This effect, which can trigger once every 3.5s, will be considered:",
+        "- **Radiance: Stellar-Conduct** or when not in a Radiance state: Stellar-Conduct reaction DMG at 66% of Odette's ATK.",
+        "- **Radiance: Stellar Swirl**: Stellar Swirl reaction DMG at 99% of Odette's ATK."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "\"Oh! I Have Slipped the Surly Bonds of Earth\"",
+      "description": [
+        "Increases the Level of **Presto: Bluebird Finale** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "\"Put Out My Hand, and Touched the Face of the Divine\"",
+      "description": [
+        "The Ascension Talent \"Spring Rite of the Chosen One\" is enhanced as follows: When Odette grants **Marvelous Splendor** to all nearby party members, her own Marvelous Splendor stacks will no longer decrease.",
+        "Additionally, characters affected by **Marvelous Splendor** have their Stellar Glimmer reaction DMG dealt to opponents **elevated** by 25%, and Stellar Glimmer reaction DMG dealt by Odette is elevated by an additional 20%."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Snow Swan Variation",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Unleashes a sword attack of up to 5 consecutive strikes."
+        ],
+        "charged": [
+          "Consumes a certain amount of Stamina to unleash a dazzling slash on opponents in front of her."
+        ],
+        "plunge": [
+          "Attacks opponents in her path while plunging from mid-air, then deals AoE DMG upon landing."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Adagio: Phantom Night Dancers",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "With slow, graceful dance steps, Odette deals **AoE Cryo DMG** to the opponent, and also summons her **Solo Dance Double** to the field.",
+        "If a **Dance Double** summoned by Odette is already on the field, this will re-summon the Dance Double and reset its duration."
+      ]
+    },
+    "elemental_burst": {
+      "name": "Presto: Bluebird Finale",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "With quick, lively dance steps, Odette deals multiple instances of **AoE Cryo DMG**, and summons her **Solo Dance Double**. She also gains **Snow Swan's Dream**, which increases the Stellar Glimmer reaction DMG Odette deals.",
+        "Additionally, for 6s after unleashing the Elemental Burst **Presto: Bluebird Finale**, Odette's Elemental Skill **Adagio: Phantom Night Dancers** will be replaced with the special Elemental Skill **Adagio: Coda at Dawn's Tolling** instead."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Spring Rite of the Chosen One",
+      "description": [
+        "When Odette summons her **Solo Dance Double**, she also obtains 4 stacks of **Marvelous Splendor**."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Pathetique of Pateticheskaya",
+      "description": [
+        "For every 100 ATK Odette has over 1,000, her Stellar Glimmer DMG is additionally increased by 1.5% of the original DMG. She can deal up to 30% more additional DMG in this way.For every 100 ATK Odette has over 1,000, her Stellar Glimmer DMG is additionally increased by 1.5% of the original DMG. She can deal up to 30% more additional DMG in this way."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Echo of Winter Daydreams",
+      "description": [
+        "Shows the locations of **Snezhnaya's Local Specialties** on the mini-map.",
+        "Practicing dance in one's spare time might even trigger other effects..."
+      ]
+    },
+    {
+      "unlock": "Radiance",
+      "name": "Stellar Jubilee: Dance of Aurore",
+      "description": [
+        "Odette will enter the **Radiance: Stellar-Conduct** state when she is inside a **Polestar Field**, or the **Radiance: Stellar Swirl** state for 8s after a nearby party member triggers a Stellar Swirl reaction.",
+        "When a party member triggers a Superconduct or Cryo Swirl reaction, it becomes a Stellar-Conduct or Stellar Swirl reaction instead, and the Base DMG of said reaction is also increased by 0.7% for every 100 points of Odette's ATK. A maximum increase of 14% can be obtained in this way."
+      ]
+    }
+  ],
+  "materials": {
+    "ascension": {
+      "gem": {
+        "id": "shivada_jade",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "unscorched_blossom_branch",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "frostfairy_flower",
+        "amount": 168
+      },
+      "common": {
+        "id": "ethereal",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "charity",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "ethereal",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "exalted_master_of_the_heretical_path",
+        "material": "twisted_withered_branch",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

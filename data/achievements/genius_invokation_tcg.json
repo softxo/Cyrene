@@ -1,0 +1,390 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80192
+            ],
+            "name": "Visible, Yet Invisible",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 194,
+            "stages": 1,
+            "stage1": {
+                "title": "Visible, Yet Invisible",
+                "description": "Get the TCG Player's Manual and become an officially recognized TCG player.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80193
+            ],
+            "name": "Win-Loss Ratio",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 195,
+            "stages": 1,
+            "stage1": {
+                "title": "Win-Loss Ratio",
+                "description": "Reach Player Lv.10.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80218,
+                80219,
+                80220
+            ],
+            "name": "Legendary High Roller",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 196,
+            "stages": 3,
+            "stage1": {
+                "title": "Legendary High Roller",
+                "description": "Obtain 10000 Lucky Coins in total.",
+                "progress": 10000,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Legendary High Roller",
+                "description": "Obtain 70000 Lucky Coins in total.",
+                "progress": 70000,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Legendary High Roller",
+                "description": "Obtain 150000 Lucky Coins in total.",
+                "progress": 150000,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80197,
+                80198,
+                80199
+            ],
+            "name": "A Riotous Response",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 199,
+            "stages": 3,
+            "stage1": {
+                "title": "A Riotous Response",
+                "description": "Cause a total of 30 Elemental Reactions in victorious matches.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "A Riotous Response",
+                "description": "Cause a total of 150 Elemental Reactions in victorious matches.",
+                "progress": 150,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "A Riotous Response",
+                "description": "Cause a total of 300 Elemental Reactions in victorious matches.",
+                "progress": 300,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80221,
+                80222,
+                80223
+            ],
+            "name": "Miniaturized Dice-Shaker",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 202,
+            "stages": 3,
+            "stage1": {
+                "title": "Miniaturized Dice-Shaker",
+                "description": "Deal 8 or more points of damage in one single action a total of 1 time(s) in victorious games.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Miniaturized Dice-Shaker",
+                "description": "Deal 8 or more points of damage in one single action a total of 5 time(s) in victorious games.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Miniaturized Dice-Shaker",
+                "description": "Deal 8 or more points of damage in one single action a total of 10 time(s) in victorious games.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80203,
+                80204,
+                80205
+            ],
+            "name": "Victory at Hand",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 205,
+            "stages": 3,
+            "stage1": {
+                "title": "Victory at Hand",
+                "description": "Play a total of 60 Action Cards in victorious matches.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Victory at Hand",
+                "description": "Play a total of 300 Action Cards in victorious matches.",
+                "progress": 300,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Victory at Hand",
+                "description": "Play a total of 600 Action Cards in victorious matches.",
+                "progress": 600,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80206,
+                80207,
+                80208
+            ],
+            "name": "\"Well, Let's See It, Partner...\"",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 208,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Well, Let's See It, Partner...\"",
+                "description": "Play a total of 20 Summons in victorious matches.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Well, Let's See It, Partner...\"",
+                "description": "Play a total of 100 Summons in victorious matches.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Well, Let's See It, Partner...\"",
+                "description": "Play a total of 200 Summons in victorious matches.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80209,
+                80210,
+                80211
+            ],
+            "name": "Attack! Attack! Attack!",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 211,
+            "stages": 3,
+            "stage1": {
+                "title": "Attack! Attack! Attack!",
+                "description": "Use 3 or more Elemental Bursts and achieve victory in a total of 1 match(es).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Attack! Attack! Attack!",
+                "description": "Use 3 or more Elemental Bursts and achieve victory in a total of 5 match(es).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Attack! Attack! Attack!",
+                "description": "Use 3 or more Elemental Bursts and achieve victory in a total of 10 match(es).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80212,
+                80213,
+                80214
+            ],
+            "name": "A Candle in the Wind?",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 214,
+            "stages": 3,
+            "stage1": {
+                "title": "A Candle in the Wind?",
+                "description": "Withstand a total of 30 damage using shields or healing in victorious matches.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "A Candle in the Wind?",
+                "description": "Withstand a total of 150 damage using shields or healing in victorious matches.",
+                "progress": 150,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "A Candle in the Wind?",
+                "description": "Withstand a total of 300 damage using shields or healing in victorious matches.",
+                "progress": 300,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        },
+        {
+            "id": [
+                80215,
+                80216,
+                80217
+            ],
+            "name": "Chaos Divided",
+            "achievementGroupId": 37,
+            "achievementGroupName": "Genius Invokation TCG",
+            "sortOrder": 214,
+            "stages": 3,
+            "stage1": {
+                "title": "Chaos Divided",
+                "description": "Defeat 2 or more Character Cards from the opponent's deck in one single action a total of 1 time(s) in victorious games.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Chaos Divided",
+                "description": "Defeat 2 or more Character Cards from the opponent's deck in one single action a total of 5 time(s) in victorious games.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Chaos Divided",
+                "description": "Defeat 2 or more Character Cards from the opponent's deck in one single action a total of 10 time(s) in victorious games.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.3"
+        }
+    ]
+}

@@ -1,0 +1,3431 @@
+{
+  "eye_of_the_storm": {
+    "name": "Eye of the Storm",
+    "emoji": "Eye_of_the_Storm",
+    "enemies": {
+      "eye_of_the_storm": {
+        "name": "Eye of the Storm",
+        "emoji": "Eye_of_the_Storm",
+        "aliases": ["eye", "storm eye", "eots"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["anemo"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 0,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "tainted_hydro_phantasms": {
+    "name": "Tainted Hydro Phantasms",
+    "emoji": "Tainted_Hydro_Phantasm",
+    "enemies": {
+      "tainted_water_splitting_phantasm": {
+        "name": "Tainted Water-Splitting Phantasm",
+        "emoji": "Tainted_Water_Splitting",
+        "aliases": ["small phantasm", "water splitting"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["hydro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 0,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "tainted_water_spouting_phantasm": {
+        "name": "Tainted Water-Spouting Phantasm",
+        "emoji": "Tainted_Water_Spouting",
+        "aliases": ["big phantasm", "water spouting"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["hydro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 0,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "frostnight_scions": {
+    "name": "Frostnight Scions",
+    "emoji": "Frostnight_Scion",
+    "enemies": {
+      "blazing_brilliance_frostnight_scion": {
+        "name": "Blazing Brilliance: Frostnight Scion",
+        "emoji": "Blazing_Brilliance_Scion",
+        "aliases": ["blazing scion", "brilliance scion", "pyro scion"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["pyro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 0,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 100,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "gleaming_charge_frostnight_scion": {
+        "name": "Gleaming Charge: Frostnight Scion",
+        "emoji": "Gleaming_Charge_Scion",
+        "aliases": ["gleaming scion", "charge scion", "electro scion"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["electro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 0,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 100,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "icy_crystal_frostnight_scion": {
+        "name": "Icy Crystal: Frostnight Scion",
+        "emoji": "Icy_Crystal_Scion",
+        "aliases": ["icy scion", "crystal scion", "cryo scion"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["cryo"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 0,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 100,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "tangled_vines_frostnight_scion": {
+        "name": "Tangled Vines: Frostnight Scion",
+        "emoji": "Tangled_Vines_Scion",
+        "aliases": ["tangled scion", "vines scion", "dendro scion"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["dendro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 0,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 100,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "gilded_sunshard_frostnight_scion": {
+        "name": "Gilded Sunshard: Frostnight Scion",
+        "emoji": "Gilded_Sunshard_Scion",
+        "aliases": ["gilded scion", "sunshard scion", "geo scion"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["geo"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 0
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 100
+            }
+          }
+        }
+      },
+      "surging_currents_frostnight_scion": {
+        "name": "Surging Currents: Frostnight Scion",
+        "emoji": "Surging_Currents_Scion",
+        "aliases": ["surging scion", "currents scion", "hydro scion"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["hydro"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 0,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 100,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "veiled_cloudchaser_frostnight_scion": {
+        "name": "Veiled Cloudchaser: Frostnight Scion",
+        "emoji": "Veiled_Cloudchaser_Scion",
+        "aliases": ["veiled scion", "cloudchaser scion", "anemo scion"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": ["anemo"],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 0,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Enhanced",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 100,
+              "geo": 60
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "shieldwall_mitachurls": {
+    "name": "Shieldwall Mitachurls",
+    "emoji": "Shieldwall_Mitachurl",
+    "enemies": {
+      "wooden_shieldwall_mitachurl": {
+        "name": "Wooden Shieldwall Mitachurl",
+        "emoji": "Wooden_Shieldwall_Mitachurl",
+        "aliases": ["wooden mitachurl", "wood mitachurl", "dendro mitachurl"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "rock_shieldwall_mitachurl": {
+        "name": "Rock Shieldwall Mitachurl",
+        "emoji": "Rock_Shieldwall_Mitachurl",
+        "aliases": ["rock mitachurl", "geo mitachurl"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ice_shieldwall_mitachurl": {
+        "name": "Ice Shieldwall Mitachurl",
+        "emoji": "Ice_Shieldwall_Mitachurl",
+        "aliases": ["ice mitachurl", "cryo mitachurl"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "axe_mitachurls": {
+    "name": "Axe Mitachurls",
+    "emoji": "Axe_Mitachurl",
+    "enemies": {
+      "blazing_axe_mitachurl": {
+        "name": "Blazing Axe Mitachurl",
+        "emoji": "Blazing_Axe_Mitachurl",
+        "aliases": ["blazing mitachurl", "pyro mitachurl"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "crackling_axe_mitachurl": {
+        "name": "Crackling Axe Mitachurl",
+        "emoji": "Crackling_Axe_Mitachurl",
+        "aliases": ["crackling mitachurl", "electro mitachurl"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "lawachurls": {
+    "name": "Lawachurls",
+    "emoji": "Lawachurl",
+    "enemies": {
+      "stonehide_lawachurl": {
+        "name": "Stonehide Lawachurl",
+        "emoji": "Stonehide_Lawachurl",
+        "aliases": ["stone lawachurl", "geo lawachurl"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 70
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "geo",
+          "gauge": {
+            "value": 20,
+            "element": "geo"
+          }
+          }
+        ]
+      },
+      "frostarm_lawachurl": {
+        "name": "Frostarm Lawachurl",
+        "emoji": "Frostarm_Lawachurl",
+        "aliases": ["frost lawachurl", "cryo lawachurl"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 70,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "cryo",
+          "gauge": {
+            "value": 30,
+            "element": "cryo"
+          }
+          }
+        ]
+      },
+      "thunderhelm_lawachurl": {
+        "name": "Thunderhelm Lawachurl",
+        "emoji": "Thunderhelm_Lawachurl",
+        "aliases": ["thunder lawachurl", "electro lawachurl"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 70,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "electro",
+          "gauge": {
+            "value": 18,
+            "element": "electro"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "rogues": {
+    "name": "Rogues",
+    "emoji": "Rogue",
+    "enemies": {
+      "anemo_hilichurl_rogue": {
+        "name": "Anemo Hilichurl Rogue",
+        "emoji": "Anemo_Hilichurl_Rogue",
+        "aliases": ["anemo rogue"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 50,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "hydro_hilichurl_rogue": {
+        "name": "Hydro Hilichurl Rogue",
+        "emoji": "Hydro_Hilichurl_Rogue",
+        "aliases": ["hydro rogue"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 50,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "abyss_mages": {
+    "name": "Abyss Mages",
+    "emoji": "Abyss_Mage",
+    "enemies": {
+      "hydro_abyss_mage": {
+        "name": "Hydro Abyss Mage",
+        "emoji": "Hydro_Abyss_Mage",
+        "aliases": ["hydro mage"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "hydro",
+          "gauge": {
+            "value": 12,
+            "element": "hydro"
+          }
+          }
+        ]
+      },
+      "cryo_abyss_mage": {
+        "name": "Cryo Abyss Mage",
+        "emoji": "Cryo_Abyss_Mage",
+        "aliases": ["cryo mage"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "cryo",
+          "gauge": {
+            "value": 12,
+            "element": "cryo"
+          }
+          }
+        ]
+      },
+      "pyro_abyss_mage": {
+        "name": "Pyro Abyss Mage",
+        "emoji": "Pyro_Abyss_Mage",
+        "aliases": ["pyro mage"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "pyro",
+          "gauge": {
+            "value": 12,
+            "element": "pyro"
+          }
+          }
+        ]
+      },
+      "electro_abyss_mage": {
+        "name": "Electro Abyss Mage",
+        "emoji": "Electro_Abyss_Mage",
+        "aliases": ["electro mage"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "electro",
+          "gauge": {
+            "value": 8,
+            "element": "electro"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "abyss_heralds": {
+    "name": "Abyss Heralds",
+    "emoji": "Abyss_Herald",
+    "enemies": {
+      "abyss_herald_wicked_torrents": {
+        "name": "Abyss Herald: Wicked Torrents",
+        "emoji": "Herald_Wicked_Torrents",
+        "aliases": ["hydro herald", "herald torrents"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "hydro",
+          "gauge": {
+            "value": 36,
+            "element": "hydro"
+          }
+          }
+        ]
+      },
+      "abyss_herald_frost_fall": {
+        "name": "Abyss Herald: Frost Fall",
+        "emoji": "Herald_Frost_Fall",
+        "aliases": ["cryo herald", "herald frost"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "cryo",
+          "gauge": {
+            "value": 56,
+            "element": "cryo"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "abyss_lectors": {
+    "name": "Abyss Lectors",
+    "emoji": "Abyss_Lector",
+    "enemies": {
+      "abyss_lector_fathomless_flames": {
+        "name": "Abyss Lector: Fathomless Flames",
+        "emoji": "Lector_Fathomless_Flames",
+        "aliases": ["pyro lector", "lector flames"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "pyro",
+          "gauge": {
+            "value": 72,
+            "element": "pyro"
+          }
+          }
+        ]
+      },
+      "abyss_lector_violet_lightning": {
+        "name": "Abyss Lector: Violet Lightning",
+        "emoji": "Lector_Violet_Lightning",
+        "aliases": ["electro lector", "lector lightning"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "electro",
+          "gauge": {
+            "value": 36,
+            "element": "electro"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "the_black_serpents": {
+    "name": "The Black Serpents",
+    "emoji": "The_Black_Serpents",
+    "enemies": {
+      "shadowy_husk_defender": {
+        "name": "Shadowy Husk: Defender",
+        "emoji": "Husk_Defender",
+        "aliases": ["cryo husk", "defender husk", "husk defender"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 30,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "shadowy_husk_line_breaker": {
+        "name": "Shadowy Husk: Line Breaker",
+        "emoji": "Husk_Line_Breaker",
+        "aliases": ["hydro husk", "line breaker husk", "husk line breaker"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 30,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "shadowy_husk_standard_bearer": {
+        "name": "Shadowy Husk: Standard Bearer",
+        "emoji": "Husk_Standard_Bearer",
+        "aliases": ["pyro husk", "standard bearer husk", "husk standard bearer"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 30,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "pyro",
+          "gauge": {
+            "value": 6,
+            "element": "pyro"
+          }
+          }
+        ]
+      },
+      "black_serpent_knight_windcutter": {
+        "name": "Black Serpent Knight: Windcutter",
+        "emoji": "Serpent_Knight_Windcutter",
+        "aliases": ["anemo serpent knight", "anemo husk", "windcutter serpent knight", "serpent knight windcutter"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 50,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "black_serpent_knight_rockbreaker_ax": {
+        "name": "Black Serpent Knight: Rockbreaker Ax",
+        "emoji": "Serpent_Knight_Rockbreaker_Ax",
+        "aliases": ["geo serpent knight", "geo husk", "rockbreaker ax serpent knight", "rockbreaker serpent knight", "serpent knight rockbreaker", "serpent knight rockbreaker ax"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 50
+            }
+          },
+          "enhanced": {
+            "display_name": "During Rampage",
+            "immune": [],
+            "resistance_values": {
+              "physical": 80,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 100
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "rifthound_whelps": {
+    "name": "Rifthound Whelps",
+    "emoji": "Rifthound_Whelp",
+    "enemies": {
+      "rockfond_rifthound_whelp": {
+        "name": "Rockfond Rifthound Whelp",
+        "emoji": "Rockfond_Rifthound_Whelp",
+        "aliases": ["geo whelp", "geo rifthound whelp", "rockfond whelp", "whelp rockfond"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 20,
+              "pyro": 20,
+              "hydro": 20,
+              "electro": 20,
+              "cryo": 20,
+              "dendro": 20,
+              "anemo": 20,
+              "geo": 20
+            }
+          },
+          "enhanced": {
+            "display_name": "Elemental_Devourer",
+            "immune": [],
+            "resistance_values": {
+              "physical": 20,
+              "pyro": 20,
+              "hydro": 20,
+              "electro": 20,
+              "cryo": 20,
+              "dendro": 20,
+              "anemo": 20,
+              "geo": -10
+            }
+          }
+        }
+      },
+      "thundercraven_rifthound_whelp": {
+        "name": "Thundercraven Rifthound Whelp",
+        "emoji": "Thundercraven_Rifthound_Whelp",
+        "aliases": ["electro whelp", "electro rifthound whelp", "thundercraven whelp", "whelp thundercraven"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 20,
+              "pyro": 20,
+              "hydro": 20,
+              "electro": 20,
+              "cryo": 20,
+              "dendro": 20,
+              "anemo": 20,
+              "geo": 20
+            }
+          },
+          "enhanced": {
+            "display_name": "Elemental Devourer",
+            "immune": [],
+            "resistance_values": {
+              "physical": 20,
+              "pyro": 20,
+              "hydro": 20,
+              "electro": -10,
+              "cryo": 20,
+              "dendro": 20,
+              "anemo": 20,
+              "geo": 20
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "rifthounds": {
+    "name": "Rifthounds",
+    "emoji": "Rifthound",
+    "enemies": {
+      "rockfond_rifthound": {
+        "name": "Rockfond Rifthound",
+        "emoji": "Rockfond_Rifthound",
+        "aliases": ["geo rifthound", "rockfond rifthound", "rifthound rockfond"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 25,
+              "pyro": 25,
+              "hydro": 25,
+              "electro": 25,
+              "cryo": 25,
+              "dendro": 25,
+              "anemo": 25,
+              "geo": 25
+            }
+          },
+          "enhanced": {
+            "display_name": "Elemental Devourer",
+            "immune": [],
+            "resistance_values": {
+              "physical": 25,
+              "pyro": 25,
+              "hydro": 25,
+              "electro": 25,
+              "cryo": 25,
+              "dendro": 25,
+              "anemo": 25,
+              "geo": -40
+            }
+          }
+        }
+      },
+      "thundercraven_rifthound": {
+        "name": "Thundercraven Rifthound",
+        "emoji": "Thundercraven_Rifthound",
+        "aliases": ["electro rifthound", "thundercraven rifthound", "rifthound thundercraven"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 25,
+              "pyro": 25,
+              "hydro": 25,
+              "electro": 25,
+              "cryo": 25,
+              "dendro": 25,
+              "anemo": 25,
+              "geo": 25
+            }
+          },
+          "enhanced": {
+            "display_name": "Elemental Devourer",
+            "immune": [],
+            "resistance_values": {
+              "physical": 25,
+              "pyro": 25,
+              "hydro": 25,
+              "electro": -40,
+              "cryo": 25,
+              "dendro": 25,
+              "anemo": 25,
+              "geo": 25
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "breacher_primuses": {
+    "name": "Breacher Primuses",
+    "emoji": "Breacher_Primus",
+    "enemies": {
+      "overgrown_breacher_primus": {
+        "name": "Overgrown Breacher Primus",
+        "emoji": "Overgrown_Breacher_Primus",
+        "aliases": ["dendro small primus", "small dendro primus", "small overgrown primus", "small primus overgrown"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 30,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "dendro",
+          "gauge": {
+            "value": 2,
+            "element": "dendro"
+          }
+          }
+        ]
+      },
+      "shatterstone_breacher_primus": {
+        "name": "Shatterstone Breacher Primus",
+        "emoji": "Shatterstone_Breacher_Primus",
+        "aliases": ["geo small primus", "small geo primus", "small shatterstone primus", "small primus shatterstone"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 30
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "geo",
+          "gauge": {
+            "value": 2,
+            "element": "geo"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "large_breacher_primuses": {
+    "name": "Large Breacher Primuses",
+    "emoji": "Large_Breacher_Primus",
+    "enemies": {
+      "large_overgrown_breacher_primus": {
+        "name": "Large Overgrown Breacher Primus",
+        "emoji": "L_Overgrown_Breacher_Primus",
+        "aliases": ["dendro primus", "dendro large primus", "large dendro primus", "large overgrown primus", "large primus overgrown"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 50,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "dendro",
+          "gauge": {
+            "value": 4,
+            "element": "dendro"
+          }
+          }
+        ]
+      },
+      "large_shatterstone_breacher_primus": {
+        "name": "Large Shatterstone Breacher Primus",
+        "emoji": "L_Shatterstone_Breacher_Primus",
+        "aliases": ["geo primus", "geo large primus", "large geo primus", "large shatterstone primus", "large primus shatterstone"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 50
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "geo",
+          "gauge": {
+            "value": 6,
+            "element": "geo"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "tenebrous_mimesis": {
+    "name": "Tenebrous Mimesis",
+    "emoji": "Tenebrous_Mimesis",
+    "enemies": {
+      "tenebrous_mimiflora": {
+        "name": "Tenebrous Mimiflora",
+        "emoji": "Tenebrous_Mimiflora",
+        "aliases": ["mimiflora"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "tenebrous_mimesis_crackling_axe_mitachurl": {
+        "name": "Tenebrous Mimesis - Crackling Axe Mitachurl",
+        "emoji": "Tenebrous_Crackling_Axe",
+        "aliases": ["mimesis mitachurl", "mitachurl mimesis"],
+        "element": ["electro", "pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 70,
+            "nightsoul": 24
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_anemo_hilichurl_rogue": {
+        "name": "Tenebrous Mimesis - Anemo Hilichurl Rogue",
+        "emoji": "Tenebrous_Anemo_Rogue",
+        "aliases": ["mimesis rogue", "rogue mimesis"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 70,
+            "nightsoul": 24
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_tepetlisaurus": {
+        "name": "Tenebrous Mimesis - Tepetlisaurus",
+        "emoji": "Tenebrous_Tepetlisaurus",
+        "aliases": ["mimesis tepetlisaurus", "tepetlisaurus mimesis", "mimesis geo saurian", "geo saurian mimesis"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_yumkasaurus": {
+        "name": "Tenebrous Mimesis - Yumkasaurus",
+        "emoji": "Tenebrous_Yumkasaurus",
+        "aliases": ["mimesis yumkasaurus", "yumkasaurus mimesis", "mimesis dendro saurian", "dendro saurian mimesis"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_koholasaurus": {
+        "name": "Tenebrous Mimesis - Koholasaurus",
+        "emoji": "Tenebrous_Koholasaurus",
+        "aliases": ["mimesis koholasaurus", "koholasaurus mimesis", "mimesis hydro saurian", "hydro saurian mimesis"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_ruin_guard": {
+        "name": "Tenebrous Mimesis - Ruin Guard",
+        "emoji": "Tenebrous_Ruin_Guard",
+        "aliases": ["mimesis ruin guard", "ruin guard mimesis", "mimesis guard", "guard mimesis", "mimesis ruin", "ruin mimesis"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 105,
+            "nightsoul": 35
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_ssa_hunter_seeker": {
+        "name": "Tenebrous Mimesis - Secret Source Automaton: Hunter-Seeker",
+        "emoji": "Tenebrous_SSA_HS",
+        "aliases": ["mimesis ssa", "ssa mimesis", "mimesis automaton", "automaton mimesis"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 105,
+            "nightsoul": 35
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_tw_shard_striker": {
+        "name": "Tenebrous Mimesis - Tepetlisaurus Warrior: Shard Striker",
+        "emoji": "Tenebrous_TW_Shard_Striker",
+        "aliases": ["mimesis tepetlisaurus warrior striker", "mimesis geo warrior striker", "tepetlisaurus warrior striker mimesis", "geo warrior striker mimesis", "mimesis geo striker warrior", "geo striker warrior mimesis"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_tw_rockbreaker_blade": {
+        "name": "Tenebrous Mimesis - Tepetlisaurus Warrior: Rockbreaker Blade",
+        "emoji": "Tenebrous_TW_Rockbreaker_Blade",
+        "aliases": ["mimesis tepetlisaurus warrior blade", "mimesis geo warrior blade", "tepetlisaurus warrior blade mimesis", "geo warrior blade mimesis", "mimesis geo blade warrior", "geo blade warrior mimesis"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_yw_flowing_skyfire": {
+        "name": "Tenebrous Mimesis - Yumkasaurus Warrior: Flowing Skyfire",
+        "emoji": "Tenebrous_YW_Flowing_Skyfire",
+        "aliases": ["mimesis yumkasaurus warrior", "yumkasaurus warrior mimesis", "mimesis dendro warrior", "dendro warrior mimesis"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_qw_heartstar_hammer": {
+        "name": "Tenebrous Mimesis - Qucusaurus Warrior: Heartstar Hammer",
+        "emoji": "Tenebrous_QW_Heartstar_Hammer",
+        "aliases": ["mimesis qucusaurus warrior hammer", "mimesis pyro hammer warrior", "qucusaurus warrior hammer mimesis", "pyro hammer warrior mimesis", "mimesis pyro warrior hammer", "pyro warrior hammer mimesis"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_qw_blazing_sky": {
+        "name": "Tenebrous Mimesis - Qucusaurus Warrior: Blazing Sky",
+        "emoji": "Tenebrous_QW_Blazing_Sky",
+        "aliases": ["mimesis qucusaurus warrior sky", "mimesis pyro sky warrior", "qucusaurus warrior sky mimesis", "mimesis pyro sky warrior", "mimesis pyro sky warrior", "pyro warrior sky mimesis"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_iw_icy_tidebearer": {
+        "name": "Tenebrous Mimesis - Iktomisaurus Warrior: Icy Tidebearer",
+        "emoji": "Tenebrous_IW_Icy_Tidebearer",
+        "aliases": ["mimesis iktomisaurus warrior", "iktomisaurus warrior mimesis", "mimesis cryo warrior", "cryo warrior mimesis"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_geovishap_hatchling": {
+        "name": "Tenebrous Mimesis - Geovishap Hatchling",
+        "emoji": "Tenebrous_Geovishap_Hatchling",
+        "aliases": ["mimesis geovishap", "geovishap mimesis", "mimesis geovishap hatchling", "geovishap hatchling mimesis"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      },
+      "tenebrous_mimesis_tatankasaurus": {
+        "name": "Tenebrous Mimesis - Tatankasaurus",
+        "emoji": "Tenebrous_Tatankasaurus",
+        "aliases": ["mimesis tatankasaurus", "tatankasaurus mimesis"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "void",
+          "gauge": {
+            "generic": 40,
+            "nightsoul": 14
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "wasteland_wild_hunt": {
+    "name": "Wasteland Wild Hunt",
+    "emoji": "Wasteland_Wild_Hunt",
+    "enemies": {
+      "wilderness_exile": {
+        "name": "Wilderness Exile",
+        "emoji": "Wilderness_Exile",
+        "aliases": ["wild hunt", "wild hunt exile"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "wilderness_hunter": {
+        "name": "Wilderness Hunter",
+        "emoji": "Wilderness_Hunter",
+        "aliases": ["wild hunter", "wild hunt hunter"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "fisher_of_hidden_depths": {
+    "name": "Fisher of Hidden Depths",
+    "emoji": "Fisher_of_Hidden_Depths",
+    "enemies": {
+      "fisher_of_hidden_depths": {
+        "name": "Fisher of Hidden Depths",
+        "emoji": "Fisher_of_Hidden_Depths",
+        "aliases": ["fisher", "chicken", "chickens"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "deepdark",
+          "hp": {
+            "multiplier": 2,
+            "reference": "max_hp"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "fatui_cicin_mages": {
+    "name": "Fatui Cicin Mages",
+    "emoji": "Fatui_Cicin_Mage",
+    "enemies": {
+      "fatui_electro_cicin_mage": {
+        "name": "Fatui Electro Cicin Mage",
+        "emoji": "Electro_Cicin_Mage",
+        "aliases": ["electro fatui mage"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 50,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "electro",
+          "gauge": {
+            "value": 8,
+            "element": "electro"
+          }
+          }
+        ]
+      },
+      "fatui_cryo_cicin_mage": {
+        "name": "Fatui Cryo Cicin Mage",
+        "emoji": "Cryo_Cicin_Mage",
+        "aliases": ["cryo fatui mage"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 50,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "cryo",
+          "gauge": {
+            "value": 4,
+            "element": "cryo"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "fatui_agent": {
+    "name": "Fatui Agent",
+    "emoji": "Fatui_Agent",
+    "enemies": {
+      "fatui_agent": {
+        "name": "Fatui Agent",
+        "emoji": "Fatui_Agent",
+        "aliases": ["pyro agent"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 50,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "mirror_maiden": {
+    "name": "Mirror Maiden",
+    "emoji": "Mirror_Maiden",
+    "enemies": {
+      "mirror_maiden": {
+        "name": "Mirror Maiden",
+        "emoji": "Mirror_Maiden",
+        "aliases": ["maiden", "fatui maiden", "hydro maiden", "fatui hydro maiden"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 10,
+              "hydro": 50,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "fatui_operatives": {
+    "name": "Fatui Operatives",
+    "emoji": "Fatui_Operative",
+    "enemies": {
+      "frost_operative": {
+        "name": "Frost Operative",
+        "emoji": "Frost_Operative",
+        "aliases": ["cryo operative", "cryo fatui operative"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 50,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "wind_operative": {
+        "name": "Wind Operative",
+        "emoji": "Wind_Operative",
+        "aliases": ["anemo operative", "anemo fatui operative"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": -20,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 50,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "humanoid_ruin_machines": {
+    "name": "Humanoid Ruin Machines",
+    "emoji": "Humanoid_Ruin_Machine",
+    "enemies": {
+      "ruin_guard": {
+        "name": "Ruin Guard",
+        "emoji": "Ruin_Guard",
+        "aliases": ["guard robot", "robot guard"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 70,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_hunter": {
+        "name": "Ruin Hunter",
+        "emoji": "Ruin_Hunter",
+        "aliases": ["robot hunter", "hunter robot"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_grader": {
+        "name": "Ruin Grader",
+        "emoji": "Ruin_Grader",
+        "aliases": ["robot grader", "grader robot"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 70,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ruin_sentinels": {
+    "name": "Ruin Sentinels",
+    "emoji": "Ruin_Sentinel",
+    "enemies": {
+      "ruin_cruiser": {
+        "name": "Ruin Cruiser",
+        "emoji": "Ruin_Cruiser",
+        "aliases": ["robot cruiser", "cruiser robot"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_destroyer": {
+        "name": "Ruin Destroyer",
+        "emoji": "Ruin_Destroyer",
+        "aliases": ["robot destroyer", "destroyer robot"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_defender": {
+        "name": "Ruin Defender",
+        "emoji": "Ruin_Defender",
+        "aliases": ["robot defender", "defender robot"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_scout": {
+        "name": "Ruin Scout",
+        "emoji": "Ruin_Scout",
+        "aliases": ["robot scout", "scout robot"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ruin_drakes": {
+    "name": "Ruin Drakes",
+    "emoji": "Ruin_Drake",
+    "enemies": {
+      "ruin_drake_earthguard": {
+        "name": "Ruin Drake: Earthguard",
+        "emoji": "Ruin_Drake_Earthguard",
+        "aliases": ["robot earthguard", "earthguard robot", "ruin earthguard"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "ruin_drake_skywatch": {
+        "name": "Ruin Drake: Skywatch",
+        "emoji": "Ruin_Drake_Skywatch",
+        "aliases": ["robot skywatch", "skywatch robot", "ruin skywatch"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "primal_constructs": {
+    "name": "Primal Constructs",
+    "emoji": "Primal_Construct",
+    "enemies": {
+      "primal_construct_prospector": {
+        "name": "Primal Construct: Prospector",
+        "emoji": "Primal_Construct_Prospector",
+        "aliases": ["dendro prospector", "prospector"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Invisible",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "primal_construct_repulsor": {
+        "name": "Primal Construct: Repulsor",
+        "emoji": "Primal_Construct_Repulsor",
+        "aliases": ["dendro repulsor", "repulsor"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Invisible",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      },
+      "primal_construct_reshaper": {
+        "name": "Primal Construct: Reshaper",
+        "emoji": "Primal_Construct_Reshaper",
+        "aliases": ["dendro reshaper", "reshaper"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Invisible",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ssa_hunter_seeker": {
+    "name": "Secret Source Automaton: Hunter Seeker",
+    "emoji": "SSA_Hunter_Seeker",
+    "enemies": {
+      "ssa_hunter_seeker": {
+        "name": "Secret Source Automaton: Hunter Seeker",
+        "emoji": "SSA_Hunter_Seeker",
+        "aliases": ["ssahs", "automaton hunter seeker"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 50,
+              "hydro": 50,
+              "electro": 50,
+              "cryo": 50,
+              "dendro": 50,
+              "anemo": 50,
+              "geo": 50
+            }
+          },
+          "enhanced": {
+            "display_name": "Weakened/Laser",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "domain_keeper": {
+    "name": "Domain Keeper",
+    "emoji": "Domain_Keeper",
+    "enemies": {
+      "domain_keeper": {
+        "name": "Domain Keeper",
+        "emoji": "Domain_Keeper",
+        "aliases": ["keeper"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "pssmon": {
+    "name": "Precursor's Secret Source Matrix of Overseer Network",
+    "emoji": "PSSMON",
+    "enemies": {
+      "pssmon": {
+        "name": "Precursor's Secret Source Matrix of Overseer Network",
+        "emoji": "PSSMON",
+        "aliases": ["pssmon"],
+        "element": ["physical"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Convergence Field",
+            "immune": [],
+            "resistance_values": {
+              "physical": 75,
+              "pyro": 75,
+              "hydro": 75,
+              "electro": 75,
+              "cryo": 75,
+              "dendro": 75,
+              "anemo": 75,
+              "geo": 75
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "geovishap_hatchling": {
+    "name": "Geovishap Hatchling",
+    "emoji": "Geovishap_Hatchling",
+    "enemies": {
+      "geovishap_hatchling": {
+        "name": "Geovishap Hatchling",
+        "emoji": "Geovishap_Hatchling",
+        "aliases": ["geo hatchling", "small geovishap", "small geo vishap"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 50
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "geovishap": {
+    "name": "Geovishap",
+    "emoji": "Geovishap",
+    "enemies": {
+      "geovishap": {
+        "name": "Geovishap",
+        "emoji": "Geovishap",
+        "aliases": ["geo vishap"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 50
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "bathysmal_vishap_hatchlings": {
+    "name": "Bathysmal Vishap Hatchlings",
+    "emoji": "Bathysmal_Vishap_Hatchling",
+    "enemies": {
+      "bolteater_bathysmal_vishap_hatchling": {
+        "name": "Bolteater Bathysmal Vishap Hatchling",
+        "emoji": "Bolteater_Bathysmal_Hatchling",
+        "aliases": ["electro bathysmal hatchling", "electro hatchling", "electro small vishap"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 20,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "primordial_bathysmal_vishap_hatchling": {
+        "name": "Primordial Bathysmal Vishap Hatchling",
+        "emoji": "Primordial_Bathysmal_Hatchling",
+        "aliases": ["hydro bathysmal hatchling", "hydro hatchling", "hydro small vishap"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 20,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "rimebiter_bathysmal_vishap_hatchling": {
+        "name": "Rimebiter Bathysmal Vishap Hatchling",
+        "emoji": "Rimebiter_Bathysmal_Hatchling",
+        "aliases": ["cryo bathysmal hatchling", "cryo hatchling", "cryo small vishap"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 20,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "primordial_bathysmal_vishap": {
+    "name": "Primordial Bathysmal Vishap",
+    "emoji": "Primordial_Bathysmal_Vishap",
+    "enemies": {
+      "primordial_bathysmal_vishap": {
+        "name": "Primordial Bathysmal Vishap",
+        "emoji": "Primordial_Bathysmal_Vishap",
+        "aliases": ["hydro vishap", "hydro bathysmal vishap"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 30,
+              "pyro": 10,
+              "hydro": 30,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "consecrated_beasts": {
+    "name": "Consecrated Beasts",
+    "emoji": "Consecrated_Beast",
+    "enemies": {
+      "consecrated_fanged_beast": {
+        "name": "Consecrated Fanged Beast",
+        "emoji": "Consecrated_Fanged_Beast",
+        "aliases": ["dendro consecrated beast", "dendro beast"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Phagocytic Form",
+            "immune": [],
+            "resistance_values": {
+              "physical": 40,
+              "pyro": 40,
+              "hydro": 40,
+              "electro": 40,
+              "cryo": 40,
+              "dendro": 70,
+              "anemo": 40,
+              "geo": 40
+            }
+          }
+        }
+      },
+      "consecrated_flying_serpent": {
+        "name": "Consecrated Flying Serpent",
+        "emoji": "Consecrated_Flying_Serpent",
+        "aliases": ["anemo consecrated beast", "anemo beast"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Phagocytic Form",
+            "immune": [],
+            "resistance_values": {
+              "physical": 40,
+              "pyro": 40,
+              "hydro": 40,
+              "electro": 40,
+              "cryo": 40,
+              "dendro": 40,
+              "anemo": 70,
+              "geo": 40
+            }
+          }
+        }
+      },
+      "consecrated_horned_crocodile": {
+        "name": "Consecrated Horned Crocodile",
+        "emoji": "Consecrated_Horned_Crocodile",
+        "aliases": ["hydro consecrated beast", "hydro beast"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Phagocytic Form",
+            "immune": [],
+            "resistance_values": {
+              "physical": 40,
+              "pyro": 40,
+              "hydro": 70,
+              "electro": 40,
+              "cryo": 40,
+              "dendro": 40,
+              "anemo": 40,
+              "geo": 40
+            }
+          }
+        }
+      },
+      "consecrated_red_vulture": {
+        "name": "Consecrated Red Vulture",
+        "emoji": "Consecrated_Red_Vulture",
+        "aliases": ["pyro consecrated beast", "pyro beast"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Phagocytic Form",
+            "immune": [],
+            "resistance_values": {
+              "physical": 40,
+              "pyro": 70,
+              "hydro": 40,
+              "electro": 40,
+              "cryo": 40,
+              "dendro": 40,
+              "anemo": 40,
+              "geo": 40
+            }
+          }
+        }
+      },
+      "consecrated_scorpion": {
+        "name": "Consecrated Scorpion",
+        "emoji": "Consecrated_Scorpion",
+        "aliases": ["electro consecrated beast", "electro beast"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Phagocytic Form",
+            "immune": [],
+            "resistance_values": {
+              "physical": 40,
+              "pyro": 40,
+              "hydro": 40,
+              "electro": 70,
+              "cryo": 40,
+              "dendro": 40,
+              "anemo": 40,
+              "geo": 40
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "xuanwen_beast": {
+    "name": "Xuanwen Beast",
+    "emoji": "Xuanwen_Beast",
+    "enemies": {
+      "xuanwen_beast": {
+        "name": "Xuanwen Beast",
+        "emoji": "Xuanwen_Beast",
+        "aliases": ["anemo small wolf"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 50,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 50,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "praetorian_golem": {
+    "name": "Praetorian Golem",
+    "emoji": "Praetorian_Golem",
+    "enemies": {
+      "praetorian_golem": {
+        "name": "Praetorian Golem",
+        "emoji": "Praetorian_Golem",
+        "aliases": ["pyro golem", "geo golem", "golem"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          },
+          "enhanced": {
+            "display_name": "Shielded",
+            "immune": [],
+            "resistance_values": {
+              "physical": 60,
+              "pyro": 60,
+              "hydro": 60,
+              "electro": 60,
+              "cryo": 60,
+              "dendro": 60,
+              "anemo": 60,
+              "geo": 60
+            }
+          }
+        },
+        "ward": [
+          {
+          "type": "elemental",
+          "element": "geo",
+          "gauge": {
+            "value": 12,
+            "element": "geo"
+          }
+          }
+        ]
+      }
+    }
+  },
+
+  "avatars_of_lava": {
+    "name": "Avatars of Lava",
+    "emoji": "Avatar_of_Lava",
+    "enemies": {
+      "eroding_avatar_of_lava": {
+        "name": "Eroding Avatar of Lava",
+        "emoji": "Eroding_Avatar_of_Lava",
+        "aliases": ["geo avatar", "geo avatar of lava", "eroding lava"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "fluid_avatar_of_lava": {
+        "name": "Fluid Avatar of Lava",
+        "emoji": "Fluid_Avatar_of_Lava",
+        "aliases": ["pyro avatar", "pyro avatar of lava", "fluid lava"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 70,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "wayob_manifestations": {
+    "name": "Wayob Manifestations",
+    "emoji": "Wayob_Manifestation",
+    "enemies": {
+      "flow_inverted_wayob_manifestation": {
+        "name": "Flow-Inverted Wayob Manifestation",
+        "emoji": "Flow_Inverted_Wayob",
+        "aliases": ["hydro wayob", "hydro wayob manifestation"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 50,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "hydro",
+            "gauge": {
+              "value": 48,
+              "element": "hydro"
+            }
+          }
+        ]
+      },
+      "foliar_swift_wayob_manifestation": {
+        "name": "Foliar-Swift Wayob Manifestation",
+        "emoji": "Foliar_Swift_Wayob",
+        "aliases": ["dendro wayob", "dendro wayob manifestation"],
+        "element": ["dendro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 50,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "dendro",
+            "gauge": {
+              "value": 24,
+              "element": "dendro"
+            }
+          }
+        ]
+      },
+      "rock_cavernous_wayob_manifestation": {
+        "name": "Rock-Cavernous Wayob Manifestation",
+        "emoji": "Rock_Cavernous_Wayob",
+        "aliases": ["geo wayob", "geo wayob manifestation"],
+        "element": ["geo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 50
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "geo",
+            "gauge": {
+              "value": 24,
+              "element": "geo"
+            }
+          }
+        ]
+      },
+      "biting_cold_wayob_manifestation": {
+        "name": "Biting-Cold Wayob Manifestation",
+        "emoji": "Biting_Cold_Wayob",
+        "aliases": ["cryo wayob", "cryo wayob manifestation"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 50,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "cryo",
+            "gauge": {
+              "value": 48,
+              "element": "cryo"
+            }
+          }
+        ]
+      },
+      "burning_aflame_wayob_manifestation": {
+        "name": "Burning-Aflame Wayob Manifestation",
+        "emoji": "Burning_Aflame_Wayob",
+        "aliases": ["pyro wayob", "pyro wayob manifestation"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 50,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "pyro",
+            "gauge": {
+              "value": 48,
+              "element": "pyro"
+            }
+          }
+        ]
+      },
+      "thundering_wayob_manifestation": {
+        "name": "Thundering Wayob Manifestation",
+        "emoji": "Thundering_Wayob",
+        "aliases": ["electro wayob", "electro wayob manifestation"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 50,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1.114,
+              "reference": "max_hp"
+            }
+          },
+          {
+            "type": "elemental",
+            "element": "electro",
+            "gauge": {
+              "value": 24,
+              "element": "electro"
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  "furnace_shell_mountain_weasel": {
+    "name": "Furnace Shell Mountain Weasel",
+    "emoji": "Furnace_Shell_Weasel",
+    "enemies": {
+      "furnace_shell_mountain_weasel": {
+        "name": "Furnace Shell Mountain Weasel",
+        "emoji": "Furnace_Shell_Weasel",
+        "aliases": ["pyro weasel", "furnace weasel", "shell weasel"],
+        "element": ["pyro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 50,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        },
+        "ward": [
+          {
+            "type": "elementless",
+            "hp": {
+              "multiplier": 1,
+              "reference": "max_hp"
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  "radiant_beasts": {
+    "name": "Radiant Beasts",
+    "emoji": "Radiant_Beast",
+    "enemies": {
+      "radiant_antelope": {
+        "name": "Radiant Antelope",
+        "emoji": "Radiant_Antelope",
+        "aliases": ["electro radiant beast", "electro radiant", "electro antelope"],
+        "element": ["electro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 50,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "radiant_bladehorn": {
+        "name": "Radiant Bladehorn",
+        "emoji": "Radiant_Bladehorn",
+        "aliases": ["anemo radiant beast", "anemo radiant", "anemo bladehorn"],
+        "element": ["anemo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 50,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "radiant_lunapod": {
+        "name": "Radiant Lunapod",
+        "emoji": "Radiant_Lunapod",
+        "aliases": ["hydro radiant beast", "hydro radiant", "hydro lunapod"],
+        "element": ["hydro"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 50,
+              "electro": 10,
+              "cryo": 10,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      },
+      "radiant_glacial_wolf": {
+        "name": "Radiant Glacial Wolf",
+        "emoji": "Radiant_Glacial_Wolf",
+        "aliases": ["cryo radiant beast", "cryo radiant", "cryo glacial wolf"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 10,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 50,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "the_great_snowboar_king": {
+    "name": "The Great Snowboar King",
+    "emoji": "The_Great_Snowboar_King",
+    "enemies": {
+      "the_great_snowboar_king": {
+        "name": "The Great Snowboar King",
+        "emoji": "The_Great_Snowboar_King",
+        "aliases": ["snowboar king", "boar king", "snow boar", "great boar", "great snowboar king"],
+        "element": ["cryo"],
+        "res": {
+          "base": {
+            "display_name": "Base",
+            "immune": [],
+            "resistance_values": {
+              "physical": 50,
+              "pyro": 10,
+              "hydro": 10,
+              "electro": 10,
+              "cryo": 30,
+              "dendro": 10,
+              "anemo": 10,
+              "geo": 10
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,193 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86048
+            ],
+            "name": "Instant Build Off",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9047,
+            "stages": 1,
+            "stage1": {
+                "title": "Instant Build Off",
+                "description": "Defeat the Secret Source Automaton: Configuration Device in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86057
+            ],
+            "name": "Once Again, I Have Cut a Worthless...",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9048,
+            "stages": 1,
+            "stage1": {
+                "title": "Once Again, I Have Cut a Worthless...",
+                "description": "Defeat a Tenebrous Papilla in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86058
+            ],
+            "name": "Shaman's Final Trial",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9049,
+            "stages": 1,
+            "stage1": {
+                "title": "Shaman's Final Trial",
+                "description": "Defeat the Wayward Hermetic Spiritspeaker in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86051
+            ],
+            "name": "\"Hic Fuerunt Dracones\"",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9050,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Hic Fuerunt Dracones\"",
+                "description": "Defeat the Lord of Eroded Primal Fire in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86052
+            ],
+            "name": "Morning Yet on Creation Day",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9051,
+            "stages": 1,
+            "stage1": {
+                "title": "Morning Yet on Creation Day",
+                "description": "Defeat the Lava Dragon Statue in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86053
+            ],
+            "name": "Disunified Field Theory of the Secret Source",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9052,
+            "stages": 1,
+            "stage1": {
+                "title": "Disunified Field Theory of the Secret Source",
+                "description": "Defeat the Secret Source Automaton: Overseer Device in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86054
+            ],
+            "name": "Royal Fork",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9053,
+            "stages": 1,
+            "stage1": {
+                "title": "Royal Fork",
+                "description": "Defeat The Game Before the Gate in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86055
+            ],
+            "name": "Into the Breach!",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9054,
+            "stages": 1,
+            "stage1": {
+                "title": "Into the Breach!",
+                "description": "Defeat Knuckle Duckle in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                86056
+            ],
+            "name": "Golden Autumn",
+            "achievementGroupId": 64,
+            "achievementGroupName": "Meetings in Outrealm: Series VI",
+            "sortOrder": 9055,
+            "stages": 1,
+            "stage1": {
+                "title": "Golden Autumn",
+                "description": "Defeat a Radiant Moonfly in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        }
+    ]
+}

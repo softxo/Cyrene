@@ -1,0 +1,213 @@
+{
+  "id": "beidou",
+  "name": "Beidou",
+  "title": "Uncrowned Lord\n of the Ocean",
+  "description": "Captain of her crew, The Crux. She's quite an unbound and forthright woman.",
+  "affiliation": "The Crux",
+  "constellation": "Victor Mare",
+  "birthday": "14/2",
+  "rarity": 4,
+  "element": "electro",
+  "weapon": "claymore",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#b08fc2",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Sea Beast's Scourge",
+      "description": [
+        "When **Stormbreaker** is used:",
+        "Creates a shield that absorbs up to 16% of Beidou's Max HP for 15s.",
+        "This shield absorbs **Electro DMG** 250% more effectively."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Upon the Turbulent Sea, the Thunder Arises",
+      "description": [
+        "**Stormbreaker**'s arc lightning can jump to 2 additional targets."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Summoner of Storm",
+      "description": [
+        "Increases the Level of **Tidecaller** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Stunning Revenge",
+      "description": [
+        "Upon being attacked, Beidou's Normal Attacks gain an additional instance of 20% **Electro DMG** for 10s."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "Crimson Tidewalker",
+      "description": [
+        "Increases the Level of **Stormbreaker** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Bane of Evil",
+      "description": [
+        "While **Stormbreaker** is active, nearby opponents' **Electro RES** is reduced by 15%.",
+        "**Radiance: Stellar-Conduct**: The **Cryo RES** of nearby opponents is decreased by 15%, and the Elemental Mastery of the current active character is increased by 200, while Stormbreaker is active."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Oceanborne",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 consecutive strikes."
+        ],
+        "charged": [
+          "Drains Stamina over time to perform continuous slashes.",
+          "At the end of the sequence, performs a more powerful slash."
+        ],
+        "plunge": [
+          "Plunges from mid-air to strike the ground, damaging opponents along the path and dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Tidecaller",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Nothing to worry about. Should anyone raise a hand against her or her men, she will avenge it ten-fold with sword and thunder."
+      ],
+      "sections": [
+        {
+          "title": "Press",
+          "text": [
+            "Accumulating the power of lightning, Beidou swings her blade forward fiercely, dealing **Electro DMG**."
+          ]
+        },
+        {
+          "title": "Hold",
+          "text": [
+            "Lifts her weapon up as a shield. Max DMG absorbed scales off Beidou's Max HP.",
+            "Attacks using the energy stored within the greatsword upon release or once this ability's duration expires, dealing **Electro DMG**. DMG dealt scales with the number of times Beidou is attacked in the skill's duration. The greatest DMG Bonus will be attained once this effect is triggered twice.",
+            "The shield possesses the following properties:",
+            "- Has 250% **Electro DMG** Absorption Efficiency.",
+            "- Applies the **Electro element** to Beidou upon activation."
+          ]
+        }
+      ]
+    },
+    "elemental_burst": {
+      "name": "Stormbreaker",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Recalling her slaying of the great beast Haishan, Beidou calls upon that monstrous strength and the lightning to create a Thunderbeast's Targe around herself, dealing **Electro DMG** to nearby opponents."
+      ],
+      "sections": [
+        {
+          "title": "Thunderbeast's Targe",
+          "text": [
+            "- When Normal and Charged Attacks hit, they create a lightning discharge that can jump between opponents, dealing **Electro DMG**.",
+            "- Increases the character's resistance to interruption, and decreases DMG taken.",
+            " ",
+            "A maximum of 1 lightning discharge can be triggered per second."
+          ]
+        }
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Retribution",
+      "description": [
+        "Counterattacking with **Tidecaller** at the precise moment when the character is hit grants the maximum DMG Bonus."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Lightning Storm",
+      "description": [
+        "Gain the following effects for 10s after unleashing **Tidecaller** with its maximum DMG Bonus:",
+        "DMG dealt by Normal and Charged Attacks is increased by 15%. ATK SPD of Normal and Charged Attacks is increased by 15%.",
+        "Greatly reduced delay before unleashing Charged Attacks."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Conqueror of Tides",
+      "description": [
+        "Decreases swimming Stamina consumption for your own party members by 20%.",
+        "Not stackable with Passive Talents that provide the exact same effects."
+      ]
+    },
+    {
+      "unlock": "Witch's Homework",
+      "name": "Polaris",
+      "description": [
+        "When holding down on the Elemental Skill **Tidecaller**, 1 stack of power will accumulate every 0.8s, even when not under attack. This increases the DMG dealt at the point of unleashing.",
+        "Additionally, holding down to unleash **Tidecaller** and hitting the opponent also gives extra boosts based on the power accumulated: every stack active decreases Beidou's Elemental Skill CD by 4s, as well as regenerates 8 Elemental Energy for her. This effect can trigger once every 15s.",
+        "Additionally, when inside a **Polestar Field**, Beidou will enter the **Radiance: Stellar-Conduct** state."
+      ]
+    }
+  ],
+ "materials": {
+    "ascension": {
+      "gem": {
+        "id": "vajrada_amethyst",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "lightning_prism",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "noctilucous_jade",
+        "amount": 168
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "gold",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "stormterror",
+        "material": "dvalins_sigh",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

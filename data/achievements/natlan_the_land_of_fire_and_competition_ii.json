@@ -1,0 +1,260 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80349
+            ],
+            "name": "Continental Explorer: Pyre Plains (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 323,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Pyre Plains (II)",
+                "description": "Light up the maps of the following areas in Natlan: Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80350
+            ],
+            "name": "Scaling the Scorching Sacred Mountain (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 324,
+            "stages": 1,
+            "stage1": {
+                "title": "Scaling the Scorching Sacred Mountain (II)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Natlan: Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 36,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80351
+            ],
+            "name": "Sanctuary Pilgrim: Pyre Plains (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 325,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Pyre Plains (II)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Natlan: Quahuacan Cliff and Ochkanatlan.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80352
+            ],
+            "name": "Offerings to the Night: Pyre Plains (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 326,
+            "stages": 1,
+            "stage1": {
+                "title": "Offerings to the Night: Pyre Plains (II)",
+                "description": "Unlock all the seals on the secret spaces of the tribes in the following areas in Natlan: Tezcatepetonco Range and Quahuacan Cliff.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80353,
+                80354,
+                80355
+            ],
+            "name": "Monetoo Will Guide You Home (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 327,
+            "stages": 3,
+            "stage1": {
+                "title": "Monetoo Will Guide You Home (II)",
+                "description": "Follow 3 Monetoo and complete the graffiti in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Monetoo Will Guide You Home (II)",
+                "description": "Follow 6 Monetoo and complete the graffiti in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Monetoo Will Guide You Home (II)",
+                "description": "Follow 10 Monetoo and complete the graffiti in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80356,
+                80357,
+                80358
+            ],
+            "name": "Ignited Treasure Hunter (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 330,
+            "stages": 3,
+            "stage1": {
+                "title": "Ignited Treasure Hunter (II)",
+                "description": "Open 40 chests in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ignited Treasure Hunter (II)",
+                "description": "Open 80 chests in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ignited Treasure Hunter (II)",
+                "description": "Open 160 chests in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80359,
+                80360,
+                80361
+            ],
+            "name": "Ignited Adventurer (II)",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 333,
+            "stages": 3,
+            "stage1": {
+                "title": "Ignited Adventurer (II)",
+                "description": "Complete 3 Open World Time Trial Challenges in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ignited Adventurer (II)",
+                "description": "Complete 6 Open World Time Trial Challenges in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ignited Adventurer (II)",
+                "description": "Complete 10 Open World Time Trial Challenges in Tezcatepetonco Range, Quahuacan Cliff, and Ochkanatlan.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80362
+            ],
+            "name": "Lost Traveler in the Ashen Realm",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 336,
+            "stages": 1,
+            "stage1": {
+                "title": "Lost Traveler in the Ashen Realm",
+                "description": "Complete \"Lost Traveler in the Ashen Realm.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                80363
+            ],
+            "name": "The Finishing Touch?",
+            "dupealias": "The Finishing Touch? 0",
+            "achievementGroupId": 55,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (II)",
+            "sortOrder": 337,
+            "stages": 1,
+            "stage1": {
+                "title": "The Finishing Touch?",
+                "description": "Restore the power of the giant work of graffiti on Tezcatepetonco Range.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        }
+    ]
+}

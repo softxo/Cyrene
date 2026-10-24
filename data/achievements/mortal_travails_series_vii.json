@@ -1,0 +1,67 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80525
+            ],
+            "name": "Requiem of the Icewind",
+            "achievementGroupId": 71,
+            "achievementGroupName": "Mortal Travails: Series VII",
+            "sortOrder": 484,
+            "stages": 1,
+            "stage1": {
+                "title": "Requiem of the Icewind",
+                "description": "Obtain the power of Cryo.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80526
+            ],
+            "name": "When Song Tears the Night",
+            "achievementGroupId": 71,
+            "achievementGroupName": "Mortal Travails: Series VII",
+            "sortOrder": 485,
+            "stages": 1,
+            "stage1": {
+                "title": "When Song Tears the Night",
+                "description": "Collect the entire \"Polestar Ballet Anthology\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80528
+            ],
+            "name": "Tales of the Departed",
+            "achievementGroupId": 71,
+            "achievementGroupName": "Mortal Travails: Series VII",
+            "sortOrder": 487,
+            "stages": 1,
+            "stage1": {
+                "title": "Tales of the Departed",
+                "description": "Collect the entire \"General History of Snezhnaya\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        }
+    ]
+}

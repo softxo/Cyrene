@@ -1,0 +1,22 @@
+# CODEX.md - SDL-MCP
+
+Use SDL-MCP as the default path for repository `cyrene-frontend`.
+
+## SDL-MCP Skill Bootstrap
+
+At the start of every new Codex session in this repository, load and follow the `sdl-mcp-agent-workflow` skill before repository exploration, command execution, or edits. The generated `.codex/hooks/load-sdl-skill.mjs` SessionStart hook also injects the lean skill body as a system message. If the skill is unavailable, use [SDL.md](./SDL.md) as the fallback workflow.
+
+When the SDL-MCP PID file is present, treat native repo-local shell and file tools as fallback-only. Use SDL runtime for shell actions with `stdin` for multiline input, the Iris ladder for indexed reads, `symbol.edit` for one-symbol indexed writes, `searchEditPreview` with `targeting:"identifier"`/`"structural"` or `operations[]` for cross-file indexed edits, and `file.read`/`file.write` for non-indexed files. When structured retrieval is unavailable for indexed source, use a targeted, bounded `sdl.file { op: "read" }` fallback. Native access is reserved for `.codex/**`, `.claude/**`, and non-repo agent skills, memories, and session internals.
+
+runtimeExecute executes repository tooling. Permitted uses include build, test, lint, compiler, named scripts, and targeted edit scripts. Do not use it to inspect, search, or print repository files. Use sdl.context or sdl.retrieve for indexed source and sdl.file with op="read" for other files.
+
+## Token Economy
+
+Prefer `runtimeExecute` `outputMode: "digest"` for build/test/lint; query artifacts only when needed.
+For explain/debug, call `sdl.context` with a required `budget.maxTokens`; inspect its evidence and follow `nextActions` only when more detail is needed.
+Treat `{ ref, unchanged: true }` as already-held content; use `refsMode: "off"` only to recover after lost context. Use `sN` aliases from `@ids` anywhere symbol IDs are accepted.
+On search misses, retry from `nearMisses`; if `file.read` warns about a large untargeted read, retry with search, range, or token limits.
+
+SDL-MCP (Symbol Delta Ledger MCP Server) - an MCP server providing cards-first code context for polyglot repositories. Replaces bulk code reads with structured symbol cards, graph slices, delta packs, and gated code windows. Uses LadybugDB (graph DB), tree-sitter (AST parsing), and optional Rust native addon (napi-rs) for performance.
+
+> Optimized tool-use workflow for agents: see [SDL.md](./SDL.md).

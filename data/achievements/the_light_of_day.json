@@ -1,0 +1,196 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80130
+            ],
+            "name": "\"...You Do Not Know the Night...\"",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 130,
+            "stages": 1,
+            "stage1": {
+                "title": "\"...You Do Not Know the Night...\"",
+                "description": "Light up the Enkanomiya map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                80131
+            ],
+            "name": "The Highest Authority in the Land",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 131,
+            "stages": 1,
+            "stage1": {
+                "title": "The Highest Authority in the Land",
+                "description": "Unlock all Teleport Waypoints in Enkanomiya.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                80132,
+                80133,
+                80134
+            ],
+            "name": "Phosphoros' Guidance",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 132,
+            "stages": 3,
+            "stage1": {
+                "title": "Phosphoros' Guidance",
+                "description": "Follow 6 Seelie in Enkanomiya to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Phosphoros' Guidance",
+                "description": "Follow 15 Seelie in Enkanomiya to their Seelie Courts.",
+                "progress": 15,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Phosphoros' Guidance",
+                "description": "Follow 30 Seelie in Enkanomiya to their Seelie Courts.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                80135,
+                80136,
+                80137
+            ],
+            "name": "Hesperus' Boons",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 135,
+            "stages": 3,
+            "stage1": {
+                "title": "Hesperus' Boons",
+                "description": "Open 40 chests in Enkanomiya.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Hesperus' Boons",
+                "description": "Open 80 chests in Enkanomiya.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Hesperus' Boons",
+                "description": "Open 160 chests in Enkanomiya.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                80138,
+                80139,
+                80140
+            ],
+            "name": "Kairos' Constancy",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 138,
+            "stages": 3,
+            "stage1": {
+                "title": "Kairos' Constancy",
+                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges in Enkanomiya.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Kairos' Constancy",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in Enkanomiya.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Kairos' Constancy",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges in Enkanomiya.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                80141
+            ],
+            "name": "Fire Rat's Robe, Dragon-Head Pearl, Sacred Offering Bowl, and...",
+            "achievementGroupId": 28,
+            "achievementGroupName": "The Light of Day",
+            "sortOrder": 141,
+            "stages": 1,
+            "stage1": {
+                "title": "Fire Rat's Robe, Dragon-Head Pearl, Sacred Offering Bowl, and...",
+                "description": "Obtain the coral branch that Tsuyuko requested.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.4"
+        }
+    ]
+}

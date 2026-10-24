@@ -1,0 +1,136 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82044,
+                82045,
+                82046
+            ],
+            "name": "Down We Go",
+            "achievementGroupId": 9,
+            "achievementGroupName": "Domains and Spiral Abyss: Series I",
+            "sortOrder": 2044,
+            "stages": 3,
+            "stage1": {
+                "title": "Down We Go",
+                "ps5title": "Down We Go (I)",
+                "description": "Clear Floor 4 of the Spiral Abyss.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Down We Go",
+                "ps5title": "Down We Go (II)",
+                "description": "Clear Floor 8 of the Spiral Abyss.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Down We Go",
+                "ps5title": "Down We Go (III)",
+                "description": "Clear Floor 12 of the Spiral Abyss.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82047,
+                82048,
+                82049
+            ],
+            "name": "Down to Dodge",
+            "achievementGroupId": 9,
+            "achievementGroupName": "Domains and Spiral Abyss: Series I",
+            "sortOrder": 2047,
+            "stages": 3,
+            "stage1": {
+                "title": "Down to Dodge",
+                "description": "Complete Spiral Abyss 2-3 without taking any DMG.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Down to Dodge",
+                "description": "Complete Spiral Abyss 5-3 without taking any DMG.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Down to Dodge",
+                "description": "Complete Spiral Abyss 8-3 without taking any DMG.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82050
+            ],
+            "name": "My Precious",
+            "achievementGroupId": 9,
+            "achievementGroupName": "Domains and Spiral Abyss: Series I",
+            "sortOrder": 2050,
+            "stages": 1,
+            "stage1": {
+                "title": "My Precious",
+                "description": "Complete Spiral Abyss 2-2 with an undamaged Ley Line Monolith.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82051
+            ],
+            "name": "Abyssal Crusader",
+            "achievementGroupId": 9,
+            "achievementGroupName": "Domains and Spiral Abyss: Series I",
+            "sortOrder": 2051,
+            "stages": 1,
+            "stage1": {
+                "title": "Abyssal Crusader",
+                "ps5title": "Abyss: Abyssal Crusader",
+                "description": "Obtain all Abyssal Stars in the Spiral Abyss.",
+                "progress": 72,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

@@ -1,0 +1,366 @@
+/* =========================================================
+   EVENTS — WISH BANNER CARDS, BANNER CONTENT AND WISH-RELATED RESPONSIVE RULES
+   Extracted from the original events.css.
+   Keep this file's position in the import order unchanged.
+   ========================================================= */
+
+/* =========================================================
+   13. EVENT WISHES
+   ========================================================= */
+
+.events-wishes {
+    margin-top: 30px;
+    margin-bottom: 32px;
+    min-width: 0;
+}
+
+/* ---------------------------------------------------------
+   Wish Banner Grid
+   --------------------------------------------------------- */
+
+.wish-banners {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: stretch;
+}
+
+/* ---------------------------------------------------------
+   Wish Banner Card
+   --------------------------------------------------------- */
+
+.wish-banner-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-width: 0;
+    min-height: 390px;
+    overflow: hidden;
+
+    background: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.wish-banner-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* Background artwork */
+
+.wish-banner-image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transform: scale(1.001);
+    transition: transform 0.6s ease;
+}
+
+.wish-banner-card:hover .wish-banner-image {
+    transform: scale(1.045);
+}
+
+/* Darken the text area while keeping the artwork visible */
+
+.wish-banner-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(9, 11, 18, 0.96) 0%,
+            rgba(9, 11, 18, 0.86) 34%,
+            rgba(9, 11, 18, 0.56) 66%,
+            rgba(9, 11, 18, 0.18) 100%
+        ),
+        linear-gradient(
+            0deg,
+            rgba(9, 11, 18, 0.62) 0%,
+            transparent 48%
+        );
+}
+
+/* ---------------------------------------------------------
+   Wish Banner Content
+   --------------------------------------------------------- */
+
+.wish-banner-content {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    min-width: 0;
+    min-height: 390px;
+    padding: 18px 28px 28px;
+
+    box-sizing: border-box;
+}
+
+/* Character Event Wish / Weapon Event Wish */
+
+.wish-banner-type {
+    align-self: flex-start;
+    margin-bottom: 9px;
+    padding: 6px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(12, 14, 22, 0.52);
+
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+/* Banner title */
+
+.wish-banner-title {
+    max-width: 100%;
+    margin: 0 0 16px;
+
+    color: #fff;
+    font-size: clamp(21px, 2vw, 27px);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------------------------------------------------------
+   Featured 5-Star / 4-Star Items
+   --------------------------------------------------------- */
+
+/* Featured character panels */
+.wish-banner-featured {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    width: fit-content;
+    max-width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 13px;
+    background: rgba(15, 17, 24, 0.48);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* 5-Star rarity — gold/orange */
+.wish-banner-featured:not(.wish-banner-four-star) .wish-banner-label {
+    color: #ffbd45;
+}
+
+/* 4-Star rarity — purple */
+.wish-banner-four-star .wish-banner-label {
+    color: #c58aff;
+}
+
+/* Character icons and names */
+.wish-banner-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wish-banner-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 66px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.wish-banner-item img {
+    width: 46px;
+    height: 46px;
+    padding: 3px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Four-star characters */
+.wish-banner-four-star {
+    opacity: 0.9;
+}
+
+.wish-banner-four-star .wish-banner-item {
+    width: 58px;
+    font-size: 10px;
+}
+
+.wish-banner-four-star .wish-banner-item img {
+    width: 38px;
+    height: 38px;
+}
+
+/* ---------------------------------------------------------
+   Banner Countdown
+   --------------------------------------------------------- */
+
+.wish-banner-time {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 13px;
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------------------------------------------------------
+   Empty Wish State
+   --------------------------------------------------------- */
+
+.wish-banners-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+    padding: 28px;
+    box-sizing: border-box;
+
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    background: var(--card-background);
+
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ---------------------------------------------------------
+   Responsive Layout
+   --------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+    .wish-banners {
+        gap: 16px;
+    }
+
+    .wish-banner-content {
+        padding: 22px;
+    }
+
+    .wish-banner-featured {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .wish-banner-items {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 760px) {
+    .wish-banners {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .wish-banner-card,
+    .wish-banner-content {
+        min-height: 360px;
+    }
+
+    .wish-banner-content {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 420px) {
+    .wish-banner-card,
+    .wish-banner-content {
+        min-height: 340px;
+    }
+
+    .wish-banner-content {
+        padding: 16px;
+    }
+
+    .wish-banner-title {
+        font-size: 21px;
+    }
+
+    .wish-banner-item {
+        width: 58px;
+        font-size: 10px;
+    }
+
+    .wish-banner-item img {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .wish-banner-four-star .wish-banner-item img {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .wish-banner-card,
+    .wish-banner-image,
+    .wish-banner-item img {
+        transition: none;
+    }
+
+    .wish-banner-card:hover,
+    .wish-banner-item:hover img {
+        transform: none;
+    }
+}
+
+
+

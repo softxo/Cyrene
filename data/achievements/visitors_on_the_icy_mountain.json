@@ -1,0 +1,224 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80056
+            ],
+            "name": "Continental Explorer: Dragonspine",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 56,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Dragonspine",
+                "description": "Light up the Dragonspine map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80057
+            ],
+            "name": "Peak Hopper",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 57,
+            "stages": 1,
+            "stage1": {
+                "title": "Peak Hopper",
+                "description": "Unlock all Teleport Waypoints in Dragonspine.",
+                "progress": 11,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80058,
+                80059,
+                80060
+            ],
+            "name": "Seelie in the Snow",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 58,
+            "stages": 3,
+            "stage1": {
+                "title": "Seelie in the Snow",
+                "description": "Follow 5 Warming Seelie in Dragonspine to their Seelie Courts.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Seelie in the Snow",
+                "description": "Follow 10 Warming Seelie in Dragonspine to their Seelie Courts.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Seelie in the Snow",
+                "description": "Follow 20 Warming Seelie in Dragonspine to their Seelie Courts.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80061,
+                80062,
+                80063
+            ],
+            "name": "Mountain of Treasure",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 61,
+            "stages": 3,
+            "stage1": {
+                "title": "Mountain of Treasure",
+                "ps5title": "Mountain of Treasure (I)",
+                "description": "Open 40 chests in Dragonspine.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Mountain of Treasure",
+                "ps5title": "Mountain of Treasure (II)",
+                "description": "Open 80 chests in Dragonspine.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Mountain of Treasure",
+                "ps5title": "Mountain of Treasure (III)",
+                "description": "Open 160 chests in Dragonspine.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80064,
+                80065,
+                80066
+            ],
+            "name": "Scarlet Sprouts",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 64,
+            "stages": 3,
+            "stage1": {
+                "title": "Scarlet Sprouts",
+                "ps5title": "Scarlet Sprouts (I)",
+                "description": "Raise the Frostbearing Tree to Lv. 4.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Scarlet Sprouts",
+                "ps5title": "Scarlet Sprouts (II)",
+                "description": "Raise the Frostbearing Tree to Lv. 8.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Scarlet Sprouts",
+                "ps5title": "Scarlet Sprouts (III)",
+                "description": "Raise the Frostbearing Tree to Lv. 12.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80067
+            ],
+            "name": "Skyfrost Nail",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 67,
+            "stages": 1,
+            "stage1": {
+                "title": "Skyfrost Nail",
+                "ps5title": "Dragonspine: Skyfrost Nail",
+                "description": "Raise the strange column.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                80068
+            ],
+            "name": "Dragonspear",
+            "achievementGroupId": 16,
+            "achievementGroupName": "Visitors on the Icy Mountain",
+            "sortOrder": 68,
+            "stages": 1,
+            "stage1": {
+                "title": "Dragonspear",
+                "description": "Make a weapon from a dragon's remains.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.2"
+        }
+    ]
+}

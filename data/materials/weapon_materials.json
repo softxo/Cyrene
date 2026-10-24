@@ -1,0 +1,505 @@
+{
+  "decarabians": {
+    "tiers": {
+      "tier2": {
+        "name": "Tile of Descarabian's Tower",
+        "emoji": "Decarabians_2"
+      },
+      "tier3": {
+        "name": "Debris of Descarabian's City",
+        "emoji": "Decarabians_3"
+      },
+      "tier4": {
+        "name": "Fragment of Descarabian's Epic",
+        "emoji": "Decarabians_4"
+      },
+      "tier5": {
+        "name": "Scattered Piece of Descarabian's Dream",
+        "emoji": "Decarabians_5"
+      }
+    },
+    "location": {
+      "id": "cecilia_garden"
+    }
+  },
+
+  "boreal_wolfs": {
+    "tiers": {
+      "tier2": {
+        "name": "Boreal Wolf's Milk Tooth",
+        "emoji": "Boreal_Wolfs_2"
+      },
+      "tier3": {
+        "name": "Boreal Wolf's Cracked Tooth",
+        "emoji": "Boreal_Wolfs_3"
+      },
+      "tier4": {
+        "name": "Boreal Wolf's Broken Fang",
+        "emoji": "Boreal_Wolfs_4"
+      },
+      "tier5": {
+        "name": "Boreal Wolf's Nostalgia",
+        "emoji": "Boreal_Wolfs_5"
+      }
+    },
+    "location": {
+      "id": "cecilia_garden"
+    }
+  },
+
+  "dandelion_gladiator": {
+    "tiers": {
+      "tier2": {
+        "name": "Fetters of the Dandelion Gladiator",
+        "emoji": "Dandelion_Gladiator_2"
+      },
+      "tier3": {
+        "name": "Chains of the Dandelion Gladiator",
+        "emoji": "Dandelion_Gladiator_3"
+      },
+      "tier4": {
+        "name": "Shackles of the Dandelion Gladiator",
+        "emoji": "Dandelion_Gladiator_4"
+      },
+      "tier5": {
+        "name": "Dream of the Dandelion Gladiator",
+        "emoji": "Dandelion_Gladiator_5"
+      }
+    },
+    "location": {
+      "id": "cecilia_garden"
+    }
+  },
+
+  "guyun": {
+    "tiers": {
+      "tier2": {
+        "name": "Luminous Sands from Guyun",
+        "emoji": "Guyun_2"
+      },
+      "tier3": {
+        "name": "Lustrous Stone from Guyun",
+        "emoji": "Guyun_3"
+      },
+      "tier4": {
+        "name": "Relic from Guyun",
+        "emoji": "Guyun_4"
+      },
+      "tier5": {
+        "name": "Divine Body from Guyun",
+        "emoji": "Guyun_5"
+      }
+    },
+    "location": {
+      "id": "hidden_palace_of_lianshan_formula"
+    }
+  },
+
+  "mist_veiled": {
+    "tiers": {
+      "tier2": {
+        "name": "Mist Veiled Lead Elixir",
+        "emoji": "Mist_Veiled_2"
+      },
+      "tier3": {
+        "name": "Mist Veiled Mercury Elixir",
+        "emoji": "Mist_Veiled_3"
+      },
+      "tier4": {
+        "name": "Mist Veiled Gold Elixir",
+        "emoji": "Mist_Veiled_4"
+      },
+      "tier5": {
+        "name": "Mist Veiled Primo Elixir",
+        "emoji": "Mist_Veiled_5"
+      }
+    },
+    "location": {
+      "id": "hidden_palace_of_lianshan_formula"
+    }
+  },
+
+  "aerosiderite": {
+    "tiers": {
+      "tier2": {
+        "name": "Grain of Aerosiderite",
+        "emoji": "Aerosiderite_2"
+      },
+      "tier3": {
+        "name": "Piece of Aerosiderite",
+        "emoji": "Aerosiderite_3"
+      },
+      "tier4": {
+        "name": "Bit of Aerosiderite",
+        "emoji": "Aerosiderite_4"
+      },
+      "tier5": {
+        "name": "Chunk of Aerosiderite",
+        "emoji": "Aerosiderite_5"
+      }
+    },
+    "location": {
+      "id": "hidden_palace_of_lianshan_formula"
+    }
+  },
+
+  "distant_sea": {
+    "tiers": {
+      "tier2": {
+        "name": "Coral Branch of a Distant Sea",
+        "emoji": "Distant_Sea_2"
+      },
+      "tier3": {
+        "name": "Jeweled Branch of a Distant Sea",
+        "emoji": "Distant_Sea_3"
+      },
+      "tier4": {
+        "name": "Jade Branch of a Distant Sea",
+        "emoji": "Distant_Sea_4"
+      },
+      "tier5": {
+        "name": "Golden Branch of a Distant Sea",
+        "emoji": "Distant_Sea_5"
+      }
+    },
+    "location": {
+      "id": "court_of_flowing_sand"
+    }
+  },
+
+  "narukamis": {
+    "tiers": {
+      "tier2": {
+        "name": "Narukami's Wisdom",
+        "emoji": "Narukamis_2"
+      },
+      "tier3": {
+        "name": "Narukami's Joy",
+        "emoji": "Narukamis_3"
+      },
+      "tier4": {
+        "name": "Narukami's Affection",
+        "emoji": "Narukamis_4"
+      },
+      "tier5": {
+        "name": "Narukami's Valor",
+        "emoji": "Narukamis_5"
+      }
+    },
+    "location": {
+      "id": "court_of_flowing_sand"
+    }
+  },
+
+  "mask_of": {
+    "tiers": {
+      "tier2": {
+        "name": "Mask of the Wicked Lieutenant",
+        "emoji": "Mask_of_2"
+      },
+      "tier3": {
+        "name": "Mask of the Tiger's Bite",
+        "emoji": "Mask_of_3"
+      },
+      "tier4": {
+        "name": "Mask of the One-Horned",
+        "emoji": "Mask_of_4"
+      },
+      "tier5": {
+        "name": "Mask of the Kijin",
+        "emoji": "Mask_of_5"
+      }
+    },
+    "location": {
+      "id": "court_of_flowing_sand"
+    }
+  },
+
+  "talisman": {
+    "tiers": {
+      "tier2": {
+        "name": "Copper Talisman of the Forest Dew",
+        "emoji": "Talisman_2"
+      },
+      "tier3": {
+        "name": "Iron Talisman of the Forest Dew",
+        "emoji": "Talisman_3"
+      },
+      "tier4": {
+        "name": "Silver Talisman of the Forest Dew",
+        "emoji": "Talisman_4"
+      },
+      "tier5": {
+        "name": "Golden Talisman of the Forest Dew",
+        "emoji": "Talisman_5"
+      }
+    },
+    "location": {
+      "id": "tower_of_abject_pride"
+    }
+  },
+
+  "oasis_gardens": {
+    "tiers": {
+      "tier2": {
+        "name": "Oasis Garden's Reminiscence",
+        "emoji": "Oasis_Gardens_2"
+      },
+      "tier3": {
+        "name": "Oasis Garden's Kindness",
+        "emoji": "Oasis_Gardens_3"
+      },
+      "tier4": {
+        "name": "Oasis Garden's Mourning",
+        "emoji": "Oasis_Gardens_4"
+      },
+      "tier5": {
+        "name": "Oasis Garden's Truth",
+        "emoji": "Oasis_Gardens_5"
+      }
+    },
+    "location": {
+      "id": "tower_of_abject_pride"
+    }
+  },
+
+  "scorching_might": {
+    "tiers": {
+      "tier2": {
+        "name": "Echo of Scorching Might",
+        "emoji": "Scorching_Might_2"
+      },
+      "tier3": {
+        "name": "Remnant Glow of Scorching Might",
+        "emoji": "Scorching_Might_3"
+      },
+      "tier4": {
+        "name": "Dream of Scorching Might",
+        "emoji": "Scorching_Might_4"
+      },
+      "tier5": {
+        "name": "Olden Days of Scorching Might",
+        "emoji": "Scorching_Might_5"
+      }
+    },
+    "location": {
+      "id": "tower_of_abject_pride"
+    }
+  },
+
+  "ancient_chord": {
+    "tiers": {
+      "tier2": {
+        "name": "Fragment of an Ancient Chord",
+        "emoji": "Ancient_Chord_2"
+      },
+      "tier3": {
+        "name": "Chapter of an Ancient Chord",
+        "emoji": "Ancient_Chord_3"
+      },
+      "tier4": {
+        "name": "Movement of an Ancient Chord",
+        "emoji": "Ancient_Chord_4"
+      },
+      "tier5": {
+        "name": "Echo of an Ancient Chord",
+        "emoji": "Ancient_Chord_5"
+      }
+    },
+    "location": {
+      "id": "echoes_of_the_deep_tides"
+    }
+  },
+
+  "sacred_dewdrop": {
+    "tiers": {
+      "tier2": {
+        "name": "Dross of Pure Sacred Dewdrop",
+        "emoji": "Sacred_Dewdrop_2"
+      },
+      "tier3": {
+        "name": "Sublimation of Pure Sacred Dewdrop",
+        "emoji": "Sacred_Dewdrop_3"
+      },
+      "tier4": {
+        "name": "Spring of Pure Sacred Dewdrop",
+        "emoji": "Sacred_Dewdrop_4"
+      },
+      "tier5": {
+        "name": "Essence of Pure Sacred Dewdrop",
+        "emoji": "Sacred_Dewdrop_5"
+      }
+    },
+    "location": {
+      "id": "echoes_of_the_deep_tides"
+    }
+  },
+
+  "pristine_sea": {
+    "tiers": {
+      "tier2": {
+        "name": "Broken Goblet of the Pristine Sea",
+        "emoji": "Pristine_Sea_2"
+      },
+      "tier3": {
+        "name": "Wine Goblet of the Pristine Sea",
+        "emoji": "Pristine_Sea_3"
+      },
+      "tier4": {
+        "name": "Silver Goblet of the Pristine Sea",
+        "emoji": "Pristine_Sea_4"
+      },
+      "tier5": {
+        "name": "Golden Goblet of the Pristine Sea",
+        "emoji": "Pristine_Sea_5"
+      }
+    },
+    "location": {
+      "id": "echoes_of_the_deep_tides"
+    }
+  },
+
+  "sacrificial_hearts": {
+    "tiers": {
+      "tier2": {
+        "name": "Blazing Sacrificial Heart's Terror",
+        "emoji": "Sacrificial_Hearts_2"
+      },
+      "tier3": {
+        "name": "Blazing Sacrificial Heart's Hesitance",
+        "emoji": "Sacrificial_Hearts_3"
+      },
+      "tier4": {
+        "name": "Blazing Sacrificial Heart's Resolve",
+        "emoji": "Sacrificial_Hearts_4"
+      },
+      "tier5": {
+        "name": "Blazing Sacrificial Heart's Splendor",
+        "emoji": "Sacrificial_Hearts_5"
+      }
+    },
+    "location": {
+      "id": "ancient_watchtower"
+    }
+  },
+
+  "sacred_lord": {
+    "tiers": {
+      "tier2": {
+        "name": "Delirious Decadence of the Sacred Lord",
+        "emoji": "Sacred_Lord_2"
+      },
+      "tier3": {
+        "name": "Delirious Desolation of the Sacred Lord",
+        "emoji": "Sacred_Lord_3"
+      },
+      "tier4": {
+        "name": "Delirious Demeanor of the Sacred Lord",
+        "emoji": "Sacred_Lord_4"
+      },
+      "tier5": {
+        "name": "Delirious Divinity of the Sacred Lord",
+        "emoji": "Sacred_Lord_5"
+      }
+    },
+    "location": {
+      "id": "ancient_watchtower"
+    }
+  },
+
+  "night_winds": {
+    "tiers": {
+      "tier2": {
+        "name": "Night-Wind's Mystic Consideration",
+        "emoji": "Night_Winds_2"
+      },
+      "tier3": {
+        "name": "Night-Wind's Mystic Premonition",
+        "emoji": "Night_Winds_3"
+      },
+      "tier4": {
+        "name": "Night-Wind's Mystic Augury",
+        "emoji": "Night_Winds_4"
+      },
+      "tier5": {
+        "name": "Night-Wind's Mystic Revelation",
+        "emoji": "Night_Winds_5"
+      }
+    },
+    "location": {
+      "id": "ancient_watchtower"
+    }
+  },
+
+  "artful_device": {
+    "tiers": {
+      "tier2": {
+        "name": "Artful Device Fragment",
+        "emoji": "Artful_Device_2"
+      },
+      "tier3": {
+        "name": "Artful Device Replica",
+        "emoji": "Artful_Device_3"
+      },
+      "tier4": {
+        "name": "Artful Device Inheritance",
+        "emoji": "Artful_Device_4"
+      },
+      "tier5": {
+        "name": "Artful Device Wish",
+        "emoji": "Artful_Device_5"
+      }
+    },
+    "location": {
+      "id": "lost_mooncourt"
+    }
+  },
+
+  "long_night_flint": {
+    "tiers": {
+      "tier2": {
+        "name": "Ember of Long Night Flint",
+        "emoji": "Long_Night_Flint_2"
+      },
+      "tier3": {
+        "name": "Afterglow of Long Night Flint",
+        "emoji": "Long_Night_Flint_3"
+      },
+      "tier4": {
+        "name": "Flare of Long Night Flint",
+        "emoji": "Long_Night_Flint_4"
+      },
+      "tier5": {
+        "name": "Blaze of Long Night Flint",
+        "emoji": "Long_Night_Flint_5"
+      }
+    },
+    "location": {
+      "id": "lost_mooncourt"
+    }
+  },
+
+  "far_north_scions": {
+    "tiers": {
+      "tier2": {
+        "name": "Sundered-Glory of the Far-North Scions",
+        "emoji": "Far_North_Scions_2"
+      },
+      "tier3": {
+        "name": "Unyielding Delusion of the Far-North Scions",
+        "emoji": "Far_North_Scions_3"
+      },
+      "tier4": {
+        "name": "Oblation of the Far-North Scions",
+        "emoji": "Far_North_Scions_4"
+      },
+      "tier5": {
+        "name": "Aureate Radiance of the Far-North Scions",
+        "emoji": "Far_North_Scions_5"
+      }
+    },
+    "location": {
+      "id": "lost_mooncourt"
+    }
+  }
+}

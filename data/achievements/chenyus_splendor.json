@@ -1,0 +1,217 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80300
+            ],
+            "name": "Continental Explorer: Where the Bishui Lingers",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 276,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Where the Bishui Lingers",
+                "description": "Light up the Chenyu Vale map in the Liyue region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80301
+            ],
+            "name": "Chenyu's Measure",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 277,
+            "stages": 1,
+            "stage1": {
+                "title": "Chenyu's Measure",
+                "description": "Unlock all Teleport Waypoints in Chenyu Vale within the Liyue region.",
+                "progress": 29,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80302,
+                80303,
+                80304
+            ],
+            "name": "Jadehall Guide",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 278,
+            "stages": 3,
+            "stage1": {
+                "title": "Jadehall Guide",
+                "description": "Follow 4 Seelie in Chenyu Vale to their Seelie Courts.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Jadehall Guide",
+                "description": "Follow 8 Seelie in Chenyu Vale to their Seelie Courts.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Jadehall Guide",
+                "description": "Follow 16 Seelie in Chenyu Vale to their Seelie Courts.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80305,
+                80306,
+                80307
+            ],
+            "name": "Jademound Treasure Hunter",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 281,
+            "stages": 3,
+            "stage1": {
+                "title": "Jademound Treasure Hunter",
+                "description": "Open 60 chests in Chenyu Vale.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Jademound Treasure Hunter",
+                "description": "Open 120 chests in Chenyu Vale.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Jademound Treasure Hunter",
+                "description": "Open 240 chests in Chenyu Vale.",
+                "progress": 240,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80308,
+                80309,
+                80310
+            ],
+            "name": "Jademound Adventurer",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 284,
+            "stages": 3,
+            "stage1": {
+                "title": "Jademound Adventurer",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges in Chenyu Vale.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Jademound Adventurer",
+                "description": "Complete 24 Open World mechanism-activated Time Trial Challenges in Chenyu Vale.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Jademound Adventurer",
+                "description": "Complete 48 Open World mechanism-activated Time Trial Challenges in Chenyu Vale.",
+                "progress": 48,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80311
+            ],
+            "name": "One Ring for the Rite of All",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 287,
+            "stages": 1,
+            "stage1": {
+                "title": "One Ring for the Rite of All",
+                "description": "Upgrade the Votive Rainjade in Carp's Rest to its maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.4"
+        },
+        {
+            "id": [
+                80312
+            ],
+            "name": "Chenyu's Blessings of Sunken Jade",
+            "achievementGroupId": 47,
+            "achievementGroupName": "Chenyu's Splendor",
+            "sortOrder": 288,
+            "stages": 1,
+            "stage1": {
+                "title": "Chenyu's Blessings of Sunken Jade",
+                "description": "Complete \"Chenyu's Blessings of Sunken Jade.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.4"
+        }
+    ]
+}

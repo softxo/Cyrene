@@ -1,0 +1,216 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80113
+            ],
+            "name": "Continental Explorer: Tsurumi Island",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 113,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Tsurumi Island",
+                "description": "Light up the Tsurumi Island map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80114
+            ],
+            "name": "Fog's Edge",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 114,
+            "stages": 1,
+            "stage1": {
+                "title": "Fog's Edge",
+                "description": "Unlock all Teleport Waypoints on Tsurumi Island.",
+                "progress": 7,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80115
+            ],
+            "name": "Sanctuary Pilgrim: Tsurumi Island",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 115,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Tsurumi Island",
+                "description": "Unlock all the Shrines of Depths on Tsurumi Island.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80116
+            ],
+            "name": "Flashes in the Night",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 116,
+            "stages": 1,
+            "stage1": {
+                "title": "Flashes in the Night",
+                "description": "Follow 6 Electro Seelie on Tsurumi Island.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80119
+            ],
+            "name": "Foggy Guidance",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 119,
+            "stages": 1,
+            "stage1": {
+                "title": "Foggy Guidance",
+                "description": "Follow 6 Seelie on Tsurumi Island to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80120,
+                80121,
+                80122
+            ],
+            "name": "Lost Treasure Hunter",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 120,
+            "stages": 3,
+            "stage1": {
+                "title": "Lost Treasure Hunter",
+                "description": "Open 30 chests on Tsurumi Island.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lost Treasure Hunter",
+                "description": "Open 60 chests on Tsurumi Island.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lost Treasure Hunter",
+                "description": "Open 120 chests on Tsurumi Island.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80123,
+                80124,
+                80125
+            ],
+            "name": "Lost Adventurer",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 123,
+            "stages": 3,
+            "stage1": {
+                "title": "Lost Adventurer",
+                "description": "Complete 4 Open World mechanism-activated Time Trial Challenges on Tsurumi Island.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lost Adventurer",
+                "description": "Complete 8 Open World mechanism-activated Time Trial Challenges on Tsurumi Island.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lost Adventurer",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges on Tsurumi Island.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                80126
+            ],
+            "name": "Thunder Is Forever",
+            "achievementGroupId": 27,
+            "achievementGroupName": "The Chronicles of the Sea of Fog",
+            "sortOrder": 126,
+            "stages": 1,
+            "stage1": {
+                "title": "Thunder Is Forever",
+                "description": "Complete a certain author's reference-gathering commission.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.2"
+        }
+    ]
+}

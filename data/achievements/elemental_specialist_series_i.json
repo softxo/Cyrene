@@ -1,0 +1,305 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82019,
+                82020,
+                82021
+            ],
+            "name": "Cool It!",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2019,
+            "stages": 3,
+            "stage1": {
+                "title": "Cool It!",
+                "description": "Keep an opponent Frozen for over 10s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Cool It!",
+                "description": "Keep an opponent Frozen for over 10s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Cool It!",
+                "description": "Keep an opponent Frozen for over 10s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82022,
+                82023,
+                82024
+            ],
+            "name": "Go With the Wind!",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2022,
+            "stages": 3,
+            "stage1": {
+                "title": "Go With the Wind!",
+                "description": "Trigger Cryo, Hydro, Pyro and Electro Swirl Reactions at least once each within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Go With the Wind!",
+                "description": "Trigger Cryo, Hydro, Pyro and Electro Swirl Reactions at least once each within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Go With the Wind!",
+                "description": "Trigger Cryo, Hydro, Pyro and Electro Swirl Reactions at least once each within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82025,
+                82026,
+                82027
+            ],
+            "name": "Season's Greetings",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2025,
+            "stages": 3,
+            "stage1": {
+                "title": "Season's Greetings",
+                "description": "Freeze 4 opponents within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Season's Greetings",
+                "description": "Freeze 4 opponents within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Season's Greetings",
+                "description": "Freeze 4 opponents within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82028,
+                82029,
+                82030
+            ],
+            "name": "Performance May Decline in Low Temperatures",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2028,
+            "stages": 3,
+            "stage1": {
+                "title": "Performance May Decline in Low Temperatures",
+                "description": "Defeat 4 opponents with Superconduct within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Performance May Decline in Low Temperatures",
+                "description": "Defeat 4 opponents with Superconduct within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Performance May Decline in Low Temperatures",
+                "description": "Defeat 4 opponents with Superconduct within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82031,
+                82032,
+                82033
+            ],
+            "name": "The Art of War",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2031,
+            "stages": 3,
+            "stage1": {
+                "title": "The Art of War",
+                "description": "Defeat 4 opponents with Overloaded within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Art of War",
+                "description": "Defeat 4 opponents with Overloaded within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Art of War",
+                "description": "Defeat 4 opponents with Overloaded within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82034,
+                82035,
+                82036
+            ],
+            "name": "Melt You Down Like Ice Cream",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2034,
+            "stages": 3,
+            "stage1": {
+                "title": "Melt You Down Like Ice Cream",
+                "description": "Defeat 4 opponents with Melt within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Melt You Down Like Ice Cream",
+                "description": "Defeat 4 opponents with Melt within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Melt You Down Like Ice Cream",
+                "description": "Defeat 4 opponents with Melt within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82037,
+                82038,
+                82039
+            ],
+            "name": "A Little Less Shocking Than Love at First Sight",
+            "achievementGroupId": 6,
+            "achievementGroupName": "Elemental Specialist: Series I",
+            "sortOrder": 2037,
+            "stages": 3,
+            "stage1": {
+                "title": "A Little Less Shocking Than Love at First Sight",
+                "description": "Defeat 4 opponents with Electro-Charged within 2s (×1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "A Little Less Shocking Than Love at First Sight",
+                "description": "Defeat 4 opponents with Electro-Charged within 2s (×5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "A Little Less Shocking Than Love at First Sight",
+                "description": "Defeat 4 opponents with Electro-Charged within 2s (×10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

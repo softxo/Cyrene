@@ -1,0 +1,266 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80014,
+                80015,
+                80016
+            ],
+            "name": "Onward and Upward",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 14,
+            "stages": 3,
+            "stage1": {
+                "title": "Onward and Upward",
+                "ps5title": "Onward and Upward (I)",
+                "description": "Ascend a character to Phase 2 for the first time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Onward and Upward",
+                "ps5title": "Onward and Upward (II)",
+                "description": "Ascend a character to Phase 4 for the first time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Onward and Upward",
+                "ps5title": "Onward and Upward (III)",
+                "description": "Ascend a character to Phase 6 for the first time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80017,
+                80018,
+                80019
+            ],
+            "name": "Re-Armed, Re-Forged",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 17,
+            "stages": 3,
+            "stage1": {
+                "title": "Re-Armed, Re-Forged",
+                "ps5title": "Re-Armed, Re-Forged (I)",
+                "description": "Ascend a weapon to Phase 2.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Re-Armed, Re-Forged",
+                "ps5title": "Re-Armed, Re-Forged (II)",
+                "description": "Ascend a weapon to Phase 4.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Re-Armed, Re-Forged",
+                "ps5title": "Re-Armed, Re-Forged (III)",
+                "description": "Ascend a weapon to Phase 6.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80020,
+                80021,
+                80022
+            ],
+            "name": "Hitherto Unknown",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 20,
+            "stages": 3,
+            "stage1": {
+                "title": "Hitherto Unknown",
+                "description": "Reach Friendship 10 with 4 characters.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Hitherto Unknown",
+                "description": "Reach Friendship 10 with 8 characters.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Hitherto Unknown",
+                "description": "Reach Friendship 10 with 16 characters.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80023,
+                80024,
+                80025
+            ],
+            "name": "Bounty of the Earth",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 23,
+            "stages": 3,
+            "stage1": {
+                "title": "Bounty of the Earth",
+                "description": "Collect 200 rewards from blossoms of wealth or blossoms of revelation.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Bounty of the Earth",
+                "description": "Collect 400 rewards from blossoms of wealth or blossoms of revelation.",
+                "progress": 400,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Bounty of the Earth",
+                "description": "Collect 800 rewards from blossoms of wealth or blossoms of revelation.",
+                "progress": 800,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80026
+            ],
+            "name": "Hero's Gift",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 26,
+            "stages": 1,
+            "stage1": {
+                "title": "Hero's Gift",
+                "description": "Obtain a 4-star artifact.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80027
+            ],
+            "name": "Echoing Song",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 27,
+            "stages": 1,
+            "stage1": {
+                "title": "Echoing Song",
+                "description": "Enhance a 4-star artifact to its highest level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80028
+            ],
+            "name": "Legendary Treasure",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 28,
+            "stages": 1,
+            "stage1": {
+                "title": "Legendary Treasure",
+                "description": "Obtain a 5-star artifact.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80029
+            ],
+            "name": "Sacred Canto",
+            "achievementGroupId": 3,
+            "achievementGroupName": "The Hero's Journey",
+            "sortOrder": 29,
+            "stages": 1,
+            "stage1": {
+                "title": "Sacred Canto",
+                "description": "Enhance a 5-star artifact to its highest level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

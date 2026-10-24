@@ -1,0 +1,289 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80252
+            ],
+            "name": "Continental Explorer: Land of Harmonious Springs (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 232,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Land of Harmonious Springs (I)",
+                "ps5title": "Fontaine: Continental Explorer (I)",
+                "description": "Light up the maps of the following areas in Fontaine: Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80253
+            ],
+            "name": "Font of All Waters (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 233,
+            "stages": 1,
+            "stage1": {
+                "title": "Font of All Waters (I)",
+                "ps5title": "Fontaine: Font of All Waters (I)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Fontaine: Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80254
+            ],
+            "name": "Sanctuary Pilgrim: Land of Harmonious Springs (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 234,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Land of Harmonious Springs (I)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Fontaine: Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80255
+            ],
+            "name": "Like Waters Clear",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 235,
+            "stages": 1,
+            "stage1": {
+                "title": "Like Waters Clear",
+                "ps5title": "Fontaine: Like Waters Clear",
+                "description": "Upgrade the Statues of The Seven in Fontaine to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80256
+            ],
+            "name": "Dew Song",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 236,
+            "stages": 1,
+            "stage1": {
+                "title": "Dew Song",
+                "ps5title": "Fontaine: Dew Song",
+                "description": "Reach the Max Level of the Fountain of Lucine in the Court of Fontaine.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80257,
+                80258,
+                80259
+            ],
+            "name": "Tides Will Guide You Home (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 237,
+            "stages": 3,
+            "stage1": {
+                "title": "Tides Will Guide You Home (I)",
+                "description": "Follow 6 Seelie in the Court of Fontaine Region, Belleau Region, and Beryl Region to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Tides Will Guide You Home (I)",
+                "description": "Follow 12 Seelie in the Court of Fontaine Region, Belleau Region, and Beryl Region to their Seelie Courts.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Tides Will Guide You Home (I)",
+                "description": "Follow 24 Seelie in the Court of Fontaine Region, Belleau Region, and Beryl Region to their Seelie Courts.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80260,
+                80261,
+                80262
+            ],
+            "name": "Waveriding Treasure Hunter (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 240,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Treasure Hunter (I)",
+                "ps5title": "Waveriding Treasure Hunter (I)",
+                "description": "Open 60 chests in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Treasure Hunter (I)",
+                "ps5title": "Waveriding Treasure Hunter (II)",
+                "description": "Open 120 chests in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Treasure Hunter (I)",
+                "ps5title": "Waveriding Treasure Hunter (III)",
+                "description": "Open 240 chests in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 240,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80263,
+                80264,
+                80265
+            ],
+            "name": "Waveriding Adventurer (I)",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 243,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Adventurer (I)",
+                "description": "Complete 3 Open World Time Trial Challenges in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Adventurer (I)",
+                "description": "Complete 6 Open World Time Trial Challenges in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Adventurer (I)",
+                "description": "Complete 12 Open World Time Trial Challenges in the Court of Fontaine Region, Belleau Region, and Beryl Region.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80266
+            ],
+            "name": "Ann in Wonderland",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 246,
+            "stages": 1,
+            "stage1": {
+                "title": "Ann in Wonderland",
+                "ps5title": "Journey: \"Ann in Wonderland\"",
+                "description": "Complete the tale of the Narzissenkreuz Adventure Team.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.0"
+        },
+        {
+            "id": [
+                80267
+            ],
+            "name": "Limner, Dreamer, and Robotic Dog",
+            "achievementGroupId": 42,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (I)",
+            "sortOrder": 247,
+            "stages": 1,
+            "stage1": {
+                "title": "Limner, Dreamer, and Robotic Dog",
+                "ps5title": "Journey: \"Limner, Dreamer, and Robotic Dog\"",
+                "description": "Discover the secret to be found within Elynas.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.0"
+        }
+    ]
+}

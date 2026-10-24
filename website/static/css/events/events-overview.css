@@ -1,0 +1,395 @@
+/* =========================================================
+   EVENTS — ACCOUNT-LAYOUT TABS AND OVERVIEW PANELS
+   ========================================================= */
+
+/* =========================================================
+   ACCOUNT LAYOUT TABS
+   ========================================================= */
+
+.events-featured[hidden],
+.events-list[hidden],
+.events-wishes[hidden],
+.events-account-empty[hidden] {
+    display: none;
+}
+
+
+/* =========================================================
+   EVENTS OVERVIEW
+   ========================================================= */
+
+.events-overview {
+    margin-top: 28px;
+}
+
+
+/* ---------------------------------------------------------
+   Overview Panels
+   --------------------------------------------------------- */
+
+.events-overview-panel {
+    display: none;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.events-overview-panel.active {
+    display: flex;
+}
+
+
+/* ---------------------------------------------------------
+   Overview Account Row
+   --------------------------------------------------------- */
+
+.overview-account-row {
+    min-height: 64px;
+
+    padding: 12px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--surface);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.overview-account-row:hover {
+    background: var(--surface-hover);
+
+    border-color: var(--accent);
+
+    transform: translateY(-1px);
+}
+
+.overview-account-row.completed {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+
+/* ---------------------------------------------------------
+   Account Name
+   --------------------------------------------------------- */
+
+.overview-account-name {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.overview-account-name strong {
+    color: var(--text-primary);
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.overview-account-name span {
+    color: var(--text-secondary);
+
+    opacity: 0.6;
+
+    font-size: 13px;
+}
+
+
+/* ---------------------------------------------------------
+   Account Status
+   --------------------------------------------------------- */
+
+.overview-account-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.overview-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    min-width: 64px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.overview-status:hover {
+    background: rgba(0, 0, 0, 0.38);
+
+    border-color: rgba(255, 255, 255, 0.16);
+
+    color: rgba(255, 255, 255, 0.90);
+}
+
+.overview-status.event-completion-pill,
+.overview-status.event-completion-pill:hover {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+
+/* =========================================================
+   OVERVIEW DAILY STATUS
+   ========================================================= */
+
+.overview-daily-progress {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    white-space: nowrap;
+}
+
+.overview-claimed,
+.overview-unclaimed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 100px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    white-space: nowrap;
+    font-weight: 600;
+
+    flex-shrink: 0;
+}
+
+.overview-claimed {
+    background: rgba(93, 231, 151, 0.16);
+
+    border-color: rgba(93, 231, 151, 0.32);
+
+    color: #72eea2;
+}
+
+.overview-unclaimed {
+    background: rgba(224, 82, 82, 0.16);
+
+    border-color: rgba(224, 82, 82, 0.32);
+
+    color: #f07171;
+}
+
+.overview-unclaimed.ready {
+    background: rgba(227, 154, 63, 0.20);
+
+    border-color: rgba(227, 154, 63, 0.38);
+
+    color: #f0ad5a;
+}
+
+
+/* =========================================================
+   OVERVIEW ENCOUNTER POINTS
+   ========================================================= */
+
+.overview-encounter-points {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 82px;
+    height: 32px;
+
+    padding: 4px 10px;
+
+    gap: 0;
+
+    border: 1px solid rgba(157, 130, 230, 0.28);
+    border-radius: 999px;
+
+    background: rgba(117, 90, 190, 0.16);
+
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+}
+
+.overview-encounter-points-icon {
+    width: 25px;
+    height: 25px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+    transform: translateX(-2px);
+}
+
+.overview-encounter-points-value {
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   OVERVIEW RESIN
+   ========================================================= */
+
+.overview-resin-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 16px;
+
+    flex: 0 0 auto;
+
+    min-width: 0;
+
+    position: relative;
+    left: 50px;
+}
+
+.overview-resin-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+
+    height: 36px;
+
+    padding: 4px 10px;
+
+    box-sizing: border-box;
+
+    flex: 0 0 120px;
+
+    border-radius: 8px;
+
+    background: rgba(77, 166, 225, 0.14);
+
+    color: #78c5f5;
+
+    white-space: nowrap;
+}
+
+.overview-resin-value strong {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.overview-resin-icon {
+    width: 26px;
+    height: 26px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+.overview-resin-countdowns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 4px;
+
+    min-width: 145px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.overview-resin-timer {
+    color: var(--text-primary);
+
+    font-weight: 600;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.overview-resin-value .resin-current {
+    color: #78c5f5;
+}
+
+.overview-resin-value .resin-maximum {
+    color: #608dac;
+}

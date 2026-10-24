@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Planner{% endblock %}
+
+{% block content %}
+
+<div class="page">
+
+    <!-- Planner Header -->
+    <section class="hero planner-hero">
+
+        <div class="hero-content">
+
+            <span class="eyebrow">
+                PLANNER
+            </span>
+
+            <h1>
+                Your <span>Planner</span>
+            </h1>
+
+            <p>
+                Keep track of your Genshin accounts, Resin,
+                and active reminders.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Loading -->
+    <div
+        id="planner-loading"
+        class="planner-state"
+    >
+        Loading planner...
+    </div>
+
+
+    <!-- Error -->
+    <div
+        id="planner-error"
+        class="planner-state planner-error"
+        hidden
+    >
+        Failed to load planner data.
+    </div>
+
+
+    <!-- Planner Content -->
+    <div
+        id="planner-content"
+        hidden
+    >
+
+        <!-- Accounts -->
+        <section class="planner-section">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        ACCOUNTS
+                    </span>
+
+                    <h2>
+                        Your Accounts
+                    </h2>
+                </div>
+
+            </div>
+
+            <div
+                id="accounts"
+                class="planner-grid"
+            ></div>
+
+        </section>
+
+
+        <!-- Reminders -->
+        <section class="planner-section">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        REMINDERS
+                    </span>
+
+                    <h2>
+                        Your Reminders
+                    </h2>
+
+                    <p>
+                        Manage the reminders configured for your accounts.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="planner-button"
+                    id="add-reminder-button"
+                >
+                    + Add Reminder
+                </button>
+
+            </div>
+
+
+            <div
+                id="reminder-panel"
+                class="reminder-panel"
+                hidden
+            >
+                <div class="reminder-panel-header">
+
+                    <div>
+                        <span class="eyebrow">
+                            NEW REMINDER
+                        </span>
+
+                        <h3>
+                            Add Reminder
+                        </h3>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="reminder-close-button"
+                        id="reminder-close-button"
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div class="reminder-form">
+
+                    <label>
+                        Reminder Type
+
+                        <div
+                            class="custom-select"
+                            id="reminder-type-select"
+                        >
+
+                            <button
+                                type="button"
+                                class="custom-select-button"
+                                id="reminder-type-button"
+                            >
+                                <span>
+                                    Resin
+                                </span>
+
+                                <span class="custom-select-arrow"></span>
+                            </button>
+
+                            <div
+                                class="custom-select-menu"
+                                id="reminder-type-menu"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option selected"
+                                    data-value="resin"
+                                >
+                                    Resin
+                                </button>
+
+                                <!-- Not implemented yet -->
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option disabled"
+                                    data-value="expedition"
+                                    disabled
+                                >
+                                    Expedition
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option disabled"
+                                    data-value="teapot"
+                                    disabled
+                                >
+                                    Serenitea Pot
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option disabled"
+                                    data-value="transformer"
+                                    disabled
+                                >
+                                    Parametric Transformer
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option disabled"
+                                    data-value="custom"
+                                    disabled
+                                >
+                                    Custom
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="hidden"
+                            id="reminder-type"
+                            value="resin"
+                        >
+                    </label>
+
+
+                    <label>
+                        Account
+
+                        <div
+                            class="custom-select"
+                            id="reminder-account-select"
+                        >
+
+                            <button
+                                type="button"
+                                class="custom-select-button"
+                                id="reminder-account-button"
+                            >
+                                <span id="reminder-account-value">
+                                    Select Account
+                                </span>
+
+                                <span class="custom-select-arrow"></span>
+                            </button>
+
+                            <div
+                                class="custom-select-menu"
+                                id="reminder-account-menu"
+                            ></div>
+
+                        </div>
+
+                        <input
+                            type="hidden"
+                            id="reminder-account"
+                        >
+                    </label>
+
+
+                    <label>
+                        Notify me at
+
+                        <div class="custom-input-wrapper">
+
+                            <img
+                                src="/static/images/misc/Original_Resin.webp"
+                                alt="Resin"
+                            >
+
+                            <input
+                                type="number"
+                                id="reminder-amount"
+                                min="1"
+                                max="200"
+                                value="160"
+                            >
+
+                            <span>
+                                Resin
+                            </span>
+
+                            <div class="number-spinner">
+
+                                <button
+                                    type="button"
+                                    class="number-spinner-button"
+                                    data-direction="up"
+                                    aria-label="Increase Resin"
+                                >
+                                    <span class="spinner-arrow"></span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="number-spinner-button"
+                                    data-direction="down"
+                                    aria-label="Decrease Resin"
+                                >
+                                    <span class="spinner-arrow"></span>
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </label>
+
+
+                    <div class="reminder-form-actions">
+
+                        <button
+                            type="button"
+                            class="planner-button"
+                            id="reminder-cancel-button"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            class="planner-button reminder-save-button"
+                            id="reminder-save-button"
+                        >
+                            Add Reminder
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="reminders"
+                class="reminders-list"
+            ></div>
+
+
+        </section>
+
+
+    </div>
+
+    <!-- Toast Notifications -->
+    <div
+        id="planner-toast"
+        class="planner-toast"
+        aria-live="polite"
+    >
+        <span
+            id="planner-toast-icon"
+            class="planner-toast-icon"
+        >
+            ✓
+        </span>
+
+        <span
+            id="planner-toast-message"
+            class="planner-toast-message"
+        >
+            Done
+        </span>
+    </div>
+
+</div>
+
+{% endblock %}

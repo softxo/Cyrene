@@ -1,0 +1,67 @@
+{
+    "achievements": [
+        {
+            "id": [
+                84505
+            ],
+            "name": "Geo Archon Anecdotes",
+            "achievementGroupId": 12,
+            "achievementGroupName": "Stone Harbor's Nostalgia: Series I",
+            "sortOrder": 4030,
+            "stages": 1,
+            "stage1": {
+                "title": "Geo Archon Anecdotes",
+                "description": "Collect all the stories about Rex Lapis in the \"Geo Travel Diary.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                84506
+            ],
+            "name": "Friends, Travelers, Lend Me Your Ears...",
+            "achievementGroupId": 12,
+            "achievementGroupName": "Stone Harbor's Nostalgia: Series I",
+            "sortOrder": 4031,
+            "stages": 1,
+            "stage1": {
+                "title": "Friends, Travelers, Lend Me Your Ears...",
+                "description": "Finish listening to the tale of the Ring of Raining Blades in \"Cliffhanger.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                84507
+            ],
+            "name": "Once Upon a Time...",
+            "achievementGroupId": 12,
+            "achievementGroupName": "Stone Harbor's Nostalgia: Series I",
+            "sortOrder": 4032,
+            "stages": 1,
+            "stage1": {
+                "title": "Once Upon a Time...",
+                "description": "Finish listening to the tale of The Wrath of Haishan in \"Cliffhanger.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

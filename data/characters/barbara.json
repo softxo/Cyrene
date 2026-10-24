@@ -1,0 +1,185 @@
+{
+  "id": "barbara",
+  "name": "Barbara",
+  "title": "Shining Idol",
+  "description": "Every citizen of Mondstadt adores Barbara. She learned the word \"idol\" from a magazine.",
+  "affiliation": "Church of Favonius",
+  "constellation": "Crater",
+  "birthday": "5/7",
+  "rarity": 4,
+  "element": "hydro",
+  "weapon": "catalyst",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#54b7f0",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Gleeful Songs",
+      "description": [
+        "Barbara regenerates 1 Energy every 10s."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Vitality Burst",
+      "description": [
+        "Decreases the CD of **Let the Show Begin♪** by 15%.",
+        "During the ability's duration, your active character gains a 15% **Hydro DMG Bonus**."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Star of Tomorrow",
+      "description": [
+        "Increases the Level of **Shining Miracle♪** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Attentiveness Be My Power",
+      "description": [
+        "Every opponent Barbara hits with her Charged Attack regenerates 1 Energy for her.",
+        "A maximum of 5 energy can be regenerated in this manner with any one Charged Attack."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "The Purest Companionship",
+      "description": [
+        "Increases the Level of **Let the Show Begin♪** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Dedicating Everything to You",
+      "description": [
+        "When Barbara is in the party but not on the field, and one of your own party members falls:",
+        "- Automatically revives the fallen character.",
+        "- Fully restores the revived character's HP to 100%.",
+        "This effect can only occur once every 15 mins."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Whisper of Water",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 4 water splash attacks that deal **Hydro DMG**."
+        ],
+        "charged": [
+          "Consumes a certain amount of Stamina to deal **AoE Hydro DMG** after a short casting time."
+        ],
+        "plunge": [
+          "Gathering the might of Hydro, Barbara plunges towards the ground from mid-air, damaging all opponents in her path. Deals **AoE Hydro DMG** upon impact with the ground."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Let the Show Begin♪",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Summons water droplets resembling musical notes that form a Melody Loop, dealing **Hydro DMG** to surrounding opponents and applying the **Wet** status to them."
+      ],
+      "sections": [
+        {
+          "title": "Melody Loop",
+          "text": [
+            "- On hit, Barbara's Normal Attacks heal your own party members and nearby teammates for a certain amount of HP, which scales with Barbara's Max HP.",
+            "- On hit, Barbara's Charged Attack generates 4 times the amount of healing.",
+            "- Periodically regenerates your own active character's HP.",
+            "- Applies the **Wet** status to the character and to opponents who come in contact with them."
+          ]
+        }
+      ]
+    },
+    "elemental_burst": {
+      "name": "Shining Miracle♪",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Heals your own party members and nearby teammates for a large amount of HP that scales with Barbara's Max HP."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Glorious Season",
+      "description": [
+        "The Stamina Consumption of characters within **Let the Show Begin♪**'s Melody Loop is reduced by 12%."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Encore",
+      "description": [
+        "When your active character gains an Elemental Orb/Particle, the duration of the Melody Loop of **Let the Show Begin♪** is extended by 1s.",
+        "The maximum extension is 5s."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "With My Whole Heart♪",
+      "description": [
+        "When a Perfect Cooking is achieved on a dish with restorative effects, there is a 12% chance to obtain double the product."
+      ]
+    }
+  ],
+ "materials": {
+    "ascension": {
+      "gem": {
+        "id": "varunada_lazurite",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "cleansing_heart",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "philanemo_mushroom",
+        "amount": 168
+      },
+      "common": {
+        "id": "scroll",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "freedom",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "scroll",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "andrius",
+        "material": "ring_of_boreas",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

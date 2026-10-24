@@ -1,0 +1,1239 @@
+{
+    "achievements": [
+        {
+            "id": [
+                84026
+            ],
+            "name": "Fantastic Voyage: Prologue",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6001,
+            "stages": 1,
+            "stage1": {
+                "title": "Fantastic Voyage: Prologue",
+                "description": "Complete \"Fantastic Voyage\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84100
+            ],
+            "name": "Archaic Lord of Lightning and Blitz",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6010,
+            "stages": 1,
+            "stage1": {
+                "title": "Archaic Lord of Lightning and Blitz",
+                "description": "Witness the awesome meteorological power of Bennett's phenomenally bad luck.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84101
+            ],
+            "name": "The Power of Luck",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6011,
+            "stages": 1,
+            "stage1": {
+                "title": "The Power of Luck",
+                "description": "Activate the mechanisms and obtain the treasure without making any mistakes.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84104
+            ],
+            "name": "Evil Is Banished",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6100,
+            "stages": 1,
+            "stage1": {
+                "title": "Evil Is Banished",
+                "description": "Complete \"Signs of Evil\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84028
+            ],
+            "name": "Behold, Mine Evil-Espying Eye!",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6110,
+            "stages": 1,
+            "stage1": {
+                "title": "Behold, Mine Evil-Espying Eye!",
+                "description": "Correctly interpret all clues.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84107
+            ],
+            "name": "Red Hot Chili Popsicles",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6111,
+            "stages": 1,
+            "stage1": {
+                "title": "Red Hot Chili Popsicles",
+                "description": "Make a popsicle using the wrong recipe and provoke Chongyun's Pure-Yang Spirit.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84102
+            ],
+            "name": "A Line That May Be Crossed",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6200,
+            "stages": 1,
+            "stage1": {
+                "title": "A Line That May Be Crossed",
+                "description": "Complete \"Wellspring of Healing\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84108
+            ],
+            "name": "An Idol's Last Line of Defense",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6210,
+            "stages": 1,
+            "stage1": {
+                "title": "An Idol's Last Line of Defense",
+                "description": "Successfully persuade Albert and Barbara's other fans to leave.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84105
+            ],
+            "name": "Mondstadt's Spiciest Surprise",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6211,
+            "stages": 1,
+            "stage1": {
+                "title": "Mondstadt's Spiciest Surprise",
+                "description": "Sample Barbara's Chilibrew.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84103
+            ],
+            "name": "A Maid of Strength and Virtue",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6300,
+            "stages": 1,
+            "stage1": {
+                "title": "A Maid of Strength and Virtue",
+                "description": "Complete \"Chivalric Training\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84106
+            ],
+            "name": "\"...For I Am Duty Bound\"",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6310,
+            "stages": 1,
+            "stage1": {
+                "title": "\"...For I Am Duty Bound\"",
+                "description": "Help Noelle discover the source of her strength.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84109
+            ],
+            "name": "A World Known Only Unto Roses",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6311,
+            "stages": 1,
+            "stage1": {
+                "title": "A World Known Only Unto Roses",
+                "description": "Read Noelle's study notes.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.4"
+        },
+        {
+            "id": [
+                84110
+            ],
+            "name": "Stress Relief",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6400,
+            "stages": 1,
+            "stage1": {
+                "title": "Stress Relief",
+                "description": "Complete \"Knightly Exam Prep\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84111
+            ],
+            "name": "Invulnerable Maid-Knight",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6410,
+            "stages": 1,
+            "stage1": {
+                "title": "Invulnerable Maid-Knight",
+                "description": "Listen to \"A Knight's Journey Through Liyue\" with Noelle.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84112
+            ],
+            "name": "Mondstadt's Note-Taker General",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6411,
+            "stages": 1,
+            "stage1": {
+                "title": "Mondstadt's Note-Taker General",
+                "description": "Read Noelle's study notes.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84113
+            ],
+            "name": "Diona Special, Stirred, Not Shaken",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6500,
+            "stages": 1,
+            "stage1": {
+                "title": "Diona Special, Stirred, Not Shaken",
+                "description": "Complete \"The Cat and the Cocktail\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84114
+            ],
+            "name": "But There's a Catch...",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6510,
+            "stages": 1,
+            "stage1": {
+                "title": "But There's a Catch...",
+                "description": "Help Diona find a special base drink.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84115
+            ],
+            "name": "Kitten Queen",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6511,
+            "stages": 1,
+            "stage1": {
+                "title": "Kitten Queen",
+                "description": "Bring all the cats back to The Cat's Tail.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.5"
+        },
+        {
+            "id": [
+                84116
+            ],
+            "name": "Everyone's Happy",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6600,
+            "stages": 1,
+            "stage1": {
+                "title": "Everyone's Happy",
+                "description": "Complete \"A Housekeeper's Daily Chores\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84117
+            ],
+            "name": "Housekeeper Extraordinaire",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6610,
+            "stages": 1,
+            "stage1": {
+                "title": "Housekeeper Extraordinaire",
+                "description": "Complete the big cleanup within the time limit",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84118
+            ],
+            "name": "From the Sea Never Returning",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6611,
+            "stages": 1,
+            "stage1": {
+                "title": "From the Sea Never Returning",
+                "description": "Learn of Inu Shoushou's story together with Thoma",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84119
+            ],
+            "name": "Taller by Half",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6700,
+            "stages": 1,
+            "stage1": {
+                "title": "Taller by Half",
+                "description": "Complete \"Yoohoo Art: Seichou no Jutsu\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84120
+            ],
+            "name": "Mujina-Class Ninja",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6710,
+            "stages": 1,
+            "stage1": {
+                "title": "Mujina-Class Ninja",
+                "description": "Obtain Sayu's highest rating during agility training.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84121
+            ],
+            "name": "Dish Effect: Mobility Decreased",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6711,
+            "stages": 1,
+            "stage1": {
+                "title": "Dish Effect: Mobility Decreased",
+                "description": "You were unable to prevent Sayu's reckless consumption...",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.2"
+        },
+        {
+            "id": [
+                84125
+            ],
+            "name": "General of Watatsumi",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6800,
+            "stages": 1,
+            "stage1": {
+                "title": "General of Watatsumi",
+                "description": "Complete \"The Canine General's Special Operations\" and unlock all endings",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84126
+            ],
+            "name": "Changing Times",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6810,
+            "stages": 1,
+            "stage1": {
+                "title": "Changing Times",
+                "description": "Draw all fortune slips at the Grand Narukami Shrine.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84127
+            ],
+            "name": "To Tell or Not to Tell, That Is the Question",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6811,
+            "stages": 1,
+            "stage1": {
+                "title": "To Tell or Not to Tell, That Is the Question",
+                "description": "Discover Ms. Hina's true identity at the Yae Publishing House.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84122
+            ],
+            "name": "Honorary Crux Member",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 6900,
+            "stages": 1,
+            "stage1": {
+                "title": "Honorary Crux Member",
+                "description": "Complete \"When the Crux Shines Bright\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84123
+            ],
+            "name": "Wine Unburdens",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6910,
+            "stages": 1,
+            "stage1": {
+                "title": "Wine Unburdens",
+                "description": "Take part in the Qingce banquet with Beidou",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84124
+            ],
+            "name": "Guyun Buyers' Club",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 6911,
+            "stages": 1,
+            "stage1": {
+                "title": "Guyun Buyers' Club",
+                "description": "Find out the truth behind the deal Beidou's making",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.3"
+        },
+        {
+            "id": [
+                84128
+            ],
+            "name": "Megrez's Companion Star",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7000,
+            "stages": 1,
+            "stage1": {
+                "title": "Megrez's Companion Star",
+                "description": "Complete \"The Jade Chamber's Returning Guest\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84129
+            ],
+            "name": "You've Got to Have Reserves",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7010,
+            "stages": 1,
+            "stage1": {
+                "title": "You've Got to Have Reserves",
+                "description": "Fish? The more the merrier, of course!",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84130
+            ],
+            "name": "Overprotectiveness",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7011,
+            "stages": 1,
+            "stage1": {
+                "title": "Overprotectiveness",
+                "description": "A single stone births a thousand ripples. It seems like Ningguang's day off is not to be.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84131
+            ],
+            "name": "The Lingering Song",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7100,
+            "stages": 1,
+            "stage1": {
+                "title": "The Lingering Song",
+                "description": "Complete \"A Song That Knows Grace\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84132
+            ],
+            "name": "May This Moment Be Made to Last",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7110,
+            "stages": 1,
+            "stage1": {
+                "title": "May This Moment Be Made to Last",
+                "description": "Take a commemorative photo with Yun Jin.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84133
+            ],
+            "name": "A Strict Master Trains a Talented Pupil",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7111,
+            "stages": 1,
+            "stage1": {
+                "title": "A Strict Master Trains a Talented Pupil",
+                "description": "Complete the practice session without hitting a single blue scarecrow.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.4"
+        },
+        {
+            "id": [
+                84134
+            ],
+            "name": "Arataki Gang Chief Advisor",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7200,
+            "stages": 1,
+            "stage1": {
+                "title": "Arataki Gang Chief Advisor",
+                "description": "Complete \"The Gang's Daily Deeds\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.7"
+        },
+        {
+            "id": [
+                84135
+            ],
+            "name": "One More Look!",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7210,
+            "stages": 1,
+            "stage1": {
+                "title": "One More Look!",
+                "description": "Gaze upon the glory that is Kuki Shinobu in a shrine maiden outfit.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.7"
+        },
+        {
+            "id": [
+                84136
+            ],
+            "name": "\"Upstairs...\"",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7211,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Upstairs...\"",
+                "description": "Be dissuaded before alerting Kujou Sara and Kuki Shinobu.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.7"
+        },
+        {
+            "id": [
+                84137
+            ],
+            "name": "You Thought We Were For Real, Eh?",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7300,
+            "stages": 1,
+            "stage1": {
+                "title": "You Thought We Were For Real, Eh?",
+                "description": "Complete \"Trap 'Em by Storm\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.8"
+        },
+        {
+            "id": [
+                84138
+            ],
+            "name": "An Ideal Detective Am I",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7310,
+            "stages": 1,
+            "stage1": {
+                "title": "An Ideal Detective Am I",
+                "description": "Correctly analyze the motives and the truth behind the crime the first time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.8"
+        },
+        {
+            "id": [
+                84139
+            ],
+            "name": "Sangonomiya Supplications",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7311,
+            "stages": 1,
+            "stage1": {
+                "title": "Sangonomiya Supplications",
+                "description": "Ask Gorou whether Kokomi knows about the happenings on Watatsumi Island.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.8"
+        },
+        {
+            "id": [
+                84140
+            ],
+            "name": "Optimal Solution",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7400,
+            "stages": 1,
+            "stage1": {
+                "title": "Optimal Solution",
+                "description": "Complete \"A Confounding Conundrum\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.5"
+        },
+        {
+            "id": [
+                84141
+            ],
+            "name": "To You in a Hundred Years",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7410,
+            "stages": 1,
+            "stage1": {
+                "title": "To You in a Hundred Years",
+                "description": "Read all the letters sent to Faruzan.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.5"
+        },
+        {
+            "id": [
+                84142
+            ],
+            "name": "Mechanics: From Beginner to...?",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7411,
+            "stages": 1,
+            "stage1": {
+                "title": "Mechanics: From Beginner to...?",
+                "description": "Guess correctly the smallest number of moves it will take to solve a seven-layer Pagoda Stack.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.5"
+        },
+        {
+            "id": [
+                84143
+            ],
+            "name": "The Name Is Layla",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7500,
+            "stages": 1,
+            "stage1": {
+                "title": "The Name Is Layla",
+                "description": "Complete \"Ever Silent Stars\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                84144
+            ],
+            "name": "She's Already Tense",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7510,
+            "stages": 1,
+            "stage1": {
+                "title": "She's Already Tense",
+                "description": "Help Layla finish her thesis without causing her further anxiety.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                84145
+            ],
+            "name": "Secret of Seelie and the Star-Lit Sky",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7511,
+            "stages": 1,
+            "stage1": {
+                "title": "Secret of Seelie and the Star-Lit Sky",
+                "description": "Obtain the authentic letter of the Wisdom Seelie.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                84146
+            ],
+            "name": "Art and Life",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7600,
+            "stages": 1,
+            "stage1": {
+                "title": "Art and Life",
+                "description": "Complete \"The Pendulum of Weal and Woe\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.7"
+        },
+        {
+            "id": [
+                84147
+            ],
+            "name": "School Days",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7610,
+            "stages": 1,
+            "stage1": {
+                "title": "School Days",
+                "description": "Find the annotated books in the House of Daena.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.7"
+        },
+        {
+            "id": [
+                84148
+            ],
+            "name": "An Architect's Romanticism",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7611,
+            "stages": 1,
+            "stage1": {
+                "title": "An Architect's Romanticism",
+                "description": "Chat about the future with Kaveh in the desert.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.7"
+        },
+        {
+            "id": [
+                84149
+            ],
+            "name": "Make Merry",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7700,
+            "stages": 1,
+            "stage1": {
+                "title": "Make Merry",
+                "description": "Complete \"Shenanigans and Sweet Wine\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.8"
+        },
+        {
+            "id": [
+                84150
+            ],
+            "name": "Lucky Coin",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7710,
+            "stages": 1,
+            "stage1": {
+                "title": "Lucky Coin",
+                "description": "Participate in the wager set up by Kaeya.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.8"
+        },
+        {
+            "id": [
+                84151
+            ],
+            "name": "Shh... Listen!",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7711,
+            "stages": 1,
+            "stage1": {
+                "title": "Shh... Listen!",
+                "description": "Listen to the voice coming from the confinement room.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.8"
+        },
+        {
+            "id": [
+                84152
+            ],
+            "name": "Indicators of Fate",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "sortOrder": 7800,
+            "stages": 1,
+            "stage1": {
+                "title": "Indicators of Fate",
+                "description": "Complete \"Checks & Cats\" and unlock all endings.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.5"
+        },
+        {
+            "id": [
+                84153
+            ],
+            "name": "Speedrun",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7810,
+            "stages": 1,
+            "stage1": {
+                "title": "Speedrun",
+                "description": "Persuade Lynette to spend a leisurely, peaceful day with you.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.5"
+        },
+        {
+            "id": [
+                84154
+            ],
+            "name": "Decks & Detectives",
+            "achievementGroupId": 17,
+            "achievementGroupName": "Memories of the Heart",
+            "isHidden": true,
+            "sortOrder": 7811,
+            "stages": 1,
+            "stage1": {
+                "title": "Decks & Detectives",
+                "description": "Have a peaceful tea party with Lynette after solving the smuggling case.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.5"
+        }
+    ]
+}

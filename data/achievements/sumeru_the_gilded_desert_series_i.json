@@ -1,0 +1,223 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80179
+            ],
+            "name": "Continental Explorer: Dune Dreams (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 179,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Dune Dreams (I)",
+                "ps5title": "Sumeru: Continental Explorer (II)",
+                "description": "Light up the maps of the following areas in Sumeru: Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80180
+            ],
+            "name": "Over Sandstorms and Mirages (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 180,
+            "stages": 1,
+            "stage1": {
+                "title": "Over Sandstorms and Mirages (I)",
+                "ps5title": "Sumeru: Over Sandstorms and Mirages (I)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Sumeru: Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 27,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80181
+            ],
+            "name": "Sanctuary Pilgrim: Dune Dreams (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 181,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Dune Dreams (I)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Sumeru: Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80182,
+                80183,
+                80184
+            ],
+            "name": "The Desert Will Guide You Home (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 184,
+            "stages": 3,
+            "stage1": {
+                "title": "The Desert Will Guide You Home (I)",
+                "description": "Follow 10 Seelie to their Seelie Courts in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Desert Will Guide You Home (I)",
+                "description": "Follow 20 Seelie to their Seelie Courts in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Desert Will Guide You Home (I)",
+                "description": "Follow 40 Seelie to their Seelie Courts in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80185,
+                80186,
+                80187
+            ],
+            "name": "Quicksand Treasure Hunter (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 187,
+            "stages": 3,
+            "stage1": {
+                "title": "Quicksand Treasure Hunter (I)",
+                "ps5title": "Quicksand Treasure Hunter (I)",
+                "description": "Open a total of 60 treasure chests in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Quicksand Treasure Hunter (I)",
+                "ps5title": "Quicksand Treasure Hunter (II)",
+                "description": "Open a total of 120 treasure chests in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Quicksand Treasure Hunter (I)",
+                "ps5title": "Quicksand Treasure Hunter (III)",
+                "description": "Open a total of 240 treasure chests in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 240,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80188,
+                80189,
+                80190
+            ],
+            "name": "Quicksand Adventurer (I)",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 190,
+            "stages": 3,
+            "stage1": {
+                "title": "Quicksand Adventurer (I)",
+                "description": "Complete a total of 10 Open World Time Trial Challenges in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Quicksand Adventurer (I)",
+                "description": "Complete a total of 20 Open World Time Trial Challenges in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Quicksand Adventurer (I)",
+                "description": "Complete a total of 40 Open World Time Trial Challenges in Hypostyle Desert, Land of Upper Setekh, and Land of Lower Setekh.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                80191
+            ],
+            "name": "Slumber, the Brother Of...",
+            "achievementGroupId": 35,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series I",
+            "sortOrder": 193,
+            "stages": 1,
+            "stage1": {
+                "title": "Slumber, the Brother Of...",
+                "ps5title": "Journey: Slumber, the Brother Of...",
+                "description": "Complete \"Golden Slumber.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.1"
+        }
+    ]
+}

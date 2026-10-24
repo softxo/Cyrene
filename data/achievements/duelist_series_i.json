@@ -1,0 +1,434 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82220,
+                82221,
+                82222
+            ],
+            "name": "\"Polychrome Tri-Stars\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2220,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Polychrome Tri-Stars\"",
+                "description": "Defeat Local Legend: Polychrome Tri-Stars.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Polychrome Tri-Stars\"",
+                "description": "Defeat Vasily first, then defeat the other members of the Polychrome Tri-Stars.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Polychrome Tri-Stars\"",
+                "description": "Defeat the Polychrome Tri-Stars within 10s of defeating the first member.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82223,
+                82224,
+                82225
+            ],
+            "name": "\"Cocijo\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2223,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Cocijo\"",
+                "description": "Defeat Local Legend: Cocijo.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Cocijo\"",
+                "description": "Defeat Cocijo before he forms a Thunderthorn Ward.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Cocijo\"",
+                "description": "Defeat Cocijo after the Thunderthorn Ward has been formed, and without any character having been hit by the Ward's reflected attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82226,
+                82227,
+                82228
+            ],
+            "name": "\"Sappho Amidst the Waves\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2226,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Sappho Amidst the Waves\"",
+                "description": "Defeat Local Legend: Sappho Amidst the Waves.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Sappho Amidst the Waves\"",
+                "description": "Defeat Sappho Amidst the Waves without being hit by her Shattering Ice attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Sappho Amidst the Waves\"",
+                "description": "Defeat Sappho Amidst the Waves without allowing any of the Cryo spray cans to explode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82229,
+                82230,
+                82231
+            ],
+            "name": "\"Balachko\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2229,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Balachko\"",
+                "description": "Defeat Local Legend: Balachko.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Balachko\"",
+                "description": "During the course of completing a single challenge, defeat no targets besides the original body while Balachko is using Shadowblade Tactics.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Balachko\"",
+                "description": "During the course of completing a single challenge, defeat 3 copies in a row before Balachko can unleash Shadowblade Tactics.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82232,
+                82233,
+                82234
+            ],
+            "name": "\"Cihuacoatl of Chimeric Bone\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2232,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Cihuacoatl of Chimeric Bone\"",
+                "description": "Defeat Local Legend: Cihuacoatl of Chimeric Bone.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Cihuacoatl of Chimeric Bone\"",
+                "description": "During the course of completing a single challenge, break all the grappling anchor points before the Cihuacoatl of Chimeric Bone exits the hovering state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Cihuacoatl of Chimeric Bone\"",
+                "description": "Defeat the Cihuacoatl of Chimeric Bone while she is in the hovering state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82235,
+                82236,
+                82237
+            ],
+            "name": "\"He Never Dies\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2235,
+            "stages": 3,
+            "stage1": {
+                "title": "\"He Never Dies\"",
+                "description": "Defeat Local Legend: He Never Dies.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"He Never Dies\"",
+                "description": "Defeat \"He Never Dies\" without being hit by \"Ultimate Technique: Giant Undying Collision.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"He Never Dies\"",
+                "description": "Defeat \"He Never Dies\" after interrupting the charging of \"Ultimate Technique: Giant Undying Collision\" 3 times.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82238,
+                82239,
+                82240
+            ],
+            "name": "\"Tlatzacuilotl\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2238,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Tlatzacuilotl\"",
+                "description": "Defeat Local Legend: Tlatzacuilotl.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Tlatzacuilotl\"",
+                "description": "During the course of completing a single challenge, break Tlatzacuilotl's Ward each time with a single attack.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Tlatzacuilotl\"",
+                "description": "Defeat Tlatzacuilotl without being hit by any attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82241,
+                82242,
+                82243
+            ],
+            "name": "\"Ichcahuipilli's Aegis\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2241,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Ichcahuipilli's Aegis\"",
+                "description": "Defeat Local Legend: Ichcahuipilli's Aegis.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Ichcahuipilli's Aegis\"",
+                "description": "During the course of completing a single challenge, defeat 10 Nightsoul Warriors during the Trial of Decisions.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Ichcahuipilli's Aegis\"",
+                "description": "Defeat Ichcahuipilli's Aegis without being hit by any attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82244,
+                82245,
+                82246
+            ],
+            "name": "\"Chimalli's Shade\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2244,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Chimalli's Shade\"",
+                "description": "Defeat Local Legend: Chimalli's Shade.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Chimalli's Shade\"",
+                "description": "Defeat Chimalli's Shade without any characters being downed.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Chimalli's Shade\"",
+                "description": "During the course of completing a single challenge, when Chimalli's Shade absorbs \"Hydroflow Constructs,\" break her Elemental Ward by launching frozen \"Hydroflow Constructs.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                82247,
+                82248,
+                82249
+            ],
+            "name": "\"Atlatl's Blessing\"",
+            "achievementGroupId": 54,
+            "achievementGroupName": "Duelist: Series I",
+            "sortOrder": 2247,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Atlatl's Blessing\"",
+                "description": "Defeat Local Legend: Atlatl's Blessing.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Atlatl's Blessing\"",
+                "description": "During the course of completing a single challenge, use Parry to counterattack all of Atlatl's Blessing's power attacks and inflict damage.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Atlatl's Blessing\"",
+                "description": "Defeat Atlatl's Blessing without taking any damage from attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        }
+    ]
+}

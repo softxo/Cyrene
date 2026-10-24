@@ -1,0 +1,111 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80007
+            ],
+            "name": "Taking Shape",
+            "achievementGroupId": 2,
+            "achievementGroupName": "The Art of Adventure",
+            "sortOrder": 7,
+            "stages": 1,
+            "stage1": {
+                "title": "Taking Shape",
+                "description": "Forge a 4-star weapon.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80008,
+                80009,
+                80010
+            ],
+            "name": "Survival Expert",
+            "achievementGroupId": 2,
+            "achievementGroupName": "The Art of Adventure",
+            "sortOrder": 8,
+            "stages": 3,
+            "stage1": {
+                "title": "Survival Expert",
+                "description": "Grasp how 10 different dishes are made.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Survival Expert",
+                "description": "Grasp how 20 different dishes are made.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Survival Expert",
+                "description": "Grasp how 40 different dishes are made.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80011,
+                80012,
+                80013
+            ],
+            "name": "Star Chef",
+            "achievementGroupId": 2,
+            "achievementGroupName": "The Art of Adventure",
+            "sortOrder": 11,
+            "stages": 3,
+            "stage1": {
+                "title": "Star Chef",
+                "description": "Master 10 Recipes.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Star Chef",
+                "description": "Master 20 Recipes.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Star Chef",
+                "description": "Master 40 Recipes.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

@@ -1,0 +1,130 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80456
+            ],
+            "name": "Dime Pulp Fiction",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 417,
+            "stages": 1,
+            "stage1": {
+                "title": "Dime Pulp Fiction",
+                "description": "Collect the entire \"The Legends of Reed Miller, Thief Extraordinaire\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80457
+            ],
+            "name": "Faith Was for the Transience",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 418,
+            "stages": 1,
+            "stage1": {
+                "title": "Faith Was for the Transience",
+                "description": "Collect the entire \"Hymns of the Far North\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80458
+            ],
+            "name": "...As a Bee Produces Honey",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 419,
+            "stages": 1,
+            "stage1": {
+                "title": "...As a Bee Produces Honey",
+                "description": "Collect the entire \"Conch Echoes\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80459
+            ],
+            "name": "Part the Snow-Curtain of the Sky",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 420,
+            "stages": 1,
+            "stage1": {
+                "title": "Part the Snow-Curtain of the Sky",
+                "description": "Collect the entire \"Tales Carried by the Northwind\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80460
+            ],
+            "name": "The History of One City",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 421,
+            "stages": 1,
+            "stage1": {
+                "title": "The History of One City",
+                "description": "Collect the entire \"A Brief History of the Pale Starborn\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80461
+            ],
+            "name": "A Bewitched Place Beneath the Moon",
+            "achievementGroupId": 65,
+            "achievementGroupName": "Mortal Travails: Series VI",
+            "sortOrder": 422,
+            "stages": 1,
+            "stage1": {
+                "title": "A Bewitched Place Beneath the Moon",
+                "description": "Collect the entire \"Night Murmurs From the Far Border\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        }
+    ]
+}

@@ -1,0 +1,172 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82066
+            ],
+            "name": "Turnover",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2066,
+            "stages": 1,
+            "stage1": {
+                "title": "Turnover",
+                "description": "Knock a Cryo Slime out of the hands of a Cryo Hilichurl Grenadier.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82067
+            ],
+            "name": "Tear Down This Wall!",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2067,
+            "stages": 1,
+            "stage1": {
+                "title": "Tear Down This Wall!",
+                "description": "Destroy an Ice Shieldwall Mitachurl's shield.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82068
+            ],
+            "name": "No Ice for Me, Thanks",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2068,
+            "stages": 1,
+            "stage1": {
+                "title": "No Ice for Me, Thanks",
+                "description": "Defeat a Cryo Samachurl before it is able to create an ice pillar.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82069
+            ],
+            "name": "...The Harder They Fall",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2069,
+            "stages": 1,
+            "stage1": {
+                "title": "...The Harder They Fall",
+                "description": "Destroy a Cryo Samachurl's ice pillar.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82070
+            ],
+            "name": "Chilly-Churl",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2070,
+            "stages": 1,
+            "stage1": {
+                "title": "Chilly-Churl",
+                "description": "Defeat a Frostarm Lawachurl before its Infused Form can expire.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82071
+            ],
+            "name": "\"Rosebud...\"",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2071,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Rosebud...\"",
+                "description": "Break a Cryo Cicin Mage's Ward.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82072
+            ],
+            "name": "Assassin of Kings",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2072,
+            "stages": 1,
+            "stage1": {
+                "title": "Assassin of Kings",
+                "description": "Defeat the true ruler of Dragonspine?",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.2"
+        },
+        {
+            "id": [
+                82073
+            ],
+            "name": "David and Goliath",
+            "achievementGroupId": 15,
+            "achievementGroupName": "Challenger: Series III",
+            "sortOrder": 2073,
+            "stages": 1,
+            "stage1": {
+                "title": "David and Goliath",
+                "description": "Paralyze a Ruin Grader by attacking its weak point.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.2"
+        }
+    ]
+}

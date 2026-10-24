@@ -1,0 +1,259 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80096
+            ],
+            "name": "Continental Explorer: Land of Surging Thunder (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 96,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Land of Surging Thunder (II)",
+                "description": "Light up the Watatsumi Island and Seirai Island areas of the Inazuma map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80097
+            ],
+            "name": "Thunderbolting Across the Land (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 97,
+            "stages": 1,
+            "stage1": {
+                "title": "Thunderbolting Across the Land (II)",
+                "description": "Unlock all Teleport Waypoints in the Watatsumi Island and Seirai Island areas of Inazuma.",
+                "progress": 14,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80098
+            ],
+            "name": "Sanctuary Pilgrim: Inazuma Tenryou (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 98,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Inazuma Tenryou (II)",
+                "description": "Unlock all Shrines of Depths in the Watatsumi Island and Seirai Island areas of Inazuma.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80099,
+                80100,
+                80101
+            ],
+            "name": "Naku Weed Whacker (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 99,
+            "stages": 3,
+            "stage1": {
+                "title": "Naku Weed Whacker (II)",
+                "description": "Follow 4 Electro Seelie on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Naku Weed Whacker (II)",
+                "description": "Follow 8 Electro Seelie on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Naku Weed Whacker (II)",
+                "description": "Follow 16 Electro Seelie on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80102
+            ],
+            "name": "Lights Will Guide You Home (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 102,
+            "stages": 1,
+            "stage1": {
+                "title": "Lights Will Guide You Home (II)",
+                "description": "Follow 6 Seelie to their Seelie Courts on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80105,
+                80106,
+                80107
+            ],
+            "name": "Lightning-Riding Treasure Hunter (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 105,
+            "stages": 3,
+            "stage1": {
+                "title": "Lightning-Riding Treasure Hunter (II)",
+                "description": "Open 40 chests on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lightning-Riding Treasure Hunter (II)",
+                "description": "Open 80 chests on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lightning-Riding Treasure Hunter (II)",
+                "description": "Open 160 chests on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80110,
+                80111,
+                80112
+            ],
+            "name": "Lightning-Riding Adventurer (II)",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 108,
+            "stages": 3,
+            "stage1": {
+                "title": "Lightning-Riding Adventurer (II)",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lightning-Riding Adventurer (II)",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lightning-Riding Adventurer (II)",
+                "description": "Complete 24 Open World mechanism-activated Time Trial Challenges on Watatsumi Island and Seirai Island in Inazuma.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80108
+            ],
+            "name": "Seirai Stormchasers",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 111,
+            "stages": 1,
+            "stage1": {
+                "title": "Seirai Stormchasers",
+                "description": "Complete \"Seirai Stormchasers\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                80109
+            ],
+            "name": "The Same Moonlight",
+            "achievementGroupId": 26,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series II",
+            "sortOrder": 112,
+            "stages": 1,
+            "stage1": {
+                "title": "The Same Moonlight",
+                "description": "Complete \"The Moon-Bathed Deep\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        }
+    ]
+}

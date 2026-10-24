@@ -1,0 +1,172 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82115
+            ],
+            "name": "Salt for My Foes, and Water for Me",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2115,
+            "stages": 1,
+            "stage1": {
+                "title": "Salt for My Foes, and Water for Me",
+                "description": "Obtain at least three healing orbs fired from the \"water droplets\" during the Hydro Hypostasis fight.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82116
+            ],
+            "name": "The Fraught Return",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2116,
+            "stages": 1,
+            "stage1": {
+                "title": "The Fraught Return",
+                "description": "Stop the Hydro Hypostasis from reviving itself without destroying any of the \"water droplets\" by placing obstacles or repelling them.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82117
+            ],
+            "name": "Moment of Destruction",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2117,
+            "stages": 1,
+            "stage1": {
+                "title": "Moment of Destruction",
+                "description": "Defeat Signora without using any Crimson Lotus Moths.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82118
+            ],
+            "name": "Electric Escape",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2118,
+            "stages": 1,
+            "stage1": {
+                "title": "Electric Escape",
+                "description": "Defeat a Thunder Manifestation without being hit by its homing thunder cage attack.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82119
+            ],
+            "name": "Radio Silence",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2119,
+            "stages": 1,
+            "stage1": {
+                "title": "Radio Silence",
+                "description": "Get locked on by the Thunder Manifestation before you can attack it.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82120
+            ],
+            "name": "Swimming Prohibited",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2120,
+            "stages": 1,
+            "stage1": {
+                "title": "Swimming Prohibited",
+                "description": "Defeat the Bathysmal Vishap Herd without allowing them to dive into the water.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82126
+            ],
+            "name": "Death Proof",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2126,
+            "stages": 1,
+            "stage1": {
+                "title": "Death Proof",
+                "description": "Dodge one entire round of the Baleful Vajra's destructive waves during one battle with Magatsu Mitake Narukami no Mikoto.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                82128
+            ],
+            "name": "Ouroboros",
+            "achievementGroupId": 29,
+            "achievementGroupName": "Challenger: Series V",
+            "sortOrder": 2128,
+            "stages": 1,
+            "stage1": {
+                "title": "Ouroboros",
+                "description": "Destroy Oozing Concretions to paralyze the Ruin Serpent while it is gathering energy.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        }
+    ]
+}

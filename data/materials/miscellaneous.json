@@ -1,0 +1,41 @@
+{
+  "mora": {
+    "name": "Mora",
+    "emoji": "Mora"
+  },
+
+  "heros_wit": {
+    "name": "Hero's Wit",
+    "emoji": "Heros_Wit"
+  },
+
+  "adventurers_experience": {
+    "name": "Adventurer's Experience",
+    "emoji": "Adventurers_Experience"
+  },
+
+  "wanderers_advice": {
+    "name": "Wanderer's Advice",
+    "emoji": "Wanderers_Advice"
+  },
+
+  "enhancement_ore": {
+    "name": "Enhancement Ore",
+    "emoji": "Enhancement_Ore"
+  },
+
+  "fine_enhancement_ore": {
+    "name": "Fine Enhancement Ore",
+    "emoji": "Fine_Enhancement_Ore"
+  },
+
+  "mystic_enhancement_ore": {
+    "name": "Mystic Enhancement Ore",
+    "emoji": "Mystic_Enhancement_Ore"
+  },
+
+  "crown_of_insight": {
+    "name": "Crown of Insight",
+    "emoji": "Crown_of_Insight"
+  }
+}

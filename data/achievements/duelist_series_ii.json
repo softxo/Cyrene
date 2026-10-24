@@ -1,0 +1,262 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82254,
+                82255,
+                82256
+            ],
+            "name": "\"Bronzelock\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2254,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Bronzelock\"",
+                "description": "Defeat Local Legend: Bronzelock.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Bronzelock\"",
+                "description": "During the course of completing a single challenge, break Bronzelock's core 3 times.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Bronzelock\"",
+                "description": "Defeat Bronzelock after Bronzelock has increased RES to 4 different Elemental Types.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                82257,
+                82258,
+                82259
+            ],
+            "name": "\"Rilai\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2257,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Rilai\"",
+                "description": "Defeat Local Legend: Rilai.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Rilai\"",
+                "description": "Defeat Rilai while Rilai is using \"Fusion Nova.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Rilai\"",
+                "description": "Defeat Rilai while Rilai is using \"Fusion Nova\" and without being hit by the attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                82260,
+                82261,
+                82262
+            ],
+            "name": "\"Spirit of the Fallen Dawnstar\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2260,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Spirit of the Fallen Dawnstar\"",
+                "description": "Defeat Local Legend: Spirit of the Fallen Dawnstar.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Spirit of the Fallen Dawnstar\"",
+                "description": "Defeat Spirit of the Fallen Dawnstar without ever having thawed the frozen torch.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Spirit of the Fallen Dawnstar\"",
+                "description": "Defeat Spirit of the Fallen Dawnstar without ever having been hit by the Obsidian Storm.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                82263,
+                82264,
+                82265
+            ],
+            "name": "\"Potapo's Solidarity\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2263,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Potapo's Solidarity\"",
+                "description": "Defeat Local Legend: Potapo's Solidarity",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Potapo's Solidarity\"",
+                "description": "During the course of completing a single challenge, fully restore the HP of each and every Protection Spirit.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Potapo's Solidarity\"",
+                "description": "During the course of completing a single challenge, no characters were downed and have Protection Spirit use \"Decisive: Binding of Dawn and Dusk's Breaking.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                82266,
+                82267,
+                82268
+            ],
+            "name": "\"Tupayo's Aid\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2266,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Tupayo's Aid\"",
+                "description": "Defeat Local Legend: Tupayo's Aid",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Tupayo's Aid\"",
+                "description": "During the course of completing a single challenge, no characters were downed.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Tupayo's Aid\"",
+                "description": "Defeat Tupayo's Aid while they are hovering in the air.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        },
+        {
+            "id": [
+                82269,
+                82270,
+                82271
+            ],
+            "name": "\"Ironbeard\"",
+            "achievementGroupId": 56,
+            "achievementGroupName": "Duelist: Series II",
+            "sortOrder": 2269,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Ironbeard\"",
+                "description": "Defeat Local Legend: Ironbeard.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Ironbeard\"",
+                "description": "Defeat Ironbeard without ever letting Ironbeard break Molten Barbs.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Ironbeard\"",
+                "description": "Defeat Ironbeard without being hit by any of Ironbeard's attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.2"
+        }
+    ]
+}

@@ -1,0 +1,231 @@
+{
+  "hurricane_seed": {
+    "name": "Hurricane Seed",
+    "emoji": "Hurricane_Seed"
+  },
+
+  "lightning_prism": {
+    "name": "Lightning Prism",
+    "emoji": "Lightning_Prism"
+  },
+
+  "hoarfrost_core": {
+    "name": "Hoarfrost Core",
+    "emoji": "Hoarfrost_Core"
+  },
+
+  "crystalline_bloom": {
+    "name": "Crystalline Bloom",
+    "emoji": "Crystalline_Bloom"
+  },
+
+  "plume_of_the_fallen_watcher": {
+    "name": "Plume of the Fallen Watcher",
+    "emoji": "Plume_of_the_Fallen_Watcher"
+  },
+
+  "basalt_pillar": {
+    "name": "Basalt Pillar",
+    "emoji": "Basalt_Pillar"
+  },
+
+  "everflame_seed": {
+    "name": "Everflame Seed",
+    "emoji": "Everflame_Seed"
+  },
+
+  "cleansing_heart": {
+    "name": "Cleansing Heart",
+    "emoji": "Cleansing_Heart"
+  },
+
+  "juvenile_jade": {
+    "name": "Juvenile Jade",
+    "emoji": "Juvenile_Jade"
+  },
+
+  "runic_fang": {
+    "name": "Runic Fang",
+    "emoji": "Runic_Fang"
+  },
+
+  "cloudseam_scale": {
+    "name": "Cloudseam Scale",
+    "emoji": "Cloudseam_Scale"
+  },
+
+  "marionette_core": {
+    "name": "Marionette Core",
+    "emoji": "Marionette_Core"
+  },
+
+  "perpetual_heart": {
+    "name": "Perpetual Heart",
+    "emoji": "Perpetual_Heart"
+  },
+
+  "smoldering_pearl": {
+    "name": "Smoldering Pearl",
+    "emoji": "Smoldering_Pearl"
+  },
+
+  "dew_of_repudiation": {
+    "name": "Dew of Repudiation",
+    "emoji": "Dew_of_Repudiation"
+  },
+
+  "storm_beads": {
+    "name": "Storm Beads",
+    "emoji": "Storm_Beads"
+  },
+
+  "riftborn_regalia": {
+    "name": "Riftborn Regalia",
+    "emoji": "Riftborn_Regalia"
+  },
+
+  "dragonheirs_false_fin": {
+    "name": "Dragonheir's False Fin",
+    "emoji": "Dragonheirs_False_Fin"
+  },
+
+  "majestic_hooked_beak": {
+    "name": "Majestic Hooked Beak",
+    "emoji": "Majestic_Hooked_Beak"
+  },
+
+  "thunderclap_fruitcore": {
+    "name": "Thunderclap Fruitcore",
+    "emoji": "Thunderclap_Fruitcore"
+  },
+
+  "perpetual_caliber": {
+    "name": "Perpetual Caliber",
+    "emoji": "Perpetual_Caliber"
+  },
+
+  "light_guiding_tetrahedron": {
+    "name": "Light Guiding Tetrahedron",
+    "emoji": "Light_Guiding_Tetrahedron"
+  },
+
+  "quelled_creeper": {
+    "name": "Quelled Creeper",
+    "emoji": "Quelled_Creeper"
+  },
+
+  "pseudo_stamens": {
+    "name": "Pseudo-Stamens",
+    "emoji": "Pseudo_Stamens"
+  },
+
+  "evergloom_ring": {
+    "name": "Evergloom Ring",
+    "emoji": "Evergloom_Ring"
+  },
+
+  "artificed_spare_clockwork_component_coppelia": {
+    "name": "Artificed Spare Clockwork Component - Coppelia",
+    "emoji": "Clockwork_Coppelia"
+  },
+
+  "artificed_spare_clockwork_component_coppelius": {
+    "name": "Artificed Spare Clockwork Component - Coppelius",
+    "emoji": "Clockwork_Coppelius"
+  },
+
+  "emperors_resolution": {
+    "name": "Emperor's Resolution",
+    "emoji": "Emperors_Resolution"
+  },
+
+  "fontemer_unihorn": {
+    "name": "Fontemer Unihorn",
+    "emoji": "Fontemer_Unihorn"
+  },
+
+  "tourbillon_device": {
+    "name": "Tourbillon Device",
+    "emoji": "Tourbillon_Device"
+  },
+
+  "water_that_failed_to_transcend": {
+    "name": "Water That Failed To Transcend",
+    "emoji": "Water_That_Failed_To_Transcend"
+  },
+
+  "fragment_of_a_golden_melody": {
+    "name": "Fragment of a Golden Melody",
+    "emoji": "Fragment_of_a_Golden_Melody"
+  },
+
+  "mark_of_the_binding_blessing": {
+    "name": "Mark of the Binding Blessing",
+    "emoji": "Mark_of_the_Binding_Blessing"
+  },
+
+  "overripe_flamegranate": {
+    "name": "Overripe Flamegranate",
+    "emoji": "Overripe_Flamegranate"
+  },
+
+  "gold_inscribed_secret_source_core": {
+    "name": "Gold-Inscribed Secret Source Core",
+    "emoji": "Gold_Inscribed_SS_Core"
+  },
+
+  "ensnaring_gaze": {
+    "name": "Ensnaring Gaze",
+    "emoji": "Ensnaring_Gaze"
+  },
+
+  "talisman_of_the_enigmatic_land": {
+    "name": "Talisman of the Enigmatic Land",
+    "emoji": "Talisman_of_the_Enigmatic_Land"
+  },
+
+  "sparkless_statue_core": {
+    "name": "Sparkless Statue Core",
+    "emoji": "Sparkless_Statue_Core"
+  },
+
+  "secret_source_airflow_accumulator": {
+    "name": "Secret Source Airflow Accumulator",
+    "emoji": "SS_Airflow_Accumulator"
+  },
+
+  "precision_kuuvahki_stamping_die": {
+    "name": "Precision Kuuvahki Stamping Die",
+    "emoji": "Precision_Kuuvahki_Stamping_Die"
+  },
+
+  "lightbearing_scale_feather": {
+    "name": "Lightbearing Scale-Feather",
+    "emoji": "Lightbearing_Scale_Feather"
+  },
+
+  "radiant_antler": {
+    "name": "Radiant Antler",
+    "emoji": "Radiant_Antler"
+  },
+
+  "cyclic_military_kuuvahki_core": {
+    "name": "Cyclic Military Kuuvahki Core",
+    "emoji": "Cyclic_Military_Kuuvahki_Core"
+  },
+
+  "remnant_of_the_dreadwing": {
+    "name": "Remnant of the Dreadwing",
+    "emoji": "Remnant_of_the_Dreadwing"
+  },
+
+  "prismatic_severed_tale": {
+    "name": "Prismatic Severed Tale",
+    "emoji": "Prismatic_Severed_Tale"
+  },
+
+  "unscorched_blossom_branch": {
+    "name": "Unscorched Blossom Branch",
+    "emoji": "Unscorched_Blossom_Branch"
+  }
+}

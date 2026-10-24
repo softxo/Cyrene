@@ -1,0 +1,130 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82193
+            ],
+            "name": "Theater Fire Drill",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2193,
+            "stages": 1,
+            "stage1": {
+                "title": "Theater Fire Drill",
+                "description": "Destroy the Legatus Golem's Ward before it can lift its blade and unleash its raging, fiery shockwave.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                82194
+            ],
+            "name": "Unmanifested Sealing Hex",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2194,
+            "stages": 1,
+            "stage1": {
+                "title": "Unmanifested Sealing Hex",
+                "description": "Defeat the Hydro Tulpa after it has become enhanced from absorbing Half-Tulpa(s).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                82195
+            ],
+            "name": "Three Days and Nights in the Belly of the Great Fish",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2195,
+            "stages": 1,
+            "stage1": {
+                "title": "Three Days and Nights in the Belly of the Great Fish",
+                "description": "Escape the belly of the beast without being hit at all by the phantasm(s) within.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                82196
+            ],
+            "name": "\"Feng Shui Assassination!\"",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2196,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Feng Shui Assassination!\"",
+                "description": "Within a single challenge, use Elemental Reactions to paralyze the Solitary Suanni while it is gathering Anemo and Hydro adeptal energy respectively.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                82197
+            ],
+            "name": "If You're Thirsty for Blood...",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2197,
+            "stages": 1,
+            "stage1": {
+                "title": "If You're Thirsty for Blood...",
+                "description": "Unleash 4 Scarlet Nighttides in a single battle against The Knave.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                82199
+            ],
+            "name": "Brighter Than White",
+            "achievementGroupId": 49,
+            "achievementGroupName": "Challenger: Series IX",
+            "sortOrder": 2199,
+            "stages": 1,
+            "stage1": {
+                "title": "Brighter Than White",
+                "description": "In a single battle against The Knave, avoid being hit by her at all while being affected by a Bond of Life and defeat The Knave.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.6"
+        }
+    ]
+}

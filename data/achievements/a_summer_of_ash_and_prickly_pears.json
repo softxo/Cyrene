@@ -1,0 +1,216 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80430
+            ],
+            "name": "Omen Call of Ome Calli",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 393,
+            "stages": 1,
+            "stage1": {
+                "title": "Omen Call of Ome Calli",
+                "description": "Light up the Easybreeze Holiday Resort map in the Natlan region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80431
+            ],
+            "name": "Gentle Waves Guide",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 394,
+            "stages": 1,
+            "stage1": {
+                "title": "Gentle Waves Guide",
+                "description": "Unlock all Teleport Waypoints in the following area in Natlan: Easybreeze Holiday Resort.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80432
+            ],
+            "name": "Sanctuary Pilgrim: Isle of Gentle Winds and Waves",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 395,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Isle of Gentle Winds and Waves",
+                "description": "Unlock all the Shrines of Depths in the following area in Natlan: Easybreeze Holiday Resort.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80433
+            ],
+            "name": "Monetoo Will Guide You Home (III)",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 396,
+            "stages": 1,
+            "stage1": {
+                "title": "Monetoo Will Guide You Home (III)",
+                "description": "Follow 6 Monetoo and complete the graffiti in the Easybreeze Holiday Resort.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80434,
+                80435,
+                80436
+            ],
+            "name": "Azure Isle Treasure Hunter",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 397,
+            "stages": 3,
+            "stage1": {
+                "title": "Azure Isle Treasure Hunter",
+                "description": "Open 30 chests in Easybreeze Holiday Resort.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Azure Isle Treasure Hunter",
+                "description": "Open 60 chests in Easybreeze Holiday Resort.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Azure Isle Treasure Hunter",
+                "description": "Open 120 chests in Easybreeze Holiday Resort.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80437,
+                80438,
+                80439
+            ],
+            "name": "Azure Isle Adventurer",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 400,
+            "stages": 3,
+            "stage1": {
+                "title": "Azure Isle Adventurer",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in Easybreeze Holiday Resort.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Azure Isle Adventurer",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges in Easybreeze Holiday Resort.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Azure Isle Adventurer",
+                "description": "Complete 24 Open World mechanism-activated Time Trial Challenges in Easybreeze Holiday Resort.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80440
+            ],
+            "name": "Asha's Rainbow of Gravity",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 403,
+            "stages": 1,
+            "stage1": {
+                "title": "Asha's Rainbow of Gravity",
+                "description": "Unlock all Asha colors.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.8"
+        },
+        {
+            "id": [
+                80441
+            ],
+            "name": "A Colorful Album",
+            "achievementGroupId": 62,
+            "achievementGroupName": "A Summer of Ash and Prickly Pears",
+            "sortOrder": 404,
+            "stages": 1,
+            "stage1": {
+                "title": "A Colorful Album",
+                "description": "Complete all photographs in the Easybreeze Album.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.8"
+        }
+    ]
+}

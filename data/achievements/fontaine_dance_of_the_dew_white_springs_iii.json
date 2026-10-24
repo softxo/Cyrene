@@ -1,0 +1,245 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80286
+            ],
+            "name": "Continental Explorer: Land of Harmonious Springs (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 262,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Land of Harmonious Springs (III)",
+                "ps5title": "Fontaine: Continental Explorer: Land of Harmonious Springs (II)",
+                "description": "Light up the maps of the following areas in Fontaine: Morte Region and Erinnyes Forest.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80287
+            ],
+            "name": "Font of All Waters (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 263,
+            "stages": 1,
+            "stage1": {
+                "title": "Font of All Waters (III)",
+                "ps5title": "Fontaine: Font of All Waters (II)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Fontaine: Morte Region and Erinnyes Forest.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80288
+            ],
+            "name": "Sanctuary Pilgrim: Land of Harmonious Springs (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 264,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Land of Harmonious Springs (III)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Fontaine: Morte Region and Erinnyes Forest.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80289,
+                80290,
+                80291
+            ],
+            "name": "Tidal Guide (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 265,
+            "stages": 3,
+            "stage1": {
+                "title": "Tidal Guide (III)",
+                "description": "Follow 3 Seelie to their Seelie Courts in the Morte Region and Erinnyes Forest.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Tidal Guide (III)",
+                "description": "Follow 6 Seelie to their Seelie Courts in the Morte Region and Erinnyes Forest.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Tidal Guide (III)",
+                "description": "Follow 9 Seelie to their Seelie Courts in the Morte Region and Erinnyes Forest.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80292,
+                80293,
+                80294
+            ],
+            "name": "Waveriding Treasure Hunter (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 268,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Treasure Hunter (III)",
+                "ps5title": "Waveriding Treasure Hunter (IV)",
+                "description": "Open 40 treasure chests in the Morte Region and Erinnyes Forest.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Treasure Hunter (III)",
+                "ps5title": "Waveriding Treasure Hunter (V)",
+                "description": "Open 80 treasure chests in the Morte Region and Erinnyes Forest.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Treasure Hunter (III)",
+                "ps5title": "Waveriding Treasure Hunter (VI)",
+                "description": "Open 160 treasure chests in the Morte Region and Erinnyes Forest.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80295,
+                80296,
+                80297
+            ],
+            "name": "Waveriding Adventurer (III)",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 271,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Adventurer (III)",
+                "description": "Complete a total of 3 Open World Time Trial Challenges in the Morte Region and Erinnyes Forest.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Adventurer (III)",
+                "description": "Complete a total of 6 Open World Time Trial Challenges in the Morte Region and Erinnyes Forest.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Adventurer (III)",
+                "description": "Complete a total of 9 Open World Time Trial Challenges in the Morte Region and Erinnyes Forest.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80298
+            ],
+            "name": "Semnai Sans Shadow",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 274,
+            "stages": 1,
+            "stage1": {
+                "title": "Semnai Sans Shadow",
+                "ps5title": "Journey: Semnai Sans Shadow",
+                "description": "Meet a mysterious fairy on Erinnyes.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.2"
+        },
+        {
+            "id": [
+                80299
+            ],
+            "name": "Narzissenkreuz Notes",
+            "achievementGroupId": 46,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (III)",
+            "sortOrder": 275,
+            "stages": 1,
+            "stage1": {
+                "title": "Narzissenkreuz Notes",
+                "ps5title": "Journey: Narzissenkreuz Notes",
+                "description": "What left its name behind? What lies spread all over the valley? What reflects itself in the mirror-water? What symbolizes the lonely, world-saving sacrifice?",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.2"
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "achievements": [
+        {
+            "id": [
+                84503
+            ],
+            "name": "Perfectionist",
+            "achievementGroupId": 11,
+            "achievementGroupName": "Snezhnaya Does Not Believe in Tears: Series I",
+            "sortOrder": 4028,
+            "stages": 1,
+            "stage1": {
+                "title": "Perfectionist",
+                "description": "Complete all of Tsarevich's commissions flawlessly in \"Reliable Helper.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                84504
+            ],
+            "name": "Telling It How It Is",
+            "achievementGroupId": 11,
+            "achievementGroupName": "Snezhnaya Does Not Believe in Tears: Series I",
+            "sortOrder": 4029,
+            "stages": 1,
+            "stage1": {
+                "title": "Telling It How It Is",
+                "description": "Gather intelligence concerning Snezhnaya in \"Tales of Winter.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

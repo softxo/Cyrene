@@ -1,0 +1,151 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82272
+            ],
+            "name": "\"The Bomber Will Not Always Get Through\"",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2272,
+            "stages": 1,
+            "stage1": {
+                "title": "\"The Bomber Will Not Always Get Through\"",
+                "description": "Destroy \"Flamewind Feathers\" launched by the Goldflame Qucusaur Tyrant twice during a single challenge.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82273
+            ],
+            "name": "Deep-Fried... Ice Cream?",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2273,
+            "stages": 1,
+            "stage1": {
+                "title": "Deep-Fried... Ice Cream?",
+                "description": "Use an exploding Flamegranate to trigger the Melt reaction on the Gluttonous Yumkasaur Mountain King.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82274
+            ],
+            "name": "\"This Flamegranate Isn't Just for Show!\"",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2274,
+            "stages": 1,
+            "stage1": {
+                "title": "\"This Flamegranate Isn't Just for Show!\"",
+                "description": "Use an exploding Flamegranate to defeat the Gluttonous Yumkasaur Mountain King.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82275
+            ],
+            "name": "\"It Is Too Late for You, Inorganics.\"",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2275,
+            "stages": 1,
+            "stage1": {
+                "title": "\"It Is Too Late for You, Inorganics.\"",
+                "description": "Defeat the Secret Source Automaton: Configuration Device while it is stunned.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82276
+            ],
+            "name": "Specially-Shaped Saurian...",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2276,
+            "stages": 1,
+            "stage1": {
+                "title": "Specially-Shaped Saurian...",
+                "description": "Defeat the Tenebrous Papilla while it is replicating the forms of a Primo Geovishap, a Jadeplume Terrorshroom, and the Millennial Pearl Seahorse respectively.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82277
+            ],
+            "name": "Good Thing I'm a Cut Above",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2277,
+            "stages": 1,
+            "stage1": {
+                "title": "Good Thing I'm a Cut Above",
+                "description": "Destroy a total of 8 Radiant Reflections created by the Wayward Hermetic Spiritspeaker during a single challenge.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                82278
+            ],
+            "name": "Die, or Go Parry II",
+            "achievementGroupId": 59,
+            "achievementGroupName": "Challenger: Series X",
+            "sortOrder": 2278,
+            "stages": 1,
+            "stage1": {
+                "title": "Die, or Go Parry II",
+                "description": "Defeat the Lord of Eroded Primal Fire when the battlefield has been reduced to its smallest size.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.3"
+        }
+    ]
+}

@@ -1,0 +1,174 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82210,
+                82211,
+                82212
+            ],
+            "name": "Opening Night",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2203,
+            "stages": 3,
+            "stage1": {
+                "title": "Opening Night",
+                "description": "Complete Act 3 in the Imaginarium Theater on any difficulty.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Opening Night",
+                "description": "Complete Act 6 in the Imaginarium Theater on any difficulty.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Opening Night",
+                "description": "Complete Act 8 in the Imaginarium Theater on any difficulty.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.7"
+        },
+        {
+            "id": [
+                82203
+            ],
+            "name": "Revue Synchronicity",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2206,
+            "stages": 1,
+            "stage1": {
+                "title": "Revue Synchronicity",
+                "description": "Complete an entire performance in the Imaginarium Theater after having invited a Supporting Cast character.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.7"
+        },
+        {
+            "id": [
+                82204
+            ],
+            "name": "Fate's Unpredictable Favor",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2207,
+            "stages": 1,
+            "stage1": {
+                "title": "Fate's Unpredictable Favor",
+                "description": "Complete an entire performance in the Imaginarium Theater on any difficulty having selected at least 8 Mystery Cache events.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.7"
+        },
+        {
+            "id": [
+                82205
+            ],
+            "name": "Reliable Narrator",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2208,
+            "stages": 1,
+            "stage1": {
+                "title": "Reliable Narrator",
+                "description": "Complete an entire performance in the Imaginarium Theater on any difficulty having selected at least 8 Wondrous Boon or Brilliant Blessings events.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.7"
+        },
+        {
+            "id": [
+                82206,
+                82207,
+                82208
+            ],
+            "name": "More Than Pearls and Gold",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2209,
+            "stages": 3,
+            "stage1": {
+                "title": "More Than Pearls and Gold",
+                "description": "Obtain a total of 3 Toy Medals.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "More Than Pearls and Gold",
+                "description": "Obtain a total of 6 Toy Medals.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "More Than Pearls and Gold",
+                "description": "Obtain a total of 9 Toy Medals.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.7"
+        },
+        {
+            "id": [
+                82209
+            ],
+            "name": "The Uses of Enchantment",
+            "achievementGroupId": 50,
+            "achievementGroupName": "Imaginarium Theater: The First Folio",
+            "sortOrder": 2212,
+            "stages": 1,
+            "stage1": {
+                "title": "The Uses of Enchantment",
+                "description": "Learn 3 total Thespian Tricks from Wolfy's Thespian Trove.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.7"
+        }
+    ]
+}

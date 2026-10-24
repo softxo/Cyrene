@@ -1,0 +1,601 @@
+{
+  "tainted": {
+    "tiers": {
+      "tier2": {
+        "name": "Drop of Tainted Water",
+        "emoji": "Tainted_2"
+      },
+      "tier3": {
+        "name": "Scoop of Tainted Water",
+        "emoji": "Tainted_3"
+      },
+      "tier4": {
+        "name": "Newborn Tainted Hydro Phantasm",
+        "emoji": "Tainted_4"
+      }
+    },
+    "source": {
+      "group": ["tainted_hydro_phantasms"]
+    }
+  },
+
+  "frostnight": {
+    "tiers": {
+      "tier2": {
+        "name": "Frostnight's Glimmer",
+        "emoji": "Frostnight_2"
+      },
+      "tier3": {
+        "name": "Frostnight's Glow",
+        "emoji": "Frostnight_3"
+      },
+      "tier4": {
+        "name": "Frostnight's Glory",
+        "emoji": "Frostnight_4"
+      }
+    },
+    "source": {
+      "group": ["frostnight_scions"]
+    }
+  },
+
+  "horn": {
+    "tiers": {
+      "tier2": {
+        "name": "Heavy Horn",
+        "emoji": "Horn_2"
+      },
+      "tier3": {
+        "name": "Black Bronze Horn",
+        "emoji": "Horn_3"
+      },
+      "tier4": {
+        "name": "Black Crystal Horn",
+        "emoji": "Horn_4"
+      }
+    },
+    "source": {
+      "group": ["shieldwall_mitachurls", "axe_mitachurls", "lawachurls"]
+    }
+  },
+
+  "flower": {
+    "tiers": {
+      "tier2": {
+        "name": "A Flower Yet to Bloom",
+        "emoji": "Flower_2"
+      },
+      "tier3": {
+        "name": "Treasured Flower",
+        "emoji": "Flower_3"
+      },
+      "tier4": {
+        "name": "Wanderer's Blooming Flower",
+        "emoji": "Flower_4"
+      }
+    },
+    "source": {
+      "group": ["rogues"]
+    }
+  },
+
+  "ley_line": {
+    "tiers": {
+      "tier2": {
+        "name": "Dead Ley Line Branch",
+        "emoji": "Ley_Line_2"
+      },
+      "tier3": {
+        "name": "Dead Ley Line Leaves",
+        "emoji": "Ley_Line_3"
+      },
+      "tier4": {
+        "name": "Ley Line Sprout",
+        "emoji": "Ley_Line_4"
+      }
+    },
+    "source": {
+      "group": ["abyss_mages", "abyss_heralds"]
+    }
+  },
+
+  "statuette": {
+    "tiers": {
+      "tier2": {
+        "name": "Gloomy Statuette",
+        "emoji": "Statuette_2"
+      },
+      "tier3": {
+        "name": "Dark Statuette",
+        "emoji": "Statuette_3"
+      },
+      "tier4": {
+        "name": "Deathly Statuette",
+        "emoji": "Statuette_4"
+      }
+    },
+    "source": {
+      "group": ["abyss_heralds", "abyss_lectors", "the_black_serpents"]
+    }
+  },
+
+  "concealed": {
+    "tiers": {
+      "tier2": {
+        "name": "Concealed Claw",
+        "emoji": "Concealed_2"
+      },
+      "tier3": {
+        "name": "Concealed Unguis",
+        "emoji": "Concealed_3"
+      },
+      "tier4": {
+        "name": "Concealed Talon",
+        "emoji": "Concealed_4"
+      }
+    },
+    "source": {
+      "group": ["rifthound_whelps", "rifthounds"]
+    }
+  },
+
+  "core": {
+    "tiers": {
+      "tier2": {
+        "name": "Rift Core",
+        "emoji": "Core_2"
+      },
+      "tier3": {
+        "name": "Foreign Synapse",
+        "emoji": "Core_3"
+      },
+      "tier4": {
+        "name": "Alien Life Core",
+        "emoji": "Core_4"
+      }
+    },
+    "source": {
+      "group": ["breacher_primuses", "large_breacher_primuses"]
+    }
+  },
+
+  "leaf": {
+    "tiers": {
+      "tier2": {
+        "name": "Refractive Bud",
+        "emoji": "Leaf_2"
+      },
+      "tier3": {
+        "name": "Bewildering Broadleaf",
+        "emoji": "Leaf_3"
+      },
+      "tier4": {
+        "name": "Illusory Leafcoil",
+        "emoji": "Leaf_4"
+      }
+    },
+    "source": {
+      "group": ["tenebrous_mimesis"]
+    }
+  },
+
+  "mistshroud": {
+    "tiers": {
+      "tier2": {
+        "name": "Mistshroud Manifestation",
+        "emoji": "Mistshroud_2"
+      },
+      "tier3": {
+        "name": "Mistshroud Plate",
+        "emoji": "Mistshroud_3"
+      },
+      "tier4": {
+        "name": "Mistshroud Helmet",
+        "emoji": "Mistshroud_4"
+      }
+    },
+    "source": {
+      "group": ["wasteland_wild_hunt"]
+    }
+  },
+
+  "deep_shadow": {
+    "tiers": {
+      "tier2": {
+        "name": "Fractured Eye of the Deep Shadow",
+        "emoji": "Deep_Shadow_2"
+      },
+      "tier3": {
+        "name": "Aberrant Core of the Deep Shadow",
+        "emoji": "Deep_Shadow_3"
+      },
+      "tier4": {
+        "name": "Hooked Beak of the Deep Shadow",
+        "emoji": "Deep_Shadow_4"
+      }
+    },
+    "source": {
+      "group": ["fisher_of_hidden_depths"]
+    }
+  },
+
+  "mist_grass": {
+    "tiers": {
+      "tier2": {
+        "name": "Mist Grass Pollen",
+        "emoji": "Mist_Grass_2"
+      },
+      "tier3": {
+        "name": "Mist Grass",
+        "emoji": "Mist_Grass_3"
+      },
+      "tier4": {
+        "name": "Mist Grass Wick",
+        "emoji": "Mist_Grass_4"
+      }
+    },
+    "source": {
+      "group": ["fatui_cicin_mages"]
+    }
+  },
+
+  "sacrificial_knife": {
+    "tiers": {
+      "tier2": {
+        "name": "Hunter's Sacrificial Knife",
+        "emoji": "Sacrificial_Knife_2"
+      },
+      "tier3": {
+        "name": "Agent's Sacrificial Knife",
+        "emoji": "Sacrificial_Knife_3"
+      },
+      "tier4": {
+        "name": "Inspector's Sacrificial Knife",
+        "emoji": "Sacrificial_Knife_4"
+      }
+    },
+    "source": {
+      "group": ["fatui_agent"]
+    }
+  },
+
+  "prism_maiden": {
+    "tiers": {
+      "tier2": {
+        "name": "Dismal Prism",
+        "emoji": "Prism_Maiden_2"
+      },
+      "tier3": {
+        "name": "Crystal Prism",
+        "emoji": "Prism_Maiden_3"
+      },
+      "tier4": {
+        "name": "Polarizing Prism",
+        "emoji": "Prism_Maiden_4"
+      }
+    },
+    "source": {
+      "group": ["mirror_maiden"]
+    }
+  },
+
+  "operative": {
+    "tiers": {
+      "tier2": {
+        "name": "Old Operative's Pocket Watch",
+        "emoji": "Operative_2"
+      },
+      "tier3": {
+        "name": "Operative's Standard Pocket Watch",
+        "emoji": "Operative_3"
+      },
+      "tier4": {
+        "name": "Operative's Constancy",
+        "emoji": "Operative_4"
+      }
+    },
+    "source": {
+      "group": ["fatui_operatives"]
+    }
+  },
+
+  "chaos_machine": {
+    "tiers": {
+      "tier2": {
+        "name": "Chaos Device",
+        "emoji": "Chaos_Machine_2"
+      },
+      "tier3": {
+        "name": "Chaos Circuit",
+        "emoji": "Chaos_Machine_3"
+      },
+      "tier4": {
+        "name": "Chaos Core",
+        "emoji": "Chaos_Machine_4"
+      }
+    },
+    "source": {
+      "group": ["humanoid_ruin_machines"]
+    }
+  },
+
+  "chaos_sentinel": {
+    "tiers": {
+      "tier2": {
+        "name": "Chaos Gear",
+        "emoji": "Chaos_Sentinel_2"
+      },
+      "tier3": {
+        "name": "Chaos Axis",
+        "emoji": "Chaos_Sentinel_3"
+      },
+      "tier4": {
+        "name": "Chaos Oculus",
+        "emoji": "Chaos_Sentinel_4"
+      }
+    },
+    "source": {
+      "group": ["ruin_sentinels"]
+    }
+  },
+
+  "chaos_drake": {
+    "tiers": {
+      "tier2": {
+        "name": "Chaos Storage",
+        "emoji": "Chaos_Drake_2"
+      },
+      "tier3": {
+        "name": "Chaos Module",
+        "emoji": "Chaos_Drake_3"
+      },
+      "tier4": {
+        "name": "Chaos Bolt",
+        "emoji": "Chaos_Drake_4"
+      }
+    },
+    "source": {
+      "group": ["ruin_drakes"]
+    }
+  },
+
+  "prism_construct": {
+    "tiers": {
+      "tier2": {
+        "name": "Damaged Prism",
+        "emoji": "Prism_Constructs_2"
+      },
+      "tier3": {
+        "name": "Turbid Prism",
+        "emoji": "Prism_Constructs_3"
+      },
+      "tier4": {
+        "name": "Radiant Prism",
+        "emoji": "Prism_Constructs_4"
+      }
+    },
+    "source": {
+      "group": ["primal_constructs"]
+    }
+  },
+
+  "secret_source": {
+    "tiers": {
+      "tier2": {
+        "name": "Axis of the Secret Source",
+        "emoji": "Secret_Source_2"
+      },
+      "tier3": {
+        "name": "Sheath of the Secret Source",
+        "emoji": "Secret_Source_3"
+      },
+      "tier4": {
+        "name": "Heart of the Secret Source",
+        "emoji": "Secret_Source_4"
+      }
+    },
+    "source": {
+      "group": ["ssa_hunter_seeker"]
+    }
+  },
+
+  "flaming_hilt": {
+    "tiers": {
+      "tier2": {
+        "name": "Faded Flaming Hilt",
+        "emoji": "Flaming_Hilt_2"
+      },
+      "tier3": {
+        "name": "Fractured Flaming Hilt",
+        "emoji": "Flaming_Hilt_3"
+      },
+      "tier4": {
+        "name": "Jeweled Flaming Hilt",
+        "emoji": "Flaming_Hilt_4"
+      }
+    },
+    "source": {
+      "group": ["domain_keeper"]
+    }
+  },
+
+  "lunar_iron": {
+    "tiers": {
+      "tier2": {
+        "name": "Fractured Lunar Iron",
+        "emoji": "Lunar_Iron_2"
+      },
+      "tier3": {
+        "name": "Depleted Lunar Iron",
+        "emoji": "Lunar_Iron_3"
+      },
+      "tier4": {
+        "name": "Unblemished Lunar Iron",
+        "emoji": "Lunar_Iron_4"
+      }
+    },
+    "source": {
+      "group": ["pssmon"]
+    }
+  },
+
+  "bone_shard": {
+    "tiers": {
+      "tier2": {
+        "name": "Fragile Bone Shard",
+        "emoji": "Bone_Shard_2"
+      },
+      "tier3": {
+        "name": "Sturdy Bone Shard",
+        "emoji": "Bone_Shard_3"
+      },
+      "tier4": {
+        "name": "Fossilized Bone Shard",
+        "emoji": "Bone_Shard_4"
+      }
+    },
+    "source": {
+      "group": ["geovishap_hatchling", "geovishap", "bathysmal_vishap_hatchlings", "primordial_bathysmal_vishap"]
+    }
+  },
+
+  "shell_consecrated": {
+    "tiers": {
+      "tier2": {
+        "name": "Desiccated Shell",
+        "emoji": "Shell_Consecrated_2"
+      },
+      "tier3": {
+        "name": "Sturdy Shell",
+        "emoji": "Shell_Consecrated_3"
+      },
+      "tier4": {
+        "name": "Marked Shell",
+        "emoji": "Shell_Consecrated_4"
+      }
+    },
+    "source": {
+      "group": ["consecrated_beasts"]
+    }
+  },
+
+  "fin": {
+    "tiers": {
+      "tier2": {
+        "name": "Feathery Fin",
+        "emoji": "Fin_2"
+      },
+      "tier3": {
+        "name": "Lunar Fin",
+        "emoji": "Fin_3"
+      },
+      "tier4": {
+        "name": "Chasmlight Fin",
+        "emoji": "Fin_4"
+      }
+    },
+    "source": {
+      "group": ["xuanwen_beast"]
+    }
+  },
+
+  "hilt": {
+    "tiers": {
+      "tier2": {
+        "name": "Ruined Hilt",
+        "emoji": "Hilt_2"
+      },
+      "tier3": {
+        "name": "Splintered Hilt",
+        "emoji": "Hilt_3"
+      },
+      "tier4": {
+        "name": "Still-Smoldering Hilt",
+        "emoji": "Hilt_4"
+      }
+    },
+    "source": {
+      "group": ["praetorian_golem"]
+    }
+  },
+
+  "ignited": {
+    "tiers": {
+      "tier2": {
+        "name": "Ignited Stone",
+        "emoji": "Ignited_2"
+      },
+      "tier3": {
+        "name": "Ignited Seed of Life",
+        "emoji": "Ignited_3"
+      },
+      "tier4": {
+        "name": "Ignited Seeing Eye",
+        "emoji": "Ignited_4"
+      }
+    },
+    "source": {
+      "group": ["avatars_of_lava"]
+    }
+  },
+
+  "will": {
+    "tiers": {
+      "tier2": {
+        "name": "Shard of a Shattered Will",
+        "emoji": "Will_2"
+      },
+      "tier3": {
+        "name": "Locus of a Clear Will",
+        "emoji": "Will_3"
+      },
+      "tier4": {
+        "name": "Sigil of a Striding Will",
+        "emoji": "Will_4"
+      }
+    },
+    "source": {
+      "group": ["wayob_manifestations"]
+    }
+  },
+
+  "shell_weasel": {
+    "tiers": {
+      "tier2": {
+        "name": "Cold-Cracked Shellshard",
+        "emoji": "Shell_Weasel_2"
+      },
+      "tier3": {
+        "name": "Warm Back-Shell",
+        "emoji": "Shell_Weasel_3"
+      },
+      "tier4": {
+        "name": "Blazing Prismshell",
+        "emoji": "Shell_Weasel_4"
+      }
+    },
+    "source": {
+      "group": ["furnace_shell_mountain_weasel"]
+    }
+  },
+
+  "radiant": {
+    "tiers": {
+      "tier2": {
+        "name": "Lightless Bone",
+        "emoji": "Radiant_2"
+      },
+      "tier3": {
+        "name": "Glowing Remains",
+        "emoji": "Radiant_3"
+      },
+      "tier4": {
+        "name": "Radiant Exoskeleton",
+        "emoji": "Radiant_4"
+      }
+    },
+    "source": {
+      "group": ["radiant_beasts"]
+    }
+  }
+}

@@ -1,0 +1,193 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86039
+            ],
+            "name": "Do You Believe In \"Fields\"?",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9038,
+            "stages": 1,
+            "stage1": {
+                "title": "Do You Believe In \"Fields\"?",
+                "description": "Defeat an Experimental Field Generator in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86040
+            ],
+            "name": "Pearl Diving",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9039,
+            "stages": 1,
+            "stage1": {
+                "title": "Pearl Diving",
+                "description": "Defeat a Millennial Pearl Seahorse in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86041
+            ],
+            "name": "Virtual Star Embryology",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9040,
+            "stages": 1,
+            "stage1": {
+                "title": "Virtual Star Embryology",
+                "description": "Defeat a Hydro Tulpa in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86042
+            ],
+            "name": "From the Abyss's Heart I Stab At Thee",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9041,
+            "stages": 1,
+            "stage1": {
+                "title": "From the Abyss's Heart I Stab At Thee",
+                "description": "Defeat an All-Devouring Narwhal in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86043
+            ],
+            "name": "Walking on Water and Striding Through Clouds",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9042,
+            "stages": 1,
+            "stage1": {
+                "title": "Walking on Water and Striding Through Clouds",
+                "description": "Defeat a Solitary Suanni in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86044
+            ],
+            "name": "Sic Transit Gloria Mundi",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9043,
+            "stages": 1,
+            "stage1": {
+                "title": "Sic Transit Gloria Mundi",
+                "description": "Defeat a Legatus Golem in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86045
+            ],
+            "name": "The Dark Side of the Balemoon",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9044,
+            "stages": 1,
+            "stage1": {
+                "title": "The Dark Side of the Balemoon",
+                "description": "Defeat The Knave in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86046
+            ],
+            "name": "Mountains Fall Apart",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9045,
+            "stages": 1,
+            "stage1": {
+                "title": "Mountains Fall Apart",
+                "description": "Defeat a Gluttonous Yumkasaur Mountain King in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                86047
+            ],
+            "name": "\"Sic Semper Tyrannis\"",
+            "achievementGroupId": 53,
+            "achievementGroupName": "Meetings in Outrealm: Series V",
+            "sortOrder": 9046,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Sic Semper Tyrannis\"",
+                "description": "Defeat a Goldflame Qucusaur Tyrant in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        }
+    ]
+}

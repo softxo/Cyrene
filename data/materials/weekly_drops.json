@@ -1,0 +1,267 @@
+{
+  "andrius": {
+    "name": "Andrius",
+    "emoji": "Andrius",
+    "drops": {
+      "tail_of_boreas": {
+        "name": "Tail of Boreas",
+        "emoji": "Tail_of_Boreas"
+      },
+      "ring_of_boreas": {
+        "name": "Ring of Boreas",
+        "emoji": "Ring_of_Boreas"
+      },
+      "spirit_locket_of_boreas": {
+        "name": "Spirit Locket of Boreas",
+        "emoji": "Spirit_Locket_of_Boreas"
+      }
+    }
+  },
+
+  "stormterror": {
+    "name": "Stormterror",
+    "emoji": "Stormterror",
+    "drops": {
+      "dvalins_plume": {
+        "name": "Dvalin's Plume",
+        "emoji": "Dvalins_Plume"
+      },
+      "dvalins_claw": {
+        "name": "Dvalin's Claw",
+        "emoji": "Dvalins_Claw"
+      },
+      "dvalins_sigh": {
+        "name": "Dvalin's Sigh",
+        "emoji": "Dvalins_Sigh"
+      }
+    }
+  },
+
+  "childe": {
+    "name": "Childe",
+    "emoji": "Childe",
+    "drops": {
+      "tusk_of_monoceros_caeli": {
+        "name": "Tusk of Monoceros Caeli",
+        "emoji": "Tusk_of_Monoceros_Caeli"
+      },
+      "shard_of_a_foul_legacy": {
+        "name": "Shard of a Foul Legacy",
+        "emoji": "Shard_of_a_Foul_Legacy"
+      },
+      "shadow_of_the_warrior": {
+        "name": "Shadow of the Warrior",
+        "emoji": "Shadow_of_the_Warrior"
+      }
+    }
+  },
+
+  "azhdaha": {
+    "name": "Azhdaha",
+    "emoji": "Azhdaha",
+    "drops": {
+      "dragon_lords_crown": {
+        "name": "Dragon Lord's Crown",
+        "emoji": "Dragon_Lords_Crown"
+      },
+      "bloodjade_branch": {
+        "name": "Bloodjade Branch",
+        "emoji": "Bloodjade_Branch"
+      },
+      "gilded_scale": {
+        "name": "Gilded Scale",
+        "emoji": "Gilded_Scale"
+      }
+    }
+  },
+
+  "la_signora": {
+    "name": "La Signora",
+    "emoji": "La_Signora",
+    "drops": {
+      "molten_moment": {
+        "name": "Molten Moment",
+        "emoji": "Molten_Moment"
+      },
+      "hellfire_butterfly": {
+        "name": "Hellfire Butterfly",
+        "emoji": "Hellfire_Butterfly"
+      },
+      "ashen_heart": {
+        "name": "Ashen Heart",
+        "emoji": "Ashen_Heart"
+      }
+    }
+  },
+
+  "magatsu_mitake_narukami_no_mikoto": {
+    "name": "Magatsu Mitake Narukami no Mikoto",
+    "emoji": "Magatsu_Mitake_NarukaminoMikoto",
+    "drops": {
+      "mudra_of_the_malefic_general": {
+        "name": "Mudra of the Malefic General",
+        "emoji": "Mudra_of_the_Malefic_General"
+      },
+      "tears_of_the_calamitous_god": {
+        "name": "Tears of the Calamitous God",
+        "emoji": "Tears_of_the_Calamitous_God"
+      },
+      "the_meaning_of_aeons": {
+        "name": "The Meaning of Aeons",
+        "emoji": "The_Meaning_of_Aeons"
+      }
+    }
+  },
+
+  "everlasting_lord_of_arcane_wisdom": {
+    "name": "Everlasting Lord of Arcane Wisdom",
+    "emoji": "Lord_of_Arcane_Wisdom",
+    "drops": {
+      "puppet_strings": {
+        "name": "Puppet Strings",
+        "emoji": "Puppet_Strings"
+      },
+      "mirror_of_mushin": {
+        "name": "Mirror of Mushin",
+        "emoji": "Mirror_of_Mushin"
+      },
+      "dakas_bell": {
+        "name": "Daka's Bell",
+        "emoji": "Dakas_Bell"
+      }
+    }
+  },
+
+  "guardian_of_apeps_oasis": {
+    "name": "Guardian of Apep's Oasis",
+    "emoji": "Guardian_of_Apeps_Oasis",
+    "drops": {
+      "worldspan_fern": {
+        "name": "Worldspan Fern",
+        "emoji": "Worldspan_Fern"
+      },
+      "primordial_greenbloom": {
+        "name": "Primordial Greenbloom",
+        "emoji": "Primordial_Greenbloom"
+      },
+      "everamber": {
+        "name": "Everamber",
+        "emoji": "Everamber"
+      }
+    }
+  },
+
+  "all_devouring_narwhal": {
+    "name": "All-Devouring Narwhal",
+    "emoji": "All_Devouring_Narwhal",
+    "drops": {
+      "lightless_silk_string": {
+        "name": "Lightless Silk String",
+        "emoji": "Lightless_Silk_String"
+      },
+      "lightless_eye_of_the_maelstrom": {
+        "name": "Lightless Eye of the Maelstrom",
+        "emoji": "Lightless_Eye_of_the_Maelstrom"
+      },
+      "lightless_mass": {
+        "name": "Lightless Mass",
+        "emoji": "Lightless_Mass"
+      }
+    }
+  },
+
+  "the_knave": {
+    "name": "The Knave",
+    "emoji": "The_Knave",
+    "drops": {
+      "fading_candle": {
+        "name": "Fading Candle",
+        "emoji": "Fading_Candle"
+      },
+      "silken_feather": {
+        "name": "Silken Feather",
+        "emoji": "Silken_Feather"
+      },
+      "denial_and_judgement": {
+        "name": "Denial and Judgement",
+        "emoji": "Denial_and_Judgement"
+      }
+    }
+  },
+
+  "lord_of_eroded_primal_fire": {
+    "name": "Lord of Eroded Primal Fire",
+    "emoji": "Lord_of_Eroded_Primal_Fire",
+    "drops": {
+      "eroded_horn": {
+        "name": "Eroded Horn",
+        "emoji": "Eroded_Horn"
+      },
+      "eroded_sunfire": {
+        "name": "Eroded Sunfire",
+        "emoji": "Eroded_Sunfire"
+      },
+      "eroded_scale_feather": {
+        "name": "Eroded Scale-Feather",
+        "emoji": "Eroded_Scale_Feather"
+      }
+    }
+  },
+
+  "the_game_before_the_gate": {
+    "name": "The Game Before the Gate",
+    "emoji": "The_Game_Before_the_Gate",
+    "drops": {
+      "ascended_sample_knight": {
+        "name": "Ascended Sample: Knight",
+        "emoji": "Ascended_Sample_Knight"
+      },
+      "ascended_sample_rook": {
+        "name": "Ascended Sample: Rook",
+        "emoji": "Ascended_Sample_Rook"
+      },
+      "ascended_sample_queen": {
+        "name": "Ascended Sample: Queen",
+        "emoji": "Ascended_Sample_Queen"
+      }
+    }
+  },
+
+  "heretic_of_the_false_moon": {
+    "name": "Heretic of the False Moon",
+    "emoji": "Heretic_of_the_False_Moon",
+    "drops": {
+      "mask_of_the_virtuous_doctor": {
+        "name": "Mask of the Virtuous Doctor",
+        "emoji": "Mask_of_the_Virtuous_Doctor"
+      },
+      "madmans_restraint": {
+        "name": "Madman's Restraint",
+        "emoji": "Madmans_Restraint"
+      },
+      "elixir_of_the_heretic": {
+        "name": "Elixir of the Heretic",
+        "emoji": "Elixir_of_the_Heretic"
+      }
+    }
+  },
+
+  "exalted_master_of_the_heretical_path": {
+    "name": "Exalted Master of the Heretical Path",
+    "emoji": "Master_of_the_Heretical_Path",
+    "drops": {
+      "counterfeit_resin": {
+        "name": "Counterfeit Resin",
+        "emoji": "Counterfeit_Resin"
+      },
+      "twisted_withered_branch": {
+        "name": "Twisted Withered Branch",
+        "emoji": "Twisted_Withered_Branch"
+      },
+      "profaned_sprout": {
+        "name": "Profaned Sprout",
+        "emoji": "Profaned_Sprout"
+      }
+    }
+  }
+}

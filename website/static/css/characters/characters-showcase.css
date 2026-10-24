@@ -1,0 +1,1434 @@
+/* =========================================================
+   CHARACTER SHOWCASE — MODAL
+   ========================================================= */
+
+.character-showcase[hidden],
+.enka-card-error[hidden] {
+    display: none !important;
+}
+
+.character-showcase {
+    --showcase-element-colour: var(--accent);
+    --enka-border: var(--border);
+    --enka-muted: var(--text-muted);
+
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: var(--text);
+}
+
+.character-showcase-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(5 7 14 / 78%);
+    backdrop-filter: blur(6px);
+}
+
+.character-showcase-modal {
+    position: relative;
+    z-index: 1;
+    width: min(1160px, calc(100vw - 32px));
+    height: calc(100% + 20px);
+    max-height: calc(100dvh - 50px);
+    overflow: auto;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 40%,
+        var(--border)
+    );
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: 0 20px 55px rgb(0 0 0 / 40%);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    outline: none;
+}
+
+.character-showcase-close {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.character-showcase-close:hover {
+    border-color: var(--showcase-element-colour);
+}
+
+.character-showcase-close:focus-visible {
+    outline: 2px solid var(--showcase-element-colour);
+    outline-offset: 3px;
+}
+
+body.character-showcase-open {
+    overflow: hidden;
+}
+
+/* =========================================================
+   ELEMENT COLOURS
+   ========================================================= */
+
+.enka-build-card {
+    --showcase-element-colour: var(--accent);
+
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+
+    background: var(--background);
+}
+
+.enka-build-card[data-element="anemo"] {
+    --showcase-element-colour: #83d7b0;
+}
+
+.enka-build-card[data-element="geo"] {
+    --showcase-element-colour: #f0c66f;
+}
+
+.enka-build-card[data-element="electro"] {
+    --showcase-element-colour: #c4a0ff;
+}
+
+.enka-build-card[data-element="dendro"] {
+    --showcase-element-colour: #b3db71;
+}
+
+.enka-build-card[data-element="hydro"] {
+    --showcase-element-colour: #7ccfff;
+}
+
+.enka-build-card[data-element="pyro"] {
+    --showcase-element-colour: #ff967e;
+}
+
+.enka-build-card[data-element="cryo"] {
+    --showcase-element-colour: #a4e7f1;
+}
+
+/* =========================================================
+   ELEMENTAL VIDEO BACKGROUND
+   ========================================================= */
+
+.enka-element-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/* Darken the edges slightly to preserve text readability. */
+.enka-build-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    pointer-events: none;
+
+    background: radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgb(0 0 0 / 30%) 100%
+    );
+}
+
+/* Keep all actual build content above the video and vignette. */
+.enka-character-layout,
+.enka-artifacts-panel,
+.enka-card-status,
+.enka-card-error {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   MAIN CHARACTER LAYOUT
+   ========================================================= */
+
+.enka-character-layout {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.88fr) minmax(0, 1.12fr);
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px;
+}
+
+.enka-character-visual,
+.enka-character-details {
+    position: relative;
+    min-width: 0;
+}
+
+/* =========================================================
+   CHARACTER ARTWORK — SQUARE STAGE
+   ========================================================= */
+
+.enka-character-visual {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--enka-border);
+    border-radius: 12px;
+    isolation: isolate;
+    background: transparent;
+}
+
+.enka-character-layout {
+    background: transparent;
+}
+
+.enka-character-details {
+    background: transparent;
+}
+
+.enka-artwork-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    transform: translate(20px, -20px);
+}
+
+.enka-character-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+    object-position: center center;
+}
+
+
+/* =========================================================
+   TALENTS — INDIVIDUAL GLASS CIRCLES
+   ========================================================= */
+
+.enka-talent-column {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    top: auto;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+
+    z-index: 5;
+}
+
+.enka-talent-column:empty {
+    display: none;
+}
+
+/* Shared progression circle */
+.enka-progression-item {
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    padding: 5px;
+
+    border: 1px solid rgb(255 255 255 / 22%);
+    border-radius: 50%;
+
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 14%),
+        rgb(255 255 255 / 5%)
+    );
+
+    box-shadow:
+        inset 0 1px 2px rgb(255 255 255 / 18%),
+        0 2px 6px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.enka-progression-item.enka-talent {
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 65%,
+        rgb(255 255 255 / 45%)
+    );
+}
+
+.enka-progression-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-progression-level {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+
+    display: grid;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+
+    border: 1px solid var(--background);
+    border-radius: 4px;
+    background: var(--showcase-element-colour);
+    color: #171923;
+
+    font-size: 0.62rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   CONSTELLATIONS — INDIVIDUAL GLASS CIRCLES
+   ========================================================= */
+
+.enka-constellation-orbit {
+    position: absolute;
+    z-index: 3;
+    right: 10px;
+    bottom: 15px;
+    left: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 4px;
+
+    width: auto;
+    min-width: 0;
+    padding: 0;
+
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.enka-constellation-orbit:empty {
+    display: none;
+}
+
+.enka-constellation-orbit .enka-progression-item {
+    width: min(100%, 46px);
+    height: auto;
+    aspect-ratio: 1;
+    padding: 5px;
+}
+
+.enka-progression-item.enka-constellation.is-locked {
+    opacity: 0.4;
+    filter: grayscale(0.85);
+}
+
+/* Unlocked constellations inherit the character's element colour. */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 70%,
+        rgb(255 255 255 / 35%)
+    );
+
+    background: linear-gradient(
+        145deg,
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 30%,
+            transparent
+        ),
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 12%,
+            rgb(15 18 28 / 65%)
+        )
+    );
+
+    box-shadow:
+        inset 0 1px 3px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 25%,
+                transparent
+            ),
+        0 0 8px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 18%,
+                transparent
+            );
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.enka-constellation-number {
+    display: none !important;
+}
+
+/* =========================================================
+   CHARACTER IDENTITY
+   ========================================================= */
+
+.enka-character-details {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.enka-character-identity {
+    min-width: 0;
+    padding: 3px 36px 8px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-character-element-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.enka-character-element-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+}
+
+.enka-character-element-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-character-element {
+    margin: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.enka-character-identity h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.enka-character-level {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.enka-character-rarity {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 3px;
+}
+
+.enka-character-rarity img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   PANELS AND HEADINGS
+   ========================================================= */
+
+.enka-stats-panel,
+.enka-weapon-panel,
+.enka-artifacts-panel {
+    min-width: 0;
+    border: 1px solid var(--enka-border);
+    border-radius: 9px;
+    background: var(--surface);
+}
+
+.enka-stats-panel,
+.enka-weapon-panel {
+    padding: 9px;
+}
+
+.enka-weapon-panel {
+    transform: translateY(2px);
+    padding-top: 15px;
+    padding-bottom: 16px;
+}
+
+.enka-stats-panel h3,
+.enka-weapon-panel h3,
+.enka-artifacts-panel h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CHARACTER SHOWCASE — CHARACTER STATS
+   ========================================================= */
+
+.enka-stats-panel {
+    min-width: 0;
+}
+
+.enka-stats-panel [data-showcase-stats] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+    min-width: 0;
+}
+
+.enka-stat-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+/* Remove the divider from the final row in each stats column. */
+.enka-stats-panel [data-showcase-stats] > .enka-stat-row:nth-last-child(-n + 2) {
+    border-bottom: none;
+}
+
+.enka-stat-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.enka-stat-icon {
+    display: block;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    object-fit: contain;
+}
+
+.enka-stat-label {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.3;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.enka-stat-value {
+    display: block;
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.3;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+    .enka-stats-panel [data-showcase-stats] {
+        column-gap: 12px;
+    }
+
+    .enka-stat-row {
+        gap: 5px;
+        padding: 7px 0;
+    }
+
+    .enka-stat-name {
+        gap: 4px;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+        flex-basis: 16px;
+    }
+
+    .enka-stat-label {
+        font-size: 0.66rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   WEAPON
+   ========================================================= */
+
+.enka-weapon-card {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    align-items: start;
+    gap: 9px;
+    min-width: 0;
+}
+
+.enka-weapon-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 74px;
+    padding: 3px;
+    overflow: hidden;
+    border: 1px solid var(--enka-border);
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
+}
+
+.enka-weapon-image.rarity-5 {
+    background: linear-gradient(145deg, #76502f, #30241f);
+}
+
+.enka-weapon-image.rarity-4 {
+    background: linear-gradient(145deg, #654b87, #29243b);
+}
+
+.enka-weapon-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-weapon-refinement,
+.enka-weapon-level {
+    position: absolute;
+    z-index: 1;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgb(8 10 16 / 88%);
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 800;
+}
+
+.enka-weapon-refinement {
+    top: 3px;
+    left: 3px;
+}
+
+.enka-weapon-level {
+    right: 3px;
+    bottom: 3px;
+}
+
+.enka-weapon-info {
+    min-width: 0;
+}
+
+.enka-weapon-name {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.enka-weapon-stats {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    gap: 5px;
+    min-width: 0;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--enka-border);
+}
+
+.enka-weapon-stat {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+.enka-weapon-stat span {
+    flex: 0 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.enka-weapon-stat strong {
+    flex: 0 0 auto;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   ARTIFACTS
+   ========================================================= */
+
+.enka-artifacts-panel {
+    margin: 0 12px 10px;
+    padding: 9px 12px;
+}
+
+.enka-artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+    min-width: 0;
+}
+
+.enka-artifact-card {
+    min-width: 0;
+    padding: 18px 10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    border: 1px solid var(--enka-border);
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
+}
+
+.enka-artifact-main-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 0 6px;
+    border-top: 1px solid var(--enka-border);
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-artifact-main-stat + .enka-artifact-substat {
+    margin-top: 13px;
+}
+
+.enka-artifact-card.rarity-5 {
+    border-color: rgb(215 160 83 / 45%);
+}
+
+.enka-artifact-card.rarity-4 {
+    border-color: rgb(165 119 218 / 45%);
+}
+
+.enka-artifact-header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    margin-bottom: 10px;
+}
+
+.enka-artifact-image-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 2px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 12%,
+        var(--surface)
+    );
+}
+
+.enka-artifact-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-artifact-image-wrap:hover .enka-artifact-icon {
+    transform: scale(1.05);
+}
+
+.enka-artifact-level {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgb(8 10 16 / 88%);
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.enka-artifact-rarity {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    margin-top: 4px;
+}
+
+.enka-artifact-rarity img {
+    display: block;
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+}
+
+.enka-artifact-title-wrap {
+    min-width: 0;
+}
+
+.enka-artifact-name {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-main-stat-row,
+.enka-artifact-substat {
+    display: grid;
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 7px;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.enka-artifact-substats > .enka-artifact-substat:first-child {
+    margin-top: 5px;
+}
+
+.enka-artifact-main-stat-row {
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    margin-bottom: 5px;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-name {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.enka-artifact-substat:last-child {
+    margin-bottom: 0;
+}
+
+.enka-artifact-stat-name,
+.enka-artifact-substat span {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-stat-value,
+.enka-artifact-substat strong {
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 750;
+    line-height: 1.5;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.enka-artifact-stat-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+}
+
+.enka-artifact-stat-icon,
+.enka-artifact-main-stat-row img,
+.enka-artifact-substat img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    object-fit: contain;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-value {
+    color: var(--showcase-element-colour);
+}
+
+/* =========================================================
+   ARTIFACT SET BONUSES
+   ========================================================= */
+
+.enka-artifact-sets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.enka-artifact-set {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    padding: 5px 7px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 28%,
+        var(--border)
+    );
+    border-radius: 5px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 7%,
+        var(--surface)
+    );
+}
+
+.enka-artifact-set-count {
+    flex-shrink: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.64rem;
+    font-weight: 850;
+}
+
+.enka-artifact-set-name {
+    color: var(--text);
+    font-size: 0.64rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   EMPTY VALUES, STATUS AND ERRORS
+   ========================================================= */
+
+.enka-empty-value {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 8px 0;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
+
+.enka-card-status {
+    margin: 0;
+    padding: 5px 12px 9px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.enka-card-error {
+    margin: 0 12px 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--error);
+    font-size: 0.74rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
+    .character-showcase-modal {
+        width: min(680px, calc(100vw - 24px));
+    }
+
+    .enka-character-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .enka-character-visual {
+        width: min(100%, 560px);
+        justify-self: center;
+    }
+
+    .enka-character-details {
+        gap: 8px;
+    }
+
+    .enka-artifact-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .enka-artifacts-panel {
+        margin: 0 10px 10px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+    .character-showcase {
+        padding: 6px;
+    }
+
+    .character-showcase-modal {
+        width: calc(100vw - 12px);
+        max-height: calc(100dvh - 12px);
+        border-radius: 10px;
+    }
+
+    .enka-character-layout {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .enka-character-visual {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .enka-talent-column {
+        left: 7px;
+        gap: 8px;
+        padding: 7px 5px;
+        border-radius: 14px;
+    }
+
+    .enka-progression-item {
+        width: 34px;
+        height: 34px;
+        padding: 4px;
+    }
+
+    .enka-talent-column .enka-progression-item {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+    }
+
+    .enka-constellation-orbit .enka-progression-item {
+        width: min(100%, 34px);
+        height: auto;
+        aspect-ratio: 1;
+        padding: 4px;
+    }
+
+    .enka-constellation-orbit {
+        right: 7px;
+        bottom: 10px;
+        left: 7px;
+        gap: 3px;
+        padding: 6px 5px;
+        border-radius: 12px;
+    }
+
+    .enka-character-identity h2 {
+        font-size: 1.35rem;
+    }
+
+    .enka-stats-panel,
+    .enka-weapon-panel {
+        padding: 8px;
+    }
+
+    .enka-stat-grid {
+        column-gap: 8px;
+    }
+
+    .enka-stat-row {
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 4px;
+        padding: 5px 0;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .enka-stat-name {
+        font-size: 0.6rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.67rem;
+    }
+
+    .enka-artifacts-panel {
+        margin: 0 8px 8px;
+        padding: 7px;
+    }
+
+    .enka-artifact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .enka-artifact-card {
+        padding: 14px 7px;
+    }
+
+    .enka-artifact-header {
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .enka-artifact-image-wrap {
+        width: 36px;
+        height: 36px;
+    }
+
+    .enka-artifact-name {
+        font-size: 0.68rem;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span,
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.7rem;
+    }
+
+    .enka-artifact-main-stat-row,
+    .enka-artifact-substat {
+        grid-template-columns: 14px minmax(0, 1fr) auto;
+        column-gap: 4px;
+    }
+
+    .enka-artifact-stat-icon,
+    .enka-artifact-main-stat-row img,
+    .enka-artifact-substat img {
+        width: 13px;
+        height: 13px;
+        flex-basis: 13px;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span {
+        font-size: 0.68rem;
+    }
+
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .character-card,
+    .enka-artifact-icon {
+        transition: none;
+    }
+
+    .character-card:hover,
+    .enka-artifact-image-wrap:hover .enka-artifact-icon {
+        transform: none;
+    }
+
+    .character-showcase-backdrop {
+        backdrop-filter: none;
+    }
+}
+
+/* =========================================================
+   ARTIFACTS — HEADING AND SET BONUS ALIGNMENT
+   ========================================================= */
+
+.enka-artifacts-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.enka-artifacts-heading h3 {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.enka-artifacts-heading .enka-artifact-sets {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    margin: 0 0 0 auto;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — TRANSLUCENT GLASS PANELS
+   ========================================================= */
+
+/* Stats, weapon and artefact panels */
+.enka-stats-panel,
+.enka-weapon-panel,
+.enka-artifacts-panel {
+    background: rgb(15 18 28 / 48%);
+    border-color: rgb(255 255 255 / 16%);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Individual artefact cards */
+.enka-artifact-card {
+    background: rgb(15 18 28 / 35%);
+    border-color: rgb(255 255 255 / 14%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Weapon image background */
+.enka-weapon-image {
+    background: rgb(15 18 28 / 45%);
+}
+
+/* Remove the element-colour tint behind artefact icons */
+.enka-artifact-image-wrap {
+    background: rgb(255 255 255 / 7%);
+}
+
+/* Neutral glass for artefact set bonuses */
+.enka-artifact-set {
+    background: rgb(255 255 255 / 6%);
+    border-color: rgb(255 255 255 / 18%);
+}
+
+/* Keep the build card itself neutral and transparent */
+.enka-build-card {
+    background: transparent;
+}
+
+/* Keep the main character area clear of coloured overlays */
+.enka-character-visual {
+    background: transparent;
+}
+
+/* Neutral glass for unlocked constellation icons */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 16%),
+        rgb(15 18 28 / 38%)
+    );
+
+    border-color: rgb(255 255 255 / 30%);
+
+    box-shadow:
+        inset 0 1px 3px rgb(255 255 255 / 12%),
+        0 2px 8px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — REMOVE REMAINING ELEMENT TINTS
+   ========================================================= */
+
+/* Modal outer border */
+.character-showcase-modal {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* Remove the coloured glow from the build card */
+.enka-build-card {
+    background: transparent !important;
+}
+
+/* Neutralise borders on every build panel and artefact */
+.enka-build-card .enka-stats-panel,
+.enka-build-card .enka-weapon-panel,
+.enka-build-card .enka-artifacts-panel,
+.enka-build-card .enka-artifact-card,
+.enka-build-card .enka-weapon-image,
+.enka-build-card .enka-artifact-set,
+.enka-build-card .enka-artifact-image-wrap {
+    border-color: rgb(255 255 255 / 16%) !important;
+}
+
+/* Neutralise talent and constellation borders */
+.enka-build-card .enka-progression-item,
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: rgb(255 255 255 / 24%) !important;
+}
+
+/* Remove the element-coloured border from the artwork stage */
+.enka-build-card .enka-character-visual {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — ELEMENT-TINTED UNLOCKED CONSTELLATIONS
+   ========================================================= */
+
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--showcase-element-colour) 24%, rgb(20 24 36 / 72%)),
+        color-mix(in srgb, var(--showcase-element-colour) 10%, rgb(12 15 24 / 82%))
+    ) !important;
+
+    border: 1px solid
+        color-mix(in srgb, var(--showcase-element-colour) 75%, white 25%) !important;
+
+    box-shadow:
+        inset 0 0 8px
+            color-mix(in srgb, var(--showcase-element-colour) 18%, transparent),
+        0 0 6px
+            color-mix(in srgb, var(--showcase-element-colour) 32%, transparent),
+        0 0 12px
+            color-mix(in srgb, var(--showcase-element-colour) 16%, transparent);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+/* Slightly stronger elemental glow on hover */
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked):hover {
+    border-color: var(--showcase-element-colour) !important;
+
+    box-shadow:
+        inset 0 0 10px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent),
+        0 0 9px
+            color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
+        0 0 16px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
+
+    transform: translateY(-2px);
+}
+
+.enka-artifact-cv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 25px;
+    margin-top: 10px;
+    padding-top: 7px;
+
+    border-top: 1px solid rgb(255 255 255 / 16%);
+
+    color: var(--showcase-element-colour);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Keep the CV readable on smaller screens */
+@media (max-width: 520px) {
+    .enka-artifact-card {
+        padding-top: 14px;
+        padding-bottom: 12px;
+    }
+
+    .enka-artifact-cv {
+        min-height: 23px;
+        margin-top: 8px;
+        padding-top: 6px;
+        font-size: 0.75rem;
+    }
+}

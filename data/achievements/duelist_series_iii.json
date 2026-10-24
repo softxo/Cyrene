@@ -1,0 +1,219 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82279,
+                82280,
+                82281
+            ],
+            "name": "\"The Peak\"",
+            "achievementGroupId": 61,
+            "achievementGroupName": "Duelist: Series III",
+            "sortOrder": 2279,
+            "stages": 3,
+            "stage1": {
+                "title": "\"The Peak\"",
+                "description": "Defeat Local Legend: The Peak.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"The Peak\"",
+                "description": "Defeat The Peak in its weakened state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"The Peak\"",
+                "description": "During the course of completing a single challenge, do not let The Peak unleash its Saurian Stomp.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                82282,
+                82283,
+                82284
+            ],
+            "name": "\"Battlegoat\" and \"Ironclaw\"",
+            "achievementGroupId": 61,
+            "achievementGroupName": "Duelist: Series III",
+            "sortOrder": 2282,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Battlegoat\" and \"Ironclaw\"",
+                "description": "Defeat Local Legends: Battlegoat and Ironclaw.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Battlegoat\" and \"Ironclaw\"",
+                "description": "During the course of completing a single challenge, have Battlegoat's charge collide with Ironclaw's guard stance 2 times.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Battlegoat\" and \"Ironclaw\"",
+                "description": "Defeat Battlegoat and Ironclaw at the same time by having Battlegoat's charge collide with Ironclaw's guard stance.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                82285,
+                82286,
+                82287
+            ],
+            "name": "\"Infinitesimal\"",
+            "achievementGroupId": 61,
+            "achievementGroupName": "Duelist: Series III",
+            "sortOrder": 2285,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Infinitesimal\"",
+                "description": "Defeat Local Legend: Infinitesimal.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Infinitesimal\"",
+                "description": "During the course of completing a single challenge, avoid getting hit by Infinitesimal's Earthshaker Strike.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Infinitesimal\"",
+                "description": "Defeat Infinitesimal when it first enters a weakened state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                82288,
+                82289,
+                82290
+            ],
+            "name": "\"Reji\"",
+            "achievementGroupId": 61,
+            "achievementGroupName": "Duelist: Series III",
+            "sortOrder": 2288,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Reji\"",
+                "description": "Defeat Local Legend: Reji.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Reji\"",
+                "description": "During the course of completing a single challenge, have your characters be protected by a shield when being attacked by Reji, and the shield must not be destroyed.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Reji\"",
+                "description": "During the course of completing a single challenge, deflect 4 bullets in a row within a short period of time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                82291,
+                82292,
+                82293
+            ],
+            "name": "\"Tupu's Lushness\"",
+            "achievementGroupId": 61,
+            "achievementGroupName": "Duelist: Series III",
+            "sortOrder": 2291,
+            "stages": 3,
+            "stage1": {
+                "title": "\"Tupu's Lushness\"",
+                "description": "Defeat Local Legend: Tupu's Lushness.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "\"Tupu's Lushness\"",
+                "description": "During the course of completing a single challenge, no characters were downed.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "\"Tupu's Lushness\"",
+                "description": "During the course of completing a single challenge, do not let the Electro Ward created by Tupu's Lushness reach more than half of its maximum value.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        }
+    ]
+}

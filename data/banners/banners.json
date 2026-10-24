@@ -1,0 +1,25 @@
+{
+  "version": "7.0",
+  "phase": "First Half",
+
+  "banner_id": "fdf07a3247173a53c091079cb032c320f043154f",
+
+  "duration": {
+    "start": "2026-08-12T03:15:00+01:00",
+    "end": "2026-09-01T17:59:00+01:00"
+  },
+
+  "time_mode": "fixed",
+
+  "characters": {
+    "5_star": [
+      "odette",
+      "arlecchino"
+    ],
+    "4_star": [
+      "lynette",
+      "sucrose",
+      "alyosha"
+    ]
+  }
+}

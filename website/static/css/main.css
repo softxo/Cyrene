@@ -1,0 +1,10 @@
+/*
+   CYRENE — MAIN STYLESHEET
+*/
+
+@import url("global.css");
+@import url("settings.css");
+@import url("verification.css");
+@import url("achievements.css");
+@import url("/static/css/events/events.css");
+@import url("planner.css");

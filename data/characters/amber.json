@@ -1,0 +1,188 @@
+{
+  "id": "amber",
+  "name": "Amber",
+  "title": "Gliding Champion",
+  "description": "Always energetic and full of life, Amber's\n the best — albeit only — Outrider of the\n Knights of Favonius.",
+  "affiliation": "Knights of Favonius",
+  "constellation": "Lepus",
+  "birthday": "10/8",
+  "rarity": 4,
+  "element": "pyro",
+  "weapon": "bow",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#de4b31",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "One Arrow to Rule Them All",
+      "description": [
+        "Fires 2 arrows per **Aimed Shot**. The second arrow deals 20% of the first arrow's DMG."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Bunny Triggered",
+      "description": [
+        "Baron Bunny, new and improved! Hitting Baron Bunny's foot with a fully-charged Aimed Shot manually detonates it.",
+        "Explosion via manual detonation deals 200% additional DMG."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "It Burns!",
+      "description": [
+        "Increases the Level of **Fiery Rain** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "It's Not Just Any Doll...",
+      "description": [
+        "Decreases **Explosive Puppet**'s CD by 20%. Adds 1 additional charge."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "It's Baron Bunny!",
+      "description": [
+        "Increases the Level of **Explosive Puppet** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Wildfire",
+      "description": [
+        "**Fiery Rain** increases all party members' Movement SPD by 15% and ATK by 15% for 10s."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Sharpshooter",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 consecutive shots with a bow."
+        ],
+        "charged": [
+          "Performs a more precise Aimed Shot with increased DMG.",
+          "While aiming, flames will accumulate on the arrowhead. A fully charged flaming arrow will deal **Pyro DMG**."
+        ],
+        "plunge": [
+          "Fires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Explosive Puppet",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "The ever-reliable Baron Bunny takes the stage."
+      ],
+      "sections": [
+        {
+          "title": "Baron Bunny",
+          "text": [
+            "Continuously taunts the enemy, drawing their fire.",
+            "Baron Bunny's HP scales with Amber's Max HP.",
+            "When destroyed or when its timer expires, Baron Bunny explodes, dealing **AoE Pyro DMG**."
+          ]
+        },
+        {
+          "title": "Hold",
+          "text": [
+            "Adjusts the throwing direction of Baron Bunny.",
+            "The longer the button is held, the further the throw."
+          ]
+        }
+      ]
+    },
+    "elemental_burst": {
+      "name": "Fiery Rain",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Fires off a shower of arrows, dealing continuous **AoE Pyro DMG**."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Every Arrow Finds Its Target",
+      "description": [
+        "Increases the CRIT Rate of **Fiery Rain** by 10% and widens its AoE by 30%."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Precise Shot",
+      "description": [
+        "Aimed Shot hits on weak points increase ATK by 15% for 10s."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Gliding Champion",
+      "description": [
+        "Decreases gliding Stamina consumption for your own party members by 20%.",
+        "Not stackable with Passive Talents that provide the exact same effects."
+      ]
+    }
+  ],
+  "materials": {
+    "ascension": {
+      "gem": {
+        "id": "agnidus_agate",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "everflame_seed",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "small_lamp_grass",
+        "amount": 168
+      },
+      "common": {
+        "id": "arrowhead",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "freedom",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "arrowhead",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "stormterror",
+        "material": "dvalins_sigh",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

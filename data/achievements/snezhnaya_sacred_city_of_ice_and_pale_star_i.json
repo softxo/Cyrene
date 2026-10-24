@@ -1,0 +1,394 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80504
+            ],
+            "name": "Continental Explorer: Snow Blanketed Nation (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 463,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Snow Blanketed Nation (I)",
+                "ps5title": "Snezhnaya: Continental Explorer (I)",
+                "description": "Light up the maps of Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak in the Snezhnaya region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80505
+            ],
+            "name": "Across the Icebound Snowscape (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 464,
+            "stages": 1,
+            "stage1": {
+                "title": "Across the Icebound Snowscape (I)",
+                "ps5title": "Across the Icebound Snowscape (I)",
+                "description": "Unlock all Teleport Waypoints in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak in the Snezhnaya region.",
+                "progress": 61,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80506
+            ],
+            "name": "Sanctuary Pilgrim: Snow Blanketed Nation (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 465,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Snow Blanketed Nation (I)",
+                "description": "Unlock all Shrines of Depths in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak in the Snezhnaya region.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80507
+            ],
+            "name": "Pale and Lucent as Ice",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 466,
+            "stages": 1,
+            "stage1": {
+                "title": "Pale and Lucent as Ice",
+                "description": "Upgrade the Statues of The Seven in Snezhnaya to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80508
+            ],
+            "name": "Bounty of the Shadow Realm: Snow Blanketed Nation (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 467,
+            "stages": 1,
+            "stage1": {
+                "title": "Bounty of the Shadow Realm: Snow Blanketed Nation (I)",
+                "description": "Unlock all Shadow Realm treasure vaults in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak in the Snezhnaya region.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80509,
+                80510,
+                80511
+            ],
+            "name": "The Tundra Will Guide You Home (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 468,
+            "stages": 3,
+            "stage1": {
+                "title": "The Tundra Will Guide You Home (I)",
+                "description": "Follow 3 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Tundra Will Guide You Home (I)",
+                "description": "Follow 5 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Tundra Will Guide You Home (I)",
+                "description": "Follow 10 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80512,
+                80513,
+                80514
+            ],
+            "name": "Glacial Treasure Hunter (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 471,
+            "stages": 3,
+            "stage1": {
+                "title": "Glacial Treasure Hunter (I)",
+                "ps5title": "Glacial Treasure Hunter (I)",
+                "description": "Open 65 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 65,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Glacial Treasure Hunter (I)",
+                "ps5title": "Glacial Treasure Hunter (II)",
+                "description": "Open 130 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 130,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Glacial Treasure Hunter (I)",
+                "ps5title": "Glacial Treasure Hunter (III)",
+                "description": "Open 260 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 260,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80515,
+                80516,
+                80517
+            ],
+            "name": "Chillwinter Adventurer (I)",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 474,
+            "stages": 3,
+            "stage1": {
+                "title": "Chillwinter Adventurer (I)",
+                "description": "Complete 6 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Chillwinter Adventurer (I)",
+                "description": "Complete 12 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Chillwinter Adventurer (I)",
+                "description": "Complete 24 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80518
+            ],
+            "name": "Ladder of Love",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 477,
+            "stages": 1,
+            "stage1": {
+                "title": "Ladder of Love",
+                "description": "Complete \"Hesperides of Love and Hate.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80519
+            ],
+            "name": "Gather for Everlasting Happiness",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 478,
+            "stages": 1,
+            "stage1": {
+                "title": "Gather for Everlasting Happiness",
+                "description": "Complete \"In the Dwelling of Life.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80520
+            ],
+            "name": "A Thousand Affections Caught in a Sigh",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 479,
+            "stages": 1,
+            "stage1": {
+                "title": "A Thousand Affections Caught in a Sigh",
+                "description": "Stop the \"Primordial Human\" from turning the world into a courtyard untouched by love or sorrow.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80521
+            ],
+            "name": "Birth of the Singer in the Shell",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 480,
+            "stages": 1,
+            "stage1": {
+                "title": "Birth of the Singer in the Shell",
+                "ps5title": "Journey: Tidesong Cavern",
+                "description": "Reach maximum Construction Level at the \"Meeting Point: Tidesong Cavern.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80522
+            ],
+            "name": "Hunt for Your Worth in the Waking World",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 481,
+            "stages": 1,
+            "stage1": {
+                "title": "Hunt for Your Worth in the Waking World",
+                "ps5title": "Journey: Huntsman's Cabin",
+                "description": "Reach maximum Construction Level at the \"Meeting Point: Huntsman's Cabin.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80523
+            ],
+            "name": "Glorification of the Chosen One",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 482,
+            "stages": 1,
+            "stage1": {
+                "title": "Glorification of the Chosen One",
+                "ps5title": "Journey: The Korolevskiy Theater",
+                "description": "Reach maximum Construction Level at the \"Meeting Point: The Korolevskiy Theater.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                80529
+            ],
+            "name": "Open Your Eyelids Lulled by Night",
+            "achievementGroupId": 69,
+            "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
+            "sortOrder": 488,
+            "stages": 1,
+            "stage1": {
+                "title": "Open Your Eyelids Lulled by Night",
+                "ps5title": "Journey: Rankova Zorya",
+                "description": "Complete the restoration of Rankova Zorya.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        }
+    ]
+}

@@ -1,0 +1,284 @@
+{
+  "pyro": {
+    "name": "Pyro Ward",
+    "emoji": "Pyro",
+    "colour": "pyro",
+    "coefficient": {
+      "pyro": null,
+      "hydro": 2,
+      "electro": 1,
+      "cryo": 0.5,
+      "dendro": null,
+      "anemo": 0.5,
+      "geo": 0.5
+    },
+    "effective": {
+      "best": [
+        "Hydro"
+      ],
+      "good": [
+        "Electro"
+      ]
+    },
+    "ineffective": [
+      "Pyro",
+      "Dendro"
+    ],
+    "notes": [
+      "- **Hydro** is the fastest way to remove this ward, as every 1U of Hydro removes 2U of Pyro.",
+      "- Secondly, **Electro** is also okay, removing 1U of Pyro for every 1U of Electro."
+    ]
+  },
+  "hydro": {
+    "name": "Hydro Ward",
+    "emoji": "Hydro",
+    "colour": "hydro",
+    "coefficient": {
+      "pyro": 0.5,
+      "hydro": null,
+      "electro": "**×0.4U/s**",
+      "cryo": 1,
+      "dendro": 2,
+      "anemo": 0.5,
+      "geo": 0.5
+    },
+    "effective": {
+      "best": [
+        "Dendro"
+      ],
+      "good": [
+        "Cryo"
+      ]
+    },
+    "ineffective": [
+      "Hydro"
+    ],
+    "notes": [
+      "- **Dendro** is the fastest way to remove this ward, as every 1U of Dendro removes 2U of Hydro.",
+      "- Secondly, **Cryo** is also okay, removing 1U of Hydro for every 1U of Cryo.",
+      "- Alternatively, **Electro** also works well, as it has a 0.4U per second DoT, which, while usually worse, can outperform teams that struggle to consistently apply Cryo, or rarely, Dendro."
+    ]
+  },
+  "electro": {
+    "name": "Electro Ward",
+    "emoji": "Electro",
+    "colour": "electro",
+    "coefficient": {
+      "pyro": 1,
+      "hydro": "**×0.4U/s**",
+      "electro": null,
+      "cryo": 1,
+      "dendro": 1,
+      "anemo": 0.5,
+      "geo": 0.5
+    },
+    "effective": {
+      "best": [
+        "Pyro",
+        "Cryo",
+        "Dendro"
+      ],
+      "good": [
+        "Hydro"
+      ]
+    },
+    "ineffective": [
+      "Electro"
+    ],
+    "notes": [
+      "- For this ward, **Pyro**, **Cryo** and **Dendro** all remove the same 1U of Electro for every 1U of their element.",
+      "- Alternatively, **Hydro** also works well, as it has a 0.4U per second DoT, which, while usually worse, can outperform teams that struggle to consistently apply Pyro, Cryo or Dendro.",
+      "- Since Electro wards have no reaction that removes more than 1U of Electro per 1U applied, they are theoretically more difficult to break than Hydro wards, which makes Hydro a better alternative."
+    ]
+  },
+  "cryo": {
+    "name": "Cryo Ward",
+    "emoji": "Cryo",
+    "colour": "cryo",
+    "coefficient": {
+      "pyro": 2,
+      "hydro": null,
+      "electro": 1,
+      "cryo": null,
+      "dendro": null,
+      "anemo": 0.5,
+      "geo": 0.5
+    },
+    "effective": {
+      "best": [
+        "Pyro"
+      ],
+      "good": [
+        "Electro"
+      ]
+    },
+    "ineffective": [
+      "Hydro",
+      "Cryo",
+      "Dendro"
+    ],
+    "notes": [
+      "- **Pyro** is the fastest way to remove this ward, as every 1U of Pyro removes 2U of Cryo.",
+      "- Secondly, **Electro** is also okay, removing 1U of Cryo for every 1U of Electro."
+    ]
+  },
+  "dendro": {
+    "name": "Dendro Ward",
+    "emoji": "Dendro",
+    "colour": "dendro",
+    "coefficient": {
+      "pyro": "**×0.4U/s**",
+      "hydro": 0.5,
+      "electro": 1,
+      "cryo": null,
+      "dendro": null,
+      "anemo": null,
+      "geo": null
+    },
+    "effective": {
+      "best": [
+        "Electro"
+      ],
+      "good": [
+        "Hydro",
+        "Pyro"
+      ]
+    },
+    "ineffective": [
+      "Cryo",
+      "Dendro",
+      "Anemo",
+      "Geo"
+    ],
+    "notes": [
+      "- **Electro** is the best direct counter to remove this ward, as every 1U of Electro removes 1U of Dendro.",
+      "- However, **Pyro** (Burning) can sometimes outperform Electro, if the team struggles to apply Electro consistently.",
+      "- Alternatively, **Hydro** is the next best direct counter, as it's the only element left that removes any Dendro ward durability, with Hydro removing 0.5U of Dendro for every 1U of Hydro."
+    ]
+  },
+  "geo": {
+    "name": "Geo Ward",
+    "emoji": "Geo",
+    "colour": "geo",
+    "coefficient": {
+      "pyro": "**Read Notes**",
+      "hydro": "**Read Notes**",
+      "electro": "**Read Notes**",
+      "cryo": "**Read Notes**",
+      "dendro": null,
+      "anemo": null,
+      "geo": "**Read Notes**"
+    },
+    "effective": {
+      "best": [
+        "Blunt attacks",
+        "Geo attacks",
+        "Overload reaction",
+        "PHEC + Geo (Crystallize)"
+      ]
+    },
+    "ineffective": [
+      "Dendro",
+      "Anemo"
+    ],
+    "notes": [
+      "**Notes**",
+      "- For Geo wards, the most effective way to remove one is to use **Blunt attacks** and **Geo attacks**. Blunt attacks include **Claymore attacks**, most **Plunging Attacks**, **Overload** explosions, and most **Geo attacks**.",
+      "- Geo wards can also be depleted through **Poise Damage**, a hidden value carried by attacks that produce physical impact.",
+      "- Every attack has a hidden Poise Damage value. Geo wards use this value instead of damage dealt, to determine durability consumption.",
+      "- Blunt attacks receive a 7× multiplier to their Poise Damage against Geo wards, making Claymores, most Plunging Attacks, Geo attacks, and Overload explosions extremely effective.",
+      "- Internally, 500 effective Poise Damage removes 1U of Geo ward durability. Because Blunt attacks receive a 7× multiplier, they only require about 71.4 base Poise Damage to remove the same amount.",
+      "- Due to Geo wards having a slightly different mechanic, applying a **PHEC** element (Pyro, Hydro, Electro, or Cryo) by itself does **not** reduce Geo ward durability.",
+      "- Geo ward durability is only reduced when **Crystallize** is triggered, at a ratio of 2×. Simply applying a PHEC element without triggering Crystallize has no effect.",
+      "- If an enemy has a permanent Geo aura, repeatedly applying PHEC elements alone will never consume Geo ward durability, because you're not triggering Crystallize.",
+      "",
+      "! **Important**:",
+      "- The durability consumed by **Crystallize** depends on the amount of elemental aura remaining when the reaction is triggered.",
+      "- Example: `Applied 2U of Pyro → 1 second passes → Applied Geo → Crystallize occurs`, will consume **less** than 4U due to Aura Decay Rate.",
+      "- Due to **Aura Tax**, elemental applications of 1/1.5/2/4U (8U in rare cases) that act as an aura are **not** the actual applied amount.",
+      "- They are all applied a 0.8× modifier. e.g.: 1U → 0.8U",
+      "- Because of that, the first example becomes: `Applied 1.6U of Pyro → 1 second passes → Applied Geo → Crystallize occurs`, will consume **less** than 3.2U of Geo ward durability.",
+      "",
+      "? For more information on how Aura Tax works, do `/theory theory:elemental gauge theory section:aura tax`",
+      "? For more information on how Aura Decay Rate works, do `/theory theory:elemental gauge theory section:aura decay rate`"
+    ]
+  },
+  "elementless": {
+    "name": "Elementless Ward",
+    "emoji": "Elementless",
+    "colour": "elementless",
+    "coefficient": {
+      "pyro": null,
+      "hydro": null,
+      "electro": null,
+      "cryo": null,
+      "dendro": null,
+      "anemo": null,
+      "geo": null
+    },
+    "effective": {
+      "best": [
+        "Anything"
+      ]
+    },
+    "ineffective": [
+      "Idk"
+    ],
+    "notes": [
+      "aaaaa"
+    ]
+  },
+  "void": {
+    "name": "Void Ward",
+    "emoji": "Void",
+    "colour": "void",
+    "coefficient": {
+      "all_elements": "×**1**",
+      "nightsoul": "×**3**"
+    },
+    "effective": {
+      "best": [
+        "Nightsoul-aligned attacks"
+      ],
+      "good": [
+        "Burning reaction"
+      ]
+    },
+    "ineffective": [
+      "Physical damage"
+    ],
+    "notes": [
+      "- **Void** wards are unique, as all elemental attacks consume their durability equally.",
+      "- However, while all elemental attacks consume durability equally, **Nightsoul**-aligned attacks are **3 times** more efficient.",
+      "- Nightsoul-aligned attacks are attacks from **Natlan** characters, **while being inside the Nightsoul's Blessing State**.",
+      "- As the second-best option after any Nightsoul-aligned attack, **Burning** is a great choice, as every **tick** of Burning damages the ward."
+    ]
+  },
+  "deepdark": {
+    "name": "Deepdark Ward",
+    "emoji": "Deepdark",
+    "colour": "deepdark",
+    "coefficient": {
+      "all_elements": "×**1**",
+      "lunar": "×**3**"
+    },
+    "effective": {
+      "best": [
+        "Lunar-Charged",
+        "Lunar-Bloom",
+        "Lunar-Crystallize"
+      ],
+      "good": [
+        "Elemental Damage"
+      ]
+    },
+    "ineffective": [
+      "Physical damage"
+    ],
+    "notes": [
+      "- **Deepdark** wards are unique, as they scale based off the enemy's **Max HP**.",
+      "- The ward takes equal amounts of damage from every type of elemental attack, however **Lunar Reaction** damage is multiplied by 300%.",
+      "- Lunar Reaction damage is the easiest way to break this ward, due to the multiplier it provides, however this ward isn't a check and can be broken by any character, as it only requires damage."
+    ]
+  }
+}

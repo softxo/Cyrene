@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Inventory{% endblock %}
+
+{% block content %}
+<div class="page inventory-page">
+    <header class="inventory-header">
+        <div>
+            <h1>Inventory</h1>
+            <p>Your Genshin Impact materials, synced from HoYoLAB.</p>
+        </div>
+
+        {% if accounts %}
+        <form
+            method="get"
+            action="/inventory"
+            class="inventory-account-form"
+            data-inventory-account-form
+        >
+            <label for="inventory-account-button">Account</label>
+
+            <div class="custom-select inventory-account-select">
+                <button
+                    id="inventory-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        {% if selected_account %}
+                            {{ selected_account.get("nickname") or selected_account.get("genshin_uid") }}
+                            · {{ selected_account.genshin_uid }}
+                        {% else %}
+                            Select an account
+                        {% endif %}
+                    </span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if selected_account and account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
+                    >
+                        {{ account.get("nickname") or account.get("genshin_uid") }}
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <input
+                    type="hidden"
+                    name="account_id"
+                    value="{{ selected_account.id if selected_account else '' }}"
+                >
+            </div>
+        </form>
+        {% endif %}
+    </header>
+
+    {% if not accounts %}
+    <section class="inventory-message">
+        <h2>No accounts connected</h2>
+        <p>Connect your HoYoLAB account to view your inventory.</p>
+        <a href="/verify?next=/inventory">Connect account</a>
+    </section>
+
+    {% else %}
+    <section
+        class="inventory-message inventory-loading"
+        data-inventory-loading
+        data-account-id="{{ selected_account.id }}"
+        aria-live="polite"
+    >
+        <span class="inventory-loading-spinner" aria-hidden="true"></span>
+        <h2>Loading inventory</h2>
+        <p>The page is ready while HoYoLAB syncs your materials.</p>
+    </section>
+
+    <section class="inventory-toolbar" aria-label="Inventory controls" hidden>
+        <div class="inventory-search">
+            <label for="inventory-search">Search materials</label>
+            <input
+                id="inventory-search"
+                type="search"
+                placeholder="Search by name..."
+                autocomplete="off"
+                data-inventory-search
+            >
+        </div>
+
+        <p class="inventory-summary" aria-live="polite">
+            <span data-inventory-count>0</span>
+            materials
+        </p>
+    </section>
+
+    <section class="inventory-grid" data-inventory-grid hidden></section>
+
+    <p class="inventory-empty-filter" data-inventory-empty hidden>
+        No materials match that search.
+    </p>
+
+    <p class="inventory-note" data-inventory-note hidden>
+        HoYoLAB provides development materials through its Enhancement
+        Progression Calculator. Artifacts, food, gadgets, and quest items are
+        not included, as well as some materials such as Dream Solvent, Adventurer's Experience etc.
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

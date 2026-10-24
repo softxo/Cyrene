@@ -1,0 +1,193 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86079
+            ],
+            "name": "The Fall of Being",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9076,
+            "stages": 1,
+            "stage1": {
+                "title": "The Fall of Being",
+                "description": "Defeat a Frostnight Herra in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86080
+            ],
+            "name": "Twenty-Six. Penetration!",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9077,
+            "stages": 1,
+            "stage1": {
+                "title": "Twenty-Six. Penetration!",
+                "description": "Defeat a Super-Heavy Landrover: Mechanized Fortress in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86081
+            ],
+            "name": "Then Don't Say It!",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9078,
+            "stages": 1,
+            "stage1": {
+                "title": "Then Don't Say It!",
+                "description": "Defeat a Lord of the Hidden Depths: Whisperer of Nightmares in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86082
+            ],
+            "name": "Refuse Falsehood, Reveal the Truth",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9079,
+            "stages": 1,
+            "stage1": {
+                "title": "Refuse Falsehood, Reveal the Truth",
+                "description": "Defeat The Doctor in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86083
+            ],
+            "name": "What Did You Even Protect?",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9080,
+            "stages": 1,
+            "stage1": {
+                "title": "What Did You Even Protect?",
+                "description": "Defeat a Radiant Moongecko in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86084
+            ],
+            "name": "\"If I Whet My Glittering sword...\"",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9081,
+            "stages": 1,
+            "stage1": {
+                "title": "\"If I Whet My Glittering sword...\"",
+                "description": "Defeat the Watcher: Fallen Vigil in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86085
+            ],
+            "name": "Independent Ignorance",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9082,
+            "stages": 1,
+            "stage1": {
+                "title": "Independent Ignorance",
+                "description": "Defeat Il Dottore in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86086
+            ],
+            "name": "Immortality Severed",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9083,
+            "stages": 1,
+            "stage1": {
+                "title": "Immortality Severed",
+                "description": "Defeat an Immortal Construct in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86087
+            ],
+            "name": "Endless Vitality",
+            "achievementGroupId": 72,
+            "achievementGroupName": "Meetings in Outrealm: Series VII",
+            "sortOrder": 9084,
+            "stages": 1,
+            "stage1": {
+                "title": "Endless Vitality",
+                "description": "Defeat a Chimeric Winged Lion in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        }
+    ]
+}

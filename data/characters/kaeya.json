@@ -1,0 +1,174 @@
+{
+  "id": "kaeya",
+  "name": "Kaeya",
+  "title": "Frostwind Swordsman",
+  "description": "An accomplished swordsman and a strategic thinker in the Knights of Favonius, rumored to hail from beyond Mondstadt.",
+  "affiliation": "Knights of Favonius",
+  "constellation": "Pavo Ocellus",
+  "birthday": "30/11",
+  "rarity": 4,
+  "element": "cryo",
+  "weapon": "sword",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#a0d7e4",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Excellent Blood",
+      "description": [
+        "The CRIT Rate of Kaeya's Normal and Charge Attacks against opponents affected by **Cryo** is increased by 15%."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Never-Ending Performance",
+      "description": [
+        "While **Glacial Waltz** is in effect, for each opponent defeated, its duration is increased by 2.5s, up to a maximum of 15s."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Dance of Frost",
+      "description": [
+        "Increases the Level of **Frostgnaw** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Frozen Kiss",
+      "description": [
+        "Triggers automatically when Kaeya's HP falls below 20%:",
+        "Creates a shield that absorbs damage equal to 30% of Kaeya's Max HP. Lasts for 20s.",
+        "This shield absorbs **Cryo DMG** with 250% efficiency.",
+        "Can only occur once every 60s."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "Frostbiting Embrace",
+      "description": [
+        "Increases the Level of **Glacial Waltz** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Glacial Whirlwind",
+      "description": [
+        "**Glacial Waltz** will generate 1 additional icicle, and will regenerate 15 Energy when cast."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Ceremonial Bladework",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 rapid strikes."
+        ],
+        "charged": [
+          "Consumes a certain amount of Stamina to unleash 2 rapid sword strikes.\n"
+        ],
+        "plunge": [
+          "Plunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Frostgnaw",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Unleashes a frigid blast, dealing **Cryo DMG** to opponents in front of Kaeya.\n"
+      ]
+    },
+    "elemental_burst": {
+      "name": "Glacial Waltz",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Coalescing the frost in the air, Kaeya summons 3 icicles that revolve around him.",
+        "These icicles will follow the character around and deal **Cryo DMG** to opponents in their path for the ability's duration."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Cold-Blooded Strike",
+      "description": [
+        "Every hit with **Frostgnaw** regenerates HP for Kaeya equal to 15% of his ATK."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Glacial Heart",
+      "description": [
+        "Opponents **Frozen** by **Frostgnaw** will drop additional Elemental Particles.",
+        "Frostgnaw may only produce a maximum of 2 additional Elemental Particles per use."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Hidden Strength",
+      "description": [
+        "Decreases sprinting Stamina consumption for your own party members by 20%.",
+        "Not stackable with Passive Talents that provide the exact same effects."
+      ]
+    }
+  ],
+  "materials": {
+    "ascension": {
+      "gem": {
+        "id": "shivada_jade",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "hoarfrost_core",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "calla_lily",
+        "amount": 168
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "ballad",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "andrius",
+        "material": "spirit_locket_of_boreas",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

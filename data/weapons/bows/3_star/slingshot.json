@@ -1,0 +1,71 @@
+{
+    "id": "slingshot",
+    "name": "Slingshot",
+    "emoji": "Slingshot",
+    "icon": "Slingshot",
+    "description": "A bow, despite the name. After countless experiments and improvements to the design, the creator of the ultimate slingshot found himself to have made what was actually a bow.",
+    "weapon_type": "bow",
+    "max_level": 90,
+    "rarity": 3,
+    "colour": "#4A90E2",
+    "main_stat": {
+      "type": "base_atk",
+      "value": 354
+    },
+    "secondary_stat": {
+      "type": "crit_rate",
+      "value": 31.2
+    },
+    "passive": {
+      "name": "Slingshot",
+      "description": {
+        "r1": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by **36%**. Otherwise, decreases DMG by 10%.",
+        "r2": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by **42%**. Otherwise, decreases DMG by 10%.",
+        "r3": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by **48%**. Otherwise, decreases DMG by 10%.",
+        "r4": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by **54%**. Otherwise, decreases DMG by 10%.",
+        "r5": "If a Normal or Charged Attack hits a target within 0.3s of being fired, increases DMG by **60%**. Otherwise, decreases DMG by 10%."
+      }
+    },
+    "materials": {
+      "ascension": {
+        "weapon_material": {
+          "id": "guyun",
+          "tier2": 2,
+          "tier3": 6,
+          "tier4": 6,
+          "tier5": 3
+        },
+        "common": {
+          "id": "mask",
+          "tier1": 6,
+          "tier2": 10,
+          "tier3": 12
+        },
+        "elite": {
+          "id": "sacrificial_knife",
+          "tier2": 10,
+          "tier3": 12,
+          "tier4": 18
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 105000
+        }
+      },
+      "level": {
+        "ores": {
+          "id": "enhancement_ore",
+          "tier1": 6,
+          "tier2": 18,
+          "tier3": 395
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 398880
+        }
+      }
+    },
+    "obtain": [
+      "Any Wish Banner"
+    ]
+}

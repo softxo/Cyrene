@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Settings{% endblock %}
+
+{% block content %}
+
+<div class="page">
+
+    <section class="section-header">
+        <h2>Settings</h2>
+        <p>Customise your Cyrene experience.</p>
+    </section>
+
+
+    <!-- =====================================================
+         APPEARANCE
+         ===================================================== -->
+
+    <section class="settings-section">
+
+        <div class="settings-section-header">
+            <h3>Appearance</h3>
+            <p>Choose the colour palette used throughout Cyrene.</p>
+        </div>
+
+
+        <div class="theme-options">
+
+            <!-- Dark Blue -->
+
+            <button
+                class="theme-option"
+                data-theme-option="blue"
+                onclick="setTheme('blue')"
+            >
+                <div class="theme-preview theme-preview-blue">
+                    <span></span>
+                </div>
+
+                <div class="theme-option-info">
+                    <strong>Midnight Blue</strong>
+                    <span>Dark blue palette</span>
+                </div>
+
+                <div class="theme-check"></div>
+            </button>
+
+
+            <!-- Dark Pink -->
+
+            <button
+                class="theme-option"
+                data-theme-option="pink"
+                onclick="setTheme('pink')"
+            >
+                <div class="theme-preview theme-preview-pink">
+                    <span></span>
+                </div>
+
+                <div class="theme-option-info">
+                    <strong>Cyrene Pink</strong>
+                    <span>Dark pink palette</span>
+                </div>
+
+                <div class="theme-check"></div>
+            </button>
+
+
+            <!-- Light Blue -->
+
+            <button
+                class="theme-option"
+                data-theme-option="light-blue"
+                onclick="setTheme('light-blue')"
+            >
+                <div class="theme-preview theme-preview-light-blue">
+                    <span></span>
+                </div>
+
+                <div class="theme-option-info">
+                    <strong>Daylight Blue</strong>
+                    <span>Light blue palette</span>
+                </div>
+
+                <div class="theme-check"></div>
+            </button>
+
+
+            <!-- Light Pink -->
+
+            <button
+                class="theme-option"
+                data-theme-option="light-pink"
+                onclick="setTheme('light-pink')"
+            >
+                <div class="theme-preview theme-preview-light-pink">
+                    <span></span>
+                </div>
+
+                <div class="theme-option-info">
+                    <strong>Rose Light</strong>
+                    <span>Light pink palette</span>
+                </div>
+
+                <div class="theme-check"></div>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+        INTERFACE
+        ===================================================== -->
+
+    <section class="settings-section">
+
+        <div class="settings-section-header">
+            <h3>Interface</h3>
+            <p>Control visual effects and interface behaviour.</p>
+        </div>
+
+
+        <div class="settings-toggle">
+
+            <div class="settings-toggle-info">
+                <strong>Hover Effects</strong>
+                <span>Enable the floating effect when hovering over elements.</span>
+            </div>
+
+            <button
+                type="button"
+                class="settings-toggle-switch"
+                id="hover-effects-toggle"
+                aria-label="Toggle hover effects"
+                aria-pressed="true"
+            ></button>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80001
+            ],
+            "name": "The Wind and The Star Traveler",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 1,
+            "stages": 1,
+            "stage1": {
+                "title": "The Wind and The Star Traveler",
+                "description": "Blow seeds off a Dandelion using Anemo.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80002
+            ],
+            "name": "Of Mountains High",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 2,
+            "stages": 1,
+            "stage1": {
+                "title": "Of Mountains High",
+                "ps5title": "Geo: Of Mountains High",
+                "description": "Obtain the power of Geo.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80003
+            ],
+            "name": "The Voice of Flowing Water",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 3,
+            "stages": 1,
+            "stage1": {
+                "title": "The Voice of Flowing Water",
+                "description": "Collect the entire \"Heart of Clear Springs\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80004
+            ],
+            "name": "The Divine Halberd Mocks the Heavens",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 4,
+            "stages": 1,
+            "stage1": {
+                "title": "The Divine Halberd Mocks the Heavens",
+                "description": "Collect the entire \"Legend of the Shattered Halberd\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80005
+            ],
+            "name": "The Drunkard and the Wolf",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 5,
+            "stages": 1,
+            "stage1": {
+                "title": "The Drunkard and the Wolf",
+                "description": "Collect the entire \"A Drunkard's Tale\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80006
+            ],
+            "name": "Spring, White Horse and Moonlight",
+            "achievementGroupId": 1,
+            "achievementGroupName": "Mortal Travails: Series I",
+            "sortOrder": 6,
+            "stages": 1,
+            "stage1": {
+                "title": "Spring, White Horse and Moonlight",
+                "description": "Collect the entire \"Moonlit Bamboo Forest\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

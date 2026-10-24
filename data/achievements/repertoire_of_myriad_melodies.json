@@ -1,0 +1,175 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80371
+            ],
+            "name": "Parks, Benches, and Sonatas",
+            "achievementGroupId": 58,
+            "achievementGroupName": "Repertoire of Myriad Melodies",
+            "sortOrder": 1542,
+            "stages": 1,
+            "stage1": {
+                "title": "Parks, Benches, and Sonatas",
+                "description": "Obtain the \"Repertoire of Myriad Melodies\" and become a free-spirited musician.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80372
+            ],
+            "name": "A Treatise on the Fundamental Principles of Lyre Playing",
+            "achievementGroupId": 58,
+            "achievementGroupName": "Repertoire of Myriad Melodies",
+            "sortOrder": 1543,
+            "stages": 1,
+            "stage1": {
+                "title": "A Treatise on the Fundamental Principles of Lyre Playing",
+                "description": "Complete all \"Introductory Exercises\" in the \"Repertoire of Myriad Melodies.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80373,
+                80374,
+                80375
+            ],
+            "name": "Twenty-Five Groschen...",
+            "achievementGroupId": 58,
+            "achievementGroupName": "Repertoire of Myriad Melodies",
+            "sortOrder": 1544,
+            "stages": 3,
+            "stage1": {
+                "title": "Twenty-Five Groschen...",
+                "description": "Redeem 1 score themes in the \"Treasure of Myriad Melodies.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Twenty-Five Groschen...",
+                "description": "Redeem 3 score themes in the \"Treasure of Myriad Melodies.\"",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Twenty-Five Groschen...",
+                "description": "Redeem 5 score themes in the \"Treasure of Myriad Melodies.\"",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80376,
+                80377,
+                80378
+            ],
+            "name": "The Melody's Trajectory",
+            "achievementGroupId": 58,
+            "achievementGroupName": "Repertoire of Myriad Melodies",
+            "sortOrder": 1547,
+            "stages": 3,
+            "stage1": {
+                "title": "The Melody's Trajectory",
+                "description": "Reach a performance rating of Discantus for 5 different official music scores.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Melody's Trajectory",
+                "description": "Reach a performance rating of Discantus for 15 different official music scores.",
+                "progress": 15,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Melody's Trajectory",
+                "description": "Reach a performance rating of Discantus for 30 different official music scores.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80379,
+                80380,
+                80381
+            ],
+            "name": "The Art of the Canon",
+            "achievementGroupId": 58,
+            "achievementGroupName": "Repertoire of Myriad Melodies",
+            "sortOrder": 1550,
+            "stages": 3,
+            "stage1": {
+                "title": "The Art of the Canon",
+                "description": "Reach a performance rating of Discantus for 5 different music scores by other players.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Art of the Canon",
+                "description": "Reach a performance rating of Discantus for 10 different music scores by other players.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Art of the Canon",
+                "description": "Reach a performance rating of Discantus for 20 different music scores by other players.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.3"
+        }
+    ]
+}

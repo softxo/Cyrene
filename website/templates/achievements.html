@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Achievements{% endblock %}
+
+{% block content %}
+
+<div class="page achievements-page">
+
+    <!-- Page Header -->
+    <section class="page-header">
+
+        <div>
+            <span class="eyebrow">
+                PROGRESSION
+            </span>
+
+            <h1>
+                Achievements
+            </h1>
+
+            <p>
+                Track your progress across all Genshin Impact achievements.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- Overall Progress -->
+    <section class="achievement-overview">
+
+        <div class="achievement-overview-header">
+
+            <div>
+                <span class="achievement-overview-label">
+                    Overall Progress
+                </span>
+
+                <strong id="achievement-overall-count">
+                    0 / 0
+                </strong>
+            </div>
+
+            <span
+                class="achievement-overview-percent"
+                id="achievement-overall-percent"
+            >
+                0%
+            </span>
+
+        </div>
+
+
+        <div class="achievement-progress">
+
+            <div
+                class="achievement-progress-fill"
+                id="achievement-overall-progress-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Categories -->
+    <section
+        class="achievement-categories-section"
+        id="achievement-categories"
+    >
+
+        <div class="section-header">
+
+            <div>
+                <h2>Categories</h2>
+
+                <p>
+                    Select a category to view its achievements.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Category Controls -->
+        <div class="achievement-category-controls">
+
+            <!-- Search -->
+
+            <div class="achievement-search-wrapper">
+
+                <span class="achievement-search-icon">
+                    <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M4.47487 4.4749C2.32698 6.62279 2.32698 10.1052 4.47487 12.2531C6.62275 14.401 10.1052 14.401 12.253 12.2531C14.4009 10.1052 14.4009 6.62279 12.253 4.4749C10.1052 2.32702 6.62275 2.32702 4.47487 4.4749ZM10.8388 10.8389C9.47199 12.2057 7.25591 12.2057 5.88908 10.8389C4.52224 9.47203 4.52224 7.25595 5.88908 5.88912C7.25591 4.52228 9.47199 4.52228 10.8388 5.88912C12.2057 7.25595 12.2057 9.47203 10.8388 10.8389Z"
+                            fill="currentColor"
+                        />
+                        <path
+                            d="M11.1924 13.3137C10.6066 12.7279 10.6066 11.7782 11.1924 11.1924C11.7782 10.6066 12.7279 10.6066 13.3137 11.1924L16.8492 14.7279C17.435 15.3137 17.435 16.2635 16.8492 16.8492C16.2635 17.435 15.3135 17.435 14.7279 16.8492L11.1924 13.3137Z"
+                            fill="currentColor"
+                        />
+                    </svg>
+                </span>
+
+                <input
+                    type="search"
+                    id="achievement-search"
+                    class="achievement-search"
+                    placeholder="Search achievements..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+            <!-- Version -->
+
+            <div
+                class="custom-select"
+                id="achievement-version-select"
+            >
+
+                <button
+                    type="button"
+                    class="custom-select-button"
+                    id="achievement-version-button"
+                >
+                    <span class="custom-select-value">
+                        All Versions
+                    </span>
+
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div
+                    class="custom-select-menu"
+                    id="achievement-version-menu"
+                >
+
+                    <button
+                        type="button"
+                        class="custom-select-option selected"
+                        data-value="all"
+                        role="option"
+                        aria-selected="true"
+                    >
+                        All Versions
+                    </button>
+
+                </div>
+
+            </div>
+
+            <input
+                type="hidden"
+                id="achievement-version"
+                value="all"
+            >
+
+            <!-- Hide Completed -->
+
+            <label class="checkbox-control">
+                <input
+                    type="checkbox"
+                    id="achievement-hide-completed"
+                >
+
+                <span>
+                    Hide Completed
+                </span>
+            </label>
+
+
+            <!-- Import -->
+
+                <button
+                    type="button"
+                    class="button achievement-import-button"
+                    id="achievement-import-button"
+                >
+                    Import
+                </button>
+
+
+                <input
+                    type="file"
+                    id="achievement-import-input"
+                    accept=".json,application/json"
+                    hidden
+                >
+
+            </div>
+
+
+        <div
+            class="achievement-category-grid"
+            id="achievement-category-grid"
+        ></div>
+
+    </section>
+
+
+    <!-- Achievement Browser -->
+    <section
+        class="achievement-browser"
+        id="achievement-browser"
+        hidden
+    >
+
+        <aside class="achievement-sidebar">
+
+            <div class="achievement-sidebar-header">
+
+                <button
+                    type="button"
+                    class="achievement-back"
+                    id="achievement-back"
+                    aria-label="Back to categories"
+                >
+                    ←
+                </button>
+
+                <span>Categories</span>
+
+            </div>
+
+
+            <div
+                class="achievement-sidebar-list"
+                id="achievement-sidebar-list"
+            ></div>
+
+        </aside>
+
+
+        <div class="achievement-content">
+
+            <div class="achievement-content-header">
+
+                <span class="eyebrow">
+                    CATEGORY
+                </span>
+
+                <div class="achievement-category-title-row">
+
+                    <h2 id="achievement-category-title">
+                        Wonders of the World
+                    </h2>
+
+                    <span id="achievement-category-percent">
+                        0% (0/0)
+                    </span>
+
+                </div>
+
+                <div class="achievement-category-progress">
+
+                    <div
+                        class="achievement-category-progress-fill"
+                        id="achievement-category-progress-fill"
+                        style="width: 0%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="achievement-list"
+                id="achievement-list"
+            ></div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- Notes Modal -->
+<div
+    class="achievement-notes-modal"
+    id="achievement-notes-modal"
+    hidden
+>
+    <div
+        class="achievement-notes-modal-backdrop"
+        id="achievement-notes-modal-backdrop"
+    ></div>
+
+    <div
+        class="achievement-notes-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="achievement-notes-modal-title"
+    >
+
+        <div class="achievement-notes-modal-header">
+
+            <h3 id="achievement-notes-modal-title">
+                Add Note
+            </h3>
+
+            <button
+                type="button"
+                class="achievement-notes-modal-close"
+                id="achievement-notes-modal-close"
+                aria-label="Close"
+                title="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="achievement-notes-modal-body">
+
+            <textarea
+                id="achievement-notes-input"
+                class="achievement-notes-input"
+                placeholder="Enter your note..."
+                rows="4"
+            ></textarea>
+
+        </div>
+
+
+        <div class="achievement-notes-modal-footer">
+
+            <button
+                type="button"
+                class="button"
+                id="achievement-notes-cancel"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="button achievement-notes-add"
+                id="achievement-notes-add"
+            >
+                Add Note
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

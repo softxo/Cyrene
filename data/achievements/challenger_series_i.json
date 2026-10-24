@@ -1,0 +1,88 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82004
+            ],
+            "name": "Full Metal What Now?",
+            "achievementGroupId": 8,
+            "achievementGroupName": "Challenger: Series I",
+            "sortOrder": 2004,
+            "stages": 1,
+            "stage1": {
+                "title": "Full Metal What Now?",
+                "description": "Shatter the Geo Crystal Ward of a Large Geo Slime.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82005
+            ],
+            "name": "Are Plasma Globes Still in Fashion?",
+            "achievementGroupId": 8,
+            "achievementGroupName": "Challenger: Series I",
+            "sortOrder": 2005,
+            "stages": 1,
+            "stage1": {
+                "title": "Are Plasma Globes Still in Fashion?",
+                "description": "Break an Electro Cicin Mage's Ward.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82006
+            ],
+            "name": "Rhythm Tengoku",
+            "achievementGroupId": 8,
+            "achievementGroupName": "Challenger: Series I",
+            "sortOrder": 2006,
+            "stages": 1,
+            "stage1": {
+                "title": "Rhythm Tengoku",
+                "description": "Stop an Abyss Mage from regenerating its Ward.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                82007
+            ],
+            "name": "Blazing Dadaupa",
+            "achievementGroupId": 8,
+            "achievementGroupName": "Challenger: Series I",
+            "sortOrder": 2007,
+            "stages": 1,
+            "stage1": {
+                "title": "Blazing Dadaupa",
+                "description": "Set a Wooden Shieldwall Mitachurl's shield on fire.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

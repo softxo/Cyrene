@@ -1,0 +1,433 @@
+{
+  "freedom": {
+    "name": "Freedom",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Freedom",
+        "emoji": "Teachings_of_Freedom"
+      },
+      "guide": {
+        "name": "Guide to Freedom",
+        "emoji": "Guide_to_Freedom"
+      },
+      "philosophies": {
+        "name": "Philosophies of Freedom",
+        "emoji": "Philosophies_of_Freedom"
+      }
+    }
+  },
+
+  "resistance": {
+    "name": "Resistance",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Resistance",
+        "emoji": "Teachings_of_Resistance"
+      },
+      "guide": {
+        "name": "Guide to Resistance",
+        "emoji": "Guide_to_Resistance"
+      },
+      "philosophies": {
+        "name": "Philosophies of Resistance",
+        "emoji": "Philosophies_of_Resistance"
+      }
+    }
+  },
+
+  "ballad": {
+    "name": "Ballad",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Ballad",
+        "emoji": "Teachings_of_Ballad"
+      },
+      "guide": {
+        "name": "Guide to Ballad",
+        "emoji": "Guide_to_Ballad"
+      },
+      "philosophies": {
+        "name": "Philosophies of Ballad",
+        "emoji": "Philosophies_of_Ballad"
+      }
+    }
+  },
+
+  "prosperity": {
+    "name": "Prosperity",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Prosperity",
+        "emoji": "Teachings_of_Prosperity"
+      },
+      "guide": {
+        "name": "Guide to Prosperity",
+        "emoji": "Guide_to_Prosperity"
+      },
+      "philosophies": {
+        "name": "Philosophies of Prosperity",
+        "emoji": "Philosophies_of_Prosperity"
+      }
+    }
+  },
+
+  "diligence": {
+    "name": "Diligence",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Diligence",
+        "emoji": "Teachings_of_Diligence"
+      },
+      "guide": {
+        "name": "Guide to Diligence",
+        "emoji": "Guide_to_Diligence"
+      },
+      "philosophies": {
+        "name": "Philosophies of Diligence",
+        "emoji": "Philosophies_of_Diligence"
+      }
+    }
+  },
+
+  "gold": {
+    "name": "Gold",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Gold",
+        "emoji": "Teachings_of_Gold"
+      },
+      "guide": {
+        "name": "Guide to Gold",
+        "emoji": "Guide_to_Gold"
+      },
+      "philosophies": {
+        "name": "Philosophies of Gold",
+        "emoji": "Philosophies_of_Gold"
+      }
+    }
+  },
+
+  "transience": {
+    "name": "Transience",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Transience",
+        "emoji": "Teachings_of_Transience"
+      },
+      "guide": {
+        "name": "Guide to Transience",
+        "emoji": "Guide_to_Transience"
+      },
+      "philosophies": {
+        "name": "Philosophies of Transience",
+        "emoji": "Philosophies_of_Transience"
+      }
+    }
+  },
+
+  "elegance": {
+    "name": "Elegance",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Elegance",
+        "emoji": "Teachings_of_Elegance"
+      },
+      "guide": {
+        "name": "Guide to Elegance",
+        "emoji": "Guide_to_Elegance"
+      },
+      "philosophies": {
+        "name": "Philosophies of Elegance",
+        "emoji": "Philosophies_of_Elegance"
+      }
+    }
+  },
+
+  "light": {
+    "name": "Light",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Light",
+        "emoji": "Teachings_of_Light"
+      },
+      "guide": {
+        "name": "Guide to Light",
+        "emoji": "Guide_to_Light"
+      },
+      "philosophies": {
+        "name": "Philosophies of Light",
+        "emoji": "Philosophies_of_Light"
+      }
+    }
+  },
+
+  "admonition": {
+    "name": "Admonition",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Admonition",
+        "emoji": "Teachings_of_Admonition"
+      },
+      "guide": {
+        "name": "Guide to Admonition",
+        "emoji": "Guide_to_Admonition"
+      },
+      "philosophies": {
+        "name": "Philosophies of Admonition",
+        "emoji": "Philosophies_of_Admonition"
+      }
+    }
+  },
+
+  "ingenuity": {
+    "name": "Ingenuity",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Ingenuity",
+        "emoji": "Teachings_of_Ingenuity"
+      },
+      "guide": {
+        "name": "Guide to Ingenuity",
+        "emoji": "Guide_to_Ingenuity"
+      },
+      "philosophies": {
+        "name": "Philosophies of Ingenuity",
+        "emoji": "Philosophies_of_Ingenuity"
+      }
+    }
+  },
+
+  "praxis": {
+    "name": "Praxis",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Praxis",
+        "emoji": "Teachings_of_Praxis"
+      },
+      "guide": {
+        "name": "Guide to Praxis",
+        "emoji": "Guide_to_Praxis"
+      },
+      "philosophies": {
+        "name": "Philosophies of Praxis",
+        "emoji": "Philosophies_of_Praxis"
+      }
+    }
+  },
+
+  "equity": {
+    "name": "Equity",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Equity",
+        "emoji": "Teachings_of_Equity"
+      },
+      "guide": {
+        "name": "Guide to Equity",
+        "emoji": "Guide_to_Equity"
+      },
+      "philosophies": {
+        "name": "Philosophies of Equity",
+        "emoji": "Philosophies_of_Equity"
+      }
+    }
+  },
+
+  "justice": {
+    "name": "Justice",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Justice",
+        "emoji": "Teachings_of_Justice"
+      },
+      "guide": {
+        "name": "Guide to Justice",
+        "emoji": "Guide_to_Justice"
+      },
+      "philosophies": {
+        "name": "Philosophies of Justice",
+        "emoji": "Philosophies_of_Justice"
+      }
+    }
+  },
+
+  "order": {
+    "name": "Order",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Order",
+        "emoji": "Teachings_of_Order"
+      },
+      "guide": {
+        "name": "Guide to Order",
+        "emoji": "Guide_to_Order"
+      },
+      "philosophies": {
+        "name": "Philosophies of Order",
+        "emoji": "Philosophies_of_Order"
+      }
+    }
+  },
+
+  "contention": {
+    "name": "Contention",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Contention",
+        "emoji": "Teachings_of_Contention"
+      },
+      "guide": {
+        "name": "Guide to Contention",
+        "emoji": "Guide_to_Contention"
+      },
+      "philosophies": {
+        "name": "Philosophies of Contention",
+        "emoji": "Philosophies_of_Contention"
+      }
+    }
+  },
+
+  "kindling": {
+    "name": "Kindling",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Kindling",
+        "emoji": "Teachings_of_Kindling"
+      },
+      "guide": {
+        "name": "Guide to Kindling",
+        "emoji": "Guide_to_Kindling"
+      },
+      "philosophies": {
+        "name": "Philosophies of Kindling",
+        "emoji": "Philosophies_of_Kindling"
+      }
+    }
+  },
+
+  "conflict": {
+    "name": "Conflict",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Conflict",
+        "emoji": "Teachings_of_Conflict"
+      },
+      "guide": {
+        "name": "Guide to Conflict",
+        "emoji": "Guide_to_Conflict"
+      },
+      "philosophies": {
+        "name": "Philosophies of Conflict",
+        "emoji": "Philosophies_of_Conflict"
+      }
+    }
+  },
+
+  "moonlight": {
+    "name": "Moonlight",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Moonlight",
+        "emoji": "Teachings_of_Moonlight"
+      },
+      "guide": {
+        "name": "Guide to Moonlight",
+        "emoji": "Guide_to_Moonlight"
+      },
+      "philosophies": {
+        "name": "Philosophies of Moonlight",
+        "emoji": "Philosophies_of_Moonlight"
+      }
+    }
+  },
+
+  "elysium": {
+    "name": "Elysium",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Elysium",
+        "emoji": "Teachings_of_Elysium"
+      },
+      "guide": {
+        "name": "Guide to Elysium",
+        "emoji": "Guide_to_Elysium"
+      },
+      "philosophies": {
+        "name": "Philosophies of Elysium",
+        "emoji": "Philosophies_of_Elysium"
+      }
+    }
+  },
+
+  "vagrancy": {
+    "name": "Vagrancy",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Vagrancy",
+        "emoji": "Teachings_of_Vagrancy"
+      },
+      "guide": {
+        "name": "Guide to Vagrancy",
+        "emoji": "Guide_to_Vagrancy"
+      },
+      "philosophies": {
+        "name": "Philosophies of Vagrancy",
+        "emoji": "Philosophies_of_Vagrancy"
+      }
+    }
+  },
+
+  "charity": {
+    "name": "Charity",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Charity",
+        "emoji": "Teachings_of_Charity"
+      },
+      "guide": {
+        "name": "Guide to Charity",
+        "emoji": "Guide_to_Charity"
+      },
+      "philosophies": {
+        "name": "Philosophies of Charity",
+        "emoji": "Philosophies_of_Charity"
+      }
+    }
+  },
+
+  "fortitude": {
+    "name": "Fortitude",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Fortitude",
+        "emoji": "Teachings_of_Fortitude"
+      },
+      "guide": {
+        "name": "Guide to Fortitude",
+        "emoji": "Guide_to_Fortitude"
+      },
+      "philosophies": {
+        "name": "Philosophies of Fortitude",
+        "emoji": "Philosophies_of_Fortitude"
+      }
+    }
+  },
+
+  "glory": {
+    "name": "Glory",
+    "tiers": {
+      "teachings": {
+        "name": "Teachings of Glory",
+        "emoji": "Teachings_of_Glory"
+      },
+      "guide": {
+        "name": "Guide to Glory",
+        "emoji": "Guide_to_Glory"
+      },
+      "philosophies": {
+        "name": "Philosophies of Glory",
+        "emoji": "Philosophies_of_Glory"
+      }
+    }
+  }
+}

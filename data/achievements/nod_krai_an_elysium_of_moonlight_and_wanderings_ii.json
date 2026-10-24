@@ -1,0 +1,257 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80462,
+                80463,
+                80464
+            ],
+            "name": "Moondust Treasure Hunter (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 423,
+            "stages": 3,
+            "stage1": {
+                "title": "Moondust Treasure Hunter (II)",
+                "description": "Open 45 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 45,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Moondust Treasure Hunter (II)",
+                "description": "Open 90 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 90,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Moondust Treasure Hunter (II)",
+                "description": "Open 180 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 180,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80465
+            ],
+            "name": "Moondust Adventurer (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 426,
+            "stages": 1,
+            "stage1": {
+                "title": "Moondust Adventurer (II)",
+                "description": "Complete 5 Open World mechanism-activated Time Trial Challenges in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80466
+            ],
+            "name": "Continental Explorer: Moonlit Isles (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 427,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Moonlit Isles (II)",
+                "description": "Light up the maps of the following areas in Nod-Krai: Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80467
+            ],
+            "name": "Frosty Groves Beyond the Darkness (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 428,
+            "stages": 1,
+            "stage1": {
+                "title": "Frosty Groves Beyond the Darkness (II)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Nod-Krai: Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 29,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80468
+            ],
+            "name": "Sanctuary Pilgrim: Moonlit Isles (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 429,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Moonlit Isles (II)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Nod-Krai: Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80469
+            ],
+            "name": "Offerings to the Night: Moonlit Isles (II)",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 430,
+            "stages": 1,
+            "stage1": {
+                "title": "Offerings to the Night: Moonlit Isles (II)",
+                "description": "Unlock all the seals on the Kuuhenki's Hidden Troves in the following areas in Nod-Krai: Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80470
+            ],
+            "name": "The Winds Awaken, the Leaves Whirl Round",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 431,
+            "stages": 1,
+            "stage1": {
+                "title": "The Winds Awaken, the Leaves Whirl Round",
+                "description": "A nightingale, bearing an ember in its beak, flew only after dusk.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80471
+            ],
+            "name": "Si le grain ne meurt",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 432,
+            "stages": 1,
+            "stage1": {
+                "title": "Si le grain ne meurt",
+                "description": "Even when the flower withers, the leaves still keep their promise.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80472
+            ],
+            "name": "Joint Meeting Point Construction: Cliffwatch Camp",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 433,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: Cliffwatch Camp",
+                "description": "Reach maximum Construction Level at the Cliffwatch Camp.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80473
+            ],
+            "name": "Joint Meeting Point Construction: The Witch's Garden",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 434,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: The Witch's Garden",
+                "description": "Reach maximum Construction Level at the Witch's Garden.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        },
+        {
+            "id": [
+                80474
+            ],
+            "name": "Joint Meeting Point Construction: Favonius Keep",
+            "achievementGroupId": 66,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
+            "sortOrder": 435,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: Favonius Keep",
+                "description": "Reach maximum Construction Level at the Favonius Keep.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.3"
+        }
+    ]
+}

@@ -1,0 +1,259 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80382
+            ],
+            "name": "Land of Fertility: Runaway Saurians",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 345,
+            "stages": 1,
+            "stage1": {
+                "title": "Land of Fertility: Runaway Saurians",
+                "description": "Light up the Atocpan map in the Natlan region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80383
+            ],
+            "name": "Rendezvous With Ruin",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 346,
+            "stages": 1,
+            "stage1": {
+                "title": "Rendezvous With Ruin",
+                "description": "Light up the Ancient Sacred Mountain map in the Natlan region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80384
+            ],
+            "name": "Sacred Mountain Guide",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 347,
+            "stages": 1,
+            "stage1": {
+                "title": "Sacred Mountain Guide",
+                "description": "Unlock all Teleport Waypoints in the following areas in Natlan: Ancient Sacred Mountain and Atocpan.",
+                "progress": 39,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80385
+            ],
+            "name": "Sanctuary Pilgrim: Plain of Fertile Ash",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 348,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Plain of Fertile Ash",
+                "description": "Unlock all the Shrines of Depths in the following area in Natlan: Atocpan.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80386
+            ],
+            "name": "Offerings to the Night: Plain of Fertile Ash",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 349,
+            "stages": 1,
+            "stage1": {
+                "title": "Offerings to the Night: Plain of Fertile Ash",
+                "description": "Unlock all the seals on the secret spaces of the tribes in the following area in Natlan: Atocpan.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80387,
+                80388,
+                80389
+            ],
+            "name": "Votre Toast, Je Peux Vous Le Rendre",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 350,
+            "stages": 3,
+            "stage1": {
+                "title": "Votre Toast, Je Peux Vous Le Rendre",
+                "description": "Follow 3 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Votre Toast, Je Peux Vous Le Rendre",
+                "description": "Follow 6 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Votre Toast, Je Peux Vous Le Rendre",
+                "description": "Follow 9 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80390,
+                80391,
+                80392
+            ],
+            "name": "Fertile Ash Treasure Hunter",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 353,
+            "stages": 3,
+            "stage1": {
+                "title": "Fertile Ash Treasure Hunter",
+                "description": "Open 40 chests in Ancient Sacred Mountain and Atocpan.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Fertile Ash Treasure Hunter",
+                "description": "Open 80 chests in Ancient Sacred Mountain and Atocpan.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Fertile Ash Treasure Hunter",
+                "description": "Open 160 chests in Ancient Sacred Mountain and Atocpan.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80393,
+                80394,
+                80395
+            ],
+            "name": "Fertile Ash Adventurer",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 356,
+            "stages": 3,
+            "stage1": {
+                "title": "Fertile Ash Adventurer",
+                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Fertile Ash Adventurer",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Fertile Ash Adventurer",
+                "description": "Complete 9 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80396
+            ],
+            "name": "Flowers for Someone",
+            "achievementGroupId": 60,
+            "achievementGroupName": "Sacred Mountain's Fading Glow",
+            "sortOrder": 359,
+            "stages": 1,
+            "stage1": {
+                "title": "Flowers for Someone",
+                "description": "Perhaps, compared to the world that was within its grasp, there is something else that matters more.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.5"
+        }
+    ]
+}

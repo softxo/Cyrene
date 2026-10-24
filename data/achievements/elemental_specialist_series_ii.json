@@ -1,0 +1,111 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82146,
+                82147,
+                82148
+            ],
+            "name": "Grassy Blasty, Sparks 'n' Splash",
+            "achievementGroupId": 36,
+            "achievementGroupName": "Elemental Specialist: Series II",
+            "sortOrder": 2146,
+            "stages": 3,
+            "stage1": {
+                "title": "Grassy Blasty, Sparks 'n' Splash",
+                "description": "Defeat 4 opponents with Burgeon within 2s (x1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Grassy Blasty, Sparks 'n' Splash",
+                "description": "Defeat 4 opponents with Burgeon within 2s (x5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Grassy Blasty, Sparks 'n' Splash",
+                "description": "Defeat 4 opponents with Burgeon within 2s (x10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                82149,
+                82150,
+                82151
+            ],
+            "name": "Hyperblooming Circus",
+            "achievementGroupId": 36,
+            "achievementGroupName": "Elemental Specialist: Series II",
+            "sortOrder": 2149,
+            "stages": 3,
+            "stage1": {
+                "title": "Hyperblooming Circus",
+                "description": "Defeat 4 opponents with Hyperbloom within 2s (x1).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Hyperblooming Circus",
+                "description": "Defeat 4 opponents with Hyperbloom within 2s (x5).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Hyperblooming Circus",
+                "description": "Defeat 4 opponents with Hyperbloom within 2s (x10).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.1"
+        },
+        {
+            "id": [
+                82159
+            ],
+            "name": "Active Camouflage",
+            "achievementGroupId": 36,
+            "achievementGroupName": "Elemental Specialist: Series II",
+            "sortOrder": 2159,
+            "stages": 1,
+            "stage1": {
+                "title": "Active Camouflage",
+                "description": "Remove the invisibility of at least 2 Primal Constructs using Quicken, Aggravate, Spread, or Truesense Pulses within 3 seconds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.1"
+        }
+    ]
+}

@@ -1,0 +1,152 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80364
+            ],
+            "name": "Memory of Fire",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 338,
+            "stages": 1,
+            "stage1": {
+                "title": "Memory of Fire",
+                "ps5title": "Pyro: Memory of Fire",
+                "description": "Obtain the power of Pyro.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80365
+            ],
+            "name": "Dance Into Night's Unfolding",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 339,
+            "stages": 1,
+            "stage1": {
+                "title": "Dance Into Night's Unfolding",
+                "description": "Collect the entire \"Mt. Lingmeng Gossip\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80366
+            ],
+            "name": "Chakana's Dangling Bough",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 340,
+            "stages": 1,
+            "stage1": {
+                "title": "Chakana's Dangling Bough",
+                "description": "Collect the entire \"Records of Hanan Pacha\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80367
+            ],
+            "name": "Springside Reverie",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 341,
+            "stages": 1,
+            "stage1": {
+                "title": "Springside Reverie",
+                "description": "Collect the entire \"Springs of Hidden Jade\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80368
+            ],
+            "name": "Advent of the Hot Springs",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 342,
+            "stages": 1,
+            "stage1": {
+                "title": "Advent of the Hot Springs",
+                "description": "Collect the entire \"Maawe and Monetoo\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80369
+            ],
+            "name": "Volcanic Emblem: The Blazing Pins",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 343,
+            "stages": 1,
+            "stage1": {
+                "title": "Volcanic Emblem: The Blazing Pins",
+                "description": "Collect the entire \"The Volcano Lord and the Shadow Pins\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        },
+        {
+            "id": [
+                80370
+            ],
+            "name": "Dragonbolt Chronicles",
+            "achievementGroupId": 57,
+            "achievementGroupName": "Mortal Travails: Series V",
+            "sortOrder": 344,
+            "stages": 1,
+            "stage1": {
+                "title": "Dragonbolt Chronicles",
+                "description": "Collect the entire \"Fires of Autumn Twilight\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.3"
+        }
+    ]
+}

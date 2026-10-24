@@ -1,0 +1,75 @@
+{
+    "id": "recurve_bow",
+    "name": "Recurve Bow",
+    "emoji": "Recurve_Bow",
+    "icon": "Recurve_Bow",
+    "description": "It is said that this bow can shoot down eagles in flight, but ultimately how true that is depends on the skill of the archer.",
+    "weapon_type": "bow",
+    "max_level": 90,
+    "rarity": 3,
+    "colour": "#4A90E2",
+    "main_stat": {
+      "type": "base_atk",
+      "value": 354
+    },
+    "secondary_stat": {
+      "type": "hp_percent",
+      "value": 46.9
+    },
+    "passive": {
+      "name": "Cull the Weak",
+      "description": {
+        "r1": "Defeating an opponent restores **8%** HP.",
+        "r2": "Defeating an opponent restores **10%** HP.",
+        "r3": "Defeating an opponent restores **12%** HP.",
+        "r4": "Defeating an opponent restores **14%** HP.",
+        "r5": "Defeating an opponent restores **16%** HP."
+      }
+    },
+    "materials": {
+      "ascension": {
+        "weapon_material": {
+          "id": "dandelion_gladiator",
+          "tier2": 2,
+          "tier3": 6,
+          "tier4": 6,
+          "tier5": 3
+        },
+        "common": {
+          "id": "scroll",
+          "tier1": 6,
+          "tier2": 10,
+          "tier3": 12
+        },
+        "elite": {
+          "id": "chaos_machine",
+          "tier2": 10,
+          "tier3": 12,
+          "tier4": 18
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 105000
+        }
+      },
+      "level": {
+        "ores": {
+          "id": "enhancement_ore",
+          "tier1": 6,
+          "tier2": 18,
+          "tier3": 395
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 398880
+        }
+      }
+    },
+    "obtain": [
+      "Chests",
+      "\"Going Upon the Breeze\" Quest",
+      "Talking to:",
+      "- Nakano (Inazuma)",
+      "- Shirin (Sumeru)"
+    ]
+}

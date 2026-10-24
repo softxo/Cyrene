@@ -1,0 +1,299 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86059
+            ],
+            "name": "Tundra Restorer",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9056,
+            "stages": 1,
+            "stage1": {
+                "title": "Tundra Restorer",
+                "description": "Clear a large Shadow Realm in Snezhnaya.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86062
+            ],
+            "name": "Then I'll See You in the Shadow Realm",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9059,
+            "stages": 1,
+            "stage1": {
+                "title": "Then I'll See You in the Shadow Realm",
+                "description": "Complete an Edge of Survival challenge.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86063
+            ],
+            "name": "\"Veteran Shadowdiver\"",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9060,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Veteran Shadowdiver\"",
+                "description": "Raise your Shadow Realm Analysis Level to maximum.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86066
+            ],
+            "name": "Ace of Survival",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9063,
+            "stages": 1,
+            "stage1": {
+                "title": "Ace of Survival",
+                "description": "Obtain 9 Edge of Survival Medal(s).",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86067,
+                86068,
+                86069
+            ],
+            "name": "Tundra Gunsmith (I)",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9064,
+            "stages": 3,
+            "stage1": {
+                "title": "Tundra Gunsmith (I)",
+                "description": "Install 1 accessory on 1 firearm.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Tundra Gunsmith (II)",
+                "description": "Install 2 accessories on 1 firearm.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Tundra Gunsmith (III)",
+                "description": "Install 4 accessories on 1 firearm.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86071
+            ],
+            "name": "Tachanka",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9068,
+            "stages": 1,
+            "stage1": {
+                "title": "Tachanka",
+                "description": "Install 4 accessories each on \"Shatanaya's Frostsilver,\" \"Balsag's Sunwheel,\" and \"Ashamez's Thunder.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86072
+            ],
+            "name": "It's High N—",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9069,
+            "stages": 1,
+            "stage1": {
+                "title": "It's High N—",
+                "description": "Hit enemy weak points 5 times in a row within 30 seconds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86073
+            ],
+            "name": "Say Hello to My Little Friends!",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9070,
+            "stages": 1,
+            "stage1": {
+                "title": "Say Hello to My Little Friends!",
+                "description": "Trigger 5 elemental reactions with the Grenade Launcher within 30 seconds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86074
+            ],
+            "name": "Aiming While Sliding is Pure Fantasy",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9071,
+            "stages": 1,
+            "stage1": {
+                "title": "Aiming While Sliding is Pure Fantasy",
+                "description": "Defeat a total of 20 enemies while sliding.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86075
+            ],
+            "name": "For We Are Bound by the Sacred Light Spear",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9072,
+            "stages": 1,
+            "stage1": {
+                "title": "For We Are Bound by the Sacred Light Spear",
+                "description": "Obtain the Assault Rifle \"Shatanaya's Frostsilver.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86076
+            ],
+            "name": "The Martial Art of Grenade Launching!",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9073,
+            "stages": 1,
+            "stage1": {
+                "title": "The Martial Art of Grenade Launching!",
+                "description": "Obtain the Grenade Launcher \"Balsag's Sunwheel.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86077
+            ],
+            "name": "Warning, Lightning Disaster Created...",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9074,
+            "stages": 1,
+            "stage1": {
+                "title": "Warning, Lightning Disaster Created...",
+                "description": "Obtain the Assault Rifle \"Ashamez's Thunder.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        },
+        {
+            "id": [
+                86078
+            ],
+            "name": "500 Grams of Love",
+            "achievementGroupId": 70,
+            "achievementGroupName": "Land of Surging Shadows",
+            "sortOrder": 9075,
+            "stages": 1,
+            "stage1": {
+                "title": "500 Grams of Love",
+                "description": "Obtain a Frag Crystal.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.0"
+        }
+    ]
+}

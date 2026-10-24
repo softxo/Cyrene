@@ -1,0 +1,343 @@
+{
+  "slime": {
+    "name": "Slime",
+    "tiers": {
+      "tier1": {
+        "name": "Slime Condensate",
+        "emoji": "Slime_Condensate"
+      },
+      "tier2": {
+        "name": "Slime Secretions",
+        "emoji": "Slime_Secretions"
+      },
+      "tier3": {
+        "name": "Slime Concentrate",
+        "emoji": "Slime_Concentrate"
+      }
+    }
+  },
+
+  "mask": {
+    "name": "Mask",
+    "tiers": {
+      "tier1": {
+        "name": "Damaged Mask",
+        "emoji": "Damaged_Mask"
+      },
+      "tier2": {
+        "name": "Stained Mask",
+        "emoji": "Stained_Mask"
+      },
+      "tier3": {
+        "name": "Ominous Mask",
+        "emoji": "Ominous_Mask"
+      }
+    }
+  },
+
+  "scroll": {
+    "name": "Scroll",
+    "tiers": {
+      "tier1": {
+        "name": "Divining Scroll",
+        "emoji": "Divining_Scroll"
+      },
+      "tier2": {
+        "name": "Sealed Scroll",
+        "emoji": "Sealed_Scroll"
+      },
+      "tier3": {
+        "name": "Forbidden Curse Scroll",
+        "emoji": "Forbidden_Curse_Scroll"
+      }
+    }
+  },
+
+  "arrowhead": {
+    "name": "Arrowhead",
+    "tiers": {
+      "tier1": {
+        "name": "Firm Arrowhead",
+        "emoji": "Firm_Arrowhead"
+      },
+      "tier2": {
+        "name": "Sharp Arrowhead",
+        "emoji": "Sharp_Arrowhead"
+      },
+      "tier3": {
+        "name": "Weathered Arrowhead",
+        "emoji": "Weathered_Arrowhead"
+      }
+    }
+  },
+
+  "insignia": {
+    "name": "Insignia",
+    "tiers": {
+      "tier1": {
+        "name": "Recruit's Insignia",
+        "emoji": "Recruits_Insignia"
+      },
+      "tier2": {
+        "name": "Sergeant's Insignia",
+        "emoji": "Sergeants_Insignia"
+      },
+      "tier3": {
+        "name": "Lieutenant's Insignia",
+        "emoji": "Lieutenants_Insignia"
+      }
+    }
+  },
+
+  "hoarder_insignia": {
+    "name": "Treasure Insignia",
+    "tiers": {
+      "tier1": {
+        "name": "Treasure Hoarder Insignia",
+        "emoji": "Treasure_Hoarder_Insignia"
+      },
+      "tier2": {
+        "name": "Silver Raven Insignia",
+        "emoji": "Silver_Raven_Insignia"
+      },
+      "tier3": {
+        "name": "Golden Raven Insignia",
+        "emoji": "Golden_Raven_Insignia"
+      }
+    }
+  },
+
+  "nectar": {
+    "name": "Nectar",
+    "tiers": {
+      "tier1": {
+        "name": "Whopperflower Nectar",
+        "emoji": "Whopperflower_Nectar"
+      },
+      "tier2": {
+        "name": "Shimmering Nectar",
+        "emoji": "Shimmering_Nectar"
+      },
+      "tier3": {
+        "name": "Energy Nectar",
+        "emoji": "Energy_Nectar"
+      }
+    }
+  },
+
+  "handguard": {
+    "name": "Handguard",
+    "tiers": {
+      "tier1": {
+        "name": "Old Handguard",
+        "emoji": "Old_Handguard"
+      },
+      "tier2": {
+        "name": "Kageuchi Handguard",
+        "emoji": "Kageuchi_Handguard"
+      },
+      "tier3": {
+        "name": "Famed Handguard",
+        "emoji": "Famed_Handguard"
+      }
+    }
+  },
+
+  "spectral": {
+    "name": "Spectral",
+    "tiers": {
+      "tier1": {
+        "name": "Spectral Husk",
+        "emoji": "Spectral_Husk"
+      },
+      "tier2": {
+        "name": "Spectral Heart",
+        "emoji": "Spectral_Heart"
+      },
+      "tier3": {
+        "name": "Spectral Nucleus",
+        "emoji": "Spectral_Nucleus"
+      }
+    }
+  },
+
+  "fungal": {
+    "name": "Fungal",
+    "tiers": {
+      "tier1": {
+        "name": "Fungal Spores",
+        "emoji": "Fungal_Spores"
+      },
+      "tier2": {
+        "name": "Inactivated Fungal Nucleus",
+        "emoji": "Inactivated_Fungal_Nucleus"
+      },
+      "tier3": {
+        "name": "Dormant Fungal Nucleus",
+        "emoji": "Dormant_Fungal_Nucleus"
+      }
+    }
+  },
+
+  "red": {
+    "name": "Red",
+    "tiers": {
+      "tier1": {
+        "name": "Faded Red Satin",
+        "emoji": "Faded_Red_Satin"
+      },
+      "tier2": {
+        "name": "Trimmed Red Silk",
+        "emoji": "Trimmed_Red_Silk"
+      },
+      "tier3": {
+        "name": "Rich Red Brocade",
+        "emoji": "Rich_Red_Brocade"
+      }
+    }
+  },
+
+  "transoceanic": {
+    "name": "Transoceanic",
+    "tiers": {
+      "tier1": {
+        "name": "Transoceanic Pearl",
+        "emoji": "Transoceanic_Pearl"
+      },
+      "tier2": {
+        "name": "Transoceanic Chunk",
+        "emoji": "Transoceanic_Chunk"
+      },
+      "tier3": {
+        "name": "Xenochromatic Crystal",
+        "emoji": "Xenochromatic_Crystal"
+      }
+    }
+  },
+
+  "gear": {
+    "name": "Gear",
+    "tiers": {
+      "tier1": {
+        "name": "Meshing Gear",
+        "emoji": "Meshing_Gear"
+      },
+      "tier2": {
+        "name": "Mechanical Spur Gear",
+        "emoji": "Mechanical_Spur_Gear"
+      },
+      "tier3": {
+        "name": "Artificed Dynamic Gear",
+        "emoji": "Artificed_Dynamic_Gear"
+      }
+    }
+  },
+
+  "fang": {
+    "name": "Fang",
+    "tiers": {
+      "tier1": {
+        "name": "Juvenile Fang",
+        "emoji": "Juvenile_Fang"
+      },
+      "tier2": {
+        "name": "Seasoned Fang",
+        "emoji": "Seasoned_Fang"
+      },
+      "tier3": {
+        "name": "Tyrant's Fang",
+        "emoji": "Tyrants_Fang"
+      }
+    }
+  },
+
+  "whistle": {
+    "name": "Whistle",
+    "tiers": {
+      "tier1": {
+        "name": "Sentry's Wooden Whistle",
+        "emoji": "Sentrys_Wooden_Whistle"
+      },
+      "tier2": {
+        "name": "Warrior's Metal Whistle",
+        "emoji": "Warriors_Metal_Whistle"
+      },
+      "tier3": {
+        "name": "Saurian-Crowned Warrior's Golden Whistle",
+        "emoji": "Saurian_Golden_Whistle"
+      }
+    }
+  },
+
+  "shaft": {
+    "name": "Shaft",
+    "tiers": {
+      "tier1": {
+        "name": "Broken Drive Shaft",
+        "emoji": "Broken_Drive_Shaft"
+      },
+      "tier2": {
+        "name": "Reinforced Drive Shaft",
+        "emoji": "Reinforced_Drive_Shaft"
+      },
+      "tier3": {
+        "name": "Precision Drive Shaft",
+        "emoji": "Precision_Drive_Shaft"
+      }
+    }
+  },
+
+  "warrant": {
+    "name": "Warrant",
+    "tiers": {
+      "tier1": {
+        "name": "Tattered Warrant",
+        "emoji": "Tattered_Warrant"
+      },
+      "tier2": {
+        "name": "Immaculate Warrant",
+        "emoji": "Immaculate_Warrant"
+      },
+      "tier3": {
+        "name": "Frost-Etched Warrant",
+        "emoji": "Frost_Etched_Warrant"
+      }
+    }
+  },
+
+  "ethereal": {
+    "name": "Ethereal",
+    "tiers": {
+      "tier1": {
+        "name": "Ethereal Glimmershard",
+        "emoji": "Ethereal_Glimmershard"
+      },
+      "tier2": {
+        "name": "Ethereal Crystal",
+        "emoji": "Ethereal_Crystal"
+      },
+      "tier3": {
+        "name": "Ethereal Crystalscale Stone",
+        "emoji": "Ethereal_Crystalscale_Stone"
+      }
+    }
+  },
+
+  "chimeric": {
+    "name": "Chimeric",
+    "tiers": {
+      "tier1": {
+        "name": "Chimeric Core",
+        "emoji": "Chimeric_Core"
+      },
+      "tier2": {
+        "name": "Symbiotic Chimeric Nucleus",
+        "emoji": "Symbiotic_Chimeric_Nucleus"
+      },
+      "tier3": {
+        "name": "Genesis Chimeric Nexus",
+        "emoji": "Genesis_Chimeric_Nexus"
+      }
+    }
+  }
+}

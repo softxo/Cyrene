@@ -1,0 +1,189 @@
+{
+  "id": "jean",
+  "name": "Jean",
+  "title": "Dandelion Knight",
+  "description": "The righteous and rigorous Dandelion Knight, and Acting Grand Master of Mondstadt's Knights of Favonius.",
+  "affiliation": "Knights of Favonius",
+  "constellation": "Leo Minor",
+  "birthday": "14/3",
+  "rarity": 5,
+  "element": "anemo",
+  "weapon": "sword",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#75c2aa",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Spiraling Tempest",
+      "description": [
+        "Increases the pulling speed of **Gale Blade** after holding for more than 1s, and increases the DMG dealt by 40%."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "People's Aegis",
+      "description": [
+        "When Jean picks up an Elemental Orb/Particle, all party members have their Movement SPD and ATK SPD increased by 15% for 15s."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "When the West Wind Arises",
+      "description": [
+        "Increases the Level of **Dandelion Breeze** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Lands of Dandelion",
+      "description": [
+        "Within the Field created by **Dandelion Breeze**, all opponents have their **Anemo RES** decreased by 40%."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "Outbursting Gust",
+      "description": [
+        "Increases the Level of **Gale Blade** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Lion's Fang, Fair Protector of Mondstadt",
+      "description": [
+        "Incoming DMG is decreased by 35% within the Field created by **Dandelion Breeze**. Upon leaving the Dandelion Field, this effect lasts for 3 attacks or 10s."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Favonius Bladework",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 consecutive strikes."
+        ],
+        "charged": [
+          "Consumes a certain amount of stamina to launch an opponent using the power of wind.",
+          "Launched opponents will slowly fall to the ground."
+        ],
+        "plunge": [
+          "Plunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Gale Blade",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Focusing the might of the formless wind around her blade, Jean releases a miniature storm, launching opponents in the direction she aims at, dealing massive **Anemo DMG**."
+      ],
+      "sections": [
+        {
+          "title": "Hold",
+          "text": [
+            "At the cost of continued stamina consumption, Jean can command the whirlwind to pull surrounding opponents and objects towards her front.",
+            "Direction can be adjusted.",
+            "Character is immobile during skill duration."
+          ]
+        }
+      ]
+    },
+    "elemental_burst": {
+      "name": "Dandelion Breeze",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Calling upon the wind's protection, Jean creates a swirling Dandelion Field, launching surrounding opponents and dealing **Anemo DMG**.",
+        "At the same time, she instantly regenerates a large amount of HP for all party members. The amount of HP restored scales off Jean's ATK."
+      ],
+      "sections": [
+        {
+          "title":"Dandelion Field",
+          "text": [
+            "- Continuously regenerates HP of characters within the AoE and continuously imbues them with **Anemo**.",
+            "- Deals **Anemo DMG** to opponents entering or exiting the Dandelion Field."
+          ]
+        }
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Wind Companion",
+      "description": [
+        "On hit, Jean's Normal Attacks have a 50% chance to regenerate HP equal to 15% of Jean's ATK for all party members."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Let the Wind Lead",
+      "description": [
+        "Using **Dandelion Breeze** will regenerate 20% of its Energy."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Guiding Breeze",
+      "description": [
+        "When a Perfect Cooking is achieved on a dish with restorative effects, there is a 12% chance to obtain double the product."
+      ]
+    }
+  ],
+ "materials": {
+    "ascension": {
+      "gem": {
+        "id": "vayuda_turquoise",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "hurricane_seed",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "dandelion_seed",
+        "amount": 168
+      },
+      "common": {
+        "id": "mask",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "resistance",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "mask",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "stormterror",
+        "material": "dvalins_plume",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

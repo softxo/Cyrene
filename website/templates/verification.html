@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Verify{% endblock %}
+
+{% block content %}
+
+<div class="page verification-page">
+
+    <section class="verification-panel">
+
+        <h1>
+            Verify your account
+        </h1>
+
+        <p class="verification-description">
+            Use the code below with the
+            <strong>/verify</strong>
+            command in Discord.
+        </p>
+
+        <div class="verification-code">
+            <span id="verification-code">
+                Generating...
+            </span>
+        </div>
+
+        <p
+            id="verification-status"
+            class="verification-status"
+        >
+            Awaiting Verification
+        </p>
+
+    </section>
+
+</div>
+
+<div
+    id="verification-data"
+    data-next="{{ next or '/planner' }}"
+></div>
+
+{% endblock %}

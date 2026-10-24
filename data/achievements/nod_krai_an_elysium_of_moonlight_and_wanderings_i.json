@@ -1,0 +1,311 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80442,
+                80443,
+                80444
+            ],
+            "name": "Moondust Treasure Hunter (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 405,
+            "stages": 3,
+            "stage1": {
+                "title": "Moondust Treasure Hunter (I)",
+                "ps5title": "Moondust Treasure Hunter (I)",
+                "description": "Open 60 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Moondust Treasure Hunter (I)",
+                "ps5title": "Moondust Treasure Hunter (II)",
+                "description": "Open 120 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Moondust Treasure Hunter (I)",
+                "ps5title": "Moondust Treasure Hunter (III)",
+                "description": "Open 240 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 240,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80445,
+                80446,
+                80447
+            ],
+            "name": "Moondust Adventurer (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 408,
+            "stages": 3,
+            "stage1": {
+                "title": "Moondust Adventurer (I)",
+                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Moondust Adventurer (I)",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Moondust Adventurer (I)",
+                "description": "Complete 10 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80452
+            ],
+            "name": "Shine Bright Like the Moon",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 411,
+            "stages": 1,
+            "stage1": {
+                "title": "Shine Bright Like the Moon",
+                "ps5title": "Nod-Krai: Shine Bright Like the Moon",
+                "description": "Upgrade the Statues of the New Moon in Nod-Krai to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80448
+            ],
+            "name": "Continental Explorer: Moonlit Isles (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 415,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Moonlit Isles (I)",
+                "ps5title": "Nod-Krai: Continental Explorer (I)",
+                "description": "Light up the maps of the following areas in Nod-Krai: Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80449
+            ],
+            "name": "Frosty Groves Beyond the Darkness (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 416,
+            "stages": 1,
+            "stage1": {
+                "title": "Frosty Groves Beyond the Darkness (I)",
+                "ps5title": "Frosty Groves Beyond the Darkness (I)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Nod-Krai: Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 49,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80450
+            ],
+            "name": "Sanctuary Pilgrim: Moonlit Isles (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 417,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Moonlit Isles (I)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Nod-Krai: Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80451
+            ],
+            "name": "Offerings to the Night: Moonlit Isles (I)",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 418,
+            "stages": 1,
+            "stage1": {
+                "title": "Offerings to the Night: Moonlit Isles (I)",
+                "description": "Unlock all the seals on the Kuuhenki's Hidden Troves in the following areas in Nod-Krai: Lempo Isle, Hiisi Island, and Paha Isle.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                81600
+            ],
+            "name": "The Weaver in the Ossuary",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 420,
+            "stages": 1,
+            "stage1": {
+                "title": "The Weaver in the Ossuary",
+                "ps5title": "\"The Weaver in the Ossuary\"",
+                "description": "Explore the sanctum sealed off by the first Moonchanter.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                81601
+            ],
+            "name": "The Sins of the Fathers",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 421,
+            "stages": 1,
+            "stage1": {
+                "title": "The Sins of the Fathers",
+                "ps5title": "\"The Sins of the Fathers\"",
+                "description": "Complete the adventure at the Kuuvahki Experimental Design Bureau.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80453
+            ],
+            "name": "Joint Meeting Point Construction: Final Night Cemetery",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 422,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: Final Night Cemetery",
+                "ps5title": "Journey: \"Final Night Cemetery\"",
+                "description": "Reach maximum Construction Level at the Final Night Cemetery.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80454
+            ],
+            "name": "Joint Meeting Point Construction: Clink-Clank Krumkake Craftshop",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 423,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: Clink-Clank Krumkake Craftshop",
+                "ps5title": "Journey: \"Clink-Clank Krumkake Craftshop\"",
+                "description": "Reach maximum Construction Level at the Clink-Clank Krumkake Craftshop.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        },
+        {
+            "id": [
+                80455
+            ],
+            "name": "Joint Meeting Point Construction: Frostmoon Enclave",
+            "achievementGroupId": 63,
+            "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
+            "sortOrder": 424,
+            "stages": 1,
+            "stage1": {
+                "title": "Joint Meeting Point Construction: Frostmoon Enclave",
+                "ps5title": "Journey: \"Frostmoon Enclave\"",
+                "description": "Reach maximum Construction Level at the Frostmoon Enclave.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.0"
+        }
+    ]
+}

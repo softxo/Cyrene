@@ -1,0 +1,193 @@
+{
+  "id": "fischl",
+  "name": "Fischl",
+  "title": "Prinzessin der Verurteilung!",
+  "description": "A mysterious girl who calls herself \"Prinzessin der Verurteilung\" and travels with a night raven named Oz.",
+  "affiliation": "Adventurers' Guild",
+  "constellation": "Corvus",
+  "birthday": "27/5",
+  "rarity": 4,
+  "element": "electro",
+  "weapon": "bow",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#b08fc2",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Gaze of the Deep",
+      "description": [
+        "Even when Oz is not present in combat, he can still watch over Fischl through his raven eyes. When Fischl performs a Normal Attack against an opponent, Oz fires a coordinated attack, dealing DMG equal to 22% of Fischl's ATK."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Devourer of All Sins",
+      "description": [
+        "When **Nightrider** is used, it deals an additional 200% ATK as DMG, and its AoE is increased by 50%."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Wings of Nightmare",
+      "description": [
+        "Increases the Level of **Nightrider** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Her Pilgrimage of Bleak",
+      "description": [
+        "When **Midnight Phantasmagoria** is used, it deals 222% of ATK as **Electro DMG** to surrounding opponents.",
+        "When the skill duration ends, Fischl regenerates 20% of her HP."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "Against the Fleeing Light",
+      "description": [
+        "Increases the Level of **Midnight Phantasmagoria** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Evernight Raven",
+      "description": [
+        "Extends the duration of Oz's presence on the field by 2s. Additionally, Oz performs coordinated attacks with your active character when present, dealing 30% of Fischl's ATK as **Electro DMG**.",
+        "After Oz performs a coordinated attack, the increased ATK and Elemental Mastery effects of **Witch's Eve Rite: Phantasmal Nocturne** are further increased by 100% for 10s."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Bolts of Downfall",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 consecutive shots with a bow."
+        ],
+        "charged": [
+          "Performs a more precise Aimed Shot with increased DMG.",
+          "While aiming, the dark lightning spirits of Immernachtreich shall heed the call of their Prinzessin and indwell the enchanted arrowhead. When fully indwelt, the Rachsüchtig Blitz shall deal immense **Electro DMG**."
+        ],
+        "plunge": [
+          "Fires off a shower of arrows in mid-air before falling and striking the ground, dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Nightrider",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Summons Oz. The night raven forged of darkness and lightning descends upon the land, dealing **Electro DMG** in a small AoE.",
+        "For the ability's duration, Oz will continuously attack nearby opponents with **Freikugel**.",
+        "",
+        "Hold to adjust the location Oz will be summoned to.",
+        "Press again any time during the ability's duration to once again summon him to Fischl's side."
+      ]
+    },
+    "elemental_burst": {
+      "name": "Midnight Phantasmagoria",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Summons Oz to spread his twin wings of twilight and defend Fischl.",
+        "Has the following properties during the ability's duration:",
+        "- Fischl takes on Oz's form, greatly increasing her Movement Speed.",
+        "- Strikes nearby opponents with lightning, dealing **Electro DMG** to opponents she comes into contact with. Each opponent can only be struck once.",
+        "- Once this ability's effects end, Oz will remain on the battlefield and attack his Prinzessin's foes. If Oz is already on the field, then this will reset the duration of his presence."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Stellar Predator",
+      "description": [
+        "When Fischl hits Oz with a fully-charged Aimed Shot, Oz brings down Thundering Retribution, dealing **AoE Electro DMG** equal to 152.7% of the arrow's DMG."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Undone Be Thy Sinful Hex",
+      "description": [
+        "If your current active character triggers an **Electro-related Elemental Reaction** when Oz is on the field, the opponent shall be stricken with Thundering Retribution that deals **Electro DMG** equal to 80% of Fischl's ATK."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "Mein Hausgarten",
+      "description": [
+        "When dispatched on an expedition in Mondstadt, time consumed is reduced by 25%."
+      ]
+    },
+    {
+      "unlock": "Witch's Homework",
+      "name": "Witch's Eve Rite: Phantasmal Nocturne",
+      "description": [
+        "After completing **Witch's Homework: Of the Unexpected**, Fischl will become a **Hexerei** character. When the party includes at least 2 Hexerei characters, you will gain the **Hexerei: Secret Rite** effect, which enhances Hexerei characters.",
+        "",
+        "**Hexerei: Secret Rite**",
+        "Hark, Prince Nachtraben, Ozvaldo Hrafnavins, he who has witnessed the fall of countless worlds. Sing now the starry septet for your sovereign, for this is the moment of deepest sin, when the gathered souls at the end of causality shatter the darkness of fate.",
+        "Additionally, when Oz is on the field, party members will gain additional buff effects:",
+        "- After a nearby party member triggers an Overloaded reaction, Fischl and other nearby active party members have their ATK increased by 22.5% for 10s.",
+        "- After a nearby party member triggers an Electro-Charged or Lunar-Charged reaction, Fischl and other nearby active party members have their Elemental Mastery increased by 90 for 10s."
+
+      ]
+    }
+  ],
+ "materials": {
+    "ascension": {
+      "gem": {
+        "id": "vajrada_amethyst",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "lightning_prism",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "small_lamp_grass",
+        "amount": 168
+      },
+      "common": {
+        "id": "arrowhead",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "ballad",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "arrowhead",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "andrius",
+        "material": "spirit_locket_of_boreas",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

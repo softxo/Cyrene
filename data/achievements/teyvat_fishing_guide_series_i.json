@@ -1,0 +1,236 @@
+{
+    "achievements": [
+        {
+            "id": [
+                81131
+            ],
+            "name": "Amateurs Hammer Nails Into Hooks",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1123,
+            "stages": 1,
+            "stage1": {
+                "title": "Amateurs Hammer Nails Into Hooks",
+                "description": "Catch your first fish.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81132
+            ],
+            "name": "\"Do you need a fishtank to go with that?\"",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1124,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Do you need a fishtank to go with that?\"",
+                "description": "Catch your first Ornamental Fish.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81133
+            ],
+            "name": "Yon Mirror'd Moon, Broken",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1125,
+            "stages": 1,
+            "stage1": {
+                "title": "Yon Mirror'd Moon, Broken",
+                "description": "Catch a fish that only comes out at night for the first time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81134,
+                81135,
+                81136
+            ],
+            "name": "Ding Ding Ding!",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1126,
+            "stages": 3,
+            "stage1": {
+                "title": "Ding Ding Ding!",
+                "description": "Catch fish successfully 100 times.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ding Ding Ding!",
+                "description": "Catch fish successfully 500 times.",
+                "progress": 500,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ding Ding Ding!",
+                "description": "Catch fish successfully 2,000 times.",
+                "progress": 2000,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81137
+            ],
+            "name": "\"Call Me Ishmael.\"",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1129,
+            "stages": 1,
+            "stage1": {
+                "title": "\"Call Me Ishmael.\"",
+                "description": "Catch one fish in another player's world.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81138
+            ],
+            "name": "Fishy Motive",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1130,
+            "stages": 1,
+            "stage1": {
+                "title": "Fishy Motive",
+                "description": "Buy a fishing rod from the Fishing Association.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81139
+            ],
+            "name": "Into the Waters",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1131,
+            "stages": 1,
+            "stage1": {
+                "title": "Into the Waters",
+                "description": "Successfully make 20 Bait.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81140
+            ],
+            "name": "A Right Proper Angler",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1132,
+            "stages": 1,
+            "stage1": {
+                "title": "A Right Proper Angler",
+                "description": "Unlock 20 fish Archive entries.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81144
+            ],
+            "name": "Intermission",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1133,
+            "stages": 1,
+            "stage1": {
+                "title": "Intermission",
+                "description": "Catch a scattered page of a book while fishing in Inazuma.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                81143
+            ],
+            "name": "Stabilizer",
+            "achievementGroupId": 25,
+            "achievementGroupName": "Teyvat Fishing Guide: Series I",
+            "sortOrder": 1134,
+            "stages": 1,
+            "stage1": {
+                "title": "Stabilizer",
+                "description": "Catch fish successfully 10 times while always staying inside the Ideal Tension Zone.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.1"
+        }
+    ]
+}

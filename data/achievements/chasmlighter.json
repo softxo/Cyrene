@@ -1,0 +1,259 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80145
+            ],
+            "name": "Chasm Conqueror",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 145,
+            "stages": 1,
+            "stage1": {
+                "title": "Chasm Conqueror",
+                "description": "Light up The Chasm surface map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80146
+            ],
+            "name": "Perilous Plunge",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 146,
+            "stages": 1,
+            "stage1": {
+                "title": "Perilous Plunge",
+                "description": "Light up The Chasm: Underground Mines map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80147
+            ],
+            "name": "Into the Depths",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 147,
+            "stages": 1,
+            "stage1": {
+                "title": "Into the Depths",
+                "description": "Unlock all Teleport Waypoints in The Chasm and its Underground Mines.",
+                "progress": 21,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80148,
+                80149,
+                80150
+            ],
+            "name": "Gorge Guide",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 148,
+            "stages": 3,
+            "stage1": {
+                "title": "Gorge Guide",
+                "description": "Follow 6 Seelie in The Chasm to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Gorge Guide",
+                "description": "Follow 12 Seelie in The Chasm to their Seelie Courts.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Gorge Guide",
+                "description": "Follow 24 Seelie in The Chasm to their Seelie Courts.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80151,
+                80152,
+                80153
+            ],
+            "name": "Chasm Treasure Hunter",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 151,
+            "stages": 3,
+            "stage1": {
+                "title": "Chasm Treasure Hunter",
+                "description": "Open 50 chests in The Chasm.",
+                "progress": 50,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Chasm Treasure Hunter",
+                "description": "Open 100 chests in The Chasm.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Chasm Treasure Hunter",
+                "description": "Open 200 chests in The Chasm.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80154,
+                80155,
+                80156
+            ],
+            "name": "Chasm Adventurer",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 154,
+            "stages": 3,
+            "stage1": {
+                "title": "Chasm Adventurer",
+                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges in The Chasm.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Chasm Adventurer",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in The Chasm.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Chasm Adventurer",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges in The Chasm.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80157
+            ],
+            "name": "Arch-Illuminator",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 157,
+            "stages": 1,
+            "stage1": {
+                "title": "Arch-Illuminator",
+                "description": "Enhance the Lumenstone Adjuvant to its highest possible level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80158
+            ],
+            "name": "\"When the Seal Is Broken...\"",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 158,
+            "stages": 1,
+            "stage1": {
+                "title": "\"When the Seal Is Broken...\"",
+                "description": "Remove the obstacles to your entry into the mines.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.6"
+        },
+        {
+            "id": [
+                80159
+            ],
+            "name": "Exploration Underway",
+            "achievementGroupId": 30,
+            "achievementGroupName": "Chasmlighter",
+            "sortOrder": 159,
+            "stages": 1,
+            "stage1": {
+                "title": "Exploration Underway",
+                "description": "Complete the exploration commission from the Ministry of Civil Affairs.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.6"
+        }
+    ]
+}

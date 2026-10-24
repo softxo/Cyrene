@@ -1,0 +1,153 @@
+{
+  "hp": {
+    "name": "HP",
+    "short_name": "HP",
+    "emoji": "HP",
+    "icon": "HP",
+    "type": "stat"
+  },
+
+  "atk": {
+    "name": "ATK",
+    "short_name": "ATK",
+    "emoji": "ATK",
+    "icon": "ATK",
+    "type": "stat"
+  },
+
+  "def": {
+    "name": "DEF",
+    "short_name": "DEF",
+    "emoji": "DEF",
+    "icon": "DEF",
+    "type": "stat"
+  },
+
+  "hp_percent": {
+    "name": "HP%",
+    "short_name": "HP%",
+    "emoji": "HP_Percent",
+    "icon": "HP_Percent",
+    "type": "stat"
+  },
+
+  "atk_percent": {
+    "name": "ATK%",
+    "short_name": "ATK%",
+    "emoji": "ATK_Percent",
+    "icon": "ATK_Percent",
+    "type": "stat"
+  },
+
+  "def_percent": {
+    "name": "DEF%",
+    "short_name": "DEF%",
+    "emoji": "DEF_Percent",
+    "icon": "DEF_Percent",
+    "type": "stat"
+  },
+
+  "elemental_mastery": {
+    "name": "Elemental Mastery",
+    "short_name": "EM",
+    "emoji": "Elemental_Mastery",
+    "icon": "Elemental_Mastery",
+    "type": "stat"
+  },
+
+  "energy_recharge": {
+    "name": "Energy Recharge",
+    "short_name": "ER",
+    "emoji": "Energy_Recharge",
+    "icon": "Energy_Recharge",
+    "type": "stat"
+  },
+
+  "crit_rate": {
+    "name": "CRIT Rate",
+    "short_name": "CR",
+    "emoji": "Crit_Rate",
+    "icon": "Crit_Rate",
+    "type": "stat"
+  },
+
+  "crit_dmg": {
+    "name": "CRIT DMG",
+    "short_name": "CD",
+    "emoji": "Crit_DMG",
+    "icon": "Crit_DMG",
+    "type": "stat"
+  },
+
+  "pyro_dmg_bonus": {
+    "name": "Pyro DMG Bonus",
+    "short_name": "Pyro%",
+    "emoji": "Pyro_DMG_Bonus",
+    "icon": "Pyro_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "hydro_dmg_bonus": {
+    "name": "Hydro DMG Bonus",
+    "short_name": "Hydro%",
+    "emoji": "Hydro_DMG_Bonus",
+    "icon": "Hydro_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "electro_dmg_bonus": {
+    "name": "Electro DMG Bonus",
+    "short_name": "Electro%",
+    "emoji": "Electro_DMG_Bonus",
+    "icon": "Electro_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "cryo_dmg_bonus": {
+    "name": "Cryo DMG Bonus",
+    "short_name": "Cryo%",
+    "emoji": "Cryo_DMG_Bonus",
+    "icon": "Cryo_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "dendro_dmg_bonus": {
+    "name": "Dendro DMG Bonus",
+    "short_name": "Dendro%",
+    "emoji": "Dendro_DMG_Bonus",
+    "icon": "Dendro_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "geo_dmg_bonus": {
+    "name": "Geo DMG Bonus",
+    "short_name": "Geo%",
+    "emoji": "Geo_DMG_Bonus",
+    "icon": "Geo_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "anemo_dmg_bonus": {
+    "name": "Anemo DMG Bonus",
+    "short_name": "Anemo%",
+    "emoji": "Anemo_DMG_Bonus",
+    "icon": "Anemo_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "physical_dmg_bonus": {
+    "name": "Physical DMG Bonus",
+    "short_name": "Phys%",
+    "emoji": "Physical_DMG_Bonus",
+    "icon": "Physical_DMG_Bonus",
+    "type": "stat"
+  },
+
+  "healing_bonus": {
+    "name": "Healing Bonus",
+    "short_name": "Healing%",
+    "emoji": "Healing_Bonus",
+    "icon": "Healing_Bonus",
+    "type": "stat"
+  }
+}

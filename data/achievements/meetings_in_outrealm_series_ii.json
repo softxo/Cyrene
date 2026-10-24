@@ -1,0 +1,151 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86021
+            ],
+            "name": "A Delusion's Abilities Don't Decide a Battle's Outcome",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9014,
+            "stages": 1,
+            "stage1": {
+                "title": "A Delusion's Abilities Don't Decide a Battle's Outcome",
+                "description": "Defeat Childe in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.1"
+        },
+        {
+            "id": [
+                86015
+            ],
+            "name": "Moving Mountains",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9015,
+            "stages": 1,
+            "stage1": {
+                "title": "Moving Mountains",
+                "description": "Defeat a Primo Geovishap in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                86016
+            ],
+            "name": "Blast From the Past",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9016,
+            "stages": 1,
+            "stage1": {
+                "title": "Blast From the Past",
+                "description": "Defeat Azhdaha in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                86017
+            ],
+            "name": "Put on Ice",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9017,
+            "stages": 1,
+            "stage1": {
+                "title": "Put on Ice",
+                "description": "Defeat a Cryo Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                86018
+            ],
+            "name": "No Strings Attached, Anymore",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9018,
+            "stages": 1,
+            "stage1": {
+                "title": "No Strings Attached, Anymore",
+                "description": "Defeat a Maguu Kenki in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                86019
+            ],
+            "name": "Operation Bonfire",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9019,
+            "stages": 1,
+            "stage1": {
+                "title": "Operation Bonfire",
+                "description": "Defeat a Pyro Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                86020
+            ],
+            "name": "The Not-So-Perpetual Mechanical Array",
+            "achievementGroupId": 21,
+            "achievementGroupName": "Meetings in Outrealm: Series II",
+            "sortOrder": 9020,
+            "stages": 1,
+            "stage1": {
+                "title": "The Not-So-Perpetual Mechanical Array",
+                "description": "Defeat a Perpetual Mechanical Array in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        }
+    ]
+}

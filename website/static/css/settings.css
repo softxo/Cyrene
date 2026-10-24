@@ -1,0 +1,377 @@
+/* =============================
+   SETTINGS
+   ============================= */
+
+.settings-section {
+    padding: 24px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    background: var(--surface);
+}
+
+
+.settings-section-header {
+    margin-bottom: 20px;
+}
+
+
+.settings-section-header h3 {
+    margin: 0;
+
+    font-size: 17px;
+}
+
+
+.settings-section-header p {
+    margin: 6px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+
+.theme-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+
+.theme-option {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.theme-option:hover {
+    background: var(--surface-hover);
+
+    transform: translateY(-1px);
+}
+
+
+.theme-option.selected {
+    border-color: var(--accent);
+}
+
+
+.theme-preview {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+}
+
+
+.theme-preview span {
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+}
+
+
+.theme-preview-blue {
+    background: rgba(143, 156, 255, 0.12);
+}
+
+
+.theme-preview-blue span {
+    background: #8f9cff;
+}
+
+
+.theme-preview-pink {
+    background: rgba(232, 137, 181, 0.12);
+}
+
+
+.theme-preview-pink span {
+    background: #e889b5;
+}
+
+
+.theme-preview-light-blue {
+    background: rgba(102, 117, 232, 0.10);
+}
+
+
+.theme-preview-light-blue span {
+    background: #6675e8;
+}
+
+
+.theme-preview-light-pink {
+    background: rgba(215, 101, 155, 0.10);
+}
+
+
+.theme-preview-light-pink span {
+    background: #d7659b;
+}
+
+
+.theme-option-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.theme-option-info strong {
+    font-size: 14px;
+}
+
+
+.theme-option-info span {
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+
+.theme-check {
+    margin-left: auto;
+
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--accent);
+
+    opacity: 0;
+
+    transform: scale(0.8);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+
+    -webkit-mask: none;
+    mask: none;
+}
+
+.theme-check::after {
+    content: "";
+
+    width: 18px;
+    height: 18px;
+
+    background: var(--background);
+
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+}
+
+.theme-option.selected .theme-check {
+    opacity: 1;
+
+    transform: scale(1);
+}
+
+
+/* =============================
+   ANIMATIONS SETTING
+   ============================= */
+
+.settings-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: var(--background);
+}
+
+
+.settings-toggle-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+
+.settings-toggle-info strong {
+    font-size: 14px;
+}
+
+
+.settings-toggle-info span {
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+
+/* ---------------------------------------------------------
+   Toggle
+   --------------------------------------------------------- */
+
+.settings-toggle-switch {
+    position: relative;
+
+    width: 46px;
+    height: 26px;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    border: 1px solid var(--border);
+
+    border-radius: 999px;
+
+    background: var(--surface-hover);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.settings-toggle-switch::after {
+    content: "";
+
+    position: absolute;
+
+    top: 3px;
+    left: 3px;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: var(--text-muted);
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* ---------------------------------------------------------
+   Enabled
+   --------------------------------------------------------- */
+
+.settings-toggle-switch.active {
+    border-color: var(--accent);
+
+    background: color-mix(
+        in srgb,
+        var(--accent) 18%,
+        var(--surface)
+    );
+}
+
+
+.settings-toggle-switch.active::after {
+    background: var(--accent);
+
+    transform: translateX(20px);
+}
+
+
+/* ---------------------------------------------------------
+   Hover / Focus
+   --------------------------------------------------------- */
+
+.settings-toggle-switch:hover {
+    border-color: var(--accent);
+}
+
+
+.settings-toggle-switch:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 2px color-mix(
+            in srgb,
+            var(--accent) 20%,
+            transparent
+        );
+}
+
+
+/* ---------------------------------------------------------
+   Mobile
+   --------------------------------------------------------- */
+
+@media (max-width: 650px) {
+    .settings-toggle {
+        padding: 13px;
+    }
+
+    .settings-toggle-switch {
+        width: 44px;
+        height: 25px;
+    }
+
+    .settings-toggle-switch::after {
+        width: 17px;
+        height: 17px;
+    }
+
+    .settings-toggle-switch.active::after {
+        transform: translateX(19px);
+    }
+}

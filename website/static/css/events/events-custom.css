@@ -1,0 +1,2581 @@
+/* =========================================================
+   CUSTOM EVENTS
+   ========================================================= */
+
+.events-custom-section {
+    width: 100%;
+    min-width: 0;
+}
+
+.events-limited:not([hidden]) + .events-custom-section:not([hidden]) {
+    margin-top: 32px;
+}
+
+.events-custom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.events-custom-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-description {
+    margin: 6px 0 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-secondary, #999);
+}
+
+.events-custom-create,
+.events-custom-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid var(--accent, #7c83ff);
+    border-radius: 10px;
+    background: var(--accent, #7c83ff);
+    color: #fff;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+    transition: filter 160ms ease, transform 160ms ease;
+}
+
+.events-custom-create:hover,
+.events-custom-save:hover {
+    filter: brightness(1.08);
+}
+
+.events-custom-create:active,
+.events-custom-save:active {
+    transform: translateY(1px);
+}
+
+.events-custom-list {
+    display: grid;
+    gap: 12px;
+}
+
+.events-custom-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 170px;
+    padding: 28px;
+    border: 1px dashed var(--border-color, rgba(150, 150, 170, 0.3));
+    border-radius: 14px;
+    text-align: center;
+}
+
+.events-custom-empty-title {
+    font-weight: 700;
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-empty-description {
+    max-width: 440px;
+    color: var(--text-secondary, #999);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.events-custom-card {
+    --custom-event-colour: #7c83ff;
+
+    display: grid;
+    grid-template-columns: 4px minmax(0, 1fr);
+    overflow: hidden;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.2));
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.events-custom-card-accent {
+    background: var(--custom-event-colour);
+}
+
+.events-custom-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    padding: 16px;
+}
+
+.events-custom-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.events-custom-card-title {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.events-custom-card-description {
+    margin: 6px 0 0;
+    color: var(--text-secondary, #999);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.events-custom-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--text-secondary, #999);
+    font-size: 0.8rem;
+}
+
+.events-custom-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 9px;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.25));
+    border-radius: 7px;
+    background: rgba(128, 128, 150, 0.06);
+}
+
+.events-custom-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.events-custom-action {
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary, inherit);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.events-custom-action:hover {
+    background: rgba(128, 128, 150, 0.1);
+}
+
+.events-custom-action-danger {
+    color: #ef7777;
+}
+
+.events-custom-card.is-completed {
+    opacity: 0.7;
+}
+
+.events-custom-card.is-completed .events-custom-card-title {
+    text-decoration: line-through;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — PROGRESS OBJECTIVES
+   ========================================================= */
+
+.events-custom-progress {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+}
+
+.events-custom-progress-item {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.events-custom-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    font-size: 0.82rem;
+}
+
+.events-custom-progress-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-progress-value {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 64px;
+    min-height: 32px;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.28);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary, inherit);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.events-custom-progress-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 30px 30px;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.events-custom-progress-track {
+    height: 7px;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(128, 128, 150, 0.18);
+}
+
+.events-custom-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    transition: width 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: width;
+}
+
+.events-custom-progress-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
+    border-radius: 8px;
+    background: rgba(128, 128, 150, 0.08);
+    color: var(--text-primary, inherit);
+    font: inherit;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        opacity 150ms ease;
+}
+
+.events-custom-progress-button:hover:not(:disabled) {
+    background: color-mix(
+        in srgb,
+        var(--custom-event-colour, #7c83ff) 12%,
+        transparent
+    );
+    border-color: color-mix(
+        in srgb,
+        var(--custom-event-colour, #7c83ff) 45%,
+        var(--border-color, #808096)
+    );
+    color: var(--text-primary, inherit);
+}
+
+.events-custom-progress-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — HIDDEN CONDITIONAL FIELDS
+   Ensures hidden modal fields stay hidden despite display rules.
+   ========================================================= */
+
+.events-custom-modal[hidden],
+.events-custom-modal [hidden],
+.events-custom-section [hidden] {
+    display: none !important;
+}
+
+/* =============================
+   MODAL OVERLAY
+   ============================= */
+
+.events-custom-modal {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+
+    display: grid;
+    place-items: center;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+}
+
+.events-custom-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(5, 7, 15, 0.72);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* =============================
+   MODAL PANEL
+   ============================= */
+
+.events-custom-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(100%, 680px);
+    max-height: min(88vh, 900px);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding: 26px;
+
+    box-sizing: border-box;
+
+    background: var(--surface);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.32),
+        0 0 0 1px var(--accent-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-border) transparent;
+}
+
+
+/* =============================
+   MODAL HEADER
+   ============================= */
+
+.events-custom-dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 26px;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.events-custom-eyebrow {
+    display: inline-block;
+
+    color: var(--accent);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.events-custom-dialog-header h2 {
+    margin: 7px 0 0;
+
+    color: var(--text);
+
+    font-family: "Outfit", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+}
+
+
+/* =============================
+   CLOSE BUTTON
+   ============================= */
+
+.events-custom-close {
+    display: inline-flex;
+    flex: 0 0 36px;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text-muted);
+
+    font: inherit;
+    font-size: 1.4rem;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.events-custom-close:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+
+.events-custom-close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =============================
+   FORM LAYOUT
+   ============================= */
+
+.events-custom-dialog form {
+    display: grid;
+    gap: 22px;
+}
+
+.events-custom-field {
+    display: grid;
+    gap: 9px;
+
+    min-width: 0;
+
+    color: var(--text);
+
+    font-size: 0.86rem;
+    font-weight: 650;
+}
+
+.events-custom-field small {
+    color: var(--text-muted);
+
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+
+/* =============================
+   TEXT INPUTS AND SELECTS
+   ============================= */
+
+.events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]),
+.events-custom-field textarea,
+.events-custom-field select {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+
+    box-sizing: border-box;
+    padding: 11px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    outline: none;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.45;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+}
+
+.events-custom-field textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.events-custom-field select {
+    cursor: pointer;
+}
+
+.events-custom-field select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+
+/* Hover and focus states use the active theme accent. */
+
+.events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]):hover,
+.events-custom-field textarea:hover,
+.events-custom-field select:hover {
+    border-color: var(--accent-border);
+}
+
+.events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]):focus,
+.events-custom-field textarea:focus,
+.events-custom-field select:focus {
+    border-color: var(--accent);
+
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.events-custom-field input::placeholder,
+.events-custom-field textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+
+/* =============================
+   COLOUR PICKER
+   ============================= */
+
+.events-custom-field input[type="color"] {
+    width: 100%;
+    height: 42px;
+
+    box-sizing: border-box;
+    padding: 4px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+
+    cursor: pointer;
+}
+
+.events-custom-field input[type="color"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =============================
+   FORM ROWS
+   ============================= */
+
+.events-custom-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+/* =============================
+   SCHEDULE OPTIONS
+   ============================= */
+
+.events-custom-scope {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+/* Account scope cards */
+.events-custom-scope label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 11px 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.events-custom-scope label:hover {
+    border-color: var(--accent-border);
+}
+
+.events-custom-scope label:has(input[type="radio"]:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+/* Custom radio circles */
+.events-custom-scope input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: grid;
+    place-items: center;
+    flex: 0 0 17px;
+
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 50%;
+
+    background: var(--background);
+    cursor: pointer;
+}
+
+.events-custom-scope input[type="radio"]::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+
+    transform: scale(0);
+    transition: transform 140ms ease;
+}
+
+.events-custom-scope input[type="radio"]:checked {
+    border-color: var(--accent);
+}
+
+.events-custom-scope input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+.events-custom-scope input[type="radio"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.events-custom-weekdays input {
+    accent-color: var(--accent);
+}
+
+/* =============================
+   OBJECTIVES / PROGRESS
+   ============================= */
+
+.events-custom-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.events-custom-add-objective {
+    padding: 6px 0;
+
+    border: 0;
+    background: transparent;
+
+    color: var(--accent);
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+.events-custom-add-objective:hover {
+    filter: brightness(1.12);
+    text-decoration: underline;
+}
+
+.events-custom-objective {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 76px 76px 36px;
+
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.events-custom-objective input {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+
+    box-sizing: border-box;
+    padding: 9px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font: inherit;
+    font-size: 0.82rem;
+}
+
+.events-custom-objective input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.events-custom-objective-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: transparent;
+    color: #e87979;
+
+    cursor: pointer;
+    transition: background 160ms ease;
+}
+
+.events-custom-objective-remove:hover {
+    background: rgba(232, 121, 121, 0.1);
+}
+
+
+/* =============================
+   FORM ERRORS
+   ============================= */
+
+.events-custom-error {
+    margin: 0;
+    padding: 11px 13px;
+
+    border: 1px solid rgba(232, 121, 121, 0.3);
+    border-radius: 9px;
+
+    background: rgba(232, 121, 121, 0.08);
+    color: #e87979;
+
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+
+/* =============================
+   FORM ACTIONS
+   ============================= */
+
+.events-custom-form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 2px;
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border);
+}
+
+.events-custom-cancel,
+.events-custom-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+    padding: 10px 16px;
+
+    border-radius: 9px;
+
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+.events-custom-cancel {
+    border: 1px solid var(--border);
+
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.events-custom-cancel:hover {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.events-custom-save {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--background);
+
+    box-shadow: 0 3px 12px var(--accent-glow);
+}
+
+.events-custom-save:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 4px 18px var(--accent-glow);
+}
+
+.events-custom-save:active,
+.events-custom-cancel:active {
+    transform: translateY(1px);
+}
+
+.events-custom-save:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    box-shadow: none;
+}
+
+.events-custom-save:focus-visible,
+.events-custom-cancel:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .events-custom-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .events-custom-create {
+        width: 100%;
+    }
+
+    .events-custom-dialog {
+        padding: 18px;
+    }
+
+    .events-custom-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .events-custom-weekdays {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .events-custom-objective {
+        grid-template-columns: minmax(0, 1fr) 58px 58px 32px;
+        gap: 5px;
+    }
+
+    .events-custom-card-heading {
+        flex-direction: column;
+    }
+
+    .events-custom-modal {
+        padding: 12px;
+    }
+
+    .events-custom-dialog {
+        width: 100%;
+        max-height: 92vh;
+        padding: 18px;
+        border-radius: 13px;
+    }
+
+    .events-custom-dialog-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+    }
+
+    .events-custom-dialog-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .events-custom-form-actions {
+        position: sticky;
+        bottom: -18px;
+
+        margin: 0 -18px -18px;
+        padding: 14px 18px;
+
+        background: var(--surface);
+    }
+}
+
+/* =========================================================
+   CUSTOM EVENTS — NATIVE CONTROL POLISH
+   ========================================================= */
+
+.events-custom-dialog {
+    color-scheme: dark;
+}
+
+[data-theme="light-blue"] .events-custom-dialog,
+[data-theme="light-pink"] .events-custom-dialog {
+    color-scheme: light;
+}
+
+.events-custom-dialog input,
+.events-custom-dialog select,
+.events-custom-dialog textarea,
+.events-custom-dialog button {
+    color-scheme: dark;
+}
+
+[data-theme="light-blue"] .events-custom-dialog input,
+[data-theme="light-blue"] .events-custom-dialog select,
+[data-theme="light-blue"] .events-custom-dialog textarea,
+[data-theme="light-blue"] .events-custom-dialog button,
+[data-theme="light-pink"] .events-custom-dialog input,
+[data-theme="light-pink"] .events-custom-dialog select,
+[data-theme="light-pink"] .events-custom-dialog textarea,
+[data-theme="light-pink"] .events-custom-dialog button {
+    color-scheme: light;
+}
+
+/* DATE AND TIME PICKERS */
+.events-custom-dialog input[type="date"],
+.events-custom-dialog input[type="datetime-local"],
+.events-custom-dialog input[type="time"] {
+    min-height: 42px;
+    padding-right: 12px;
+    border-color: var(--border);
+    background:
+        linear-gradient(var(--background), var(--background)) padding-box,
+        linear-gradient(135deg, var(--accent-soft), transparent) border-box;
+    color: var(--text);
+    color-scheme: inherit;
+    accent-color: var(--accent);
+    caret-color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.events-custom-dialog input[type="date"]:hover,
+.events-custom-dialog input[type="datetime-local"]:hover,
+.events-custom-dialog input[type="time"]:hover {
+    background:
+        linear-gradient(var(--surface-hover), var(--surface-hover)) padding-box,
+        linear-gradient(135deg, var(--accent), var(--accent-border)) border-box;
+}
+
+.events-custom-dialog input[type="date"]:focus,
+.events-custom-dialog input[type="datetime-local"]:focus,
+.events-custom-dialog input[type="time"]:focus {
+    border-color: var(--accent);
+    background: var(--background);
+    box-shadow:
+        0 0 0 3px var(--accent-soft),
+        inset 0 0 0 1px var(--accent-border);
+}
+
+.events-custom-dialog input[type="date"]::-webkit-datetime-edit,
+.events-custom-dialog input[type="datetime-local"]::-webkit-datetime-edit,
+.events-custom-dialog input[type="time"]::-webkit-datetime-edit {
+    color: var(--text);
+}
+
+.events-custom-dialog input[type="date"]::-webkit-calendar-picker-indicator,
+.events-custom-dialog input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.events-custom-dialog input[type="time"]::-webkit-calendar-picker-indicator {
+    width: 19px;
+    height: 19px;
+    padding: 3px;
+    border-radius: 6px;
+    background-color: var(--accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Z'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Z'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+    cursor: pointer;
+    opacity: 1;
+}
+
+/* CUSTOM DATE AND TIME PICKER */
+.events-custom-datetime {
+    position: relative;
+    min-width: 0;
+}
+
+.events-custom-datetime-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.events-custom-datetime-trigger:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-hover);
+}
+
+.events-custom-datetime-trigger:focus-visible,
+.events-custom-datetime-trigger[aria-expanded="true"] {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.events-custom-datetime-trigger.is-placeholder .events-custom-datetime-value {
+    color: var(--text-muted);
+}
+
+.events-custom-datetime-icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    background: var(--accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.events-custom-calendar {
+    position: absolute;
+    z-index: 1200;
+    top: calc(100% + 8px);
+    left: 0;
+    width: min(340px, calc(100vw - 56px));
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--accent-border);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38), 0 0 0 1px var(--accent-soft);
+    font-weight: 400;
+}
+
+.events-custom-form-row > .events-custom-field:last-child .events-custom-calendar {
+    right: 0;
+    left: auto;
+}
+
+.events-custom-calendar-header {
+    display: grid;
+    grid-template-columns: 36px 1fr 36px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.events-custom-calendar-month {
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.events-custom-calendar-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    color: var(--text);
+    font: inherit;
+    font-size: 1.35rem;
+    cursor: pointer;
+}
+
+.events-custom-calendar-nav:hover,
+.events-custom-calendar-secondary:hover {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.events-custom-calendar-weekdays,
+.events-custom-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.events-custom-calendar-weekdays {
+    margin-bottom: 5px;
+}
+
+.events-custom-calendar-weekdays span {
+    padding: 4px 0;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.events-custom-calendar-day {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    min-width: 0;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.events-custom-calendar-day:hover {
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+}
+
+.events-custom-calendar-day.is-outside {
+    color: var(--text-muted);
+    opacity: 0.45;
+}
+
+.events-custom-calendar-day.is-today {
+    border-color: var(--accent-border);
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.events-custom-calendar-day.is-selected {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--background);
+    font-weight: 800;
+    box-shadow: 0 3px 10px var(--accent-glow);
+}
+
+.events-custom-calendar-time {
+    display: grid;
+    grid-template-columns: 1fr 70px auto 70px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.events-custom-dialog .events-custom-field .events-custom-calendar-time input[type="text"] {
+    width: 100%;
+    height: 36px;
+    min-height: 36px;
+    padding: 7px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text);
+    font: inherit;
+    text-align: center;
+}
+
+.events-custom-calendar-footer,
+.events-custom-calendar-footer-end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.events-custom-calendar-footer {
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+.events-custom-calendar-secondary,
+.events-custom-calendar-apply {
+    min-height: 34px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.events-custom-calendar-apply {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--background);
+}
+
+.events-custom-calendar button:focus-visible,
+.events-custom-calendar input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .events-custom-calendar {
+        right: auto !important;
+        left: 0 !important;
+        width: min(320px, calc(100vw - 60px));
+        padding: 13px;
+    }
+
+    .events-custom-calendar-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .events-custom-calendar-footer-end {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+}
+
+/* COLOUR PICKER */
+.events-custom-dialog input[type="color"] {
+    appearance: none;
+    -webkit-appearance: none;
+    overflow: hidden;
+    min-height: 42px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    cursor: pointer;
+}
+
+.events-custom-dialog input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.events-custom-dialog input[type="color"]::-webkit-color-swatch {
+    border: 0;
+    border-radius: 5px;
+}
+
+.events-custom-dialog input[type="color"]::-moz-color-swatch {
+    border: 0;
+    border-radius: 5px;
+}
+
+/* RADIO BUTTONS / ACCOUNT CIRCLES */
+.events-custom-dialog input[type="radio"],
+.events-custom-dialog input[type="checkbox"] {
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* Consistent focus indicators for keyboard navigation. */
+.events-custom-dialog input[type="radio"]:focus-visible,
+.events-custom-dialog input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEME-AWARE DROPDOWNS
+   ========================================================= */
+
+.events-custom-dialog select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    box-sizing: border-box;
+
+    padding: 10px 40px 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background-color: var(--background);
+    background-repeat: no-repeat;
+    background-position: right 13px center;
+    background-size: 15px;
+
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.45;
+
+    cursor: pointer;
+
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background-color 180ms ease;
+}
+
+/* Blue */
+[data-theme="blue"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238f9cff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Pink */
+[data-theme="pink"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e889b5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Light blue */
+[data-theme="light-blue"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236675e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Light pink */
+[data-theme="light-pink"] .events-custom-dialog select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d7659b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Hover and keyboard focus */
+.events-custom-dialog select:hover {
+    border-color: var(--accent);
+}
+
+.events-custom-dialog select:focus,
+.events-custom-dialog select:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Option colours */
+.events-custom-dialog select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — NUMBER INPUTS AND SPINNERS
+   ========================================================= */
+
+.events-custom-dialog .events-custom-number {
+    position: relative !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    height: 38px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+
+    background: var(--background) !important;
+    overflow: hidden !important;
+}
+
+/* Number input */
+.events-custom-dialog .events-custom-number input[type="number"] {
+    appearance: textfield !important;
+    -webkit-appearance: textfield !important;
+    -moz-appearance: textfield !important;
+
+    display: block !important;
+    flex: 1 1 auto !important;
+
+    width: 0 !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 6px 0 9px !important;
+    box-sizing: border-box !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+    background: transparent !important;
+    color: var(--text) !important;
+
+    font-family: "Inter", sans-serif !important;
+    font-size: 0.82rem !important;
+}
+
+.events-custom-dialog .events-custom-number input[type="number"]::-webkit-inner-spin-button,
+.events-custom-dialog .events-custom-number input[type="number"]::-webkit-outer-spin-button {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+/* =========================================================
+   SPINNER COLUMN — COMPACT, CENTRED ARROWS
+   ========================================================= */
+
+.events-custom-dialog .events-custom-number > .number-spinner {
+    position: static !important;
+    transform: none !important;
+
+    display: flex !important;
+    flex: 0 0 22px !important;
+    flex-direction: column !important;
+    align-self: center !important;
+
+    width: 22px !important;
+    height: 28px !important;
+    min-width: 22px !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 1px !important;
+    box-sizing: border-box !important;
+    gap: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Individual arrow buttons */
+.events-custom-dialog .events-custom-number .number-spinner-button {
+    position: static !important;
+
+    display: flex !important;
+    flex: 1 1 50% !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 3px !important;
+
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    box-shadow: none !important;
+    transform: none !important;
+
+    cursor: pointer;
+}
+
+.events-custom-dialog .events-custom-number .number-spinner-button:hover {
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+}
+
+/* =========================================================
+   CHEVRON ICONS — MATCH PLANNER
+   ========================================================= */
+
+.events-custom-dialog .events-custom-number .spinner-arrow {
+    width: 7px !important;
+    height: 7px !important;
+
+    display: block !important;
+    box-sizing: border-box !important;
+
+    border-right: 1.5px solid currentColor !important;
+    border-bottom: 1.5px solid currentColor !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+
+    transition:
+        color 0.12s ease,
+        transform 0.12s ease;
+}
+
+.events-custom-dialog .number-spinner-button[data-direction="up"] .spinner-arrow {
+    transform: rotate(225deg) !important;
+}
+
+.events-custom-dialog .number-spinner-button[data-direction="down"] .spinner-arrow {
+    transform: rotate(45deg) !important;
+}
+
+.events-custom-dialog .number-spinner-button[data-direction="up"]:active .spinner-arrow {
+    transform: rotate(225deg) translate(-1px, -1px) !important;
+}
+
+.events-custom-dialog .number-spinner-button[data-direction="down"]:active .spinner-arrow {
+    transform: rotate(45deg) translate(1px, 1px) !important;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — FORCE REMOVE SPINNER ARROW FOCUS
+   ========================================================= */
+
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus,
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus-visible,
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:active,
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus .spinner-arrow,
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus-visible .spinner-arrow {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+/* Prevent global button focus styles from affecting spinner buttons */
+.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CUSTOM FORM DROPDOWNS
+   ========================================================= */
+
+.events-custom-dialog [data-custom-dropdown] {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Dropdown trigger */
+.events-custom-dialog [data-custom-dropdown] > button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+/* Hover and focus */
+.events-custom-dialog [data-custom-dropdown] > button:hover {
+    border-color: var(--accent);
+}
+
+.events-custom-dialog [data-custom-dropdown] > button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Dropdown options menu */
+.events-custom-dialog [data-custom-dropdown] [role="listbox"],
+.events-custom-dialog [data-custom-dropdown] .events-custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--surface);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+}
+
+/* Individual options */
+.events-custom-dialog [data-custom-dropdown] [data-value] {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+    color: var(--text);
+
+    font: inherit;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.events-custom-dialog [data-custom-dropdown] [data-value]:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CUSTOM DROPDOWN POSITIONING
+   ========================================================= */
+
+.events-custom-dialog .events-custom-field-select {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+.events-custom-dialog .events-custom-field-select > .custom-select-button {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.events-custom-dialog .events-custom-field-select > .custom-select-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEMED WEEKDAY BUTTONS
+   ========================================================= */
+
+.events-custom-dialog .events-custom-weekdays {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.events-custom-dialog .events-custom-day {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.events-custom-dialog .events-custom-day input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.events-custom-dialog .events-custom-day span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 44px;
+    height: 38px;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+/* Selected weekday */
+.events-custom-dialog .events-custom-day input:checked + span {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+/* Hover */
+.events-custom-dialog .events-custom-day:hover span {
+    border-color: var(--accent-border);
+}
+
+/* Keyboard accessibility */
+.events-custom-dialog .events-custom-day input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — THEMED ADD OBJECTIVE BUTTON
+   ========================================================= */
+
+.events-custom-dialog .events-custom-add-objective {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 0 15px;
+
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+
+    background: var(--accent-soft);
+    color: var(--accent);
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+.events-custom-dialog .events-custom-add-objective:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    text-decoration: none;
+}
+
+.events-custom-dialog .events-custom-add-objective:active {
+    transform: translateY(1px);
+}
+
+.events-custom-dialog .events-custom-add-objective:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.events-custom-dialog .events-custom-add-objective span {
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CONSISTENT CONTROL HEIGHTS
+   ========================================================= */
+
+.events-custom-dialog {
+    --custom-control-height: 42px;
+}
+
+/* Text, number, date, colour and native select controls */
+.events-custom-dialog .events-custom-field > input:not([type="checkbox"]),
+.events-custom-dialog .events-custom-field > select {
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+/* Number inputs and their JavaScript-generated spinner wrappers */
+.events-custom-dialog .events-custom-number {
+    display: flex;
+    align-items: stretch;
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+.events-custom-dialog .events-custom-number > input {
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+/* Keep the spinner controls inside the same overall height */
+.events-custom-dialog .events-custom-number .number-spinner-button {
+    height: 50%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+/* Account selector */
+.events-custom-dialog [data-custom-account-dropdown] .custom-select-button,
+.events-custom-dialog .events-custom-account-select .custom-select-button {
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CUSTOM EVENTS — COMPACT SINGLE-ROW HEADER
+   ========================================================= */
+
+.events-custom-card-content {
+    gap: 10px;
+    padding: 16px 18px;
+    min-width: 0;
+}
+
+.events-custom-card-top-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.events-custom-card-title {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0 4px 0 0;
+    color: var(--text-primary, inherit);
+    font-size: 1rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.events-custom-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.25));
+    border-radius: 7px;
+    background: rgba(128, 128, 150, 0.06);
+    color: var(--text-secondary, #999);
+    font-size: 0.78rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.events-custom-countdown {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: var(--text-primary, inherit);
+    font-size: 0.86rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.events-custom-card-description {
+    margin: 0;
+    color: var(--text-secondary, #999);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.events-custom-card-reminder {
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    flex: 0 1 auto;
+
+    color: var(--text-secondary, #999);
+    font-size: 0.82rem;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.events-custom-card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+/* Completed events remain visibly distinct. */
+.events-custom-card.is-completed .events-custom-countdown {
+    color: var(--text-secondary, #999);
+}
+
+/* =========================================================
+   CUSTOM EVENTS — RESPONSIVE HEADER
+   ========================================================= */
+
+@media (max-width: 640px) {
+    .events-custom-card-content {
+        padding: 14px;
+    }
+
+    .events-custom-card-top-row {
+        gap: 7px;
+    }
+
+    .events-custom-card-title {
+        flex-basis: 100%;
+        margin-right: 0;
+    }
+
+    .events-custom-countdown {
+        margin-left: auto;
+    }
+}
+
+
+/* =========================================================
+   CUSTOM EVENTS — COUNTDOWN PILL
+   ========================================================= */
+
+.events-custom-countdown {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 96px;
+    height: 32px;
+    margin-left: auto;
+    padding: 0 13px;
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.92);
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    white-space: nowrap;
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Approaching expiry: less than three days. */
+.events-custom-countdown.warning {
+    background: rgba(230, 155, 45, 0.30);
+    border-color: rgba(255, 190, 70, 0.65);
+    color: #ffe5ad;
+    box-shadow: 0 3px 12px rgba(230, 155, 45, 0.18);
+}
+
+/* Urgent: less than one day. */
+.events-custom-countdown.danger {
+    background: rgba(220, 55, 65, 0.34);
+    border-color: rgba(255, 105, 115, 0.68);
+    color: #ffe0e3;
+    box-shadow: 0 3px 12px rgba(220, 55, 65, 0.20);
+}
+
+.events-custom-card.is-completed .events-custom-countdown {
+    color: var(--text-secondary, #999);
+}
+
+@media (max-width: 640px) {
+    .events-custom-countdown {
+        padding: 0 10px;
+    }
+}
+
+/* =========================================================
+   CUSTOM EVENTS — IMAGE UPLOAD
+   ========================================================= */
+
+.events-custom-icon-upload {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.events-custom-icon-preview {
+    display: block;
+    width: 120px;
+    height: 120px;
+    flex: 0 0 120px;
+    object-fit: contain;
+
+    border: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.events-custom-icon-preview[hidden] {
+    display: none !important;
+}
+
+/* Upload controls */
+.events-custom-icon-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.events-custom-icon-button,
+.events-custom-icon-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--background);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+.events-custom-icon-button:hover,
+.events-custom-icon-remove:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+}
+
+.events-custom-field-hint {
+    margin: 7px 0 0;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — CARD TITLE AND ICON
+   ========================================================= */
+
+.events-custom-card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.events-custom-card-icon {
+    display: block;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    object-fit: contain;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.events-custom-card-title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — REMINDER INLINE WITH ACTIONS
+   ========================================================= */
+
+.events-custom-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =========================================================
+   CUSTOM EVENTS — DRAG AND DROP ORDERING
+   ========================================================= */
+
+.events-custom-card {
+    cursor: default;
+    transition:
+        opacity 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease;
+}
+
+.events-custom-card.is-dragging {
+    opacity: 0.4;
+}
+
+.events-custom-card:active {
+    cursor: default;
+}
+
+.events-custom-card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.events-custom-card-accent {
+    position: relative;
+}
+
+.events-custom-drag-handle {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    cursor: grab;
+    opacity: 0.4;
+    transform: translate(-50%, -50%);
+    transition: opacity 160ms ease;
+}
+
+.events-custom-drag-handle::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 5px;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+}
+
+.events-custom-drag-handle:hover,
+.events-custom-drag-handle:focus-visible {
+    opacity: 0.9;
+}
+
+.events-custom-drag-handle:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 2px;
+}
+
+.events-custom-drag-handle:disabled {
+    cursor: wait;
+    opacity: 0.2;
+}
+/* Custom Events in the account Overview. */
+.events-custom-overview .events-custom-account-group {
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.events-custom-overview .events-custom-account-group:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+
+.events-custom-overview .events-custom-account-heading {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 64px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.events-custom-overview summary::-webkit-details-marker { display: none; }
+.events-custom-overview summary::marker { content: ''; }
+.events-custom-overview summary:focus-visible,
+.events-custom-overview-manage:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -3px;
+}
+
+.events-custom-overview .events-custom-account-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.events-custom-overview .events-custom-account-count,
+.events-custom-overview .events-custom-overview-progress,
+.events-custom-overview .events-custom-overview-objective-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.events-custom-overview .events-custom-account-heading::after {
+    content: '+';
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 20px;
+    line-height: 1;
+}
+
+.events-custom-overview .events-custom-account-group[open] > summary::after {
+    content: '\2212';
+}
+
+.events-custom-overview .events-custom-list {
+    display: grid;
+    gap: 8px;
+    padding: 0 20px 16px;
+}
+
+.events-custom-overview .events-custom-overview-event {
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.events-custom-overview .events-custom-overview-event::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--custom-event-colour);
+    pointer-events: none;
+}
+
+.events-custom-overview .events-custom-overview-summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 76px;
+    padding: 16px 18px;
+    box-sizing: border-box;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.events-custom-overview-icon {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.events-custom-overview .events-custom-overview-name {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--text-primary);
+    margin-right: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.events-custom-overview-progress {
+    flex: 0 0 auto;
+}
+
+.events-custom-overview-summary-status {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.events-custom-overview-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 28px;
+    flex: 0 0 24px;
+    color: var(--text-secondary);
+    font-size: 20px;
+    line-height: 1;
+}
+
+.events-custom-overview-toggle::before { content: '+'; }
+.events-custom-overview-event[open] .events-custom-overview-toggle::before {
+    content: '\2212';
+}
+
+.events-custom-overview .events-custom-overview-summary .events-custom-countdown {
+    flex: 0 0 auto;
+    min-width: 90px;
+    width: auto;
+    height: 28px;
+    margin: 0;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.events-custom-overview .events-custom-overview-event.is-completed .events-custom-countdown {
+    color: var(--text-secondary, #999);
+}
+
+.events-limited-overview .events-custom-overview-event.is-completed .events-custom-countdown {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+.events-limited-overview .events-custom-countdown.upcoming {
+    background: rgba(44, 127, 211, 0.28);
+    border-color: rgba(92, 174, 255, 0.62);
+    color: #c9e7ff;
+    box-shadow: 0 3px 12px rgba(44, 127, 211, 0.16);
+}
+
+.events-limited-overview .event-limited-rewards {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.events-custom-overview .events-custom-overview-progress.event-completion-pill {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+.events-custom-overview .events-custom-overview-details {
+    display: grid;
+    gap: 12px;
+    overflow: hidden;
+    padding: 16px 18px 16px 70px;
+    border-top: 1px solid var(--border);
+}
+
+.events-custom-overview .events-custom-overview-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+}
+
+.events-custom-overview .events-custom-card-description {
+    margin: 0;
+}
+
+.events-custom-overview .events-custom-overview-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+}
+
+.events-custom-overview .events-custom-overview-objective {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 12px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.events-custom-overview-objective-name {
+    align-self: end;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    transform: translateY(2px);
+}
+.events-custom-overview-objective-value {
+    min-width: 64px;
+}
+
+.events-custom-overview .events-custom-overview-objective-track {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    width: 100%;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(128, 128, 150, 0.18);
+}
+
+.events-custom-overview-objective-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--custom-event-colour);
+    transition: width 300ms ease;
+}
+
+.events-custom-overview-objective-controls {
+    display: flex;
+    grid-column: 2;
+    grid-row: 2;
+    gap: 6px;
+}
+
+.events-custom-overview-objective-button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(128, 128, 150, 0.08);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.events-custom-overview-objective-button:hover:not(:disabled) {
+    border-color: var(--custom-event-colour);
+    background: rgba(128, 128, 150, 0.18);
+    transform: translateY(-1px);
+}
+
+.events-custom-overview-objective-button:active:not(:disabled) { transform: scale(0.94); }
+.events-custom-overview-objective-button:disabled { opacity: 0.35; cursor: not-allowed; }
+.events-custom-overview-objective-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .events-custom-overview-objective-fill,
+    .events-custom-overview-objective-button { transition: none; }
+}
+
+.events-custom-overview .events-custom-overview-manage {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 8px;
+    min-height: 34px;
+    padding: 7px 11px;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.events-custom-overview .events-custom-overview-manage::after { content: '\2192'; }
+.events-custom-overview .events-custom-overview-manage:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+.events-custom-overview-empty {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .events-custom-overview .events-custom-account-heading { gap: 10px; padding: 12px; }
+    .events-custom-overview .events-custom-list { padding: 0 12px 12px; }
+    .events-custom-overview .events-custom-overview-summary { gap: 7px; padding: 14px; }
+    .events-custom-overview .events-custom-overview-name { flex-basis: calc(100% - 56px); margin-right: 0; }
+    .events-custom-overview .events-custom-overview-summary-status { margin-left: auto; }
+    .events-custom-overview .events-custom-overview-details { padding: 16px 12px 12px; }
+    .events-custom-overview .events-custom-header { flex-wrap: wrap; }
+}

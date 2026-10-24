@@ -1,0 +1,175 @@
+{
+  "id": "",
+  "name": "",
+  "title": "",
+  "description": "",
+  "affiliation": "",
+  "constellation": "",
+  "birthday": "",
+  "rarity": 0,
+  "element": "",
+  "weapon": "",
+  "version": "",
+  "release": "",
+  "colour": "",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "",
+      "description": [
+        ""
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "",
+      "description": [
+        ""
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "",
+      "description": [
+        "",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "",
+      "description": [
+        ""
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "",
+      "description": [
+        "",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "",
+      "description": [
+        ""
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          ""
+        ],
+        "charged": [
+          ""
+        ],
+        "plunge": [
+          ""
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        ""
+      ]
+    },
+    "elemental_burst": {
+      "name": "",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        ""
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "",
+      "description": [
+        ""
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "",
+      "description": [
+        ""
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "",
+      "description": [
+        ""
+      ]
+    },
+    {
+      "unlock": "??Additional??",
+      "name": "",
+      "description": [
+        ""
+      ]
+    }
+  ],
+  "materials": {
+    "ascension": {
+      "gem": {
+        "id": "",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "",
+        "amount": 168
+      },
+      "common": {
+        "id": "",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "",
+        "material": "",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

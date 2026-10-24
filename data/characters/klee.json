@@ -1,0 +1,189 @@
+{
+  "id": "klee",
+  "name": "Klee",
+  "title": "Fleeing Sunlight",
+  "description": "An explosives expert and a regular at the Knights of Favonius's confinement room. Also known as Fleeing Sunlight.",
+  "affiliation": "Knights of Favonius",
+  "constellation": "Trifolium",
+  "birthday": "27/7",
+  "rarity": 5,
+  "element": "pyro",
+  "weapon": "catalyst",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#ef7a35",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Chained Reactions",
+      "description": [
+        "Attacks and Skills have a certain chance to summon sparks that bombard opponents, dealing DMG equal to 120% of **Sparks 'n' Splash**'s DMG.",
+        "For 12s after triggering the above effect, Klee's ATK is increased by 60%."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Explosive Frags",
+      "description": [
+        "When Klee's Elemental Skill hits an opponent, that opponent's DEF will be decreased by 23% for 10s."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Exquisite Compound",
+      "description": [
+        "Increases the Level of **Jumpy Dumpty** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Sparkly Explosion",
+      "description": [
+        "An explosion will be triggered if Klee leaves the field while **Sparks 'n' Splash** is active or when Sparks 'n' Splash ends, dealing 555% of ATK as **AoE Pyro DMG**. If Klee is on-field when the explosion occurs, its DMG will be increased by 100%."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "Nova Burst",
+      "description": [
+        "Increases the Level of **Sparks 'n' Splash** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Blazing Delight",
+      "description": [
+        "While under the effects of **Sparks 'n' Splash**, Klee will regenerate 3 Energy for all members of the party (excluding Klee) every 3s.",
+        "For 25s after **Sparks 'n' Splash** is used, all other party members will gain a 10% **Pyro DMG Bonus**, and Klee will gain a 50% **Pyro DMG Bonus**.",
+        "**Hexerei: Secret Rite**",
+        "- When Klee uses an **Explosive Spark**, there is a 50% chance it will not be consumed. Additionally, while **Sparks 'n' Splash** is active, Klee's Normal Attacks have a 40% chance on the first and second hits to consume an Explosive Spark, dealing an additional attack equivalent to Boom-Boom Strike to her opponent(s)."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Kaboom!",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Throws things that go boom when they hit things! Performs up to 3 explosive attacks, dealing **AoE Pyro DMG**."
+        ],
+        "charged": [
+          "Consumes a certain amount of Stamina and deals **AoE Pyro DMG** to opponents after a short casting time."
+        ],
+        "plunge": [
+          "Gathering the power of Pyro, Klee plunges towards the ground from mid-air, damaging all opponents in her path. Deals **AoE Pyro DMG** upon impact with the ground."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Jumpy Dumpty",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Jumpy Dumpty is tons of boom-bang-fun!",
+        "When thrown, Jumpy Dumpty bounces thrice, igniting and dealing **AoE Pyro DMG** with every bounce.",
+        "On the third bounce, the bomb splits into many mines.",
+        "The mines will explode upon contact with opponents, or after a short period of time, dealing **AoE Pyro DMG**.",
+        "Starts with 2 charges."
+      ]
+    },
+    "elemental_burst": {
+      "name": "Sparks 'n' Splash",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Klee's Blazing Delight! For the duration of this ability, continuously summons Sparks 'n' Splash to attack nearby opponents, dealing **AoE Pyro DMG**."
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Pounding Surprise",
+      "description": [
+        "When Klee's Elemental Skill **Jumpy Dumpty** and Normal Attacks deal DMG, there is a 50% chance to grant her an Explosive Spark. Using her Elemental Skill **Jumpy Dumpty** or Elemental Burst **Sparks 'n' Splash** also grants 1 Explosive Spark. Klee can hold up to 3 Explosive Sparks.",
+        "While holding an Explosive Spark, Klee's Charged Attack will consume 1 Spark to perform a special stamina-free Charged Attack, Boom-Boom Strike, dealing 50% increased DMG.",
+        "**Hexerei: Secret Rite**",
+        "During the duration of Klee's Elemental Burst **Sparks 'n' Splash**, her Normal Attack sequence does not reset. If Klee holds an Explosive Spark while performing Normal Attacks, the third attack in the sequence will consume 1 Spark to unleash an additional attack equivalent to Boom-Boom Strike."
+
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Sparkling Burst",
+      "description": [
+        "When Klee's Charged Attack results in a CRIT Hit, all party members gain 2 Elemental Energy."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "All Of My Treasures!",
+      "description": [
+        "Displays the location of nearby **resources unique to Mondstadt** on the mini-map."
+      ]
+    },
+    {
+      "unlock": "Witch's Homework",
+      "name": "Witch's Eve Rite: Sparkborne Magic",
+      "description": [
+        "After completing **Witch's Homework: Of Leaves That Spark**, Klee will become a **Hexerei** character. When the party includes at least 2 Hexerei characters, you will gain the **Hexerei: Secret Rite** effect, which enhances Hexerei characters.",
+        "**Hexerei: Secret Rite**",
+        "When Klee deals DMG with Normal Attacks, Elemental Skills, or Elemental Bursts, she gains 1 Boom Badge that lasts 20s. Each type of attack can grant at most 1 Boom Badge this way, and each badge has its own independent timer. While Klee has 1/2/3 Boom Badges, her special Charged Attack Boom-Boom Strike deals 115%/130%/150% of its original DMG."
+      ]
+    }
+  ],
+  "materials": {
+    "ascension": {
+      "gem": {
+        "id": "agnidus_agate",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "everflame_seed",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "philanemo_mushroom",
+        "amount": 168
+      },
+      "common": {
+        "id": "scroll",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "freedom",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "scroll",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "andrius",
+        "material": "ring_of_boreas",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

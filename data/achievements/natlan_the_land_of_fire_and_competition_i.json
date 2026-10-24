@@ -1,0 +1,332 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80328
+            ],
+            "name": "Continental Explorer: Pyre Plains (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 304,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Pyre Plains (I)",
+                "ps5title": "Natlan: Continental Explorer (I)",
+                "description": "Light up the maps of the following areas in Natlan: Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80329
+            ],
+            "name": "Scaling the Scorching Sacred Mountain (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 305,
+            "stages": 1,
+            "stage1": {
+                "title": "Scaling the Scorching Sacred Mountain (I)",
+                "ps5title": "Scaling the Scorching Sacred Mountain (I)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Natlan: Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 46,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80330
+            ],
+            "name": "Sanctuary Pilgrim: Pyre Plains (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 306,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Pyre Plains (I)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Natlan: Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80331
+            ],
+            "name": "Radiant As Fire",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 307,
+            "stages": 1,
+            "stage1": {
+                "title": "Radiant As Fire",
+                "ps5title": "Natlan: Radiant As Fire",
+                "description": "Upgrade the Statues of The Seven in Natlan to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80346
+            ],
+            "name": "Offerings to the Night: Pyre Plains (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 308,
+            "stages": 1,
+            "stage1": {
+                "title": "Offerings to the Night: Pyre Plains (I)",
+                "description": "Unlock all the seals on the secret spaces of the tribes in the following areas in Natlan: Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80332
+            ],
+            "name": "The Fiery Hue of the Scorching Sun",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 309,
+            "stages": 1,
+            "stage1": {
+                "title": "The Fiery Hue of the Scorching Sun",
+                "ps5title": "Natlan: The Fiery Hue of the Scorching Sun",
+                "description": "Raise the Tablet of Tona in the Basin of Unnumbered Flames to the maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.5"
+        },
+        {
+            "id": [
+                80333,
+                80334,
+                80335
+            ],
+            "name": "Monetoo Will Guide You Home (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 310,
+            "stages": 3,
+            "stage1": {
+                "title": "Monetoo Will Guide You Home (I)",
+                "description": "Follow 8 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Monetoo Will Guide You Home (I)",
+                "description": "Follow 16 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Monetoo Will Guide You Home (I)",
+                "description": "Follow 32 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 32,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80336,
+                80337,
+                80338
+            ],
+            "name": "Ignited Treasure Hunter (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 313,
+            "stages": 3,
+            "stage1": {
+                "title": "Ignited Treasure Hunter (I)",
+                "ps5title": "Ignited Treasure Hunter (I)",
+                "description": "Open 80 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ignited Treasure Hunter (I)",
+                "ps5title": "Ignited Treasure Hunter (II)",
+                "description": "Open 160 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ignited Treasure Hunter (I)",
+                "ps5title": "Ignited Treasure Hunter (III)",
+                "description": "Open 320 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 320,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80339,
+                80347,
+                80348
+            ],
+            "name": "Ignited Adventurer (I)",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 316,
+            "stages": 3,
+            "stage1": {
+                "title": "Ignited Adventurer (I)",
+                "description": "Complete 3 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ignited Adventurer (I)",
+                "description": "Complete 6 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ignited Adventurer (I)",
+                "description": "Complete 12 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80342
+            ],
+            "name": "Ancestral Reminiscence",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 319,
+            "stages": 1,
+            "stage1": {
+                "title": "Ancestral Reminiscence",
+                "ps5title": "Journey: \"The Feat of Ancestral Reminiscence\"",
+                "description": "Helped Titu liberate the souls of the tribe's ancestors.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80343
+            ],
+            "name": "Not All Treasure Is Silver and Gold",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 320,
+            "stages": 1,
+            "stage1": {
+                "title": "Not All Treasure Is Silver and Gold",
+                "ps5title": "Journey: \"The Ancient Phlogiston Code\"",
+                "description": "Failed to find the \"panacea.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        },
+        {
+            "id": [
+                80345
+            ],
+            "name": "Gold of the Sun, Together with his Blood",
+            "achievementGroupId": 51,
+            "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
+            "sortOrder": 322,
+            "stages": 1,
+            "stage1": {
+                "title": "Gold of the Sun, Together with his Blood",
+                "ps5title": "Journey: \"The Relic Left by the Sage\"",
+                "description": "Obtain the token needed for the pilgrimage to the volcano in the ruins of the Sage of the Stolen Flame.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.0"
+        }
+    ]
+}

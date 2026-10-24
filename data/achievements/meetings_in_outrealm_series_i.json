@@ -1,0 +1,238 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86001,
+                86002,
+                86003
+            ],
+            "name": "You Came, You Saw, We Co-Oped",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9001,
+            "stages": 3,
+            "stage1": {
+                "title": "You Came, You Saw, We Co-Oped",
+                "description": "Complete Domains together with other players 5 times.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "You Came, You Saw, We Co-Oped",
+                "description": "Complete Domains together with other players 20 times.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "You Came, You Saw, We Co-Oped",
+                "description": "Complete Domains together with other players 100 times.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86004,
+                86005,
+                86006
+            ],
+            "name": "I Came, I Saw, I Conquered",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9004,
+            "stages": 3,
+            "stage1": {
+                "title": "I Came, I Saw, I Conquered",
+                "description": "Collect 5 regional specialties in another player's world.",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "I Came, I Saw, I Conquered",
+                "description": "Collect 20 regional specialties in another player's world.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "I Came, I Saw, I Conquered",
+                "description": "Collect 50 regional specialties in another player's world.",
+                "progress": 50,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86007
+            ],
+            "name": "That's One Big Crystalfly",
+            "dupealias": "That's One Big Crystalfly 1",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9007,
+            "stages": 1,
+            "stage1": {
+                "title": "That's One Big Crystalfly",
+                "description": "Defeat an Anemo Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86008
+            ],
+            "name": "...And Still Smiling!",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9008,
+            "stages": 1,
+            "stage1": {
+                "title": "...And Still Smiling!",
+                "description": "Defeat an Electro Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86009
+            ],
+            "name": "You Have to Hit the Pillars",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9009,
+            "stages": 1,
+            "stage1": {
+                "title": "You Have to Hit the Pillars",
+                "description": "Defeat a Geo Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86010
+            ],
+            "name": "Just Me and You, the Sky So Blue, and Almost Getting Killed by a Cryo Regisvine",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9010,
+            "stages": 1,
+            "stage1": {
+                "title": "Just Me and You, the Sky So Blue, and Almost Getting Killed by a Cryo Regisvine",
+                "description": "Defeat a Cryo Regisvine in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86011
+            ],
+            "name": "This Is Fine",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9011,
+            "stages": 1,
+            "stage1": {
+                "title": "This Is Fine",
+                "description": "Defeat a Pyro Regisvine in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86012
+            ],
+            "name": "A Fish Called Rhodeia",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9012,
+            "stages": 1,
+            "stage1": {
+                "title": "A Fish Called Rhodeia",
+                "description": "Defeat an Oceanid in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                86013
+            ],
+            "name": "Wolf Pact",
+            "achievementGroupId": 13,
+            "achievementGroupName": "Meetings in Outrealm: Series I",
+            "sortOrder": 9013,
+            "stages": 1,
+            "stage1": {
+                "title": "Wolf Pact",
+                "description": "Defeat the king of Wolvendom in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

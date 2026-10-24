@@ -1,0 +1,71 @@
+{
+    "id": "sharpshooters_oath",
+    "name": "Sharpshooter's Oath",
+    "emoji": "Sharpshooters_Oath",
+    "icon": "Sharpshooters_Oath",
+    "description": "This superior bow once belonged to a master archer. However, it gives off a strong scent, thus making it unsuitable for hunting.",
+    "weapon_type": "bow",
+    "max_level": 90,
+    "rarity": 3,
+    "colour": "#4A90E2",
+    "main_stat": {
+      "type": "base_atk",
+      "value": 401
+    },
+    "secondary_stat": {
+      "type": "crit_dmg",
+      "value": 46.9
+    },
+    "passive": {
+      "name": "Precise",
+      "description": {
+        "r1": "Increases DMG against weak spots by **24%**.",
+        "r2": "Increases DMG against weak spots by **30%**.",
+        "r3": "Increases DMG against weak spots by **36%**.",
+        "r4": "Increases DMG against weak spots by **42%**.",
+        "r5": "Increases DMG against weak spots by **48%**."
+      }
+    },
+    "materials": {
+      "ascension": {
+        "weapon_material": {
+          "id": "boreal_wolfs",
+          "tier2": 2,
+          "tier3": 6,
+          "tier4": 6,
+          "tier5": 3
+        },
+        "common": {
+          "id": "slime",
+          "tier1": 6,
+          "tier2": 10,
+          "tier3": 12
+        },
+        "elite": {
+          "id": "ley_line",
+          "tier2": 10,
+          "tier3": 12,
+          "tier4": 18
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 105000
+        }
+      },
+      "level": {
+        "ores": {
+          "id": "enhancement_ore",
+          "tier1": 6,
+          "tier2": 18,
+          "tier3": 395
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 398880
+        }
+      }
+    },
+    "obtain": [
+      "Any Wish Banner"
+    ]
+}

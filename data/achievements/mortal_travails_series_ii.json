@@ -1,0 +1,110 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80069
+            ],
+            "name": "Unlimited Power!",
+            "achievementGroupId": 22,
+            "achievementGroupName": "Mortal Travails: Series II",
+            "sortOrder": 69,
+            "stages": 1,
+            "stage1": {
+                "title": "Unlimited Power!",
+                "ps5title": "Electro: Unlimited Power!",
+                "description": "Obtain the power of Electro.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80070
+            ],
+            "name": "Land of Dandelions",
+            "achievementGroupId": 22,
+            "achievementGroupName": "Mortal Travails: Series II",
+            "sortOrder": 70,
+            "stages": 1,
+            "stage1": {
+                "title": "Land of Dandelions",
+                "description": "Collect the entire \"The Fox in the Dandelion Sea\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80071
+            ],
+            "name": "True Friendship Takes Sacrifice",
+            "achievementGroupId": 22,
+            "achievementGroupName": "Mortal Travails: Series II",
+            "sortOrder": 71,
+            "stages": 1,
+            "stage1": {
+                "title": "True Friendship Takes Sacrifice",
+                "description": "Collect the entire \"The Boar Princess\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80072
+            ],
+            "name": "Eternal Youth",
+            "achievementGroupId": 22,
+            "achievementGroupName": "Mortal Travails: Series II",
+            "sortOrder": 72,
+            "stages": 1,
+            "stage1": {
+                "title": "Eternal Youth",
+                "description": "Collect the entire \"Vera's Melancholy\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80073
+            ],
+            "name": "Hilichurlian Studies Expert",
+            "achievementGroupId": 22,
+            "achievementGroupName": "Mortal Travails: Series II",
+            "sortOrder": 73,
+            "stages": 1,
+            "stage1": {
+                "title": "Hilichurlian Studies Expert",
+                "description": "Collect the entire \"Hilichurl Cultural Customs\" series.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        }
+    ]
+}

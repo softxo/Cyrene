@@ -1,0 +1,194 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82091
+            ],
+            "name": "...Geovishap, Solarvishap, Lunarvishap...",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2091,
+            "stages": 1,
+            "stage1": {
+                "title": "...Geovishap, Solarvishap, Lunarvishap...",
+                "description": "Defeat the Geovishap in all of its elemental forms.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82092
+            ],
+            "name": "Geo Elemental Reaction?",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2092,
+            "stages": 1,
+            "stage1": {
+                "title": "Geo Elemental Reaction?",
+                "description": "Defeat the Primo Geovishap in all of its elemental forms.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82093
+            ],
+            "name": "Puppet Show-Off",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2093,
+            "stages": 1,
+            "stage1": {
+                "title": "Puppet Show-Off",
+                "description": "Defeat the Maguu Kenki while he is taunting you.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82094
+            ],
+            "name": "Totaled Totem",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2094,
+            "stages": 1,
+            "stage1": {
+                "title": "Totaled Totem",
+                "description": "Defeat an Electro Samachurl with no lightning totem on the field.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82095
+            ],
+            "name": "Did My Hand Fall From My Wrist?",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2095,
+            "stages": 1,
+            "stage1": {
+                "title": "Did My Hand Fall From My Wrist?",
+                "description": "Defeat a Thunderhelm Lawachurl while in an enhanced state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82096
+            ],
+            "name": "I'll Skip the Spa, Thanks",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2096,
+            "stages": 1,
+            "stage1": {
+                "title": "I'll Skip the Spa, Thanks",
+                "description": "Defeat a Mirror Maiden without being trapped by its Water Prison.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82097
+            ],
+            "name": "It's Quiet... Too Quiet...",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2097,
+            "stages": 1,
+            "stage1": {
+                "title": "It's Quiet... Too Quiet...",
+                "description": "Defeat the Pyro Hypostasis after it enters its extinguished state only once",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82098
+            ],
+            "name": "The Battle of Narukami Island",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2098,
+            "stages": 1,
+            "stage1": {
+                "title": "The Battle of Narukami Island",
+                "description": "Defeat the Perpetual Mechanical Array in its weakened state.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                82109
+            ],
+            "name": "The Finishing Touch",
+            "dupealias": "The Finishing Touch 1",
+            "achievementGroupId": 20,
+            "achievementGroupName": "Challenger: Series IV",
+            "sortOrder": 2099,
+            "stages": 1,
+            "stage1": {
+                "title": "The Finishing Touch",
+                "description": "Defeat Azhdaha without ever having gained a shield.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "5.2"
+        }
+    ]
+}

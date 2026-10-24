@@ -1,0 +1,351 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80074
+            ],
+            "name": "Continental Explorer: Land of Surging Thunder (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 74,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Land of Surging Thunder (I)",
+                "ps5title": "Continental Explorer: Land of Surging Thunder",
+                "description": "Light up the Narukami Island, Kannazuka, and Yashiori Island areas of the Inazuma map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80075
+            ],
+            "name": "Thunderbolting Across the Land (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 75,
+            "stages": 1,
+            "stage1": {
+                "title": "Thunderbolting Across the Land (I)",
+                "ps5title": "Thunderbolting Across the Land",
+                "description": "Unlock all Teleport Waypoints in the Narukami Island, Kannazuka, and Yashiori Island areas of Inazuma.",
+                "progress": 26,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80076
+            ],
+            "name": "Sanctuary Pilgrim: Inazuma Tenryou (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 77,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Inazuma Tenryou (I)",
+                "description": "Unlock all Shrines of Depths in the Narukami Island, Kannazuka, and Yashiori Island areas of Inazuma.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80077
+            ],
+            "name": "Eternal Thunder",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 78,
+            "stages": 1,
+            "stage1": {
+                "title": "Eternal Thunder",
+                "ps5title": "Inazuma: Eternal Thunder",
+                "description": "Upgrade the Statues of The Seven in Inazuma to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80078
+            ],
+            "name": "Divine Roots",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 79,
+            "stages": 1,
+            "stage1": {
+                "title": "Divine Roots",
+                "ps5title": "Inazuma: Divine Roots",
+                "description": "Reach the Max Level of Sacred Sakura's Favor.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80079,
+                80080,
+                80081
+            ],
+            "name": "Naku Weed Whacker (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 80,
+            "stages": 3,
+            "stage1": {
+                "title": "Naku Weed Whacker (I)",
+                "description": "Follow 10 Electro Seelie on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Naku Weed Whacker (I)",
+                "description": "Follow 20 Electro Seelie on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Naku Weed Whacker (I)",
+                "description": "Follow 40 Electro Seelie on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80082,
+                80083,
+                80084
+            ],
+            "name": "Lights Will Guide You Home (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 83,
+            "stages": 3,
+            "stage1": {
+                "title": "Lights Will Guide You Home (I)",
+                "description": "Follow 4 Seelie to their Seelie Courts on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lights Will Guide You Home (I)",
+                "description": "Follow 8 Seelie to their Seelie Courts on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lights Will Guide You Home (I)",
+                "description": "Follow 16 Seelie to their Seelie Courts on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80085,
+                80086,
+                80087
+            ],
+            "name": "Lightning-Riding Treasure Hunter (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 86,
+            "stages": 3,
+            "stage1": {
+                "title": "Lightning-Riding Treasure Hunter (I)",
+                "ps5title": "Lightning-Riding Treasure Hunter (I)",
+                "description": "Open 100 Chests on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lightning-Riding Treasure Hunter (I)",
+                "ps5title": "Lightning-Riding Treasure Hunter (II)",
+                "description": "Open 200 Chests on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lightning-Riding Treasure Hunter (I)",
+                "ps5title": "Lightning-Riding Treasure Hunter (III)",
+                "description": "Open 300 Chests on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 300,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80088
+            ],
+            "name": "Spring Cleaning",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 89,
+            "stages": 1,
+            "stage1": {
+                "title": "Spring Cleaning",
+                "description": "Complete the Sacred Sakura Cleansing Ritual.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80089
+            ],
+            "name": "Tatara Tales",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 90,
+            "stages": 1,
+            "stage1": {
+                "title": "Tatara Tales",
+                "description": "Resolve the crisis at the Mikage Furnace.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80090
+            ],
+            "name": "Echo of Fury",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 91,
+            "stages": 1,
+            "stage1": {
+                "title": "Echo of Fury",
+                "description": "Complete \"Orobashi's Legacy.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "2.0"
+        },
+        {
+            "id": [
+                80093,
+                80094,
+                80095
+            ],
+            "name": "Lightning-Riding Adventurer (I)",
+            "achievementGroupId": 24,
+            "achievementGroupName": "Inazuma: The Islands of Thunder and Eternity - Series I",
+            "sortOrder": 93,
+            "stages": 3,
+            "stage1": {
+                "title": "Lightning-Riding Adventurer (I)",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lightning-Riding Adventurer (I)",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lightning-Riding Adventurer (I)",
+                "description": "Complete 24 Open World mechanism-activated Time Trial Challenges on Narukami Island, Kannazuka, and Yashiori Island in Inazuma.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "2.0"
+        }
+    ]
+}

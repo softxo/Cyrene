@@ -1,0 +1,697 @@
+/* =========================================================
+   EVENTS — ACTIVITY LIST, COMPLETION STATES, DAILY COMMISSIONS, ENCOUNTER POINTS AND TROUNCE
+   ========================================================= */
+
+/* =========================================================
+   ACTIVITY LIST
+   ========================================================= */
+
+.events-list {
+    margin-top: 32px;
+}
+
+.events-list-header {
+    margin-bottom: 16px;
+}
+
+.events-list-header h2 {
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.events-limited-list {
+    display: grid;
+    gap: 10px;
+}
+
+.event-limited-item {
+    min-height: 84px;
+    padding: 10px 16px;
+}
+
+.event-limited-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    min-width: 0;
+}
+
+.event-limited-icon {
+    width: 64px;
+    height: 64px;
+    margin-right: 16px;
+    overflow: hidden;
+    border: 1px solid var(--accent-border);
+    border-radius: 50%;
+    background: var(--accent-soft);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.event-list-icon.event-limited-icon img {
+    object-fit: cover;
+}
+
+.event-limited-title {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.event-limited-name-line {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+.event-limited-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.event-limited-tcg {
+    border: 1px solid rgba(206, 171, 255, 0.45);
+    background: rgba(139, 91, 201, 0.22);
+    color: #ddc2ff;
+}
+
+.event-limited-completed {
+    display: inline-flex;
+    align-items: center;
+}
+
+.event-limited-item.upcoming .event-list-left,
+.event-limited-item.upcoming .event-list-status,
+.event-limited-item.upcoming .event-limited-rewards {
+    filter: grayscale(0.72);
+    opacity: 0.62;
+}
+
+.event-limited-item.upcoming {
+    border-color: color-mix(in srgb, var(--border) 72%, #7d8490 28%);
+    background: color-mix(in srgb, var(--surface) 84%, #7d8490 16%);
+}
+
+.event-limited-item.upcoming:hover .event-list-left,
+.event-limited-item.upcoming:hover .event-list-status,
+.event-limited-item.upcoming:hover .event-limited-rewards {
+    opacity: 0.78;
+}
+
+.event-limited-rewards {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex: 0 1 auto;
+    gap: 6px;
+    max-width: 42%;
+    min-width: 0;
+    padding: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.event-limited-rewards::-webkit-scrollbar {
+    display: none;
+}
+
+.event-limited-reward {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 38px;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background:
+        linear-gradient(145deg, var(--surface-hover), var(--background));
+    color: var(--text-muted);
+    font-size: 11px;
+    box-sizing: border-box;
+}
+
+.event-limited-reward img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.event-limited-reward-amount {
+    position: absolute;
+    right: -3px;
+    bottom: -4px;
+    min-width: 17px;
+    padding: 2px 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--background);
+    color: var(--text);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.24);
+}
+
+.event-list-right .event-time-left.upcoming {
+    border-color: rgba(92, 174, 255, 0.62);
+    background: rgba(44, 127, 211, 0.28);
+    color: #c9e7ff;
+    box-shadow: 0 3px 12px rgba(44, 127, 211, 0.16);
+}
+
+.event-list-item {
+    min-height: 60px;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--surface);
+
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.06);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.event-list-item:hover {
+    background: var(--surface-hover);
+
+    border-color: var(--accent);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 22px rgba(0, 0, 0, 0.10);
+}
+
+.event-list-item.completed .event-list-status {
+    color: #5de797;
+}
+
+.event-list-left {
+    display: flex;
+    align-items: center;
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+}
+
+.event-list-check {
+    margin-right: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+}
+
+
+/* ---------------------------------------------------------
+   Activity Checkmark
+   --------------------------------------------------------- */
+
+.event-checkmark {
+    position: relative;
+
+    width: 24px;
+    height: 24px;
+
+    flex: 0 0 24px;
+
+    margin-left: 4px;
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: var(--text-muted);
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12);
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.event-checkmark:not(.event-checkmark-empty) {
+    border-color: var(--accent);
+
+    background: var(--accent);
+
+    color: var(--background);
+}
+
+.event-checkmark:not(.event-checkmark-empty)::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: currentColor;
+
+    -webkit-mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4 4L19 7' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 18px 18px no-repeat;
+
+    mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4 4L19 7' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 18px 18px no-repeat;
+}
+
+.event-checkmark:hover {
+    border-color: var(--accent);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--accent) 10%,
+            rgba(255, 255, 255, 0.06)
+        );
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.event-checkmark:not(.event-checkmark-empty):hover {
+    border-color: var(--accent);
+
+    background: var(--accent);
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.20);
+}
+
+.event-checkmark:active {
+    transform: scale(0.95);
+}
+
+.event-checkmark:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+
+/* ---------------------------------------------------------
+   Activity Icon
+   --------------------------------------------------------- */
+
+.event-list-icon {
+    width: 40px;
+    height: 40px;
+
+    margin-right: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.event-list-icon img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+/* ---------------------------------------------------------
+   Activity Name
+   --------------------------------------------------------- */
+
+.event-list-name {
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    color: var(--text-primary);
+
+    font-size: 18px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------------------------------------------------------
+   Activity Right Side
+   --------------------------------------------------------- */
+
+.event-list-right {
+    margin-left: 12px;
+
+    display: grid;
+
+    grid-template-columns:
+        max-content max-content;
+
+    align-items: center;
+
+    column-gap: 12px;
+
+    flex: 0 0 auto;
+
+    width: max-content;
+
+    min-width: 0;
+
+    white-space: nowrap;
+}
+
+.event-list-right .event-list-status {
+    position: static;
+
+    grid-column: 1;
+    grid-row: 1;
+
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+.event-limited-item .event-list-right .event-list-status {
+    width: 112px;
+    min-width: 112px;
+    max-width: 112px;
+}
+
+.event-daily-item .event-list-status.claimed,
+.event-daily-item .event-list-status.not-claimed {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.event-list-right .event-time-left {
+    position: static;
+
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 96px;
+    min-width: 96px;
+    max-width: 96px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+.event-list-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    min-width: 64px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.event-list-status:hover {
+    background: rgba(0, 0, 0, 0.38);
+
+    border-color: rgba(255, 255, 255, 0.16);
+
+    color: rgba(255, 255, 255, 0.90);
+}
+
+.event-list-status-divider {
+    margin: 0 2px;
+    opacity: 0.45;
+}
+
+.event-list-status-with-claim {
+    white-space: nowrap;
+}
+
+.event-list-status-with-claim .event-list-status-claim {
+    white-space: nowrap;
+}
+
+/* =========================================
+   DAILY COMMISSION REWARD STATES
+   ========================================= */
+
+.event-list-status-with-claim.unclaimed,
+.event-list-status-with-claim.handbook-claimed,
+.event-list-status-with-claim.claimed {
+    width: 135px !important;
+    min-width: 135px !important;
+    max-width: 135px !important;
+
+    box-sizing: border-box;
+}
+
+/* 4/4 — nothing claimed */
+.event-list-status-with-claim.unclaimed {
+    color: #ef5350;
+    border-color: rgba(239, 83, 80, 0.30);
+    background: rgba(239, 83, 80, 0.08);
+}
+
+/* 4/4 — Handbook claimed only */
+.event-list-status-with-claim.handbook-claimed {
+    color: #f2c94c;
+    border-color: rgba(242, 201, 76, 0.30);
+    background: rgba(242, 201, 76, 0.08);
+}
+
+/* 4/4 — Katheryne reward claimed */
+.event-list-status-with-claim.claimed {
+    color: #66bb6a;
+    border-color: rgba(102, 187, 106, 0.30);
+    background: rgba(102, 187, 106, 0.08);
+}
+
+
+/* =========================================================
+   DAILY COMMISSION STATUS
+   ========================================================= */
+
+.event-list-status.claimed,
+.event-list-status.not-claimed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    flex: 0 0 100px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.event-list-status.claimed {
+    background: rgba(93, 231, 151, 0.16);
+
+    border-color: rgba(93, 231, 151, 0.32);
+
+    color: #72eea2;
+}
+
+.event-list-status.event-completion-pill {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+.event-list-status.not-claimed {
+    background: rgba(224, 82, 82, 0.16);
+
+    border-color: rgba(224, 82, 82, 0.32);
+
+    color: #f07171;
+}
+
+.event-limited-item.completed,
+.event-daily-item.completed,
+.event-trounce-item.completed {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+
+    border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+
+    box-shadow:
+        0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+
+/* ---------------------------------------------------------
+   Encounter Points
+   --------------------------------------------------------- */
+
+.event-encounter-points {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 82px;
+    height: 32px;
+
+    padding: 4px 10px;
+
+    gap: 0;
+
+    margin-left: 10px;
+
+    border: 1px solid rgba(157, 130, 230, 0.28);
+    border-radius: 999px;
+
+    background: rgba(117, 90, 190, 0.16);
+
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.event-encounter-points:hover {
+    background: rgba(117, 90, 190, 0.22);
+
+    border-color: rgba(157, 130, 230, 0.42);
+
+    box-shadow:
+        0 3px 10px rgba(117, 90, 190, 0.12);
+}
+
+.event-encounter-points-icon {
+    width: 25px;
+    height: 25px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+    transform: translateX(-3px);
+}
+
+.event-encounter-points-value {
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   TROUNCE DOMAINS
+   ========================================================= */
+
+.event-trounce-item {
+    margin-top: 10px;
+}

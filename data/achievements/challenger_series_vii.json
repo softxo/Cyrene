@@ -1,0 +1,172 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82161
+            ],
+            "name": "Refusal of Thorns",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2161,
+            "stages": 1,
+            "stage1": {
+                "title": "Refusal of Thorns",
+                "description": "Use Pyro to burn all the thorns created by the Dendro Hypostasis during its Ring of Thorns attack.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82162
+            ],
+            "name": "Back for More",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2162,
+            "stages": 1,
+            "stage1": {
+                "title": "Back for More",
+                "description": "Use the power of the Phagocytic Energy Blocks to immobilize the following enemies: Consecrated Red Vulture, Consecrated Scorpion, Consecrated Flying Serpent, Consecrated Horned Crocodile, and Consecrated Fanged Beast.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82163
+            ],
+            "name": "Like Hopscotch?",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2163,
+            "stages": 1,
+            "stage1": {
+                "title": "Like Hopscotch?",
+                "description": "Activate all Elemental Matrices in a fight against Shouki no Kami, the Prodigal.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82164
+            ],
+            "name": "...It's Payback Time",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2164,
+            "stages": 1,
+            "stage1": {
+                "title": "...It's Payback Time",
+                "description": "Destroy Shouki no Kami's Ward while he is delivering a powerful barrage of attacks.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82165
+            ],
+            "name": "Now That's What You Call the Four Winds!",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2165,
+            "stages": 1,
+            "stage1": {
+                "title": "Now That's What You Call the Four Winds!",
+                "description": "Use a Cryo, Pyro, Electro, and Hydro attack each to trigger a Swirl reaction with the Windbite Bullets in a fight against the Setekh Wenut.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82166
+            ],
+            "name": "Despite the Barrier Between Us...",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2166,
+            "stages": 1,
+            "stage1": {
+                "title": "Despite the Barrier Between Us...",
+                "description": "Defeat the Iniquitous Baptist without destroying its Elemental Ward.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82167
+            ],
+            "name": "Proof by Exhaustion",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2167,
+            "stages": 1,
+            "stage1": {
+                "title": "Proof by Exhaustion",
+                "description": "Defeat Iniquitous Baptists of all possible elemental combinations.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                82169
+            ],
+            "name": "Like the Sun's Passage",
+            "achievementGroupId": 39,
+            "achievementGroupName": "Challenger: Series VII",
+            "sortOrder": 2169,
+            "stages": 1,
+            "stage1": {
+                "title": "Like the Sun's Passage",
+                "description": "Defeat the Guardian of Apep's Oasis without any character being attacked by aftershocks of the apocalypse.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.6"
+        }
+    ]
+}

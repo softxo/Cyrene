@@ -1,0 +1,28 @@
+{
+  "adventurer": {
+    "name": "Adventurer",
+    "emoji": "Adventurer",
+    "icon": "Adventurer",
+    "type": "artifact_set",
+    "bonus_2pc": "Max HP increased by 1,000.",
+    "bonus_4pc": "Opening a chest regenerates 30% Max HP over 5s."
+  },
+
+  "lucky_dog": {
+    "name": "Lucky Dog",
+    "emoji": "Lucky_Dog",
+    "icon": "Lucky_Dog",
+    "type": "artifact_set",
+    "bonus_2pc": "DEF increased by 100.",
+    "bonus_4pc": "Picking up Mora restores 300 HP."
+  },
+
+  "traveling_doctor": {
+    "name": "Traveling Doctor",
+    "emoji": "Traveling_Doctor",
+    "icon": "Traveling_Doctor",
+    "type": "artifact_set",
+    "bonus_2pc": "Increases incoming healing by 20%.",
+    "bonus_4pc": "Using Elemental Burst restores 20% HP."
+  }
+}

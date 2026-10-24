@@ -1,0 +1,267 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80160
+            ],
+            "name": "Continental Explorer: Sumeru Boscage",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 160,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Sumeru Boscage",
+                "ps5title": "Sumeru: Continental Explorer (I)",
+                "description": "Light up the maps of the following areas in Sumeru: Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80161
+            ],
+            "name": "Forest Roamer",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 161,
+            "stages": 1,
+            "stage1": {
+                "title": "Forest Roamer",
+                "ps5title": "Sumeru: Forest Roamer",
+                "description": "Unlock all Teleport Waypoints in the following areas in Sumeru: Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 47,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80162
+            ],
+            "name": "Sanctuary Pilgrim: Sumeru Boscage",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 162,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Sumeru Boscage",
+                "description": "Unlock all the Shrines of Depths in the following areas in Sumeru: Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80163
+            ],
+            "name": "Fluorescent Bloom",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 163,
+            "stages": 1,
+            "stage1": {
+                "title": "Fluorescent Bloom",
+                "ps5title": "Sumeru: Fluorescent Bloom",
+                "description": "Upgrade the Statues of The Seven in Sumeru to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80164
+            ],
+            "name": "Culmination of the Great Dream",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 164,
+            "stages": 1,
+            "stage1": {
+                "title": "Culmination of the Great Dream",
+                "ps5title": "Sumeru: Culmination of the Great Dream",
+                "description": "Reach the Max Level of the Tree of Dreams in Vanarana.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80165,
+                80166,
+                80167
+            ],
+            "name": "Woodland Guide",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 165,
+            "stages": 3,
+            "stage1": {
+                "title": "Woodland Guide",
+                "description": "Follow a total of 10 Seelie to their Seelie Courts in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Woodland Guide",
+                "description": "Follow a total of 20 Seelie to their Seelie Courts in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Woodland Guide",
+                "description": "Follow a total of 40 Seelie to their Seelie Courts in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80168,
+                80169,
+                80170
+            ],
+            "name": "Treasure Hunter of the Shimmering Woods",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 168,
+            "stages": 3,
+            "stage1": {
+                "title": "Treasure Hunter of the Shimmering Woods",
+                "ps5title": "Greenwood Treasure Hunter (I)",
+                "description": "Open a total of 100 treasure chests in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Treasure Hunter of the Shimmering Woods",
+                "ps5title": "Greenwood Treasure Hunter (II)",
+                "description": "Open a total of 200 treasure chests in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Treasure Hunter of the Shimmering Woods",
+                "ps5title": "Greenwood Treasure Hunter (III)",
+                "description": "Open a total of 400 treasure chests in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 400,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80171,
+                80172,
+                80173
+            ],
+            "name": "Adventurer of the Shimmering Woods",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 171,
+            "stages": 3,
+            "stage1": {
+                "title": "Adventurer of the Shimmering Woods",
+                "description": "Complete a total of 10 Open World Time Trial Challenges in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Adventurer of the Shimmering Woods",
+                "description": "Complete a total of 20 Open World Time Trial Challenges in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Adventurer of the Shimmering Woods",
+                "description": "Complete a total of 40 Open World Time Trial Challenges in Avidya Forest, Lokapala Jungle, Ardravi Valley, Ashavan Realm, Vissudha Field, Lost Nursery, and Vanarana.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                80174
+            ],
+            "name": "The Forest Will Remember",
+            "achievementGroupId": 31,
+            "achievementGroupName": "Sumeru: The Rainforest of Lore",
+            "sortOrder": 174,
+            "stages": 1,
+            "stage1": {
+                "title": "The Forest Will Remember",
+                "ps5title": "Journey: \"The Forest Will Remember\"",
+                "description": "Complete \"Aranyaka.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        }
+    ]
+}

@@ -1,0 +1,240 @@
+{
+  "builds": [
+    {
+      "id": "burst_support",
+      "name": "Burst Support",
+      "recommended": true,
+
+      "best_weapon": {
+        "id": "elegy_for_the_end"
+      },
+
+      "best_f2p_weapon": {
+        "id": "favonius_warbow"
+      },
+
+      "alternative_weapons": [
+        {
+          "id": "skyward_harp"
+        },
+        {
+          "id": "sacrificial_bow"
+        },
+        {
+          "id": "aqua_simulacra",
+          "suffix": "*"
+        },
+        {
+          "id": "stringless",
+          "suffix": "*"
+        },
+        {
+          "id": "slingshot",
+          "suffix": "*"
+        }
+      ],
+
+      "artifacts": {
+        "best": [
+          {
+            "sets": [
+              {
+                "type": "set",
+                "id": "noblesse_oblige",
+                "bonus": "4pc"
+              }
+              ]
+          },
+          {
+            "sets": [
+              {
+                "type": "set",
+                "id": "emblem_of_severed_fate",
+                "bonus": "4pc"
+              }
+              ]
+          },
+          {
+            "sets": [
+              {
+                "type": "bonus",
+                "id": "energy_recharge",
+                "bonus": "2pc"
+              },
+              {
+                "type": "bonus",
+                "id": "elemental_burst_dmg",
+                "bonus": "2pc"
+              }
+            ]
+          }
+        ],
+        "best_f2p": [
+          {
+          "sets": [
+             {
+                "id": "the_exile",
+                "bonus": "4pc"
+              }
+            ]
+          }
+        ]
+      },
+
+      "main_stats": {
+        "sands": [
+          "energy_recharge",
+          "atk_percent"
+        ],
+        "goblet": [
+          "pyro_dmg_bonus"
+        ],
+        "circlet": [
+          "crit_rate",
+          "crit_dmg"
+        ]
+      },
+
+      "sub_stats": [
+        "energy_recharge",
+        "crit_rate",
+        "crit_dmg",
+        "atk_percent"
+      ],
+
+      "talent_priority": [
+        "elemental_burst",
+        ">",
+        "elemental_skill",
+        ">",
+        "normal_attack"
+      ],
+
+      "notes": [
+        {
+          "text": "* are just stat sticks that provide some value through the main stat or passive; not recommended over the others."
+        },
+        {
+          "text": "Levelling up the Normal Attack is pointless as it is not used."
+        }
+      ]
+    },
+
+    {
+      "id": "dps",
+      "name": "Melt DPS",
+
+      "best_weapon": {
+        "id": "first_great_magic"
+      },
+
+      "best_f2p_weapon": {
+        "id": "hamayumi"
+      },
+
+      "alternative_weapons": [
+        {
+          "id": "aqua_simulacra"
+        },
+        {
+          "id": "polar_star"
+        },
+        {
+          "id": "thundering_pulse"
+        },
+        {
+          "id": "amos_bow"
+        },
+        {
+          "id": "skyward_harp"
+        }
+      ],
+
+      "artifacts": {
+        "best": [
+          {
+            "sets": [
+              {
+                "type": "set",
+                "id": "shimenawas_reminiscence",
+                "bonus": "4pc"
+              }
+            ]
+          },
+          {
+            "sets": [
+              {
+                "type": "set",
+                "id": "wanderers_troupe",
+                "bonus": "4pc"
+              }
+            ]
+          },
+          {
+            "sets": [
+              {
+                "type": "bonus",
+                "id": "pyro_dmg_percent",
+                "bonus": "2pc"
+              },
+              {
+                "type": "bonus",
+                "id": "atk_percent",
+                "bonus": "2pc"
+              }
+            ]
+          }
+        ],
+        "best_f2p": [
+          {
+          "sets": [
+            {
+              "id": "the_exile",
+              "bonus": "4pc"
+            }
+            ]
+          }
+        ]
+      },
+
+      "main_stats": {
+        "sands": [
+          "elemental_mastery",
+          "atk_percent"
+        ],
+        "goblet": [
+          "pyro_dmg_bonus"
+        ],
+        "circlet": [
+          "crit_rate",
+          "crit_dmg"
+        ]
+      },
+
+      "sub_stats": [
+        "energy_recharge",
+        "crit_rate",
+        "crit_dmg",
+        "elemental_mastery",
+        "atk_percent"
+      ],
+
+      "talent_priority": [
+        "normal_attack",
+        ">",
+        "elemental_burst",
+        ">",
+        "elemental_skill"
+      ],
+
+      "notes": [
+        {
+          "text": "Talent Priority, if C4+ is:"
+        },
+        {
+          "text": "Skill ≥ Normal Attack > Burst"
+        }
+      ]
+    }
+  ]
+}

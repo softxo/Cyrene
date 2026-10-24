@@ -1,0 +1,22 @@
+{
+  "normal_attack": {
+    "id": "normal_attack",
+    "name": "Normal Attack",
+    "short_name": "NA",
+    "emoji": "Normal_Attack"
+  },
+
+  "elemental_skill": {
+    "id": "elemental_skill",
+    "name": "Elemental Skill",
+    "short_name": "E",
+    "emoji": "Elemental_Skill"
+  },
+
+  "elemental_burst": {
+    "id": "elemental_burst",
+    "name": "Elemental Burst",
+    "short_name": "Q",
+    "emoji": "Elemental_Burst"
+  }
+}

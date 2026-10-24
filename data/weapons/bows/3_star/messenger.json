@@ -1,0 +1,72 @@
+{
+    "id": "messenger",
+    "name": "Messenger",
+    "emoji": "Messenger",
+    "icon": "Messenger",
+    "description": "A basic wooden bow. It is said to have once been used as a tool for long-distance communication.",
+    "weapon_type": "bow",
+    "max_level": 90,
+    "rarity": 3,
+    "colour": "#4A90E2",
+    "main_stat": {
+      "type": "base_atk",
+      "value": 448
+    },
+    "secondary_stat": {
+      "type": "crit_dmg",
+      "value": 31.2
+    },
+    "passive": {
+      "name": "Archer's Message",
+      "description": {
+        "r1": "Charged Attack hits on weak points deal an additional **100%** ATK DMG as CRIT DMG. Can only occur once every 10s.",
+        "r2": "Charged Attack hits on weak points deal an additional **125%** ATK DMG as CRIT DMG. Can only occur once every 10s.",
+        "r3": "Charged Attack hits on weak points deal an additional **150%** ATK DMG as CRIT DMG. Can only occur once every 10s.",
+        "r4": "Charged Attack hits on weak points deal an additional **175%** ATK DMG as CRIT DMG. Can only occur once every 10s.",
+        "r5": "Charged Attack hits on weak points deal an additional **200%** ATK DMG as CRIT DMG. Can only occur once every 10s."
+      }
+    },
+    "materials": {
+      "ascension": {
+        "weapon_material": {
+          "id": "mist_veiled",
+          "tier2": 2,
+          "tier3": 6,
+          "tier4": 6,
+          "tier5": 3
+        },
+        "common": {
+          "id": "hoarder_insignia",
+          "tier1": 6,
+          "tier2": 10,
+          "tier3": 12
+        },
+        "elite": {
+          "id": "mist_grass",
+          "tier2": 10,
+          "tier3": 12,
+          "tier4": 18
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 105000
+        }
+      },
+      "level": {
+        "ores": {
+          "id": "enhancement_ore",
+          "tier1": 6,
+          "tier2": 18,
+          "tier3": 395
+        },
+        "mora": {
+          "id": "mora",
+          "amount": 398880
+        }
+      }
+    },
+    "obtain": [
+      "Chests"
+    ]
+}
+

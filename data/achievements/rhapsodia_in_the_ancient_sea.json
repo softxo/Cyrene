@@ -1,0 +1,237 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80313
+            ],
+            "name": "Mare Nostrum",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 289,
+            "stages": 1,
+            "stage1": {
+                "title": "Mare Nostrum",
+                "description": "Light up the maps of the following areas in Fontaine: Nostoi Region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80314
+            ],
+            "name": "Sumphonia Sine Fine",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 290,
+            "stages": 1,
+            "stage1": {
+                "title": "Sumphonia Sine Fine",
+                "description": "Light up the maps of the following areas in Fontaine: Sea of Bygone Eras.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80315
+            ],
+            "name": "A Mari Usque Ad Mare",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 291,
+            "stages": 1,
+            "stage1": {
+                "title": "A Mari Usque Ad Mare",
+                "description": "Unlock all Teleport Waypoints in the Nostoi Region and the Sea of Bygone Eras in Fontaine.",
+                "progress": 23,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80316
+            ],
+            "name": "Sanctuary Pilgrim: Rhapsodia in the Ancient Sea",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 292,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Rhapsodia in the Ancient Sea",
+                "description": "Unlock all the Shrines of Depths in the Nostoi Region and the Sea of Bygone Eras in Fontaine.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80317
+            ],
+            "name": "Domus Aurea Guide",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 293,
+            "stages": 1,
+            "stage1": {
+                "title": "Domus Aurea Guide",
+                "description": "Follow 6 Seelie in the Nostoi Region and Sea of Bygone Eras to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80320,
+                80321,
+                80322
+            ],
+            "name": "Ancient Sea Treasure Hunter",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 296,
+            "stages": 3,
+            "stage1": {
+                "title": "Ancient Sea Treasure Hunter",
+                "description": "Open 30 chests in the Nostoi Region and the Sea of Bygone Eras.",
+                "progress": 30,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ancient Sea Treasure Hunter",
+                "description": "Open 60 chests in the Nostoi Region and the Sea of Bygone Eras.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ancient Sea Treasure Hunter",
+                "description": "Open 120 chests in the Nostoi Region and the Sea of Bygone Eras.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80323,
+                80324,
+                80325
+            ],
+            "name": "Ancient Sea Adventurer",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 299,
+            "stages": 3,
+            "stage1": {
+                "title": "Ancient Sea Adventurer",
+                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in the Nostoi Region and Sea of Bygone Eras.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Ancient Sea Adventurer",
+                "description": "Complete 12 Open World mechanism-activated Time Trial Challenges in the Nostoi Region and Sea of Bygone Eras.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Ancient Sea Adventurer",
+                "description": "Complete 24 Open World mechanism-activated Time Trial Challenges in the Nostoi Region and Sea of Bygone Eras.",
+                "progress": 24,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80326
+            ],
+            "name": "Echoes of the Grand Symphony",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 302,
+            "stages": 1,
+            "stage1": {
+                "title": "Echoes of the Grand Symphony",
+                "description": "Play all the melodies within the Ancient Autoharmonic Music Box.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.6"
+        },
+        {
+            "id": [
+                80327
+            ],
+            "name": "Canticles of Harmony",
+            "achievementGroupId": 48,
+            "achievementGroupName": "Rhapsodia in the Ancient Sea",
+            "sortOrder": 303,
+            "stages": 1,
+            "stage1": {
+                "title": "Canticles of Harmony",
+                "description": "Complete \"Canticles of Harmony.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.6"
+        }
+    ]
+}

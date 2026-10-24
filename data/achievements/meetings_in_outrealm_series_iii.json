@@ -1,0 +1,172 @@
+{
+    "achievements": [
+        {
+            "id": [
+                86022
+            ],
+            "name": "Our Hearts as One",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9021,
+            "stages": 1,
+            "stage1": {
+                "title": "Our Hearts as One",
+                "description": "Defeat a Thunder Manifestation in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86023
+            ],
+            "name": "Water, Basically",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9022,
+            "stages": 1,
+            "stage1": {
+                "title": "Water, Basically",
+                "description": "Defeat a Hydro Hypostasis in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86024
+            ],
+            "name": "Dashing Through the Snow... and the Flames",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9023,
+            "stages": 1,
+            "stage1": {
+                "title": "Dashing Through the Snow... and the Flames",
+                "description": "Defeat Signora in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86025
+            ],
+            "name": "The Whisperer in Darkness",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9024,
+            "stages": 1,
+            "stage1": {
+                "title": "The Whisperer in Darkness",
+                "description": "Defeat the Golden Wolflord in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86026
+            ],
+            "name": "Brave the Lightning's Glow...",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9025,
+            "stages": 1,
+            "stage1": {
+                "title": "Brave the Lightning's Glow...",
+                "description": "Defeat the Raiden Shogun in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86027
+            ],
+            "name": "Surpassing the Ancients' Wisdom",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9026,
+            "stages": 1,
+            "stage1": {
+                "title": "Surpassing the Ancients' Wisdom",
+                "description": "Defeat the Ruin Serpent in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86028
+            ],
+            "name": "I'm a Flexitarian",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9027,
+            "stages": 1,
+            "stage1": {
+                "title": "I'm a Flexitarian",
+                "description": "Defeat a Jadeplume Terrorshroom in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        },
+        {
+            "id": [
+                86029
+            ],
+            "name": "Electric Shock Hazard",
+            "achievementGroupId": 33,
+            "achievementGroupName": "Meetings in Outrealm: Series III",
+            "sortOrder": 9028,
+            "stages": 1,
+            "stage1": {
+                "title": "Electric Shock Hazard",
+                "description": "Defeat an Electro Regisvine in Co-Op Mode.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.0"
+        }
+    ]
+}

@@ -1,0 +1,132 @@
+{
+  "resolution_of_sojourner": {
+    "name": "Resolution of Sojourner",
+    "emoji": "Resolution_of_Sojourner",
+    "icon": "Resolution_of_Sojourner",
+    "type": "artifact_set",
+    "bonus_2pc": "ATK +18%.",
+    "bonus_4pc": "Increases Charged Attack CRIT Rate by 30%."
+  },
+
+  "brave_heart": {
+    "name": "Brave Heart",
+    "emoji": "Brave_Heart",
+    "icon": "Brave_Heart",
+    "type": "artifact_set",
+    "bonus_2pc": "ATK +18%.",
+    "bonus_4pc": "Increases DMG by 30% against opponents with more than 50% HP."
+  },
+
+  "defenders_will": {
+    "name": "Defender's Will",
+    "emoji": "Defenders_Will",
+    "icon": "Defenders_Will",
+    "type": "artifact_set",
+    "bonus_2pc": "DEF +30%",
+    "bonus_4pc": "For each different element present in your own party, the wearer's Elemental RES to that corresponding element is increased by 30%."
+  },
+
+  "tiny_miracle": {
+    "name": "Tiny Miracle",
+    "emoji": "Tiny_Miracle",
+    "icon": "Tiny_Miracle",
+    "type": "artifact_set",
+    "bonus_2pc": "All Elemental RES increased by 20%.",
+    "bonus_4pc": "Incoming elemental DMG increases corresponding Elemental RES by 30% for 10s. Can only occur once every 10s."
+  },
+
+  "berserker": {
+    "name": "Berserker",
+    "emoji": "Berserker",
+    "icon": "Berserker",
+    "type": "artifact_set",
+    "bonus_2pc": "CRIT Rate +12%",
+    "bonus_4pc": "When HP is below 70%, CRIT Rate increases by an additional 24%."
+  },
+
+  "martial_artist": {
+    "name": "Martial Artist",
+    "emoji": "Martial_Artist",
+    "icon": "Martial_Artist",
+    "type": "artifact_set",
+    "bonus_2pc": "Normal and Charged Attack DMG +15%",
+    "bonus_4pc": "After using Elemental Skill, increases Normal Attack and Charged Attack DMG by 25% for 8s."
+  },
+
+  "instructor": {
+    "name": "Instructor",
+    "emoji": "Instructor",
+    "icon": "Instructor",
+    "alias": ["Ins"],
+    "type": "artifact_set",
+    "bonus_2pc": "Increases Elemental Mastery by 80.",
+    "bonus_4pc": "Upon triggering an Elemental Reaction, increases all party members' Elemental Mastery by 120 for 8s."
+  },
+
+  "gambler": {
+    "name": "Gambler",
+    "emoji": "Gambler",
+    "icon": "Gambler",
+    "type": "artifact_set",
+    "bonus_2pc": "Increases Elemental Skill DMG by 20%.",
+    "bonus_4pc": "Defeating an opponent has a 100% chance to remove Elemental Skill CD. Can only occur once every 15s."
+  },
+
+  "the_exile": {
+    "name": "The Exile",
+    "emoji": "The_Exile",
+    "icon": "The_Exile",
+    "type": "artifact_set",
+    "bonus_2pc": "Energy Recharge +20%",
+    "bonus_4pc": "Using an Elemental Burst regenerates 2 Energy for all party members (excluding the wearer) every 2s for 6s. This effect cannot stack."
+  },
+
+  "scholar": {
+    "name": "Scholar",
+    "emoji": "Scholar",
+    "icon": "Scholar",
+    "type": "artifact_set",
+    "bonus_2pc": "Energy Recharge +20%",
+    "bonus_4pc": "Gaining Elemental Particles or Orbs gives 3 Energy to all party members who have a bow or a catalyst equipped. Can only occur once every 3s."
+  },
+
+  "prayers_for_illumination": {
+    "name": "Prayers for Illumination",
+    "emoji": "Prayers_for_Illumination",
+    "icon": "Prayers_for_Illumination",
+    "type": "artifact_set",
+    "bonus_1pc": "Affected by Pyro for 40% less time."
+  },
+
+  "prayers_for_destiny": {
+    "name": "Prayers for Destiny",
+    "emoji": "Prayers_for_Destiny",
+    "icon": "Prayers_for_Destiny",
+    "type": "artifact_set",
+    "bonus_1pc": "Affected by Hydro for 40% less time."
+  },
+
+  "prayers_for_wisdom": {
+    "name": "Prayers for Wisdom",
+    "emoji": "Prayers_for_Wisdom",
+    "icon": "Prayers_for_Wisdom",
+    "type": "artifact_set",
+    "bonus_1pc": "Affected by Electro for 40% less time."
+  },
+
+  "prayers_to_the_firmament": {
+    "name": "Prayers to the Firmament",
+    "emoji": "Prayers_to_the_Firmament",
+    "icon": "Prayers_to_the_Firmament",
+    "type": "artifact_set",
+    "bonus_1pc": "Affected by Anemo for 40% less time."
+  },
+
+  "prayers_to_springtime": {
+    "name": "Prayers to Springtime",
+    "emoji": "Prayers_to_Springtime",
+    "icon": "Prayers_to_Springtime",
+    "type": "artifact_set",
+    "bonus_1pc": "Affected by Cryo for 40% less time."
+  }
+}

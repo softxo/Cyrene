@@ -1,0 +1,261 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80490,
+                80491,
+                80492
+            ],
+            "name": "Moonmist Treasure Hunter",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 450,
+            "stages": 3,
+            "stage1": {
+                "title": "Moonmist Treasure Hunter",
+                "ps5title": "Moonmist Treasure Hunter (I)",
+                "description": "Open 45 chests in the Dunanna Pit and the Frost Moon",
+                "progress": 45,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Moonmist Treasure Hunter",
+                "ps5title": "Moonmist Treasure Hunter (II)",
+                "description": "Open 90 chests in the Dunanna Pit and the Frost Moon",
+                "progress": 90,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Moonmist Treasure Hunter",
+                "ps5title": "Moonmist Treasure Hunter (III)",
+                "description": "Open 180 chests in the Dunanna Pit and the Frost Moon",
+                "progress": 180,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80493
+            ],
+            "name": "Moonmist Adventurer",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 453,
+            "stages": 1,
+            "stage1": {
+                "title": "Moonmist Adventurer",
+                "description": "Complete 4 Open World Time Trial Challenges in the Dunanna Pit and the Frost Moon.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80494
+            ],
+            "name": "A Lamentation of Catastrophe",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 454,
+            "stages": 1,
+            "stage1": {
+                "title": "A Lamentation of Catastrophe",
+                "description": "Light up the Dunanna Pit map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80495
+            ],
+            "name": "Blue Moon",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 455,
+            "stages": 1,
+            "stage1": {
+                "title": "Blue Moon",
+                "description": "Light up the Lunar Highlands map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80496
+            ],
+            "name": "Any Colour You Like",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 456,
+            "stages": 1,
+            "stage1": {
+                "title": "Any Colour You Like",
+                "description": "Light up the Dark Side of the Moon map.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80501
+            ],
+            "name": "Le Voyage dans la Lune",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 457,
+            "stages": 1,
+            "stage1": {
+                "title": "Le Voyage dans la Lune",
+                "description": "Unlock all Teleport Waypoints in Nod-Krai and the following areas in the Frost Moon region: Dunanna Pit, Lunar Highlands, and Dark Side of the Moon.",
+                "progress": 38,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80498
+            ],
+            "name": "A Fall of Moondust",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 458,
+            "stages": 1,
+            "stage1": {
+                "title": "A Fall of Moondust",
+                "description": "Unlock all the seals on the Kuuhenki Shrines in the following areas in the Frost Moon region: Lunar Highlands, Moontide Sea, and Dark Side of the Moon.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80499
+            ],
+            "name": "Hoards Found — We Don't Have a Problem",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 459,
+            "stages": 1,
+            "stage1": {
+                "title": "Hoards Found — We Don't Have a Problem",
+                "description": "Unlock all the seals on the Kuuhenki's Hidden Troves in the following areas in the Frost Moon region: Lunar Highlands and Moontide Sea.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80497
+            ],
+            "name": "6EQUJ5",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 460,
+            "stages": 1,
+            "stage1": {
+                "title": "6EQUJ5",
+                "ps5title": "6EQUJ5",
+                "description": "Witness Ninnin launch Project Moongazer.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80502
+            ],
+            "name": "Darkness Out of Space",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 461,
+            "stages": 1,
+            "stage1": {
+                "title": "Darkness Out of Space",
+                "description": "Upgrade the Curtain-Form Blackbody Containment Lab to its maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        },
+        {
+            "id": [
+                80503
+            ],
+            "name": "The Inner Light",
+            "achievementGroupId": 68,
+            "achievementGroupName": "Unfettered Crescent",
+            "sortOrder": 462,
+            "stages": 1,
+            "stage1": {
+                "title": "The Inner Light",
+                "description": "Upgrade the Nuur Stone Circle to its maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "6.7"
+        }
+    ]
+}

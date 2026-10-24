@@ -1,0 +1,224 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80030
+            ],
+            "name": "Continental Explorer: Mondstadt",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 30,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Mondstadt",
+                "ps5title": "Mondstadt: Continental Explorer",
+                "description": "Light up the entire Mondstadt map (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80031
+            ],
+            "name": "Brush of a Thousand Winds",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 31,
+            "stages": 1,
+            "stage1": {
+                "title": "Brush of a Thousand Winds",
+                "ps5title": "Mondstadt: Brush of a Thousand Winds",
+                "description": "Unlock all Teleport Waypoints in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 23,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80032
+            ],
+            "name": "Let the Wind Lead",
+            "dupealias": "Let the Wind Lead 0",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 32,
+            "stages": 1,
+            "stage1": {
+                "title": "Let the Wind Lead",
+                "ps5title": "Mondstadt: Let the Wind Lead",
+                "description": "Upgrade the Statues of The Seven in Mondstadt to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80033
+            ],
+            "name": "Sanctuary Pilgrim: Mondstadt",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 33,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Mondstadt",
+                "description": "Unlock all the Shrines of Depths in Mondstadt.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80034,
+                80035,
+                80036
+            ],
+            "name": "Guiding Wind",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 34,
+            "stages": 3,
+            "stage1": {
+                "title": "Guiding Wind",
+                "description": "Follow 10 Seelie in Mondstadt to their Seelie Courts (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Guiding Wind",
+                "description": "Follow 20 Seelie in Mondstadt to their Seelie Courts (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Guiding Wind",
+                "description": "Follow 40 Seelie in Mondstadt to their Seelie Courts (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80037,
+                80038,
+                80039
+            ],
+            "name": "Wind-Chasing Treasure Hunter",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 37,
+            "stages": 3,
+            "stage1": {
+                "title": "Wind-Chasing Treasure Hunter",
+                "ps5title": "Wind-Chasing Treasure Hunter (I)",
+                "description": "Open 100 chests in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Wind-Chasing Treasure Hunter",
+                "ps5title": "Wind-Chasing Treasure Hunter (II)",
+                "description": "Open 200 chests in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Wind-Chasing Treasure Hunter",
+                "ps5title": "Wind-Chasing Treasure Hunter (III)",
+                "description": "Open 400 chests in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 400,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80040,
+                80041,
+                80042
+            ],
+            "name": "Wind-Chasing Adventurer",
+            "achievementGroupId": 4,
+            "achievementGroupName": "Mondstadt: The City of Wind and Song",
+            "sortOrder": 40,
+            "stages": 3,
+            "stage1": {
+                "title": "Wind-Chasing Adventurer",
+                "description": "Complete 5 Open World mechanism-activated Time Trial Challenges in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 5,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Wind-Chasing Adventurer",
+                "description": "Complete 10 Open World mechanism-activated Time Trial Challenges in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Wind-Chasing Adventurer",
+                "description": "Complete 15 Open World mechanism-activated Time Trial Challenges in Mondstadt (excluding Dragonspine, Windrest Peak, and the Temple of Space).",
+                "progress": 15,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

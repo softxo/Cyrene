@@ -1,0 +1,162 @@
+{
+  "agnidus_agate": {
+    "name": "Agnidus Agate",
+    "icon": "Agnidus_Agate",
+    "tiers": {
+      "sliver": {
+        "name": "Agnidus Agate Sliver",
+        "emoji": "Agnidus_Agate_Sliver"
+      },
+      "fragment": {
+        "name": "Agnidus Agate Fragment",
+        "emoji": "Agnidus_Agate_Fragment"
+      },
+      "chunk": {
+        "name": "Agnidus Agate Chunk",
+        "emoji": "Agnidus_Agate_Chunk"
+      },
+      "gemstone": {
+        "name": "Agnidus Agate Gemstone",
+        "emoji": "Agnidus_Agate_Gemstone"
+      }
+    }
+  },
+
+  "varunada_lazurite": {
+    "name": "Varunada Lazurite",
+    "icon": "Varunada_Lazurite",
+    "tiers": {
+      "sliver": {
+        "name": "Varunada Lazurite Sliver",
+        "emoji": "Varunada_Lazurite_Sliver"
+      },
+      "fragment": {
+        "name": "Varunada Lazurite Fragment",
+        "emoji": "Varunada_Lazurite_Fragment"
+      },
+      "chunk": {
+        "name": "Varunada Lazurite Chunk",
+        "emoji": "Varunada_Lazurite_Chunk"
+      },
+      "gemstone": {
+        "name": "Varunada Lazurite Gemstone",
+        "emoji": "Varunada_Lazurite_Gemstone"
+      }
+    }
+  },
+
+  "vajrada_amethyst": {
+    "name": "Vajrada Amethyst",
+    "icon": "Vajrada_Amethyst",
+    "tiers": {
+      "sliver": {
+        "name": "Vajrada Amethyst Sliver",
+        "emoji": "Vajrada_Amethyst_Sliver"
+      },
+      "fragment": {
+        "name": "Vajrada Amethyst Fragment",
+        "emoji": "Vajrada_Amethyst_Fragment"
+      },
+      "chunk": {
+        "name": "Vajrada Amethyst Chunk",
+        "emoji": "Vajrada_Amethyst_Chunk"
+      },
+      "gemstone": {
+        "name": "Vajrada Amethyst Gemstone",
+        "emoji": "Vajrada_Amethyst_Gemstone"
+      }
+    }
+  },
+
+  "shivada_jade": {
+    "name": "Shivada Jade",
+    "icon": "Shivada_Jade",
+    "tiers": {
+      "sliver": {
+        "name": "Shivada Jade Sliver",
+        "emoji": "Shivada_Jade_Sliver"
+      },
+      "fragment": {
+        "name": "Shivada Jade Fragment",
+        "emoji": "Shivada_Jade_Fragment"
+      },
+      "chunk": {
+        "name": "Shivada Jade Chunk",
+        "emoji": "Shivada_Jade_Chunk"
+      },
+      "gemstone": {
+        "name": "Shivada Jade Gemstone",
+        "emoji": "Shivada_Jade_Gemstone"
+      }
+    }
+  },
+
+  "nagadus_emerald": {
+    "name": "Nagadus Emerald",
+    "icon": "Nagadus_Emerald",
+    "tiers": {
+      "sliver": {
+        "name": "Nagadus Emerald Sliver",
+        "emoji": "Nagadus_Emerald_Sliver"
+      },
+      "fragment": {
+        "name": "Nagadus Emerald Fragment",
+        "emoji": "Nagadus_Emerald_Fragment"
+      },
+      "chunk": {
+        "name": "Nagadus Emerald Chunk",
+        "emoji": "Nagadus_Emerald_Chunk"
+      },
+      "gemstone": {
+        "name": "Nagadus Emerald Gemstone",
+        "emoji": "Nagadus_Emerald_Gemstone"
+      }
+    }
+  },
+
+  "prithiva_topaz": {
+    "name": "Prithiva Topaz",
+    "icon": "Prithiva_Topaz",
+    "tiers": {
+      "sliver": {
+        "name": "Prithiva Topaz Sliver",
+        "emoji": "Prithiva_Topaz_Sliver"
+      },
+      "fragment": {
+        "name": "Prithiva Topaz Fragment",
+        "emoji": "Prithiva_Topaz_Fragment"
+      },
+      "chunk": {
+        "name": "Prithiva Topaz Chunk",
+        "emoji": "Prithiva_Topaz_Chunk"
+      },
+      "gemstone": {
+        "name": "Prithiva Topaz Gemstone",
+        "emoji": "Prithiva_Topaz_Gemstone"
+      }
+    }
+  },
+
+  "vayuda_turquoise": {
+    "name": "Vayuda Turquoise",
+    "icon": "Vayuda_Turquoise",
+    "tiers": {
+      "sliver": {
+        "name": "Vayuda Turquoise Sliver",
+        "emoji": "Vayuda_Turquoise_Sliver"
+      },
+      "fragment": {
+        "name": "Vayuda Turquoise Fragment",
+        "emoji": "Vayuda_Turquoise_Fragment"
+      },
+      "chunk": {
+        "name": "Vayuda Turquoise Chunk",
+        "emoji": "Vayuda_Turquoise_Chunk"
+      },
+      "gemstone": {
+        "name": "Vayuda Turquoise Gemstone",
+        "emoji": "Vayuda_Turquoise_Gemstone"
+      }
+    }
+  }
+}

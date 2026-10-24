@@ -1,0 +1,199 @@
+{
+  "id": "bennett",
+  "name": "Bennett",
+  "title": "Trial by Fire",
+  "description": "A good-natured adventurer from Mondstadt who's unfortunately extremely unlucky.",
+  "affiliation": "Adventurers' Guild",
+  "constellation": "Rota Calamitas",
+  "birthday": "29/2",
+  "rarity": 4,
+  "element": "pyro",
+  "weapon": "sword",
+  "version": "1.0",
+  "release": "28-09-2020",
+  "colour": "#de4b31",
+  "images": {
+    "icon": "icon.webp",
+    "card": "card.png",
+    "splash": "splash.png"
+  },
+  "constellations": [
+    {
+      "name": "Grand Expectation",
+      "description": [
+        "**Fantastic Voyage**'s ATK increase no longer has an HP restriction, and gains an additional 20% of Bennett's Base ATK."
+      ],
+      "icon": "C1.webp"
+    },
+    {
+      "name": "Impasse Conqueror",
+      "description": [
+        "When Bennett's HP falls below 70%, his Energy Recharge is increased by 30%."
+      ],
+      "icon": "C2.webp"
+    },
+    {
+      "name": "Unstoppable Fervor",
+      "description": [
+        "Increases the Level of **Passion Overload** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C3.webp"
+    },
+    {
+      "name": "Unexpected Odyssey",
+      "description": [
+        "Using a Normal Attack as the second attack of **Passion Overload**'s Charge Level 1 will perform a follow-up attack.",
+        "This additional attack does 135% of the second attack's DMG."
+      ],
+      "icon": "C4.webp"
+    },
+    {
+      "name": "True Explorer",
+      "description": [
+        "Increases the Level of **Fantastic Voyage** by 3.",
+        "Maximum upgrade level is 15."
+      ],
+      "icon": "C5.webp"
+    },
+    {
+      "name": "Fire Ventures With Me",
+      "description": [
+        "Sword, Claymore, or Polearm-wielding characters inside **Fantastic Voyage**'s radius gain a 15% **Pyro DMG Bonus** and their weapons are infused with **Pyro**."
+      ],
+      "icon": "C6.webp"
+    }
+  ],
+  "talents": {
+    "normal_attack": {
+      "name": "Strike of Fortune",
+      "icon": "Normal_Attack.webp",
+      "description": {
+        "normal": [
+          "Performs up to 5 rapid strikes."
+        ],
+        "charged": [
+          "Consumes a certain amount of Stamina to unleash 2 rapid sword strikes."
+        ],
+        "plunge": [
+          "Plunges from mid-air to strike the ground below, damaging opponents along the path and dealing AoE DMG upon impact."
+        ]
+      }
+    },
+    "elemental_skill": {
+      "name": "Passion Overload",
+      "icon": "Elemental_Skill.webp",
+      "description": [
+        "Bennett puts all his fire and passion for adventuring into his sword. Results may vary based on how fired up he is..."
+      ],
+      "sections": [
+        {
+          "title": "Press",
+          "text": [
+            "A single, swift flame strike that deals Pyro DMG."
+          ]
+        },
+        {
+          "title": "Hold (Short)",
+          "text": [
+            "Charges up, resulting in different effects when unleashed based on the Charge Level.",
+            "- Level 1: Strikes twice, dealing **Pyro DMG** and launching opponents.",
+            "- Level 2: Unleashes 3 consecutive attacks that deal impressive **Pyro DMG**, but the last attack triggers an explosion that launches both Bennett and the enemy.",
+            "Bennett takes no damage from being launched."
+          ]
+        }
+      ]
+    },
+    "elemental_burst": {
+      "name": "Fantastic Voyage",
+      "icon": "Elemental_Burst.webp",
+      "description": [
+        "Bennett performs a jumping attack that deals **Pyro DMG**, creating an Inspiration Field."
+      ],
+      "sections": [
+        {
+          "title": "Inspiration Field",
+          "text": [
+            "- If the health of a character within the AoE is equal to or falls below 70%, their health will continuously regenerate. The amount of HP restored scales off Bennett's Max HP.",
+            "- If the health of a character within the AoE is higher than 70%, they gain an ATK Bonus that is based on Bennett's Base ATK.",
+            "- Imbues characters within the AoE with **Pyro**."
+          ]
+        }
+      ]
+    }
+  },
+  "passives": [
+    {
+      "unlock": "A1",
+      "name": "Rekindle",
+      "description": [
+        "Decreases **Passion Overload**'s CD by 20%."
+      ]
+    },
+    {
+      "unlock": "A4",
+      "name": "Fearnaught",
+      "description": [
+        "Within the area created by **Fantastic Voyage**, **Passion Overload** takes on the following effects:",
+        "- CD is reduced by 50%.",
+        "- Bennett will not be launched by the effects of Charge Level 2."
+      ]
+    },
+    {
+      "unlock": "Utility",
+      "name": "It Should Be Safe...",
+      "description": [
+        "Decreases gliding Stamina consumption for your own party members by 20%.",
+        "Not stackable with Passive Talents that provide the exact same effects."
+      ]
+    }
+  ],
+ "materials": {
+    "ascension": {
+      "gem": {
+        "id": "agnidus_agate",
+        "sliver": 1,
+        "fragment": 9,
+        "chunk": 9,
+        "gemstone": 6
+      },
+      "boss": {
+        "id": "everflame_seed",
+        "amount": 46
+      },
+      "local_specialty": {
+        "id": "windwheel_aster",
+        "amount": 168
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 30,
+        "tier3": 36
+      }
+    },
+    "talents": {
+      "book": {
+        "id": "resistance",
+        "teachings": 9,
+        "guide": 63,
+        "philosophies": 114
+      },
+      "common": {
+        "id": "hoarder_insignia",
+        "tier1": 18,
+        "tier2": 66,
+        "tier3": 93
+      },
+      "weekly_boss": {
+        "id": "stormterror",
+        "material": "dvalins_plume",
+        "amount": 18
+      },
+      "crown": {
+        "id": "crown_of_insight",
+        "amount": 3
+      }
+    }
+  }
+}

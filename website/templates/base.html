@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{% block title %}Cyrene{% endblock %}</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/static/images/ui/ui_icons/Cyrene.png"
+    >
+
+    <script>
+        const savedTheme = localStorage.getItem("theme") || "blue";
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/main.css?v=1.1"
+    >
+
+    {% if request.path == '/characters' %}
+
+    <link
+        rel="stylesheet"
+        href="/static/css/characters/characters.css"
+    >
+
+    {% endif %}
+
+    {% if request.path == '/inventory' %}
+
+    <link
+        rel="stylesheet"
+        href="/static/css/inventory.css"
+    >
+
+    {% endif %}
+</head>
+
+<body>
+
+    <header class="mobile-header">
+
+        <button
+            class="mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="mobile-brand">
+            <div class="brand-icon">✦</div>
+            <span>Cyrene</span>
+        </div>
+
+    </header>
+
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+
+            <div class="brand-name">
+                Cyrene
+            </div>
+        </div>
+
+        <nav class="navigation">
+
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Home.webp"
+                        alt="Home">
+                </span>
+                <span>Home</span>
+            </a>
+
+            <a href="/characters" class="nav-item {% if request.path == '/characters' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Characters.webp"
+                        alt="Characters">
+                </span>
+                <span>Characters</span>
+            </a>
+
+            <a href="/weapons" class="nav-item {% if request.path == '/weapons' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Weapons.webp"
+                        alt="Weapons">
+                </span>
+                <span>Weapons</span>
+            </a>
+
+            <a href="/inventory" class="nav-item {% if request.path == '/inventory' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Inventory.webp"
+                        alt="Inventory">
+                </span>
+                <span>Inventory</span>
+            </a>
+
+            <a href="/planner" class="nav-item {% if request.path == '/planner' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Planner.webp"
+                        alt="Planner">
+                </span>
+                <span>Planner</span>
+            </a>
+
+            <a href="/events" class="nav-item {% if request.path == '/events' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img 
+                        src="/static/images/ui/ui_icons/Events.webp"
+                        alt="Events">
+                </span>
+                <span>Events</span>
+            </a>
+
+            <a href="/achievements" class="nav-item {% if request.path == '/achievements' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Achievements.webp"
+                        alt="Achievements">
+                </span>
+                <span>Achievements</span>
+            </a>
+
+            <a href="/wishes" class="nav-item {% if request.path == '/wishes' %}active{% endif %}">
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Wishes.webp"
+                        alt="Wishes">
+                </span>
+                <span>Wishes</span>
+            </a>
+
+        </nav>
+
+        
+        <div class="sidebar-bottom">
+
+            <a
+                href="/codes"
+                class="nav-item {% if request.path == '/codes' %}active{% endif %}"
+            >
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Codes.webp"
+                        alt="Codes"
+                    >
+                </span>
+                <span>Codes</span>
+            </a>
+
+            <a
+                href="/verify"
+                class="nav-item {% if request.path == '/verify' %}active{% endif %}"
+            >
+
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Discord.webp"
+                        alt="Discord">
+                </span>
+                <span>Connect Discord</span>
+            </a>
+
+            <a
+                href="/settings"
+                class="nav-item {% if request.path == '/settings' %}active{% endif %}"
+            >
+                <span class="nav-icon">
+                    <img
+                        src="/static/images/ui/ui_icons/Settings.webp"
+                        alt="Settings">
+                </span>
+                <span>Settings</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <script type="module" src="/static/build/js/app.js"></script>
+    <script src="/static/js/theme.js"></script>
+    <script src="/static/js/achievements.js"></script>
+
+</body>
+</html>

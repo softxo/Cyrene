@@ -1,0 +1,238 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80237
+            ],
+            "name": "Continental Explorer: Blessed Hamada",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 218,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Blessed Hamada",
+                "description": "Light up the maps of the following areas in Sumeru: Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80238
+            ],
+            "name": "Descending Into the Depths of Desolation",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 219,
+            "stages": 1,
+            "stage1": {
+                "title": "Descending Into the Depths of Desolation",
+                "description": "Unlock all Teleport Waypoints in the following areas in Sumeru: Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 18,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80239
+            ],
+            "name": "Sanctuary Pilgrim: Blessed Hamada",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 220,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Blessed Hamada",
+                "description": "Unlock all the Shrines of Depths in the following areas in Sumeru: Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80240,
+                80241,
+                80242
+            ],
+            "name": "Dune Guide",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 221,
+            "stages": 3,
+            "stage1": {
+                "title": "Dune Guide",
+                "description": "Follow 4 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Dune Guide",
+                "description": "Follow 8 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Dune Guide",
+                "description": "Follow 16 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80243,
+                80244,
+                80245
+            ],
+            "name": "Badlands Treasure Hunter",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 224,
+            "stages": 3,
+            "stage1": {
+                "title": "Badlands Treasure Hunter",
+                "description": "Open a total of 40 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Badlands Treasure Hunter",
+                "description": "Open a total of 80 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 80,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Badlands Treasure Hunter",
+                "description": "Open a total of 160 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 160,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80246,
+                80247,
+                80248
+            ],
+            "name": "Badlands Adventurer",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 227,
+            "stages": 3,
+            "stage1": {
+                "title": "Badlands Adventurer",
+                "description": "Complete a total of 4 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Badlands Adventurer",
+                "description": "Complete a total of 8 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Badlands Adventurer",
+                "description": "Complete a total of 16 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80250
+            ],
+            "name": "Alkanet Amrita",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 230,
+            "stages": 1,
+            "stage1": {
+                "title": "Alkanet Amrita",
+                "description": "Upgrade the Amrita Pool to its maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.6"
+        },
+        {
+            "id": [
+                80249
+            ],
+            "name": "Khvarena of Good and Evil",
+            "achievementGroupId": 41,
+            "achievementGroupName": "Blessed Hamada",
+            "sortOrder": 231,
+            "stages": 1,
+            "stage1": {
+                "title": "Khvarena of Good and Evil",
+                "description": "Complete \"Khvarena of Good and Evil.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.6"
+        }
+    ]
+}

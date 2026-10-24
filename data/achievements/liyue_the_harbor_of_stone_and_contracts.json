@@ -1,0 +1,223 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80043
+            ],
+            "name": "Continental Explorer: Liyue",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 43,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Liyue",
+                "ps5title": "Liyue: Continental Explorer",
+                "description": "Light up the map in the following zones: Bishui Plain, Qiongji Estuary, Minlin, Lisha, Sea of Clouds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80044
+            ],
+            "name": "Surveyor of Stone",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 44,
+            "stages": 1,
+            "stage1": {
+                "title": "Surveyor of Stone",
+                "ps5title": "Liyue: Surveyor of Stone",
+                "description": "Unlock all Teleport Waypoints in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80045
+            ],
+            "name": "Unmovable Mountain",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 45,
+            "stages": 1,
+            "stage1": {
+                "title": "Unmovable Mountain",
+                "ps5title": "Liyue: Unmovable Mountain",
+                "description": "Upgrade the Statues of The Seven in Liyue to their maximum level.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80046
+            ],
+            "name": "Sanctuary Pilgrim: Liyue",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 46,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Liyue",
+                "description": "Unlock all the Shrines of Depths in Liyue.",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80047,
+                80048,
+                80049
+            ],
+            "name": "Lithic Guide",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 47,
+            "stages": 3,
+            "stage1": {
+                "title": "Lithic Guide",
+                "description": "Follow 20 Seelie in Liyue to their Seelie Courts (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Lithic Guide",
+                "description": "Follow 40 Seelie in Liyue to their Seelie Courts (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Lithic Guide",
+                "description": "Follow 60 Seelie in Liyue to their Seelie Courts (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80050,
+                80051,
+                80052
+            ],
+            "name": "Rock-Steady Treasure Hunter",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 50,
+            "stages": 3,
+            "stage1": {
+                "title": "Rock-Steady Treasure Hunter",
+                "ps5title": "Rock-Steady Treasure Hunter (I)",
+                "description": "Open 200 chests in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Rock-Steady Treasure Hunter",
+                "ps5title": "Rock-Steady Treasure Hunter (II)",
+                "description": "Open 400 chests in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 400,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Rock-Steady Treasure Hunter",
+                "ps5title": "Rock-Steady Treasure Hunter (III)",
+                "description": "Open 800 chests in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 800,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        },
+        {
+            "id": [
+                80053,
+                80054,
+                80055
+            ],
+            "name": "Rock-Steady Adventurer",
+            "achievementGroupId": 5,
+            "achievementGroupName": "Liyue: The Harbor of Stone and Contracts",
+            "sortOrder": 53,
+            "stages": 3,
+            "stage1": {
+                "title": "Rock-Steady Adventurer",
+                "description": "Complete 10 Open World mechanism-activated Time Trial Challenges in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 10,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Rock-Steady Adventurer",
+                "description": "Complete 20 Open World mechanism-activated Time Trial Challenges in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Rock-Steady Adventurer",
+                "description": "Complete 40 Open World mechanism-activated Time Trial Challenges in Liyue (The Chasm and Chenyu Vale are counted separately).",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.0"
+        }
+    ]
+}

@@ -1,0 +1,194 @@
+{
+    "achievements": [
+        {
+            "id": [
+                82053
+            ],
+            "name": "Hydro Hunter",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2053,
+            "stages": 1,
+            "stage1": {
+                "title": "Hydro Hunter",
+                "description": "Defeat every type of Hydro Mimic that an Oceanid can summon.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82054
+            ],
+            "name": "Dip, Duck, Dive, Dodge, Defeat",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2054,
+            "stages": 1,
+            "stage1": {
+                "title": "Dip, Duck, Dive, Dodge, Defeat",
+                "description": "Defeat an Oceanid without being hit by water bombs left behind by certain Hydro Mimics.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82055,
+                82056,
+                82057
+            ],
+            "name": "...Well, That Was Strange",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2055,
+            "stages": 3,
+            "stage1": {
+                "title": "...Well, That Was Strange",
+                "description": "Defeat the Unusual Hilichurl 1 time.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "...Well, That Was Strange",
+                "description": "Defeat the Unusual Hilichurl 20 times.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "...Well, That Was Strange",
+                "description": "Defeat the Unusual Hilichurl 50 times.",
+                "progress": 50,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82058
+            ],
+            "name": "Extreme Gardening",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2058,
+            "stages": 1,
+            "stage1": {
+                "title": "Extreme Gardening",
+                "description": "Paralyze a Cryo Regisvine by attacking its corolla.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82059
+            ],
+            "name": "Gardener Extraordinaire",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2059,
+            "stages": 1,
+            "stage1": {
+                "title": "Gardener Extraordinaire",
+                "description": "Paralyze a Pyro Regisvine by attacking its corolla.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82060
+            ],
+            "name": "Geronimo!",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2060,
+            "stages": 1,
+            "stage1": {
+                "title": "Geronimo!",
+                "description": "Hit an opponent with a Plunging Attack after plunging for more than 5 seconds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82061
+            ],
+            "name": "Vicious Circle",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2061,
+            "stages": 1,
+            "stage1": {
+                "title": "Vicious Circle",
+                "description": "Unleash 5 Elemental Bursts within 15 seconds.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.1"
+        },
+        {
+            "id": [
+                82062
+            ],
+            "name": "Shield Me From the World",
+            "achievementGroupId": 14,
+            "achievementGroupName": "Challenger: Series II",
+            "sortOrder": 2062,
+            "stages": 1,
+            "stage1": {
+                "title": "Shield Me From the World",
+                "description": "Have a single character be protected by 3 different types of shield at once.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "1.1"
+        }
+    ]
+}

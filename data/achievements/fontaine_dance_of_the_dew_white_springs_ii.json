@@ -1,0 +1,238 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80272
+            ],
+            "name": "Continental Explorer: Land of Harmonious Springs (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 248,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Land of Harmonious Springs (II)",
+                "description": "Light up the maps in the following areas of Fontaine: Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80273
+            ],
+            "name": "Font of All Waters (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 249,
+            "stages": 1,
+            "stage1": {
+                "title": "Font of All Waters (II)",
+                "description": "Unlock all Teleport Waypoints in the following areas in Fontaine: Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region",
+                "progress": 22,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80274
+            ],
+            "name": "Sanctuary Pilgrim: Land of Harmonious Springs (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 250,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Land of Harmonious Springs (II)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Fontaine: Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80275,
+                80276,
+                80277
+            ],
+            "name": "Tidal Guide (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 251,
+            "stages": 3,
+            "stage1": {
+                "title": "Tidal Guide (II)",
+                "description": "Follow 3 Seelie in Liffey Region and Fontaine Research Institute of Kinetic Energy Engineering Region to their Seelie Courts.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Tidal Guide (II)",
+                "description": "Follow 6 Seelie in Liffey Region and Fontaine Research Institute of Kinetic Energy Engineering Region to their Seelie Courts.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Tidal Guide (II)",
+                "description": "Follow 9 Seelie in Liffey Region and Fontaine Research Institute of Kinetic Energy Engineering Region to their Seelie Courts.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80278,
+                80279,
+                80280
+            ],
+            "name": "Waveriding Treasure Hunter (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 254,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Treasure Hunter (II)",
+                "description": "Open 60 treasure chests in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 60,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Treasure Hunter (II)",
+                "description": "Open 120 treasure chests in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 120,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Treasure Hunter (II)",
+                "description": "Open 200 treasure chests in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80281,
+                80282,
+                80283
+            ],
+            "name": "Waveriding Adventurer (II)",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 257,
+            "stages": 3,
+            "stage1": {
+                "title": "Waveriding Adventurer (II)",
+                "description": "Complete 3 Open World Time Trial Challenges in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Waveriding Adventurer (II)",
+                "description": "Complete 6 Open World Time Trial Challenges in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 6,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Waveriding Adventurer (II)",
+                "description": "Complete 12 Open World Time Trial Challenges in the Liffey Region and the Fontaine Research Institute of Kinetic Energy Engineering Region.",
+                "progress": 12,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80284
+            ],
+            "name": "There Is One Spectacle Grander Than the Sea, That Is the Sky",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 260,
+            "stages": 1,
+            "stage1": {
+                "title": "There Is One Spectacle Grander Than the Sea, That Is the Sky",
+                "description": "Get Lanoire out of the Fortress of Meropide.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.1"
+        },
+        {
+            "id": [
+                80285
+            ],
+            "name": "This Ends Here",
+            "achievementGroupId": 45,
+            "achievementGroupName": "Fontaine: Dance of the Dew-White Springs (II)",
+            "sortOrder": 261,
+            "stages": 1,
+            "stage1": {
+                "title": "This Ends Here",
+                "description": "Bear witness to the story of the Fontaine Research Institute of Kinetic Energy Engineering.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "4.1"
+        }
+    ]
+}

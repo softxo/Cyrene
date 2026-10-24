@@ -1,0 +1,217 @@
+{
+    "achievements": [
+        {
+            "id": [
+                80224
+            ],
+            "name": "Continental Explorer: Dune Dreams (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 205,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Dune Dreams (II)",
+                "description": "Light up the maps of the following area in Sumeru: Desert of Hadramaveth.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80225
+            ],
+            "name": "Over Sandstorms and Mirages (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 206,
+            "stages": 1,
+            "stage1": {
+                "title": "Over Sandstorms and Mirages (II)",
+                "description": "Unlock all Teleport Waypoints in the following area in Sumeru: Desert of Hadramaveth.",
+                "progress": 20,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80226
+            ],
+            "name": "Sanctuary Pilgrim: Dune Dreams (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 207,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Dune Dreams (II)",
+                "description": "Unlock all the Shrines of Depths in the following area in Sumeru: Desert of Hadramaveth.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80228,
+                80229,
+                80230
+            ],
+            "name": "The Desert Will Guide You Home (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 208,
+            "stages": 3,
+            "stage1": {
+                "title": "The Desert Will Guide You Home (II)",
+                "description": "Follow 4 Seelie in the Desert of Hadramaveth to their Seelie Courts.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Desert Will Guide You Home (II)",
+                "description": "Follow 8 Seelie in the Desert of Hadramaveth to their Seelie Courts.",
+                "progress": 8,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Desert Will Guide You Home (II)",
+                "description": "Follow 16 Seelie in the Desert of Hadramaveth to their Seelie Courts.",
+                "progress": 16,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80231,
+                80232,
+                80233
+            ],
+            "name": "Quicksand Treasure Hunter (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 211,
+            "stages": 3,
+            "stage1": {
+                "title": "Quicksand Treasure Hunter (II)",
+                "description": "Open 50 treasure chests in the Desert of Hadramaveth.",
+                "progress": 50,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Quicksand Treasure Hunter (II)",
+                "description": "Open 100 treasure chests in the Desert of Hadramaveth.",
+                "progress": 100,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Quicksand Treasure Hunter (II)",
+                "description": "Open 200 treasure chests in the Desert of Hadramaveth.",
+                "progress": 200,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80234,
+                80235,
+                80236
+            ],
+            "name": "Quicksand Adventurer (II)",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 214,
+            "stages": 3,
+            "stage1": {
+                "title": "Quicksand Adventurer (II)",
+                "description": "Complete 7 Open World Time Trial Challenges in the Desert of Hadramaveth.",
+                "progress": 7,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Quicksand Adventurer (II)",
+                "description": "Complete 14 Open World Time Trial Challenges in the Desert of Hadramaveth.",
+                "progress": 14,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Quicksand Adventurer (II)",
+                "description": "Complete 28 Open World Time Trial Challenges in the Desert of Hadramaveth.",
+                "progress": 28,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "3.4"
+        },
+        {
+            "id": [
+                80227
+            ],
+            "name": "The Dirge of Bilqis",
+            "achievementGroupId": 38,
+            "achievementGroupName": "Sumeru: The Gilded Desert - Series II",
+            "sortOrder": 217,
+            "stages": 1,
+            "stage1": {
+                "title": "The Dirge of Bilqis",
+                "description": "Complete \"The Dirge of Bilqis.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "3.4"
+        }
+    ]
+}
