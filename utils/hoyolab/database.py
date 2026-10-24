@@ -195,6 +195,8 @@ async def initialise_database() -> None:
                 id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
                 discord_user_id BIGINT NOT NULL,
+                account_id INTEGER REFERENCES accounts(id)
+                    ON DELETE CASCADE,
                 achievement_id TEXT NOT NULL,
                 tier INTEGER NOT NULL,
 
@@ -207,6 +209,58 @@ async def initialise_database() -> None:
 
                 UNIQUE(discord_user_id, achievement_id, tier)
             )
+            """
+        )
+
+        await connection.execute(
+            """
+            ALTER TABLE achievement_progress
+            ADD COLUMN IF NOT EXISTS account_id INTEGER
+                REFERENCES accounts(id) ON DELETE CASCADE
+            """
+        )
+
+        await connection.execute(
+            """
+            ALTER TABLE achievement_progress
+            DROP CONSTRAINT IF EXISTS
+                achievement_progress_discord_user_id_achievement_id_tier_key
+            """
+        )
+
+        # Existing user-wide progress belongs to the user's first linked
+        # account. Rows without a linked account remain available for a later
+        # migration instead of being discarded.
+        await connection.execute(
+            """
+            UPDATE achievement_progress AS progress
+            SET account_id = (
+                SELECT id
+                FROM accounts
+                WHERE discord_user_id = progress.discord_user_id
+                ORDER BY id
+                LIMIT 1
+            )
+            WHERE progress.account_id IS NULL
+              AND EXISTS (
+                  SELECT 1
+                  FROM accounts
+                  WHERE discord_user_id = progress.discord_user_id
+              )
+            """
+        )
+
+        await connection.execute(
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS
+                idx_achievement_progress_account_unique
+            ON achievement_progress (
+                discord_user_id,
+                account_id,
+                achievement_id,
+                tier
+            )
+            WHERE account_id IS NOT NULL
             """
         )
 
@@ -1880,7 +1934,8 @@ async def get_due_reminders() -> list[dict]:
 
 
 async def get_achievement_progress(
-    discord_user_id: int
+    discord_user_id: int,
+    account_id: int,
 ) -> list[dict]:
     async with get_pool().connection() as connection:
         result = await connection.execute(
@@ -1894,9 +1949,10 @@ async def get_achievement_progress(
                 note
             FROM achievement_progress
             WHERE discord_user_id = %s
+            AND account_id = %s
             ORDER BY achievement_id, tier
             """,
-            (discord_user_id,)
+            (discord_user_id, account_id)
         )
 
         return await result.fetchall()
@@ -1904,6 +1960,7 @@ async def get_achievement_progress(
 
 async def get_achievement_tier_progress(
     discord_user_id: int,
+    account_id: int,
     achievement_id: str,
     tier: int
 ) -> dict | None:
@@ -1921,12 +1978,14 @@ async def get_achievement_tier_progress(
                 note
             FROM achievement_progress
             WHERE discord_user_id = %s
+            AND account_id = %s
             AND achievement_id = %s
             AND tier = %s
             LIMIT 1
             """,
             (
                 discord_user_id,
+                account_id,
                 achievement_id,
                 tier
             )
@@ -1937,6 +1996,7 @@ async def get_achievement_tier_progress(
 
 async def update_achievement_tier(
     discord_user_id: int,
+    account_id: int,
     achievement_id: str,
     tier: int,
     *,
@@ -1948,6 +2008,7 @@ async def update_achievement_tier(
 
     existing = await get_achievement_tier_progress(
         discord_user_id,
+        account_id,
         achievement_id,
         tier
     )
@@ -1996,6 +2057,7 @@ async def update_achievement_tier(
                 """
                 INSERT INTO achievement_progress (
                     discord_user_id,
+                    account_id,
                     achievement_id,
                     tier,
                     completed,
@@ -2004,11 +2066,12 @@ async def update_achievement_tier(
                     note
                 )
                 VALUES (
-                    %s, %s, %s, %s, %s, %s, %s
+                    %s, %s, %s, %s, %s, %s, %s, %s
                 )
                 """,
                 (
                     discord_user_id,
+                    account_id,
                     achievement_id,
                     tier,
                     completed,
@@ -2102,6 +2165,7 @@ async def update_achievement_tier(
 
     values.extend([
         discord_user_id,
+        account_id,
         achievement_id,
         tier
     ])
@@ -2114,6 +2178,7 @@ async def update_achievement_tier(
             UPDATE achievement_progress
             SET {", ".join(updates)}
             WHERE discord_user_id = %s
+            AND account_id = %s
             AND achievement_id = %s
             AND tier = %s
             """,
@@ -2126,6 +2191,7 @@ async def update_achievement_tier(
 
 async def update_achievement_tier_note(
     discord_user_id: int,
+    account_id: int,
     achievement_id: str,
     tier: int,
     note: str | None,
@@ -2133,6 +2199,7 @@ async def update_achievement_tier_note(
 
     existing = await get_achievement_tier_progress(
         discord_user_id,
+        account_id,
         achievement_id,
         tier
     )
@@ -2141,6 +2208,7 @@ async def update_achievement_tier_note(
 
         await update_achievement_tier(
             discord_user_id=discord_user_id,
+            account_id=account_id,
             achievement_id=achievement_id,
             tier=tier,
             completed=False,
@@ -2156,12 +2224,14 @@ async def update_achievement_tier_note(
                 note = %s,
                 updated_at = NOW()
             WHERE discord_user_id = %s
+            AND account_id = %s
             AND achievement_id = %s
             AND tier = %s
             """,
             (
                 note,
                 discord_user_id,
+                account_id,
                 achievement_id,
                 tier
             )
@@ -2172,6 +2242,7 @@ async def update_achievement_tier_note(
 
 async def import_achievement_progress(
     discord_user_id: int,
+    account_id: int,
     progress_data: dict
 ) -> None:
     async with get_pool().connection() as connection:
@@ -2203,6 +2274,7 @@ async def import_achievement_progress(
                     """
                     INSERT INTO achievement_progress (
                         discord_user_id,
+                        account_id,
                         achievement_id,
                         tier,
                         completed,
@@ -2210,14 +2282,16 @@ async def import_achievement_progress(
                         completed_at
                     )
                     VALUES (
-                        %s, %s, %s, %s, %s, %s
+                        %s, %s, %s, %s, %s, %s, %s
                     )
 
                     ON CONFLICT (
                         discord_user_id,
+                        account_id,
                         achievement_id,
                         tier
                     )
+                    WHERE account_id IS NOT NULL
                     DO UPDATE SET
                         completed = EXCLUDED.completed,
                         current = EXCLUDED.current,
@@ -2226,6 +2300,7 @@ async def import_achievement_progress(
                     """,
                     (
                         discord_user_id,
+                        account_id,
                         achievement_id,
                         tier,
                         completed,

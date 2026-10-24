@@ -4,10 +4,13 @@
 
 {% block content %}
 
-<div class="page achievements-page">
+<div
+    class="page achievements-page"
+    data-achievement-account-id="{{ selected_account.id if selected_account else '' }}"
+>
 
     <!-- Page Header -->
-    <section class="page-header">
+    <section class="page-header achievements-page-header">
 
         <div>
             <span class="eyebrow">
@@ -23,7 +26,51 @@
             </p>
         </div>
 
+        {% if accounts %}
+        <form method="get" action="/achievements" class="achievements-account-form">
+            <label for="achievements-account-button">Account</label>
+            <div class="custom-select achievements-account-select">
+                <button
+                    id="achievements-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        {{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}
+                        · {{ selected_account.genshin_uid }}
+                    </span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if account.id == selected_account.id else 'false' }}"
+                    >
+                        {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="account_id" value="{{ selected_account.id }}">
+            </div>
+        </form>
+        {% endif %}
+
     </section>
+
+    {% if not accounts %}
+    <section class="achievement-empty-state">
+        <h2>No accounts connected</h2>
+        <p>Connect a HoYoLAB account before tracking achievements.</p>
+        <a class="button" href="/verify?next=/achievements">Connect account</a>
+    </section>
+    {% endif %}
 
 
     <!-- Overall Progress -->
@@ -115,6 +162,7 @@
                 <input
                     type="search"
                     id="achievement-search"
+                    data-achievement-search
                     class="achievement-search"
                     placeholder="Search achievements..."
                     autocomplete="off"
@@ -127,6 +175,7 @@
             <div
                 class="custom-select"
                 id="achievement-version-select"
+                data-achievement-version-select
             >
 
                 <button
@@ -172,6 +221,7 @@
                 <input
                     type="checkbox"
                     id="achievement-hide-completed"
+                    data-achievement-hide-completed
                 >
 
                 <span>
@@ -272,6 +322,32 @@
 
                 </div>
 
+            </div>
+
+            <div class="achievement-category-controls achievement-browser-controls">
+                <div class="achievement-search-wrapper">
+                    <span class="achievement-search-icon" aria-hidden="true">⌕</span>
+                    <input
+                        type="search"
+                        class="achievement-search"
+                        data-achievement-search
+                        placeholder="Search achievements..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="custom-select" data-achievement-version-select>
+                    <button type="button" class="custom-select-button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">All Versions</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox"></div>
+                </div>
+
+                <label class="checkbox-control">
+                    <input type="checkbox" data-achievement-hide-completed>
+                    <span>Hide Completed</span>
+                </label>
             </div>
 
 

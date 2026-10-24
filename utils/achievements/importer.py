@@ -15,6 +15,7 @@ load_dotenv()
 
 async def import_achievements(
     user_id: int,
+    account_id: int,
     export_file: str | Path,
 ) -> dict:
 
@@ -190,6 +191,7 @@ async def import_achievements(
 
     await import_achievement_progress(
         user_id,
+        account_id,
         progress,
     )
 
@@ -220,6 +222,7 @@ if __name__ == "__main__":
 
         result = await import_achievements(
             user_id=1,
+            account_id=1,
             export_file=export_file,
         )
 

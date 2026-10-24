@@ -4400,7 +4400,8 @@ async def api_change_custom_event_account_progress(
 )
 async def achievements(
     request: Request,
-    cyrene_session: str | None = Cookie(default=None)
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
 ):
     session = await get_web_session(
         cyrene_session
@@ -4412,17 +4413,56 @@ async def achievements(
             status_code=303,
         )
 
+    accounts = await get_accounts(session.user_id)
+    selected_account = next(
+        (
+            account
+            for account in accounts
+            if account["id"] == account_id
+        ),
+        None,
+    ) if account_id is not None else None
+
+    if selected_account is None and accounts:
+        selected_account = accounts[0]
+
     return templates.TemplateResponse(
         request=request,
         name="achievements.html",
         context={
             "request": request,
+            "accounts": accounts,
+            "selected_account": selected_account,
         },
     )
 
 
+async def _get_achievement_account(
+    user_id: int,
+    account_id: int,
+) -> dict:
+    accounts = await get_accounts(user_id)
+    account = next(
+        (
+            item
+            for item in accounts
+            if item["id"] == account_id
+        ),
+        None,
+    )
+
+    if account is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Genshin account not found.",
+        )
+
+    return account
+
+
 @app.get("/api/achievements")
 async def achievements_data(
+    account_id: int,
     cyrene_session: str | None = Cookie(default=None)
 ):
     user_id = await get_authenticated_user(
@@ -4435,9 +4475,12 @@ async def achievements_data(
             detail="Not authenticated."
         )
 
+    await _get_achievement_account(user_id, account_id)
+
     source_achievements = load_achievements()
     saved_progress = await load_progress(
-        user_id
+        user_id,
+        account_id,
     )
 
     achievements = []
@@ -4642,6 +4685,7 @@ async def achievements_data(
 async def update_achievement_tier_api(
     achievement_id: str,
     tier: int,
+    account_id: int,
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
 ):
@@ -4655,6 +4699,7 @@ async def update_achievement_tier_api(
             detail="Not authenticated."
         )
 
+    await _get_achievement_account(user_id, account_id)
     body = await request.json()
 
     completed = body.get("completed")
@@ -4667,6 +4712,7 @@ async def update_achievement_tier_api(
 
     updated = await update_achievement_tier(
         discord_user_id=user_id,
+        account_id=account_id,
         achievement_id=achievement_id,
         tier=tier,
         completed=completed,
@@ -4685,6 +4731,7 @@ async def update_achievement_tier_api(
 async def update_achievement_tier_note_api(
     achievement_id: str,
     tier: int,
+    account_id: int,
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
 ):
@@ -4698,6 +4745,7 @@ async def update_achievement_tier_note_api(
             detail="Not authenticated."
         )
 
+    await _get_achievement_account(user_id, account_id)
     body = await request.json()
 
     note = body.get("note")
@@ -4716,6 +4764,7 @@ async def update_achievement_tier_note_api(
 
     updated = await update_achievement_tier(
         discord_user_id=user_id,
+        account_id=account_id,
         achievement_id=achievement_id,
         tier=tier,
         note=note,
@@ -4733,6 +4782,7 @@ async def update_achievement_tier_note_api(
 @app.post("/api/achievements/import")
 async def import_achievements_api(
     request: Request,
+    account_id: int,
     cyrene_session: str | None = Cookie(default=None),
 ):
     user_id = await get_authenticated_user(
@@ -4745,6 +4795,7 @@ async def import_achievements_api(
             detail="Not authenticated."
         )
 
+    await _get_achievement_account(user_id, account_id)
     form = await request.form()
 
     uploaded_file = form.get(
@@ -4781,6 +4832,7 @@ async def import_achievements_api(
 
         result = await import_achievements(
             user_id=user_id,
+            account_id=account_id,
             export_file=temp_path,
         )
 
