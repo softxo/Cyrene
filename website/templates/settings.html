@@ -11,12 +11,39 @@
         <p>Customise your Cyrene experience.</p>
     </section>
 
+    <div class="settings-panel">
+
+
+    <!-- =====================================================
+         HOYOLAB ACCOUNTS
+         ===================================================== -->
+
+    <section class="settings-group account-link-section">
+        <div class="settings-section-header">
+            <h3>HoYoLAB Accounts</h3>
+            <p>
+                Add an account here or through Discord. Both methods link it
+                to the same Cyrene profile.
+            </p>
+        </div>
+
+        <button id="open-account-link" class="account-link-open" type="button">
+            Add HoYoLAB account
+        </button>
+
+        <div
+            id="linked-account-list"
+            class="linked-account-list"
+            aria-live="polite"
+        ></div>
+    </section>
+
 
     <!-- =====================================================
          APPEARANCE
          ===================================================== -->
 
-    <section class="settings-section">
+    <section class="settings-group">
 
         <div class="settings-section-header">
             <h3>Appearance</h3>
@@ -114,7 +141,7 @@
         INTERFACE
         ===================================================== -->
 
-    <section class="settings-section">
+    <section class="settings-group">
 
         <div class="settings-section-header">
             <h3>Interface</h3>
@@ -140,6 +167,123 @@
         </div>
 
     </section>
+
+    </div>
+
+    <div id="account-link-modal" class="settings-modal" hidden>
+        <div class="settings-modal-backdrop" data-close-account-modal></div>
+
+        <section
+            class="settings-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="account-link-title"
+        >
+            <button
+                type="button"
+                class="settings-modal-close"
+                data-close-account-modal
+                aria-label="Close"
+            >×</button>
+
+            <div id="account-link-modal-content">
+                <h3 id="account-link-title">Add HoYoLAB account</h3>
+                <p class="settings-modal-description">
+                    Sign in to choose which Genshin account to add.
+                </p>
+
+                <form id="account-link-form" class="account-link-form">
+            <label>
+                <span>Email or username</span>
+                <input
+                    id="hoyolab-account"
+                    name="account"
+                    type="text"
+                    autocomplete="username"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input
+                    id="hoyolab-password"
+                    name="password"
+                    type="password"
+                    autocomplete="current-password"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <p class="account-link-privacy">
+                Your password is sent directly to HoYoLAB for authentication
+                and is never stored by Cyrene.
+            </p>
+
+            <button id="account-link-submit" type="submit">
+                Continue
+            </button>
+
+                </form>
+
+                <div
+                    id="account-link-result"
+                    class="account-link-result"
+                    aria-live="polite"
+                ></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="account-manage-modal" class="settings-modal" hidden>
+        <div class="settings-modal-backdrop" data-close-manage-modal></div>
+
+        <section
+            class="settings-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="account-manage-title"
+        >
+            <button
+                type="button"
+                class="settings-modal-close"
+                data-close-manage-modal
+                aria-label="Close"
+            >×</button>
+
+            <h3 id="account-manage-title">Manage account</h3>
+            <p id="account-manage-details" class="settings-modal-description"></p>
+
+            <form id="account-rename-form" class="account-link-form">
+                <label>
+                    <span>Cyrene nickname</span>
+                    <input
+                        id="account-manage-nickname"
+                        type="text"
+                        maxlength="50"
+                        placeholder="Use the HoYoLAB nickname"
+                    >
+                </label>
+
+                <button type="submit">Save nickname</button>
+            </form>
+
+            <div class="account-danger-zone">
+                <div>
+                    <strong>Remove account</strong>
+                    <span>This unlinks it from both the site and Discord.</span>
+                </div>
+
+                <button id="account-delete-button" type="button">
+                    Remove
+                </button>
+            </div>
+
+            <p id="account-manage-status" class="account-link-message" aria-live="polite"></p>
+        </section>
+    </div>
 
 </div>
 

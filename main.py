@@ -199,7 +199,7 @@ async def main():
     config = uvicorn.Config(
         web_app,
         host="0.0.0.0",
-        port=26199,
+        port=25301,
         log_level="info",
     )
 
