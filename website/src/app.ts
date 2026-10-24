@@ -79,7 +79,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js",
         "/static/build/browser/pages/characters/characters-showcase.js",
-        "/static/build/browser/pages/characters/characters-planner.js",
+        "/static/build/browser/pages/characters/characters-planner.js?v=2",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js",
@@ -181,7 +181,7 @@ async function loadPageScript(path: string): Promise<void> {
    4. PAGE STYLE LOADER
    ========================================================= */
 
-function loadPageStyle(path: string): void {
+async function loadPageStyle(path: string): Promise<void> {
     const styleHref = pageStyles[path];
 
     if (!styleHref) {
@@ -210,7 +210,16 @@ function loadPageStyle(path: string): void {
     link.href = styleHref;
     link.dataset.pageStyle = path;
 
-    document.head.appendChild(link);
+    await new Promise<void>((resolve, reject) => {
+        link.addEventListener("load", () => resolve(), { once: true });
+        link.addEventListener(
+            "error",
+            () => reject(new Error(`Failed to load page style: ${styleHref}`)),
+            { once: true },
+        );
+
+        document.head.appendChild(link);
+    });
 }
 
 
@@ -251,7 +260,7 @@ function initialisePage(path: string): void {
 }
 
 async function preparePage(path: string): Promise<void> {
-    loadPageStyle(path);
+    await loadPageStyle(path);
 
     await loadPageScript(path);
 
@@ -354,6 +363,15 @@ async function navigate(
             );
         }
 
+        const finalPath = new URL(
+            url,
+            window.location.origin,
+        ).pathname;
+
+        // Keep the current page visible until the destination stylesheet is
+        // ready, preventing an unstyled frame during client-side navigation.
+        await loadPageStyle(finalPath);
+
         /*
          * Replace the current page content.
          */
@@ -394,11 +412,6 @@ async function navigate(
         /*
          * Load assets and initialise the destination page.
          */
-
-        const finalPath = new URL(
-            url,
-            window.location.origin,
-        ).pathname;
 
         await preparePage(finalPath);
 
