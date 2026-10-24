@@ -8,7 +8,7 @@ PyNaCl
 Pillow
 davey
 cryptography
-genshin
+genshin @ git+https://github.com/seriaati/genshin.py.git@2d20ab1ad7e8af722d179a2cf0d79db5f8a9b213
 rsa
 fastapi
 uvicorn
