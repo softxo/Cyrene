@@ -824,10 +824,11 @@ window.initAchievements = function () {
         return true;
     }
     function rebuildCategoryView() {
-        buildCategories();
         if (activeCategory && !browser.hidden) {
             buildAchievements(activeCategory);
+            return;
         }
+        buildCategories();
     }
     achievementSearchInputs.forEach(achievementSearch => {
         achievementSearch.addEventListener("input", () => {
@@ -1193,6 +1194,7 @@ window.initAchievements = function () {
         achievementList.innerHTML = "";
         const achievements = achievementData.achievements.filter(achievement => achievement.category === category &&
             achievementMatchesFilters(achievement));
+        const fragment = document.createDocumentFragment();
         achievements.forEach(achievement => {
             const item = document.createElement("div");
             item.className =
@@ -1401,18 +1403,6 @@ window.initAchievements = function () {
                     </div>
     
                 `;
-            item.querySelectorAll(".achievement-tier").forEach(tierElement => {
-                const description = tierElement.querySelector(".achievement-tier-description p");
-                const descriptionContainer = tierElement.querySelector(".achievement-tier-description");
-                if (!description ||
-                    !descriptionContainer) {
-                    return;
-                }
-                const lineHeight = parseFloat(window.getComputedStyle(description).lineHeight);
-                const height = description.getBoundingClientRect().height;
-                const isMultiline = height > lineHeight * 1.5;
-                descriptionContainer.classList.toggle("multiline", isMultiline);
-            });
             const tierButtons = item.querySelectorAll(".achievement-complete-button");
             const notesButtons = item.querySelectorAll(".achievement-notes-button");
             const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
@@ -1505,10 +1495,12 @@ window.initAchievements = function () {
                     toggleTierCompleted(achievement, tier, item, button);
                 });
             });
-            achievementList.appendChild(item);
+            fragment.appendChild(item);
             updateLockedTiers(item);
             updateAchievementProgress(item);
         });
+        achievementList.appendChild(fragment);
+        achievementList.parentElement.scrollTop = 0;
     }
     function getTierImage(currentTier, totalTiers) {
         return `/static/images/achievements/tiers/Achievement_${currentTier}_${totalTiers}.png`;

@@ -1245,12 +1245,12 @@
    ACHIEVEMENT VERSION DROPDOWN
    ============================= */
 
-#achievement-version-select {
+.achievement-version-select {
     position: relative;
 }
 
 
-#achievement-version-select .custom-select-menu {
+.achievement-version-select .custom-select-menu {
     width: 430px;
 
     left: 50%;
@@ -1275,7 +1275,7 @@
    OPEN STATE
    ============================= */
 
-#achievement-version-select.open .custom-select-menu {
+.achievement-version-select.open .custom-select-menu {
     transform: translateX(-50%) translateY(0);
 
     grid-template-columns:
@@ -1297,7 +1297,7 @@
    VERSION OPTIONS
    ============================= */
 
-#achievement-version-select
+.achievement-version-select
 .custom-select-option {
 
     width: auto;
@@ -1322,7 +1322,7 @@
    EMPTY CELLS
    ============================= */
 
-#achievement-version-select
+.achievement-version-select
 .custom-select-option-spacer {
 
     min-height: 28px;
@@ -1334,7 +1334,7 @@
    FIRST VERSION ROW
    ============================= */
 
-#achievement-version-select
+.achievement-version-select
 .achievement-version-first-row {
 
     transform: translateY(0);
@@ -1346,7 +1346,7 @@
    ALL VERSIONS
    ============================= */
 
-#achievement-version-select
+.achievement-version-select
 .version-all-option {
     grid-column: 1 / -1;
 
@@ -2639,12 +2639,12 @@
 }
 
 
-#achievement-version-select {
+.achievement-version-select {
     position: relative;
     z-index: 1001;
 }
 
-#achievement-version-button {
+.achievement-version-button {
     position: relative;
     z-index: 1002;
     pointer-events: auto;
@@ -2676,7 +2676,7 @@
 
 
 /* Version dropdown button */
-#achievement-version-button {
+.achievement-version-button {
     height: 42px;
 
     background: var(--surface);
@@ -2686,7 +2686,7 @@
     font-weight: 600;
 }
 
-#achievement-version-button:hover {
+.achievement-version-button:hover {
     background: var(--surface-hover);
 
     border-color: var(--accent-border);
@@ -2716,7 +2716,7 @@
 
 
 /* All Versions dropdown option */
-#achievement-version-select .version-all-option {
+.achievement-version-select .version-all-option {
     min-height: 38px;
 
     background: var(--surface);
@@ -2726,13 +2726,13 @@
     font-weight: 600;
 }
 
-#achievement-version-select .version-all-option:hover {
+.achievement-version-select .version-all-option:hover {
     background: var(--surface-hover);
 
     color: var(--accent);
 }
 
-#achievement-version-select
+.achievement-version-select
 .version-all-option.selected {
     background:
         color-mix(
@@ -2744,7 +2744,7 @@
     color: var(--accent);
 }
 
-#achievement-version-select
+.achievement-version-select
 .version-all-option.selected:hover {
     background:
         color-mix(

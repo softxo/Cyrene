@@ -173,14 +173,14 @@
             <!-- Version -->
 
             <div
-                class="custom-select"
+                class="custom-select achievement-version-select"
                 id="achievement-version-select"
                 data-achievement-version-select
             >
 
                 <button
                     type="button"
-                    class="custom-select-button"
+                    class="custom-select-button achievement-version-button"
                     id="achievement-version-button"
                 >
                     <span class="custom-select-value">
@@ -326,7 +326,27 @@
 
             <div class="achievement-category-controls achievement-browser-controls">
                 <div class="achievement-search-wrapper">
-                    <span class="achievement-search-icon" aria-hidden="true">⌕</span>
+                    <span class="achievement-search-icon">
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M4.47487 4.4749C2.32698 6.62279 2.32698 10.1052 4.47487 12.2531C6.62275 14.401 10.1052 14.401 12.253 12.2531C14.4009 10.1052 14.4009 6.62279 12.253 4.4749C10.1052 2.32702 6.62275 2.32702 4.47487 4.4749ZM10.8388 10.8389C9.47199 12.2057 7.25591 12.2057 5.88908 10.8389C4.52224 9.47203 4.52224 7.25595 5.88908 5.88912C7.25591 4.52228 9.47199 4.52228 10.8388 5.88912C12.2057 7.25595 12.2057 9.47203 10.8388 10.8389Z"
+                                fill="currentColor"
+                            />
+                            <path
+                                d="M11.1924 13.3137C10.6066 12.7279 10.6066 11.7782 11.1924 11.1924C11.7782 10.6066 12.7279 10.6066 13.3137 11.1924L16.8492 14.7279C17.435 15.3137 17.435 16.2635 16.8492 16.8492C16.2635 17.435 15.3135 17.435 14.7279 16.8492L11.1924 13.3137Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </span>
                     <input
                         type="search"
                         class="achievement-search"
@@ -336,8 +356,8 @@
                     >
                 </div>
 
-                <div class="custom-select" data-achievement-version-select>
-                    <button type="button" class="custom-select-button" aria-haspopup="listbox" aria-expanded="false">
+                <div class="custom-select achievement-version-select" data-achievement-version-select>
+                    <button type="button" class="custom-select-button achievement-version-button" aria-haspopup="listbox" aria-expanded="false">
                         <span class="custom-select-value">All Versions</span>
                         <span class="custom-select-arrow"></span>
                     </button>

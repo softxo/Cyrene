@@ -1869,11 +1869,12 @@ window.initAchievements = function () {
 
         function rebuildCategoryView() {
 
-            buildCategories();
-
             if (activeCategory && !browser.hidden) {
                 buildAchievements(activeCategory);
+                return;
             }
+
+            buildCategories();
 
         }
 
@@ -2525,6 +2526,9 @@ window.initAchievements = function () {
                     achievementMatchesFilters(achievement)
             );
 
+        const fragment =
+            document.createDocumentFragment();
+
 
         achievements.forEach(
             achievement => {
@@ -2780,48 +2784,6 @@ window.initAchievements = function () {
     
                 `;
 
-                item.querySelectorAll(
-                    ".achievement-tier"
-                ).forEach(tierElement => {
-
-                    const description =
-                        tierElement.querySelector(
-                            ".achievement-tier-description p"
-                        );
-
-                    const descriptionContainer =
-                        tierElement.querySelector(
-                            ".achievement-tier-description"
-                        );
-
-                    if (
-                        !description ||
-                        !descriptionContainer
-                    ) {
-                        return;
-                    }
-
-                    const lineHeight =
-                        parseFloat(
-                            window.getComputedStyle(
-                                description
-                            ).lineHeight
-                        );
-
-                    const height =
-                        description.getBoundingClientRect().height;
-
-                    const isMultiline =
-                        height > lineHeight * 1.5;
-
-                    descriptionContainer.classList.toggle(
-                        "multiline",
-                        isMultiline
-                    );
-
-                });
-
-
                 const tierButtons =
                     item.querySelectorAll(
                         ".achievement-complete-button"
@@ -3056,13 +3018,16 @@ window.initAchievements = function () {
                 );
 
 
-                achievementList.appendChild(item);
+                fragment.appendChild(item);
 
                 updateLockedTiers(item);
                 updateAchievementProgress(item);
 
             }
         );
+
+        achievementList.appendChild(fragment);
+        achievementList.parentElement.scrollTop = 0;
 
     }
 
