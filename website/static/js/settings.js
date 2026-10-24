@@ -9,6 +9,7 @@ function initSettings() {
     );
 
     initialiseAccountLinking();
+    initialiseAccountManagement();
 
 
     // =========================================
@@ -43,17 +44,231 @@ function initSettings() {
 }
 
 
+function initialiseAccountManagement() {
+    const list = document.getElementById("linked-account-list");
+    const modal = document.getElementById("account-manage-modal");
+    const renameForm = document.getElementById("account-rename-form");
+    const nicknameInput = document.getElementById("account-manage-nickname");
+    const details = document.getElementById("account-manage-details");
+    const status = document.getElementById("account-manage-status");
+    const deleteButton = document.getElementById("account-delete-button");
+
+    if (
+        !list ||
+        !modal ||
+        !renameForm ||
+        !nicknameInput ||
+        !details ||
+        !status ||
+        !deleteButton ||
+        list.dataset.initialised === "true"
+    ) {
+        return;
+    }
+
+    list.dataset.initialised = "true";
+    let selectedAccount = null;
+
+    const closeModal = () => {
+        modal.hidden = true;
+        selectedAccount = null;
+        document.body.classList.remove("settings-modal-open");
+    };
+
+    const request = async (url, options = {}) => {
+        const response = await fetch(url, options);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            const error = new Error(data.detail || "Something went wrong.");
+            error.status = response.status;
+            throw error;
+        }
+
+        return data;
+    };
+
+    const openModal = account => {
+        selectedAccount = account;
+        details.textContent = `${account.nickname || "Unnamed account"} · UID ${account.uid}`;
+        nicknameInput.value = account.cyrene_nickname || "";
+        status.textContent = "";
+        status.classList.remove("error");
+        deleteButton.disabled = false;
+        modal.hidden = false;
+        document.body.classList.add("settings-modal-open");
+        nicknameInput.focus();
+    };
+
+    const renderAccounts = accounts => {
+        list.innerHTML = "";
+
+        if (!accounts.length) {
+            const empty = document.createElement("p");
+            empty.className = "linked-account-empty";
+            empty.textContent = "No HoYoLAB accounts linked yet.";
+            list.appendChild(empty);
+            return;
+        }
+
+        accounts.forEach(account => {
+            const row = document.createElement("div");
+            row.className = "linked-account-row";
+
+            const info = document.createElement("div");
+            info.className = "linked-account-info";
+
+            const name = document.createElement("strong");
+            name.textContent = account.cyrene_nickname || account.nickname || "Unnamed account";
+
+            const meta = document.createElement("span");
+            meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
+
+            const manage = document.createElement("button");
+            manage.type = "button";
+            manage.className = "linked-account-manage";
+            manage.textContent = "Manage";
+            manage.addEventListener("click", () => openModal(account));
+
+            info.append(name, meta);
+            row.append(info, manage);
+            list.appendChild(row);
+        });
+    };
+
+    const loadAccounts = async () => {
+        try {
+            const data = await request("/api/hoyolab/accounts");
+            renderAccounts(data.accounts);
+        } catch (error) {
+            list.innerHTML = "";
+            const message = document.createElement("p");
+            message.className = "linked-account-empty";
+            message.textContent = error.status === 401
+                ? "Verify your Discord account to view and manage linked accounts."
+                : error.message;
+            list.appendChild(message);
+        }
+    };
+
+    modal.querySelectorAll("[data-close-manage-modal]").forEach(button => {
+        button.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+
+    renameForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!selectedAccount) {
+            return;
+        }
+
+        status.classList.remove("error");
+        status.textContent = "Saving…";
+
+        try {
+            const data = await request(
+                `/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`,
+                {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nickname: nicknameInput.value })
+                }
+            );
+
+            selectedAccount.cyrene_nickname = data.nickname;
+            status.textContent = "Nickname saved.";
+            await loadAccounts();
+        } catch (error) {
+            status.classList.add("error");
+            status.textContent = error.message;
+        }
+    });
+
+    deleteButton.addEventListener("click", async () => {
+        if (
+            !selectedAccount ||
+            !window.confirm("Remove this HoYoLAB account from Cyrene and Discord?")
+        ) {
+            return;
+        }
+
+        deleteButton.disabled = true;
+        status.classList.remove("error");
+        status.textContent = "Removing account…";
+
+        try {
+            await request(
+                `/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`,
+                { method: "DELETE" }
+            );
+
+            closeModal();
+            await loadAccounts();
+        } catch (error) {
+            deleteButton.disabled = false;
+            status.classList.add("error");
+            status.textContent = error.message;
+        }
+    });
+
+    void loadAccounts();
+}
+
+
 function initialiseAccountLinking() {
+    const modal = document.getElementById("account-link-modal");
+    const openButton = document.getElementById("open-account-link");
     const form = document.getElementById("account-link-form");
     const result = document.getElementById("account-link-result");
     const submit = document.getElementById("account-link-submit");
 
-    if (!form || !result || !submit || form.dataset.initialised === "true") {
+    if (
+        !modal ||
+        !openButton ||
+        !form ||
+        !result ||
+        !submit ||
+        form.dataset.initialised === "true"
+    ) {
         return;
     }
 
     form.dataset.initialised = "true";
     let pollTimer = null;
+
+    const closeModal = () => {
+        modal.hidden = true;
+        document.body.classList.remove("settings-modal-open");
+        window.clearTimeout(pollTimer);
+    };
+
+    const openModal = () => {
+        modal.hidden = false;
+        form.hidden = false;
+        result.innerHTML = "";
+        submit.disabled = false;
+        submit.textContent = "Continue";
+        document.body.classList.add("settings-modal-open");
+        document.getElementById("hoyolab-account").focus();
+    };
+
+    openButton.addEventListener("click", openModal);
+
+    modal.querySelectorAll("[data-close-account-modal]").forEach(button => {
+        button.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
 
     const showError = message => {
         result.innerHTML = "";
@@ -62,7 +277,7 @@ function initialiseAccountLinking() {
         paragraph.textContent = message;
         result.appendChild(paragraph);
         submit.disabled = false;
-        submit.textContent = "Add HoYoLAB account";
+        submit.textContent = "Continue";
     };
 
     const request = async (url, options = {}) => {
@@ -82,6 +297,7 @@ function initialiseAccountLinking() {
     };
 
     const showAccountChoices = (token, accounts) => {
+        form.hidden = true;
         result.innerHTML = "";
 
         const heading = document.createElement("p");
@@ -137,6 +353,10 @@ function initialiseAccountLinking() {
                         : "Account linked";
                     result.querySelector("p").textContent =
                         `${account.nickname || account.game_uid} is now available in Cyrene and Discord.`;
+
+                    window.setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } catch (error) {
                     button.disabled = false;
                     showError(error.message);
@@ -171,7 +391,8 @@ function initialiseAccountLinking() {
             message.className = "account-link-message";
 
             if (data.status === "captcha") {
-                message.textContent = "HoYoLAB needs a CAPTCHA before continuing.";
+                message.classList.add("warning");
+                message.textContent = "HoYoLAB needs a CAPTCHA before continuing. Complete it in the new page, then return here.";
                 result.appendChild(message);
 
                 const link = document.createElement("a");

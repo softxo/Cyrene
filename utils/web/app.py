@@ -47,6 +47,8 @@ from utils.hoyolab.database import (
     save_account,
     get_account,
     get_account_count,
+    delete_account,
+    update_account_nickname,
     get_accounts,
     get_reminders,
     get_reminder,
@@ -398,6 +400,68 @@ async def start_hoyolab_link(
     task.add_done_callback(_account_link_tasks.discard)
 
     return {"success": True, "token": token}
+
+
+@app.get("/api/hoyolab/accounts")
+async def web_hoyolab_accounts(
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    accounts = await get_accounts(user_id)
+
+    return {
+        "accounts": [
+            {
+                "uid": account["genshin_uid"],
+                "nickname": account["nickname"],
+                "cyrene_nickname": account["cyrene_nickname"],
+                "level": account["level"],
+                "server": account["genshin_server"],
+            }
+            for account in accounts
+        ],
+    }
+
+
+@app.patch("/api/hoyolab/accounts/{uid}")
+async def rename_web_hoyolab_account(
+    uid: str,
+    data: dict[str, typing.Any],
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    nickname = str(data.get("nickname") or "").strip()
+
+    if len(nickname) > 50:
+        raise HTTPException(
+            status_code=400,
+            detail="Account names must be 50 characters or fewer.",
+        )
+
+    updated = await update_account_nickname(
+        user_id,
+        uid,
+        nickname or None,
+    )
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Account not found.")
+
+    return {"success": True, "nickname": nickname or None}
+
+
+@app.delete("/api/hoyolab/accounts/{uid}")
+async def delete_web_hoyolab_account(
+    uid: str,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    deleted = await delete_account(user_id, uid)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Account not found.")
+
+    return {"success": True}
 
 
 def _get_account_link_attempt(token: str, user_id: int) -> dict:
@@ -5061,9 +5125,27 @@ async def challenge(token: str):
                                 </svg>
                             </div>
                             <h1>CAPTCHA verified</h1>
-                            <p>You can close this page. Cyrene will continue automatically.</p>
+                            <p>
+                                Cyrene will continue automatically. This page
+                                will close in <span id="close-countdown">3</span> seconds.
+                            </p>
                         </div>
                     `;
+
+                    let secondsRemaining = 3;
+                    const countdown = document.getElementById("close-countdown");
+
+                    const countdownTimer = window.setInterval(() => {{
+                        secondsRemaining -= 1;
+
+                        if (secondsRemaining > 0) {{
+                            countdown.textContent = secondsRemaining;
+                            return;
+                        }}
+
+                        window.clearInterval(countdownTimer);
+                        window.close();
+                    }}, 1000);
 
                 }}
 
