@@ -6,84 +6,63 @@
 
 <div class="page home-page">
     <section class="home-hero">
-        <div class="home-hero-content">
-            <span class="home-eyebrow"><span></span>Your Genshin companion</span>
+        <div class="home-hero-copy">
+            <span class="home-kicker">A clearer way to play</span>
 
-            <h1>
-                Everything you need,<br>
-                <span>beautifully organised.</span>
-            </h1>
+            <h1>Your adventure,<br><em>all in one place.</em></h1>
 
             <p>
-                Track your roster, plan upgrades, follow events, and keep
-                your daily progress together in one calm workspace.
+                Cyrene brings your Genshin progress, plans, events, and
+                account tools into one focused workspace.
             </p>
 
-            <div class="home-actions">
-                <a href="/characters" class="home-primary-action">
-                    View characters <span aria-hidden="true">→</span>
+            <div class="home-hero-actions">
+                <a href="/characters" class="home-action-primary">
+                    Open your roster <span aria-hidden="true">→</span>
                 </a>
-                <a href="/events" class="home-secondary-action">Check events</a>
+                <a href="/settings" class="home-action-secondary">
+                    Manage accounts
+                </a>
             </div>
         </div>
 
-        <div class="home-hero-visual" aria-hidden="true">
-            <div class="home-visual-glow"></div>
-            <div class="home-orbit home-orbit-outer"></div>
-            <div class="home-orbit home-orbit-inner"></div>
-
-            <div class="home-logo-card">
-                <img src="/static/images/ui/ui_icons/Cyrene.png" alt="">
-            </div>
-
-            <div class="home-floating-icon home-floating-character">
-                <img src="/static/images/ui/ui_icons/Characters.webp" alt="">
-            </div>
-            <div class="home-floating-icon home-floating-planner">
-                <img src="/static/images/ui/ui_icons/Planner.webp" alt="">
-            </div>
-            <div class="home-floating-icon home-floating-events">
-                <img src="/static/images/ui/ui_icons/Events.webp" alt="">
-            </div>
+        <div class="home-hero-mark" aria-hidden="true">
+            <span class="home-mark-ring"></span>
+            <span class="home-mark-ring home-mark-ring-inner"></span>
+            <img src="/static/images/ui/ui_icons/Cyrene.png" alt="">
+            <span>Progress, made clearer.</span>
         </div>
     </section>
 
     <section class="home-explore">
-        <div class="home-section-heading">
+        <div class="home-section-title">
             <div>
-                <span>QUICK ACCESS</span>
-                <h2>Pick up where you left off</h2>
+                <span>YOUR TOOLS</span>
+                <h2>Where would you like to go?</h2>
             </div>
-            <p>Your most useful Cyrene tools, always close by.</p>
+            <p>Everything in Cyrene, in one place.</p>
         </div>
 
-        <div class="home-feature-grid">
-            {% set features = [
-                ('/characters', 'Characters.webp', 'Characters', 'Browse your roster, builds, and progression plans.', 'Roster'),
-                ('/planner', 'Planner.webp', 'Planner', 'Organise farming, reminders, and account resources.', 'Progress'),
-                ('/inventory', 'Inventory.webp', 'Inventory', 'See your HoYoLAB materials in one clear overview.', 'Materials'),
-                ('/events', 'Events.webp', 'Events', 'Follow active content, timers, and custom schedules.', 'Schedule'),
-                ('/achievements', 'Achievements.webp', 'Achievements', 'Track completed goals and uncover what remains.', 'Completion'),
-                ('/codes', 'Codes.webp', 'Codes', 'Manage redemption codes and daily check-in settings.', 'Rewards')
+        <div class="home-tool-grid">
+            {% set tools = [
+                ('/characters', 'Characters.webp', 'Characters', 'Browse your roster and builds.'),
+                ('/planner', 'Planner.webp', 'Planner', 'Plan upgrades and materials.'),
+                ('/inventory', 'Inventory.webp', 'Inventory', 'Check your synced resources.'),
+                ('/events', 'Events.webp', 'Events', 'See active content and schedules.'),
+                ('/achievements', 'Achievements.webp', 'Achievements', 'Track what you have completed.'),
+                ('/codes', 'Codes.webp', 'Codes', 'Redeem codes and claim rewards.')
             ] %}
 
-            {% for href, icon, title, description, label in features %}
-            <a href="{{ href }}" class="home-feature-card">
-                <div class="home-feature-topline">
-                    <div class="home-feature-icon">
-                        <img src="/static/images/ui/ui_icons/{{ icon }}" alt="">
-                    </div>
-                    <span>{{ label }}</span>
-                </div>
-
-                <div class="home-feature-copy">
-                    <h3>{{ title }}</h3>
-                    <p>{{ description }}</p>
-                </div>
-
-                <div class="home-feature-link">
-                    Open {{ title }} <span aria-hidden="true">→</span>
-                </div>
+            {% for href, icon, title, description in tools %}
+            <a href="{{ href }}" class="home-tool-card">
+                <span class="home-tool-icon">
+                    <img src="/static/images/ui/ui_icons/{{ icon }}" alt="">
+                </span>
+                <span class="home-tool-copy">
+                    <strong>{{ title }}</strong>
+                    <span>{{ description }}</span>
+                </span>
+                <span class="home-tool-arrow" aria-hidden="true">→</span>
             </a>
             {% endfor %}
         </div>
