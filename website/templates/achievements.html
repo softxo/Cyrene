@@ -4,10 +4,13 @@
 
 {% block content %}
 
-<div class="page achievements-page">
+<div
+    class="page achievements-page"
+    data-achievement-account-id="{{ selected_account.id if selected_account else '' }}"
+>
 
     <!-- Page Header -->
-    <section class="page-header">
+    <section class="page-header achievements-page-header">
 
         <div>
             <span class="eyebrow">
@@ -23,7 +26,51 @@
             </p>
         </div>
 
+        {% if accounts %}
+        <form method="get" action="/achievements" class="achievements-account-form">
+            <label for="achievements-account-button">Account</label>
+            <div class="custom-select achievements-account-select">
+                <button
+                    id="achievements-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        {{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}
+                        · {{ selected_account.genshin_uid }}
+                    </span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if account.id == selected_account.id else 'false' }}"
+                    >
+                        {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="account_id" value="{{ selected_account.id }}">
+            </div>
+        </form>
+        {% endif %}
+
     </section>
+
+    {% if not accounts %}
+    <section class="achievement-empty-state">
+        <h2>No accounts connected</h2>
+        <p>Connect a HoYoLAB account before tracking achievements.</p>
+        <a class="button" href="/verify?next=/achievements">Connect account</a>
+    </section>
+    {% endif %}
 
 
     <!-- Overall Progress -->
@@ -115,6 +162,7 @@
                 <input
                     type="search"
                     id="achievement-search"
+                    data-achievement-search
                     class="achievement-search"
                     placeholder="Search achievements..."
                     autocomplete="off"
@@ -125,13 +173,14 @@
             <!-- Version -->
 
             <div
-                class="custom-select"
+                class="custom-select achievement-version-select"
                 id="achievement-version-select"
+                data-achievement-version-select
             >
 
                 <button
                     type="button"
-                    class="custom-select-button"
+                    class="custom-select-button achievement-version-button"
                     id="achievement-version-button"
                 >
                     <span class="custom-select-value">
@@ -172,6 +221,7 @@
                 <input
                     type="checkbox"
                     id="achievement-hide-completed"
+                    data-achievement-hide-completed
                 >
 
                 <span>
@@ -274,6 +324,52 @@
 
             </div>
 
+            <div class="achievement-category-controls achievement-browser-controls">
+                <div class="achievement-search-wrapper">
+                    <span class="achievement-search-icon">
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M4.47487 4.4749C2.32698 6.62279 2.32698 10.1052 4.47487 12.2531C6.62275 14.401 10.1052 14.401 12.253 12.2531C14.4009 10.1052 14.4009 6.62279 12.253 4.4749C10.1052 2.32702 6.62275 2.32702 4.47487 4.4749ZM10.8388 10.8389C9.47199 12.2057 7.25591 12.2057 5.88908 10.8389C4.52224 9.47203 4.52224 7.25595 5.88908 5.88912C7.25591 4.52228 9.47199 4.52228 10.8388 5.88912C12.2057 7.25595 12.2057 9.47203 10.8388 10.8389Z"
+                                fill="currentColor"
+                            />
+                            <path
+                                d="M11.1924 13.3137C10.6066 12.7279 10.6066 11.7782 11.1924 11.1924C11.7782 10.6066 12.7279 10.6066 13.3137 11.1924L16.8492 14.7279C17.435 15.3137 17.435 16.2635 16.8492 16.8492C16.2635 17.435 15.3135 17.435 14.7279 16.8492L11.1924 13.3137Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </span>
+                    <input
+                        type="search"
+                        class="achievement-search"
+                        data-achievement-search
+                        placeholder="Search achievements..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="custom-select achievement-version-select" data-achievement-version-select>
+                    <button type="button" class="custom-select-button achievement-version-button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">All Versions</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox"></div>
+                </div>
+
+                <label class="checkbox-control">
+                    <input type="checkbox" data-achievement-hide-completed>
+                    <span>Hide Completed</span>
+                </label>
+            </div>
+
 
             <div
                 class="achievement-list"
@@ -284,6 +380,36 @@
 
     </section>
 
+</div>
+
+
+<div
+    class="achievement-import-success"
+    id="achievement-import-success"
+    role="status"
+    aria-live="polite"
+    hidden
+>
+    <div class="achievement-import-success-backdrop"></div>
+
+    <div class="achievement-import-success-panel">
+        <div class="achievement-import-verified-icon" aria-hidden="true">
+            <span class="achievement-import-corner top-left"></span>
+            <span class="achievement-import-corner top-right"></span>
+            <span class="achievement-import-corner bottom-left"></span>
+            <span class="achievement-import-corner bottom-right"></span>
+            <span class="achievement-import-scan-line"></span>
+
+            <svg class="achievement-import-check" viewBox="0 0 64 64" focusable="false">
+                <path d="M17 33.5 27.5 44 48 22"></path>
+            </svg>
+        </div>
+
+        <h2>Imported</h2>
+        <p id="achievement-import-success-message">
+            Achievement progress imported successfully.
+        </p>
+    </div>
 </div>
 
 

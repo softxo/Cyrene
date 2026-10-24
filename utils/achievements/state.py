@@ -4,12 +4,14 @@ from utils.achievements.progress import load_progress
 
 async def load_achievement_state(
     user_id: int,
+    account_id: int,
 ) -> list[dict]:
 
     achievements = load_achievements()
 
     progress = await load_progress(
-        user_id
+        user_id,
+        account_id,
     )
 
     state = []

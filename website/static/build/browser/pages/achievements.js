@@ -1,5 +1,30 @@
 // @ts-nocheck -- Legacy global script; types will be tightened incrementally.
 window.initAchievements = function () {
+    const page = document.querySelector(".achievements-page");
+    const accountId = page?.dataset.achievementAccountId;
+    function achievementApiUrl(path) {
+        const separator = path.includes("?") ? "&" : "?";
+        return `${path}${separator}account_id=${encodeURIComponent(accountId)}`;
+    }
+    const accountForm = document.querySelector(".achievements-account-form");
+    const accountSelect = accountForm?.querySelector(".achievements-account-select");
+    const accountButton = accountSelect?.querySelector(".custom-select-button");
+    const accountInput = accountSelect?.querySelector('input[name="account_id"]');
+    accountButton?.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !accountSelect.classList.contains("open");
+        accountSelect.classList.toggle("open", open);
+        accountButton.setAttribute("aria-expanded", String(open));
+    });
+    accountSelect?.querySelectorAll(".custom-select-option").forEach(option => {
+        option.addEventListener("click", () => {
+            if (!option.dataset.value || !accountInput) {
+                return;
+            }
+            accountInput.value = option.dataset.value;
+            accountForm.requestSubmit();
+        });
+    });
     const categories = document.getElementById("achievement-categories");
     const categoryGrid = document.getElementById("achievement-category-grid");
     const browser = document.getElementById("achievement-browser");
@@ -43,7 +68,7 @@ window.initAchievements = function () {
         }
         const { achievement, tier } = achievementNoteTarget;
         try {
-            const response = await fetch(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`, {
+            const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`), {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -83,6 +108,7 @@ window.initAchievements = function () {
     let hideCompletedAchievements = false;
     let achievementSelectedVersion = "all";
     let achievementNoteTarget = null;
+    let activeCategory = null;
     const CATEGORY_ICONS = {
         "Wonders of the World": "/static/images/achievements/categories/Wonders_of_the_World.png",
         "Memories of the Heart": "/static/images/achievements/categories/Memories_of_the_Heart.png",
@@ -314,10 +340,28 @@ window.initAchievements = function () {
      * CATEGORY PAGE CONTROLS
      * --------------------------------------------------
      */
-    const achievementSearch = document.getElementById("achievement-search");
-    const achievementHideCompleted = document.getElementById("achievement-hide-completed");
+    const achievementSearchInputs = document.querySelectorAll("[data-achievement-search]");
+    const achievementHideCompletedInputs = document.querySelectorAll("[data-achievement-hide-completed]");
     const achievementImportButton = document.getElementById("achievement-import-button");
     const achievementImportInput = document.getElementById("achievement-import-input");
+    const achievementImportSuccess = document.getElementById("achievement-import-success");
+    const achievementImportSuccessMessage = document.getElementById("achievement-import-success-message");
+    let achievementImportSuccessTimer = null;
+    function showAchievementImportSuccess(result) {
+        if (!achievementImportSuccess) {
+            return;
+        }
+        if (achievementImportSuccessMessage) {
+            const matched = Number(result?.matched) || 0;
+            achievementImportSuccessMessage.textContent =
+                `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
+        }
+        window.clearTimeout(achievementImportSuccessTimer);
+        achievementImportSuccess.hidden = false;
+        achievementImportSuccessTimer = window.setTimeout(() => {
+            achievementImportSuccess.hidden = true;
+        }, 2200);
+    }
     if (achievementImportButton &&
         achievementImportInput) {
         achievementImportButton.addEventListener("click", () => {
@@ -331,7 +375,8 @@ window.initAchievements = function () {
             const formData = new FormData();
             formData.append("file", file);
             try {
-                const response = await fetch("/api/achievements/import", {
+                achievementImportButton.disabled = true;
+                const response = await fetch(achievementApiUrl("/api/achievements/import"), {
                     method: "POST",
                     body: formData,
                 });
@@ -343,11 +388,15 @@ window.initAchievements = function () {
                 console.log("Achievement import:", result);
                 achievementImportInput.value = "";
                 await loadAchievements();
+                showAchievementImportSuccess(result);
             }
             catch (error) {
                 console.error("Achievement import failed:", error);
                 achievementImportInput.value = "";
                 alert(error.message);
+            }
+            finally {
+                achievementImportButton.disabled = false;
             }
         });
     }
@@ -501,7 +550,8 @@ window.initAchievements = function () {
             if (button) {
                 button.setAttribute("aria-expanded", "false");
             }
-            buildCategories();
+            rebuildCategoryView();
+            syncSecondaryVersionSelect();
         });
         menu.appendChild(allOption);
         /*
@@ -626,7 +676,8 @@ window.initAchievements = function () {
                     select
                         .querySelector(".custom-select-button")
                         .setAttribute("aria-expanded", "false");
-                    buildCategories();
+                    rebuildCategoryView();
+                    syncSecondaryVersionSelect();
                 });
                 menu.appendChild(option);
             });
@@ -711,6 +762,38 @@ window.initAchievements = function () {
             };
         }
     }
+    function syncSecondaryVersionSelect() {
+        const primary = document.getElementById("achievement-version-select");
+        const secondary = [...document.querySelectorAll("[data-achievement-version-select]")].find(select => select !== primary);
+        if (!primary || !secondary) {
+            return;
+        }
+        const primaryMenu = primary.querySelector(".custom-select-menu");
+        const secondaryMenu = secondary.querySelector(".custom-select-menu");
+        const secondaryValue = secondary.querySelector(".custom-select-value");
+        const secondaryButton = secondary.querySelector(".custom-select-button");
+        if (!primaryMenu || !secondaryMenu || !secondaryValue || !secondaryButton) {
+            return;
+        }
+        const selected = primaryMenu.querySelector(".custom-select-option.selected");
+        secondaryValue.textContent = selected?.textContent || "All Versions";
+        secondaryMenu.innerHTML = primaryMenu.innerHTML;
+        secondaryMenu.querySelectorAll(".custom-select-option").forEach(option => {
+            option.addEventListener("click", () => {
+                const primaryOption = [...primaryMenu.querySelectorAll(".custom-select-option")].find(item => item.dataset.value === option.dataset.value);
+                primaryOption?.click();
+                secondary.classList.remove("open");
+                secondaryButton.setAttribute("aria-expanded", "false");
+            });
+        });
+        secondaryButton.onclick = event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = !secondary.classList.contains("open");
+            secondary.classList.toggle("open", open);
+            secondaryButton.setAttribute("aria-expanded", String(open));
+        };
+    }
     function achievementIsCompleted(achievement) {
         if (!Array.isArray(achievement.tiers) ||
             achievement.tiers.length === 0) {
@@ -764,36 +847,52 @@ window.initAchievements = function () {
         return true;
     }
     function rebuildCategoryView() {
+        if (activeCategory && !browser.hidden) {
+            buildAchievements(activeCategory);
+            return;
+        }
         buildCategories();
     }
-    if (achievementSearch) {
+    achievementSearchInputs.forEach(achievementSearch => {
         achievementSearch.addEventListener("input", () => {
             achievementSearchQuery =
                 achievementSearch.value;
+            achievementSearchInputs.forEach(input => {
+                if (input !== achievementSearch) {
+                    input.value = achievementSearch.value;
+                }
+            });
             rebuildCategoryView();
         });
-    }
-    if (achievementHideCompleted) {
+    });
+    achievementHideCompletedInputs.forEach(achievementHideCompleted => {
         achievementHideCompleted.addEventListener("change", () => {
             hideCompletedAchievements =
                 achievementHideCompleted.checked;
+            achievementHideCompletedInputs.forEach(input => {
+                input.checked = achievementHideCompleted.checked;
+            });
             rebuildCategoryView();
         });
-    }
+    });
     /*
      * --------------------------------------------------
      * LOAD ACHIEVEMENTS
      * --------------------------------------------------
      */
     async function loadAchievements() {
+        if (!accountId) {
+            return;
+        }
         try {
-            const response = await fetch("/api/achievements");
+            const response = await fetch(achievementApiUrl("/api/achievements"));
             if (!response.ok) {
                 throw new Error("Failed to load achievements.");
             }
             achievementData =
                 await response.json();
             buildVersionOptions();
+            syncSecondaryVersionSelect();
             buildCategories();
             updateOverallAchievementProgress();
         }
@@ -1008,6 +1107,8 @@ window.initAchievements = function () {
         if (!achievementData) {
             return;
         }
+        activeCategory = category;
+        syncSecondaryVersionSelect();
         const data = achievementData.categories[category];
         if (!data) {
             return;
@@ -1116,6 +1217,7 @@ window.initAchievements = function () {
         achievementList.innerHTML = "";
         const achievements = achievementData.achievements.filter(achievement => achievement.category === category &&
             achievementMatchesFilters(achievement));
+        const fragment = document.createDocumentFragment();
         achievements.forEach(achievement => {
             const item = document.createElement("div");
             item.className =
@@ -1324,18 +1426,6 @@ window.initAchievements = function () {
                     </div>
     
                 `;
-            item.querySelectorAll(".achievement-tier").forEach(tierElement => {
-                const description = tierElement.querySelector(".achievement-tier-description p");
-                const descriptionContainer = tierElement.querySelector(".achievement-tier-description");
-                if (!description ||
-                    !descriptionContainer) {
-                    return;
-                }
-                const lineHeight = parseFloat(window.getComputedStyle(description).lineHeight);
-                const height = description.getBoundingClientRect().height;
-                const isMultiline = height > lineHeight * 1.5;
-                descriptionContainer.classList.toggle("multiline", isMultiline);
-            });
             const tierButtons = item.querySelectorAll(".achievement-complete-button");
             const notesButtons = item.querySelectorAll(".achievement-notes-button");
             const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
@@ -1382,7 +1472,7 @@ window.initAchievements = function () {
                         return;
                     }
                     try {
-                        const response = await fetch(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`, {
+                        const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`), {
                             method: "PATCH",
                             headers: {
                                 "Content-Type": "application/json"
@@ -1428,10 +1518,12 @@ window.initAchievements = function () {
                     toggleTierCompleted(achievement, tier, item, button);
                 });
             });
-            achievementList.appendChild(item);
+            fragment.appendChild(item);
             updateLockedTiers(item);
             updateAchievementProgress(item);
         });
+        achievementList.appendChild(fragment);
+        achievementList.parentElement.scrollTop = 0;
     }
     function getTierImage(currentTier, totalTiers) {
         return `/static/images/achievements/tiers/Achievement_${currentTier}_${totalTiers}.png`;
@@ -1520,7 +1612,7 @@ window.initAchievements = function () {
                 ? achievement.tiers.filter(achievementTier => achievementTier.tier >= tier.tier)
                 : [tier];
             for (const achievementTier of tiersToSave) {
-                const response = await fetch(`/api/achievements/${encodeURIComponent(achievementTier.genshin_id)}/tiers/${achievementTier.tier}`, {
+                const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(achievementTier.genshin_id)}/tiers/${achievementTier.tier}`), {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json"

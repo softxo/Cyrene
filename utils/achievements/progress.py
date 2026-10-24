@@ -3,10 +3,12 @@ from utils.hoyolab.database import get_achievement_progress
 
 async def load_progress(
     user_id: int,
+    account_id: int,
 ) -> dict:
 
     rows = await get_achievement_progress(
-        user_id
+        user_id,
+        account_id,
     )
 
     progress = {}
