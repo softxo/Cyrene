@@ -98,7 +98,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/js/events/events.js",
     ],
 
-    "/settings": "/static/js/settings.js",
+    "/settings": "/static/js/settings.js?v=2",
 };
 
 const pageStyles: Record<string, string> = {
@@ -108,7 +108,7 @@ const pageStyles: Record<string, string> = {
     "/verify": "/static/css/verification.css?v=2",
     "/codes": "/static/css/codes.css",
     "/events": "/static/css/events/events.css",
-    "/settings": "/static/css/settings.css",
+    "/settings": "/static/css/settings.css?v=2",
 };
 
 

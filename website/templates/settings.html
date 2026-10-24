@@ -13,6 +13,62 @@
 
 
     <!-- =====================================================
+         HOYOLAB ACCOUNTS
+         ===================================================== -->
+
+    <section class="settings-section account-link-section">
+        <div class="settings-section-header">
+            <h3>HoYoLAB Accounts</h3>
+            <p>
+                Add an account here or through Discord. Both methods link it
+                to the same Cyrene profile.
+            </p>
+        </div>
+
+        <form id="account-link-form" class="account-link-form">
+            <label>
+                <span>Email or username</span>
+                <input
+                    id="hoyolab-account"
+                    name="account"
+                    type="text"
+                    autocomplete="username"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input
+                    id="hoyolab-password"
+                    name="password"
+                    type="password"
+                    autocomplete="current-password"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <p class="account-link-privacy">
+                Your password is sent directly to HoYoLAB for authentication
+                and is never stored by Cyrene.
+            </p>
+
+            <button id="account-link-submit" type="submit">
+                Add HoYoLAB account
+            </button>
+        </form>
+
+        <div
+            id="account-link-result"
+            class="account-link-result"
+            aria-live="polite"
+        ></div>
+    </section>
+
+
+    <!-- =====================================================
          APPEARANCE
          ===================================================== -->
 

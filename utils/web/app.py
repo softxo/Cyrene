@@ -44,6 +44,9 @@ from utils.web.auth import (
     delete_web_session,
 )
 from utils.hoyolab.database import (
+    save_account,
+    get_account,
+    get_account_count,
     get_accounts,
     get_reminders,
     get_reminder,
@@ -72,6 +75,19 @@ from utils.hoyolab.database import (
     get_visible_custom_event,
     get_character_plans,
     replace_character_plans,
+)
+from utils.hoyolab.login import login_with_password
+from utils.hoyolab.accounts import get_genshin_accounts
+from utils.hoyolab.account_limits import get_account_limit
+from utils.hoyolab.errors import (
+    HoYoLABAuthenticationError,
+    HoYoLABAccountNotFoundError,
+    HoYoLABAccountLockedError,
+    HoYoLABAccountMutedError,
+    HoYoLABVerificationError,
+    HoYoLABCaptchaError,
+    HoYoLABRateLimitError,
+    HoYoLABError,
 )
 from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.daily_note import get_resin
@@ -269,6 +285,231 @@ async def get_authenticated_user(
         )
 
     return session.user_id
+
+
+ACCOUNT_LINK_TIMEOUT = 15 * 60
+_account_link_attempts: dict[str, dict[str, typing.Any]] = {}
+_account_link_tasks: set[asyncio.Task] = set()
+
+
+def _cleanup_account_link_attempts() -> None:
+    cutoff = time.time() - ACCOUNT_LINK_TIMEOUT
+
+    for token, attempt in list(_account_link_attempts.items()):
+        if attempt["created_at"] < cutoff:
+            _account_link_attempts.pop(token, None)
+
+
+def _account_link_error(error: Exception) -> str:
+    if isinstance(error, HoYoLABAccountNotFoundError):
+        return "The HoYoLAB account could not be found."
+    if isinstance(error, HoYoLABAuthenticationError):
+        return "The HoYoLAB email, username, or password is incorrect."
+    if isinstance(error, HoYoLABAccountLockedError):
+        return "This HoYoLAB account is currently locked."
+    if isinstance(error, HoYoLABAccountMutedError):
+        return "This HoYoLAB account is currently restricted."
+    if isinstance(error, HoYoLABVerificationError):
+        return "HoYoLAB verification could not be completed. Please try again."
+    if isinstance(error, HoYoLABCaptchaError):
+        return "The CAPTCHA could not be completed. Please try again."
+    if isinstance(error, HoYoLABRateLimitError):
+        return "HoYoLAB is temporarily rate-limiting requests. Please try again later."
+    return "Cyrene could not connect to HoYoLAB. Please try again."
+
+
+async def _run_web_account_login(
+    token: str,
+    account: str,
+    password: str,
+) -> None:
+    attempt = _account_link_attempts[token]
+
+    async def notify(challenge_url: str) -> None:
+        attempt["status"] = "captcha"
+        attempt["challenge_url"] = challenge_url
+
+    try:
+        client, credentials = await login_with_password(
+            account,
+            password,
+            user_id=attempt["user_id"],
+            notify=notify,
+        )
+
+        accounts = await get_genshin_accounts(client)
+
+        if not accounts:
+            attempt["status"] = "error"
+            attempt["error"] = (
+                "No Genshin accounts are linked to this HoYoLAB account."
+            )
+            return
+
+        attempt["credentials"] = credentials
+        attempt["accounts"] = accounts
+        attempt["status"] = "select"
+
+    except HoYoLABError as error:
+        attempt["status"] = "error"
+        attempt["error"] = _account_link_error(error)
+
+    except Exception as error:
+        print("===== WEB ACCOUNT LINK ERROR =====")
+        print(f"Type: {type(error).__name__}")
+        print(f"Error: {error}")
+        print("==================================")
+
+        attempt["status"] = "error"
+        attempt["error"] = _account_link_error(error)
+
+
+@app.post("/api/hoyolab/link/start")
+async def start_hoyolab_link(
+    data: dict[str, typing.Any],
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    account = str(data.get("account") or "").strip()
+    password = str(data.get("password") or "")
+
+    if not account or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Enter your HoYoLAB email or username and password.",
+        )
+
+    _cleanup_account_link_attempts()
+    token = uuid.uuid4().hex
+    _account_link_attempts[token] = {
+        "user_id": user_id,
+        "created_at": time.time(),
+        "status": "authenticating",
+        "challenge_url": None,
+        "accounts": None,
+        "credentials": None,
+        "error": None,
+    }
+
+    task = asyncio.create_task(
+        _run_web_account_login(token, account, password)
+    )
+    _account_link_tasks.add(task)
+    task.add_done_callback(_account_link_tasks.discard)
+
+    return {"success": True, "token": token}
+
+
+def _get_account_link_attempt(token: str, user_id: int) -> dict:
+    _cleanup_account_link_attempts()
+    attempt = _account_link_attempts.get(token)
+
+    if attempt is None or attempt["user_id"] != user_id:
+        raise HTTPException(
+            status_code=404,
+            detail="This account-linking attempt has expired.",
+        )
+
+    return attempt
+
+
+@app.get("/api/hoyolab/link/status")
+async def hoyolab_link_status(
+    token: str,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    attempt = _get_account_link_attempt(token, user_id)
+
+    response = {"status": attempt["status"]}
+
+    if attempt["status"] == "captcha":
+        response["challenge_url"] = attempt["challenge_url"]
+    elif attempt["status"] == "select":
+        response["accounts"] = attempt["accounts"]
+    elif attempt["status"] == "error":
+        response["error"] = attempt["error"]
+
+    return response
+
+
+@app.post("/api/hoyolab/link/complete")
+async def complete_hoyolab_link(
+    data: dict[str, typing.Any],
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    token = str(data.get("token") or "")
+    selected_uid = str(data.get("uid") or "")
+    attempt = _get_account_link_attempt(token, user_id)
+
+    if attempt["status"] != "select":
+        raise HTTPException(
+            status_code=409,
+            detail="The HoYoLAB login is not ready for account selection.",
+        )
+
+    account = next(
+        (
+            item for item in attempt["accounts"]
+            if item["game_uid"] == selected_uid
+        ),
+        None,
+    )
+
+    if account is None:
+        raise HTTPException(status_code=400, detail="Select a valid account.")
+
+    existing_account = await get_account(user_id, selected_uid)
+    account_count = await get_account_count(user_id)
+    account_limit = get_account_limit(user_id)
+
+    if (
+        existing_account is None
+        and account_limit is not None
+        and account_count >= account_limit
+    ):
+        raise HTTPException(
+            status_code=409,
+            detail=f"You have reached your limit of {account_limit} linked accounts.",
+        )
+
+    await save_account(
+        user_id,
+        attempt["credentials"],
+        discord_username=(
+            existing_account["discord_username"]
+            if existing_account else None
+        ),
+        discord_display_name=(
+            existing_account["discord_display_name"]
+            if existing_account else None
+        ),
+        discord_guild_id=(
+            existing_account["discord_guild_id"]
+            if existing_account else None
+        ),
+        discord_guild_name=(
+            existing_account["discord_guild_name"]
+            if existing_account else None
+        ),
+        genshin_uid=account["game_uid"],
+        genshin_server=account["region"],
+        nickname=account["nickname"],
+        cyrene_nickname=(
+            existing_account["cyrene_nickname"]
+            if existing_account else None
+        ),
+        level=account["level"],
+    )
+
+    _account_link_attempts.pop(token, None)
+
+    return {
+        "success": True,
+        "account": account,
+        "reconnected": existing_account is not None,
+    }
 
 
 @app.get(
@@ -4765,6 +5006,24 @@ async def challenge(token: str):
                 #captcha {{
                     margin-top: 24px;
                 }}
+
+                .success-screen {{ min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#0f1117; text-align:center; animation:success-in 300ms ease-out both; }}
+                .success-icon {{ position:relative; width:112px; height:112px; color:#59d58b; }}
+                .success-corner {{ position:absolute; width:31px; height:31px; border-color:currentColor; border-style:solid; opacity:0; animation:frame-in 420ms cubic-bezier(.2,.8,.2,1) forwards; }}
+                .success-corner.tl {{ top:0; left:0; border-width:4px 0 0 4px; border-radius:14px 0 0; }}
+                .success-corner.tr {{ top:0; right:0; border-width:4px 4px 0 0; border-radius:0 14px 0 0; }}
+                .success-corner.bl {{ bottom:0; left:0; border-width:0 0 4px 4px; border-radius:0 0 0 14px; }}
+                .success-corner.br {{ right:0; bottom:0; border-width:0 4px 4px 0; border-radius:0 0 14px; }}
+                .success-scan {{ position:absolute; top:18px; right:16px; left:16px; height:2px; border-radius:999px; background:currentColor; box-shadow:0 0 12px currentColor; opacity:0; animation:scan 700ms 280ms ease-in-out both; }}
+                .success-check {{ position:absolute; inset:20px; width:72px; height:72px; }}
+                .success-check path {{ fill:none; stroke:currentColor; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:50; stroke-dashoffset:50; animation:check-in 440ms 850ms ease-out forwards; }}
+                .success-screen h1 {{ margin:24px 0 6px; }}
+                .success-screen p {{ margin:0; }}
+                @keyframes success-in {{ from {{ opacity:0; transform:scale(.97); }} to {{ opacity:1; transform:scale(1); }} }}
+                @keyframes frame-in {{ from {{ opacity:0; transform:scale(.78); }} to {{ opacity:1; transform:scale(1); }} }}
+                @keyframes scan {{ 0% {{ opacity:0; transform:translateY(0); }} 18%,82% {{ opacity:.9; }} 100% {{ opacity:0; transform:translateY(74px); }} }}
+                @keyframes check-in {{ to {{ stroke-dashoffset:0; }} }}
+                @media (prefers-reduced-motion: reduce) {{ .success-screen, .success-corner, .success-scan, .success-check path {{ animation-duration:1ms; animation-delay:0ms; }} }}
             </style>
         </head>
 
@@ -4790,28 +5049,22 @@ async def challenge(token: str):
 
                 function showSuccess() {{
                     document.body.innerHTML = `
-                        <div
-                            style="
-                                min-height:100vh;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                background:#0f1117;
-                                color:white;
-                                font-family:Arial,sans-serif;
-                                text-align:center;
-                            "
-                        >
-                            <div>
-                                <h1>✓ Verification Complete</h1>
-
-                                <p>
-                                    You may now return to Discord.
-                                    Cyrene will continue automatically.
-                                </p>
+                        <div class="success-screen" role="status">
+                            <div class="success-icon" aria-hidden="true">
+                                <span class="success-corner tl"></span>
+                                <span class="success-corner tr"></span>
+                                <span class="success-corner bl"></span>
+                                <span class="success-corner br"></span>
+                                <span class="success-scan"></span>
+                                <svg class="success-check" viewBox="0 0 64 64">
+                                    <path d="M17 33.5 27.5 44 48 22"></path>
+                                </svg>
                             </div>
+                            <h1>CAPTCHA verified</h1>
+                            <p>You can close this page. Cyrene will continue automatically.</p>
                         </div>
                     `;
+
                 }}
 
                 {captcha_script}
