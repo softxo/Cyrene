@@ -1,0 +1,3995 @@
+/* =========================================================
+   CHARACTERS — STYLESHEET ENTRY POINT
+   ========================================================= *//* =========================================================
+   CHARACTERS PAGE
+   ========================================================= */
+
+.characters-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.characters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.characters-header h1 {
+    margin: 0;
+}
+
+.characters-header p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+}
+
+/* =========================================================
+   CHARACTER ACCOUNT SELECTOR
+   ========================================================= */
+
+.characters-account-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.characters-account-form > label {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.characters-account-select {
+    width: 260px;
+    max-width: 100%;
+}
+
+.characters-account-select .custom-select-button {
+    min-height: 39px;
+    background: var(--surface);
+}
+
+.characters-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-account-select .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.characters-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ROSTER SUMMARY
+   ========================================================= */
+
+.characters-summary {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+   CHARACTERS — PAGE TABS
+   ========================================================= */
+
+.characters-page-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0;
+    padding: 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.characters-page-tab {
+    padding: 0.65rem 1.15rem;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.characters-page-tab:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.characters-page-tab.active {
+    background: var(--accent);
+    border-color: var(--accent-border);
+    color: var(--text);
+}
+
+.characters-panel[hidden],
+.planner-picker[hidden],
+.planner-editor[hidden],
+.planner-character-grid[hidden],
+.planner-empty-state[hidden],
+.planner-picker-character[hidden],
+.planner-picker-empty[hidden] {
+    display: none !important;
+}
+
+.characters-panel.active {
+    margin-top: -10px;
+}
+
+/* =========================================================
+   RESPONSIVE HEADER AND ACCOUNT SELECTOR
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .characters-header {
+        align-items: stretch;
+    }
+
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-account-select {
+        width: 100%;
+    }
+
+    .character-card-info {
+        padding: 7px;
+    }
+
+    .character-card-info h2 {
+        font-size: 0.82rem;
+    }
+
+    .character-card-meta,
+    .character-card-footer {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   CHARACTER GRID
+   ========================================================= */
+
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+}
+
+@media (max-width: 1500px) {
+    .characters-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 9px;
+    }
+}
+
+@media (max-width: 1150px) {
+    .characters-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .characters-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .characters-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   CHARACTER CARDS
+   ========================================================= */
+
+.character-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.character-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-border);
+}
+
+/* =========================================================
+   CHARACTER PORTRAIT
+   ========================================================= */
+
+.character-card-image {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    background: linear-gradient(
+        180deg,
+        #8055a8 0%,
+        #49345f 100%
+    );
+}
+
+/* Five-star characters: orange-gold */
+.character-card[data-rarity="5"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #d99a43 0%,
+        #87502e 100%
+    );
+}
+
+/* Four-star characters: purple */
+.character-card[data-rarity="4"] .character-card-image {
+    background: linear-gradient(
+        180deg,
+        #a16acb 0%,
+        #573777 100%
+    );
+}
+
+.character-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Character level badge */
+.character-level {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: color-mix(
+        in srgb,
+        var(--background) 90%,
+        transparent
+    );
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+/* =========================================================
+   CHARACTER INFORMATION
+   ========================================================= */
+
+.character-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    padding: 7px;
+}
+
+/* Character name */
+.character-card-info h2 {
+    overflow: hidden;
+    margin: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ELEMENT AND RARITY ROW
+   ========================================================= */
+
+.character-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+/* Element icon and name */
+.character-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.character-element img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
+}
+
+.character-element span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Rarity value and icon */
+.character-rarity {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.character-rarity img {
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   FRIENDSHIP AND CONSTELLATION ROW
+   ========================================================= */
+
+.character-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+/* Friendship icon and level */
+.character-friendship {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.character-friendship img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    object-fit: contain;
+}
+
+/* Constellation value and icon */
+.character-constellation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.character-constellation img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   EMPTY AND ERROR STATES
+   ========================================================= */
+
+.characters-message {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.characters-message h2 {
+    margin-top: 0;
+}
+
+.characters-message p {
+    margin-bottom: 0;
+    color: var(--text-muted);
+}
+
+.characters-message-error {
+    border-color: var(--error);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .character-card {
+        transition: none;
+    }
+
+    .character-card:hover {
+        transform: none;
+    }
+}
+
+/* =========================================================
+   UNOWNED CHARACTERS
+   ========================================================= */
+
+.character-card-unowned {
+    opacity: 0.7;
+}
+
+.character-card-unowned .character-card-image img {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.character-unowned-label {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.character-unowned-status {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
+
+/* =========================================================
+   CHARACTERS — FILTER TOOLBAR LAYOUT
+   ========================================================= */
+
+.characters-toolbar {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* Search, sort, and ownership controls share consistent sizing. */
+.characters-toolbar > .characters-search,
+.characters-toolbar > .characters-filter:not(.characters-icon-filter) {
+    flex: 1 1 120px;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Icon filters only take up the space their buttons need. */
+.characters-toolbar > .characters-icon-filter {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Keep icon buttons together on one line. */
+.characters-toolbar .characters-icon-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    min-height: 40px;
+}
+
+/* Prevent toolbar children from overflowing their available space. */
+.characters-toolbar > * {
+    min-width: 0;
+}
+
+.characters-search,
+.characters-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.characters-search label,
+.characters-filter label {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.characters-search input {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    outline: none;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.characters-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px
+        color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Match the filter dropdowns to the account selector. */
+.characters-filter > .custom-select {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Consistent button height across every filter. */
+.characters-filter .custom-select-button {
+    width: 100%;
+    min-height: 40px;
+    background: var(--surface);
+}
+
+/* Prevent long option labels from breaking the toolbar. */
+.characters-filter .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Keep long option lists within the viewport area. */
+.characters-filter .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Reset button. */
+.characters-reset-filters {
+    min-height: 40px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.characters-reset-filters:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover, var(--surface));
+}
+
+.character-card[hidden] {
+    display: none !important;
+}
+
+.characters-summary {
+    margin: 18px 0 14px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+/* =========================================================
+   CHARACTERS — RESPONSIVE FILTERS
+   ========================================================= */
+
+@media (max-width: 1250px) {
+    .characters-toolbar {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: end;
+    }
+
+    .characters-search {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 700px) {
+    .characters-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .characters-search {
+        grid-column: 1 / -1;
+    }
+
+    .characters-reset-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .characters-search {
+        grid-column: auto;
+    }
+}
+
+/* =========================================================
+   CHARACTERS — ELEMENT AND WEAPON ICON FILTERS
+   ========================================================= */
+
+.characters-icon-filter {
+    min-width: 0;
+}
+
+.characters-icon-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 40px;
+}
+
+.characters-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+.characters-icon-button img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* Smaller rarity star icons */
+.characters-icon-buttons[data-character-rarity] img {
+    width: 19px;
+    height: 19px;
+}
+
+.characters-icon-button span {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.characters-icon-button:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.characters-icon-button.selected {
+    border-color: var(--accent);
+    background: color-mix(
+        in srgb,
+        var(--accent) 16%,
+        var(--surface)
+    );
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.characters-icon-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+    .characters-icon-buttons {
+        gap: 4px;
+    }
+
+    .characters-icon-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .characters-icon-button img {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — MODAL
+   ========================================================= */
+
+.character-showcase[hidden],
+.enka-card-error[hidden] {
+    display: none !important;
+}
+
+.character-showcase {
+    --showcase-element-colour: var(--accent);
+    --enka-border: var(--border);
+    --enka-muted: var(--text-muted);
+
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: var(--text);
+}
+
+.character-showcase-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(5 7 14 / 78%);
+    backdrop-filter: blur(6px);
+}
+
+.character-showcase-modal {
+    position: relative;
+    z-index: 1;
+    width: min(1160px, calc(100vw - 32px));
+    height: calc(100% + 20px);
+    max-height: calc(100dvh - 50px);
+    overflow: auto;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 40%,
+        var(--border)
+    );
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: 0 20px 55px rgb(0 0 0 / 40%);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    outline: none;
+}
+
+.character-showcase-close {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.character-showcase-close:hover {
+    border-color: var(--showcase-element-colour);
+}
+
+.character-showcase-close:focus-visible {
+    outline: 2px solid var(--showcase-element-colour);
+    outline-offset: 3px;
+}
+
+body.character-showcase-open {
+    overflow: hidden;
+}
+
+/* =========================================================
+   ELEMENT COLOURS
+   ========================================================= */
+
+.enka-build-card {
+    --showcase-element-colour: var(--accent);
+
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+
+    background: var(--background);
+}
+
+.enka-build-card[data-element="anemo"] {
+    --showcase-element-colour: #83d7b0;
+}
+
+.enka-build-card[data-element="geo"] {
+    --showcase-element-colour: #f0c66f;
+}
+
+.enka-build-card[data-element="electro"] {
+    --showcase-element-colour: #c4a0ff;
+}
+
+.enka-build-card[data-element="dendro"] {
+    --showcase-element-colour: #b3db71;
+}
+
+.enka-build-card[data-element="hydro"] {
+    --showcase-element-colour: #7ccfff;
+}
+
+.enka-build-card[data-element="pyro"] {
+    --showcase-element-colour: #ff967e;
+}
+
+.enka-build-card[data-element="cryo"] {
+    --showcase-element-colour: #a4e7f1;
+}
+
+/* =========================================================
+   ELEMENTAL VIDEO BACKGROUND
+   ========================================================= */
+
+.enka-element-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/* Darken the edges slightly to preserve text readability. */
+.enka-build-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    pointer-events: none;
+
+    background: radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgb(0 0 0 / 30%) 100%
+    );
+}
+
+/* Keep all actual build content above the video and vignette. */
+.enka-character-layout,
+.enka-artifacts-panel,
+.enka-card-status,
+.enka-card-error {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   MAIN CHARACTER LAYOUT
+   ========================================================= */
+
+.enka-character-layout {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.88fr) minmax(0, 1.12fr);
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px;
+}
+
+.enka-character-visual,
+.enka-character-details {
+    position: relative;
+    min-width: 0;
+}
+
+/* =========================================================
+   CHARACTER ARTWORK — SQUARE STAGE
+   ========================================================= */
+
+.enka-character-visual {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--enka-border);
+    border-radius: 12px;
+    isolation: isolate;
+    background: transparent;
+}
+
+.enka-character-layout {
+    background: transparent;
+}
+
+.enka-character-details {
+    background: transparent;
+}
+
+.enka-artwork-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    transform: translate(20px, -20px);
+}
+
+.enka-character-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+    object-position: center center;
+}
+
+
+/* =========================================================
+   TALENTS — INDIVIDUAL GLASS CIRCLES
+   ========================================================= */
+
+.enka-talent-column {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    top: auto;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+
+    z-index: 5;
+}
+
+.enka-talent-column:empty {
+    display: none;
+}
+
+/* Shared progression circle */
+.enka-progression-item {
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    padding: 5px;
+
+    border: 1px solid rgb(255 255 255 / 22%);
+    border-radius: 50%;
+
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 14%),
+        rgb(255 255 255 / 5%)
+    );
+
+    box-shadow:
+        inset 0 1px 2px rgb(255 255 255 / 18%),
+        0 2px 6px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.enka-progression-item.enka-talent {
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 65%,
+        rgb(255 255 255 / 45%)
+    );
+}
+
+.enka-progression-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-progression-level {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+
+    display: grid;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+
+    border: 1px solid var(--background);
+    border-radius: 4px;
+    background: var(--showcase-element-colour);
+    color: #171923;
+
+    font-size: 0.62rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   CONSTELLATIONS — INDIVIDUAL GLASS CIRCLES
+   ========================================================= */
+
+.enka-constellation-orbit {
+    position: absolute;
+    z-index: 3;
+    right: 10px;
+    bottom: 15px;
+    left: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 4px;
+
+    width: auto;
+    min-width: 0;
+    padding: 0;
+
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.enka-constellation-orbit:empty {
+    display: none;
+}
+
+.enka-constellation-orbit .enka-progression-item {
+    width: min(100%, 46px);
+    height: auto;
+    aspect-ratio: 1;
+    padding: 5px;
+}
+
+.enka-progression-item.enka-constellation.is-locked {
+    opacity: 0.4;
+    filter: grayscale(0.85);
+}
+
+/* Unlocked constellations inherit the character's element colour. */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 70%,
+        rgb(255 255 255 / 35%)
+    );
+
+    background: linear-gradient(
+        145deg,
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 30%,
+            transparent
+        ),
+        color-mix(
+            in srgb,
+            var(--showcase-element-colour) 12%,
+            rgb(15 18 28 / 65%)
+        )
+    );
+
+    box-shadow:
+        inset 0 1px 3px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 25%,
+                transparent
+            ),
+        0 0 8px
+            color-mix(
+                in srgb,
+                var(--showcase-element-colour) 18%,
+                transparent
+            );
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.enka-constellation-number {
+    display: none !important;
+}
+
+/* =========================================================
+   CHARACTER IDENTITY
+   ========================================================= */
+
+.enka-character-details {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.enka-character-identity {
+    min-width: 0;
+    padding: 3px 36px 8px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-character-element-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.enka-character-element-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+}
+
+.enka-character-element-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-character-element {
+    margin: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.enka-character-identity h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.enka-character-level {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.enka-character-rarity {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 3px;
+}
+
+.enka-character-rarity img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+}
+
+/* =========================================================
+   PANELS AND HEADINGS
+   ========================================================= */
+
+.enka-stats-panel,
+.enka-weapon-panel,
+.enka-artifacts-panel {
+    min-width: 0;
+    border: 1px solid var(--enka-border);
+    border-radius: 9px;
+    background: var(--surface);
+}
+
+.enka-stats-panel,
+.enka-weapon-panel {
+    padding: 9px;
+}
+
+.enka-weapon-panel {
+    transform: translateY(2px);
+    padding-top: 15px;
+    padding-bottom: 16px;
+}
+
+.enka-stats-panel h3,
+.enka-weapon-panel h3,
+.enka-artifacts-panel h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CHARACTER SHOWCASE — CHARACTER STATS
+   ========================================================= */
+
+.enka-stats-panel {
+    min-width: 0;
+}
+
+.enka-stats-panel [data-showcase-stats] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+    min-width: 0;
+}
+
+.enka-stat-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--enka-border);
+}
+
+/* Remove the divider from the final row in each stats column. */
+.enka-stats-panel [data-showcase-stats] > .enka-stat-row:nth-last-child(-n + 2) {
+    border-bottom: none;
+}
+
+.enka-stat-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.enka-stat-icon {
+    display: block;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    object-fit: contain;
+}
+
+.enka-stat-label {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.3;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.enka-stat-value {
+    display: block;
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.3;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+    .enka-stats-panel [data-showcase-stats] {
+        column-gap: 12px;
+    }
+
+    .enka-stat-row {
+        gap: 5px;
+        padding: 7px 0;
+    }
+
+    .enka-stat-name {
+        gap: 4px;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+        flex-basis: 16px;
+    }
+
+    .enka-stat-label {
+        font-size: 0.66rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   WEAPON
+   ========================================================= */
+
+.enka-weapon-card {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    align-items: start;
+    gap: 9px;
+    min-width: 0;
+}
+
+.enka-weapon-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 74px;
+    padding: 3px;
+    overflow: hidden;
+    border: 1px solid var(--enka-border);
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
+}
+
+.enka-weapon-image.rarity-5 {
+    background: linear-gradient(145deg, #76502f, #30241f);
+}
+
+.enka-weapon-image.rarity-4 {
+    background: linear-gradient(145deg, #654b87, #29243b);
+}
+
+.enka-weapon-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-weapon-refinement,
+.enka-weapon-level {
+    position: absolute;
+    z-index: 1;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgb(8 10 16 / 88%);
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 800;
+}
+
+.enka-weapon-refinement {
+    top: 3px;
+    left: 3px;
+}
+
+.enka-weapon-level {
+    right: 3px;
+    bottom: 3px;
+}
+
+.enka-weapon-info {
+    min-width: 0;
+}
+
+.enka-weapon-name {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.enka-weapon-stats {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    gap: 5px;
+    min-width: 0;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--enka-border);
+}
+
+.enka-weapon-stat {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+.enka-weapon-stat span {
+    flex: 0 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.enka-weapon-stat strong {
+    flex: 0 0 auto;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   ARTIFACTS
+   ========================================================= */
+
+.enka-artifacts-panel {
+    margin: 0 12px 10px;
+    padding: 9px 12px;
+}
+
+.enka-artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+    min-width: 0;
+}
+
+.enka-artifact-card {
+    min-width: 0;
+    padding: 18px 10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    border: 1px solid var(--enka-border);
+    border-radius: 7px;
+    background: var(--surface-hover, var(--surface));
+}
+
+.enka-artifact-main-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 0 6px;
+    border-top: 1px solid var(--enka-border);
+    border-bottom: 1px solid var(--enka-border);
+}
+
+.enka-artifact-main-stat + .enka-artifact-substat {
+    margin-top: 13px;
+}
+
+.enka-artifact-card.rarity-5 {
+    border-color: rgb(215 160 83 / 45%);
+}
+
+.enka-artifact-card.rarity-4 {
+    border-color: rgb(165 119 218 / 45%);
+}
+
+.enka-artifact-header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    margin-bottom: 10px;
+}
+
+.enka-artifact-image-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 2px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 12%,
+        var(--surface)
+    );
+}
+
+.enka-artifact-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.enka-artifact-image-wrap:hover .enka-artifact-icon {
+    transform: scale(1.05);
+}
+
+.enka-artifact-level {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgb(8 10 16 / 88%);
+    color: #fff;
+    font-size: 0.56rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.enka-artifact-rarity {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    margin-top: 4px;
+}
+
+.enka-artifact-rarity img {
+    display: block;
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+}
+
+.enka-artifact-title-wrap {
+    min-width: 0;
+}
+
+.enka-artifact-name {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-main-stat-row,
+.enka-artifact-substat {
+    display: grid;
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 7px;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.enka-artifact-substats > .enka-artifact-substat:first-child {
+    margin-top: 5px;
+}
+
+.enka-artifact-main-stat-row {
+    grid-template-columns: 15px minmax(0, 1fr) auto;
+    margin-bottom: 5px;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-name {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.enka-artifact-substat:last-child {
+    margin-bottom: 0;
+}
+
+.enka-artifact-stat-name,
+.enka-artifact-substat span {
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.enka-artifact-stat-value,
+.enka-artifact-substat strong {
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 750;
+    line-height: 1.5;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.enka-artifact-stat-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+}
+
+.enka-artifact-stat-icon,
+.enka-artifact-main-stat-row img,
+.enka-artifact-substat img {
+    display: block;
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    object-fit: contain;
+}
+
+.enka-artifact-main-stat-row .enka-artifact-stat-value {
+    color: var(--showcase-element-colour);
+}
+
+/* =========================================================
+   ARTIFACT SET BONUSES
+   ========================================================= */
+
+.enka-artifact-sets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.enka-artifact-set {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    padding: 5px 7px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--showcase-element-colour) 28%,
+        var(--border)
+    );
+    border-radius: 5px;
+    background: color-mix(
+        in srgb,
+        var(--showcase-element-colour) 7%,
+        var(--surface)
+    );
+}
+
+.enka-artifact-set-count {
+    flex-shrink: 0;
+    color: var(--showcase-element-colour);
+    font-size: 0.64rem;
+    font-weight: 850;
+}
+
+.enka-artifact-set-name {
+    color: var(--text);
+    font-size: 0.64rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   EMPTY VALUES, STATUS AND ERRORS
+   ========================================================= */
+
+.enka-empty-value {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 8px 0;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
+
+.enka-card-status {
+    margin: 0;
+    padding: 5px 12px 9px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.enka-card-error {
+    margin: 0 12px 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--error);
+    font-size: 0.74rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
+    .character-showcase-modal {
+        width: min(680px, calc(100vw - 24px));
+    }
+
+    .enka-character-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .enka-character-visual {
+        width: min(100%, 560px);
+        justify-self: center;
+    }
+
+    .enka-character-details {
+        gap: 8px;
+    }
+
+    .enka-artifact-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .enka-artifacts-panel {
+        margin: 0 10px 10px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+    .character-showcase {
+        padding: 6px;
+    }
+
+    .character-showcase-modal {
+        width: calc(100vw - 12px);
+        max-height: calc(100dvh - 12px);
+        border-radius: 10px;
+    }
+
+    .enka-character-layout {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .enka-character-visual {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .enka-talent-column {
+        left: 7px;
+        gap: 8px;
+        padding: 7px 5px;
+        border-radius: 14px;
+    }
+
+    .enka-progression-item {
+        width: 34px;
+        height: 34px;
+        padding: 4px;
+    }
+
+    .enka-talent-column .enka-progression-item {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+    }
+
+    .enka-constellation-orbit .enka-progression-item {
+        width: min(100%, 34px);
+        height: auto;
+        aspect-ratio: 1;
+        padding: 4px;
+    }
+
+    .enka-constellation-orbit {
+        right: 7px;
+        bottom: 10px;
+        left: 7px;
+        gap: 3px;
+        padding: 6px 5px;
+        border-radius: 12px;
+    }
+
+    .enka-character-identity h2 {
+        font-size: 1.35rem;
+    }
+
+    .enka-stats-panel,
+    .enka-weapon-panel {
+        padding: 8px;
+    }
+
+    .enka-stat-grid {
+        column-gap: 8px;
+    }
+
+    .enka-stat-row {
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 4px;
+        padding: 5px 0;
+    }
+
+    .enka-stat-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .enka-stat-name {
+        font-size: 0.6rem;
+    }
+
+    .enka-stat-value {
+        font-size: 0.67rem;
+    }
+
+    .enka-artifacts-panel {
+        margin: 0 8px 8px;
+        padding: 7px;
+    }
+
+    .enka-artifact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .enka-artifact-card {
+        padding: 14px 7px;
+    }
+
+    .enka-artifact-header {
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .enka-artifact-image-wrap {
+        width: 36px;
+        height: 36px;
+    }
+
+    .enka-artifact-name {
+        font-size: 0.68rem;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span,
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.7rem;
+    }
+
+    .enka-artifact-main-stat-row,
+    .enka-artifact-substat {
+        grid-template-columns: 14px minmax(0, 1fr) auto;
+        column-gap: 4px;
+    }
+
+    .enka-artifact-stat-icon,
+    .enka-artifact-main-stat-row img,
+    .enka-artifact-substat img {
+        width: 13px;
+        height: 13px;
+        flex-basis: 13px;
+    }
+
+    .enka-artifact-stat-name,
+    .enka-artifact-substat span {
+        font-size: 0.68rem;
+    }
+
+    .enka-artifact-stat-value,
+    .enka-artifact-substat strong {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .character-card,
+    .enka-artifact-icon {
+        transition: none;
+    }
+
+    .character-card:hover,
+    .enka-artifact-image-wrap:hover .enka-artifact-icon {
+        transform: none;
+    }
+
+    .character-showcase-backdrop {
+        backdrop-filter: none;
+    }
+}
+
+/* =========================================================
+   ARTIFACTS — HEADING AND SET BONUS ALIGNMENT
+   ========================================================= */
+
+.enka-artifacts-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.enka-artifacts-heading h3 {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.enka-artifacts-heading .enka-artifact-sets {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    margin: 0 0 0 auto;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — TRANSLUCENT GLASS PANELS
+   ========================================================= */
+
+/* Stats, weapon and artefact panels */
+.enka-stats-panel,
+.enka-weapon-panel,
+.enka-artifacts-panel {
+    background: rgb(15 18 28 / 48%);
+    border-color: rgb(255 255 255 / 16%);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Individual artefact cards */
+.enka-artifact-card {
+    background: rgb(15 18 28 / 35%);
+    border-color: rgb(255 255 255 / 14%);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Weapon image background */
+.enka-weapon-image {
+    background: rgb(15 18 28 / 45%);
+}
+
+/* Remove the element-colour tint behind artefact icons */
+.enka-artifact-image-wrap {
+    background: rgb(255 255 255 / 7%);
+}
+
+/* Neutral glass for artefact set bonuses */
+.enka-artifact-set {
+    background: rgb(255 255 255 / 6%);
+    border-color: rgb(255 255 255 / 18%);
+}
+
+/* Keep the build card itself neutral and transparent */
+.enka-build-card {
+    background: transparent;
+}
+
+/* Keep the main character area clear of coloured overlays */
+.enka-character-visual {
+    background: transparent;
+}
+
+/* Neutral glass for unlocked constellation icons */
+.enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        rgb(255 255 255 / 16%),
+        rgb(15 18 28 / 38%)
+    );
+
+    border-color: rgb(255 255 255 / 30%);
+
+    box-shadow:
+        inset 0 1px 3px rgb(255 255 255 / 12%),
+        0 2px 8px rgb(0 0 0 / 12%);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — REMOVE REMAINING ELEMENT TINTS
+   ========================================================= */
+
+/* Modal outer border */
+.character-showcase-modal {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* Remove the coloured glow from the build card */
+.enka-build-card {
+    background: transparent !important;
+}
+
+/* Neutralise borders on every build panel and artefact */
+.enka-build-card .enka-stats-panel,
+.enka-build-card .enka-weapon-panel,
+.enka-build-card .enka-artifacts-panel,
+.enka-build-card .enka-artifact-card,
+.enka-build-card .enka-weapon-image,
+.enka-build-card .enka-artifact-set,
+.enka-build-card .enka-artifact-image-wrap {
+    border-color: rgb(255 255 255 / 16%) !important;
+}
+
+/* Neutralise talent and constellation borders */
+.enka-build-card .enka-progression-item,
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    border-color: rgb(255 255 255 / 24%) !important;
+}
+
+/* Remove the element-coloured border from the artwork stage */
+.enka-build-card .enka-character-visual {
+    border-color: rgb(255 255 255 / 18%) !important;
+}
+
+/* =========================================================
+   CHARACTER SHOWCASE — ELEMENT-TINTED UNLOCKED CONSTELLATIONS
+   ========================================================= */
+
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked) {
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--showcase-element-colour) 24%, rgb(20 24 36 / 72%)),
+        color-mix(in srgb, var(--showcase-element-colour) 10%, rgb(12 15 24 / 82%))
+    ) !important;
+
+    border: 1px solid
+        color-mix(in srgb, var(--showcase-element-colour) 75%, white 25%) !important;
+
+    box-shadow:
+        inset 0 0 8px
+            color-mix(in srgb, var(--showcase-element-colour) 18%, transparent),
+        0 0 6px
+            color-mix(in srgb, var(--showcase-element-colour) 32%, transparent),
+        0 0 12px
+            color-mix(in srgb, var(--showcase-element-colour) 16%, transparent);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+/* Slightly stronger elemental glow on hover */
+.enka-build-card .enka-progression-item.enka-constellation:not(.is-locked):hover {
+    border-color: var(--showcase-element-colour) !important;
+
+    box-shadow:
+        inset 0 0 10px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent),
+        0 0 9px
+            color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
+        0 0 16px
+            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
+
+    transform: translateY(-2px);
+}
+
+.enka-artifact-cv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 25px;
+    margin-top: 10px;
+    padding-top: 7px;
+
+    border-top: 1px solid rgb(255 255 255 / 16%);
+
+    color: var(--showcase-element-colour);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Keep the CV readable on smaller screens */
+@media (max-width: 520px) {
+    .enka-artifact-card {
+        padding-top: 14px;
+        padding-bottom: 12px;
+    }
+
+    .enka-artifact-cv {
+        min-height: 23px;
+        margin-top: 8px;
+        padding-top: 6px;
+        font-size: 0.75rem;
+    }
+}
+/* =========================================================
+   CHARACTER PLANNER — HEADER AND EMPTY STATE
+   ========================================================= */
+
+.planner-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.planner-header h2,
+.planner-header p {
+    margin-top: 0;
+}
+
+.planner-header p {
+    margin-bottom: 0;
+    color: var(--text-secondary);
+}
+
+.planner-add-button,
+.planner-save-button,
+.planner-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        filter 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        background 160ms ease;
+}
+
+.planner-add-button,
+.planner-save-button {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+}
+
+.planner-secondary-button {
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+}
+
+.planner-add-button:hover,
+.planner-save-button:hover {
+    filter: brightness(1.08);
+}
+
+.planner-secondary-button:hover {
+    border-color: var(--accent-border);
+    color: var(--text);
+}
+
+.planner-empty-state {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.planner-empty-state h3 {
+    margin-bottom: 0.5rem;
+}
+
+.planner-empty-state p {
+    max-width: 520px;
+    margin: 0 auto 1.25rem;
+    color: var(--text-secondary);
+}
+
+.planner-empty-icon {
+    margin-bottom: 0.75rem;
+    color: var(--accent);
+    font-size: 2rem;
+}
+
+
+/* =========================================================
+   CHARACTER PLANNER — SAVED CHARACTER CARDS
+   ========================================================= */
+
+.planner-character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1rem;
+}
+
+.planner-character-card {
+    --planner-card-accent: #8a57c7;
+    position: relative;
+    display: grid;
+    grid-template-columns: 116px minmax(0, 1fr);
+    align-items: stretch;
+    min-width: 0;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--planner-card-accent) 42%,
+        var(--border)
+    );
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
+    transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.planner-character-card[data-rarity="5"] {
+    --planner-card-accent: #d6972f;
+}
+
+.planner-character-card:hover {
+    border-color: var(--planner-card-accent);
+    transform: translateY(-2px);
+}
+
+.planner-card-portrait {
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: 128px;
+    background: color-mix(
+        in srgb,
+        var(--planner-card-accent) 58%,
+        var(--surface)
+    );
+    overflow: hidden;
+}
+
+.planner-card-portrait > img:first-child {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.planner-card-identity {
+    position: relative;
+    width: 100%;
+    padding: 6px 8px;
+    border-top: 1px solid color-mix(
+        in srgb,
+        var(--planner-card-accent) 55%,
+        var(--border)
+    );
+    background: color-mix(
+        in srgb,
+        var(--planner-card-accent) 38%,
+        var(--surface)
+    );
+    text-align: center;
+}
+
+.planner-card-identity h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.92rem;
+    line-height: 1.15;
+}
+
+.planner-card-element {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 28%);
+    overflow: hidden;
+}
+
+.planner-card-element img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.planner-card-content {
+    display: grid;
+    grid-template-rows: auto auto minmax(42px, 1fr);
+    min-width: 0;
+}
+
+.planner-card-goals,
+.planner-card-talents,
+.planner-card-weapon {
+    padding: 8px 11px;
+    border-bottom: 1px solid var(--border);
+}
+
+.planner-card-goals,
+.planner-card-weapon {
+    display: grid;
+    gap: 10px;
+}
+
+.planner-card-goals {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+
+.planner-card-weapon {
+    align-self: stretch;
+    align-content: center;
+    gap: 2px;
+}
+
+.planner-card-goal,
+.planner-card-weapon {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
+
+.planner-card-goal {
+    display: grid;
+    gap: 2px;
+}
+
+.planner-card-goal strong,
+.planner-card-weapon strong {
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.planner-card-level-values {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.planner-card-level-values > span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.planner-card-constellation {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    left: 8px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: rgb(15 18 25 / 80%);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    box-shadow: 0 2px 7px rgb(0 0 0 / 28%);
+    backdrop-filter: blur(4px);
+}
+
+.planner-card-level-values.has-goal {
+    width: fit-content;
+    margin-left: -5px;
+    padding: 2px 5px;
+    border-radius: 6px;
+    background: color-mix(
+        in srgb,
+        var(--planner-card-accent) 12%,
+        transparent
+    );
+}
+
+.planner-card-level-values.has-goal strong:last-child,
+.planner-card-constellation.has-goal {
+    color: var(--planner-card-accent);
+}
+
+.planner-card-talent .planner-card-level-values.has-goal {
+    margin-left: 0;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.planner-card-talents {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.planner-card-talent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.planner-card-talent-key {
+    display: grid;
+    place-items: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    background: #487f69;
+    color: white;
+    font-size: 0.62rem;
+    font-weight: 800;
+}
+
+.planner-card-talent-key.talent-2 {
+    background: #9a762d;
+}
+
+.planner-card-talent-key.talent-3 {
+    background: #a34476;
+}
+
+.planner-card-talent strong {
+    color: var(--text);
+    font-size: 0.82rem;
+}
+
+.planner-card-talent-values {
+    white-space: nowrap;
+}
+
+.planner-card-notes {
+    margin: 6px 8px 8px;
+    padding: 7px 9px;
+    border: 1px solid color-mix(
+        in srgb,
+        var(--planner-card-accent) 38%,
+        var(--border)
+    );
+    border-radius: 8px;
+    background: color-mix(
+        in srgb,
+        var(--planner-card-accent) 10%,
+        var(--surface)
+    );
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 550;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.planner-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.planner-card-actions button {
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--surface) 90%, var(--background));
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1;
+    box-shadow: none;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease;
+}
+
+.planner-card-actions button:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-hover);
+}
+
+.planner-card-actions .planner-card-edit {
+    color: var(--text);
+}
+
+.planner-card-actions .planner-card-remove {
+    color: #ffb2b2;
+}
+
+@media (max-width: 420px) {
+    .planner-character-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .planner-character-card {
+        grid-template-columns: 100px minmax(0, 1fr);
+    }
+
+    .planner-card-portrait {
+        min-height: 126px;
+    }
+
+    .planner-card-goals,
+    .planner-card-talents,
+    .planner-card-weapon {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   CHARACTER PLANNER — MODALS AND CHARACTER PICKER
+   ========================================================= */
+
+.planner-picker,
+.planner-editor {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.planner-picker {
+    z-index: 1200;
+}
+
+.planner-editor {
+    z-index: 1300;
+}
+
+.planner-picker[hidden],
+.planner-editor[hidden] {
+    display: none !important;
+}
+
+.planner-picker-backdrop,
+.planner-editor-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(5 7 14 / 76%);
+    backdrop-filter: blur(8px);
+}
+
+.planner-picker-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(900px, 100%);
+    max-height: min(88vh, 800px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 40%);
+}
+
+.planner-modal-close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.8rem;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.planner-modal-close:hover {
+    border-color: var(--accent-border);
+    color: var(--text);
+}
+
+.planner-picker-dialog > h2 {
+    margin: 0 2.5rem 0.4rem 0;
+}
+
+.planner-picker-dialog > p {
+    color: var(--text-secondary);
+}
+
+.planner-picker-dialog > label {
+    display: block;
+    margin: 1.25rem 0 0.45rem;
+    font-size: 0.9rem;
+}
+
+.planner-picker-dialog input,
+.planner-picker-dialog select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.planner-picker-dialog input {
+    margin-bottom: 1rem;
+}
+
+.planner-picker-dialog select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.planner-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+    gap: 0.8rem;
+}
+
+.planner-picker-character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        transform 160ms ease;
+}
+
+.planner-picker-character:hover {
+    border-color: var(--accent-border);
+    transform: translateY(-2px);
+}
+
+.planner-picker-character img {
+    display: block;
+    width: 100%;
+    max-width: 115px;
+    aspect-ratio: 1;
+    object-fit: contain;
+}
+
+.planner-picker-character span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.planner-picker-empty {
+    padding: 1rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+
+/* =========================================================
+   CHARACTER PLANNER — EDITOR DIALOG
+   ========================================================= */
+
+.planner-editor-dialog {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(680px, 100%);
+    min-width: 0;
+    overflow: visible;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 38%);
+    transition: transform 220ms ease;
+
+}
+
+.planner-editor.is-total-open .planner-editor-dialog {
+    transform: translateX(calc(0px - var(--planner-total-shift)));
+}
+
+.planner-editor-total-panel {
+    position: fixed;
+    z-index: 1;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    box-sizing: border-box;
+    width: min(390px, calc(100vw - 24px));
+    padding: 47px 11px 12px;
+    border: 1px solid var(--accent-border);
+    border-left-width: 2px;
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 16px 18px 46px rgb(0 0 0 / 28%);
+    opacity: 0;
+    transform: translate(12px, -50%) scale(0.98);
+    transform-origin: left center;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.planner-editor-total-panel[hidden] {
+    display: none !important;
+}
+
+.planner-editor.is-total-open .planner-editor-total-panel {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.planner-editor-total-content {
+    min-height: 0;
+    overflow: visible;
+}
+
+.planner-editor-total-content .planner-cost-grid {
+    justify-content: center;
+    gap: 7px;
+}
+
+.planner-editor-total-content .planner-cost-entry {
+    width: 67px;
+}
+
+.planner-editor-total-content .planner-cost-artwork {
+    height: 56px;
+}
+
+.planner-editor-total-content .planner-cost-artwork img {
+    width: 52px;
+    height: 52px;
+}
+
+.planner-editor-total-content .planner-cost-owned {
+    top: -4px;
+    right: -4px;
+    padding: 2px 4px;
+    font-size: 0.62rem;
+}
+
+.planner-editor-total-content .planner-cost-quantity {
+    min-height: 25px;
+    padding: 4px 3px;
+    font-size: 0.72rem;
+}
+
+.planner-editor-total-content .planner-cost-note {
+    display: none;
+}
+
+.planner-total-bookmark {
+    position: fixed;
+    z-index: 2;
+    box-sizing: border-box;
+    width: 70px;
+    height: 39px;
+    min-height: 39px;
+    padding: 0 12px;
+    border: 1px solid var(--accent-border);
+    border-left-color: transparent;
+    border-radius: 0 10px 10px 0;
+    background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 750;
+    box-shadow: 8px 5px 18px rgb(0 0 0 / 20%);
+    cursor: pointer;
+    transition:
+        width 220ms ease,
+        border-radius 220ms ease,
+        background 160ms ease,
+        transform 220ms ease;
+}
+
+.planner-total-bookmark::before {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -11px;
+    width: 13px;
+    border-top: 1px solid var(--accent-border);
+    border-bottom: 1px solid var(--accent-border);
+    background: inherit;
+    clip-path: polygon(100% 0, 100% 100%, 0 50%);
+    content: "";
+    transition: opacity 120ms ease;
+}
+
+.planner-editor.is-total-open .planner-total-bookmark {
+    width: var(--planner-total-width);
+    border-left-color: var(--accent-border);
+    border-radius: 14px 14px 0 0;
+    transform: translate(
+        calc(12px - var(--planner-total-shift)),
+        var(--planner-total-bookmark-y)
+    );
+    background: color-mix(in srgb, var(--accent) 30%, var(--surface));
+    box-shadow: 12px 6px 24px rgb(0 0 0 / 22%);
+}
+
+.planner-editor.is-total-open .planner-total-bookmark::before {
+    opacity: 0;
+}
+
+.planner-total-bookmark:hover {
+    background: color-mix(in srgb, var(--accent) 26%, var(--surface));
+}
+
+.planner-editor-form {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — CHARACTER IDENTITY AND CLOSE BUTTON
+   ========================================================= */
+
+.planner-editor-header {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) 38px;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.planner-editor-character-icon {
+    display: block;
+    width: 68px;
+    height: 68px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-editor-identity {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.planner-editor-identity h2 {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 1.25rem;
+    font-weight: 750;
+    line-height: 1.25;
+}
+
+.planner-editor-identity p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.planner-editor-close {
+    display: grid;
+    place-items: center;
+    align-self: start;
+    justify-self: end;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        color 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.planner-editor-close:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.planner-editor-close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — NOTES AND CONSTELLATION
+   ========================================================= */
+
+.planner-editor-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 125px;
+    align-items: start;
+    gap: 16px;
+    min-width: 0;
+    padding-top: 6px;
+}
+
+.planner-notes-field,
+.planner-constellation-field {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.planner-notes-field > span,
+.planner-constellation-field > span {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 650;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .planner-editor-dialog,
+    .planner-editor-total-panel,
+    .planner-total-bookmark {
+        transition: none;
+    }
+}
+
+.planner-editor-meta textarea,
+.planner-editor-meta select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.88rem;
+}
+
+.planner-editor-meta textarea {
+    height: 39px;
+    min-height: 39px;
+    max-height: 39px;
+    padding: 9px 12px;
+    resize: none;
+    overflow-y: auto;
+    line-height: 19px;
+}
+
+.planner-editor-meta select {
+    min-height: 39px;
+    padding: 7px 9px;
+}
+
+.planner-editor-meta textarea:focus,
+.planner-editor-meta select:focus {
+    border-color: var(--accent);
+    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    outline-offset: 1px;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — MAIN TABS
+   ========================================================= */
+
+.planner-progression-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-tab {
+    min-width: 0;
+    padding: 11px 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.planner-tab:hover {
+    color: var(--text);
+}
+
+.planner-tab.is-active {
+    border-color: var(--accent-border);
+    background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+    color: var(--text);
+}
+
+.planner-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.planner-crafting-toggle {
+    width: fit-content;
+    margin: -4px auto 0;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.planner-crafting-toggle:hover {
+    border-color: var(--accent-border);
+    color: var(--text);
+}
+
+.planner-crafting-toggle[aria-pressed="true"] {
+    border-color: var(--accent-border);
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+    color: var(--text);
+}
+
+.planner-crafting-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.planner-progression-panel {
+    display: grid;
+    align-content: start;
+    gap: 20px;
+    min-width: 0;
+}
+
+.planner-progression-panel[hidden] {
+    display: none !important;
+}
+
+.planner-panel-heading {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.planner-panel-heading h3 {
+    margin: 0;
+    color: var(--text);
+}
+
+.planner-panel-heading p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — CURRENT LEVEL TO GOAL LEVEL
+   ========================================================= */
+
+.planner-level-comparison {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: var(--surface);
+}
+
+.planner-level-value {
+    display: grid;
+    align-content: start;
+    gap: 5px;
+    min-width: 0;
+}
+
+.planner-level-value > span {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.planner-level-value > strong {
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.planner-level-value select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 35px;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.88rem;
+}
+
+.planner-level-value select:focus {
+    border-color: var(--accent);
+    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    outline-offset: 1px;
+}
+
+.planner-level-arrow {
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — TALENT CARDS
+   ========================================================= */
+
+.planner-talent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+}
+
+.planner-talent-panel {
+    display: grid;
+    align-content: start;
+    gap: 9px;
+    min-width: 0;
+    padding: 10px 9px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.planner-talent-panel h3 {
+    min-height: 2.4em;
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 0.83rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.planner-talent-levels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr);
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.planner-talent-current,
+.planner-talent-levels label {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.planner-talent-current > span,
+.planner-talent-levels label > span {
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.planner-talent-current > strong {
+    color: var(--text);
+    font-size: 1.2rem;
+    line-height: 1.2;
+}
+
+.planner-talent-levels select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 35px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+}
+
+.planner-talent-levels select:focus {
+    border-color: var(--accent);
+    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    outline-offset: 1px;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — WEAPON
+   ========================================================= */
+
+.planner-weapon-overview {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+}
+
+.planner-weapon-identity {
+    --planner-weapon-rarity: var(--border);
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid var(--planner-weapon-rarity);
+    border-radius: 12px;
+    background: color-mix(
+        in srgb,
+        var(--planner-weapon-rarity) 10%,
+        var(--surface)
+    );
+}
+
+.planner-weapon-identity[data-rarity="1"],
+.planner-weapon-identity[data-rarity="2"] {
+    --planner-weapon-rarity: #71916f;
+}
+
+.planner-weapon-identity[data-rarity="3"] {
+    --planner-weapon-rarity: #5e8ec2;
+}
+
+.planner-weapon-identity[data-rarity="4"] {
+    --planner-weapon-rarity: #9a72c7;
+}
+
+.planner-weapon-identity[data-rarity="5"] {
+    --planner-weapon-rarity: #c7984f;
+}
+
+.planner-weapon-identity > img {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    border: 1px solid var(--planner-weapon-rarity);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+.planner-weapon-identity > img[hidden] {
+    display: none !important;
+}
+
+.planner-weapon-identity > div {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    text-align: center;
+}
+
+.planner-weapon-identity h3 {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+/* =========================================================
+   PLANNER EDITOR — GOAL COST
+   ========================================================= */
+
+.planner-goal-cost {
+    display: grid;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.planner-goal-cost h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.planner-goal-cost p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.planner-cost-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+}
+
+.planner-goal-cost h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+}
+
+.planner-cost-status {
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: rgba(124, 131, 255, 0.16);
+    color: var(--text-secondary);
+    font-size: 0.66rem;
+    font-weight: 750;
+}
+
+.planner-cost-status.is-complete {
+    color: #e0fff2;
+    background: #087d60;
+}
+
+.planner-cost-entry {
+    position: relative;
+    width: 80px;
+}
+
+.planner-cost-tile {
+    --material-colour: #657587;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 7px;
+    background: var(--material-colour);
+    color: #fff;
+    font: inherit;
+    cursor: help;
+}
+
+.planner-cost-tile.is-craft-enough {
+    border-color: rgba(94, 232, 164, 0.95);
+    box-shadow: 0 0 0 2px rgba(78, 203, 143, 0.38);
+}
+
+.planner-cost-tile.is-craft-short {
+    border-color: rgba(247, 126, 138, 0.92);
+    box-shadow: 0 0 0 2px rgba(231, 117, 128, 0.32);
+}
+
+.planner-cost-tile[data-rarity="2"] { --material-colour: #417d68; }
+.planner-cost-tile[data-rarity="3"] { --material-colour: #476d99; }
+.planner-cost-tile[data-rarity="4"] { --material-colour: #776093; }
+.planner-cost-tile[data-rarity="5"] { --material-colour: #9a7146; }
+
+.planner-cost-tile:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.planner-cost-artwork {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 64px;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.2), rgba(255, 255, 255, 0.15));
+}
+
+.planner-cost-artwork img {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.planner-cost-owned {
+    position: absolute;
+    z-index: 1;
+    top: -6px;
+    right: -6px;
+    min-width: 22px;
+    max-width: calc(100% + 12px);
+    box-sizing: border-box;
+    padding: 3px 6px;
+    border: 1px solid color-mix(in srgb, var(--text) 20%, var(--border));
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--surface) 94%, black);
+    color: var(--text);
+    font-size: 0.68rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.32);
+}
+
+.planner-cost-owned.is-craft-gain {
+    border-color: #55c995;
+    background: #245943;
+    color: #e7fff4;
+}
+
+.planner-cost-owned.is-craft-spent {
+    border-color: #d87885;
+    background: #60313a;
+    color: #fff0f2;
+}
+
+.planner-cost-fallback {
+    padding: 4px;
+    font-size: 0.65rem;
+    overflow-wrap: anywhere;
+}
+
+.planner-cost-quantity {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    min-height: 26px;
+    padding: 5px 3px;
+    border-top: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 0 0 6px 6px;
+    background: rgba(13, 22, 36, 0.72);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.planner-cost-quantity.is-enough {
+    border-top-color: #58d7a0;
+    background: #176f4d;
+}
+
+.planner-cost-quantity.is-craft-enough {
+    border-top-color: #e9ad61;
+    background: #70491f;
+}
+
+.planner-cost-quantity.is-short {
+    border-top-color: #e07a88;
+    background: #642d37;
+}
+
+.planner-cost-tile.is-craft-short .planner-cost-quantity {
+    box-shadow: inset 0 -2px rgba(231, 117, 128, 0.75);
+}
+
+.planner-cost-remaining {
+    opacity: 0.58;
+    font-size: 0.82em;
+    font-weight: 650;
+}
+
+.planner-cost-tooltip {
+    position: absolute;
+    z-index: 2;
+    bottom: calc(100% + 7px);
+    left: 0;
+    width: max-content;
+    max-width: 240px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #172334;
+    color: #fff;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: pre-line;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.planner-cost-entry:hover .planner-cost-tooltip,
+.planner-cost-entry:focus-within .planner-cost-tooltip {
+    visibility: visible;
+}
+
+.planner-cost-retry {
+    margin-top: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+.planner-goal-cost .planner-cost-note {
+    margin-top: 9px;
+    padding: 9px 11px;
+    border-left: 3px solid var(--accent);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.planner-goal-cost .planner-cost-complete {
+    color: var(--accent);
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   PLANNER EDITOR — FOOTER ACTIONS
+   ========================================================= */
+
+.planner-editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.planner-editor-actions button {
+    min-height: 40px;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   CHARACTER PLANNER — RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .characters-page-tabs {
+        width: 100%;
+    }
+
+    .characters-page-tab {
+        flex: 1;
+    }
+
+    .planner-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .planner-picker-dialog {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .planner-editor {
+        padding: 8px;
+    }
+
+    .planner-editor-dialog {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    .planner-editor-header {
+        grid-template-columns: 54px minmax(0, 1fr) 34px;
+        gap: 11px;
+        padding-bottom: 15px;
+    }
+
+    .planner-editor-character-icon {
+        width: 54px;
+        height: 54px;
+    }
+
+    .planner-editor-identity h2 {
+        font-size: 1.05rem;
+    }
+
+    .planner-editor-close {
+        width: 34px;
+        height: 34px;
+    }
+
+    .planner-editor-meta {
+        grid-template-columns: minmax(0, 1fr) 100px;
+        gap: 10px;
+    }
+
+    .planner-level-comparison {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .planner-level-value > strong {
+        font-size: 1.25rem;
+    }
+
+    .planner-talent-grid {
+        gap: 6px;
+    }
+
+    .planner-talent-panel {
+        gap: 8px;
+        padding: 10px 7px;
+    }
+
+    .planner-talent-panel h3 {
+        font-size: 0.75rem;
+    }
+
+    .planner-talent-levels {
+        grid-template-columns: minmax(0, 1fr) 10px minmax(0, 1fr);
+        gap: 3px;
+    }
+
+    .planner-talent-current > span,
+    .planner-talent-levels label > span {
+        font-size: 0.65rem;
+    }
+
+    .planner-talent-current > strong {
+        font-size: 1.15rem;
+    }
+
+    .planner-editor-actions button {
+        padding: 9px 12px;
+    }
+
+    .planner-weapon-overview {
+        grid-template-columns: 105px minmax(0, 1fr);
+        gap: 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .planner-editor-meta {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .planner-constellation-field {
+        max-width: none;
+    }
+
+    .planner-talent-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .planner-talent-panel {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+    }
+
+    .planner-talent-panel h3 {
+        min-height: 0;
+    }
+
+    .planner-weapon-overview {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* =========================================================
+   CHARACTER PLANNER — BUTTON VALUE SELECTORS
+   ========================================================= */
+
+.planner-native-select {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+.planner-choice-trigger {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    width: 100%;
+    min-width: 0;
+    height: 39px;
+    padding: 7px 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--surface);
+    color: var(--text);
+
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.planner-choice-trigger:hover,
+.planner-choice-trigger[aria-expanded="true"] {
+    border-color: var(--accent-border);
+    background: var(--surface-hover);
+}
+
+.planner-choice-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.planner-choice-value {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.planner-choice-arrow {
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    transition: transform 160ms ease;
+}
+
+.planner-choice-trigger[aria-expanded="true"]
+.planner-choice-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   SELECTOR POPUP
+   ========================================================= */
+
+.planner-choice-menu {
+    position: fixed;
+    z-index: 10;
+
+    box-sizing: border-box;
+    max-height: min(300px, calc(100dvh - 24px));
+    overflow-y: auto;
+
+    padding: 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--background);
+    box-shadow: 0 16px 45px rgb(0 0 0 / 35%);
+}
+
+.planner-choice-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.planner-choice-option {
+    display: grid;
+    place-items: center;
+
+    min-width: 0;
+    flex: 0 0 calc((100% - 18px) / 4);
+    min-height: 39px;
+    padding: 7px 4px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--surface);
+    color: var(--text);
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.planner-choice-option:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent-border);
+}
+
+.planner-choice-option.is-selected {
+    background: color-mix(
+        in srgb,
+        var(--accent) 20%,
+        var(--surface)
+    );
+
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+.planner-choice-option:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Compact talent selectors */
+
+.planner-talent-levels .planner-choice-trigger {
+    padding-inline: 7px;
+    font-size: 0.82rem;
+}
+
+@media (max-width: 560px) {
+    .planner-choice-menu {
+        padding: 8px;
+    }
+
+    .planner-choice-grid {
+        gap: 5px;
+    }
+
+    .planner-choice-option {
+        min-height: 36px;
+        font-size: 0.78rem;
+    }
+
+    .planner-talent-levels .planner-choice-trigger {
+        padding-inline: 5px;
+        gap: 3px;
+    }
+}

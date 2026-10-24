@@ -23,25 +23,26 @@
 
     <link
         rel="stylesheet"
-        href="/static/css/main.css?v=1.5"
+        href="/static/build/css/global.css"
     >
 
-    {% if request.path == '/characters' %}
+    {% set page_styles = {
+        '/achievements': '/static/build/css/achievements.css',
+        '/characters': '/static/build/css/characters.css',
+        '/inventory': '/static/build/css/inventory.css',
+        '/planner': '/static/build/css/planner.css',
+        '/verify': '/static/build/css/verification.css',
+        '/codes': '/static/build/css/codes.css',
+        '/events': '/static/build/css/events.css',
+        '/settings': '/static/build/css/settings.css'
+    } %}
 
+    {% if page_styles.get(request.path) %}
     <link
         rel="stylesheet"
-        href="/static/css/characters/characters.css"
+        href="{{ page_styles[request.path] }}"
+        data-page-style="{{ request.path }}"
     >
-
-    {% endif %}
-
-    {% if request.path == '/inventory' %}
-
-    <link
-        rel="stylesheet"
-        href="/static/css/inventory.css"
-    >
-
     {% endif %}
 </head>
 
@@ -215,7 +216,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=1.6"></script>
+    <script type="module" src="/static/build/js/app.js?v=1.7"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

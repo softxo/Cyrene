@@ -8,7 +8,7 @@
 - `utils/web/app.py`: FastAPI routes and website APIs.
 - `utils/hoyolab/`: HoYoLAB integration and database logic.
 - `website/templates/`: Jinja templates.
-- `website/static/css/`: Website stylesheets.
+- `website/src/styles/`: CSS source, organised into shared core and page styles.
 - `website/src/browser/`: TypeScript browser source, organised into shared core and page scripts.
 - `website/src/schemas/`: Shared frontend validation schemas.
 - `website/static/build/`: Generated frontend assets; do not edit these directly.
