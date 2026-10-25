@@ -2,11 +2,12 @@
 /* =========================================================
    CODES PAGE
    ========================================================= */
-(() => {
+function initCodes() {
     const page = document.querySelector(".codes-page");
-    if (!page) {
+    if (!page || page.dataset.initialised === "true") {
         return;
     }
+    page.dataset.initialised = "true";
     const list = document.getElementById("codes-list");
     const count = document.getElementById("codes-count");
     const accountSelect = document.getElementById("codes-account");
@@ -370,4 +371,5 @@
     });
     refreshButton.addEventListener("click", fetchCodes);
     fetchCodes();
-})();
+}
+window.initCodes = initCodes;

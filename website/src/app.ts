@@ -27,6 +27,7 @@ declare global {
         initPlanner?: () => void;
         initVerify?: () => void;
         initAchievements?: () => void;
+        initCodes?: () => void;
         initSettings?: () => void;
         initEvents?: () => void;
 
@@ -106,7 +107,7 @@ const pageStyles: Record<string, string> = {
     "/": "/static/build/css/home.css?v=4",
     "/achievements": "/static/build/css/achievements.css?v=2",
     "/wishes": "/static/build/css/wishes.css?v=10",
-    "/characters": "/static/build/css/characters.css?v=2",
+    "/characters": "/static/build/css/characters.css?v=3",
     "/inventory": "/static/build/css/inventory.css?v=2",
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css",
@@ -251,6 +252,10 @@ function initialisePage(path: string): void {
             window.initAchievements?.();
             break;
 
+        case "/codes":
+            window.initCodes?.();
+            break;
+
         case "/settings":
             window.initSettings?.();
             break;
@@ -271,7 +276,62 @@ async function preparePage(path: string): Promise<void> {
 
 
 /* =========================================================
-   6. ACTIVE SIDEBAR NAVIGATION
+   6. CUSTOM SELECT SAFETY NET
+   ========================================================= */
+
+function initialiseCustomSelectFallback(): void {
+    document.addEventListener("click", event => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
+        const button = event.target.closest<HTMLButtonElement>(
+            ".custom-select-button",
+        );
+
+        const select = button?.closest<HTMLElement>(
+            ".custom-select",
+        );
+
+        if (!button || !select || button.disabled) {
+            return;
+        }
+
+        const wasOpen = select.classList.contains("open");
+        const previousExpanded = button.getAttribute("aria-expanded");
+
+        // Page-specific handlers run first. Only step in when a freshly
+        // inserted SPA control has not been initialised by its page module.
+        window.setTimeout(() => {
+            const handled =
+                select.classList.contains("open") !== wasOpen ||
+                button.getAttribute("aria-expanded") !== previousExpanded;
+
+            if (handled || !select.isConnected) {
+                return;
+            }
+
+            document.querySelectorAll<HTMLElement>(
+                ".custom-select.open",
+            ).forEach(otherSelect => {
+                if (otherSelect === select) {
+                    return;
+                }
+
+                otherSelect.classList.remove("open");
+                otherSelect.querySelector(".custom-select-button")
+                    ?.setAttribute("aria-expanded", "false");
+            });
+
+            select.classList.toggle("open", !wasOpen);
+            button.setAttribute("aria-expanded", String(!wasOpen));
+        }, 0);
+    }, true);
+}
+
+
+/* =========================================================
+   7. ACTIVE SIDEBAR NAVIGATION
    ========================================================= */
 
 function updateActiveNavigation(url: string | URL): void {
@@ -297,7 +357,7 @@ function updateActiveNavigation(url: string | URL): void {
 
 
 /* =========================================================
-   7. CLIENT-SIDE NAVIGATION
+   8. CLIENT-SIDE NAVIGATION
    ========================================================= */
 
 async function navigate(
@@ -440,7 +500,7 @@ async function navigate(
 
 
 /* =========================================================
-   8. NAVIGATION EVENT LISTENERS
+   9. NAVIGATION EVENT LISTENERS
    ========================================================= */
 
 document.addEventListener(
@@ -453,6 +513,8 @@ document.addEventListener(
         if (!mainContent) {
             return;
         }
+
+        initialiseCustomSelectFallback();
 
         /*
          * Intercept internal navigation links.
@@ -515,7 +577,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   9. MOBILE SIDEBAR
+   10. MOBILE SIDEBAR
    ========================================================= */
 
 const mobileMenuButton = document.getElementById(
