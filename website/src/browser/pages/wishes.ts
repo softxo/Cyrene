@@ -7,10 +7,12 @@
     const history = document.getElementById("wish-history")!;
     const urlInput = document.getElementById("wish-url") as HTMLInputElement;
     const importButton = document.getElementById("wish-import") as HTMLButtonElement;
-    const status = document.getElementById("wish-import-status")!;
     const filter = document.getElementById("wish-filter") as HTMLInputElement;
     const success = document.getElementById("wish-import-success")!;
     const successMessage = document.getElementById("wish-import-success-message")!;
+    const importTitle = document.getElementById("wish-import-title")!;
+    const importCount = document.getElementById("wish-import-count")!;
+    const importClose = document.getElementById("wish-import-close") as HTMLButtonElement;
     const selectedRarities = new Set([3, 4, 5]);
     const standardFiveStars = new Set(["Diluc", "Jean", "Keqing", "Mona", "Qiqi", "Tighnari", "Dehya", "Yumemizuki Mizuki"]);
     const bannerLabels: Record<string, string> = { character: "Character Event", weapon: "Weapon Event", standard: "Standard Banner", novice: "Novice", chronicled: "Chronicled Wish" };
@@ -20,7 +22,6 @@
     let wishes: Wish[] = [];
     let currentPage = 1;
     let currentView: "list" | "grid" = "list";
-    let successTimer = 0;
 
     const category = (type: string) => {
         if (type === "301" || type === "400") return "character";
@@ -206,11 +207,33 @@
         render();
     }
 
-    function showVerified(imported: number) {
-        successMessage.textContent = `${imported} new wish${imported === 1 ? "" : "es"} imported successfully.`;
-        window.clearTimeout(successTimer);
+    function openImportModal() {
+        success.classList.remove("complete", "error");
+        importTitle.textContent = "Importing wishes";
+        importCount.textContent = "0";
+        successMessage.textContent = "Connecting to HoYoverse…";
+        importClose.hidden = true;
         success.hidden = false;
-        successTimer = window.setTimeout(() => { success.hidden = true; }, 2200);
+    }
+
+    function updateImportModal(event: { type?: string; found?: number; imported?: number; seconds?: number; message?: string }) {
+        if (typeof event.found === "number") importCount.textContent = event.found.toLocaleString();
+        if (event.type === "progress") successMessage.textContent = "Reading wish history…";
+        if (event.type === "phase") successMessage.textContent = event.message || "Processing wishes…";
+        if (event.type === "retry") successMessage.textContent = `HoYoverse asked us to slow down. Retrying in ${event.seconds || 2} seconds…`;
+        if (event.type === "complete") {
+            success.classList.add("complete");
+            importTitle.textContent = "Import complete";
+            const imported = Number(event.imported) || 0;
+            successMessage.textContent = `${imported.toLocaleString()} new wish${imported === 1 ? "" : "es"} saved.`;
+            importClose.hidden = false;
+        }
+        if (event.type === "error") {
+            success.classList.add("error");
+            importTitle.textContent = "Import stopped";
+            successMessage.textContent = event.message || "Wish import failed.";
+            importClose.hidden = false;
+        }
     }
 
     document.querySelectorAll<HTMLButtonElement>(".wish-rarity-filter").forEach(button => button.addEventListener("click", () => {
@@ -235,21 +258,41 @@
         const url = urlInput.value.trim();
         if (!url) return;
         importButton.disabled = true;
-        status.className = "wish-import-status";
-        status.textContent = "Importing wish history…";
+        openImportModal();
         try {
-            const response = await fetch(`/api/wishes/import?account_id=${encodeURIComponent(selectedAccountId)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url }) });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.detail || "Wish import failed.");
+            const response = await fetch(`/api/wishes/import/stream?account_id=${encodeURIComponent(selectedAccountId)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url }) });
+            if (!response.ok) {
+                const result = await response.json();
+                throw new Error(result.detail || "Wish import failed.");
+            }
+            if (!response.body) throw new Error("Import progress is unavailable.");
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+            let completed = false;
+            while (true) {
+                const { value, done } = await reader.read();
+                buffer += decoder.decode(value, { stream: !done });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() || "";
+                for (const line of lines) {
+                    if (!line.trim()) continue;
+                    const event = JSON.parse(line);
+                    updateImportModal(event);
+                    if (event.type === "complete") completed = true;
+                    if (event.type === "error") throw new Error(event.message || "Wish import failed.");
+                }
+                if (done) break;
+            }
+            if (!completed) throw new Error("The import ended before it could finish.");
             urlInput.value = "";
-            status.textContent = "";
             await load();
-            showVerified(Number(result.imported) || 0);
         } catch (error) {
-            status.classList.add("error");
-            status.textContent = error instanceof Error ? error.message : "Wish import failed.";
+            updateImportModal({ type: "error", message: error instanceof Error ? error.message : "Wish import failed." });
         } finally { importButton.disabled = false; }
     });
+
+    importClose.addEventListener("click", () => { success.hidden = true; });
 
     initialiseDropdowns();
     load().catch(error => { history.textContent = error instanceof Error ? error.message : "Could not load wish history."; });

@@ -50,7 +50,6 @@
                    placeholder="Paste your wish-history URL…" aria-label="Wish-history URL">
             <button id="wish-import" class="button" type="button">Import wishes</button>
         </div>
-        <p id="wish-import-status" class="wish-import-status" role="status"></p>
     </section>
 
     <section class="wish-overview" aria-label="Wish banner summary">
@@ -108,7 +107,7 @@
     </section>
     {% endif %}
 </div>
-<div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" hidden>
+<div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" aria-modal="true" hidden>
     <div class="wish-import-success-backdrop"></div>
     <div class="wish-import-success-panel">
         <div class="wish-import-verified-icon" aria-hidden="true">
@@ -117,9 +116,12 @@
             <span class="wish-import-scan-line"></span>
             <svg class="wish-import-check" viewBox="0 0 64 64" focusable="false"><path d="M17 33.5 27.5 44 48 22"></path></svg>
         </div>
-        <h2>Verified</h2>
-        <p id="wish-import-success-message">Wish history imported successfully.</p>
+        <h2 id="wish-import-title">Importing wishes</h2>
+        <strong class="wish-import-count" id="wish-import-count">0</strong>
+        <span class="wish-import-count-label">wishes found</span>
+        <p id="wish-import-success-message">Connecting to HoYoverse…</p>
+        <button class="button wish-import-close" id="wish-import-close" type="button" hidden>Close</button>
     </div>
 </div>
-{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=5"></script>{% endif %}
+{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=6"></script>{% endif %}
 {% endblock %}

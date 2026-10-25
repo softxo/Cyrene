@@ -1,6 +1,7 @@
 import typing
 import asyncio
 import aiohttp
+import json
 import time
 import tempfile
 import re
@@ -25,6 +26,7 @@ from fastapi.responses import (
     HTMLResponse,
     JSONResponse,
     RedirectResponse,
+    StreamingResponse,
 )
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -4466,7 +4468,10 @@ def _validated_wish_url(value: str) -> str:
     return value.strip()
 
 
-async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
+async def _fetch_wishes_from_hoyoverse(
+    source_url: str,
+    progress: typing.Callable[[dict], typing.Awaitable[None]] | None = None,
+) -> list[dict]:
     parsed = urlsplit(source_url)
     base_query = dict(parse_qsl(parsed.query, keep_blank_values=True))
     wishes: dict[str, dict] = {}
@@ -4493,13 +4498,26 @@ async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
                     urlencode(query),
                     "",
                 ))
-                try:
-                    async with client.get(page_url, allow_redirects=False) as response:
-                        if response.status != 200:
-                            raise HTTPException(status_code=502, detail="HoYoverse rejected the wish-history request.")
-                        payload = await response.json(content_type=None)
-                except (aiohttp.ClientError, asyncio.TimeoutError) as error:
-                    raise HTTPException(status_code=502, detail="Could not contact HoYoverse.") from error
+                payload = None
+                for attempt in range(5):
+                    try:
+                        async with client.get(page_url, allow_redirects=False) as response:
+                            if response.status not in (200, 429):
+                                raise HTTPException(status_code=502, detail="HoYoverse rejected the wish-history request.")
+                            payload = await response.json(content_type=None)
+                    except (aiohttp.ClientError, asyncio.TimeoutError) as error:
+                        raise HTTPException(status_code=502, detail="Could not contact HoYoverse.") from error
+
+                    message = str(payload.get("message") or "") if isinstance(payload, dict) else ""
+                    rate_limited = response.status == 429 or "frequent" in message.casefold()
+                    if not rate_limited:
+                        break
+                    if attempt == 4:
+                        raise HTTPException(status_code=429, detail="HoYoverse is still rate limiting this import. Please wait a few minutes and try again.")
+                    delay = min(2 ** (attempt + 1), 12)
+                    if progress:
+                        await progress({"type": "retry", "seconds": delay, "found": len(wishes)})
+                    await asyncio.sleep(delay)
 
                 if not isinstance(payload, dict) or payload.get("retcode") != 0:
                     message = (
@@ -4536,12 +4554,18 @@ async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
                         "pulled_at": pulled_at,
                     }
 
+                if progress:
+                    await progress({"type": "progress", "found": len(wishes), "banner": gacha_type})
+
                 next_end_id = str(page[-1].get("id") or "")
                 if not next_end_id or next_end_id == end_id or len(page) < 20:
                     break
                 end_id = next_end_id
+                await asyncio.sleep(0.25)
 
     records = list(wishes.values())
+    if progress:
+        await progress({"type": "phase", "found": len(records), "message": "Matching wish artwork…"})
     unique_items = {
         (wish["item_type"].casefold(), wish["name"])
         for wish in records
@@ -4611,6 +4635,63 @@ async def import_wishes_api(
         )
     imported = await import_wish_history(account_id, wishes)
     return {"success": True, "imported": imported, "found": len(wishes)}
+
+
+@app.post("/api/wishes/import/stream")
+async def import_wishes_stream_api(
+    request: Request,
+    account_id: int,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    user_id = await get_authenticated_user(cyrene_session)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated.")
+    account = await _get_achievement_account(user_id, account_id)
+    body = await request.json()
+    source_url = _validated_wish_url(str(body.get("url") or ""))
+
+    async def stream():
+        queue: asyncio.Queue[dict] = asyncio.Queue()
+
+        async def report(event: dict) -> None:
+            await queue.put(event)
+
+        async def run_import() -> None:
+            try:
+                wishes = await _fetch_wishes_from_hoyoverse(source_url, report)
+                returned_uids = {wish["uid"] for wish in wishes}
+                if returned_uids and returned_uids != {str(account["genshin_uid"])}:
+                    raise HTTPException(status_code=409, detail="This wish history belongs to a different Genshin account.")
+                await report({"type": "phase", "found": len(wishes), "message": "Saving wishes…"})
+                imported = await import_wish_history(account_id, wishes)
+                await report({"type": "complete", "found": len(wishes), "imported": imported})
+            except HTTPException as error:
+                await report({"type": "error", "message": str(error.detail)})
+            except Exception:
+                logger.exception("Wish history streaming import failed")
+                await report({"type": "error", "message": "Wish import failed unexpectedly."})
+
+        task = asyncio.create_task(run_import())
+        try:
+            while not task.done() or not queue.empty():
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=1)
+                except asyncio.TimeoutError:
+                    yield "\n"
+                    continue
+                yield json.dumps(event, separators=(",", ":")) + "\n"
+        finally:
+            if not task.done():
+                task.cancel()
+
+    return StreamingResponse(
+        stream(),
+        media_type="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @app.get(
