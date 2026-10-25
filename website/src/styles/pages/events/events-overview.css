@@ -60,7 +60,7 @@
     border: 1px solid var(--border);
     border-radius: 14px;
 
-    background: var(--surface);
+    background: var(--panel-background);
 
     transition:
         background 0.2s ease,

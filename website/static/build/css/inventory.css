@@ -68,7 +68,7 @@
     padding: 16px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: var(--surface);
+    background: var(--panel-background);
 }
 
 .inventory-search {
@@ -120,7 +120,7 @@
     padding: 8px 8px 11px;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: var(--surface);
+    background: var(--panel-background);
     transition: border-color 0.16s ease, transform 0.16s ease;
 }
 
@@ -208,7 +208,7 @@
     padding: 30px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: var(--surface);
+    background: var(--panel-background);
     text-align: center;
 }
 

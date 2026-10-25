@@ -103,15 +103,16 @@ const pageScripts: Record<string, string | string[]> = {
 };
 
 const pageStyles: Record<string, string> = {
-    "/": "/static/build/css/home.css?v=3",
-    "/achievements": "/static/build/css/achievements.css",
-    "/characters": "/static/build/css/characters.css",
-    "/inventory": "/static/build/css/inventory.css",
-    "/planner": "/static/build/css/planner.css",
+    "/": "/static/build/css/home.css?v=4",
+    "/achievements": "/static/build/css/achievements.css?v=2",
+    "/wishes": "/static/build/css/wishes.css?v=10",
+    "/characters": "/static/build/css/characters.css?v=2",
+    "/inventory": "/static/build/css/inventory.css?v=2",
+    "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css",
-    "/codes": "/static/build/css/codes.css",
-    "/events": "/static/build/css/events.css",
-    "/settings": "/static/build/css/settings.css",
+    "/codes": "/static/build/css/codes.css?v=2",
+    "/events": "/static/build/css/events.css?v=3",
+    "/settings": "/static/build/css/settings.css?v=2",
 };
 
 

@@ -23,20 +23,20 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css"
+        href="/static/build/css/global.css?v=5"
     >
 
     {% set page_styles = {
-        '/': '/static/build/css/home.css?v=3',
-        '/achievements': '/static/build/css/achievements.css',
-        '/wishes': '/static/build/css/wishes.css?v=9',
-        '/characters': '/static/build/css/characters.css',
-        '/inventory': '/static/build/css/inventory.css',
-        '/planner': '/static/build/css/planner.css',
+        '/': '/static/build/css/home.css?v=4',
+        '/achievements': '/static/build/css/achievements.css?v=2',
+        '/wishes': '/static/build/css/wishes.css?v=10',
+        '/characters': '/static/build/css/characters.css?v=2',
+        '/inventory': '/static/build/css/inventory.css?v=2',
+        '/planner': '/static/build/css/planner.css?v=2',
         '/verify': '/static/build/css/verification.css',
-        '/codes': '/static/build/css/codes.css',
-        '/events': '/static/build/css/events.css',
-        '/settings': '/static/build/css/settings.css'
+        '/codes': '/static/build/css/codes.css?v=2',
+        '/events': '/static/build/css/events.css?v=3',
+        '/settings': '/static/build/css/settings.css?v=2'
     } %}
 
     {% if page_styles.get(request.path) %}
@@ -218,7 +218,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=1.9"></script>
+    <script type="module" src="/static/build/js/app.js?v=2.0"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

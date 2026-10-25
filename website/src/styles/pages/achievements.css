@@ -47,7 +47,7 @@
 
     border-radius: 14px;
 
-    background: var(--surface);
+    background: var(--panel-background);
 }
 
 
@@ -160,7 +160,7 @@
 
     border-radius: 14px;
 
-    background: var(--surface);
+    background: var(--panel-background);
 
     color: var(--text);
 
@@ -426,7 +426,7 @@
 
     border-radius: 14px;
 
-    background: var(--surface);
+    background: var(--panel-background);
 }
 
 
