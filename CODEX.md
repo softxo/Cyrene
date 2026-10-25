@@ -1,22 +1,43 @@
-# CODEX.md - SDL-MCP
+# Cyrene — Agent Instructions
 
-Use SDL-MCP as the default path for repository `cyrene-frontend`.
+## Project
+Cyrene is a Genshin Impact Discord bot and companion website.
 
-## SDL-MCP Skill Bootstrap
+- Backend: Python 3.14, FastAPI, discord.py, PostgreSQL.
+- Frontend: TypeScript, Vite, Jinja2, CSS.
+- Development: VS Code, Windows, PowerShell.
+- Git: develop on `dev`; `main` is protected.
 
-At the start of every new Codex session in this repository, load and follow the `sdl-mcp-agent-workflow` skill before repository exploration, command execution, or edits. The generated `.codex/hooks/load-sdl-skill.mjs` SessionStart hook also injects the lean skill body as a system message. If the skill is unavailable, use [SDL.md](./SDL.md) as the fallback workflow.
+## Workflow
+- Inspect relevant code before making changes.
+- Search narrowly by filename, symbol, or directory before expanding scope.
+- Reuse existing functions, utilities, components, and patterns.
+- Make the smallest complete change that solves the underlying problem.
+- Preserve existing behaviour unless explicitly requested otherwise.
+- Avoid unrelated refactoring, formatting, and dependency changes.
+- Do not modify generated files manually; identify and edit their sources.
+- Avoid reading entire directories or large files when targeted inspection is sufficient.
+- Do not install packages or modify Git history without approval.
 
-When the SDL-MCP PID file is present, treat native repo-local shell and file tools as fallback-only. Use SDL runtime for shell actions with `stdin` for multiline input, the Iris ladder for indexed reads, `symbol.edit` for one-symbol indexed writes, `searchEditPreview` with `targeting:"identifier"`/`"structural"` or `operations[]` for cross-file indexed edits, and `file.read`/`file.write` for non-indexed files. When structured retrieval is unavailable for indexed source, use a targeted, bounded `sdl.file { op: "read" }` fallback. Native access is reserved for `.codex/**`, `.claude/**`, and non-repo agent skills, memories, and session internals.
+## Code Quality
+- Follow existing naming, formatting, and architectural conventions.
+- Use British English for comments, documentation, and user-facing text unless an API requires otherwise.
+- Prefer clear, maintainable solutions over unnecessary abstractions.
+- Use TypeScript types and avoid `any` unless justified.
+- Handle errors explicitly; do not silently suppress failures.
+- Respect account-specific data isolation and authentication boundaries.
+- Preserve existing UI patterns, themes, and responsive behaviour.
 
-runtimeExecute executes repository tooling. Permitted uses include build, test, lint, compiler, named scripts, and targeted edit scripts. Do not use it to inspect, search, or print repository files. Use sdl.context or sdl.retrieve for indexed source and sdl.file with op="read" for other files.
+## Verification
+- Run targeted checks for affected code.
+- For frontend changes, use existing type-checking, linting, tests, and build scripts as applicable.
+- For Python changes, run relevant tests or syntax checks.
+- Investigate failures introduced by changes; identify unrelated existing failures.
+- Do not claim checks passed unless they were executed successfully.
 
-## Token Economy
-
-Prefer `runtimeExecute` `outputMode: "digest"` for build/test/lint; query artifacts only when needed.
-For explain/debug, call `sdl.context` with a required `budget.maxTokens`; inspect its evidence and follow `nextActions` only when more detail is needed.
-Treat `{ ref, unchanged: true }` as already-held content; use `refsMode: "off"` only to recover after lost context. Use `sN` aliases from `@ids` anywhere symbol IDs are accepted.
-On search misses, retry from `nearMisses`; if `file.read` warns about a large untargeted read, retry with search, range, or token limits.
-
-SDL-MCP (Symbol Delta Ledger MCP Server) - an MCP server providing cards-first code context for polyglot repositories. Replaces bulk code reads with structured symbol cards, graph slices, delta packs, and gated code windows. Uses LadybugDB (graph DB), tree-sitter (AST parsing), and optional Rust native addon (napi-rs) for performance.
-
-> Optimized tool-use workflow for agents: see [SDL.md](./SDL.md).
+## Responses
+- Keep responses concise and technical.
+- Summarise changes rather than reproducing entire files.
+- Reference modified file paths.
+- Report relevant test results, failures, and remaining risks.
+- Avoid lengthy explanations unless requested.
