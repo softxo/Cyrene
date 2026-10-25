@@ -1270,7 +1270,11 @@ function initCharacterPlanner() {
             ?.querySelector(".planner-choice-trigger");
         const triggerRect = constellationTrigger?.getBoundingClientRect();
         const bookmarkTop = triggerRect?.top ?? rect.top + 92;
-        totalButton.style.left = `${rect.right - 12}px`;
+        const bookmarkLeft = Math.min(
+            rect.right - 1,
+            window.innerWidth - totalButton.offsetWidth - 8
+        );
+        totalButton.style.left = `${bookmarkLeft}px`;
         totalButton.style.top = `${bookmarkTop}px`;
 
         if (!includePanel || !totalPanel) {
@@ -1291,6 +1295,10 @@ function initCharacterPlanner() {
         const panelTop = rect.top + ((rect.height - panelHeight) / 2);
 
         editor.style.setProperty("--planner-total-shift", `${shift}px`);
+        editor.style.setProperty(
+            "--planner-total-bookmark-x",
+            `${rect.right - shift - bookmarkLeft}px`
+        );
         editor.style.setProperty(
             "--planner-total-width",
             `${panelWidth}px`
@@ -1918,7 +1926,6 @@ function initCharacterPlanner() {
                 );
                 ownedIndicator.title = ownedLabel;
                 ownedIndicator.setAttribute("aria-label", ownedLabel);
-                artwork.append(ownedIndicator);
                 label += `, ${ownedLabel}`;
             }
 
@@ -1945,7 +1952,13 @@ function initCharacterPlanner() {
             tile.append(artwork, quantity);
             const tooltip = makeElement("span", "planner-cost-tooltip", label);
             tooltip.setAttribute("aria-hidden", "true");
-            wrapper.append(tile, tooltip);
+            wrapper.append(tile);
+
+            if (ownedIndicator) {
+                wrapper.append(ownedIndicator);
+            }
+
+            wrapper.append(tooltip);
             grid.append(wrapper);
 
             const baseLabel = label;

@@ -1,12 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% set planner_active = request.query_params.get('tab') == 'planner' %}
 <div class="page characters-page">
 
     <header class="characters-header">
         <div class="characters-page-heading">
+            <span class="eyebrow">ROSTER</span>
             <h1>Characters</h1>
             <p>Your Genshin Impact character roster.</p>
+        </div>
+
+    </header>
+
+    <div class="characters-navigation-row">
+        <div class="characters-navigation-primary">
+            <nav class="characters-page-tabs" aria-label="Character pages">
+                <button
+                    type="button"
+                    class="characters-page-tab{% if not planner_active %} active{% endif %}"
+                    data-characters-tab="characters"
+                    aria-pressed="{{ 'false' if planner_active else 'true' }}"
+                >
+                    Characters
+                </button>
+
+                <button
+                    type="button"
+                    class="characters-page-tab{% if planner_active %} active{% endif %}"
+                    data-characters-tab="planner"
+                    aria-pressed="{{ 'true' if planner_active else 'false' }}"
+                >
+                    Planner
+                </button>
+            </nav>
+
+            {% if accounts and not character_error %}
+            <div class="characters-summary"{% if planner_active %} hidden{% endif %}>
+                <span data-character-count>
+                    Showing {{ characters | length }} of {{ characters | length }} characters
+                </span>
+            </div>
+            {% endif %}
         </div>
 
         {% if accounts %}
@@ -58,34 +93,16 @@
                     name="account_id"
                     value="{{ selected_account.id if selected_account else '' }}"
                 >
+                <input type="hidden" name="tab" value="{{ 'planner' if planner_active else 'characters' }}" data-characters-tab-input>
             </div>
         </form>
         {% endif %}
-    </header>
-
-    <nav class="characters-page-tabs" aria-label="Character pages">
-        <button
-            type="button"
-            class="characters-page-tab active"
-            data-characters-tab="characters"
-            aria-pressed="true"
-        >
-            Characters
-        </button>
-
-        <button
-            type="button"
-            class="characters-page-tab"
-            data-characters-tab="planner"
-            aria-pressed="false"
-        >
-            Planner
-        </button>
-    </nav>
+    </div>
 
     <section
-        class="characters-panel active"
+        class="characters-panel{% if not planner_active %} active{% endif %}"
         data-characters-panel="characters"
+        {% if planner_active %}hidden{% endif %}
     >
 
     {% if not accounts %}
@@ -297,12 +314,7 @@
             <button type="button" class="characters-reset-filters" data-character-reset>
                 Reset filters
             </button>
-        </div>
 
-        <div class="characters-summary">
-            <span data-character-count>
-                {{ characters | length }} characters
-            </span>
         </div>
 
         <div class="characters-grid">
@@ -500,9 +512,9 @@
 
     <!-- CHARACTER PLANNER -->
     <section
-        class="characters-panel"
+        class="characters-panel{% if planner_active %} active{% endif %}"
         data-characters-panel="planner"
-        hidden
+        {% if not planner_active %}hidden{% endif %}
     >
         <header class="planner-header">
             <div>
@@ -599,8 +611,22 @@
                     data-planner-character-level="{{ character.level if character.level is not none else '' }}"
                     data-planner-character-constellation="{{ character.constellation if character.constellation is not none else 0 }}"
                 >
-                    <img src="{{ character.icon }}" alt="" loading="lazy">
-                    <span>{{ character.name }}</span>
+                    <span class="planner-picker-portrait">
+                        <img src="{{ character.icon }}" alt="" loading="lazy">
+                        <span class="planner-picker-rarity" aria-label="{{ character.rarity }}-star character">
+                            {{ character.rarity }} &#9733;
+                        </span>
+                    </span>
+                    <span class="planner-picker-character-info">
+                        <strong>{{ character.name }}</strong>
+                        <span class="planner-picker-element">
+                            <img
+                                src="/static/images/characters/Element_{{ character.element }}.webp"
+                                alt=""
+                            >
+                            {{ character.element }}
+                        </span>
+                    </span>
                 </button>
                 {% endfor %}
             </div>

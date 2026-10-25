@@ -58,6 +58,7 @@ function initCharacterShowcase() {
 
     let previouslyFocused = null;
     let activeRequestId = 0;
+    const characterCache = new Map();
 
     function createElement(tag, className, text = "") {
         const element = document.createElement(tag);
@@ -158,9 +159,30 @@ function initCharacterShowcase() {
         cryo: "Cryo_BG.mp4"
     };
 
+    function waitForMedia(element, eventName) {
+        return new Promise(resolve => {
+            let settled = false;
+
+            const finish = () => {
+                if (settled) {
+                    return;
+                }
+
+                settled = true;
+                element.removeEventListener(eventName, finish);
+                element.removeEventListener("error", finish);
+                resolve();
+            };
+
+            element.addEventListener(eventName, finish, { once: true });
+            element.addEventListener("error", finish, { once: true });
+            window.setTimeout(finish, 1400);
+        });
+    }
+
     function setElementBackground(element) {
         if (!backgroundVideo) {
-            return;
+            return Promise.resolve();
         }
 
         const elementKey = String(element || "")
@@ -173,7 +195,7 @@ function initCharacterShowcase() {
             backgroundVideo.pause();
             backgroundVideo.removeAttribute("src");
             backgroundVideo.load();
-            return;
+            return Promise.resolve();
         }
 
         const videoPath = `${SHOWCASE_ICON_PATH}${filename}`;
@@ -187,6 +209,10 @@ function initCharacterShowcase() {
         backgroundVideo.play().catch(() => {
             // Muted autoplay may be restricted by the browser.
         });
+
+        return backgroundVideo.readyState >= 2
+            ? Promise.resolve()
+            : waitForMedia(backgroundVideo, "loadeddata");
     }
 
     const ELEMENT_DAMAGE_ICONS = {
@@ -1020,48 +1046,67 @@ function initCharacterShowcase() {
         errorElement.textContent = "";
     }
 
-    async function loadCharacter(card, requestId) {
+    function fetchCharacter(card) {
         const characterId = card.dataset.characterId;
         const accountId = modal.dataset.accountId;
 
         if (!characterId) {
-            throw new Error("This character card is missing its character ID.");
+            return Promise.reject(
+                new Error("This character card is missing its character ID.")
+            );
         }
 
         const query = accountId
             ? `?account_id=${encodeURIComponent(accountId)}`
             : "";
+        const cacheKey = `${accountId || "default"}:${characterId}`;
 
-        const response = await fetch(
+        if (characterCache.has(cacheKey)) {
+            return characterCache.get(cacheKey);
+        }
+
+        const request = fetch(
             `/api/characters/${encodeURIComponent(characterId)}/showcase${query}`,
             {
                 method: "GET",
                 credentials: "same-origin",
                 headers: { Accept: "application/json" }
             }
-        );
+        ).then(async response => {
+            let payload;
 
-        let payload;
+            try {
+                payload = await response.json();
+            } catch {
+                throw new Error("The server returned an invalid response.");
+            }
 
-        try {
-            payload = await response.json();
-        } catch {
-            throw new Error("The server returned an invalid response.");
-        }
+            if (!response.ok) {
+                throw new Error(
+                    payload?.error || "Couldn't retrieve this character's build."
+                );
+            }
 
-        if (!response.ok) {
-            throw new Error(
-                payload?.error || "Couldn't retrieve this character's build."
-            );
-        }
+            const character = payload?.data?.characters?.[0];
 
-        const character = payload?.data?.characters?.[0];
+            if (!character) {
+                throw new Error(
+                    "No detailed build data was returned for this character."
+                );
+            }
 
-        if (!character) {
-            throw new Error("No detailed build data was returned for this character.");
-        }
+            return character;
+        });
 
-        if (requestId !== activeRequestId || modal.hidden) {
+        characterCache.set(cacheKey, request);
+        request.catch(() => characterCache.delete(cacheKey));
+        return request;
+    }
+
+    async function loadCharacter(card, requestId) {
+        const character = await fetchCharacter(card);
+
+        if (requestId !== activeRequestId) {
             return;
         }
 
@@ -1072,7 +1117,7 @@ function initCharacterShowcase() {
             character.element || ""
         ).toLowerCase();
 
-        setElementBackground(character.element);
+        void setElementBackground(character.element);
 
         showcase.dataset.rarity = String(character.rarity || "");
 
@@ -1083,6 +1128,7 @@ function initCharacterShowcase() {
 
         portrait.src = character.display_image || character.icon || "";
         portrait.alt = character.name || "Character artwork";
+        portrait.loading = "eager";
 
         if (elementIconElement) {
             elementIconElement.replaceChildren();
@@ -1110,38 +1156,40 @@ function initCharacterShowcase() {
 
         renderCharacter(character);
         statusElement.textContent = "";
+
+        const portraitReady = portrait.complete
+            ? portrait.decode?.().catch(() => {})
+            : waitForMedia(portrait, "load");
+
+        await portraitReady;
     }
 
-    function openShowcase(card) {
+    function showModal() {
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("character-showcase-open");
+        dialog.focus();
+    }
+
+    async function openShowcase(card) {
         if (card.dataset.owned !== "true") {
             return;
         }
 
-        const image = card.querySelector(".character-card-image img");
         const name = card.querySelector(".character-card-info h2");
-        const element = card.querySelector(".character-element span");
 
-        if (!image || !name) {
+        if (!name) {
             return;
         }
 
         previouslyFocused = document.activeElement;
         const requestId = ++activeRequestId;
 
-        portrait.src = image.src;
+        portrait.removeAttribute("src");
         portrait.alt = name.textContent.trim();
         nameElement.textContent = name.textContent.trim();
-        elementElement.textContent = element?.textContent.trim() || "";
-        modal.dataset.element = (
-            card.dataset.element || ""
-        ).toLowerCase();
-
-        setElementBackground(card.dataset.element);
-
-        modal.dataset.rarity = card.dataset.rarity || "";
-        levelElement.textContent = card.dataset.level
-            ? `Level ${card.dataset.level}`
-            : "Level unavailable";
+        card.classList.add("is-loading");
+        card.setAttribute("aria-busy", "true");
 
         weaponElement.replaceChildren();
         statsElement.replaceChildren();
@@ -1162,13 +1210,16 @@ function initCharacterShowcase() {
         errorElement.textContent = "";
         statusElement.textContent = "Loading character build…";
 
-        modal.hidden = false;
-        modal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("character-showcase-open");
-        dialog.focus();
+        try {
+            await loadCharacter(card, requestId);
 
-        loadCharacter(card, requestId).catch(error => {
-            if (requestId !== activeRequestId || modal.hidden) {
+            if (requestId !== activeRequestId) {
+                return;
+            }
+
+            showModal();
+        } catch (error) {
+            if (requestId !== activeRequestId) {
                 return;
             }
 
@@ -1179,7 +1230,11 @@ function initCharacterShowcase() {
 
             errorElement.hidden = false;
             statusElement.textContent = "";
-        });
+            showModal();
+        } finally {
+            card.classList.remove("is-loading");
+            card.removeAttribute("aria-busy");
+        }
     }
 
     function closeShowcase() {
@@ -1199,6 +1254,43 @@ function initCharacterShowcase() {
         }
     }
 
+    function prefetchShowcase(card) {
+        if (card.dataset.owned !== "true") {
+            return;
+        }
+
+        fetchCharacter(card).then(character => {
+            const source = character.display_image || character.icon;
+
+            if (source) {
+                const image = new Image();
+                image.src = source;
+            }
+        }).catch(() => {
+            // A click retries failed prefetches and displays the full error state.
+        });
+    }
+
+    page.addEventListener("pointerover", event => {
+        const card = event.target instanceof Element
+            ? event.target.closest(".character-card")
+            : null;
+
+        if (card && page.contains(card)) {
+            prefetchShowcase(card);
+        }
+    });
+
+    page.addEventListener("focusin", event => {
+        const card = event.target instanceof Element
+            ? event.target.closest(".character-card")
+            : null;
+
+        if (card && page.contains(card)) {
+            prefetchShowcase(card);
+        }
+    });
+
     page.addEventListener("click", event => {
         if (!(event.target instanceof Element)) {
             return;
@@ -1214,7 +1306,7 @@ function initCharacterShowcase() {
         const card = event.target.closest(".character-card");
 
         if (card && page.contains(card)) {
-            openShowcase(card);
+            void openShowcase(card);
         }
     });
 

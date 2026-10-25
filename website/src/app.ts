@@ -78,9 +78,9 @@ initialiseHoverEffects();
 const pageScripts: Record<string, string | string[]> = {
     "/characters": [
         "/static/build/browser/pages/characters/characters-filters.js",
-        "/static/build/browser/pages/characters/characters-tabs.js",
-        "/static/build/browser/pages/characters/characters-showcase.js",
-        "/static/build/browser/pages/characters/characters-planner.js?v=2",
+        "/static/build/browser/pages/characters/characters-tabs.js?v=2",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=3",
+        "/static/build/browser/pages/characters/characters-planner.js?v=4",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js",
@@ -107,8 +107,8 @@ const pageStyles: Record<string, string> = {
     "/": "/static/build/css/home.css?v=4",
     "/achievements": "/static/build/css/achievements.css?v=2",
     "/wishes": "/static/build/css/wishes.css?v=10",
-    "/characters": "/static/build/css/characters.css?v=3",
-    "/inventory": "/static/build/css/inventory.css?v=2",
+    "/characters": "/static/build/css/characters.css?v=16",
+    "/inventory": "/static/build/css/inventory.css?v=3",
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css",
     "/codes": "/static/build/css/codes.css?v=2",
