@@ -2,11 +2,25 @@
 .wishes-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
 .wishes-header h1 { margin: 6px 0; font-size: clamp(2rem, 5vw, 3.3rem); }
 .wishes-header p, .wish-import-card p { color: var(--text-muted); margin: 0; }
+.wishes-header p { font-size: .88rem; }
+.wishes-header-actions { display: flex; align-items: flex-end; gap: 10px; }
 .wishes-account-form { display: grid; gap: 7px; min-width: 260px; }
 .wishes-account-form label { color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
 .wishes-account-form .custom-select { min-width: 280px; }
 #wish-url { color: var(--text); background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
 .wish-import-card, .wish-history-card, .wishes-empty { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; }
+.wish-import-header-button { min-width: 142px; min-height: 42px; white-space: nowrap; }
+.wish-import-dialog[hidden] { display: none; }
+.wish-import-dialog { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 20px; }
+.wish-import-dialog-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: rgba(0, 0, 0, .58); backdrop-filter: blur(4px); cursor: default; }
+.wish-import-dialog-panel { position: relative; z-index: 1; width: min(570px, 100%); padding: 30px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: 0 22px 70px rgba(0, 0, 0, .38); animation: wish-import-content-in 220ms ease-out both; }
+.wish-import-dialog-panel h2 { margin: 6px 0 8px; font-size: 1.6rem; }
+.wish-import-dialog-panel p { margin: 0 0 20px; color: var(--text-muted); line-height: 1.55; }
+.wish-import-dialog-panel #wish-url { width: 100%; box-sizing: border-box; }
+.wish-import-dialog-x { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--border); border-radius: 9px; color: var(--text-muted); background: var(--background); font-size: 1.35rem; cursor: pointer; }
+.wish-import-dialog-x:hover { color: var(--text); background: var(--surface-hover); }
+.wish-import-dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.wish-import-cancel { color: var(--text-muted); background: var(--background); }
 .wish-card-kicker { color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
 .wish-import-card h2, .wish-history-card h2 { margin: 5px 0 8px; }
 .wish-import-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-top: 20px; }
@@ -121,9 +135,13 @@
 @media (max-width: 760px) {
     .wishes-page { padding: 28px 18px 50px; }
     .wishes-header { align-items: stretch; flex-direction: column; }
+    .wishes-header-actions { width: 100%; }
+    .wishes-account-form { flex: 1; }
     .wish-overview { grid-template-columns: repeat(2, 1fr); }
     .wish-stat-grid { grid-template-columns: repeat(2, 1fr); }
     .wish-import-controls { grid-template-columns: 1fr; }
+    .wish-import-dialog-panel { padding: 25px 20px 20px; }
+    .wish-import-dialog-actions .button { flex: 1; }
     .wish-history-heading { align-items: stretch; flex-direction: column; }
     .wish-history-filters { align-items: stretch; flex-wrap: wrap; }
     .wish-banner-select { width: 100%; }
@@ -133,5 +151,5 @@
     .wish-row { grid-template-columns: 42px minmax(0, 1fr) auto auto; }
 }
 @media (min-width: 761px) and (max-width: 900px) { .wish-history-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
-@media (max-width: 440px) { .wish-overview, .wish-stat-grid { grid-template-columns: 1fr; } .wish-history-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 440px) { .wish-overview, .wish-stat-grid { grid-template-columns: 1fr; } .wish-history-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } .wishes-header-actions { align-items: stretch; flex-direction: column; } .wish-import-header-button { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .wish-import-success-panel, .wish-import-corner, .wish-import-scan-line, .wish-import-check path { animation-duration: 1ms; animation-delay: 0ms; } }

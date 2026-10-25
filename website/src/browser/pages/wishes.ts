@@ -7,6 +7,8 @@
     const history = document.getElementById("wish-history")!;
     const urlInput = document.getElementById("wish-url") as HTMLInputElement;
     const importButton = document.getElementById("wish-import") as HTMLButtonElement;
+    const importOpen = document.getElementById("wish-import-open") as HTMLButtonElement;
+    const importDialog = document.getElementById("wish-import-dialog")!;
     const filter = document.getElementById("wish-filter") as HTMLInputElement;
     const success = document.getElementById("wish-import-success")!;
     const successMessage = document.getElementById("wish-import-success-message")!;
@@ -254,10 +256,20 @@
         render();
     }));
 
+    const closeImportDialog = () => { importDialog.hidden = true; };
+    importOpen.addEventListener("click", () => {
+        importDialog.hidden = false;
+        window.setTimeout(() => urlInput.focus(), 0);
+    });
+    document.querySelectorAll<HTMLButtonElement>("[data-close-import-dialog]").forEach(button => button.addEventListener("click", closeImportDialog));
+    importDialog.addEventListener("keydown", event => { if (event.key === "Escape") closeImportDialog(); });
+    urlInput.addEventListener("keydown", event => { if (event.key === "Enter") importButton.click(); });
+
     importButton.addEventListener("click", async () => {
         const url = urlInput.value.trim();
-        if (!url) return;
+        if (!url) { urlInput.focus(); return; }
         importButton.disabled = true;
+        closeImportDialog();
         openImportModal();
         try {
             const response = await fetch(`/api/wishes/import/stream?account_id=${encodeURIComponent(selectedAccountId)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url }) });

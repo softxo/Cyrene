@@ -11,24 +11,27 @@
             <p>Import, browse and track your Genshin Impact wish history.</p>
         </div>
         {% if accounts %}
-        <form method="get" action="/wishes" class="wishes-account-form">
-            <label>Account</label>
-            <div class="custom-select" data-wish-select data-submit-on-select>
-                <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
-                    <span class="custom-select-value">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }} · {{ selected_account.genshin_uid }}</span>
-                    <span class="custom-select-arrow"></span>
-                </button>
-                <div class="custom-select-menu" role="listbox">
-                    {% for account in accounts %}
-                    <button class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
-                            type="button" data-value="{{ account.id }}" role="option">
-                        {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+        <div class="wishes-header-actions">
+            <form method="get" action="/wishes" class="wishes-account-form">
+                <label>Account</label>
+                <div class="custom-select" data-wish-select data-submit-on-select>
+                    <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }} · {{ selected_account.genshin_uid }}</span>
+                        <span class="custom-select-arrow"></span>
                     </button>
-                    {% endfor %}
+                    <div class="custom-select-menu" role="listbox">
+                        {% for account in accounts %}
+                        <button class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                                type="button" data-value="{{ account.id }}" role="option">
+                            {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="account_id" value="{{ selected_account.id }}">
                 </div>
-                <input type="hidden" name="account_id" value="{{ selected_account.id }}">
-            </div>
-        </form>
+            </form>
+            <button id="wish-import-open" class="button wish-import-header-button" type="button">Import Wishes</button>
+        </div>
         {% endif %}
     </header>
 
@@ -39,19 +42,6 @@
         <a class="button" href="/verify?next=/wishes">Connect account</a>
     </section>
     {% else %}
-    <section class="wish-import-card">
-        <div>
-            <span class="wish-card-kicker">CYRENE SCANNER</span>
-            <h2>Import wish history</h2>
-            <p>Paste the URL copied by Wish Scanner. The auth key is used once for the import and is never stored.</p>
-        </div>
-        <div class="wish-import-controls">
-            <input id="wish-url" type="password" autocomplete="off" spellcheck="false"
-                   placeholder="Paste your wish-history URL…" aria-label="Wish-history URL">
-            <button id="wish-import" class="button" type="button">Import wishes</button>
-        </div>
-    </section>
-
     <section class="wish-overview" aria-label="Wish banner summary">
         {% for kind, title in [('character', 'Character Event'), ('weapon', 'Weapon Event'), ('standard', 'Standard Banner'), ('chronicled', 'Chronicled Wish')] %}
         <article class="wish-banner-summary" data-banner-summary="{{ kind }}">
@@ -107,6 +97,21 @@
     </section>
     {% endif %}
 </div>
+<div class="wish-import-dialog" id="wish-import-dialog" role="dialog" aria-modal="true" aria-labelledby="wish-import-dialog-title" hidden>
+    <button class="wish-import-dialog-backdrop" type="button" data-close-import-dialog aria-label="Close import dialog"></button>
+    <div class="wish-import-dialog-panel">
+        <button class="wish-import-dialog-x" type="button" data-close-import-dialog aria-label="Close">×</button>
+        <span class="wish-card-kicker">CYRENE SCANNER</span>
+        <h2 id="wish-import-dialog-title">Import wish history</h2>
+        <p>Paste the URL copied by Wish Scanner. The auth key is used once for the import and is never stored.</p>
+        <input id="wish-url" type="password" autocomplete="off" spellcheck="false"
+               placeholder="Paste your wish-history URL…" aria-label="Wish-history URL">
+        <div class="wish-import-dialog-actions">
+            <button class="button wish-import-cancel" type="button" data-close-import-dialog>Cancel</button>
+            <button id="wish-import" class="button" type="button">Import Wishes</button>
+        </div>
+    </div>
+</div>
 <div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" aria-modal="true" hidden>
     <div class="wish-import-success-backdrop"></div>
     <div class="wish-import-success-panel">
@@ -123,5 +128,5 @@
         <button class="button wish-import-close" id="wish-import-close" type="button" hidden>Close</button>
     </div>
 </div>
-{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=7"></script>{% endif %}
+{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=9"></script>{% endif %}
 {% endblock %}
