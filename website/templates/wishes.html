@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Wishes{% endblock %}
+
+{% block content %}
+<div class="page wishes-page" data-account-id="{{ selected_account.id if selected_account else '' }}">
+    <header class="wishes-header">
+        <div>
+            <span class="eyebrow">HISTORY</span>
+            <h1>Wishes</h1>
+            <p>Import, browse and track your Genshin Impact wish history.</p>
+        </div>
+        {% if accounts %}
+        <div class="wishes-header-actions">
+            <form method="get" action="/wishes" class="wishes-account-form">
+                <label>Account</label>
+                <div class="custom-select" data-wish-select data-submit-on-select>
+                    <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }} · {{ selected_account.genshin_uid }}</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        {% for account in accounts %}
+                        <button class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                                type="button" data-value="{{ account.id }}" role="option">
+                            {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="account_id" value="{{ selected_account.id }}">
+                </div>
+            </form>
+            <button id="wish-import-open" class="button wish-import-header-button" type="button">Import Wishes</button>
+        </div>
+        {% endif %}
+    </header>
+
+    {% if not accounts %}
+    <section class="wishes-empty">
+        <h2>No accounts connected</h2>
+        <p>Connect a HoYoLAB account before importing wish history.</p>
+        <a class="button" href="/verify?next=/wishes">Connect account</a>
+    </section>
+    {% else %}
+    <section class="wish-overview" aria-label="Wish banner summary">
+        {% for kind, title in [('character', 'Character Event'), ('weapon', 'Weapon Event'), ('standard', 'Standard Banner'), ('chronicled', 'Chronicled Wish')] %}
+        <article class="wish-banner-summary" data-banner-summary="{{ kind }}">
+            <div class="wish-banner-summary-heading"><h2>{{ title }}</h2><strong id="wish-{{ kind }}-pulls">—</strong></div>
+            <div class="wish-pity-row rarity-5"><span><b aria-hidden="true">★</b> 5 Pity</span><strong id="wish-{{ kind }}-five-pity">—</strong></div>
+            <div class="wish-pity-row rarity-4"><span><b aria-hidden="true">★</b> 4 Pity</span><strong id="wish-{{ kind }}-four-pity">—</strong></div>
+        </article>
+        {% endfor %}
+    </section>
+
+    <section class="wish-stats" aria-labelledby="wish-stats-title">
+        <div class="wish-stats-title"><span></span><h2 id="wish-stats-title">Stats</h2><span></span></div>
+        <div class="wish-stat-grid">
+            <article><span>Total Wishes</span><strong id="wish-total">—</strong></article>
+            <article class="rarity-5"><span><b aria-hidden="true">★</b> 5 Avg Pulls</span><strong id="wish-five-average">—</strong></article>
+            <article class="rarity-4"><span><b aria-hidden="true">★</b> 4 Avg Pulls</span><strong id="wish-four-average">—</strong></article>
+            <article><span>50/50 Win Rate</span><strong id="wish-win-rate">—</strong></article>
+        </div>
+    </section>
+
+    <section class="wish-history-card">
+        <div class="wish-history-heading">
+            <div><span class="wish-card-kicker">ARCHIVE</span><h2>Wish history</h2></div>
+            <div class="wish-history-filters">
+                <div class="custom-select wish-banner-select" data-wish-select>
+                    <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span class="custom-select-value">All banners</span><span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button class="custom-select-option selected" type="button" data-value="all">All banners</button>
+                        <button class="custom-select-option" type="button" data-value="character">Character Event</button>
+                        <button class="custom-select-option" type="button" data-value="weapon">Weapon Event</button>
+                        <button class="custom-select-option" type="button" data-value="standard">Standard Banner</button>
+                        <button class="custom-select-option" type="button" data-value="chronicled">Chronicled Wish</button>
+                    </div>
+                    <input id="wish-filter" type="hidden" value="all">
+                </div>
+                <div class="wish-rarity-filters" aria-label="Filter by rarity">
+                    <button class="wish-rarity-filter active rarity-5" type="button" data-rarity="5" aria-pressed="true"><b aria-hidden="true">★</b> 5</button>
+                    <button class="wish-rarity-filter active rarity-4" type="button" data-rarity="4" aria-pressed="true"><b aria-hidden="true">★</b> 4</button>
+                    <button class="wish-rarity-filter active rarity-3" type="button" data-rarity="3" aria-pressed="true"><b aria-hidden="true">★</b> 3</button>
+                </div>
+                <div class="wish-view-toggle" aria-label="History layout">
+                    <button class="active" type="button" data-view="list" aria-label="List view" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h2M8 5h9M3 10h2M8 10h9M3 15h2M8 15h9"/></svg></button>
+                    <button type="button" data-view="grid" aria-label="Grid view" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></button>
+                </div>
+            </div>
+        </div>
+        <div id="wish-history" class="wish-history-list">
+            <p class="wish-loading">Loading wish history…</p>
+        </div>
+        <nav id="wish-pagination" class="wish-pagination" aria-label="Wish history pages"></nav>
+    </section>
+    {% endif %}
+</div>
+<div class="wish-import-dialog" id="wish-import-dialog" role="dialog" aria-modal="true" aria-labelledby="wish-import-dialog-title" hidden>
+    <button class="wish-import-dialog-backdrop" type="button" data-close-import-dialog aria-label="Close import dialog"></button>
+    <div class="wish-import-dialog-panel">
+        <button class="wish-import-dialog-x" type="button" data-close-import-dialog aria-label="Close">×</button>
+        <span class="wish-card-kicker">CYRENE SCANNER</span>
+        <h2 id="wish-import-dialog-title">Import wish history</h2>
+        <p>Paste the URL copied by Wish Scanner. The auth key is used once for the import and is never stored.</p>
+        <input id="wish-url" type="password" autocomplete="off" spellcheck="false"
+               placeholder="Paste your wish-history URL…" aria-label="Wish-history URL">
+        <div class="wish-import-dialog-actions">
+            <button class="button wish-import-cancel" type="button" data-close-import-dialog>Cancel</button>
+            <button id="wish-import" class="button" type="button">Import Wishes</button>
+        </div>
+    </div>
+</div>
+<div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" aria-modal="true" hidden>
+    <div class="wish-import-success-backdrop"></div>
+    <div class="wish-import-success-panel">
+        <div class="wish-import-verified-icon" aria-hidden="true">
+            <span class="wish-import-corner top-left"></span><span class="wish-import-corner top-right"></span>
+            <span class="wish-import-corner bottom-left"></span><span class="wish-import-corner bottom-right"></span>
+            <span class="wish-import-scan-line"></span>
+            <svg class="wish-import-check" viewBox="0 0 64 64" focusable="false"><path d="M17 33.5 27.5 44 48 22"></path></svg>
+        </div>
+        <h2 id="wish-import-title">Importing wishes</h2>
+        <strong class="wish-import-count" id="wish-import-count">0</strong>
+        <span class="wish-import-count-label">wishes found</span>
+        <p id="wish-import-success-message">Connecting to HoYoverse…</p>
+        <button class="button wish-import-close" id="wish-import-close" type="button" hidden>Close</button>
+    </div>
+</div>
+{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=9"></script>{% endif %}
+{% endblock %}

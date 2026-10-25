@@ -16,6 +16,7 @@ export default defineConfig({
                 "css/global": `${projectRoot}/website/src/styles/core/global.css`,
                 "css/home": `${projectRoot}/website/src/styles/pages/home.css`,
                 "css/achievements": `${projectRoot}/website/src/styles/pages/achievements.css`,
+                "css/wishes": `${projectRoot}/website/src/styles/pages/wishes.css`,
                 "css/codes": `${projectRoot}/website/src/styles/pages/codes.css`,
                 "css/inventory": `${projectRoot}/website/src/styles/pages/inventory.css`,
                 "css/planner": `${projectRoot}/website/src/styles/pages/planner.css`,

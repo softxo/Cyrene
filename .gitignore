@@ -5,10 +5,4 @@ __pycache__/
 .vscode/
 .idea/
 cookies.txt
-tools/CyreneAchievementScanner/bin/
-tools/CyreneAchievementScanner/obj/
-tools/CyreneAchievementScanner/vendor/
-tools/CyreneAchievementScanner/dist/
-tools/CyreneAchievementScanner/fixed-release/
-tools/CyreneAchievementScanner/release/
-tools/CyreneAchievementScanner/release-current/
+/tools/
