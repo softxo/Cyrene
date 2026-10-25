@@ -101,6 +101,7 @@
 .wish-import-count-label { margin: 4px 0 14px; color: var(--text-muted); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
 .wish-import-close { margin-top: 20px; min-width: 110px; }
 .wish-import-success:not(.complete) .wish-import-check { display: none; }
+.wish-import-success.complete .wish-import-scan-line { display: none; }
 .wish-import-success.error .wish-import-verified-icon { color: #ef7777; }
 .wish-import-success.error .wish-import-scan-line { animation: none; opacity: .65; transform: translateY(37px); }
 .wish-import-success.complete .wish-import-count { color: #59d58b; }
@@ -110,7 +111,7 @@
 .wish-import-corner.top-right { top: 0; right: 0; border-width: 4px 4px 0 0; border-radius: 0 14px 0 0; }
 .wish-import-corner.bottom-left { bottom: 0; left: 0; border-width: 0 0 4px 4px; border-radius: 0 0 0 14px; }
 .wish-import-corner.bottom-right { right: 0; bottom: 0; border-width: 0 4px 4px 0; border-radius: 0 0 14px; }
-.wish-import-scan-line { position: absolute; top: 18px; right: 16px; left: 16px; height: 2px; border-radius: 999px; background: currentColor; box-shadow: 0 0 12px currentColor; opacity: 0; animation: wish-import-scan 700ms 280ms ease-in-out both; }
+.wish-import-scan-line { position: absolute; top: 18px; right: 16px; left: 16px; height: 2px; border-radius: 999px; background: currentColor; box-shadow: 0 0 12px currentColor; opacity: 0; animation: wish-import-scan 1.15s 280ms ease-in-out infinite; }
 .wish-import-check { position: absolute; inset: 20px; width: 72px; height: 72px; }
 .wish-import-check path { fill: none; stroke: currentColor; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 50; stroke-dashoffset: 50; animation: wish-import-check-draw 440ms 850ms ease-out forwards; }
 @keyframes wish-import-content-in { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }

@@ -32,7 +32,7 @@
         return "other";
     };
     const label = (type: string) => bannerLabels[category(type)] || "Wish";
-    const hitsRarity = (wish: Wish, rarity: number) => rarity === 4 ? Number(wish.rank_type) >= 4 : Number(wish.rank_type) === rarity;
+    const hitsRarity = (wish: Wish, rarity: number) => Number(wish.rank_type) === rarity;
     const pity = (kind: string, rarity: number) => {
         let count = 0;
         for (const wish of wishes.filter(item => category(item.gacha_type) === kind)) {
