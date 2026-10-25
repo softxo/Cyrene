@@ -13,8 +13,13 @@
     const successMessage = document.getElementById("wish-import-success-message");
     const selectedRarities = new Set([3, 4, 5]);
     const standardFiveStars = new Set(["Diluc", "Jean", "Keqing", "Mona", "Qiqi", "Tighnari", "Dehya", "Yumemizuki Mizuki"]);
-    const bannerLabels = { character: "Character Event", weapon: "Weapon Event", standard: "Standard", novice: "Novice", chronicled: "Chronicled" };
+    const bannerLabels = { character: "Character Event", weapon: "Weapon Event", standard: "Standard Banner", novice: "Novice", chronicled: "Chronicled Wish" };
+    const summaryKinds = ["character", "weapon", "standard", "chronicled"];
+    const listPageSize = 20;
+    const gridPageSize = 24;
     let wishes = [];
+    let currentPage = 1;
+    let currentView = "list";
     let successTimer = 0;
     const category = (type) => {
         if (type === "301" || type === "400")
@@ -30,14 +35,41 @@
         return "other";
     };
     const label = (type) => bannerLabels[category(type)] || "Wish";
-    const pity = (kind) => {
+    const hitsRarity = (wish, rarity) => rarity === 4 ? Number(wish.rank_type) >= 4 : Number(wish.rank_type) === rarity;
+    const pity = (kind, rarity) => {
         let count = 0;
         for (const wish of wishes.filter(item => category(item.gacha_type) === kind)) {
-            if (Number(wish.rank_type) === 5)
+            if (hitsRarity(wish, rarity))
                 break;
             count += 1;
         }
         return count;
+    };
+    const averagePity = (rarity) => {
+        const intervals = [];
+        [...new Set(wishes.map(wish => category(wish.gacha_type)))].forEach(kind => {
+            let count = 0;
+            const chronological = wishes.filter(wish => category(wish.gacha_type) === kind).reverse();
+            for (const wish of chronological) {
+                count += 1;
+                if (hitsRarity(wish, rarity)) {
+                    intervals.push(count);
+                    count = 0;
+                }
+            }
+        });
+        return intervals.length ? (intervals.reduce((sum, value) => sum + value, 0) / intervals.length).toFixed(1) : "—";
+    };
+    const pullNumbers = () => {
+        const numbers = new Map();
+        const counters = new Map();
+        for (const wish of [...wishes].reverse()) {
+            const kind = category(wish.gacha_type);
+            const number = (counters.get(kind) || 0) + 1;
+            numbers.set(wish, number);
+            counters.set(kind, Number(wish.rank_type) === 5 ? 0 : number);
+        }
+        return numbers;
     };
     function initialiseDropdowns() {
         document.querySelectorAll("[data-wish-select]").forEach(select => {
@@ -60,8 +92,10 @@
                 close();
                 if (select.hasAttribute("data-submit-on-select"))
                     select.closest("form")?.requestSubmit();
-                else
+                else {
+                    currentPage = 1;
                     render();
+                }
             }));
         });
         document.addEventListener("click", () => document.querySelectorAll(".custom-select.open").forEach(open => open.classList.remove("open")));
@@ -75,56 +109,124 @@
     }
     function render() {
         document.getElementById("wish-total").textContent = String(wishes.length);
-        document.getElementById("wish-five-stars").textContent = String(wishes.filter(w => Number(w.rank_type) === 5).length);
-        document.getElementById("wish-character-pity").textContent = String(pity("character"));
-        document.getElementById("wish-weapon-pity").textContent = String(pity("weapon"));
-        const visible = wishes.filter(wish => (filter.value === "all" || category(wish.gacha_type) === filter.value) && selectedRarities.has(Number(wish.rank_type)));
-        if (!visible.length) {
+        summaryKinds.forEach(kind => {
+            const bannerWishes = wishes.filter(item => category(item.gacha_type) === kind);
+            document.getElementById(`wish-${kind}-pulls`).textContent = String(bannerWishes.length);
+            document.getElementById(`wish-${kind}-five-pity`).textContent = String(pity(kind, 5));
+            document.getElementById(`wish-${kind}-four-pity`).textContent = String(pity(kind, 4));
+        });
+        document.getElementById("wish-five-average").textContent = averagePity(5);
+        document.getElementById("wish-four-average").textContent = averagePity(4);
+        const characterFiveStars = wishes.filter(wish => resultFor(wish));
+        const wins = characterFiveStars.filter(wish => resultFor(wish) === "win").length;
+        document.getElementById("wish-win-rate").textContent = characterFiveStars.length ? `${Math.round(wins / characterFiveStars.length * 100)}%` : "—";
+        let visible = wishes.filter(wish => (filter.value === "all" || category(wish.gacha_type) === filter.value) && selectedRarities.has(Number(wish.rank_type)));
+        const pageSize = currentView === "grid" ? gridPageSize : listPageSize;
+        const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
+        currentPage = Math.min(currentPage, pageCount);
+        const pageWishes = visible.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        const wishPullNumbers = pullNumbers();
+        history.className = currentView === "grid" ? "wish-history-grid" : "wish-history-list";
+        if (!pageWishes.length)
             history.innerHTML = '<p class="wish-empty-message">No wishes match these filters.</p>';
+        else
+            history.replaceChildren(...pageWishes.map(wish => {
+                const row = document.createElement("article");
+                row.className = currentView === "grid" ? "wish-grid-item" : "wish-row";
+                row.dataset.rank = String(wish.rank_type);
+                const result = resultFor(wish);
+                if (result)
+                    row.classList.add(`result-${result}`);
+                const fallback = document.createElement("span");
+                fallback.className = "wish-item-icon wish-item-fallback";
+                fallback.textContent = wish.item_name.slice(0, 1);
+                let visual = fallback;
+                if (wish.icon_url) {
+                    const image = document.createElement("img");
+                    image.className = "wish-item-icon";
+                    image.src = wish.icon_url;
+                    image.alt = "";
+                    image.loading = "lazy";
+                    image.addEventListener("error", () => image.replaceWith(fallback), { once: true });
+                    visual = image;
+                }
+                const details = document.createElement("div");
+                const nameLine = document.createElement("div");
+                nameLine.className = "wish-name-line";
+                const name = document.createElement("span");
+                name.className = "wish-name";
+                name.textContent = wish.item_name;
+                nameLine.append(name);
+                if (result) {
+                    const badge = document.createElement("span");
+                    badge.className = `wish-result ${result}`;
+                    badge.textContent = result;
+                    badge.title = result === "loss" ? "Standard-pool five-star on Character Event Wish" : "Limited five-star on Character Event Wish";
+                    nameLine.append(badge);
+                }
+                const meta = document.createElement("span");
+                meta.className = "wish-meta";
+                const metaStar = document.createElement("b");
+                metaStar.className = `wish-meta-star rarity-${wish.rank_type}`;
+                metaStar.textContent = "★";
+                meta.append(metaStar, ` ${wish.rank_type} ${wish.item_type} · ${label(wish.gacha_type)}`);
+                details.append(nameLine, meta);
+                const date = document.createElement("time");
+                date.className = "wish-date";
+                date.textContent = new Date(wish.pulled_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+                const pull = document.createElement("span");
+                pull.className = "wish-pull-number";
+                pull.textContent = `#${wishPullNumbers.get(wish) || 1}`;
+                if (currentView === "grid") {
+                    visual.title = `${wish.item_name} · ${wish.rank_type} star · pull ${pull.textContent}`;
+                    row.setAttribute("aria-label", visual.title);
+                    row.append(visual, pull);
+                    if (result) {
+                        const gridResult = document.createElement("span");
+                        gridResult.className = `wish-grid-result ${result}`;
+                        gridResult.textContent = result;
+                        row.append(gridResult);
+                    }
+                }
+                else
+                    row.append(visual, details, pull, date);
+                return row;
+            }));
+        renderPagination(pageCount, visible.length);
+    }
+    function renderPagination(pageCount, resultCount) {
+        const pagination = document.getElementById("wish-pagination");
+        if (!resultCount || pageCount <= 1) {
+            pagination.replaceChildren();
             return;
         }
-        history.replaceChildren(...visible.map(wish => {
-            const row = document.createElement("article");
-            row.className = "wish-row";
-            row.dataset.rank = String(wish.rank_type);
-            const fallback = document.createElement("span");
-            fallback.className = "wish-item-icon wish-item-fallback";
-            fallback.textContent = wish.item_name.slice(0, 1);
-            let visual = fallback;
-            if (wish.icon_url) {
-                const image = document.createElement("img");
-                image.className = "wish-item-icon";
-                image.src = wish.icon_url;
-                image.alt = "";
-                image.loading = "lazy";
-                image.addEventListener("error", () => image.replaceWith(fallback), { once: true });
-                visual = image;
+        const makeButton = (text, pageNumber, labelText, active = false) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = text;
+            button.setAttribute("aria-label", labelText);
+            if (active) {
+                button.classList.add("active");
+                button.setAttribute("aria-current", "page");
             }
-            const details = document.createElement("div");
-            const nameLine = document.createElement("div");
-            nameLine.className = "wish-name-line";
-            const name = document.createElement("span");
-            name.className = "wish-name";
-            name.textContent = wish.item_name;
-            nameLine.append(name);
-            const result = resultFor(wish);
-            if (result) {
-                const badge = document.createElement("span");
-                badge.className = `wish-result ${result}`;
-                badge.textContent = result;
-                badge.title = result === "loss" ? "Standard-pool five-star on Character Event Wish" : "Limited five-star on Character Event Wish";
-                nameLine.append(badge);
+            button.disabled = pageNumber < 1 || pageNumber > pageCount;
+            button.addEventListener("click", () => { currentPage = pageNumber; render(); history.scrollIntoView({ behavior: "smooth", block: "start" }); });
+            return button;
+        };
+        const pages = new Set([1, pageCount, currentPage - 1, currentPage, currentPage + 1]);
+        const nodes = [makeButton("‹", currentPage - 1, "Previous page")];
+        let previous = 0;
+        [...pages].filter(pageNumber => pageNumber >= 1 && pageNumber <= pageCount).sort((a, b) => a - b).forEach(pageNumber => {
+            if (previous && pageNumber - previous > 1) {
+                const ellipsis = document.createElement("span");
+                ellipsis.textContent = "…";
+                nodes.push(ellipsis);
             }
-            const meta = document.createElement("span");
-            meta.className = "wish-meta";
-            meta.textContent = `${wish.rank_type}★ ${wish.item_type} · ${label(wish.gacha_type)}`;
-            details.append(nameLine, meta);
-            const date = document.createElement("time");
-            date.className = "wish-date";
-            date.textContent = new Date(wish.pulled_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-            row.append(visual, details, date);
-            return row;
-        }));
+            nodes.push(makeButton(String(pageNumber), pageNumber, `Page ${pageNumber}`, pageNumber === currentPage));
+            previous = pageNumber;
+        });
+        nodes.push(makeButton("›", currentPage + 1, "Next page"));
+        pagination.replaceChildren(...nodes);
     }
     async function load() {
         const response = await fetch(`/api/wishes?account_id=${encodeURIComponent(selectedAccountId)}`);
@@ -147,6 +249,17 @@
             selectedRarities.add(rarity);
         button.classList.toggle("active", selectedRarities.has(rarity));
         button.setAttribute("aria-pressed", String(selectedRarities.has(rarity)));
+        currentPage = 1;
+        render();
+    }));
+    document.querySelectorAll(".wish-view-toggle button").forEach(button => button.addEventListener("click", () => {
+        currentView = button.dataset.view === "grid" ? "grid" : "list";
+        currentPage = 1;
+        document.querySelectorAll(".wish-view-toggle button").forEach(item => {
+            const active = item === button;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-pressed", String(active));
+        });
         render();
     }));
     importButton.addEventListener("click", async () => {

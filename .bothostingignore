@@ -1,0 +1,43 @@
+# Development tooling
+tools/
+.vscode/
+.idea/
+.git/
+.github/
+.husky/
+
+# Frontend source (compiled locally)
+website/src/
+
+# Node.js tooling
+node_modules/
+package.json
+package-lock.json
+tsconfig*.json
+vite.config.ts
+eslint.config.js
+commitlint.config.mjs
+
+# Development tests
+test_exporter.py
+tests/
+playwright-report/
+test-results/
+
+# Python development
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Documentation
+CODEX.md
+README.md
+
+# Temporary and sensitive files
+.env
+.env.*
+*.log
+*.tmp
+cyrene_export.json

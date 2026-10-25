@@ -53,11 +53,24 @@
         <p id="wish-import-status" class="wish-import-status" role="status"></p>
     </section>
 
-    <section class="wish-overview" aria-label="Wish summary">
-        <article><span>Total wishes</span><strong id="wish-total">—</strong></article>
-        <article><span>Five-stars <b class="wish-yellow-star">★</b></span><strong id="wish-five-stars">—</strong></article>
-        <article><span>Character pity</span><strong id="wish-character-pity">—</strong></article>
-        <article><span>Weapon pity</span><strong id="wish-weapon-pity">—</strong></article>
+    <section class="wish-overview" aria-label="Wish banner summary">
+        {% for kind, title in [('character', 'Character Event'), ('weapon', 'Weapon Event'), ('standard', 'Standard Banner'), ('chronicled', 'Chronicled Wish')] %}
+        <article class="wish-banner-summary" data-banner-summary="{{ kind }}">
+            <div class="wish-banner-summary-heading"><h2>{{ title }}</h2><strong id="wish-{{ kind }}-pulls">—</strong></div>
+            <div class="wish-pity-row rarity-5"><span><b aria-hidden="true">★</b> 5 Pity</span><strong id="wish-{{ kind }}-five-pity">—</strong></div>
+            <div class="wish-pity-row rarity-4"><span><b aria-hidden="true">★</b> 4 Pity</span><strong id="wish-{{ kind }}-four-pity">—</strong></div>
+        </article>
+        {% endfor %}
+    </section>
+
+    <section class="wish-stats" aria-labelledby="wish-stats-title">
+        <div class="wish-stats-title"><span></span><h2 id="wish-stats-title">Stats</h2><span></span></div>
+        <div class="wish-stat-grid">
+            <article><span>Total Wishes</span><strong id="wish-total">—</strong></article>
+            <article class="rarity-5"><span><b aria-hidden="true">★</b> 5 Avg Pulls</span><strong id="wish-five-average">—</strong></article>
+            <article class="rarity-4"><span><b aria-hidden="true">★</b> 4 Avg Pulls</span><strong id="wish-four-average">—</strong></article>
+            <article><span>50/50 Win Rate</span><strong id="wish-win-rate">—</strong></article>
+        </div>
     </section>
 
     <section class="wish-history-card">
@@ -72,22 +85,26 @@
                         <button class="custom-select-option selected" type="button" data-value="all">All banners</button>
                         <button class="custom-select-option" type="button" data-value="character">Character Event</button>
                         <button class="custom-select-option" type="button" data-value="weapon">Weapon Event</button>
-                        <button class="custom-select-option" type="button" data-value="standard">Standard</button>
-                        <button class="custom-select-option" type="button" data-value="novice">Novice</button>
-                        <button class="custom-select-option" type="button" data-value="chronicled">Chronicled</button>
+                        <button class="custom-select-option" type="button" data-value="standard">Standard Banner</button>
+                        <button class="custom-select-option" type="button" data-value="chronicled">Chronicled Wish</button>
                     </div>
                     <input id="wish-filter" type="hidden" value="all">
                 </div>
                 <div class="wish-rarity-filters" aria-label="Filter by rarity">
-                    <button class="wish-rarity-filter active rarity-5" type="button" data-rarity="5" aria-pressed="true">5★</button>
-                    <button class="wish-rarity-filter active rarity-4" type="button" data-rarity="4" aria-pressed="true">4★</button>
-                    <button class="wish-rarity-filter active rarity-3" type="button" data-rarity="3" aria-pressed="true">3★</button>
+                    <button class="wish-rarity-filter active rarity-5" type="button" data-rarity="5" aria-pressed="true"><b aria-hidden="true">★</b> 5</button>
+                    <button class="wish-rarity-filter active rarity-4" type="button" data-rarity="4" aria-pressed="true"><b aria-hidden="true">★</b> 4</button>
+                    <button class="wish-rarity-filter active rarity-3" type="button" data-rarity="3" aria-pressed="true"><b aria-hidden="true">★</b> 3</button>
+                </div>
+                <div class="wish-view-toggle" aria-label="History layout">
+                    <button class="active" type="button" data-view="list" aria-label="List view" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h2M8 5h9M3 10h2M8 10h9M3 15h2M8 15h9"/></svg></button>
+                    <button type="button" data-view="grid" aria-label="Grid view" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></button>
                 </div>
             </div>
         </div>
         <div id="wish-history" class="wish-history-list">
             <p class="wish-loading">Loading wish history…</p>
         </div>
+        <nav id="wish-pagination" class="wish-pagination" aria-label="Wish history pages"></nav>
     </section>
     {% endif %}
 </div>
@@ -104,5 +121,5 @@
         <p id="wish-import-success-message">Wish history imported successfully.</p>
     </div>
 </div>
-{% if accounts %}<script src="/static/build/browser/pages/wishes.js"></script>{% endif %}
+{% if accounts %}<script src="/static/build/browser/pages/wishes.js?v=5"></script>{% endif %}
 {% endblock %}

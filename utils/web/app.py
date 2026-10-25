@@ -4475,7 +4475,10 @@ async def _fetch_wishes_from_hoyoverse(source_url: str) -> list[dict]:
     async with aiohttp.ClientSession(timeout=timeout) as client:
         for gacha_type in ("100", "200", "301", "400", "302", "500"):
             end_id = "0"
-            for _ in range(50):
+            # Active accounts can exceed 1,000 wishes in a single banner while
+            # those records are still available from HoYoverse. Keep a generous
+            # safety ceiling, but continue until the API itself is exhausted.
+            for _ in range(500):
                 query = {
                     **base_query,
                     "gacha_type": gacha_type,
