@@ -4,11 +4,7 @@
         "module": "ESNext",
         "types": ["node"],
         "moduleResolution": "Bundler",
-        "lib": [
-            "ES2022",
-            "DOM",
-            "DOM.Iterable"
-        ],
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "strict": true,
         "noEmit": true,
         "noEmitOnError": true,
@@ -16,10 +12,6 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true
     },
-    "include": [
-        "website/src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["website/src/**/*.ts"],
+    "exclude": ["node_modules"]
 }
