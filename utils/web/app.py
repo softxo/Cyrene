@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import re
 import tempfile
 import time
@@ -16,6 +17,7 @@ from fastapi import (
     File,
     HTTPException,
     Request,
+    Response,
     UploadFile,
     logger,
 )
@@ -4226,18 +4228,31 @@ async def _get_achievement_account(
 
 
 @app.get("/api/achievements")
-async def achievements_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+async def achievements_data(
+    account_id: int,
+    response: Response,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    response.headers["Cache-Control"] = "no-store, private"
     user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
 
-    await _get_achievement_account(user_id, account_id)
+    account = await _get_achievement_account(user_id, account_id)
 
     source_achievements = load_achievements()
     saved_progress = await load_progress(
         user_id,
         account_id,
+    )
+
+    logging.getLogger("uvicorn.error").info(
+        "Achievement read: user=%s account=%s uid=%s saved_achievements=%s",
+        user_id,
+        account_id,
+        account["genshin_uid"],
+        len(saved_progress),
     )
 
     achievements = []
@@ -4442,7 +4457,7 @@ async def import_achievements_api(
     if user_id is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
 
-    await _get_achievement_account(user_id, account_id)
+    account = await _get_achievement_account(user_id, account_id)
     form = await request.form()
 
     uploaded_file = form.get("file")
@@ -4470,6 +4485,16 @@ async def import_achievements_api(
     finally:
         Path(temp_path).unlink(missing_ok=True)
 
+    saved_progress = await load_progress(user_id, account_id)
+    saved_tiers = sum(len(item["tiers"]) for item in saved_progress.values())
+    logging.getLogger("uvicorn.error").info(
+        "Achievement import verified: user=%s account=%s uid=%s matched=%s saved_tiers=%s",
+        user_id,
+        account_id,
+        account["genshin_uid"],
+        result["matched"],
+        saved_tiers,
+    )
     return result
 
 

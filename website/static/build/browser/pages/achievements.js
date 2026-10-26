@@ -387,8 +387,9 @@ window.initAchievements = function () {
                 }
                 console.log("Achievement import:", result);
                 achievementImportInput.value = "";
-                await loadAchievements();
-                showAchievementImportSuccess(result);
+                if (await loadAchievements()) {
+                    showAchievementImportSuccess(result);
+                }
             }
             catch (error) {
                 console.error("Achievement import failed:", error);
@@ -885,19 +886,31 @@ window.initAchievements = function () {
             return;
         }
         try {
-            const response = await fetch(achievementApiUrl("/api/achievements"));
+            const response = await fetch(achievementApiUrl("/api/achievements"), { cache: "no-store" });
             if (!response.ok) {
                 throw new Error("Failed to load achievements.");
             }
             achievementData =
                 await response.json();
+            const loadError = document.getElementById("achievement-load-error");
+            if (loadError)
+                loadError.hidden = true;
             buildVersionOptions();
             syncSecondaryVersionSelect();
             buildCategories();
             updateOverallAchievementProgress();
+            return true;
         }
         catch (error) {
             console.error("[Achievements] INITIALIZATION ERROR:", error);
+            const loadError = document.getElementById("achievement-load-error");
+            const message = document.getElementById("achievement-load-error-message");
+            if (message) {
+                message.textContent = "Cyrene could not read your saved achievement progress. Please retry.";
+            }
+            if (loadError)
+                loadError.hidden = false;
+            return false;
         }
     }
     /*

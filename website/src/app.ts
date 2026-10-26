@@ -76,7 +76,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-planner.js?v=9",
         "/static/build/browser/pages/characters/characters.js",
     ],
-    "/achievements": "/static/build/browser/pages/achievements.js",
+    "/achievements": "/static/build/browser/pages/achievements.js?v=2",
     "/inventory": "/static/build/browser/pages/inventory.js",
     "/planner": "/static/build/browser/pages/planner.js",
     "/verify": "/static/build/browser/pages/verification.js",

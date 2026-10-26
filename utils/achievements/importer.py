@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from utils.achievements.achievements import load_achievements
 from utils.hoyolab.database import (
+    get_achievement_progress,
     import_achievement_progress,
     initialise_database,
 )
@@ -24,9 +25,7 @@ async def import_achievements(
     export_path = Path(export_file)
 
     if not export_path.exists():
-        raise FileNotFoundError(
-            f"Achievement export not found: {export_path}"
-        )
+        raise FileNotFoundError(f"Achievement export not found: {export_path}")
 
     # --------------------------------
     # Load YaeAchievement export
@@ -38,15 +37,10 @@ async def import_achievements(
     ) as file:
         export_data = json.load(file)
 
-    exported_achievements = export_data.get(
-        "list",
-        []
-    )
+    exported_achievements = export_data.get("list", [])
 
     if not isinstance(exported_achievements, list):
-        raise ValueError(
-            "Invalid achievement export."
-        )
+        raise ValueError("Invalid achievement export.")
 
     # --------------------------------
     # Load Cyrene achievements
@@ -61,63 +55,31 @@ async def import_achievements(
     achievement_map = {}
 
     for achievement in achievements:
+        achievement_ids = achievement.get("id", [])
 
-        achievement_ids = achievement.get(
-            "id",
-            []
-        )
+        stage_count = achievement.get("stages", 0)
 
-        stage_count = achievement.get(
-            "stages",
-            0
-        )
-
-        if not isinstance(
-            achievement_ids,
-            list
-        ):
+        if not isinstance(achievement_ids, list):
             continue
 
-        if not isinstance(
-            stage_count,
-            int
-        ) or stage_count < 1:
+        if not isinstance(stage_count, int) or stage_count < 1:
             continue
 
-        for stage_number in range(
-            1,
-            stage_count + 1
-        ):
-
-            if stage_number > len(
-                achievement_ids
-            ):
+        for stage_number in range(1, stage_count + 1):
+            if stage_number > len(achievement_ids):
                 continue
 
-            stage = achievement.get(
-                f"stage{stage_number}"
-            )
+            stage = achievement.get(f"stage{stage_number}")
 
-            if not isinstance(
-                stage,
-                dict
-            ):
+            if not isinstance(stage, dict):
                 continue
 
-            genshin_id = achievement_ids[
-                stage_number - 1
-            ]
+            genshin_id = achievement_ids[stage_number - 1]
 
-            achievement_map[
-                str(genshin_id)
-            ] = {
-                "achievement_id": str(
-                    genshin_id
-                ),
+            achievement_map[str(genshin_id)] = {
+                "achievement_id": str(genshin_id),
                 "tier": stage_number,
-                "progress": stage.get(
-                    "progress"
-                ),
+                "progress": stage.get("progress"),
             }
 
     # --------------------------------
@@ -130,7 +92,6 @@ async def import_achievements(
     unmatched = 0
 
     for entry in exported_achievements:
-
         if not isinstance(entry, dict):
             continue
 
@@ -141,48 +102,24 @@ async def import_achievements(
 
         genshin_id = str(genshin_id)
 
-        mapping = achievement_map.get(
-            genshin_id
-        )
+        mapping = achievement_map.get(genshin_id)
 
         if mapping is None:
             unmatched += 1
             continue
 
-        achievement_id = mapping[
-            "achievement_id"
-        ]
+        achievement_id = mapping["achievement_id"]
 
-        tier_number = mapping[
-            "tier"
-        ]
+        tier_number = mapping["tier"]
 
         if achievement_id not in progress:
+            progress[achievement_id] = {"tiers": {}}
 
-            progress[achievement_id] = {
-                "tiers": {}
-            }
-
-        progress[
-            achievement_id
-        ][
-            "tiers"
-        ][
-            str(tier_number)
-        ] = {
-            "completed": entry.get(
-                "status"
-            ) == 3,
-            "current": entry.get(
-                "current",
-                0
-            ),
-            "progress": mapping.get(
-                "progress"
-            ),
-            "timestamp": entry.get(
-                "timestamp"
-            ),
+        progress[achievement_id]["tiers"][str(tier_number)] = {
+            "completed": entry.get("status") == 3,
+            "current": entry.get("current", 0),
+            "progress": mapping.get("progress"),
+            "timestamp": entry.get("timestamp"),
         }
 
         matched += 1
@@ -197,6 +134,21 @@ async def import_achievements(
         progress,
     )
 
+    # Verify the committed records through a fresh database connection before
+    # telling the browser that the import succeeded.
+    saved = {
+        (row["achievement_id"], str(row["tier"])): row
+        for row in await get_achievement_progress(user_id, account_id)
+    }
+    for achievement_id, achievement in progress.items():
+        for tier, expected in achievement["tiers"].items():
+            actual = saved.get((achievement_id, tier))
+            if actual is None or (
+                bool(actual["completed"]) != expected["completed"]
+                or actual["current"] != int(expected["current"])
+            ):
+                raise RuntimeError("Achievement import could not be verified in the database.")
+
     return {
         "matched": matched,
         "unmatched": unmatched,
@@ -205,18 +157,11 @@ async def import_achievements(
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) < 2:
-        print(
-            "Usage: python -m "
-            "utils.achievements.importer "
-            "<export_file>"
-        )
+        print("Usage: python -m utils.achievements.importer <export_file>")
         raise SystemExit(1)
 
-    export_file = Path(
-        sys.argv[1]
-    )
+    export_file = Path(sys.argv[1])
 
     async def main():
 
@@ -230,9 +175,4 @@ if __name__ == "__main__":
 
         print(result)
 
-    asyncio.run(
-        main(),
-        loop_factory=lambda: asyncio.SelectorEventLoop(
-            selectors.SelectSelector()
-        )
-    )
+    asyncio.run(main(), loop_factory=lambda: asyncio.SelectorEventLoop(selectors.SelectSelector()))
