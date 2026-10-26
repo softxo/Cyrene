@@ -560,6 +560,8 @@
     <div
         class="planner-picker"
         data-planner-picker
+        data-planner-user-id="{{ planner_user_id }}"
+        data-planner-account-uid="{{ selected_account.genshin_uid if selected_account else '' }}"
         data-account-id="{{ selected_account.id if selected_account else '' }}"
         aria-hidden="true"
         hidden

@@ -33,14 +33,10 @@ declare global {
 
         CyreneSchemas: {
             customEventSchema: typeof customEventSchema;
-            customEventsListResponseSchema:
-                typeof customEventsListResponseSchema;
-            customEventResponseSchema:
-                typeof customEventResponseSchema;
-            deleteCustomEventResponseSchema:
-                typeof deleteCustomEventResponseSchema;
-            customEventCompletionResponseSchema:
-                typeof customEventCompletionResponseSchema;
+            customEventsListResponseSchema: typeof customEventsListResponseSchema;
+            customEventResponseSchema: typeof customEventResponseSchema;
+            deleteCustomEventResponseSchema: typeof deleteCustomEventResponseSchema;
+            customEventCompletionResponseSchema: typeof customEventCompletionResponseSchema;
         };
     }
 }
@@ -58,18 +54,14 @@ window.CyreneSchemas = {
    ========================================================= */
 
 function initialiseHoverEffects(): void {
-    const savedHoverEffects =
-        localStorage.getItem("hoverEffects");
+    const savedHoverEffects = localStorage.getItem("hoverEffects");
 
-    const hoverEffectsEnabled =
-        savedHoverEffects !== "false";
+    const hoverEffectsEnabled = savedHoverEffects !== "false";
 
-    document.documentElement.dataset.hoverEffects =
-        hoverEffectsEnabled ? "on" : "off";
+    document.documentElement.dataset.hoverEffects = hoverEffectsEnabled ? "on" : "off";
 }
 
 initialiseHoverEffects();
-
 
 /* =========================================================
    2. PAGE CONFIGURATION
@@ -81,7 +73,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
         "/static/build/browser/pages/characters/characters-showcase.js?v=6",
-        "/static/build/browser/pages/characters/characters-planner.js?v=7",
+        "/static/build/browser/pages/characters/characters-planner.js?v=9",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js",
@@ -101,22 +93,21 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js",
+    "/settings": "/static/build/browser/pages/settings.js?v=3",
 };
 
 const pageStyles: Record<string, string> = {
     "/": "/static/build/css/home.css?v=4",
     "/achievements": "/static/build/css/achievements.css?v=3",
     "/wishes": "/static/build/css/wishes.css?v=10",
-    "/characters": "/static/build/css/characters.css?v=35",
+    "/characters": "/static/build/css/characters.css?v=37",
     "/inventory": "/static/build/css/inventory.css?v=3",
     "/planner": "/static/build/css/planner.css?v=2",
-    "/verify": "/static/build/css/verification.css",
+    "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
     "/events": "/static/build/css/events.css?v=4",
-    "/settings": "/static/build/css/settings.css?v=2",
+    "/settings": "/static/build/css/settings.css?v=3",
 };
-
 
 /* =========================================================
    3. PAGE SCRIPT LOADER
@@ -136,16 +127,11 @@ async function loadPageScript(path: string): Promise<void> {
 
     // Preserve script dependencies by loading sequentially.
     for (const scriptSrc of scriptSources) {
-        const absoluteSrc = new URL(
-            scriptSrc,
-            window.location.origin,
-        ).href;
+        const absoluteSrc = new URL(scriptSrc, window.location.origin).href;
 
         const existingScript = Array.from(
-            document.querySelectorAll<HTMLScriptElement>(
-                "script[src]",
-            ),
-        ).find(script => script.src === absoluteSrc);
+            document.querySelectorAll<HTMLScriptElement>("script[src]"),
+        ).find((script) => script.src === absoluteSrc);
 
         // Page scripts remain loaded during SPA navigation.
         if (existingScript) {
@@ -159,19 +145,11 @@ async function loadPageScript(path: string): Promise<void> {
         script.dataset.scriptSrc = scriptSrc;
 
         await new Promise<void>((resolve, reject) => {
-            script.addEventListener(
-                "load",
-                () => resolve(),
-                { once: true },
-            );
+            script.addEventListener("load", () => resolve(), { once: true });
 
             script.addEventListener(
                 "error",
-                () => reject(
-                    new Error(
-                        `Failed to load page script: ${scriptSrc}`,
-                    ),
-                ),
+                () => reject(new Error(`Failed to load page script: ${scriptSrc}`)),
                 { once: true },
             );
 
@@ -179,7 +157,6 @@ async function loadPageScript(path: string): Promise<void> {
         });
     }
 }
-
 
 /* =========================================================
    4. PAGE STYLE LOADER
@@ -192,17 +169,12 @@ async function loadPageStyle(path: string): Promise<void> {
         return;
     }
 
-    const absoluteHref = new URL(
-        styleHref,
-        window.location.origin,
-    ).href;
+    const absoluteHref = new URL(styleHref, window.location.origin).href;
 
     // Reuse any stylesheet already present in the document.
     const existingStyle = Array.from(
-        document.querySelectorAll<HTMLLinkElement>(
-            'link[rel="stylesheet"]',
-        ),
-    ).find(link => link.href === absoluteHref);
+        document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'),
+    ).find((link) => link.href === absoluteHref);
 
     if (existingStyle) {
         return;
@@ -225,7 +197,6 @@ async function loadPageStyle(path: string): Promise<void> {
         document.head.appendChild(link);
     });
 }
-
 
 /* =========================================================
    5. PAGE INITIALISATION
@@ -275,96 +246,80 @@ async function preparePage(path: string): Promise<void> {
     initialisePage(path);
 }
 
-
 /* =========================================================
    6. CUSTOM SELECT SAFETY NET
    ========================================================= */
 
 function initialiseCustomSelectFallback(): void {
-    document.addEventListener("click", event => {
-        if (!(event.target instanceof Element)) {
-            return;
-        }
-
-        const button = event.target.closest<HTMLButtonElement>(
-            ".custom-select-button",
-        );
-
-        const select = button?.closest<HTMLElement>(
-            ".custom-select",
-        );
-
-        if (!button || !select || button.disabled) {
-            return;
-        }
-
-        const wasOpen = select.classList.contains("open");
-        const previousExpanded = button.getAttribute("aria-expanded");
-
-        // Page-specific handlers run first. Only step in when a freshly
-        // inserted SPA control has not been initialised by its page module.
-        window.setTimeout(() => {
-            const handled =
-                select.classList.contains("open") !== wasOpen ||
-                button.getAttribute("aria-expanded") !== previousExpanded;
-
-            if (handled || !select.isConnected) {
+    document.addEventListener(
+        "click",
+        (event) => {
+            if (!(event.target instanceof Element)) {
                 return;
             }
 
-            document.querySelectorAll<HTMLElement>(
-                ".custom-select.open",
-            ).forEach(otherSelect => {
-                if (otherSelect === select) {
+            const button = event.target.closest<HTMLButtonElement>(".custom-select-button");
+
+            const select = button?.closest<HTMLElement>(".custom-select");
+
+            if (!button || !select || button.disabled) {
+                return;
+            }
+
+            const wasOpen = select.classList.contains("open");
+            const previousExpanded = button.getAttribute("aria-expanded");
+
+            // Page-specific handlers run first. Only step in when a freshly
+            // inserted SPA control has not been initialised by its page module.
+            window.setTimeout(() => {
+                const handled =
+                    select.classList.contains("open") !== wasOpen ||
+                    button.getAttribute("aria-expanded") !== previousExpanded;
+
+                if (handled || !select.isConnected) {
                     return;
                 }
 
-                otherSelect.classList.remove("open");
-                otherSelect.querySelector(".custom-select-button")
-                    ?.setAttribute("aria-expanded", "false");
-            });
+                document
+                    .querySelectorAll<HTMLElement>(".custom-select.open")
+                    .forEach((otherSelect) => {
+                        if (otherSelect === select) {
+                            return;
+                        }
 
-            select.classList.toggle("open", !wasOpen);
-            button.setAttribute("aria-expanded", String(!wasOpen));
-        }, 0);
-    }, true);
+                        otherSelect.classList.remove("open");
+                        otherSelect
+                            .querySelector(".custom-select-button")
+                            ?.setAttribute("aria-expanded", "false");
+                    });
+
+                select.classList.toggle("open", !wasOpen);
+                button.setAttribute("aria-expanded", String(!wasOpen));
+            }, 0);
+        },
+        true,
+    );
 }
-
 
 /* =========================================================
    7. ACTIVE SIDEBAR NAVIGATION
    ========================================================= */
 
 function updateActiveNavigation(url: string | URL): void {
-    const currentPath = new URL(
-        url,
-        window.location.origin,
-    ).pathname;
+    const currentPath = new URL(url, window.location.origin).pathname;
 
-    document.querySelectorAll<HTMLAnchorElement>(
-        ".nav-item",
-    ).forEach(item => {
-        const itemPath = new URL(
-            item.href,
-            window.location.origin,
-        ).pathname;
+    document.querySelectorAll<HTMLAnchorElement>(".nav-item").forEach((item) => {
+        const itemPath = new URL(item.href, window.location.origin).pathname;
 
-        item.classList.toggle(
-            "active",
-            itemPath === currentPath,
-        );
+        item.classList.toggle("active", itemPath === currentPath);
     });
 }
-
 
 /* =========================================================
    8. CLIENT-SIDE NAVIGATION
    ========================================================= */
 
-async function navigate(
-    url: string | URL,
-    addToHistory = true,
-): Promise<void> {
+async function navigate(url: string | URL, addToHistory = true): Promise<void> {
     try {
         const response = await fetch(url, {
             redirect: "manual",
@@ -374,62 +329,38 @@ async function navigate(
          * Handle server-side redirects.
          */
 
-        if (
-            [301, 302, 303, 307, 308].includes(
-                response.status,
-            )
-        ) {
-            const redirectUrl =
-                response.headers.get("Location");
+        if ([301, 302, 303, 307, 308].includes(response.status)) {
+            const redirectUrl = response.headers.get("Location");
 
             if (redirectUrl) {
-                window.location.href = new URL(
-                    redirectUrl,
-                    window.location.origin,
-                ).href;
+                window.location.href = new URL(redirectUrl, window.location.origin).href;
 
                 return;
             }
         }
 
         if (!response.ok) {
-            throw new Error(
-                `Navigation failed: ${response.status}`,
-            );
+            throw new Error(`Navigation failed: ${response.status}`);
         }
 
         const html = await response.text();
         const parser = new DOMParser();
 
-        const newDocument = parser.parseFromString(
-            html,
-            "text/html",
-        );
+        const newDocument = parser.parseFromString(html, "text/html");
 
-        const newMain = newDocument.querySelector(
-            ".main-content",
-        );
+        const newMain = newDocument.querySelector(".main-content");
 
         if (!newMain) {
-            throw new Error(
-                "New page does not contain .main-content",
-            );
+            throw new Error("New page does not contain .main-content");
         }
 
-        const mainContent = document.querySelector(
-            ".main-content",
-        );
+        const mainContent = document.querySelector(".main-content");
 
         if (!mainContent) {
-            throw new Error(
-                "Current page does not contain .main-content",
-            );
+            throw new Error("Current page does not contain .main-content");
         }
 
-        const finalPath = new URL(
-            url,
-            window.location.origin,
-        ).pathname;
+        const finalPath = new URL(url, window.location.origin).pathname;
 
         // Keep the current page visible until the destination stylesheet is
         // ready, preventing an unstyled frame during client-side navigation.
@@ -445,24 +376,17 @@ async function navigate(
          * Execute scripts included in the new content.
          */
 
-        mainContent
-            .querySelectorAll("script")
-            .forEach(oldScript => {
-                const newScript =
-                    document.createElement("script");
+        mainContent.querySelectorAll("script").forEach((oldScript) => {
+            const newScript = document.createElement("script");
 
-                for (const attribute of oldScript.attributes) {
-                    newScript.setAttribute(
-                        attribute.name,
-                        attribute.value,
-                    );
-                }
+            for (const attribute of oldScript.attributes) {
+                newScript.setAttribute(attribute.name, attribute.value);
+            }
 
-                newScript.textContent =
-                    oldScript.textContent;
+            newScript.textContent = oldScript.textContent;
 
-                oldScript.replaceWith(newScript);
-            });
+            oldScript.replaceWith(newScript);
+        });
 
         /*
          * Update browser history.
@@ -499,107 +423,90 @@ async function navigate(
     }
 }
 
-
 /* =========================================================
    9. NAVIGATION EVENT LISTENERS
    ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-        const mainContent = document.querySelector(
-            ".main-content",
-        );
+document.addEventListener("DOMContentLoaded", async () => {
+    const mainContent = document.querySelector(".main-content");
 
-        if (!mainContent) {
+    if (!mainContent) {
+        return;
+    }
+
+    initialiseCustomSelectFallback();
+
+    /*
+     * Intercept internal navigation links.
+     */
+
+    document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) {
             return;
         }
 
-        initialiseCustomSelectFallback();
+        const link = event.target.closest("a");
 
-        /*
-         * Intercept internal navigation links.
-         */
+        if (!(link instanceof HTMLAnchorElement)) {
+            return;
+        }
 
-        document.addEventListener("click", event => {
-            if (!(event.target instanceof Element)) {
-                return;
-            }
+        if (link.origin !== window.location.origin) {
+            return;
+        }
 
-            const link = event.target.closest("a");
+        if (
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey ||
+            event.metaKey ||
+            link.target === "_blank"
+        ) {
+            return;
+        }
 
-            if (!(link instanceof HTMLAnchorElement)) {
-                return;
-            }
+        if (link.pathname === window.location.pathname && link.hash) {
+            return;
+        }
 
-            if (link.origin !== window.location.origin) {
-                return;
-            }
+        event.preventDefault();
 
-            if (
-                event.ctrlKey ||
-                event.shiftKey ||
-                event.altKey ||
-                event.metaKey ||
-                link.target === "_blank"
-            ) {
-                return;
-            }
+        void navigate(link.href);
+    });
 
-            if (
-                link.pathname === window.location.pathname &&
-                link.hash
-            ) {
-                return;
-            }
+    /*
+     * Support browser Back and Forward navigation.
+     */
 
-            event.preventDefault();
+    window.addEventListener("popstate", () => {
+        void navigate(window.location.href, false);
+    });
 
-            void navigate(link.href);
-        });
+    /*
+     * Initialise the page loaded by the server.
+     */
 
-        /*
-         * Support browser Back and Forward navigation.
-         */
+    await preparePage(window.location.pathname);
 
-        window.addEventListener("popstate", () => {
-            void navigate(window.location.href, false);
-        });
-
-        /*
-         * Initialise the page loaded by the server.
-         */
-
-        await preparePage(window.location.pathname);
-
-        updateActiveNavigation(window.location.href);
-    },
-);
-
+    updateActiveNavigation(window.location.href);
+});
 
 /* =========================================================
    10. MOBILE SIDEBAR
    ========================================================= */
 
-const mobileMenuButton = document.getElementById(
-    "mobile-menu-button",
-);
+const mobileMenuButton = document.getElementById("mobile-menu-button");
 
 const sidebar = document.getElementById("sidebar");
 
-const sidebarOverlay = document.getElementById(
-    "sidebar-overlay",
-);
+const sidebarOverlay = document.getElementById("sidebar-overlay");
 
 function openSidebar(): void {
     sidebar?.classList.add("open");
     sidebarOverlay?.classList.add("visible");
     mobileMenuButton?.classList.add("open");
 
-    mobileMenuButton?.setAttribute(
-        "aria-expanded",
-        "true",
-    );
+    mobileMenuButton?.setAttribute("aria-expanded", "true");
 }
 
 function closeSidebar(): void {
@@ -607,10 +514,7 @@ function closeSidebar(): void {
     sidebarOverlay?.classList.remove("visible");
     mobileMenuButton?.classList.remove("open");
 
-    mobileMenuButton?.setAttribute(
-        "aria-expanded",
-        "false",
-    );
+    mobileMenuButton?.setAttribute("aria-expanded", "false");
 }
 
 mobileMenuButton?.addEventListener("click", () => {
@@ -621,11 +525,8 @@ mobileMenuButton?.addEventListener("click", () => {
     }
 });
 
-sidebarOverlay?.addEventListener(
-    "click",
-    closeSidebar,
-);
+sidebarOverlay?.addEventListener("click", closeSidebar);
 
-sidebar?.querySelectorAll("a").forEach(link => {
+sidebar?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", closeSidebar);
 });

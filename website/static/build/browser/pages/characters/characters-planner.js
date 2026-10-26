@@ -218,24 +218,26 @@ function initCharacterPlanner() {
     /* =====================================================
        CONFIGURATION AND STATE
        ===================================================== */
-    const LEGACY_STORAGE_KEY = "cyrene-character-plans";
     const accountId = picker.dataset.accountId || "";
-    const STORAGE_KEY = accountId
-        ? `cyrene-character-plans-${accountId}`
+    const accountUid = picker.dataset.plannerAccountUid || "";
+    const plannerUserId = picker.dataset.plannerUserId || "";
+    const STORAGE_KEY = accountUid && plannerUserId
+        ? `cyrene-character-plans-v2-${plannerUserId}-${accountUid}`
         : null;
-    const migrationKey = STORAGE_KEY
-        ? `${STORAGE_KEY}-database-migrated`
-        : null;
+    const pendingKey = STORAGE_KEY ? `${STORAGE_KEY}-pending` : null;
     const pickerButtons = Array.from(pickerGrid.querySelectorAll("[data-planner-character-id]"));
     pickerButtons.sort((a, b) => (b.dataset.plannerCharacterRelease || "").localeCompare(a.dataset.plannerCharacterRelease || "") ||
         a.dataset.plannerCharacterName.localeCompare(b.dataset.plannerCharacterName)).forEach(button => pickerGrid.append(button));
     const pickerFilters = { element: "all", weapon: "all", rarity: "all" };
     const pickerCount = picker.querySelector("[data-planner-picker-count]");
-    let plans = migrationKey && localStorage.getItem(migrationKey) === "true"
-        ? []
-        : loadPlans();
+    let plans = loadPlans();
     let plansRevision = 0;
     let databaseSavePromise = Promise.resolve();
+    const syncStatus = document.createElement("p");
+    syncStatus.className = "planner-sync-status";
+    syncStatus.setAttribute("role", "status");
+    syncStatus.hidden = true;
+    plannerGrid.before(syncStatus);
     let editingId = null;
     let previouslyFocused = null;
     let progressionRequestId = 0;
@@ -260,20 +262,8 @@ function initCharacterPlanner() {
                 ? localStorage.getItem(STORAGE_KEY)
                 : null;
             const storedPlans = normalisePlans(stored ? JSON.parse(stored) : []);
-            const legacyRecoveryKey = STORAGE_KEY
-                ? `${STORAGE_KEY}-legacy-recovered`
-                : null;
-            if (STORAGE_KEY &&
-                storedPlans.length === 0 &&
-                localStorage.getItem(legacyRecoveryKey) !== "true") {
-                const legacyPlans = normalisePlans(JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || "[]"));
-                const ownedCharacterIds = new Set(Array.from(pickerGrid.querySelectorAll("[data-planner-character-id]")).map(button => String(button.dataset.plannerCharacterId)));
-                const accountPlans = legacyPlans.filter(plan => ownedCharacterIds.has(String(plan.id)));
-                localStorage.setItem(legacyRecoveryKey, "true");
-                if (accountPlans.length > 0) {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(accountPlans));
-                    return accountPlans;
-                }
+            if (STORAGE_KEY && stored !== null) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(storedPlans));
             }
             return storedPlans;
         }
@@ -335,6 +325,9 @@ function initCharacterPlanner() {
         }
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+            localStorage.setItem(pendingKey, "true");
+            syncStatus.hidden = false;
+            syncStatus.textContent = "Saving plans...";
             const snapshot = JSON.parse(JSON.stringify(plans));
             plansRevision++;
             databaseSavePromise = databaseSavePromise
@@ -342,6 +335,7 @@ function initCharacterPlanner() {
                 .then(() => savePlansToDatabase(snapshot));
             databaseSavePromise.catch(error => {
                 console.error("Could not save Character Planner data.", error);
+                syncStatus.textContent = "Plans are saved in this browser only. Server save failed; they will retry when you reopen Planner.";
             });
             return true;
         }
@@ -364,7 +358,11 @@ function initCharacterPlanner() {
         if (!response.ok) {
             throw new Error("Could not save Character Planner data.");
         }
-        localStorage.setItem(`${STORAGE_KEY}-database-migrated`, "true");
+        // A queued older save must not acknowledge newer edits.
+        if (localStorage.getItem(STORAGE_KEY) === JSON.stringify(snapshot)) {
+            localStorage.removeItem(pendingKey);
+            syncStatus.hidden = true;
+        }
     }
     async function hydratePlansFromDatabase() {
         if (!accountId) {
@@ -384,26 +382,20 @@ function initCharacterPlanner() {
             if (plansRevision !== startingRevision) {
                 return;
             }
-            const databasePlans = normalisePlans(payload?.plans);
-            if (databasePlans.length > 0) {
-                plans = databasePlans;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-                localStorage.setItem(migrationKey, "true");
-                renderPlans();
-            }
-            else if (plans.length > 0 &&
-                localStorage.getItem(migrationKey) !== "true") {
+            if (localStorage.getItem(pendingKey) === "true") {
+                // Include []: a failed deletion must never resurrect old plans.
                 await savePlansToDatabase(JSON.parse(JSON.stringify(plans)));
             }
             else {
-                plans = [];
-                localStorage.setItem(STORAGE_KEY, "[]");
-                localStorage.setItem(migrationKey, "true");
+                plans = normalisePlans(payload?.plans);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
                 renderPlans();
             }
         }
         catch (error) {
             console.error("Could not synchronise Character Planner data.", error);
+            syncStatus.hidden = false;
+            syncStatus.textContent = "Could not sync Planner. Showing this browser's saved plans; reload to retry.";
         }
     }
     function getPlan(id) {
@@ -661,7 +653,23 @@ function initCharacterPlanner() {
                 : 90;
             const weaponGoal = Math.min(plan.weaponLevel, weaponMaximum);
             const weapon = makeElement("div", "planner-card-weapon");
-            weapon.append(makeElement("span", "", "Weapon level"), makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "));
+            const weaponLevels = makeElement("div", "planner-card-goal");
+            weaponLevels.append(makeElement("span", "", "Weapon level"), makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "));
+            weapon.append(weaponLevels);
+            if (plan.currentWeaponIcon || plan.currentWeaponName) {
+                const identity = makeElement("div", "planner-card-equipped-weapon");
+                if (plan.currentWeaponIcon) {
+                    const icon = makeElement("img");
+                    icon.src = plan.currentWeaponIcon;
+                    icon.alt = "";
+                    icon.loading = "lazy";
+                    identity.append(icon);
+                }
+                const name = makeElement("span", "", plan.currentWeaponName || "Equipped weapon");
+                name.title = name.textContent;
+                identity.append(name);
+                weapon.append(identity);
+            }
             content.append(goals, talentRow, weapon);
             const actions = makeElement("div", "planner-card-actions");
             const editButton = makeElement("button", "planner-card-edit", "✎");
@@ -709,7 +717,8 @@ function initCharacterPlanner() {
         if (pickerCount)
             pickerCount.textContent = `${visibleCount} of ${pickerButtons.length} characters`;
     }
-    function openPicker() {
+    async function openPicker() {
+        await hydrationPromise;
         pickerSearch.value = "";
         filterPicker();
         showModal(picker, pickerDialog);
@@ -718,7 +727,8 @@ function initCharacterPlanner() {
     function closePicker() {
         hideModal(picker);
     }
-    function addCharacter(button) {
+    async function addCharacter(button) {
+        await hydrationPromise;
         const id = button.dataset.plannerCharacterId;
         if (!id) {
             return;
@@ -747,7 +757,8 @@ function initCharacterPlanner() {
         closePicker();
         openEditor(plan.id);
     }
-    function removePlan(id) {
+    async function removePlan(id) {
+        await hydrationPromise;
         const plan = getPlan(id);
         if (!plan) {
             return;
@@ -1069,6 +1080,8 @@ function initCharacterPlanner() {
                 ? currentTalentLevels
                 : plan.currentTalents;
             plan.currentWeaponLevel = Number(weapon?.level) || null;
+            plan.currentWeaponName = weapon?.name || "";
+            plan.currentWeaponIcon = weapon?.icon || "";
             plan.currentWeaponRarity = Number.isFinite(weaponRarity)
                 ? weaponRarity
                 : null;
@@ -1574,6 +1587,7 @@ function initCharacterPlanner() {
     });
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
+        await hydrationPromise;
         const plan = getPlan(editingId);
         if (!plan) {
             return;
@@ -1611,5 +1625,34 @@ function initCharacterPlanner() {
     const plannerSelectors = createPlannerButtonSelectors(form, editor, editorDialog);
     renderPlans();
     filterPicker();
-    void hydratePlansFromDatabase();
+    const hydrationPromise = hydratePlansFromDatabase();
+    void hydrationPromise.then(async () => {
+        let changed = false;
+        await Promise.all(plans.map(async (plan) => {
+            if (plan.currentWeaponIcon || !accountId)
+                return;
+            try {
+                const response = await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`, { credentials: "same-origin" });
+                if (!response.ok)
+                    return;
+                const data = await response.json();
+                const character = Array.isArray(data.data)
+                    ? data.data[0]
+                    : data.data?.characters?.[0];
+                const weapon = character?.weapon;
+                if (!weapon || getPlan(plan.id) !== plan)
+                    return;
+                plan.currentWeaponName = weapon.name || "";
+                plan.currentWeaponIcon = weapon.icon || "";
+                changed = true;
+            }
+            catch (error) {
+                console.warn("Could not load the equipped weapon for a planner card.", error);
+            }
+        }));
+        if (changed) {
+            persistPlans();
+            renderPlans();
+        }
+    });
 }

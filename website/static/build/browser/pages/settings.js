@@ -57,7 +57,7 @@ function initialiseAccountManagement() {
         }
         return data;
     };
-    const openModal = account => {
+    const openModal = (account) => {
         selectedAccount = account;
         details.textContent = `${account.nickname || "Unnamed account"} · UID ${account.uid}`;
         nicknameInput.value = account.cyrene_nickname || "";
@@ -68,7 +68,7 @@ function initialiseAccountManagement() {
         document.body.classList.add("settings-modal-open");
         nicknameInput.focus();
     };
-    const renderAccounts = accounts => {
+    const renderAccounts = (accounts) => {
         list.innerHTML = "";
         if (!accounts.length) {
             const empty = document.createElement("p");
@@ -77,7 +77,7 @@ function initialiseAccountManagement() {
             list.appendChild(empty);
             return;
         }
-        accounts.forEach(account => {
+        accounts.forEach((account) => {
             const row = document.createElement("div");
             row.className = "linked-account-row";
             const info = document.createElement("div");
@@ -105,16 +105,17 @@ function initialiseAccountManagement() {
             list.innerHTML = "";
             const message = document.createElement("p");
             message.className = "linked-account-empty";
-            message.textContent = error.status === 401
-                ? "Verify your Discord account to view and manage linked accounts."
-                : error.message;
+            message.textContent =
+                error.status === 401
+                    ? "Verify your Discord account to view and manage linked accounts."
+                    : error.message;
             list.appendChild(message);
         }
     };
-    modal.querySelectorAll("[data-close-manage-modal]").forEach(button => {
+    modal.querySelectorAll("[data-close-manage-modal]").forEach((button) => {
         button.addEventListener("click", closeModal);
     });
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && !modal.hidden) {
             closeModal();
         }
@@ -130,7 +131,7 @@ function initialiseAccountManagement() {
             const data = await request(`/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nickname: nicknameInput.value })
+                body: JSON.stringify({ nickname: nicknameInput.value }),
             });
             selectedAccount.cyrene_nickname = data.nickname;
             status.textContent = "Nickname saved.";
@@ -150,7 +151,9 @@ function initialiseAccountManagement() {
         status.classList.remove("error");
         status.textContent = "Removing account…";
         try {
-            await request(`/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`, { method: "DELETE" });
+            await request(`/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`, {
+                method: "DELETE",
+            });
             closeModal();
             await loadAccounts();
         }
@@ -193,15 +196,16 @@ function initialiseAccountLinking() {
         document.getElementById("hoyolab-account").focus();
     };
     openButton.addEventListener("click", openModal);
-    modal.querySelectorAll("[data-close-account-modal]").forEach(button => {
+    modal.querySelectorAll("[data-close-account-modal]").forEach((button) => {
         button.addEventListener("click", closeModal);
     });
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && !modal.hidden) {
             closeModal();
         }
     });
-    const showError = message => {
+    const showError = (message) => {
+        form.hidden = false;
         result.innerHTML = "";
         const paragraph = document.createElement("p");
         paragraph.className = "account-link-message error";
@@ -222,6 +226,40 @@ function initialiseAccountLinking() {
         }
         return data;
     };
+    const completeAccount = async (token, account) => {
+        form.hidden = true;
+        result.innerHTML = '<p class="account-link-message">Linking account...</p>';
+        const data = await request("/api/hoyolab/link/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token, uid: account.game_uid }),
+        });
+        form.hidden = true;
+        result.innerHTML = `
+            <div class="account-link-success">
+                <div class="verified-icon" aria-hidden="true">
+                    <span class="verified-corner top-left"></span>
+                    <span class="verified-corner top-right"></span>
+                    <span class="verified-corner bottom-left"></span>
+                    <span class="verified-corner bottom-right"></span>
+                    <span class="verified-scan-line"></span>
+                    <svg class="verified-check" viewBox="0 0 64 64" focusable="false">
+                        <path d="M17 33.5 27.5 44 48 22"></path>
+                    </svg>
+                </div>
+                <h4></h4>
+                <p></p>
+            </div>
+        `;
+        result.querySelector("h4").textContent = data.reconnected
+            ? "Account reconnected"
+            : "Account linked";
+        result.querySelector("p").textContent =
+            `${account.nickname || account.game_uid} is now available in Cyrene and Discord.`;
+        window.setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    };
     const showAccountChoices = (token, accounts) => {
         form.hidden = true;
         result.innerHTML = "";
@@ -231,7 +269,7 @@ function initialiseAccountLinking() {
         result.appendChild(heading);
         const choices = document.createElement("div");
         choices.className = "account-choices";
-        accounts.forEach(account => {
+        accounts.forEach((account) => {
             const button = document.createElement("button");
             button.type = "button";
             button.className = "account-choice";
@@ -243,36 +281,7 @@ function initialiseAccountLinking() {
             button.addEventListener("click", async () => {
                 button.disabled = true;
                 try {
-                    const data = await request("/api/hoyolab/link/complete", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ token, uid: account.game_uid })
-                    });
-                    form.hidden = true;
-                    result.innerHTML = `
-                        <div class="account-link-success">
-                            <div class="verified-icon" aria-hidden="true">
-                                <span class="verified-corner top-left"></span>
-                                <span class="verified-corner top-right"></span>
-                                <span class="verified-corner bottom-left"></span>
-                                <span class="verified-corner bottom-right"></span>
-                                <span class="verified-scan-line"></span>
-                                <svg class="verified-check" viewBox="0 0 64 64" focusable="false">
-                                    <path d="M17 33.5 27.5 44 48 22"></path>
-                                </svg>
-                            </div>
-                            <h4></h4>
-                            <p></p>
-                        </div>
-                    `;
-                    result.querySelector("h4").textContent = data.reconnected
-                        ? "Account reconnected"
-                        : "Account linked";
-                    result.querySelector("p").textContent =
-                        `${account.nickname || account.game_uid} is now available in Cyrene and Discord.`;
-                    window.setTimeout(() => {
-                        window.location.reload();
-                    }, 2000);
+                    await completeAccount(token, account);
                 }
                 catch (error) {
                     button.disabled = false;
@@ -292,7 +301,12 @@ function initialiseAccountLinking() {
             }
             if (data.status === "select") {
                 submit.disabled = false;
-                showAccountChoices(token, data.accounts);
+                if (data.accounts.length === 1) {
+                    await completeAccount(token, data.accounts[0]);
+                }
+                else {
+                    showAccountChoices(token, data.accounts);
+                }
                 return;
             }
             result.innerHTML = "";
@@ -300,7 +314,8 @@ function initialiseAccountLinking() {
             message.className = "account-link-message";
             if (data.status === "captcha") {
                 message.classList.add("warning");
-                message.textContent = "HoYoLAB needs a CAPTCHA before continuing. Complete it in the new page, then return here.";
+                message.textContent =
+                    "HoYoLAB needs a CAPTCHA before continuing. Complete it in the new page, then return here.";
                 result.appendChild(message);
                 const link = document.createElement("a");
                 link.className = "account-link-action";
@@ -332,8 +347,8 @@ function initialiseAccountLinking() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     account: document.getElementById("hoyolab-account").value,
-                    password: document.getElementById("hoyolab-password").value
-                })
+                    password: document.getElementById("hoyolab-password").value,
+                }),
             });
             document.getElementById("hoyolab-password").value = "";
             await poll(data.token);
