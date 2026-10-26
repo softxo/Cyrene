@@ -2859,7 +2859,7 @@
 }
 
 .overview-account-row:hover {
-    background: var(--surface-hover);
+    background-color: var(--surface-hover);
 
     border-color: var(--accent);
 

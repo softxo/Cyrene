@@ -227,6 +227,10 @@ function initCharacterPlanner() {
         ? `${STORAGE_KEY}-database-migrated`
         : null;
     const pickerButtons = Array.from(pickerGrid.querySelectorAll("[data-planner-character-id]"));
+    pickerButtons.sort((a, b) => (b.dataset.plannerCharacterRelease || "").localeCompare(a.dataset.plannerCharacterRelease || "") ||
+        a.dataset.plannerCharacterName.localeCompare(b.dataset.plannerCharacterName)).forEach(button => pickerGrid.append(button));
+    const pickerFilters = { element: "all", weapon: "all", rarity: "all" };
+    const pickerCount = picker.querySelector("[data-planner-picker-count]");
     let plans = migrationKey && localStorage.getItem(migrationKey) === "true"
         ? []
         : loadPlans();
@@ -595,7 +599,11 @@ function initCharacterPlanner() {
             String(button.dataset.plannerCharacterId),
             Number(button.dataset.plannerCharacterLevel) || null
         ]));
-        plans.forEach(plan => {
+        const releaseOrder = new Map(pickerButtons.map((button, index) => [
+            String(button.dataset.plannerCharacterId), index
+        ]));
+        [...plans].sort((a, b) => (releaseOrder.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) -
+            (releaseOrder.get(String(b.id)) ?? Number.MAX_SAFE_INTEGER)).forEach(plan => {
             const card = makeElement("article", "planner-character-card");
             const image = makeElement("img");
             image.src = plan.icon;
@@ -644,7 +652,9 @@ function initCharacterPlanner() {
                 const talentValues = makeProgressionValues(currentTalent, value);
                 talentValues.classList.add("planner-card-talent-values");
                 talent.classList.toggle("has-goal", talentValues.classList.contains("has-goal"));
-                talent.append(makeElement("span", `planner-card-talent-key talent-${index + 1}`, talentLabels[index][0]), talentValues);
+                const talentKey = makeElement("span", `planner-card-talent-key talent-${index + 1}`);
+                talentKey.append(makeElement("span", "", talentLabels[index][0]));
+                talent.append(talentKey, talentValues);
                 talentRow.append(talent);
             });
             const weaponMaximum = plan.currentWeaponRarity &&
@@ -691,13 +701,15 @@ function initCharacterPlanner() {
         let visibleCount = 0;
         pickerButtons.forEach(button => {
             const name = (button.dataset.plannerCharacterName || "").toLocaleLowerCase();
-            const matches = name.includes(query);
+            const matches = name.includes(query) && Object.entries(pickerFilters).every(([key, value]) => value === "all" || (button.dataset[`plannerCharacter${key[0].toUpperCase()}${key.slice(1)}`] || "").toLowerCase() === value);
             button.hidden = !matches;
             if (matches) {
                 visibleCount++;
             }
         });
         pickerEmpty.hidden = visibleCount !== 0;
+        if (pickerCount)
+            pickerCount.textContent = `${visibleCount} of ${pickerButtons.length} characters`;
     }
     function openPicker() {
         pickerSearch.value = "";
@@ -1528,6 +1540,24 @@ function initCharacterPlanner() {
         });
     });
     pickerSearch.addEventListener("input", filterPicker);
+    picker.querySelectorAll("[data-planner-filter]").forEach(group => {
+        group.querySelectorAll("button").forEach(button => {
+            button.addEventListener("click", () => {
+                pickerFilters[group.dataset.plannerFilter] = button.dataset.value;
+                group.querySelectorAll("button").forEach(option => {
+                    const selected = option === button;
+                    option.classList.toggle("selected", selected);
+                    option.setAttribute("aria-pressed", String(selected));
+                });
+                filterPicker();
+            });
+        });
+    });
+    picker.querySelector("[data-planner-filter-reset]")?.addEventListener("click", () => {
+        pickerSearch.value = "";
+        picker.querySelectorAll('[data-planner-filter] [data-value="all"]').forEach(button => button.click());
+        filterPicker();
+    });
     levelInput.addEventListener("change", updateGoalCosts);
     weaponLevelInput.addEventListener("change", updateGoalCosts);
     form.querySelectorAll("[data-planner-talent]").forEach(input => {

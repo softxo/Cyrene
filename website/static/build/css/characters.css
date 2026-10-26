@@ -2482,15 +2482,15 @@ body.character-showcase-open {
 .planner-card-element {
     position: absolute;
     z-index: 2;
-    top: 8px;
-    right: 8px;
+    bottom: 35px;
+    right: 5px;
     display: grid;
     place-items: center;
     width: 38px;
     height: 38px;
     padding: 6px;
     border: 1px solid rgb(255 255 255 / 22%);
-    border-radius: 13px;
+    border-radius: 50%;
     background: linear-gradient(
         145deg,
         rgb(255 255 255 / 18%),
@@ -2565,6 +2565,8 @@ body.character-showcase-open {
 }
 
 .planner-card-level-values > span {
+    position: relative;
+    top: 1px;
     color: var(--text-muted);
     font-size: 0.72rem;
 }
@@ -2638,6 +2640,7 @@ body.character-showcase-open {
     color: var(--text);
     font-size: 0.62rem;
     font-weight: 800;
+    line-height: 1;
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 12%);
 }
 
@@ -2647,7 +2650,21 @@ body.character-showcase-open {
 }
 
 .planner-card-talent-values {
+    line-height: 1;
     white-space: nowrap;
+}
+
+.planner-card-talent-values > strong {
+    position: relative;
+    top: 1px;
+}
+
+.planner-card-talent-key > span {
+    text-box: trim-both cap alphabetic;
+}
+
+.planner-card-talent-key.talent-1 > span {
+    transform: translateX(-1px);
 }
 
 .planner-card-notes {
@@ -4196,4 +4213,96 @@ body.character-showcase-open {
         padding-inline: 5px;
         gap: 3px;
     }
+}
+
+/* Character selection uses the same compact icon controls as the roster. */
+.planner-add-button {
+    padding: 10px 16px;
+    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+    border-radius: 12px;
+    background-color: var(--surface);
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+    color: var(--text);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
+}
+.planner-add-button > span {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--accent);
+    font-size: 1.2rem;
+}
+.planner-add-button:hover { border-color: var(--accent); background-color: var(--surface-raised); filter: none; }
+.planner-add-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.planner-picker-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 32px 22px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.planner-picker-heading-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    height: 48px;
+    border: 1px solid var(--accent-border);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    color: var(--accent);
+    font-size: 1.8rem;
+}
+
+.planner-picker-heading-icon::before,
+.planner-picker-heading-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+}
+
+.planner-picker-heading-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+.planner-picker-heading .eyebrow { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--accent); }
+.planner-picker-heading h2 { margin: 4px 0 6px; font-size: 1.4rem; }
+.planner-picker-heading p { margin: 0; color: var(--text-secondary); font-size: 0.86rem; line-height: 1.5; }
+.planner-picker-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 14px 20px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-inset);
+}
+.planner-picker-search { flex: 1 1 100%; }
+.planner-picker-search > span, .planner-picker-filter > span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+.planner-picker-search input { margin: 0; }
+.planner-picker-filters .characters-icon-buttons { flex-wrap: wrap; }
+.planner-picker-results { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; color: var(--text-muted); font-size: 0.74rem; }
+.planner-picker-character[hidden] { display: none; }
+@media (max-width: 560px) {
+    .planner-picker-dialog { padding: 16px; }
+    .planner-picker-heading { gap: 10px; }
+    .planner-picker-heading-icon { flex-basis: 38px; height: 38px; }
+    .planner-picker-heading h2 { font-size: 1.2rem; }
+    .planner-picker-filters { padding: 12px; gap: 12px; }
 }
