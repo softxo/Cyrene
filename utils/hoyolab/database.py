@@ -123,6 +123,32 @@ async def initialise_database() -> None:
             """
         )
 
+        # UID-based snapshots deliberately survive unlinking an account.
+        # An empty snapshot records deletions and prevents legacy resurrection.
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS character_plan_snapshots (
+                discord_user_id BIGINT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                plans JSONB NOT NULL,
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                PRIMARY KEY (discord_user_id, genshin_uid)
+            )
+            """
+        )
+        await connection.execute(
+            """
+            INSERT INTO character_plan_snapshots
+                (discord_user_id, genshin_uid, plans)
+            SELECT p.discord_user_id, a.genshin_uid::text,
+                   jsonb_agg(p.plan ORDER BY p.updated_at, p.character_id)
+            FROM character_plans p
+            JOIN accounts a ON a.id = p.account_id
+            GROUP BY p.discord_user_id, a.genshin_uid
+            ON CONFLICT (discord_user_id, genshin_uid) DO NOTHING
+            """
+        )
+
         # =========================================
         # REMINDERS
         # =========================================
@@ -1165,22 +1191,21 @@ async def get_character_plans(
     discord_user_id: int,
     account_id: int,
 ) -> list[dict]:
-    """Return the saved Character Planner entries for an account."""
-
+    """Load a snapshot through an account owned by this user."""
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
-            SELECT plan
-            FROM character_plans
-            WHERE discord_user_id = %s
-              AND account_id = %s
-            ORDER BY updated_at ASC, character_id ASC
+            SELECT s.plans
+            FROM accounts a
+            JOIN character_plan_snapshots s
+              ON s.discord_user_id = a.discord_user_id
+             AND s.genshin_uid = a.genshin_uid::text
+            WHERE a.discord_user_id = %s AND a.id = %s
             """,
             (discord_user_id, account_id),
         )
-        rows = await result.fetchall()
-
-    return [row["plan"] for row in rows]
+        row = await result.fetchone()
+    return row["plans"] if row else []
 
 
 async def replace_character_plans(
@@ -1188,37 +1213,22 @@ async def replace_character_plans(
     account_id: int,
     plans: list[dict],
 ) -> None:
-    """Replace all Character Planner entries for one account."""
-
+    """Atomically save one UID snapshot, including an intentionally empty plan."""
     async with get_pool().connection() as connection:
-        await connection.execute(
+        result = await connection.execute(
             """
-            DELETE FROM character_plans
-            WHERE discord_user_id = %s
-              AND account_id = %s
+            INSERT INTO character_plan_snapshots
+                (discord_user_id, genshin_uid, plans, updated_at)
+            SELECT discord_user_id, genshin_uid::text, %s, NOW()
+            FROM accounts
+            WHERE discord_user_id = %s AND id = %s
+            ON CONFLICT (discord_user_id, genshin_uid)
+            DO UPDATE SET plans = EXCLUDED.plans, updated_at = NOW()
             """,
-            (discord_user_id, account_id),
+            (Jsonb(plans), discord_user_id, account_id),
         )
-
-        for plan in plans:
-            await connection.execute(
-                """
-                INSERT INTO character_plans (
-                    discord_user_id,
-                    account_id,
-                    character_id,
-                    plan,
-                    updated_at
-                )
-                VALUES (%s, %s, %s, %s, NOW())
-                """,
-                (
-                    discord_user_id,
-                    account_id,
-                    int(plan["id"]),
-                    Jsonb(plan),
-                ),
-            )
+        if result.rowcount != 1:
+            raise ValueError("Planner account is no longer linked.")
 
 
 async def delete_account(discord_user_id: int, genshin_uid: str) -> bool:

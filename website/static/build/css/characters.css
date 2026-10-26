@@ -2603,7 +2603,38 @@ body.character-showcase-open {
 .planner-card-weapon {
     align-self: stretch;
     align-content: center;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
     gap: 2px;
+}
+
+.planner-card-weapon > .planner-card-goal {
+    white-space: nowrap;
+}
+
+.planner-card-equipped-weapon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+}
+
+.planner-card-equipped-weapon img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.planner-card-equipped-weapon span {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 10px;
+    line-height: 1.2;
 }
 
 .planner-card-goal,

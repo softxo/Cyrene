@@ -114,21 +114,16 @@ app = FastAPI(
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-templates = Jinja2Templates(
-    directory=BASE_DIR / "website" / "templates"
-)
+templates = Jinja2Templates(directory=BASE_DIR / "website" / "templates")
 
 app.mount(
     "/static",
-    StaticFiles(
-        directory=BASE_DIR / "website" / "static"
-    ),
+    StaticFiles(directory=BASE_DIR / "website" / "static"),
     name="static",
 )
 
 
 GT_V3_URL = "https://static.geetest.com/static/js/gt.0.5.0.js"
-
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -152,6 +147,7 @@ async def settings(request: Request):
         },
     )
 
+
 @app.get(
     "/verify",
     response_class=HTMLResponse,
@@ -160,10 +156,7 @@ async def verify_page(
     request: Request,
     next: str | None = None,
 ):
-    if next and (
-        not next.startswith("/")
-        or next.startswith("//")
-    ):
+    if next and (not next.startswith("/") or next.startswith("//")):
         next = None
 
     return templates.TemplateResponse(
@@ -190,9 +183,7 @@ async def create_web_verification():
 
 
 @app.get("/api/verify/status")
-async def verification_status(
-    token: str
-):
+async def verification_status(token: str):
     verification = get_verification(token)
 
     if verification is None:
@@ -206,9 +197,7 @@ async def verification_status(
             "verified": False,
         }
 
-    session = await create_web_session(
-        verification.user_id
-    )
+    session = await create_web_session(verification.user_id)
 
     response = JSONResponse(
         content={
@@ -229,15 +218,9 @@ async def verification_status(
 
 
 @app.post("/api/auth/logout")
-async def logout(
-    cyrene_session: str | None = Cookie(
-        default=None
-    )
-):
+async def logout(cyrene_session: str | None = Cookie(default=None)):
     if cyrene_session:
-        await delete_web_session(
-            cyrene_session
-        )
+        await delete_web_session(cyrene_session)
 
     response = JSONResponse(
         content={
@@ -245,22 +228,14 @@ async def logout(
         }
     )
 
-    response.delete_cookie(
-        key="cyrene_session"
-    )
+    response.delete_cookie(key="cyrene_session")
 
     return response
 
 
 @app.get("/api/auth/status")
-async def auth_status(
-    cyrene_session: str | None = Cookie(
-        default=None
-    )
-):
-    session = await get_web_session(
-        cyrene_session
-    )
+async def auth_status(cyrene_session: str | None = Cookie(default=None)):
+    session = await get_web_session(cyrene_session)
 
     if session is None:
         return {
@@ -273,19 +248,12 @@ async def auth_status(
     }
 
 
-async def get_authenticated_user(
-    cyrene_session: str | None
-) -> int:
+async def get_authenticated_user(cyrene_session: str | None) -> int:
 
-    session = await get_web_session(
-        cyrene_session
-    )
+    session = await get_web_session(cyrene_session)
 
     if session is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Authentication required."
-        )
+        raise HTTPException(status_code=401, detail="Authentication required.")
 
     return session.user_id
 
@@ -344,9 +312,7 @@ async def _run_web_account_login(
 
         if not accounts:
             attempt["status"] = "error"
-            attempt["error"] = (
-                "No Genshin accounts are linked to this HoYoLAB account."
-            )
+            attempt["error"] = "No Genshin accounts are linked to this HoYoLAB account."
             return
 
         attempt["credentials"] = credentials
@@ -394,9 +360,7 @@ async def start_hoyolab_link(
         "error": None,
     }
 
-    task = asyncio.create_task(
-        _run_web_account_login(token, account, password)
-    )
+    task = asyncio.create_task(_run_web_account_login(token, account, password))
     _account_link_tasks.add(task)
     task.add_done_callback(_account_link_tasks.discard)
 
@@ -515,10 +479,7 @@ async def complete_hoyolab_link(
         )
 
     account = next(
-        (
-            item for item in attempt["accounts"]
-            if item["game_uid"] == selected_uid
-        ),
+        (item for item in attempt["accounts"] if item["game_uid"] == selected_uid),
         None,
     )
 
@@ -529,11 +490,7 @@ async def complete_hoyolab_link(
     account_count = await get_account_count(user_id)
     account_limit = get_account_limit(user_id)
 
-    if (
-        existing_account is None
-        and account_limit is not None
-        and account_count >= account_limit
-    ):
+    if existing_account is None and account_limit is not None and account_count >= account_limit:
         raise HTTPException(
             status_code=409,
             detail=f"You have reached your limit of {account_limit} linked accounts.",
@@ -542,29 +499,16 @@ async def complete_hoyolab_link(
     await save_account(
         user_id,
         attempt["credentials"],
-        discord_username=(
-            existing_account["discord_username"]
-            if existing_account else None
-        ),
+        discord_username=(existing_account["discord_username"] if existing_account else None),
         discord_display_name=(
-            existing_account["discord_display_name"]
-            if existing_account else None
+            existing_account["discord_display_name"] if existing_account else None
         ),
-        discord_guild_id=(
-            existing_account["discord_guild_id"]
-            if existing_account else None
-        ),
-        discord_guild_name=(
-            existing_account["discord_guild_name"]
-            if existing_account else None
-        ),
+        discord_guild_id=(existing_account["discord_guild_id"] if existing_account else None),
+        discord_guild_name=(existing_account["discord_guild_name"] if existing_account else None),
         genshin_uid=account["game_uid"],
         genshin_server=account["region"],
         nickname=account["nickname"],
-        cyrene_nickname=(
-            existing_account["cyrene_nickname"]
-            if existing_account else None
-        ),
+        cyrene_nickname=(existing_account["cyrene_nickname"] if existing_account else None),
         level=account["level"],
     )
 
@@ -581,13 +525,8 @@ async def complete_hoyolab_link(
     "/planner",
     response_class=HTMLResponse,
 )
-async def planner(
-    request: Request,
-    cyrene_session: str | None = Cookie(default=None)
-):
-    session = await get_web_session(
-        cyrene_session
-    )
+async def planner(request: Request, cyrene_session: str | None = Cookie(default=None)):
+    session = await get_web_session(cyrene_session)
 
     if session is None:
         return RedirectResponse(
@@ -605,12 +544,8 @@ async def planner(
 
 
 @app.get("/api/planner")
-async def planner_data(
-    cyrene_session: str | None = Cookie(default=None)
-):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+async def planner_data(cyrene_session: str | None = Cookie(default=None)):
+    user_id = await get_authenticated_user(cyrene_session)
 
     accounts, reminders = await asyncio.gather(
         get_accounts(user_id),
@@ -618,10 +553,7 @@ async def planner_data(
     )
 
     async def load_planner_account(account):
-        client = await get_account_client(
-            user_id,
-            account["genshin_uid"]
-        )
+        client = await get_account_client(user_id, account["genshin_uid"])
 
         if client is None:
             return None
@@ -629,13 +561,10 @@ async def planner_data(
         try:
             async with client:
                 response = await client.get_genshin_daily_note(
-                    client.genshin_uid,
-                    client.genshin_server
+                    client.genshin_uid, client.genshin_server
                 )
 
-            current_resin, max_resin, recovery = get_resin(
-                response
-            )
+            current_resin, max_resin, recovery = get_resin(response)
 
         except Exception as error:
             print("===== WEBSITE PLANNER RESIN ERROR =====")
@@ -649,19 +578,11 @@ async def planner_data(
         full_resin_at = None
 
         if current_resin < max_resin:
-
             remaining_resin = max_resin - current_resin
 
-            replenished_at = (
-                    int(time.time())
-                    + recovery
-            )
+            replenished_at = int(time.time()) + recovery
 
-            full_resin_at = (
-                    int(time.time())
-                    + recovery
-                    + ((remaining_resin - 1) * 480)
-            )
+            full_resin_at = int(time.time()) + recovery + ((remaining_resin - 1) * 480)
 
         return {
             "genshin_uid": account["genshin_uid"],
@@ -674,43 +595,26 @@ async def planner_data(
             "full_resin_at": full_resin_at,
         }
 
-    loaded_accounts = await asyncio.gather(*(
-        load_planner_account(account)
-        for account in accounts
-    ))
-    planner_accounts = [
-        account
-        for account in loaded_accounts
-        if account is not None
-    ]
+    loaded_accounts = await asyncio.gather(*(load_planner_account(account) for account in accounts))
+    planner_accounts = [account for account in loaded_accounts if account is not None]
 
     planner_reminders = []
 
     for reminder in reminders:
-
         if not reminder.get("enabled"):
             continue
 
         config = reminder.get("config") or {}
 
         account = next(
-            (
-                account
-                for account in accounts
-                if account["genshin_uid"]
-                   == reminder["genshin_uid"]
-            ),
+            (account for account in accounts if account["genshin_uid"] == reminder["genshin_uid"]),
             None,
         )
 
         planner_reminders.append(
             {
                 "id": reminder["id"],
-                "account_nickname": (
-                    account.get("nickname")
-                    if account
-                    else None
-                ),
+                "account_nickname": (account.get("nickname") if account else None),
                 "type": reminder["reminder_type"],
                 "mode": reminder["reminder_mode"],
                 "genshin_uid": reminder["genshin_uid"],
@@ -725,13 +629,8 @@ async def planner_data(
 
 
 @app.post("/api/planner/reminders")
-async def create_planner_reminder(
-    data: dict,
-    cyrene_session: str | None = Cookie(default=None)
-):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+async def create_planner_reminder(data: dict, cyrene_session: str | None = Cookie(default=None)):
+    user_id = await get_authenticated_user(cyrene_session)
 
     reminder_type = data.get("type")
     reminder_mode = data.get("mode", "automatic")
@@ -757,81 +656,47 @@ async def create_planner_reminder(
     }
 
     if reminder_type not in valid_types:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid reminder type."
-        )
+        raise HTTPException(status_code=400, detail="Invalid reminder type.")
 
     if reminder_mode not in valid_modes:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid reminder mode."
-        )
+        raise HTTPException(status_code=400, detail="Invalid reminder mode.")
 
     if delivery_type not in valid_delivery_types:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid delivery type."
-        )
+        raise HTTPException(status_code=400, detail="Invalid delivery type.")
 
     if not isinstance(config, dict):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid reminder configuration."
-        )
+        raise HTTPException(status_code=400, detail="Invalid reminder configuration.")
 
-    accounts = await get_accounts(
-        user_id
-    )
+    accounts = await get_accounts(user_id)
 
     if not accounts:
-        raise HTTPException(
-            status_code=404,
-            detail="No Genshin account linked."
-        )
+        raise HTTPException(status_code=404, detail="No Genshin account linked.")
 
     if not genshin_uid:
-        raise HTTPException(
-            status_code=400,
-            detail="A Genshin account is required."
-        )
+        raise HTTPException(status_code=400, detail="A Genshin account is required.")
 
     account = next(
-        (
-            account
-            for account in accounts
-            if account["genshin_uid"] == genshin_uid
-        ),
+        (account for account in accounts if account["genshin_uid"] == genshin_uid),
         None,
     )
 
     if account is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid Genshin account."
-        )
+        raise HTTPException(status_code=400, detail="Invalid Genshin account.")
 
     # --------------------------------
     # Resin validation
     # --------------------------------
 
     if reminder_type == "resin":
-
         amount = config.get("amount")
 
         try:
             amount = int(amount)
-        except (TypeError, ValueError):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid Resin amount."
-            )
+        except TypeError, ValueError:
+            raise HTTPException(status_code=400, detail="Invalid Resin amount.")
 
         if not 1 <= amount <= 200:
-            raise HTTPException(
-                status_code=400,
-                detail="Resin must be between 1 and 200."
-            )
+            raise HTTPException(status_code=400, detail="Resin must be between 1 and 200.")
 
         config["amount"] = amount
 
@@ -840,11 +705,9 @@ async def create_planner_reminder(
     # --------------------------------
 
     if reminder_mode == "automatic":
-
         if reminder_type == "custom":
             raise HTTPException(
-                status_code=400,
-                detail="Custom reminders cannot use automatic mode."
+                status_code=400, detail="Custom reminders cannot use automatic mode."
             )
 
     reminder_id = await create_reminder(
@@ -865,61 +728,37 @@ async def create_planner_reminder(
 
 @app.patch("/api/planner/reminders/{reminder_id}")
 async def update_planner_reminder(
-    reminder_id: int,
-    data: dict,
-    cyrene_session: str | None = Cookie(default=None)
+    reminder_id: int, data: dict, cyrene_session: str | None = Cookie(default=None)
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
-    reminder = await get_reminder(
-        user_id,
-        reminder_id
-    )
+    reminder = await get_reminder(user_id, reminder_id)
 
     if reminder is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Reminder not found."
-        )
+        raise HTTPException(status_code=404, detail="Reminder not found.")
 
     enabled = data.get("enabled")
     config = data.get("config")
 
     if enabled is not None:
         if not isinstance(enabled, bool):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid enabled value."
-            )
+            raise HTTPException(status_code=400, detail="Invalid enabled value.")
 
     if config is not None:
         if not isinstance(config, dict):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid reminder configuration."
-            )
+            raise HTTPException(status_code=400, detail="Invalid reminder configuration.")
 
         if reminder["reminder_type"] == "resin":
-
             amount = config.get("amount")
 
             if amount is not None:
-
                 try:
                     amount = int(amount)
-                except (TypeError, ValueError):
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Invalid Resin amount."
-                    )
+                except TypeError, ValueError:
+                    raise HTTPException(status_code=400, detail="Invalid Resin amount.")
 
                 if not 1 <= amount <= 200:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Resin must be between 1 and 200."
-                    )
+                    raise HTTPException(status_code=400, detail="Resin must be between 1 and 200.")
 
                 config["amount"] = amount
 
@@ -931,10 +770,7 @@ async def update_planner_reminder(
     )
 
     if not updated:
-        raise HTTPException(
-            status_code=400,
-            detail="Nothing to update."
-        )
+        raise HTTPException(status_code=400, detail="Nothing to update.")
 
     return {
         "success": True,
@@ -943,28 +779,19 @@ async def update_planner_reminder(
 
 @app.delete("/api/planner/reminders/{reminder_id}")
 async def delete_planner_reminder(
-    reminder_id: int,
-    cyrene_session: str | None = Cookie(default=None)
+    reminder_id: int, cyrene_session: str | None = Cookie(default=None)
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
-    deleted = await delete_reminder(
-        user_id,
-        reminder_id
-    )
+    deleted = await delete_reminder(user_id, reminder_id)
 
     if not deleted:
-        raise HTTPException(
-            status_code=404,
-            detail="Reminder not found."
-        )
+        raise HTTPException(status_code=404, detail="Reminder not found.")
 
     return {
         "success": True,
     }
-    
+
 
 @app.get("/codes", response_class=HTMLResponse)
 async def codes_page(
@@ -986,9 +813,7 @@ async def codes_page(
             "id": account["id"],
             "genshin_uid": account["genshin_uid"],
             "nickname": (
-                account.get("cyrene_nickname")
-                or account.get("nickname")
-                or account["genshin_uid"]
+                account.get("cyrene_nickname") or account.get("nickname") or account["genshin_uid"]
             ),
             "genshin_server": account["genshin_server"],
         }
@@ -1003,7 +828,7 @@ async def codes_page(
             "accounts": codes_accounts,
         },
     )
-    
+
 
 @app.get("/api/codes")
 async def get_genshin_codes(
@@ -1025,10 +850,7 @@ async def get_genshin_codes(
         account = accounts[0]
     else:
         account = next(
-            (
-                item for item in accounts
-                if item["id"] == account_id
-            ),
+            (item for item in accounts if item["id"] == account_id),
             None,
         )
 
@@ -1040,46 +862,29 @@ async def get_genshin_codes(
 
     selected_account_id = account["id"]
 
-    settings = await get_gift_code_settings(
-        selected_account_id
-    )
-    checkin_settings = await get_daily_checkin_settings(
-        selected_account_id
-    )
-    redemptions = await get_gift_code_redemptions(
-        selected_account_id
-    )
+    settings = await get_gift_code_settings(selected_account_id)
+    checkin_settings = await get_daily_checkin_settings(selected_account_id)
+    redemptions = await get_gift_code_redemptions(selected_account_id)
 
     url = "https://hoyo-codes.seria.moe/codes?game=genshin"
 
     try:
         timeout = aiohttp.ClientTimeout(total=15)
 
-        async with aiohttp.ClientSession(
-            timeout=timeout
-        ) as session:
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(url) as response:
                 if response.status != 200:
                     raise HTTPException(
                         status_code=502,
-                        detail=(
-                            "The gift-code service is temporarily "
-                            "unavailable."
-                        ),
+                        detail=("The gift-code service is temporarily unavailable."),
                     )
 
                 data = await response.json(content_type=None)
 
-        if (
-            not isinstance(data, dict)
-            or not isinstance(data.get("codes"), list)
-        ):
+        if not isinstance(data, dict) or not isinstance(data.get("codes"), list):
             raise HTTPException(
                 status_code=502,
-                detail=(
-                    "The gift-code service returned an "
-                    "unexpected response."
-                ),
+                detail=("The gift-code service returned an unexpected response."),
             )
 
         codes = []
@@ -1095,16 +900,18 @@ async def get_genshin_codes(
             code = item["code"].strip()
             saved = redemptions.get(code.upper(), {})
 
-            codes.append({
-                "code": code,
-                "rewards": item.get(
-                    "rewards",
-                    "Rewards not listed",
-                ),
-                "status": item.get("status", "UNKNOWN"),
-                "redemption_status": saved.get("status"),
-                "redemption_message": saved.get("message"),
-            })
+            codes.append(
+                {
+                    "code": code,
+                    "rewards": item.get(
+                        "rewards",
+                        "Rewards not listed",
+                    ),
+                    "status": item.get("status", "UNKNOWN"),
+                    "redemption_status": saved.get("status"),
+                    "redemption_message": saved.get("message"),
+                }
+            )
 
         return {
             "codes": codes,
@@ -1124,9 +931,7 @@ async def get_genshin_codes(
     ) as exc:
         raise HTTPException(
             status_code=502,
-            detail=(
-                "Unable to retrieve gift codes. Please try again later."
-            ),
+            detail=("Unable to retrieve gift codes. Please try again later."),
         ) from exc
 
 
@@ -1139,7 +944,7 @@ async def redeem_genshin_code(
 
     try:
         payload = await request.json()
-    except (ValueError, UnicodeDecodeError):
+    except ValueError, UnicodeDecodeError:
         raise HTTPException(
             status_code=400,
             detail="Invalid request body.",
@@ -1162,7 +967,7 @@ async def redeem_genshin_code(
 
     try:
         account_id = int(account_id)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise HTTPException(
             status_code=400,
             detail="Select a valid Genshin account.",
@@ -1171,10 +976,7 @@ async def redeem_genshin_code(
     # Only allow accounts belonging to the authenticated user.
     accounts = await get_accounts(user_id)
     account = next(
-        (
-            item for item in accounts
-            if item["id"] == account_id
-        ),
+        (item for item in accounts if item["id"] == account_id),
         None,
     )
 
@@ -1252,8 +1054,8 @@ async def redeem_genshin_code(
                 "message": message,
             },
         )
-        
-        
+
+
 @app.post("/api/codes/automatic")
 async def update_automatic_gift_code_claiming(
     request: Request,
@@ -1263,7 +1065,7 @@ async def update_automatic_gift_code_claiming(
 
     try:
         payload = await request.json()
-    except (ValueError, UnicodeDecodeError):
+    except ValueError, UnicodeDecodeError:
         raise HTTPException(
             status_code=400,
             detail="Invalid request body.",
@@ -1286,7 +1088,7 @@ async def update_automatic_gift_code_claiming(
 
     try:
         account_id = int(account_id)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise HTTPException(
             status_code=400,
             detail="Select a valid Genshin account.",
@@ -1295,10 +1097,7 @@ async def update_automatic_gift_code_claiming(
     accounts = await get_accounts(user_id)
 
     account = next(
-        (
-            item for item in accounts
-            if item["id"] == account_id
-        ),
+        (item for item in accounts if item["id"] == account_id),
         None,
     )
 
@@ -1320,7 +1119,7 @@ async def update_automatic_gift_code_claiming(
         "success": True,
         "auto_claim_enabled": enabled,
     }
-    
+
 
 @app.post("/api/codes/daily-checkin")
 async def set_daily_checkin(
@@ -1339,7 +1138,7 @@ async def set_daily_checkin(
 
     try:
         account_id = int(payload.get("account_id"))
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise HTTPException(
             status_code=400,
             detail="A valid account ID is required.",
@@ -1356,11 +1155,7 @@ async def set_daily_checkin(
     accounts = await get_accounts(user)
 
     account = next(
-        (
-            item
-            for item in accounts
-            if int(item["id"]) == account_id
-        ),
+        (item for item in accounts if int(item["id"]) == account_id),
         None,
     )
 
@@ -1374,7 +1169,7 @@ async def set_daily_checkin(
         account_id,
         enabled,
     )
-    
+
     if enabled:
         request_daily_checkin()
 
@@ -1382,8 +1177,8 @@ async def set_daily_checkin(
         "success": True,
         "auto_checkin_enabled": enabled,
     }
-        
-    
+
+
 def get_event_activity_period_keys(
     genshin_server: str,
 ) -> tuple[str, str]:
@@ -1409,7 +1204,7 @@ def get_event_activity_period_keys(
     ).strftime("%G-W%V")
 
     return daily_period_key, weekly_period_key
-    
+
 
 # =========================================
 # EVENTS CACHE
@@ -1428,10 +1223,7 @@ async def get_cached_inventory(user_id: int, account: dict) -> list[dict]:
     cache_key = (user_id, account["id"], account["genshin_uid"])
     cached = _inventory_cache.get(cache_key)
 
-    if (
-        cached
-        and time.monotonic() - cached["timestamp"] < INVENTORY_CACHE_TTL
-    ):
+    if cached and time.monotonic() - cached["timestamp"] < INVENTORY_CACHE_TTL:
         return cached["data"]
 
     client = await get_account_client(user_id, account["genshin_uid"])
@@ -1453,7 +1245,7 @@ async def get_single_account_events(
     account: dict,
     include_featured: bool = True,
 ):
-    
+
     # Keep Overview and full Events data in separate cache entries.
     cache_key = (
         user_id,
@@ -1513,7 +1305,7 @@ async def get_single_account_events(
         "reset_time": 0,
         "manual_checked": None,
     }
-    
+
     resin_data = {
         "has_data": False,
         "current": 0,
@@ -1534,14 +1326,13 @@ async def get_single_account_events(
     limited_events = []
 
     try:
-
         client = await get_account_client(
             user_id,
             account["genshin_uid"],
         )
 
         if client is not None:
-            
+
             async def timed_event_request(name, awaitable):
                 started = time.monotonic()
 
@@ -1560,7 +1351,6 @@ async def get_single_account_events(
                     raise
 
             async with client:
-
                 requests = [
                     timed_event_request(
                         "Announcements",
@@ -1581,16 +1371,18 @@ async def get_single_account_events(
                 ]
 
                 if include_featured:
-                    requests.extend([
-                        timed_event_request(
-                            "Theater",
-                            client.get_imaginarium_theater(),
-                        ),
-                        timed_event_request(
-                            "Stygian",
-                            client.get_stygian_onslaught(),
-                        ),
-                    ])
+                    requests.extend(
+                        [
+                            timed_event_request(
+                                "Theater",
+                                client.get_imaginarium_theater(),
+                            ),
+                            timed_event_request(
+                                "Stygian",
+                                client.get_stygian_onslaught(),
+                            ),
+                        ]
+                    )
 
                 results = await asyncio.gather(*requests)
 
@@ -1602,8 +1394,7 @@ async def get_single_account_events(
                 if include_featured:
                     theater = results[4]
                     stygian = results[5]
-                    
-            
+
             # =========================================
             # DIRE PRESTIGE / DISTURBANCE OUTBREAK
             # =========================================
@@ -1643,28 +1434,29 @@ async def get_single_account_events(
 
                         # A zero maximum indicates that the Outbreak is not active.
                         if max_progress > 0:
-                            dire_prestige_data.update({
-                                "active": True,
-                                "ended": False,
-                                "progress": progress,
-                                "max_progress": max_progress,
-                            })
+                            dire_prestige_data.update(
+                                {
+                                    "active": True,
+                                    "ended": False,
+                                    "progress": progress,
+                                    "max_progress": max_progress,
+                                }
+                            )
                         else:
-                            dire_prestige_data.update({
-                                "active": False,
-                                "ended": True,
-                                "progress": 0,
-                                "max_progress": 0,
-                            })
+                            dire_prestige_data.update(
+                                {
+                                    "active": False,
+                                    "ended": True,
+                                    "progress": 0,
+                                    "max_progress": 0,
+                                }
+                            )
 
                         break
 
                 # If the Stygian event exists but its Outbreak
                 # data is absent, the Outbreak is no longer active.
-                if (
-                    dire_prestige_data["available"]
-                    and not dire_prestige_data["active"]
-                ):
+                if dire_prestige_data["available"] and not dire_prestige_data["active"]:
                     dire_prestige_data["ended"] = True
 
             except Exception as error:
@@ -1676,14 +1468,11 @@ async def get_single_account_events(
 
             stygian_data["dire_prestige"] = dire_prestige_data
 
-
             # =========================================
             # EVENT WISH BANNERS
             # =========================================
 
-            now_timestamp = int(
-                datetime.now(timezone.utc).timestamp()
-            )
+            now_timestamp = int(datetime.now(timezone.utc).timestamp())
 
             # =========================================
             # LIMITED-TIME EVENTS
@@ -1716,7 +1505,8 @@ async def get_single_account_events(
                         calendar_event,
                         "stygian_detail",
                         None,
-                    ) is not None
+                    )
+                    is not None
                 ):
                     continue
 
@@ -1734,12 +1524,8 @@ async def get_single_account_events(
                         for announcement in announcements
                         if normalised_name
                         and (
-                            normalised_name in normalise_event_name(
-                                announcement.title
-                            )
-                            or normalised_name in normalise_event_name(
-                                announcement.subtitle
-                            )
+                            normalised_name in normalise_event_name(announcement.title)
+                            or normalised_name in normalise_event_name(announcement.subtitle)
                         )
                     ),
                     None,
@@ -1747,10 +1533,7 @@ async def get_single_account_events(
 
                 icon = None
                 if matching_announcement is not None:
-                    icon = (
-                        matching_announcement.img
-                        or matching_announcement.banner
-                    )
+                    icon = matching_announcement.img or matching_announcement.banner
                 if not icon and calendar_event.rewards:
                     icon = calendar_event.rewards[0].icon
 
@@ -1765,36 +1548,36 @@ async def get_single_account_events(
                     }
                     for reward in calendar_event.rewards
                 ]
-                is_tcg = any(
-                    "lucky coin" in reward["name"].casefold()
-                    for reward in all_rewards
+                is_tcg = any("lucky coin" in reward["name"].casefold() for reward in all_rewards)
+                limited_events.append(
+                    {
+                        "id": calendar_event.id,
+                        "name": event_name,
+                        "description": calendar_event.description,
+                        "icon": icon,
+                        "is_tcg": is_tcg,
+                        "is_finished": calendar_event.is_finished,
+                        "is_upcoming": (
+                            calendar_event.start_timestamp > now_timestamp
+                            or calendar_event.end_timestamp <= 0
+                        ),
+                        "is_unscheduled_upcoming": (
+                            calendar_event.start_timestamp <= 0
+                            and calendar_event.end_timestamp <= 0
+                        ),
+                        "start_time": calendar_event.start_timestamp,
+                        "end_time": calendar_event.end_timestamp,
+                        "rewards": all_rewards,
+                    }
                 )
-                limited_events.append({
-                    "id": calendar_event.id,
-                    "name": event_name,
-                    "description": calendar_event.description,
-                    "icon": icon,
-                    "is_tcg": is_tcg,
-                    "is_finished": calendar_event.is_finished,
-                    "is_upcoming": (
-                        calendar_event.start_timestamp > now_timestamp
-                        or calendar_event.end_timestamp <= 0
-                    ),
-                    "is_unscheduled_upcoming": (
-                        calendar_event.start_timestamp <= 0
-                        and calendar_event.end_timestamp <= 0
-                    ),
-                    "start_time": calendar_event.start_timestamp,
-                    "end_time": calendar_event.end_timestamp,
-                    "rewards": all_rewards,
-                })
 
-            limited_events.sort(key=lambda event: (
-                event["is_upcoming"],
-                event["is_tcg"],
-                event["start_time"] if event["is_upcoming"] else event["end_time"],
-            ))
-
+            limited_events.sort(
+                key=lambda event: (
+                    event["is_upcoming"],
+                    event["is_tcg"],
+                    event["start_time"] if event["is_upcoming"] else event["end_time"],
+                )
+            )
 
             def find_wish_announcement(names):
                 """
@@ -1802,13 +1585,10 @@ async def get_single_account_events(
                 """
 
                 for announcement in announcements:
-
                     if not announcement.subtitle:
                         continue
 
-                    if not announcement.subtitle.startswith(
-                        "Event Wish"
-                    ):
+                    if not announcement.subtitle.startswith("Event Wish"):
                         continue
 
                     if not announcement.banner:
@@ -1817,19 +1597,16 @@ async def get_single_account_events(
                     content = announcement.content or ""
 
                     for name in names:
-
                         if name.lower() in content.lower():
                             return announcement
 
                 return None
-
 
             # -----------------------------------------
             # Character Event Wishes
             # -----------------------------------------
 
             for banner in event_calendar.character_banners:
-
                 if banner.pool_status != 2:
                     continue
 
@@ -1837,17 +1614,13 @@ async def get_single_account_events(
                     continue
 
                 featured_5star_names = [
-                    character.name
-                    for character in banner.characters
-                    if character.rarity == 5
+                    character.name for character in banner.characters if character.rarity == 5
                 ]
 
                 if not featured_5star_names:
                     continue
 
-                announcement = find_wish_announcement(
-                    featured_5star_names
-                )
+                announcement = find_wish_announcement(featured_5star_names)
 
                 featured_5stars = [
                     {
@@ -1867,35 +1640,29 @@ async def get_single_account_events(
                     if character.rarity == 4
                 ]
 
-                wish_banners.append({
-                    "banner_id": banner.id,
-                    "banner_type": 301,
-                    "title": (
-                        clean_banner_title(
-                            announcement.subtitle
-                        )
-                        if announcement
-                        else "Character Event Wish"
-                    ),
-                    "banner_type_name": "Character Event Wish",
-                    "image": (
-                        announcement.banner
-                        if announcement
-                        else None
-                    ),
-                    "start_time": banner.start_timestamp,
-                    "end_time": banner.end_timestamp,
-                    "r5_up_items": featured_5stars,
-                    "r4_up_items": featured_4stars,
-                })
-
+                wish_banners.append(
+                    {
+                        "banner_id": banner.id,
+                        "banner_type": 301,
+                        "title": (
+                            clean_banner_title(announcement.subtitle)
+                            if announcement
+                            else "Character Event Wish"
+                        ),
+                        "banner_type_name": "Character Event Wish",
+                        "image": (announcement.banner if announcement else None),
+                        "start_time": banner.start_timestamp,
+                        "end_time": banner.end_timestamp,
+                        "r5_up_items": featured_5stars,
+                        "r4_up_items": featured_4stars,
+                    }
+                )
 
             # -----------------------------------------
             # Weapon Event Wishes
             # -----------------------------------------
 
             for banner in event_calendar.weapon_banners:
-
                 if banner.pool_status != 2:
                     continue
 
@@ -1903,9 +1670,7 @@ async def get_single_account_events(
                     continue
 
                 featured_5star_names = [
-                    weapon.name
-                    for weapon in banner.weapons
-                    if weapon.rarity == 5
+                    weapon.name for weapon in banner.weapons if weapon.rarity == 5
                 ]
 
                 featured_5stars = [
@@ -1929,32 +1694,25 @@ async def get_single_account_events(
                 if not featured_5stars:
                     continue
 
-                announcement = find_wish_announcement(
-                    featured_5star_names
+                announcement = find_wish_announcement(featured_5star_names)
+
+                wish_banners.append(
+                    {
+                        "banner_id": banner.id,
+                        "banner_type": 302,
+                        "title": (
+                            clean_banner_title(announcement.subtitle)
+                            if announcement
+                            else "Weapon Event Wish"
+                        ),
+                        "banner_type_name": "Weapon Event Wish",
+                        "image": (announcement.banner if announcement else None),
+                        "start_time": banner.start_timestamp,
+                        "end_time": banner.end_timestamp,
+                        "r5_up_items": featured_5stars,
+                        "r4_up_items": featured_4stars,
+                    }
                 )
-
-                wish_banners.append({
-                    "banner_id": banner.id,
-                    "banner_type": 302,
-                    "title": (
-                        clean_banner_title(
-                            announcement.subtitle
-                        )
-                        if announcement
-                        else "Weapon Event Wish"
-                    ),
-                    "banner_type_name": "Weapon Event Wish",
-                    "image": (
-                        announcement.banner
-                        if announcement
-                        else None
-                    ),
-                    "start_time": banner.start_timestamp,
-                    "end_time": banner.end_timestamp,
-                    "r5_up_items": featured_5stars,
-                    "r4_up_items": featured_4stars,
-                })
-
 
             # =========================================
             # DAILY COMMISSIONS
@@ -1962,108 +1720,59 @@ async def get_single_account_events(
 
             notes_data = notes["data"]
 
-            daily_task = notes_data.get(
-                "daily_task",
-                {}
-            )
+            daily_task = notes_data.get("daily_task", {})
 
-            daily_commissions = int(
-                notes_data.get(
-                    "finished_task_num",
-                    0
-                )
-            )
+            daily_commissions = int(notes_data.get("finished_task_num", 0))
 
-            attendance_rewards = daily_task.get(
-                "attendance_rewards",
-                []
-            )
+            attendance_rewards = daily_task.get("attendance_rewards", [])
 
-            daily_progress = min(
-                4,
-                daily_commissions
-            )
+            daily_progress = min(4, daily_commissions)
 
             # -----------------------------------------
             # HANDBOOK / ENCOUNTER POINT REWARD
             # -----------------------------------------
 
-            attendance_rewards = daily_task.get(
-                "attendance_rewards",
-                []
-            )
+            attendance_rewards = daily_task.get("attendance_rewards", [])
 
             handbook_claimed = any(
-                reward.get("status")
-                == "AttendanceRewardStatusTakenAward"
+                reward.get("status") == "AttendanceRewardStatusTakenAward"
                 for reward in attendance_rewards
             )
-
 
             # -----------------------------------------
             # KATHERYNE / OVERALL REWARD
             # -----------------------------------------
 
-            katheryne_claimed = bool(
-                notes_data.get(
-                    "is_extra_task_reward_received",
-                    False
-                )
-            )
-
+            katheryne_claimed = bool(notes_data.get("is_extra_task_reward_received", False))
 
             daily_data = {
                 "has_data": True,
-
                 "completed": daily_progress,
-
                 "total": 4,
-
                 # Katheryne / overall reward.
                 "claimed_reward": katheryne_claimed,
-
                 # Handbook / Encounter Point reward.
                 "handbook_claimed": handbook_claimed,
-
-                "daily_commissions": int(
-                    notes_data.get(
-                        "finished_task_num",
-                        0
-                    )
-                ),
-
+                "daily_commissions": int(notes_data.get("finished_task_num", 0)),
                 # Keep the stored Encounter Point value available,
                 # but DO NOT use it for daily_progress.
-                "encounter_points": float(
-                    daily_task.get(
-                        "stored_attendance",
-                        0
-                    )
-                ),
-
-                "reset_time": get_daily_reset_timestamp(
-                    account["genshin_server"]
-                ),
+                "encounter_points": float(daily_task.get("stored_attendance", 0)),
+                "reset_time": get_daily_reset_timestamp(account["genshin_server"]),
             }
-
 
             # -----------------------------------------
             # REWARD STATE
             # -----------------------------------------
 
             if katheryne_claimed:
-
                 daily_data["reward_state"] = "claimed"
 
             elif handbook_claimed:
-
                 daily_data["reward_state"] = "handbook-claimed"
 
             else:
-
                 daily_data["reward_state"] = "unclaimed"
-            
-            
+
             # =========================================
             # RESIN
             # =========================================
@@ -2072,9 +1781,7 @@ async def get_single_account_events(
 
             current_resin = notes_data["current_resin"]
             maximum_resin = 200
-            recovery_seconds = int(
-                notes_data["resin_recovery_time"]
-            )
+            recovery_seconds = int(notes_data["resin_recovery_time"])
 
             now_timestamp = int(time.time())
 
@@ -2082,19 +1789,11 @@ async def get_single_account_events(
                 next_resin_at = None
                 full_resin_at = None
             else:
-                remaining_resin = (
-                    maximum_resin - current_resin
-                )
+                remaining_resin = maximum_resin - current_resin
 
-                next_resin_at = (
-                    now_timestamp
-                    + recovery_seconds
-                    - ((remaining_resin - 1) * 480)
-                )
+                next_resin_at = now_timestamp + recovery_seconds - ((remaining_resin - 1) * 480)
 
-                full_resin_at = (
-                    now_timestamp + recovery_seconds
-                )
+                full_resin_at = now_timestamp + recovery_seconds
 
             resin_data = {
                 "has_data": True,
@@ -2104,32 +1803,23 @@ async def get_single_account_events(
                 "full_resin_at": full_resin_at,
             }
 
-
             # =========================================
             # TROUNCE DOMAINS
             # =========================================
 
             trounce_data = {
                 "has_data": True,
-                "remaining": (
-                    notes["data"]["remain_resin_discount_num"]
-                ),
-                "total": (
-                    notes["data"]["resin_discount_num_limit"]
-                ),
-                "reset_time": get_weekly_reset_timestamp(
-                    account["genshin_server"]
-                ),
+                "remaining": (notes["data"]["remain_resin_discount_num"]),
+                "total": (notes["data"]["resin_discount_num_limit"]),
+                "reset_time": get_weekly_reset_timestamp(account["genshin_server"]),
             }
-            
+
             # =========================================
             # ACTIVITY CHECKMARKS
             # =========================================
 
-            daily_period_key, weekly_period_key = (
-                get_event_activity_period_keys(
-                    account["genshin_server"]
-                )
+            daily_period_key, weekly_period_key = get_event_activity_period_keys(
+                account["genshin_server"]
             )
 
             activity_checks = await get_event_activity_checks(
@@ -2139,22 +1829,15 @@ async def get_single_account_events(
                 weekly_period_key,
             )
 
-            daily_data["manual_checked"] = (
-                activity_checks["daily_commissions"]
-            )
+            daily_data["manual_checked"] = activity_checks["daily_commissions"]
 
-            trounce_data["manual_checked"] = (
-                activity_checks["trounce_domains"]
-            )
-            
+            trounce_data["manual_checked"] = activity_checks["trounce_domains"]
+
             daily_automatic_checked = (
-                daily_data["completed"] >= daily_data["total"]
-                and daily_data["claimed_reward"]
+                daily_data["completed"] >= daily_data["total"] and daily_data["claimed_reward"]
             )
 
-            trounce_automatic_checked = (
-                trounce_data["remaining"] <= 0
-            )
+            trounce_automatic_checked = trounce_data["remaining"] <= 0
 
             daily_data["checked"] = (
                 daily_automatic_checked
@@ -2168,7 +1851,6 @@ async def get_single_account_events(
                 else trounce_data["manual_checked"]
             )
 
-
             # =========================================
             # SPIRAL ABYSS
             # =========================================
@@ -2176,38 +1858,36 @@ async def get_single_account_events(
             abyss_chambers = []
 
             if abyss.floors:
-
-                deepest_floor = max(
-                    abyss.floors,
-                    key=lambda floor: floor.floor
-                )
+                deepest_floor = max(abyss.floors, key=lambda floor: floor.floor)
 
                 for chamber in deepest_floor.chambers:
-
                     battles = []
 
                     for battle in chamber.battles:
-
                         characters = []
 
                         for character in battle.characters:
+                            characters.append(
+                                {
+                                    "name": character.name,
+                                    "icon": character.icon,
+                                }
+                            )
 
-                            characters.append({
-                                "name": character.name,
-                                "icon": character.icon,
-                            })
+                        battles.append(
+                            {
+                                "half": battle.half,
+                                "characters": characters,
+                            }
+                        )
 
-                        battles.append({
-                            "half": battle.half,
-                            "characters": characters,
-                        })
-
-                    abyss_chambers.append({
-                        "floor": deepest_floor.floor,
-                        "chamber": chamber.chamber,
-                        "battles": battles,
-                    })
-
+                    abyss_chambers.append(
+                        {
+                            "floor": deepest_floor.floor,
+                            "chamber": chamber.chamber,
+                            "battles": battles,
+                        }
+                    )
 
             abyss_data = {
                 "has_data": abyss.total_battles > 0,
@@ -2216,7 +1896,6 @@ async def get_single_account_events(
                 "end_time": abyss.end_time.timestamp(),
                 "chambers": abyss_chambers,
             }
-
 
             # =========================================
             # STYGIAN ONSLAUGHT
@@ -2232,17 +1911,21 @@ async def get_single_account_events(
                     characters = []
 
                     for character in challenge.get("teams", []):
-                        characters.append({
-                            "name": character["name"],
-                            "icon": character["image"],
-                        })
+                        characters.append(
+                            {
+                                "name": character["name"],
+                                "icon": character["image"],
+                            }
+                        )
 
-                    bosses.append({
-                        "name": challenge["monster"]["name"],
-                        "icon": challenge["monster"]["icon"],
-                        "time": challenge["second"],
-                        "characters": characters,
-                    })
+                    bosses.append(
+                        {
+                            "name": challenge["monster"]["name"],
+                            "icon": challenge["monster"]["icon"],
+                            "time": challenge["second"],
+                            "characters": characters,
+                        }
+                    )
 
                 difficulty_icons = {
                     1: "SO_Diff_I.webp",
@@ -2255,31 +1938,17 @@ async def get_single_account_events(
 
                 stygian_data = {
                     "has_data": current_stygian["single"]["has_data"],
-                    "end_time": int(
-                        current_stygian["schedule"]["end_time"]
-                    ),
-                    "difficulty": (
-                        record["difficulty"] if record else 0
-                    ),
+                    "end_time": int(current_stygian["schedule"]["end_time"]),
+                    "difficulty": (record["difficulty"] if record else 0),
                     "difficulty_icon": (
                         "SO_Diff_VI_180.webp"
-                        if (
-                            record
-                            and record["difficulty"] == 6
-                            and record["second"] < 180
-                        )
-                        else (
-                            difficulty_icons.get(
-                                record["difficulty"], ""
-                            )
-                            if record
-                            else ""
-                        )
+                        if (record and record["difficulty"] == 6 and record["second"] < 180)
+                        else (difficulty_icons.get(record["difficulty"], "") if record else "")
                     ),
                     "best_time": record["second"] if record else 0,
                     "bosses": bosses,
                 }
-                
+
             # Attach Dire Prestige data after the Stygian dictionary has been fully constructed.
             stygian_data["dire_prestige"] = dire_prestige_data
 
@@ -2294,11 +1963,7 @@ async def get_single_account_events(
                 detail = current_cycle["detail"]
                 acts = detail["rounds_data"]
 
-                arcanums = sum(
-                    1
-                    for act in acts
-                    if act.get("is_tarot") is True
-                )
+                arcanums = sum(1 for act in acts if act.get("is_tarot") is True)
 
                 theater_data = {
                     "has_data": stat["max_round_id"] > 0,
@@ -2309,15 +1974,12 @@ async def get_single_account_events(
                     "elements": IT_ELEMENTS,
                 }
 
-
     except Exception as error:
-
         print("===== EVENTS ERROR =====")
         print(f"Account: {account.get('genshin_uid')}")
         print(f"Type: {type(error).__name__}")
         print(f"Error: {error}")
         print("================================")
-
 
     result = {
         "account": account,
@@ -2349,28 +2011,20 @@ async def get_events_data(
     selected_account = None
 
     if accounts:
-
         if account_id is not None:
-
             selected_account = next(
-                (
-                    account
-                    for account in accounts
-                    if account["id"] == account_id
-                ),
+                (account for account in accounts if account["id"] == account_id),
                 None,
             )
 
         if selected_account is None:
             selected_account = accounts[0]
 
-
     # =========================================
     # OVERVIEW VIEW
     # =========================================
 
     if overview:
-
         overview_data = await asyncio.gather(
             *[
                 get_single_account_events(
@@ -2382,7 +2036,6 @@ async def get_events_data(
             ]
         )
 
-
         return {
             "accounts": accounts,
             "selected_account": selected_account,
@@ -2390,13 +2043,11 @@ async def get_events_data(
             "overview_data": overview_data,
         }
 
-
     # =========================================
     # ACCOUNT VIEW
     # =========================================
 
     if selected_account is not None:
-
         account_events = await get_single_account_events(
             user_id,
             selected_account,
@@ -2414,7 +2065,6 @@ async def get_events_data(
             "wish_banners": account_events["wish_banners"],
             "limited_events": account_events["limited_events"],
         }
-
 
     # =========================================
     # NO ACCOUNTS
@@ -2474,41 +2124,22 @@ async def get_events_data(
 
 
 def clean_banner_title(title: str) -> str:
-    return re.sub(
-        r"<color=.*?>(.*?)</color>",
-        r"\1",
-        title
-    )
+    return re.sub(r"<color=.*?>(.*?)</color>", r"\1", title)
 
-def get_daily_reset_timestamp(
-    genshin_server: str
-) -> int:
+
+def get_daily_reset_timestamp(genshin_server: str) -> int:
 
     server_offsets = {
-        "os_usa": timezone(
-            timedelta(hours=-5)
-        ),
-        "os_euro": timezone(
-            timedelta(hours=1)
-        ),
-        "os_asia": timezone(
-            timedelta(hours=8)
-        ),
+        "os_usa": timezone(timedelta(hours=-5)),
+        "os_euro": timezone(timedelta(hours=1)),
+        "os_asia": timezone(timedelta(hours=8)),
     }
 
-    timezone_value = server_offsets.get(
-        genshin_server,
-        timezone.utc
-    )
+    timezone_value = server_offsets.get(genshin_server, timezone.utc)
 
     now = datetime.now(timezone_value)
 
-    reset = now.replace(
-        hour=4,
-        minute=0,
-        second=0,
-        microsecond=0
-    )
+    reset = now.replace(hour=4, minute=0, second=0, microsecond=0)
 
     if now >= reset:
         reset += timedelta(days=1)
@@ -2516,41 +2147,22 @@ def get_daily_reset_timestamp(
     return int(reset.timestamp())
 
 
-def get_weekly_reset_timestamp(
-    genshin_server: str
-) -> int:
+def get_weekly_reset_timestamp(genshin_server: str) -> int:
 
     server_offsets = {
-        "os_usa": timezone(
-            timedelta(hours=-5)
-        ),
-        "os_euro": timezone(
-            timedelta(hours=1)
-        ),
-        "os_asia": timezone(
-            timedelta(hours=8)
-        ),
+        "os_usa": timezone(timedelta(hours=-5)),
+        "os_euro": timezone(timedelta(hours=1)),
+        "os_asia": timezone(timedelta(hours=8)),
     }
 
-    timezone_value = server_offsets.get(
-        genshin_server,
-        timezone.utc
-    )
+    timezone_value = server_offsets.get(genshin_server, timezone.utc)
 
     now = datetime.now(timezone_value)
 
-    days_until_monday = (
-        7 - now.weekday()
-    ) % 7
+    days_until_monday = (7 - now.weekday()) % 7
 
-    reset = (
-        now
-        + timedelta(days=days_until_monday)
-    ).replace(
-        hour=4,
-        minute=0,
-        second=0,
-        microsecond=0
+    reset = (now + timedelta(days=days_until_monday)).replace(
+        hour=4, minute=0, second=0, microsecond=0
     )
 
     if reset <= now:
@@ -2559,10 +2171,7 @@ def get_weekly_reset_timestamp(
     return int(reset.timestamp())
 
 
-@app.get(
-    "/events", 
-    response_class=HTMLResponse
-)
+@app.get("/events", response_class=HTMLResponse)
 async def events_page(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
@@ -2595,10 +2204,7 @@ async def events_page(
     )
 
 
-@app.get(
-    "/events/refresh",
-    response_class=HTMLResponse
-)
+@app.get("/events/refresh", response_class=HTMLResponse)
 async def refresh_events(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
@@ -2628,16 +2234,14 @@ async def refresh_events(
             "tab": tab,
         },
     )
-    
+
 
 @app.post("/api/events/activity-check")
 async def update_event_activity_check(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
         return JSONResponse(
@@ -2695,7 +2299,7 @@ async def update_event_activity_check(
 
     try:
         account_id = int(account_id)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return JSONResponse(
             {
                 "success": False,
@@ -2711,16 +2315,11 @@ async def update_event_activity_check(
     accounts = await get_accounts(user_id)
 
     account = next(
-        (
-            account
-            for account in accounts
-            if int(account["id"]) == account_id
-        ),
+        (account for account in accounts if int(account["id"]) == account_id),
         None,
     )
 
     if account is None:
-
         return JSONResponse(
             {
                 "success": False,
@@ -2733,17 +2332,9 @@ async def update_event_activity_check(
     # DETERMINE CURRENT PERIOD
     # =========================================
 
-    daily_period_key, weekly_period_key = (
-        get_event_activity_period_keys(
-            account["genshin_server"]
-        )
-    )
+    daily_period_key, weekly_period_key = get_event_activity_period_keys(account["genshin_server"])
 
-    period_key = (
-        daily_period_key
-        if activity_type == "daily_commissions"
-        else weekly_period_key
-    )
+    period_key = daily_period_key if activity_type == "daily_commissions" else weekly_period_key
 
     # =========================================
     # SAVE CHECKMARK
@@ -2788,35 +2379,23 @@ async def daily_events_data(
     cyrene_session: str | None = Cookie(default=None),
     account_id: int | None = None,
 ):
-    session = await get_web_session(
-        cyrene_session
-    )
+    session = await get_web_session(cyrene_session)
 
     if session is None:
-        return {
-            "success": False
-        }
+        return {"success": False}
 
     user_id = session.user_id
 
-    accounts = await get_accounts(
-        user_id
-    )
+    accounts = await get_accounts(user_id)
 
     if not accounts:
-        return {
-            "success": False
-        }
+        return {"success": False}
 
     selected_account = None
 
     if account_id is not None:
         selected_account = next(
-            (
-                account
-                for account in accounts
-                if account["id"] == account_id
-            ),
+            (account for account in accounts if account["id"] == account_id),
             None,
         )
 
@@ -2824,77 +2403,49 @@ async def daily_events_data(
         selected_account = accounts[0]
 
     try:
-
-        client = await get_account_client(
-            user_id,
-            selected_account["genshin_uid"]
-        )
+        client = await get_account_client(user_id, selected_account["genshin_uid"])
 
         if client is None:
-            return {
-                "success": False
-            }
+            return {"success": False}
 
         async with client:
-
             notes = await client.get_genshin_notes()
 
         data = notes["data"]
 
-        daily_commissions = int(
-            data.get("finished_task_num", 0)
-        )
+        daily_commissions = int(data.get("finished_task_num", 0))
 
-        daily_task = data.get(
-            "daily_task",
-            {}
-        )
+        daily_task = data.get("daily_task", {})
 
-        encounter_points = float(
-            daily_task.get("stored_attendance", 0)
-        )
+        encounter_points = float(daily_task.get("stored_attendance", 0))
 
-        daily_progress = min(
-            4,
-            daily_commissions + encounter_points
-        )
-        
+        daily_progress = min(4, daily_commissions + encounter_points)
+
         return {
             "success": True,
-
             # Combined Daily Commission + Encounter Point progress.
             "completed": daily_progress,
-
             "total": 4,
-
-            "claimed_reward": (
-                data["is_extra_task_reward_received"]
-            ),
-
+            "claimed_reward": (data["is_extra_task_reward_received"]),
             # Individual values remain available if the frontend needs them later.
             "daily_commissions": daily_commissions,
             "encounter_points": encounter_points,
-
-            "reset_time": get_daily_reset_timestamp(
-                selected_account["genshin_server"]
-            ),
+            "reset_time": get_daily_reset_timestamp(selected_account["genshin_server"]),
         }
 
     except Exception as error:
-
         print("===== DAILY EVENTS ERROR =====")
         print(f"Type: {type(error).__name__}")
         print(f"Error: {error}")
         print("================================")
 
-        return {
-            "success": False
-        }
-        
-        
+        return {"success": False}
+
+
 # =========================================
 # CUSTOM EVENTS — API HELPERS
 # =========================================
+
 
 def parse_custom_event_datetime(value, field_name: str) -> datetime:
     """Parse an ISO-8601 datetime and ensure it is timezone-aware."""
@@ -2905,9 +2456,7 @@ def parse_custom_event_datetime(value, field_name: str) -> datetime:
         )
 
     try:
-        parsed = datetime.fromisoformat(
-            value.strip().replace("Z", "+00:00")
-        )
+        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
     except ValueError:
         raise HTTPException(
             status_code=400,
@@ -2968,7 +2517,7 @@ async def validate_custom_event_payload(
     else:
         try:
             account_id = int(account_id)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             raise HTTPException(
                 status_code=400,
                 detail="Select a valid account for this event.",
@@ -2976,11 +2525,7 @@ async def validate_custom_event_payload(
 
         accounts = await get_accounts(user_id)
         owned_account = next(
-            (
-                account
-                for account in accounts
-                if int(account["id"]) == account_id
-            ),
+            (account for account in accounts if int(account["id"]) == account_id),
             None,
         )
 
@@ -2996,11 +2541,7 @@ async def validate_custom_event_payload(
     )
 
     end_value = data.get("end_at")
-    end_at = (
-        parse_custom_event_datetime(end_value, "End date and time")
-        if end_value
-        else None
-    )
+    end_at = parse_custom_event_datetime(end_value, "End date and time") if end_value else None
 
     if end_at is not None and end_at <= start_at:
         raise HTTPException(
@@ -3024,7 +2565,7 @@ async def validate_custom_event_payload(
 
     try:
         interval = int(recurrence.get("interval", 1))
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         raise HTTPException(
             status_code=400,
             detail="Recurrence interval must be a number.",
@@ -3052,7 +2593,7 @@ async def validate_custom_event_payload(
 
         try:
             supplied_weekdays = sorted(set(int(day) for day in supplied_weekdays))
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             raise HTTPException(
                 status_code=400,
                 detail="Weekly recurrence weekdays are invalid.",
@@ -3067,9 +2608,7 @@ async def validate_custom_event_payload(
         recurrence["weekdays"] = supplied_weekdays
 
     colour = data.get("colour", "#7c83ff")
-    if not isinstance(colour, str) or not re.fullmatch(
-        r"#[0-9a-fA-F]{6}", colour
-    ):
+    if not isinstance(colour, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", colour):
         raise HTTPException(
             status_code=400,
             detail="Colour must be a valid six-digit hexadecimal colour.",
@@ -3080,7 +2619,7 @@ async def validate_custom_event_payload(
     if reminder_minutes is not None:
         try:
             reminder_minutes = int(reminder_minutes)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             raise HTTPException(
                 status_code=400,
                 detail="Reminder time must be a number of minutes.",
@@ -3117,7 +2656,7 @@ async def validate_custom_event_payload(
         try:
             current = int(objective.get("current", 0))
             target = int(objective.get("target", 1))
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             raise HTTPException(
                 status_code=400,
                 detail="Progress values must be whole numbers.",
@@ -3129,12 +2668,14 @@ async def validate_custom_event_payload(
                 detail="A progress objective has invalid values.",
             )
 
-        clean_progress.append({
-            "title": objective_title.strip(),
-            "current": min(current, target),
-            "target": target,
-        })
-        
+        clean_progress.append(
+            {
+                "title": objective_title.strip(),
+                "current": min(current, target),
+                "target": target,
+            }
+        )
+
     icon_url = data.get("icon_url")
 
     if icon_url is not None:
@@ -3168,7 +2709,7 @@ async def validate_custom_event_payload(
         "progress": clean_progress,
         "icon_url": icon_url,
     }
-    
+
 
 @app.get(
     "/inventory",
@@ -3190,14 +2731,14 @@ async def inventory_page(
     user_id = session.user_id
     accounts = await get_accounts(user_id)
 
-    selected_account = next(
-        (
-            account
-            for account in accounts
-            if account["id"] == account_id
-        ),
-        None,
-    ) if account_id is not None else None
+    selected_account = (
+        next(
+            (account for account in accounts if account["id"] == account_id),
+            None,
+        )
+        if account_id is not None
+        else None
+    )
 
     if selected_account is None and accounts:
         selected_account = accounts[0]
@@ -3229,11 +2770,7 @@ async def inventory_data(
 
     accounts = await get_accounts(session.user_id)
     selected_account = next(
-        (
-            account
-            for account in accounts
-            if account["id"] == account_id
-        ),
+        (account for account in accounts if account["id"] == account_id),
         None,
     )
 
@@ -3260,9 +2797,7 @@ async def inventory_data(
         )
         return JSONResponse(
             status_code=502,
-            content={
-                "error": "Couldn't retrieve inventory from HoYoLAB."
-            },
+            content={"error": "Couldn't retrieve inventory from HoYoLAB."},
         )
 
     return {
@@ -3271,10 +2806,7 @@ async def inventory_data(
     }
 
 
-@app.get(
-    "/characters",
-    response_class=HTMLResponse
-)
+@app.get("/characters", response_class=HTMLResponse)
 async def characters_page(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
@@ -3291,14 +2823,14 @@ async def characters_page(
     user_id = session.user_id
     accounts = await get_accounts(user_id)
 
-    selected_account = next(
-        (
-            account
-            for account in accounts
-            if account["id"] == account_id
-        ),
-        None,
-    ) if account_id is not None else None
+    selected_account = (
+        next(
+            (account for account in accounts if account["id"] == account_id),
+            None,
+        )
+        if account_id is not None
+        else None
+    )
 
     if selected_account is None and accounts:
         selected_account = accounts[0]
@@ -3306,17 +2838,18 @@ async def characters_page(
     characters = []
     character_error = None
     release_dates = json.loads(
-        (Path(__file__).resolve().parents[2] / "data" / "character_release_dates.json")
-        .read_text(encoding="utf-8")
+        (Path(__file__).resolve().parents[2] / "data" / "character_release_dates.json").read_text(
+            encoding="utf-8"
+        )
     )["dates"]
     release_dates.update({"Aether": "2020-09-28", "Lumine": "2020-09-28"})
     # Local entries include custom characters absent from the public catalogue.
     for entry in (Path(__file__).resolve().parents[2] / "data" / "characters").glob("*.json"):
         local_character = json.loads(entry.read_text(encoding="utf-8"))
         if local_character.get("release") and local_character.get("name"):
-            release_dates[local_character["name"]] = datetime.strptime(
-                local_character["release"], "%d-%m-%Y"
-            ).date().isoformat()
+            release_dates[local_character["name"]] = (
+                datetime.strptime(local_character["release"], "%d-%m-%Y").date().isoformat()
+            )
 
     # Build the full character catalogue independently of account ownership.
     character_catalogue = []
@@ -3330,20 +2863,17 @@ async def characters_page(
     for character_id, data in catalogue.items():
         character_id = int(character_id)
 
-        character_catalogue.append({
-            "id": character_id,
-            "name": traveler_names.get(character_id, data.name),
-            "element": data.element,
-            "rarity": data.rarity,
-            "icon": (
-                "https://enka.network/ui/"
-                f"UI_AvatarIcon_{data.icon_name}.png"
-            ),
-        })
+        character_catalogue.append(
+            {
+                "id": character_id,
+                "name": traveler_names.get(character_id, data.name),
+                "element": data.element,
+                "rarity": data.rarity,
+                "icon": (f"https://enka.network/ui/UI_AvatarIcon_{data.icon_name}.png"),
+            }
+        )
 
-    character_catalogue.sort(
-        key=lambda character: character["name"].casefold()
-    )
+    character_catalogue.sort(key=lambda character: character["name"].casefold())
 
     if selected_account is not None:
         client = await get_account_client(
@@ -3356,16 +2886,11 @@ async def characters_page(
         else:
             try:
                 async with client:
-                    owned_characters = (
-                        await client.get_genshin_characters()
-                    )
+                    owned_characters = await client.get_genshin_characters()
 
                 # Index the account's characters by their numeric IDs.
-                owned_by_id = {
-                    int(character.id): character
-                    for character in owned_characters
-                }
-                
+                owned_by_id = {int(character.id): character for character in owned_characters}
+
                 # Get the full character catalogue from genshin.py.
                 catalogue = CHARACTER_NAMES.get("en-us", {})
 
@@ -3393,7 +2918,7 @@ async def characters_page(
 
                         try:
                             weapon_id = int(value)
-                        except (TypeError, ValueError):
+                        except TypeError, ValueError:
                             continue
 
                         if weapon_id in weapon_types:
@@ -3407,10 +2932,7 @@ async def characters_page(
                         10000005: 10000007,
                         10000007: 10000005,
                     }.get(character_id)
-                    if (
-                        other_traveler_id in owned_by_id
-                        and character_id not in owned_by_id
-                    ):
+                    if other_traveler_id in owned_by_id and character_id not in owned_by_id:
                         continue
 
                     owned = owned_by_id.get(int(character_id))
@@ -3430,49 +2952,24 @@ async def characters_page(
                     icon = (
                         owned.icon
                         if owned is not None
-                        else (
-                            "https://enka.network/ui/"
-                            f"UI_AvatarIcon_{data.icon_name}.png"
-                        )
+                        else (f"https://enka.network/ui/UI_AvatarIcon_{data.icon_name}.png")
                     )
 
-                    characters.append({
-                        "id": int(character_id),
-                        "name": (
-                            owned.name
-                            if owned is not None
-                            else name
-                        ),
-                        "element": (
-                            owned.element
-                            if owned is not None
-                            else data.element
-                        ),
-                        "rarity": (
-                            owned.rarity
-                            if owned is not None
-                            else data.rarity
-                        ),
-                        "icon": icon,
-                        "level": (
-                            owned.level
-                            if owned is not None
-                            else None
-                        ),
-                        "friendship": (
-                            owned.friendship
-                            if owned is not None
-                            else None
-                        ),
-                        "constellation": (
-                            owned.constellation
-                            if owned is not None
-                            else None
-                        ),
-                        "release_date": release_dates.get(name, ""),
-                        "weapon": get_weapon_type(owned, data),
-                        "owned": owned is not None,
-                    })
+                    characters.append(
+                        {
+                            "id": int(character_id),
+                            "name": (owned.name if owned is not None else name),
+                            "element": (owned.element if owned is not None else data.element),
+                            "rarity": (owned.rarity if owned is not None else data.rarity),
+                            "icon": icon,
+                            "level": (owned.level if owned is not None else None),
+                            "friendship": (owned.friendship if owned is not None else None),
+                            "constellation": (owned.constellation if owned is not None else None),
+                            "release_date": release_dates.get(name, ""),
+                            "weapon": get_weapon_type(owned, data),
+                            "owned": owned is not None,
+                        }
+                    )
 
                 # Owned characters first, then highest level to lowest.
                 # Unowned characters remain at the bottom.
@@ -3501,14 +2998,15 @@ async def characters_page(
         context={
             "request": request,
             "accounts": accounts,
+            "planner_user_id": str(user_id),
             "selected_account": selected_account,
             "characters": characters,
             "character_error": character_error,
             "character_catalogue": character_catalogue,
         },
     )
-    
-    
+
+
 def _normalise_character_plan(plan: object) -> dict | None:
     """Validate the small user-owned payload stored for a planner card."""
 
@@ -3524,7 +3022,7 @@ def _normalise_character_plan(plan: object) -> dict | None:
             1,
             min(90, int(plan.get("weaponLevel", 90))),
         )
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return None
 
     if character_id <= 0:
@@ -3540,7 +3038,7 @@ def _normalise_character_plan(plan: object) -> dict | None:
             return None
         try:
             return max(minimum, min(maximum, int(value)))
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             return None
 
     def bounded_list(values: object, minimum: int, maximum: int):
@@ -3551,7 +3049,7 @@ def _normalise_character_plan(plan: object) -> dict | None:
         for value in values[:3]:
             try:
                 result.append(max(minimum, min(maximum, int(value))))
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 return None
         return result if len(result) == 3 else None
 
@@ -3576,6 +3074,8 @@ def _normalise_character_plan(plan: object) -> dict | None:
         "talents": target_talents,
         "currentTalents": current_talents,
         "weaponLevel": weapon_level,
+        "currentWeaponName": str(plan.get("currentWeaponName") or "")[:100],
+        "currentWeaponIcon": str(plan.get("currentWeaponIcon") or "")[:1000],
         "currentWeaponLevel": optional_int(
             "currentWeaponLevel",
             1,
@@ -3592,11 +3092,7 @@ def _normalise_character_plan(plan: object) -> dict | None:
 async def _get_planner_account(user_id: int, account_id: int):
     accounts = await get_accounts(user_id)
     return next(
-        (
-            account
-            for account in accounts
-            if int(account["id"]) == account_id
-        ),
+        (account for account in accounts if int(account["id"]) == account_id),
         None,
     )
 
@@ -3673,11 +3169,7 @@ async def character_showcase_data(
     # Use the requested account, or the first account by default.
     if account_id is not None:
         selected_account = next(
-            (
-                account
-                for account in accounts
-                if int(account["id"]) == account_id
-            ),
+            (account for account in accounts if int(account["id"]) == account_id),
             None,
         )
 
@@ -3711,30 +3203,21 @@ async def character_showcase_data(
             # Confirm the character belongs to this account.
             owned_characters = await client.get_genshin_characters()
 
-            if not any(
-                int(character.id) == character_id
-                for character in owned_characters
-            ):
+            if not any(int(character.id) == character_id for character in owned_characters):
                 return JSONResponse(
                     status_code=404,
-                    content={
-                        "error": "This character isn't owned by this account."
-                    },
+                    content={"error": "This character isn't owned by this account."},
                 )
 
             # Retrieve detailed data for this character only.
-            detailed_characters = (
-                await client.get_genshin_detailed_characters(
-                    characters=[character_id],
-                )
+            detailed_characters = await client.get_genshin_detailed_characters(
+                characters=[character_id],
             )
 
         # Convert Pydantic models into JSON-compatible dictionaries.
         if isinstance(detailed_characters, (list, tuple)):
             character_data = [
-                character.model_dump(mode="json")
-                if hasattr(character, "model_dump")
-                else character
+                character.model_dump(mode="json") if hasattr(character, "model_dump") else character
                 for character in detailed_characters
             ]
         elif hasattr(detailed_characters, "model_dump"):
@@ -3749,17 +3232,14 @@ async def character_showcase_data(
 
     except Exception:
         logger.exception(
-            "Failed to retrieve showcase data for character %s "
-            "on account %s",
+            "Failed to retrieve showcase data for character %s on account %s",
             character_id,
             selected_account["id"],
         )
 
         return JSONResponse(
             status_code=502,
-            content={
-                "error": "Couldn't retrieve detailed character data."
-            },
+            content={"error": "Couldn't retrieve detailed character data."},
         )
 
 
@@ -3790,14 +3270,8 @@ async def character_planner_costs(
         )
 
     try:
-        parsed_current_talents = [
-            int(level)
-            for level in current_talents.split(",")
-        ]
-        parsed_target_talents = [
-            int(level)
-            for level in target_talents.split(",")
-        ]
+        parsed_current_talents = [int(level) for level in current_talents.split(",")]
+        parsed_target_talents = [int(level) for level in target_talents.split(",")]
     except ValueError:
         return JSONResponse(
             status_code=400,
@@ -3864,11 +3338,12 @@ async def character_planner_costs(
         "character_id": character_id,
         "costs": costs,
     }
-    
-    
+
+
 # =========================================
 # CUSTOM EVENTS — LIST
 # =========================================
+
 
 @app.get("/api/custom-events")
 async def api_get_custom_events(
@@ -3880,10 +3355,7 @@ async def api_get_custom_events(
     if account_id is not None:
         accounts = await get_accounts(user_id)
 
-        if not any(
-            int(account["id"]) == account_id
-            for account in accounts
-        ):
+        if not any(int(account["id"]) == account_id for account in accounts):
             raise HTTPException(
                 status_code=404,
                 detail="Account not found.",
@@ -3920,6 +3392,7 @@ async def api_get_custom_events(
 # CUSTOM EVENTS — CREATE
 # =========================================
 
+
 @app.post("/api/custom-events")
 async def api_create_custom_event(
     request: Request,
@@ -3947,9 +3420,7 @@ async def api_create_custom_event(
     return {"success": True, "event": event}
 
 
-CUSTOM_EVENT_UPLOAD_DIR = (
-    BASE_DIR / "website" / "static" / "uploads" / "custom-events"
-)
+CUSTOM_EVENT_UPLOAD_DIR = BASE_DIR / "website" / "static" / "uploads" / "custom-events"
 
 MAX_CUSTOM_EVENT_ICON_SIZE = 5 * 1024 * 1024
 
@@ -3990,11 +3461,7 @@ async def upload_custom_event_icon(
     elif contents.startswith(CUSTOM_EVENT_IMAGE_TYPES["jpg"][0]):
         extension = "jpg"
 
-    elif (
-        len(contents) >= 12
-        and contents[:4] == b"RIFF"
-        and contents[8:12] == b"WEBP"
-    ):
+    elif len(contents) >= 12 and contents[:4] == b"RIFF" and contents[8:12] == b"WEBP":
         extension = "webp"
 
     if extension is None:
@@ -4023,6 +3490,7 @@ async def upload_custom_event_icon(
 # CUSTOM EVENTS — REORDER
 # =========================================
 
+
 @app.post("/api/custom-events/reorder")
 async def api_reorder_custom_events(
     request: Request,
@@ -4047,29 +3515,20 @@ async def api_reorder_custom_events(
     account_id = data.get("account_id")
     ordered_event_ids = data.get("ordered_event_ids")
 
-    if (
-        isinstance(account_id, bool)
-        or not isinstance(account_id, int)
-        or account_id < 1
-    ):
+    if isinstance(account_id, bool) or not isinstance(account_id, int) or account_id < 1:
         raise HTTPException(
             status_code=400,
             detail="'account_id' must be a positive integer.",
         )
 
-    if (
-        not isinstance(ordered_event_ids, list)
-        or not ordered_event_ids
-    ):
+    if not isinstance(ordered_event_ids, list) or not ordered_event_ids:
         raise HTTPException(
             status_code=400,
             detail="'ordered_event_ids' must be a non-empty list.",
         )
 
     if any(
-        isinstance(event_id, bool)
-        or not isinstance(event_id, int)
-        or event_id < 1
+        isinstance(event_id, bool) or not isinstance(event_id, int) or event_id < 1
         for event_id in ordered_event_ids
     ):
         raise HTTPException(
@@ -4092,10 +3551,7 @@ async def api_reorder_custom_events(
     if not saved:
         raise HTTPException(
             status_code=409,
-            detail=(
-                "The event order could not be saved. "
-                "Refresh and try again."
-            ),
+            detail=("The event order could not be saved. Refresh and try again."),
         )
 
     return {
@@ -4108,6 +3564,7 @@ async def api_reorder_custom_events(
 # =========================================
 # CUSTOM EVENTS — UPDATE
 # =========================================
+
 
 @app.put("/api/custom-events/{event_id}")
 async def api_update_custom_event(
@@ -4152,6 +3609,7 @@ async def api_update_custom_event(
 # CUSTOM EVENTS — DELETE
 # =========================================
 
+
 @app.delete("/api/custom-events/{event_id}")
 async def api_delete_custom_event(
     event_id: int,
@@ -4169,6 +3627,7 @@ async def api_delete_custom_event(
 # =========================================
 # CUSTOM EVENTS — COMPLETE OCCURRENCE
 # =========================================
+
 
 @app.post("/api/custom-events/{event_id}/completion")
 async def api_set_custom_event_completion(
@@ -4204,11 +3663,7 @@ async def api_set_custom_event_completion(
     account_id = data.get("account_id")
 
     if account_id is not None:
-        if (
-            isinstance(account_id, bool)
-            or not isinstance(account_id, int)
-            or account_id < 1
-        ):
+        if isinstance(account_id, bool) or not isinstance(account_id, int) or account_id < 1:
             raise HTTPException(
                 status_code=400,
                 detail="'account_id' must be a valid account ID.",
@@ -4216,15 +3671,12 @@ async def api_set_custom_event_completion(
 
         accounts = await get_accounts(user_id)
 
-        if not any(
-            int(account["id"]) == account_id
-            for account in accounts
-        ):
+        if not any(int(account["id"]) == account_id for account in accounts):
             raise HTTPException(
                 status_code=404,
                 detail="Account not found.",
             )
-            
+
     # Account-specific completion can be shared with any Discord user who has linked the same Genshin UID + server.
     if account_id is not None:
         event = await get_visible_custom_event(
@@ -4282,11 +3734,12 @@ async def api_set_custom_event_completion(
         "occurrence_start": occurrence_start,
         "completed": completed,
     }
-    
+
 
 # =========================================
 # CUSTOM EVENTS — ACCOUNT OBJECTIVE PROGRESS
 # =========================================
+
 
 @app.post("/api/custom-events/{event_id}/progress")
 async def api_change_custom_event_account_progress(
@@ -4315,11 +3768,7 @@ async def api_change_custom_event_account_progress(
     amount = data.get("amount")
 
     # Validate the supplied values before using them.
-    if (
-        isinstance(account_id, bool)
-        or not isinstance(account_id, int)
-        or account_id < 1
-    ):
+    if isinstance(account_id, bool) or not isinstance(account_id, int) or account_id < 1:
         raise HTTPException(
             status_code=400,
             detail="'account_id' must be a valid account ID.",
@@ -4335,11 +3784,7 @@ async def api_change_custom_event_account_progress(
             detail="'objective_index' must be a non-negative integer.",
         )
 
-    if (
-        isinstance(amount, bool)
-        or not isinstance(amount, int)
-        or amount not in (-1, 1)
-    ):
+    if isinstance(amount, bool) or not isinstance(amount, int) or amount not in (-1, 1):
         raise HTTPException(
             status_code=400,
             detail="'amount' must be -1 or 1.",
@@ -4348,10 +3793,7 @@ async def api_change_custom_event_account_progress(
     # The account must belong to the authenticated user.
     accounts = await get_accounts(user_id)
 
-    if not any(
-        int(account["id"]) == account_id
-        for account in accounts
-    ):
+    if not any(int(account["id"]) == account_id for account in accounts):
         raise HTTPException(
             status_code=404,
             detail="Account not found.",
@@ -4383,11 +3825,7 @@ async def api_change_custom_event_account_progress(
     objective = objectives[objective_index]
     target = objective.get("target")
 
-    if (
-        isinstance(target, bool)
-        or not isinstance(target, int)
-        or target < 1
-    ):
+    if isinstance(target, bool) or not isinstance(target, int) or target < 1:
         raise HTTPException(
             status_code=400,
             detail="Invalid objective target.",
@@ -4416,8 +3854,8 @@ async def api_change_custom_event_account_progress(
         "current": current,
         "target": target,
     }
-    
-    
+
+
 @app.get(
     "/wishes",
     response_class=HTMLResponse,
@@ -4435,10 +3873,14 @@ async def wishes(
         )
 
     accounts = await get_accounts(session.user_id)
-    selected_account = next(
-        (account for account in accounts if account["id"] == account_id),
-        None,
-    ) if account_id is not None else None
+    selected_account = (
+        next(
+            (account for account in accounts if account["id"] == account_id),
+            None,
+        )
+        if account_id is not None
+        else None
+    )
     if selected_account is None and accounts:
         selected_account = accounts[0]
 
@@ -4460,12 +3902,8 @@ def _validated_wish_url(value: str) -> str:
     except ValueError as error:
         raise HTTPException(status_code=400, detail="Invalid wish-history URL.") from error
 
-    valid_host = (
-        parsed.hostname is not None
-        and (
-            parsed.hostname.endswith(".hoyoverse.com")
-            or parsed.hostname.endswith(".mihoyo.com")
-        )
+    valid_host = parsed.hostname is not None and (
+        parsed.hostname.endswith(".hoyoverse.com") or parsed.hostname.endswith(".mihoyo.com")
     )
     if (
         parsed.scheme != "https"
@@ -4473,7 +3911,8 @@ def _validated_wish_url(value: str) -> str:
         or port not in (None, 443)
         or parsed.username is not None
         or parsed.password is not None
-        or parsed.path not in {
+        or parsed.path
+        not in {
             "/gacha_info/api/getGachaLog",
             "/gacha_info/api/getLdGachaLog",
         }
@@ -4509,29 +3948,39 @@ async def _fetch_wishes_from_hoyoverse(
                     "size": "20",
                     "end_id": end_id,
                 }
-                page_url = urlunsplit((
-                    parsed.scheme,
-                    parsed.netloc,
-                    parsed.path,
-                    urlencode(query),
-                    "",
-                ))
+                page_url = urlunsplit(
+                    (
+                        parsed.scheme,
+                        parsed.netloc,
+                        parsed.path,
+                        urlencode(query),
+                        "",
+                    )
+                )
                 payload = None
                 for attempt in range(5):
                     try:
                         async with client.get(page_url, allow_redirects=False) as response:
                             if response.status not in (200, 429):
-                                raise HTTPException(status_code=502, detail="HoYoverse rejected the wish-history request.")
+                                raise HTTPException(
+                                    status_code=502,
+                                    detail="HoYoverse rejected the wish-history request.",
+                                )
                             payload = await response.json(content_type=None)
                     except (aiohttp.ClientError, asyncio.TimeoutError) as error:
-                        raise HTTPException(status_code=502, detail="Could not contact HoYoverse.") from error
+                        raise HTTPException(
+                            status_code=502, detail="Could not contact HoYoverse."
+                        ) from error
 
                     message = str(payload.get("message") or "") if isinstance(payload, dict) else ""
                     rate_limited = response.status == 429 or "frequent" in message.casefold()
                     if not rate_limited:
                         break
                     if attempt == 4:
-                        raise HTTPException(status_code=429, detail="HoYoverse is still rate limiting this import. Please wait a few minutes and try again.")
+                        raise HTTPException(
+                            status_code=429,
+                            detail="HoYoverse is still rate limiting this import. Please wait a few minutes and try again.",
+                        )
                     delay = min(2 ** (attempt + 1), 12)
                     if progress:
                         await progress({"type": "retry", "seconds": delay, "found": len(wishes)})
@@ -4539,9 +3988,7 @@ async def _fetch_wishes_from_hoyoverse(
 
                 if not isinstance(payload, dict) or payload.get("retcode") != 0:
                     message = (
-                        payload.get("message")
-                        if isinstance(payload, dict)
-                        else None
+                        payload.get("message") if isinstance(payload, dict) else None
                     ) or "The wish-history URL has expired."
                     raise HTTPException(status_code=400, detail=message)
 
@@ -4560,7 +4007,7 @@ async def _fetch_wishes_from_hoyoverse(
                             "%Y-%m-%d %H:%M:%S",
                         )
                         rank_type = int(item.get("rank_type"))
-                    except (TypeError, ValueError):
+                    except TypeError, ValueError:
                         continue
                     wishes[wish_id] = {
                         "id": wish_id,
@@ -4583,11 +4030,10 @@ async def _fetch_wishes_from_hoyoverse(
 
     records = list(wishes.values())
     if progress:
-        await progress({"type": "phase", "found": len(records), "message": "Matching wish artwork…"})
-    unique_items = {
-        (wish["item_type"].casefold(), wish["name"])
-        for wish in records
-    }
+        await progress(
+            {"type": "phase", "found": len(records), "message": "Matching wish artwork…"}
+        )
+    unique_items = {(wish["item_type"].casefold(), wish["name"]) for wish in records}
 
     async def resolve_icon(item_type: str, name: str) -> tuple[tuple[str, str], str | None]:
         folder = "characters" if item_type == "character" else "weapons"
@@ -4601,11 +4047,15 @@ async def _fetch_wishes_from_hoyoverse(
 
     async with aiohttp.ClientSession(timeout=timeout) as catalogue_client:
         db = GenshinDB(catalogue_client)
-        resolved = dict(await asyncio.gather(*(
-            resolve_icon(item_type, name)
-            for item_type, name in unique_items
-            if item_type in {"character", "weapon"}
-        )))
+        resolved = dict(
+            await asyncio.gather(
+                *(
+                    resolve_icon(item_type, name)
+                    for item_type, name in unique_items
+                    if item_type in {"character", "weapon"}
+                )
+            )
+        )
     for wish in records:
         wish["icon_url"] = resolved.get((wish["item_type"].casefold(), wish["name"]))
     return records
@@ -4679,7 +4129,10 @@ async def import_wishes_stream_api(
                 wishes = await _fetch_wishes_from_hoyoverse(source_url, report)
                 returned_uids = {wish["uid"] for wish in wishes}
                 if returned_uids and returned_uids != {str(account["genshin_uid"])}:
-                    raise HTTPException(status_code=409, detail="This wish history belongs to a different Genshin account.")
+                    raise HTTPException(
+                        status_code=409,
+                        detail="This wish history belongs to a different Genshin account.",
+                    )
                 await report({"type": "phase", "found": len(wishes), "message": "Saving wishes…"})
                 imported = await import_wish_history(account_id, wishes)
                 await report({"type": "complete", "found": len(wishes), "imported": imported})
@@ -4721,9 +4174,7 @@ async def achievements(
     cyrene_session: str | None = Cookie(default=None),
     account_id: int | None = None,
 ):
-    session = await get_web_session(
-        cyrene_session
-    )
+    session = await get_web_session(cyrene_session)
 
     if session is None:
         return RedirectResponse(
@@ -4732,14 +4183,14 @@ async def achievements(
         )
 
     accounts = await get_accounts(session.user_id)
-    selected_account = next(
-        (
-            account
-            for account in accounts
-            if account["id"] == account_id
-        ),
-        None,
-    ) if account_id is not None else None
+    selected_account = (
+        next(
+            (account for account in accounts if account["id"] == account_id),
+            None,
+        )
+        if account_id is not None
+        else None
+    )
 
     if selected_account is None and accounts:
         selected_account = accounts[0]
@@ -4761,11 +4212,7 @@ async def _get_achievement_account(
 ) -> dict:
     accounts = await get_accounts(user_id)
     account = next(
-        (
-            item
-            for item in accounts
-            if item["id"] == account_id
-        ),
+        (item for item in accounts if item["id"] == account_id),
         None,
     )
 
@@ -4779,19 +4226,11 @@ async def _get_achievement_account(
 
 
 @app.get("/api/achievements")
-async def achievements_data(
-    account_id: int,
-    cyrene_session: str | None = Cookie(default=None)
-):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+async def achievements_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Not authenticated."
-        )
+        raise HTTPException(status_code=401, detail="Not authenticated.")
 
     await _get_achievement_account(user_id, account_id)
 
@@ -4809,144 +4248,70 @@ async def achievements_data(
     completed_tiers = 0
 
     for source in source_achievements:
+        achievement_ids = source.get("id", [])
 
-        achievement_ids = source.get(
-            "id",
-            []
-        )
+        category = source.get("achievementGroupName")
 
-        category = source.get(
-            "achievementGroupName"
-        )
-
-        stage_count = source.get(
-            "stages",
-            0
-        )
+        stage_count = source.get("stages", 0)
 
         if not achievement_ids or not category:
             continue
 
-        if not isinstance(
-            achievement_ids,
-            list
-        ):
+        if not isinstance(achievement_ids, list):
             continue
 
-        if not isinstance(
-            stage_count,
-            int
-        ) or stage_count < 1:
+        if not isinstance(stage_count, int) or stage_count < 1:
             continue
 
         tiers = []
 
-        for stage_number in range(
-            1,
-            stage_count + 1
-        ):
+        for stage_number in range(1, stage_count + 1):
+            stage_key = f"stage{stage_number}"
 
-            stage_key = (
-                f"stage{stage_number}"
-            )
+            stage = source.get(stage_key)
 
-            stage = source.get(
-                stage_key
-            )
-
-            if not isinstance(
-                stage,
-                dict
-            ):
+            if not isinstance(stage, dict):
                 continue
 
-            if stage_number > len(
-                achievement_ids
-            ):
+            if stage_number > len(achievement_ids):
                 continue
 
-            achievement_id = str(
-                achievement_ids[
-                    stage_number - 1
-                ]
-            )
+            achievement_id = str(achievement_ids[stage_number - 1])
 
-            achievement_progress = (
-                saved_progress.get(
-                    achievement_id,
-                    {}
-                )
-            )
+            achievement_progress = saved_progress.get(achievement_id, {})
 
-            tier_progress = (
-                achievement_progress.get(
-                    "tiers",
-                    {}
-                )
-            )
+            tier_progress = achievement_progress.get("tiers", {})
 
-            tier_key = str(
-                stage_number
-            )
+            tier_key = str(stage_number)
 
-            saved_tier = (
-                tier_progress.get(
-                    tier_key,
-                    {}
-                )
-            )
+            saved_tier = tier_progress.get(tier_key, {})
 
-            completed = saved_tier.get(
-                "completed",
-                False
-            )
+            completed = saved_tier.get("completed", False)
 
-            current = saved_tier.get(
-                "current",
-                0
-            )
+            current = saved_tier.get("current", 0)
 
-            timestamp = saved_tier.get(
-                "timestamp"
-            )
+            timestamp = saved_tier.get("timestamp")
 
-            note = saved_tier.get(
-                "note"
-            )
+            note = saved_tier.get("note")
 
-            reward = stage.get(
-                "reward",
-                {}
-            )
+            reward = stage.get("reward", {})
 
-            primogems = reward.get(
-                "count",
-                0
-            )
+            primogems = reward.get("count", 0)
 
-            tiers.append({
-                "tier": stage_number,
-                "genshin_id": achievement_id,
-                "title": stage.get(
-                    "title",
-                    source.get(
-                        "name",
-                        ""
-                    )
-                ),
-                "description": stage.get(
-                    "description",
-                    ""
-                ),
-                "progress": stage.get(
-                    "progress"
-                ),
-                "primogems": primogems,
-                "completed": completed,
-                "current": current,
-                "timestamp": timestamp,
-                "note": note,
-            })
+            tiers.append(
+                {
+                    "tier": stage_number,
+                    "genshin_id": achievement_id,
+                    "title": stage.get("title", source.get("name", "")),
+                    "description": stage.get("description", ""),
+                    "progress": stage.get("progress"),
+                    "primogems": primogems,
+                    "completed": completed,
+                    "current": current,
+                    "timestamp": timestamp,
+                    "note": note,
+                }
+            )
 
             total_tiers += 1
 
@@ -4957,23 +4322,14 @@ async def achievements_data(
             continue
 
         frontend_achievement = {
-            "id": str(
-                achievement_ids[0]
-            ),
-            "name": source.get(
-                "name",
-                ""
-            ),
+            "id": str(achievement_ids[0]),
+            "name": source.get("name", ""),
             "category": category,
-            "version": source.get(
-                "version"
-            ),
+            "version": source.get("version"),
             "tiers": tiers,
         }
 
-        achievements.append(
-            frontend_achievement
-        )
+        achievements.append(frontend_achievement)
 
         if category not in categories:
             categories[category] = {
@@ -4981,15 +4337,9 @@ async def achievements_data(
                 "completed": 0,
             }
 
-        categories[category]["total"] += len(
-            tiers
-        )
+        categories[category]["total"] += len(tiers)
 
-        categories[category]["completed"] += sum(
-            1
-            for tier in tiers
-            if tier["completed"]
-        )
+        categories[category]["completed"] += sum(1 for tier in tiers if tier["completed"])
 
     return {
         "achievements": achievements,
@@ -5007,15 +4357,10 @@ async def update_achievement_tier_api(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Not authenticated."
-        )
+        raise HTTPException(status_code=401, detail="Not authenticated.")
 
     await _get_achievement_account(user_id, account_id)
     body = await request.json()
@@ -5023,10 +4368,7 @@ async def update_achievement_tier_api(
     completed = body.get("completed")
 
     if not isinstance(completed, bool):
-        raise HTTPException(
-            status_code=400,
-            detail="The 'completed' field must be a boolean."
-        )
+        raise HTTPException(status_code=400, detail="The 'completed' field must be a boolean.")
 
     updated = await update_achievement_tier(
         discord_user_id=user_id,
@@ -5041,7 +4383,7 @@ async def update_achievement_tier_api(
         "updated": updated,
         "achievement_id": achievement_id,
         "tier": tier,
-        "completed": completed
+        "completed": completed,
     }
 
 
@@ -5053,15 +4395,10 @@ async def update_achievement_tier_note_api(
     request: Request,
     cyrene_session: str | None = Cookie(default=None),
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Not authenticated."
-        )
+        raise HTTPException(status_code=401, detail="Not authenticated.")
 
     await _get_achievement_account(user_id, account_id)
     body = await request.json()
@@ -5069,10 +4406,7 @@ async def update_achievement_tier_note_api(
     note = body.get("note")
 
     if note is not None and not isinstance(note, str):
-        raise HTTPException(
-            status_code=400,
-            detail="The 'note' field must be a string or null."
-        )
+        raise HTTPException(status_code=400, detail="The 'note' field must be a string or null.")
 
     if isinstance(note, str):
         note = note.strip()
@@ -5103,43 +4437,23 @@ async def import_achievements_api(
     account_id: int,
     cyrene_session: str | None = Cookie(default=None),
 ):
-    user_id = await get_authenticated_user(
-        cyrene_session
-    )
+    user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Not authenticated."
-        )
+        raise HTTPException(status_code=401, detail="Not authenticated.")
 
     await _get_achievement_account(user_id, account_id)
     form = await request.form()
 
-    uploaded_file = form.get(
-        "file"
-    )
+    uploaded_file = form.get("file")
 
     if uploaded_file is None:
-        raise HTTPException(
-            status_code=400,
-            detail="No achievement export was provided."
-        )
+        raise HTTPException(status_code=400, detail="No achievement export was provided.")
 
-    if not hasattr(
-        uploaded_file,
-        "read"
-    ):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid upload."
-        )
+    if not hasattr(uploaded_file, "read"):
+        raise HTTPException(status_code=400, detail="Invalid upload.")
 
-    with tempfile.NamedTemporaryFile(
-        suffix=".json",
-        delete=False
-    ) as temp_file:
-
+    with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
         content = await uploaded_file.read()
 
         temp_file.write(content)
@@ -5147,7 +4461,6 @@ async def import_achievements_api(
         temp_path = temp_file.name
 
     try:
-
         result = await import_achievements(
             user_id=user_id,
             account_id=account_id,
@@ -5155,10 +4468,7 @@ async def import_achievements_api(
         )
 
     finally:
-
-        Path(temp_path).unlink(
-            missing_ok=True
-        )
+        Path(temp_path).unlink(missing_ok=True)
 
     return result
 
