@@ -202,6 +202,7 @@ function initialiseAccountLinking() {
         }
     });
     const showError = message => {
+        form.hidden = false;
         result.innerHTML = "";
         const paragraph = document.createElement("p");
         paragraph.className = "account-link-message error";
@@ -221,6 +222,40 @@ function initialiseAccountLinking() {
             throw new Error(data.detail || "Something went wrong.");
         }
         return data;
+    };
+    const completeAccount = async (token, account) => {
+        form.hidden = true;
+        result.innerHTML = '<p class="account-link-message">Linking account...</p>';
+        const data = await request("/api/hoyolab/link/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token, uid: account.game_uid })
+        });
+        form.hidden = true;
+        result.innerHTML = `
+            <div class="account-link-success">
+                <div class="verified-icon" aria-hidden="true">
+                    <span class="verified-corner top-left"></span>
+                    <span class="verified-corner top-right"></span>
+                    <span class="verified-corner bottom-left"></span>
+                    <span class="verified-corner bottom-right"></span>
+                    <span class="verified-scan-line"></span>
+                    <svg class="verified-check" viewBox="0 0 64 64" focusable="false">
+                        <path d="M17 33.5 27.5 44 48 22"></path>
+                    </svg>
+                </div>
+                <h4></h4>
+                <p></p>
+            </div>
+        `;
+        result.querySelector("h4").textContent = data.reconnected
+            ? "Account reconnected"
+            : "Account linked";
+        result.querySelector("p").textContent =
+            `${account.nickname || account.game_uid} is now available in Cyrene and Discord.`;
+        window.setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
     const showAccountChoices = (token, accounts) => {
         form.hidden = true;
@@ -243,36 +278,7 @@ function initialiseAccountLinking() {
             button.addEventListener("click", async () => {
                 button.disabled = true;
                 try {
-                    const data = await request("/api/hoyolab/link/complete", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ token, uid: account.game_uid })
-                    });
-                    form.hidden = true;
-                    result.innerHTML = `
-                        <div class="account-link-success">
-                            <div class="verified-icon" aria-hidden="true">
-                                <span class="verified-corner top-left"></span>
-                                <span class="verified-corner top-right"></span>
-                                <span class="verified-corner bottom-left"></span>
-                                <span class="verified-corner bottom-right"></span>
-                                <span class="verified-scan-line"></span>
-                                <svg class="verified-check" viewBox="0 0 64 64" focusable="false">
-                                    <path d="M17 33.5 27.5 44 48 22"></path>
-                                </svg>
-                            </div>
-                            <h4></h4>
-                            <p></p>
-                        </div>
-                    `;
-                    result.querySelector("h4").textContent = data.reconnected
-                        ? "Account reconnected"
-                        : "Account linked";
-                    result.querySelector("p").textContent =
-                        `${account.nickname || account.game_uid} is now available in Cyrene and Discord.`;
-                    window.setTimeout(() => {
-                        window.location.reload();
-                    }, 2000);
+                    await completeAccount(token, account);
                 }
                 catch (error) {
                     button.disabled = false;
@@ -292,7 +298,12 @@ function initialiseAccountLinking() {
             }
             if (data.status === "select") {
                 submit.disabled = false;
-                showAccountChoices(token, data.accounts);
+                if (data.accounts.length === 1) {
+                    await completeAccount(token, data.accounts[0]);
+                }
+                else {
+                    showAccountChoices(token, data.accounts);
+                }
                 return;
             }
             result.innerHTML = "";

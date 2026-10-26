@@ -1,3 +1,5 @@
+@import "../core/verified.css";
+
 /* =============================
    SETTINGS
    ============================= */
@@ -9,13 +11,10 @@
 
     border-radius: var(--radius-xl);
 
-    background:
-        linear-gradient(145deg, var(--surface-sheen), transparent 45%),
-        var(--surface);
+    background: linear-gradient(145deg, var(--surface-sheen), transparent 45%), var(--surface);
 
     box-shadow: var(--shadow-soft);
 }
-
 
 .settings-group {
     padding: 26px 0;
@@ -23,11 +22,9 @@
     border-bottom: 1px solid var(--border);
 }
 
-
 .settings-group:first-child {
     padding-top: 0;
 }
-
 
 .settings-group:last-child {
     padding-bottom: 0;
@@ -35,18 +32,15 @@
     border-bottom: 0;
 }
 
-
 .settings-section-header {
     margin-bottom: 20px;
 }
-
 
 .settings-section-header h3 {
     margin: 0;
 
     font-size: 17px;
 }
-
 
 .settings-section-header p {
     margin: 6px 0 0;
@@ -56,12 +50,10 @@
     font-size: 13px;
 }
 
-
 .account-link-form {
     display: grid;
     gap: 14px;
 }
-
 
 .account-link-form label {
     display: flex;
@@ -72,7 +64,6 @@
 
     font-size: 12px;
 }
-
 
 .account-link-form input {
     width: 100%;
@@ -90,13 +81,11 @@
     font-size: 14px;
 }
 
-
 .account-link-form input:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
 }
-
 
 .account-link-privacy {
     grid-column: 1 / -1;
@@ -108,7 +97,6 @@
     font-size: 12px;
     line-height: 1.5;
 }
-
 
 #account-link-submit,
 .account-link-open,
@@ -128,17 +116,14 @@
     cursor: pointer;
 }
 
-
 #account-link-submit:disabled {
     opacity: 0.6;
     cursor: wait;
 }
 
-
 .account-link-open {
     width: fit-content;
 }
-
 
 .linked-account-list {
     display: grid;
@@ -146,7 +131,6 @@
 
     margin-top: 18px;
 }
-
 
 .linked-account-row {
     display: flex;
@@ -162,7 +146,6 @@
     background: var(--background);
 }
 
-
 .linked-account-info {
     min-width: 0;
 
@@ -170,7 +153,6 @@
     flex-direction: column;
     gap: 4px;
 }
-
 
 .linked-account-info strong {
     overflow: hidden;
@@ -182,7 +164,6 @@
     white-space: nowrap;
 }
 
-
 .linked-account-info span,
 .linked-account-empty {
     color: var(--text-muted);
@@ -190,11 +171,9 @@
     font-size: 12px;
 }
 
-
 .linked-account-empty {
     margin: 0;
 }
-
 
 .linked-account-manage,
 #account-rename-form button {
@@ -210,7 +189,6 @@
     cursor: pointer;
 }
 
-
 .account-danger-zone {
     display: flex;
     align-items: center;
@@ -223,13 +201,11 @@
     border-top: 1px solid var(--border);
 }
 
-
 .account-danger-zone div {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
-
 
 .account-danger-zone strong {
     color: var(--text);
@@ -237,13 +213,11 @@
     font-size: 13px;
 }
 
-
 .account-danger-zone span {
     color: var(--text-muted);
 
     font-size: 11px;
 }
-
 
 #account-delete-button {
     padding: 9px 13px;
@@ -258,16 +232,13 @@
     cursor: pointer;
 }
 
-
 #account-manage-status:not(:empty) {
     margin-top: 14px;
 }
 
-
 .settings-modal[hidden] {
     display: none;
 }
-
 
 .settings-modal {
     position: fixed;
@@ -280,7 +251,6 @@
     padding: 20px;
 }
 
-
 .settings-modal-backdrop {
     position: absolute;
     inset: 0;
@@ -290,7 +260,6 @@
 
     animation: settings-backdrop-in 180ms ease-out both;
 }
-
 
 .settings-modal-dialog {
     position: relative;
@@ -313,13 +282,11 @@
     animation: settings-modal-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-
 .settings-modal-dialog h3 {
     margin: 0 36px 6px 0;
 
     font-size: 21px;
 }
-
 
 .settings-modal-description {
     margin: 0 0 22px;
@@ -328,7 +295,6 @@
 
     font-size: 13px;
 }
-
 
 .settings-modal-close {
     position: absolute;
@@ -351,11 +317,9 @@
     cursor: pointer;
 }
 
-
 .settings-modal-open {
     overflow: hidden;
 }
-
 
 .account-link-message.warning {
     padding: 12px 14px;
@@ -367,12 +331,14 @@
     color: #f0c47f;
 }
 
-
 @keyframes settings-backdrop-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
-
 
 @keyframes settings-modal-in {
     from {
@@ -386,11 +352,9 @@
     }
 }
 
-
 .account-link-result:not(:empty) {
     margin-top: 18px;
 }
-
 
 .account-link-message {
     margin: 0;
@@ -400,11 +364,9 @@
     line-height: 1.5;
 }
 
-
 .account-link-message.error {
     color: #f08080;
 }
-
 
 .account-link-action {
     display: inline-block;
@@ -414,12 +376,10 @@
     text-decoration: none;
 }
 
-
 .account-choices {
     display: grid;
     gap: 10px;
 }
-
 
 .account-choice {
     width: 100%;
@@ -437,14 +397,12 @@
     text-align: left;
 }
 
-
 .account-choice span {
     color: var(--text-muted);
 
     font-size: 12px;
     font-weight: 400;
 }
-
 
 .account-link-success {
     display: flex;
@@ -459,7 +417,6 @@
     animation: verified-content-in 300ms ease-out both;
 }
 
-
 .account-link-success h4 {
     margin: 22px 0 6px;
 
@@ -468,23 +425,19 @@
     font-size: 26px;
 }
 
-
 .account-link-success p {
     margin: 0;
 
     color: var(--text-muted);
 }
 
-
 .theme-options {
     display: grid;
 
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: 12px;
 }
-
 
 .theme-option {
     position: relative;
@@ -517,7 +470,6 @@
         box-shadow 0.2s ease;
 }
 
-
 .theme-option:hover {
     background: var(--surface-hover);
 
@@ -526,7 +478,6 @@
     box-shadow: 0 12px 28px color-mix(in srgb, var(--background) 36%, transparent);
 }
 
-
 .theme-option.selected {
     border-color: var(--accent);
 
@@ -534,7 +485,6 @@
 
     box-shadow: 0 0 0 3px var(--accent-soft);
 }
-
 
 .theme-preview {
     width: 46px;
@@ -552,7 +502,6 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-
 .theme-preview span {
     width: 18px;
     height: 18px;
@@ -562,50 +511,41 @@
     box-shadow: 0 0 18px currentColor;
 }
 
-
 .theme-preview-blue {
     background: linear-gradient(145deg, #182038, #0b0e17);
     color: #8f9cff;
 }
 
-
 .theme-preview-blue span {
     background: #8f9cff;
 }
-
 
 .theme-preview-pink {
     background: linear-gradient(145deg, #342035, #120c13);
     color: #e889b5;
 }
 
-
 .theme-preview-pink span {
     background: #e889b5;
 }
-
 
 .theme-preview-light-blue {
     background: linear-gradient(145deg, #ffffff, #dfe5f5);
     color: #6675e8;
 }
 
-
 .theme-preview-light-blue span {
     background: #6675e8;
 }
-
 
 .theme-preview-light-pink {
     background: linear-gradient(145deg, #ffffff, #f1dfe9);
     color: #d7659b;
 }
 
-
 .theme-preview-light-pink span {
     background: #d7659b;
 }
-
 
 .theme-option-info {
     display: flex;
@@ -614,18 +554,15 @@
     gap: 4px;
 }
 
-
 .theme-option-info strong {
     font-size: 14px;
 }
-
 
 .theme-option-info span {
     color: var(--text-muted);
 
     font-size: 12px;
 }
-
 
 .theme-check {
     margin-left: auto;
@@ -661,9 +598,11 @@
 
     background: var(--background);
 
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E")
+        center / 18px 18px no-repeat;
 
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E") center / 18px 18px no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' d='M6.5 14.2L11.8 19.2L21.5 8.8'/%3E%3C/svg%3E")
+        center / 18px 18px no-repeat;
 }
 
 .theme-option.selected .theme-check {
@@ -671,7 +610,6 @@
 
     transform: scale(1);
 }
-
 
 /* =============================
    ANIMATIONS SETTING
@@ -693,7 +631,6 @@
     background: var(--background);
 }
 
-
 .settings-toggle-info {
     display: flex;
     flex-direction: column;
@@ -703,18 +640,15 @@
     min-width: 0;
 }
 
-
 .settings-toggle-info strong {
     font-size: 14px;
 }
-
 
 .settings-toggle-info span {
     color: var(--text-muted);
 
     font-size: 12px;
 }
-
 
 /* ---------------------------------------------------------
    Toggle
@@ -743,7 +677,6 @@
         border-color 0.2s ease;
 }
 
-
 .settings-toggle-switch::after {
     content: "";
 
@@ -766,7 +699,6 @@
         background 0.2s ease;
 }
 
-
 /* ---------------------------------------------------------
    Enabled
    --------------------------------------------------------- */
@@ -774,20 +706,14 @@
 .settings-toggle-switch.active {
     border-color: var(--accent);
 
-    background: color-mix(
-        in srgb,
-        var(--accent) 18%,
-        var(--surface)
-    );
+    background: color-mix(in srgb, var(--accent) 18%, var(--surface));
 }
-
 
 .settings-toggle-switch.active::after {
     background: var(--accent);
 
     transform: translateX(20px);
 }
-
 
 /* ---------------------------------------------------------
    Hover / Focus
@@ -797,18 +723,11 @@
     border-color: var(--accent);
 }
 
-
 .settings-toggle-switch:focus-visible {
     outline: none;
 
-    box-shadow:
-        0 0 0 2px color-mix(
-            in srgb,
-            var(--accent) 20%,
-            transparent
-        );
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
 }
-
 
 /* ---------------------------------------------------------
    Mobile
