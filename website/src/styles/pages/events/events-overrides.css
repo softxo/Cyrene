@@ -476,12 +476,33 @@
 
 .event-featured-card[data-event-type="stygian"] .event-collapsed-stat {
     min-width: 0;
+    padding-inline: 10px;
     box-sizing: border-box;
 }
 
 .event-featured-card[data-event-type="stygian"] .event-collapsed-value {
+    width: 100%;
     min-width: 0;
-    flex-wrap: wrap;
+    gap: 5px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.event-featured-card[data-event-type="stygian"]
+.event-collapsed-value .stygian-difficulty-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.event-featured-card[data-event-type="stygian"]
+.event-collapsed-value strong {
+    min-width: 0;
+    font-size: clamp(13px, 1.05vw, 16px);
+}
+
+.event-featured-card[data-event-type="stygian"]
+.event-stat-separator {
+    flex-shrink: 0;
 }
 
 

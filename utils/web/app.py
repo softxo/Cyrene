@@ -3310,6 +3310,18 @@ async def characters_page(
 
     characters = []
     character_error = None
+    release_dates = json.loads(
+        (Path(__file__).resolve().parents[2] / "data" / "character_release_dates.json")
+        .read_text(encoding="utf-8")
+    )["dates"]
+    release_dates.update({"Aether": "2020-09-28", "Lumine": "2020-09-28"})
+    # Local entries include custom characters absent from the public catalogue.
+    for entry in (Path(__file__).resolve().parents[2] / "data" / "characters").glob("*.json"):
+        local_character = json.loads(entry.read_text(encoding="utf-8"))
+        if local_character.get("release") and local_character.get("name"):
+            release_dates[local_character["name"]] = datetime.strptime(
+                local_character["release"], "%d-%m-%Y"
+            ).date().isoformat()
 
     # Build the full character catalogue independently of account ownership.
     character_catalogue = []
@@ -3395,6 +3407,17 @@ async def characters_page(
                     return ""
 
                 for character_id, data in catalogue.items():
+                    character_id = int(character_id)
+                    other_traveler_id = {
+                        10000005: 10000007,
+                        10000007: 10000005,
+                    }.get(character_id)
+                    if (
+                        other_traveler_id in owned_by_id
+                        and character_id not in owned_by_id
+                    ):
+                        continue
+
                     owned = owned_by_id.get(int(character_id))
 
                     # Give the two Traveler variants distinct names.
@@ -3451,6 +3474,7 @@ async def characters_page(
                             if owned is not None
                             else None
                         ),
+                        "release_date": release_dates.get(name, ""),
                         "weapon": get_weapon_type(owned, data),
                         "owned": owned is not None,
                     })

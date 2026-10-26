@@ -39,12 +39,15 @@
    ============================================================ */
 
 :root {
-    --background: #0d0f14;
-    --sidebar: #11141b;
-    --surface: #171a22;
-    --surface-hover: #1d212b;
+    --background: #090b12;
+    --sidebar: rgba(13, 16, 27, 0.86);
+    --surface: #141824;
+    --surface-hover: #1b2030;
+    --surface-raised: #1a1f2d;
+    --surface-inset: #0e111b;
 
-    --border: rgba(255, 255, 255, 0.07);
+    --border: rgba(218, 225, 255, 0.09);
+    --border-strong: rgba(218, 225, 255, 0.15);
 
     --text: #f2f3f5;
     --text-muted: #9298a6;
@@ -55,6 +58,22 @@
     --accent-soft: rgba(143, 156, 255, 0.12);
     --accent-glow: rgba(143, 156, 255, 0.16);
     --accent-border: rgba(143, 156, 255, 0.25);
+
+    --ambient-primary: rgba(108, 124, 255, 0.16);
+    --ambient-secondary: rgba(91, 207, 255, 0.07);
+    --surface-sheen: rgba(255, 255, 255, 0.035);
+    --panel-background:
+        radial-gradient(circle at 8% 0%, var(--accent-soft), transparent 42%),
+        linear-gradient(145deg, var(--surface-sheen), transparent 56%),
+        var(--surface);
+    --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.22);
+    --shadow-float: 0 24px 70px rgba(0, 0, 0, 0.32);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --control-radius: 14px;
+    --control-menu-radius: 18px;
 
     --achievement-progress-low: color-mix(
         in srgb,
@@ -96,6 +115,21 @@ body {
 
 body {
     min-height: 100vh;
+
+    background-image:
+        radial-gradient(circle at 15% -10%, var(--ambient-primary), transparent 34rem),
+        radial-gradient(circle at 92% 12%, var(--ambient-secondary), transparent 30rem);
+    background-attachment: fixed;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--accent) 32%, transparent);
+    color: var(--text);
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 
@@ -671,12 +705,15 @@ body {
    ------------------------------------------------------------ */
 
 [data-theme="blue"] {
-    --background: #0d0f14;
-    --sidebar: #11141b;
-    --surface: #171a22;
-    --surface-hover: #1d212b;
+    --background: #090b12;
+    --sidebar: rgba(13, 16, 27, 0.86);
+    --surface: #141824;
+    --surface-hover: #1b2030;
+    --surface-raised: #1a1f2d;
+    --surface-inset: #0e111b;
 
-    --border: rgba(255, 255, 255, 0.07);
+    --border: rgba(218, 225, 255, 0.09);
+    --border-strong: rgba(218, 225, 255, 0.15);
 
     --text: #f2f3f5;
     --text-muted: #9298a6;
@@ -685,6 +722,11 @@ body {
     --accent-soft: rgba(143, 156, 255, 0.12);
     --accent-glow: rgba(143, 156, 255, 0.16);
     --accent-border: rgba(143, 156, 255, 0.25);
+    --ambient-primary: rgba(108, 124, 255, 0.16);
+    --ambient-secondary: rgba(91, 207, 255, 0.07);
+    --surface-sheen: rgba(255, 255, 255, 0.035);
+    --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.22);
+    --shadow-float: 0 24px 70px rgba(0, 0, 0, 0.32);
 }
 
 
@@ -693,12 +735,15 @@ body {
    ------------------------------------------------------------ */
 
 [data-theme="pink"] {
-    --background: #0f0d12;
-    --sidebar: #151117;
-    --surface: #1b161e;
-    --surface-hover: #241c27;
+    --background: #100b11;
+    --sidebar: rgba(24, 14, 23, 0.86);
+    --surface: #201621;
+    --surface-hover: #2a1d2b;
+    --surface-raised: #281c29;
+    --surface-inset: #160f17;
 
-    --border: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 225, 244, 0.09);
+    --border-strong: rgba(255, 225, 244, 0.15);
 
     --text: #f5f1f4;
     --text-muted: #a99da7;
@@ -707,6 +752,11 @@ body {
     --accent-soft: rgba(232, 137, 181, 0.12);
     --accent-glow: rgba(232, 137, 181, 0.16);
     --accent-border: rgba(232, 137, 181, 0.25);
+    --ambient-primary: rgba(232, 104, 177, 0.15);
+    --ambient-secondary: rgba(171, 112, 255, 0.07);
+    --surface-sheen: rgba(255, 255, 255, 0.035);
+    --shadow-soft: 0 18px 50px rgba(12, 3, 11, 0.26);
+    --shadow-float: 0 24px 70px rgba(12, 3, 11, 0.36);
 }
 
 
@@ -715,12 +765,15 @@ body {
    ------------------------------------------------------------ */
 
 [data-theme="light-blue"] {
-    --background: #cfd2d8;
-    --sidebar: #c3c6cd;
-    --surface: #dfe1e6;
-    --surface-hover: #d3d5db;
+    --background: #eef1f8;
+    --sidebar: rgba(247, 249, 255, 0.84);
+    --surface: rgba(255, 255, 255, 0.76);
+    --surface-hover: #f8f9ff;
+    --surface-raised: #ffffff;
+    --surface-inset: #e8ecf5;
 
-    --border: rgba(20, 25, 40, 0.12);
+    --border: rgba(35, 45, 80, 0.10);
+    --border-strong: rgba(35, 45, 80, 0.17);
 
     --text: #1c1f2a;
     --text-muted: #626875;
@@ -729,6 +782,11 @@ body {
     --accent-soft: rgba(102, 117, 232, 0.12);
     --accent-glow: rgba(102, 117, 232, 0.15);
     --accent-border: rgba(102, 117, 232, 0.28);
+    --ambient-primary: rgba(102, 117, 232, 0.18);
+    --ambient-secondary: rgba(74, 190, 225, 0.11);
+    --surface-sheen: rgba(255, 255, 255, 0.62);
+    --shadow-soft: 0 18px 48px rgba(64, 75, 120, 0.12);
+    --shadow-float: 0 24px 70px rgba(64, 75, 120, 0.18);
 }
 
 
@@ -737,12 +795,15 @@ body {
    ------------------------------------------------------------ */
 
 [data-theme="light-pink"] {
-    --background: #d5cdd2;
-    --sidebar: #c8bec5;
-    --surface: #e2dce0;
-    --surface-hover: #d6cfd4;
+    --background: #f6eef4;
+    --sidebar: rgba(255, 249, 253, 0.84);
+    --surface: rgba(255, 255, 255, 0.74);
+    --surface-hover: #fff8fc;
+    --surface-raised: #ffffff;
+    --surface-inset: #f0e5ed;
 
-    --border: rgba(40, 25, 35, 0.12);
+    --border: rgba(72, 39, 62, 0.10);
+    --border-strong: rgba(72, 39, 62, 0.17);
 
     --text: #29212a;
     --text-muted: #71666e;
@@ -751,6 +812,11 @@ body {
     --accent-soft: rgba(215, 101, 155, 0.12);
     --accent-glow: rgba(215, 101, 155, 0.15);
     --accent-border: rgba(215, 101, 155, 0.28);
+    --ambient-primary: rgba(215, 101, 155, 0.17);
+    --ambient-secondary: rgba(145, 105, 224, 0.09);
+    --surface-sheen: rgba(255, 255, 255, 0.60);
+    --shadow-soft: 0 18px 48px rgba(104, 62, 90, 0.12);
+    --shadow-float: 0 24px 70px rgba(104, 62, 90, 0.18);
 }
 
 
@@ -770,11 +836,18 @@ body {
     display: flex;
     flex-direction: column;
 
-    padding: 28px 18px;
+    z-index: 100;
+
+    padding: 24px 16px;
 
     background: var(--sidebar);
 
+    -webkit-backdrop-filter: blur(22px) saturate(1.3);
+    backdrop-filter: blur(22px) saturate(1.3);
+
     border-right: 1px solid var(--border);
+
+    box-shadow: 12px 0 45px color-mix(in srgb, var(--background) 58%, transparent);
 }
 
 
@@ -790,7 +863,7 @@ body {
 
     padding: 0 12px;
 
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .brand-icon {
@@ -803,9 +876,14 @@ body {
 
     flex-shrink: 0;
 
-    border-radius: 10px;
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
 
-    background: var(--accent-soft);
+    background:
+        linear-gradient(145deg, var(--surface-sheen), transparent),
+        var(--accent-soft);
+
+    box-shadow: 0 8px 24px var(--accent-glow);
 
     overflow: hidden;
 }
@@ -848,7 +926,8 @@ body {
 
     padding: 5px 13px;
 
-    border-radius: 9px;
+    border: 1px solid transparent;
+    border-radius: 11px;
 
     color: var(--text-muted);
 
@@ -864,7 +943,9 @@ body {
 }
 
 .nav-item:hover {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+
+    border-color: var(--border);
 
     color: var(--text);
 
@@ -872,9 +953,14 @@ body {
 }
 
 .nav-item.active {
-    background: var(--accent-soft);
+    background:
+        linear-gradient(90deg, var(--accent-soft), transparent 110%);
+
+    border-color: var(--accent-border);
 
     color: var(--accent);
+
+    box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .nav-icon {
@@ -948,16 +1034,16 @@ body {
 
     margin-left: var(--sidebar-width);
 
-    padding-left: 40px;
-    padding-right: 40px;
+    padding-left: clamp(24px, 4vw, 64px);
+    padding-right: clamp(24px, 4vw, 64px);
 }
 
 .page {
-    width: min(1600px, 100%);
+    width: min(1480px, 100%);
 
     margin: 0 auto;
 
-    padding: 70px 0;
+    padding: 56px 0 72px;
 }
 
 
@@ -970,11 +1056,11 @@ body {
 
     overflow: hidden;
 
-    margin-bottom: 55px;
-    padding: 70px 60px;
+    margin-bottom: 48px;
+    padding: 64px 58px;
 
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
 
     background:
         radial-gradient(
@@ -982,7 +1068,21 @@ body {
             var(--accent-glow),
             transparent 40%
         ),
+        linear-gradient(145deg, var(--surface-sheen), transparent 48%),
         var(--surface);
+
+    box-shadow: var(--shadow-soft);
+}
+
+/* Page introductions use one compact, unboxed treatment. */
+html body .hero {
+    overflow: visible;
+    margin-bottom: 32px;
+    padding: 4px 0 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .hero-content {
@@ -1040,7 +1140,8 @@ body {
 .section-header h2 {
     margin: 0;
 
-    font-size: 24px;
+    font-size: 26px;
+    letter-spacing: -0.6px;
 }
 
 .section-header p {
@@ -1078,9 +1179,11 @@ body {
     padding: 24px;
 
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
 
-    background: var(--surface);
+    background:
+        linear-gradient(145deg, var(--surface-sheen), transparent 55%),
+        var(--surface);
     color: var(--text);
 
     text-decoration: none;
@@ -1088,15 +1191,18 @@ body {
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
-    background: var(--surface-hover);
+    background-color: var(--surface-hover);
 
     border-color: var(--accent-border);
 
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-soft);
 }
 
 .card-icon {
@@ -1155,6 +1261,35 @@ body {
     color: var(--accent);
 
     transform: translateX(4px);
+}
+
+
+/* ============================================================
+   MODERN INTERACTION GEOMETRY
+   ============================================================ */
+
+html body button:not(.event-featured-toggle):not(.settings-toggle-switch):not(.settings-modal-close):not(.reminder-close-button):not(.number-spinner-button):not(.achievement-back),
+html body .button,
+html body .nav-item,
+html body input:not([type="checkbox"]):not([type="radio"]),
+html body textarea,
+html body select,
+html body .custom-input-wrapper,
+html body .checkbox-control {
+    border-radius: var(--control-radius);
+}
+
+html body .custom-select-button {
+    border-radius: var(--control-radius);
+}
+
+html body .custom-select-menu {
+    padding: 7px;
+    border-radius: var(--control-menu-radius);
+}
+
+html body .custom-select-option {
+    border-radius: 12px;
 }
 
 

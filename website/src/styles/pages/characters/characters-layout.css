@@ -5,7 +5,7 @@
 .characters-page {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
     min-width: 0;
 }
 
@@ -18,16 +18,23 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 24px;
 }
 
 .characters-header h1 {
-    margin: 0;
+    margin: 5px 0 0;
+    font-size: clamp(32px, 4vw, 44px);
+    letter-spacing: -1.4px;
 }
 
 .characters-header p {
-    margin: 6px 0 0;
+    margin: 8px 0 0;
     color: var(--text-muted);
+    font-size: 14px;
+}
+
+.characters-page-heading .eyebrow {
+    margin-bottom: 0;
 }
 
 /* =========================================================
@@ -37,14 +44,17 @@
 .characters-account-form {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
 }
 
 .characters-account-form > label {
     flex-shrink: 0;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
 }
 
 .characters-account-select {
@@ -53,8 +63,9 @@
 }
 
 .characters-account-select .custom-select-button {
-    min-height: 39px;
-    background: var(--surface);
+    min-height: 44px;
+    padding-inline: 15px;
+    background: var(--surface-inset);
 }
 
 .characters-account-select .custom-select-value {
@@ -74,13 +85,34 @@
     white-space: nowrap;
 }
 
+.characters-navigation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.characters-navigation-primary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
 /* =========================================================
    ROSTER SUMMARY
    ========================================================= */
 
 .characters-summary {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    width: max-content;
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
 /* =========================================================
@@ -90,22 +122,25 @@
 .characters-page-tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 4px;
     width: fit-content;
     max-width: 100%;
     margin-bottom: 0;
-    padding: 0.35rem;
+    padding: 4px;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--surface);
+    border-radius: 16px;
+    background: var(--surface-inset);
+
+    box-shadow: inset 0 1px 0 var(--surface-sheen);
 }
 
 .characters-page-tab {
-    padding: 0.65rem 1.15rem;
+    min-height: 38px;
+    padding: 0.55rem 1.25rem;
     border: 1px solid transparent;
-    border-radius: 9px;
+    border-radius: 12px;
     background: transparent;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font: inherit;
     cursor: pointer;
     transition:
@@ -120,9 +155,15 @@
 }
 
 .characters-page-tab.active {
-    background: var(--accent);
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 92%, white),
+        var(--accent)
+    );
     border-color: var(--accent-border);
-    color: var(--text);
+    color: var(--background);
+
+    box-shadow: 0 7px 18px var(--accent-glow);
 }
 
 .characters-panel[hidden],
@@ -136,7 +177,7 @@
 }
 
 .characters-panel.active {
-    margin-top: -10px;
+    margin-top: -6px;
 }
 
 /* =========================================================
@@ -148,9 +189,32 @@
         align-items: stretch;
     }
 
+    .characters-page {
+        gap: 22px;
+    }
+
+    .characters-page-tabs {
+        width: 100%;
+    }
+
+    .characters-navigation-primary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-page-tab {
+        flex: 1;
+    }
+
     .characters-account-form {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .characters-navigation-row {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
     }
 
     .characters-account-select {

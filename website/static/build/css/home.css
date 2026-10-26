@@ -12,17 +12,15 @@
     align-items: center;
     gap: clamp(40px, 6vw, 90px);
 
-    min-height: 430px;
-    padding: clamp(42px, 6vw, 74px);
+    min-height: 330px;
+    padding: 10px 8px 4px;
 
-    border: 1px solid var(--border);
-    border-radius: 22px;
+    border: 0;
+    border-radius: 0;
 
-    background:
-        radial-gradient(circle at 0 100%, var(--accent-glow), transparent 31%),
-        linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--surface) 84%, var(--background)));
+    background: transparent;
 
-    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
 }
 
 .home-hero::after {
@@ -111,7 +109,7 @@
     padding: 0 17px;
 
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: var(--control-radius);
 
     color: var(--text);
 
@@ -330,8 +328,8 @@
 
     .home-hero {
         min-height: 0;
-        padding: 38px 22px;
-        border-radius: 18px;
+        padding: 8px 0 0;
+        border-radius: 0;
     }
 
     .home-hero h1 {

@@ -7,9 +7,13 @@
 
     border: 1px solid var(--border);
 
-    border-radius: 14px;
+    border-radius: var(--radius-xl);
 
-    background: var(--surface);
+    background:
+        linear-gradient(145deg, var(--surface-sheen), transparent 45%),
+        var(--surface);
+
+    box-shadow: var(--shadow-soft);
 }
 
 
@@ -496,9 +500,9 @@
 
     border: 1px solid var(--border);
 
-    border-radius: 12px;
+    border-radius: var(--radius-md);
 
-    background: var(--background);
+    background: var(--surface-inset);
 
     color: var(--text);
 
@@ -509,7 +513,8 @@
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
@@ -517,11 +522,17 @@
     background: var(--surface-hover);
 
     transform: translateY(-1px);
+
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--background) 36%, transparent);
 }
 
 
 .theme-option.selected {
     border-color: var(--accent);
+
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface-raised));
+
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 
@@ -535,7 +546,10 @@
     align-items: center;
     justify-content: center;
 
-    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 13px;
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 
@@ -544,11 +558,14 @@
     height: 18px;
 
     border-radius: 50%;
+
+    box-shadow: 0 0 18px currentColor;
 }
 
 
 .theme-preview-blue {
-    background: rgba(143, 156, 255, 0.12);
+    background: linear-gradient(145deg, #182038, #0b0e17);
+    color: #8f9cff;
 }
 
 
@@ -558,7 +575,8 @@
 
 
 .theme-preview-pink {
-    background: rgba(232, 137, 181, 0.12);
+    background: linear-gradient(145deg, #342035, #120c13);
+    color: #e889b5;
 }
 
 
@@ -568,7 +586,8 @@
 
 
 .theme-preview-light-blue {
-    background: rgba(102, 117, 232, 0.10);
+    background: linear-gradient(145deg, #ffffff, #dfe5f5);
+    color: #6675e8;
 }
 
 
@@ -578,7 +597,8 @@
 
 
 .theme-preview-light-pink {
-    background: rgba(215, 101, 155, 0.10);
+    background: linear-gradient(145deg, #ffffff, #f1dfe9);
+    color: #d7659b;
 }
 
 

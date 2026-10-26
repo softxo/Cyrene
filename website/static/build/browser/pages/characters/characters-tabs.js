@@ -9,6 +9,8 @@ function initCharactersTabs() {
     }
     const tabs = Array.from(page.querySelectorAll("[data-characters-tab]"));
     const panels = Array.from(page.querySelectorAll("[data-characters-panel]"));
+    const summary = page.querySelector(".characters-summary");
+    const tabInput = page.querySelector("[data-characters-tab-input]");
     if (!tabs.length || !panels.length) {
         return;
     }
@@ -24,12 +26,31 @@ function initCharactersTabs() {
             panel.hidden = !active;
             panel.classList.toggle("active", active);
         });
+        if (summary) {
+            summary.hidden = name !== "characters";
+        }
+        if (tabInput) {
+            tabInput.value = name;
+        }
+    }
+    function updateTabParameter(name) {
+        const url = new URL(window.location.href);
+        if (name === "planner") {
+            url.searchParams.set("tab", name);
+        }
+        else {
+            url.searchParams.delete("tab");
+        }
+        history.replaceState(history.state, "", url);
     }
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
-            activateTab(tab.dataset.charactersTab);
+            const name = tab.dataset.charactersTab;
+            activateTab(name);
+            updateTabParameter(name);
         });
     });
-    activateTab(tabs.find(tab => tab.classList.contains("active"))
-        ?.dataset.charactersTab || "characters");
+    const requestedTab = new URLSearchParams(window.location.search).get("tab");
+    const initialTab = requestedTab === "planner" ? "planner" : "characters";
+    activateTab(initialTab);
 }

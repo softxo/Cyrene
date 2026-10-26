@@ -44,6 +44,7 @@ function initCharacterShowcase() {
     modal.dataset.initialised = "true";
     let previouslyFocused = null;
     let activeRequestId = 0;
+    const characterCache = new Map();
     function createElement(tag, className, text = "") {
         const element = document.createElement(tag);
         if (className) {
@@ -119,9 +120,26 @@ function initCharacterShowcase() {
         pyro: "Pyro_BG.mp4",
         cryo: "Cryo_BG.mp4"
     };
+    function waitForMedia(element, eventName) {
+        return new Promise(resolve => {
+            let settled = false;
+            const finish = () => {
+                if (settled) {
+                    return;
+                }
+                settled = true;
+                element.removeEventListener(eventName, finish);
+                element.removeEventListener("error", finish);
+                resolve();
+            };
+            element.addEventListener(eventName, finish, { once: true });
+            element.addEventListener("error", finish, { once: true });
+            window.setTimeout(finish, 1400);
+        });
+    }
     function setElementBackground(element) {
         if (!backgroundVideo) {
-            return;
+            return Promise.resolve();
         }
         const elementKey = String(element || "")
             .trim()
@@ -131,7 +149,7 @@ function initCharacterShowcase() {
             backgroundVideo.pause();
             backgroundVideo.removeAttribute("src");
             backgroundVideo.load();
-            return;
+            return Promise.resolve();
         }
         const videoPath = `${SHOWCASE_ICON_PATH}${filename}`;
         if (backgroundVideo.getAttribute("src") !== videoPath) {
@@ -142,6 +160,9 @@ function initCharacterShowcase() {
         backgroundVideo.play().catch(() => {
             // Muted autoplay may be restricted by the browser.
         });
+        return backgroundVideo.readyState >= 2
+            ? Promise.resolve()
+            : waitForMedia(backgroundVideo, "loadeddata");
     }
     const ELEMENT_DAMAGE_ICONS = {
         Cryo: "DMG_Cryo.png",
@@ -176,6 +197,13 @@ function initCharacterShowcase() {
         return String(value ?? "")
             .toLowerCase()
             .replace(/[^a-z0-9]/g, "");
+    }
+    function getElementIcon(element) {
+        const name = String(element || "").toLowerCase();
+        const elements = ["anemo", "geo", "electro", "dendro", "hydro", "pyro", "cryo"];
+        return elements.includes(name)
+            ? `/static/images/characters/Element_${name[0].toUpperCase()}${name.slice(1)}.webp`
+            : "";
     }
     function getElementDamageIcon(element) {
         const filename = ELEMENT_DAMAGE_ICONS[cleanGameText(element)];
@@ -303,7 +331,7 @@ function initCharacterShowcase() {
         const imageWrap = createElement("div", `enka-weapon-image ${getRarityClass(weapon.rarity)}`);
         imageWrap.append(createImage(getItemImage(weapon), weapon.name ?? "Equipped weapon", "enka-weapon-icon"));
         if (weapon.refinement != null) {
-            imageWrap.append(createElement("span", "enka-weapon-refinement", `R${weapon.refinement}`));
+            imageWrap.append(createElement("span", `enka-weapon-refinement${Number(weapon.refinement) === 5 ? " is-max" : ""}`, `R${weapon.refinement}`));
         }
         if (weapon.level != null) {
             imageWrap.append(createElement("span", "enka-weapon-level", `Lv. ${weapon.level}`));
@@ -526,16 +554,20 @@ function initCharacterShowcase() {
     }
     function renderTalents(character) {
         talentsElement.replaceChildren();
-        const skills = Array.isArray(character?.skills)
-            ? character.skills
-            : [];
-        const talents = skills
-            .filter(skill => Number(skill.skill_type) === 1)
-            .slice(0, 3);
+        const talents = getCharacterCombatTalents(character);
+        const normaliseTalentText = value => cleanGameText(value)
+            .toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        const activeBoosts = (character?.constellations || [])
+            .filter(constellation => constellation.activated && [3, 5].includes(Number(constellation.pos)))
+            .map(constellation => normaliseTalentText(constellation.effect));
         talents.forEach((talent, index) => {
+            const talentName = normaliseTalentText(talent.name);
+            const boosted = (talentName && activeBoosts.some(effect => effect.includes(talentName))) ||
+                Number(talent.level) > 10;
+            const maximum = boosted ? 13 : 10;
             const item = createElement("div", "enka-progression-item enka-talent");
             item.append(createImage(getItemImage(talent), talent.name ?? `Talent ${index + 1}`, "enka-progression-icon"));
-            item.append(createElement("span", "enka-progression-level", talent.level != null
+            item.append(createElement("span", `enka-progression-level${Number(talent.level) >= maximum ? " is-max" : ""}`, talent.level != null
                 ? String(talent.level)
                 : "—"));
             item.title = cleanGameText(talent.name ?? `Talent ${index + 1}`);
@@ -583,7 +615,7 @@ function initCharacterShowcase() {
         renderConstellations(character);
         if (elementIconElement) {
             elementIconElement.replaceChildren();
-            const iconPath = getElementDamageIcon(character?.element);
+            const iconPath = getElementIcon(character?.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
                 icon.addEventListener("error", () => icon.remove(), {
@@ -598,41 +630,53 @@ function initCharacterShowcase() {
         errorElement.hidden = true;
         errorElement.textContent = "";
     }
-    async function loadCharacter(card, requestId) {
+    function fetchCharacter(card) {
         const characterId = card.dataset.characterId;
         const accountId = modal.dataset.accountId;
         if (!characterId) {
-            throw new Error("This character card is missing its character ID.");
+            return Promise.reject(new Error("This character card is missing its character ID."));
         }
         const query = accountId
             ? `?account_id=${encodeURIComponent(accountId)}`
             : "";
-        const response = await fetch(`/api/characters/${encodeURIComponent(characterId)}/showcase${query}`, {
+        const cacheKey = `${accountId || "default"}:${characterId}`;
+        if (characterCache.has(cacheKey)) {
+            return characterCache.get(cacheKey);
+        }
+        const request = fetch(`/api/characters/${encodeURIComponent(characterId)}/showcase${query}`, {
             method: "GET",
             credentials: "same-origin",
             headers: { Accept: "application/json" }
+        }).then(async (response) => {
+            let payload;
+            try {
+                payload = await response.json();
+            }
+            catch {
+                throw new Error("The server returned an invalid response.");
+            }
+            if (!response.ok) {
+                throw new Error(payload?.error || "Couldn't retrieve this character's build.");
+            }
+            const character = payload?.data?.characters?.[0];
+            if (!character) {
+                throw new Error("No detailed build data was returned for this character.");
+            }
+            return character;
         });
-        let payload;
-        try {
-            payload = await response.json();
-        }
-        catch {
-            throw new Error("The server returned an invalid response.");
-        }
-        if (!response.ok) {
-            throw new Error(payload?.error || "Couldn't retrieve this character's build.");
-        }
-        const character = payload?.data?.characters?.[0];
-        if (!character) {
-            throw new Error("No detailed build data was returned for this character.");
-        }
-        if (requestId !== activeRequestId || modal.hidden) {
+        characterCache.set(cacheKey, request);
+        request.catch(() => characterCache.delete(cacheKey));
+        return request;
+    }
+    async function loadCharacter(card, requestId) {
+        const character = await fetchCharacter(card);
+        if (requestId !== activeRequestId) {
             return;
         }
         nameElement.textContent = character.name || "Unknown character";
         elementElement.textContent = character.element || "";
         showcase.dataset.element = String(character.element || "").toLowerCase();
-        setElementBackground(character.element);
+        void setElementBackground(character.element);
         showcase.dataset.rarity = String(character.rarity || "");
         levelElement.textContent =
             `Level ${formatValue(character.level)} · ` +
@@ -640,9 +684,10 @@ function initCharacterShowcase() {
                 `Friendship ${formatValue(character.friendship)}`;
         portrait.src = character.display_image || character.icon || "";
         portrait.alt = character.name || "Character artwork";
+        portrait.loading = "eager";
         if (elementIconElement) {
             elementIconElement.replaceChildren();
-            const iconPath = getElementDamageIcon(character.element);
+            const iconPath = getElementIcon(character.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
                 icon.addEventListener("error", () => icon.remove(), {
@@ -656,29 +701,32 @@ function initCharacterShowcase() {
         }
         renderCharacter(character);
         statusElement.textContent = "";
+        const portraitReady = portrait.complete
+            ? portrait.decode?.().catch(() => { })
+            : waitForMedia(portrait, "load");
+        await portraitReady;
     }
-    function openShowcase(card) {
+    function showModal() {
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("character-showcase-open");
+        dialog.focus();
+    }
+    async function openShowcase(card) {
         if (card.dataset.owned !== "true") {
             return;
         }
-        const image = card.querySelector(".character-card-image img");
         const name = card.querySelector(".character-card-info h2");
-        const element = card.querySelector(".character-element span");
-        if (!image || !name) {
+        if (!name) {
             return;
         }
         previouslyFocused = document.activeElement;
         const requestId = ++activeRequestId;
-        portrait.src = image.src;
+        portrait.removeAttribute("src");
         portrait.alt = name.textContent.trim();
         nameElement.textContent = name.textContent.trim();
-        elementElement.textContent = element?.textContent.trim() || "";
-        modal.dataset.element = (card.dataset.element || "").toLowerCase();
-        setElementBackground(card.dataset.element);
-        modal.dataset.rarity = card.dataset.rarity || "";
-        levelElement.textContent = card.dataset.level
-            ? `Level ${card.dataset.level}`
-            : "Level unavailable";
+        card.classList.add("is-loading");
+        card.setAttribute("aria-busy", "true");
         weaponElement.replaceChildren();
         statsElement.replaceChildren();
         artifactsElement.replaceChildren();
@@ -694,12 +742,15 @@ function initCharacterShowcase() {
         errorElement.hidden = true;
         errorElement.textContent = "";
         statusElement.textContent = "Loading character build…";
-        modal.hidden = false;
-        modal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("character-showcase-open");
-        dialog.focus();
-        loadCharacter(card, requestId).catch(error => {
-            if (requestId !== activeRequestId || modal.hidden) {
+        try {
+            await loadCharacter(card, requestId);
+            if (requestId !== activeRequestId) {
+                return;
+            }
+            showModal();
+        }
+        catch (error) {
+            if (requestId !== activeRequestId) {
                 return;
             }
             errorElement.textContent =
@@ -708,7 +759,12 @@ function initCharacterShowcase() {
                     : "Couldn't retrieve this character's build.";
             errorElement.hidden = false;
             statusElement.textContent = "";
-        });
+            showModal();
+        }
+        finally {
+            card.classList.remove("is-loading");
+            card.removeAttribute("aria-busy");
+        }
     }
     function closeShowcase() {
         if (modal.hidden) {
@@ -723,6 +779,36 @@ function initCharacterShowcase() {
             previouslyFocused.focus();
         }
     }
+    function prefetchShowcase(card) {
+        if (card.dataset.owned !== "true") {
+            return;
+        }
+        fetchCharacter(card).then(character => {
+            const source = character.display_image || character.icon;
+            if (source) {
+                const image = new Image();
+                image.src = source;
+            }
+        }).catch(() => {
+            // A click retries failed prefetches and displays the full error state.
+        });
+    }
+    page.addEventListener("pointerover", event => {
+        const card = event.target instanceof Element
+            ? event.target.closest(".character-card")
+            : null;
+        if (card && page.contains(card)) {
+            prefetchShowcase(card);
+        }
+    });
+    page.addEventListener("focusin", event => {
+        const card = event.target instanceof Element
+            ? event.target.closest(".character-card")
+            : null;
+        if (card && page.contains(card)) {
+            prefetchShowcase(card);
+        }
+    });
     page.addEventListener("click", event => {
         if (!(event.target instanceof Element)) {
             return;
@@ -734,7 +820,7 @@ function initCharacterShowcase() {
         }
         const card = event.target.closest(".character-card");
         if (card && page.contains(card)) {
-            openShowcase(card);
+            void openShowcase(card);
         }
     });
     document.addEventListener("keydown", event => {
