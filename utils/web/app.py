@@ -3407,6 +3407,17 @@ async def characters_page(
                     return ""
 
                 for character_id, data in catalogue.items():
+                    character_id = int(character_id)
+                    other_traveler_id = {
+                        10000005: 10000007,
+                        10000007: 10000005,
+                    }.get(character_id)
+                    if (
+                        other_traveler_id in owned_by_id
+                        and character_id not in owned_by_id
+                    ):
+                        continue
+
                     owned = owned_by_id.get(int(character_id))
 
                     # Give the two Traveler variants distinct names.

@@ -252,6 +252,14 @@ function initCharacterShowcase() {
             .replace(/[^a-z0-9]/g, "");
     }
 
+    function getElementIcon(element) {
+        const name = String(element || "").toLowerCase();
+        const elements = ["anemo", "geo", "electro", "dendro", "hydro", "pyro", "cryo"];
+        return elements.includes(name)
+            ? `/static/images/characters/Element_${name[0].toUpperCase()}${name.slice(1)}.webp`
+            : "";
+    }
+
     function getElementDamageIcon(element) {
         const filename = ELEMENT_DAMAGE_ICONS[
             cleanGameText(element)
@@ -467,7 +475,7 @@ function initCharacterShowcase() {
             imageWrap.append(
                 createElement(
                     "span",
-                    "enka-weapon-refinement",
+                    `enka-weapon-refinement${Number(weapon.refinement) === 5 ? " is-max" : ""}`,
                     `R${weapon.refinement}`
                 )
             );
@@ -900,15 +908,19 @@ function initCharacterShowcase() {
     function renderTalents(character) {
         talentsElement.replaceChildren();
 
-        const skills = Array.isArray(character?.skills)
-            ? character.skills
-            : [];
+        const talents = getCharacterCombatTalents(character);
 
-        const talents = skills
-            .filter(skill => Number(skill.skill_type) === 1)
-            .slice(0, 3);
+        const normaliseTalentText = value => cleanGameText(value)
+            .toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        const activeBoosts = (character?.constellations || [])
+            .filter(constellation => constellation.activated && [3, 5].includes(Number(constellation.pos)))
+            .map(constellation => normaliseTalentText(constellation.effect));
 
         talents.forEach((talent, index) => {
+            const talentName = normaliseTalentText(talent.name);
+            const boosted = (talentName && activeBoosts.some(effect => effect.includes(talentName))) ||
+                Number(talent.level) > 10;
+            const maximum = boosted ? 13 : 10;
             const item = createElement(
                 "div",
                 "enka-progression-item enka-talent"
@@ -925,7 +937,7 @@ function initCharacterShowcase() {
             item.append(
                 createElement(
                     "span",
-                    "enka-progression-level",
+                    `enka-progression-level${Number(talent.level) >= maximum ? " is-max" : ""}`,
                     talent.level != null
                         ? String(talent.level)
                         : "—"
@@ -1021,7 +1033,7 @@ function initCharacterShowcase() {
         if (elementIconElement) {
             elementIconElement.replaceChildren();
 
-            const iconPath = getElementDamageIcon(character?.element);
+            const iconPath = getElementIcon(character?.element);
 
             if (iconPath) {
                 const icon = createImage(
@@ -1133,7 +1145,7 @@ function initCharacterShowcase() {
         if (elementIconElement) {
             elementIconElement.replaceChildren();
 
-            const iconPath = getElementDamageIcon(character.element);
+            const iconPath = getElementIcon(character.element);
 
             if (iconPath) {
                 const icon = createImage(

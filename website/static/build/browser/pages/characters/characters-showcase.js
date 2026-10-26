@@ -198,6 +198,13 @@ function initCharacterShowcase() {
             .toLowerCase()
             .replace(/[^a-z0-9]/g, "");
     }
+    function getElementIcon(element) {
+        const name = String(element || "").toLowerCase();
+        const elements = ["anemo", "geo", "electro", "dendro", "hydro", "pyro", "cryo"];
+        return elements.includes(name)
+            ? `/static/images/characters/Element_${name[0].toUpperCase()}${name.slice(1)}.webp`
+            : "";
+    }
     function getElementDamageIcon(element) {
         const filename = ELEMENT_DAMAGE_ICONS[cleanGameText(element)];
         return filename ? `${SHOWCASE_ICON_PATH}${filename}` : "";
@@ -324,7 +331,7 @@ function initCharacterShowcase() {
         const imageWrap = createElement("div", `enka-weapon-image ${getRarityClass(weapon.rarity)}`);
         imageWrap.append(createImage(getItemImage(weapon), weapon.name ?? "Equipped weapon", "enka-weapon-icon"));
         if (weapon.refinement != null) {
-            imageWrap.append(createElement("span", "enka-weapon-refinement", `R${weapon.refinement}`));
+            imageWrap.append(createElement("span", `enka-weapon-refinement${Number(weapon.refinement) === 5 ? " is-max" : ""}`, `R${weapon.refinement}`));
         }
         if (weapon.level != null) {
             imageWrap.append(createElement("span", "enka-weapon-level", `Lv. ${weapon.level}`));
@@ -547,16 +554,20 @@ function initCharacterShowcase() {
     }
     function renderTalents(character) {
         talentsElement.replaceChildren();
-        const skills = Array.isArray(character?.skills)
-            ? character.skills
-            : [];
-        const talents = skills
-            .filter(skill => Number(skill.skill_type) === 1)
-            .slice(0, 3);
+        const talents = getCharacterCombatTalents(character);
+        const normaliseTalentText = value => cleanGameText(value)
+            .toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        const activeBoosts = (character?.constellations || [])
+            .filter(constellation => constellation.activated && [3, 5].includes(Number(constellation.pos)))
+            .map(constellation => normaliseTalentText(constellation.effect));
         talents.forEach((talent, index) => {
+            const talentName = normaliseTalentText(talent.name);
+            const boosted = (talentName && activeBoosts.some(effect => effect.includes(talentName))) ||
+                Number(talent.level) > 10;
+            const maximum = boosted ? 13 : 10;
             const item = createElement("div", "enka-progression-item enka-talent");
             item.append(createImage(getItemImage(talent), talent.name ?? `Talent ${index + 1}`, "enka-progression-icon"));
-            item.append(createElement("span", "enka-progression-level", talent.level != null
+            item.append(createElement("span", `enka-progression-level${Number(talent.level) >= maximum ? " is-max" : ""}`, talent.level != null
                 ? String(talent.level)
                 : "—"));
             item.title = cleanGameText(talent.name ?? `Talent ${index + 1}`);
@@ -604,7 +615,7 @@ function initCharacterShowcase() {
         renderConstellations(character);
         if (elementIconElement) {
             elementIconElement.replaceChildren();
-            const iconPath = getElementDamageIcon(character?.element);
+            const iconPath = getElementIcon(character?.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
                 icon.addEventListener("error", () => icon.remove(), {
@@ -676,7 +687,7 @@ function initCharacterShowcase() {
         portrait.loading = "eager";
         if (elementIconElement) {
             elementIconElement.replaceChildren();
-            const iconPath = getElementDamageIcon(character.element);
+            const iconPath = getElementIcon(character.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
                 icon.addEventListener("error", () => icon.remove(), {

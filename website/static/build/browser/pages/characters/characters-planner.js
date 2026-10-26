@@ -534,9 +534,7 @@ function initCharacterPlanner() {
             const character = Array.isArray(responseData)
                 ? responseData[0]
                 : responseData?.characters?.[0];
-            const talents = (character?.skills || [])
-                .filter(skill => Number(skill.skill_type) === 1)
-                .slice(0, 3);
+            const talents = getCharacterCombatTalents(character);
             if (!character || talents.length !== 3) {
                 throw new Error("Current progression is unavailable.");
             }
@@ -1040,15 +1038,7 @@ function initCharacterPlanner() {
                         ? `Lv. ${weapon.level}`
                         : "Unavailable";
             }
-            /*
-             * Keep the same talent selection rule as the showcase.
-             * The order is the order returned by the detailed API.
-             */
-            const talents = Array.isArray(character.skills)
-                ? character.skills
-                    .filter(skill => Number(skill.skill_type) === 1)
-                    .slice(0, 3)
-                : [];
+            const talents = getCharacterCombatTalents(character);
             [1, 2, 3].forEach(index => {
                 const element = form.querySelector(`[data-planner-current-talent="${index}"]`);
                 const talent = talents[index - 1];
