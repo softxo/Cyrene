@@ -7,7 +7,6 @@ export default tseslint.config(
         ignores: [
             "node_modules/**",
             "website/static/build/**",
-            "website/src/browser/**",
             "dist/**",
         ],
     },
@@ -27,6 +26,21 @@ export default tseslint.config(
             globals: {
                 ...globals.browser,
             },
+        },
+    },
+
+    {
+        files: ["website/src/browser/**/*.ts"],
+
+        rules: {
+            "@typescript-eslint/ban-ts-comment": [
+                "error",
+                {
+                    "ts-nocheck": false,
+                },
+            ],
+
+            "@typescript-eslint/no-unused-vars": "off",
         },
     },
 );

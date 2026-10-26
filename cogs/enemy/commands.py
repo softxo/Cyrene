@@ -1,16 +1,17 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from utils.icons import get_enemy_icon, get_enemy_splash
+from discord.ext import commands
+
+from utils.constants.colours import ENEMY_ELEMENT_COLOURS
+from utils.constants.elements import ELEMENT_NAMES
+from utils.constants.emojis import COLOURED_ELEMENT_EMOJIS
+from utils.constants.enemies import ENEMY_CATEGORY_NAMES
 from utils.enemy.enemies import get_enemy
 from utils.enemy.enemy_autocomplete import enemy_autocomplete
 from utils.enemy.enemy_format import format_elements, format_values
 from utils.enemy.ward_format import format_wards
-from utils.constants.colours import ENEMY_ELEMENT_COLOURS
-from utils.constants.emojis import COLOURED_ELEMENT_EMOJIS
-from utils.constants.elements import ELEMENT_NAMES
-from utils.constants.enemies import ENEMY_CATEGORY_NAMES
 from utils.errors.error_handler import send_interaction_error, send_not_found
+from utils.icons import get_enemy_icon, get_enemy_splash
 
 
 class Enemy(commands.Cog):

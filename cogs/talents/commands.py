@@ -1,11 +1,13 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from utils.character.characters import get_character
+from discord.ext import commands
+
 from utils.character.character_autocomplete import character_autocomplete
+from utils.character.characters import get_character
+from utils.errors.error_handler import send_interaction_error, send_not_found
 from utils.icons import get_character_icon, get_talent_emoji
 from utils.talents.talents_format import format_description, format_sections
-from utils.errors.error_handler import send_interaction_error, send_not_found
+
 
 class Skills(commands.Cog):
     def __init__(self, bot):

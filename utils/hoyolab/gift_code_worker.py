@@ -10,7 +10,6 @@ from utils.hoyolab.database import (
     update_gift_code_redemption,
 )
 
-
 GIFT_CODES_URL = "https://hoyo-codes.seria.moe/codes?game=genshin"
 
 # Check for new codes every 15 minutes.

@@ -1,5 +1,5 @@
-from .database import get_account, update_account_cookie_token
 from .client import HoYoLABClient
+from .database import get_account, update_account_cookie_token
 
 
 async def get_account_client(

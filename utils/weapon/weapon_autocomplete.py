@@ -1,4 +1,5 @@
 from discord import app_commands
+
 from utils.weapon.weapons import get_all_weapons
 
 

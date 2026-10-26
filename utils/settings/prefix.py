@@ -1,7 +1,4 @@
-from utils.settings.guild_settings_manager import (
-    get_guild_settings,
-    save_settings
-)
+from utils.settings.guild_settings_manager import get_guild_settings, save_settings
 
 
 def get_prefix(guild_id):

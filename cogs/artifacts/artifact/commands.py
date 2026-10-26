@@ -1,14 +1,13 @@
-import discord
 import json
 from pathlib import Path
+
+import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.artifacts.artifacts import load_artifacts
-from utils.artifacts.artifact_autocomplete import (
-    create_artifact_autocomplete
-)
-from utils.constants.colours import RARITY_COLOURS
 
+from utils.artifacts.artifact_autocomplete import create_artifact_autocomplete
+from utils.artifacts.artifacts import load_artifacts
+from utils.constants.colours import RARITY_COLOURS
 
 artifacts = load_artifacts()
 

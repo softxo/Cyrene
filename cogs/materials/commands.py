@@ -1,16 +1,21 @@
 import json
-import discord
-from pathlib import Path
-from discord.ext import commands
-from discord import app_commands
-from utils.character.characters import get_character
-from utils.character.character_autocomplete import character_autocomplete
-from utils.icons import get_character_icon, get_material_emoji
-from utils.constants.costs import ASCENSION_MORA_COSTS, LEVEL_MORA_COSTS, LEVEL_EXP_COSTS, TALENT_MORA_COSTS
 from collections import defaultdict
+from pathlib import Path
+
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+from utils.character.character_autocomplete import character_autocomplete
+from utils.character.characters import get_character
+from utils.constants.costs import (
+    ASCENSION_MORA_COSTS,
+    LEVEL_EXP_COSTS,
+    LEVEL_MORA_COSTS,
+    TALENT_MORA_COSTS,
+)
 from utils.errors.error_handler import send_interaction_error, send_not_found, send_not_your_command
-
-
+from utils.icons import get_character_icon, get_material_emoji
 
 MATERIALS_PATH = Path("data/materials")
 
@@ -150,7 +155,6 @@ def get_talent_text(data, emojis, talent_count=1):
     common_tier2_emoji = get_material_emoji(emojis, common["tiers"]["tier2"]["emoji"])
     common_tier3_emoji = get_material_emoji(emojis, common["tiers"]["tier3"]["emoji"])
 
-    weekly_emoji = get_material_emoji(emojis, weekly["emoji"])
     weekly_drop_emoji = get_material_emoji(emojis, weekly_drop["emoji"])
 
     crown_emoji = get_material_emoji(emojis, crown["emoji"])

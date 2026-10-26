@@ -1,20 +1,22 @@
-import discord
-import time
 import asyncio
-import yt_dlp as youtube_dl
-import yt_dlp.utils as ytdlp_utils
-import re
-import aiohttp
-import os
 import base64
+import os
 import random
+import re
+import time
 import urllib.parse
 from io import BytesIO
-from typing import Any, cast, Optional
+from typing import Any, Optional, cast
+
+import aiohttp
+import discord
+import yt_dlp as youtube_dl
+import yt_dlp.utils as ytdlp_utils
 from discord.ext import commands
 from dotenv import load_dotenv
-from utils.constants.emojis import MUSIC_EMOJIS as EMOJIS
 from PIL import Image
+
+from utils.constants.emojis import MUSIC_EMOJIS as EMOJIS
 
 load_dotenv()
 
@@ -817,7 +819,7 @@ class Music(commands.Cog):
                 payload = await resp.json()
                 token = payload.get("access_token")
                 if not token:
-                    raise RuntimeError(f"Spotify did not return an access token.")
+                    raise RuntimeError("Spotify did not return an access token.")
 
                 return token
 

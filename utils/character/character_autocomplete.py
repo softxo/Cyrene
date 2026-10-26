@@ -1,6 +1,7 @@
 from discord import app_commands
-from utils.character.characters import search_characters
+
 from utils.character.character_loader import CHARACTERS
+from utils.character.characters import search_characters
 
 
 async def character_autocomplete(

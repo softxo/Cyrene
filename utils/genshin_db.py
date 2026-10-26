@@ -6,7 +6,6 @@ from collections import OrderedDict
 
 import aiohttp
 
-
 API_URL = "https://genshin-db-api.vercel.app/api/v5"
 CACHE_SECONDS = 24 * 60 * 60
 _cache: OrderedDict = OrderedDict()

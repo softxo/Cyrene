@@ -1,4 +1,5 @@
 import traceback
+
 from utils.errors.error_database import save_error
 
 

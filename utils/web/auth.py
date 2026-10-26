@@ -1,9 +1,9 @@
 import secrets
 import time
-from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
-from utils.hoyolab.database import get_pool
+from datetime import datetime, timedelta, timezone
 
+from utils.hoyolab.database import get_pool
 
 VERIFICATION_TIMEOUT = 5 * 60
 WEB_SESSION_TIMEOUT = 30 * 24 * 60 * 60

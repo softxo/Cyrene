@@ -1,7 +1,8 @@
-import discord
 from pathlib import Path
-from discord import Emoji
 from typing import Optional
+
+import discord
+from discord import Emoji
 
 CHARACTER_ASSETS = Path("assets/characters")
 WEAPON_ASSETS = Path("assets/weapons")

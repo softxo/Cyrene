@@ -1,6 +1,5 @@
-from pathlib import Path
 import json
-
+from pathlib import Path
 
 DATA_FILE = Path("data/hoyolab/expedition_icons.json")
 

@@ -1,11 +1,13 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from utils.weapon.weapons import get_weapon
+from discord.ext import commands
+
+from utils.errors.error_handler import send_interaction_error, send_not_found
+from utils.icons import get_weapon_icon
 from utils.weapon.weapon_autocomplete import weapon_autocomplete
 from utils.weapon.weapon_materials_format import build_ascension_materials_embed
-from utils.icons import get_weapon_icon
-from utils.errors.error_handler import send_interaction_error, send_not_found, send_invalid_input
+from utils.weapon.weapons import get_weapon
+
 
 class Weapons(commands.Cog):
     def __init__(self, bot):

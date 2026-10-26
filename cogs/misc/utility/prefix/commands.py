@@ -1,12 +1,12 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
 
-from utils.settings.prefix import get_prefix, set_prefix
 from utils.errors.error_handler import (
-    send_interaction_error,
     send_context_error,
+    send_interaction_error,
 )
+from utils.settings.prefix import get_prefix, set_prefix
 
 
 class Prefix(commands.Cog):

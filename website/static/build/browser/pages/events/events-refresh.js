@@ -182,7 +182,7 @@ window.refreshEvents = async function refreshEvents() {
             let position = 0;
             for (const newChild of newChildren) {
                 const key = getNodeKey(newChild);
-                let matchingChild = key
+                const matchingChild = key
                     ? keyedChildren.get(key)
                     : null;
                 if (matchingChild && matchingChild.parentNode === current) {

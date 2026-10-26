@@ -1,5 +1,7 @@
-from utils.enemy.enemies import ENEMIES, normalise
 from discord import app_commands
+
+from utils.enemy.enemies import ENEMIES, normalise
+
 
 async def enemy_autocomplete(
     interaction,

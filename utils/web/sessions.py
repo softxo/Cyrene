@@ -2,6 +2,7 @@ import asyncio
 import secrets
 import time
 from dataclasses import dataclass, field
+
 from genshin.models.auth.geetest import SessionMMT
 
 SESSION_TIMEOUT = 10 * 60

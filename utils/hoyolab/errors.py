@@ -1,6 +1,7 @@
 import discord
-from utils.constants.emojis import ERROR_EMOJIS, ERROR_TYPE_EMOJIS
+
 from utils.constants.colours import ERROR_COLOURS, ERROR_TYPE_COLOURS
+from utils.constants.emojis import ERROR_EMOJIS, ERROR_TYPE_EMOJIS
 
 
 class HoYoLABError(Exception):

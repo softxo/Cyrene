@@ -3,11 +3,13 @@ import json
 import selectors
 import sys
 from pathlib import Path
+
 from dotenv import load_dotenv
+
 from utils.achievements.achievements import load_achievements
 from utils.hoyolab.database import (
-    initialise_database,
     import_achievement_progress,
+    initialise_database,
 )
 
 load_dotenv()
