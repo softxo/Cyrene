@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import aiohttp
 
 from utils.hoyolab.account_client import get_account_client
+from utils.hoyolab.client import RedemptionAuthenticationError
 from utils.hoyolab.database import (
     get_gift_code_auto_claim_accounts,
     get_gift_code_redemptions,
@@ -11,17 +12,16 @@ from utils.hoyolab.database import (
 )
 
 GIFT_CODES_URL = "https://hoyo-codes.seria.moe/codes?game=genshin"
-
-# Check for new codes every 15 minutes.
 CHECK_INTERVAL = 15 * 60
-
 REDEMPTION_DELAY_SECONDS = 6
-
-# A processing record older than this is considered abandoned, for example if the application stopped during a redemption.
 STALE_PROCESSING_AFTER = timedelta(minutes=30)
 
-# Allows the website to trigger an immediate check when automatic claiming is enabled.
 gift_code_wakeup = asyncio.Event()
+
+
+def account_log_label(account: dict) -> str:
+    nickname = account.get("cyrene_nickname") or account.get("nickname") or "Unnamed account"
+    return f"{nickname!r} (UID {account['genshin_uid']}, account {account['account_id']})"
 
 
 def request_gift_code_check() -> None:
@@ -39,9 +39,7 @@ async def fetch_active_gift_codes() -> list[dict]:
             response.raise_for_status()
             data = await response.json(content_type=None)
 
-    if not isinstance(data, dict) or not isinstance(
-        data.get("codes"), list
-    ):
+    if not isinstance(data, dict) or not isinstance(data.get("codes"), list):
         raise ValueError("Unexpected gift-code feed response.")
 
     active_codes = []
@@ -53,11 +51,7 @@ async def fetch_active_gift_codes() -> list[dict]:
 
         code = item.get("code")
 
-        if (
-            not isinstance(code, str)
-            or not code.strip()
-            or item.get("status") != "OK"
-        ):
+        if not isinstance(code, str) or not code.strip() or item.get("status") != "OK":
             continue
 
         code = code.strip().upper()
@@ -107,11 +101,9 @@ def should_skip_automatic_attempt(
             attempted_at = datetime.fromisoformat(attempted_at)
 
             if attempted_at.tzinfo is None:
-                attempted_at = attempted_at.replace(
-                    tzinfo=timezone.utc
-                )
+                attempted_at = attempted_at.replace(tzinfo=timezone.utc)
 
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             return True
 
         age = datetime.now(timezone.utc) - attempted_at
@@ -132,6 +124,7 @@ async def process_account(
     account_id = account["account_id"]
     user_id = account["discord_user_id"]
     genshin_uid = account["genshin_uid"]
+    account_label = account_log_label(account)
 
     redemptions = await get_gift_code_redemptions(account_id)
 
@@ -157,9 +150,7 @@ async def process_account(
             )
 
             if client is None:
-                raise RuntimeError(
-                    "Could not load the account client."
-                )
+                raise RuntimeError("Could not load the account client.")
 
             async with client:
                 await client.redeem_genshin_code(code)
@@ -179,37 +170,34 @@ async def process_account(
             redemptions[code] = {
                 "status": "submitted",
                 "message": message,
-                "attempted_at": datetime.now(
-                    timezone.utc
-                ).isoformat(),
+                "attempted_at": datetime.now(timezone.utc).isoformat(),
             }
 
-            print(
-                f"[Gift Codes] Submitted {code} "
-                f"for account {account_id} ({genshin_uid})."
-            )
+            print(f"[Gift Codes] Submitted {code} for {account_label}.")
 
         except Exception as exc:
             error_text = str(exc)
             error_type = type(exc).__name__
 
             # HoYoLAB limits how frequently codes can be redeemed.
-            if (
+            if isinstance(exc, RedemptionAuthenticationError):
+                # Keep this retryable after reconnecting and stop trying
+                # other codes with the same rejected account credentials.
+                status = "cooldown"
+                message = str(exc)
+
+            elif (
                 error_type == "RedemptionCooldown"
                 or "RedemptionCooldown" in error_text
                 or "[-2016]" in error_text
             ):
                 status = "cooldown"
                 message = (
-                    "HoYoLAB redemption cooldown. "
-                    "This code can be retried automatically later."
+                    "HoYoLAB redemption cooldown. This code can be retried automatically later."
                 )
 
             # This code has already been claimed or used.
-            elif (
-                error_type == "RedemptionClaimed"
-                or "[-2017]" in error_text
-            ):
+            elif error_type == "RedemptionClaimed" or "[-2017]" in error_text:
                 status = "failed"
                 message = (
                     "This code has already been redeemed or is "
@@ -226,7 +214,7 @@ async def process_account(
 
             print(
                 f"[Gift Codes] {status.capitalize()} for {code} "
-                f"on account {account_id}: "
+                f"on {account_label}: "
                 f"{error_type}: {error_text}"
             )
 
@@ -239,17 +227,17 @@ async def process_account(
                 )
             except Exception:
                 print(
-                    f"[Gift Codes] Could not save {status} status "
-                    f"for account {account_id}, code {code}."
+                    f"[Gift Codes] Could not save {status} status for {account_label}, code {code}."
                 )
 
             redemptions[code] = {
                 "status": status,
                 "message": message,
-                "attempted_at": datetime.now(
-                    timezone.utc
-                ).isoformat(),
+                "attempted_at": datetime.now(timezone.utc).isoformat(),
             }
+
+            if isinstance(exc, RedemptionAuthenticationError):
+                return
 
         # Wait after every attempt, whether it succeeded or failed.
         await asyncio.sleep(REDEMPTION_DELAY_SECONDS)
@@ -283,7 +271,7 @@ async def gift_code_worker() -> None:
                         except Exception as exc:
                             print(
                                 f"[Gift Codes] Error processing "
-                                f"account {account['account_id']}: "
+                                f"{account_log_label(account)}: "
                                 f"{type(exc).__name__}: {exc}"
                             )
 
@@ -294,10 +282,7 @@ async def gift_code_worker() -> None:
             raise
 
         except Exception as exc:
-            print(
-                f"[Gift Codes] Worker cycle failed: "
-                f"{type(exc).__name__}: {exc}"
-            )
+            print(f"[Gift Codes] Worker cycle failed: {type(exc).__name__}: {exc}")
 
         gift_code_wakeup.clear()
 

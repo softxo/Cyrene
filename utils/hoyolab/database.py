@@ -15,9 +15,7 @@ def get_database_url() -> str:
     database_url = os.getenv("DATABASE_URL")
 
     if not database_url:
-        raise RuntimeError(
-            "DATABASE_URL is not configured."
-        )
+        raise RuntimeError("DATABASE_URL is not configured.")
 
     return database_url
 
@@ -31,15 +29,12 @@ async def initialise_database() -> None:
             min_size=1,
             max_size=10,
             open=False,
-            kwargs={
-                "row_factory": dict_row
-            }
+            kwargs={"row_factory": dict_row},
         )
 
         await _pool.open()
 
     async with _pool.connection() as connection:
-
         # =========================================
         # ACCOUNTS
         # =========================================
@@ -885,9 +880,7 @@ async def initialise_database() -> None:
 
 def get_pool() -> AsyncConnectionPool:
     if _pool is None:
-        raise RuntimeError(
-            "HoYoLAB database pool has not been initialised."
-        )
+        raise RuntimeError("HoYoLAB database pool has not been initialised.")
 
     return _pool
 
@@ -912,74 +905,40 @@ async def save_account(
     genshin_server: str,
     nickname: str | None = None,
     cyrene_nickname: str | None = None,
-    level: int | None = None
+    level: int | None = None,
 ) -> None:
     crypto = HoYoLABCrypto()
 
-    encrypted_stoken = (
-        crypto.encrypt(credentials.stoken)
-        if credentials.stoken
-        else None
-    )
+    encrypted_stoken = crypto.encrypt(credentials.stoken) if credentials.stoken else None
 
-    encrypted_ltuid_v2 = (
-        crypto.encrypt(credentials.ltuid_v2)
-        if credentials.ltuid_v2
-        else None
-    )
+    encrypted_ltuid_v2 = crypto.encrypt(credentials.ltuid_v2) if credentials.ltuid_v2 else None
 
-    encrypted_ltoken_v2 = (
-        crypto.encrypt(credentials.ltoken_v2)
-        if credentials.ltoken_v2
-        else None
-    )
+    encrypted_ltoken_v2 = crypto.encrypt(credentials.ltoken_v2) if credentials.ltoken_v2 else None
 
-    encrypted_ltmid_v2 = (
-        crypto.encrypt(credentials.ltmid_v2)
-        if credentials.ltmid_v2
-        else None
-    )
+    encrypted_ltmid_v2 = crypto.encrypt(credentials.ltmid_v2) if credentials.ltmid_v2 else None
 
     encrypted_cookie_token_v2 = (
-        crypto.encrypt(credentials.cookie_token_v2)
-        if credentials.cookie_token_v2
-        else None
+        crypto.encrypt(credentials.cookie_token_v2) if credentials.cookie_token_v2 else None
     )
 
     encrypted_account_mid_v2 = (
-        crypto.encrypt(credentials.account_mid_v2)
-        if credentials.account_mid_v2
-        else None
+        crypto.encrypt(credentials.account_mid_v2) if credentials.account_mid_v2 else None
     )
 
     encrypted_account_id_v2 = (
-        crypto.encrypt(credentials.account_id_v2)
-        if credentials.account_id_v2
-        else None
+        crypto.encrypt(credentials.account_id_v2) if credentials.account_id_v2 else None
     )
 
-    encrypted_ltuid = (
-        crypto.encrypt(credentials.ltuid)
-        if credentials.ltuid
-        else None
-    )
+    encrypted_ltuid = crypto.encrypt(credentials.ltuid) if credentials.ltuid else None
 
-    encrypted_ltoken = (
-        crypto.encrypt(credentials.ltoken)
-        if credentials.ltoken
-        else None
-    )
-    
+    encrypted_ltoken = crypto.encrypt(credentials.ltoken) if credentials.ltoken else None
+
     encrypted_cookie_token = (
-        crypto.encrypt(credentials.cookie_token)
-        if credentials.cookie_token
-        else None
+        crypto.encrypt(credentials.cookie_token) if credentials.cookie_token else None
     )
 
     encrypted_account_id = (
-        crypto.encrypt(credentials.account_id)
-        if credentials.account_id
-        else None
+        crypto.encrypt(credentials.account_id) if credentials.account_id else None
     )
 
     now = datetime.now(timezone.utc).isoformat()
@@ -1148,9 +1107,7 @@ async def update_account_cookie_token(
     cookie_token_v2: str,
 ) -> None:
     """Persist a refreshed HoYoLAB cookie token."""
-    encrypted_cookie_token = HoYoLABCrypto().encrypt(
-        cookie_token_v2
-    )
+    encrypted_cookie_token = HoYoLABCrypto().encrypt(cookie_token_v2)
 
     async with get_pool().connection() as connection:
         await connection.execute(
@@ -1170,9 +1127,7 @@ async def update_account_cookie_token(
         )
 
 
-async def get_account_count(
-    discord_user_id: int
-) -> int:
+async def get_account_count(discord_user_id: int) -> int:
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1180,7 +1135,7 @@ async def get_account_count(
             FROM accounts
             WHERE discord_user_id = %s
             """,
-            (discord_user_id,)
+            (discord_user_id,),
         )
 
         row = await result.fetchone()
@@ -1188,10 +1143,7 @@ async def get_account_count(
     return row["count"]
 
 
-async def account_exists(
-    discord_user_id: int,
-    genshin_uid: str
-) -> bool:
+async def account_exists(discord_user_id: int, genshin_uid: str) -> bool:
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1201,10 +1153,7 @@ async def account_exists(
             AND genshin_uid = %s
             LIMIT 1
             """,
-            (
-                discord_user_id,
-                genshin_uid
-            )
+            (discord_user_id, genshin_uid),
         )
 
         row = await result.fetchone()
@@ -1272,10 +1221,7 @@ async def replace_character_plans(
             )
 
 
-async def delete_account(
-    discord_user_id: int,
-    genshin_uid: str
-) -> bool:
+async def delete_account(discord_user_id: int, genshin_uid: str) -> bool:
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1283,10 +1229,7 @@ async def delete_account(
             WHERE discord_user_id = %s
             AND genshin_uid = %s
             """,
-            (
-                discord_user_id,
-                genshin_uid
-            )
+            (discord_user_id, genshin_uid),
         )
 
     return result.rowcount > 0
@@ -1315,8 +1258,8 @@ async def update_discord_user(
                 discord_display_name,
                 discord_user_id,
                 discord_username,
-                discord_display_name
-            )
+                discord_display_name,
+            ),
         )
 
     return result.rowcount > 0
@@ -1345,17 +1288,15 @@ async def update_discord_server(
                 discord_guild_name,
                 discord_user_id,
                 discord_guild_id,
-                discord_guild_name
-            )
+                discord_guild_name,
+            ),
         )
 
     return result.rowcount > 0
 
 
 async def update_account_nickname(
-    discord_user_id: int,
-    genshin_uid: str,
-    cyrene_nickname: str | None
+    discord_user_id: int, genshin_uid: str, cyrene_nickname: str | None
 ) -> bool:
     async with get_pool().connection() as connection:
         result = await connection.execute(
@@ -1365,19 +1306,13 @@ async def update_account_nickname(
             WHERE discord_user_id = %s
             AND genshin_uid = %s
             """,
-            (
-                cyrene_nickname,
-                discord_user_id,
-                genshin_uid
-            )
+            (cyrene_nickname, discord_user_id, genshin_uid),
         )
 
     return result.rowcount > 0
 
 
-async def get_accounts(
-    discord_user_id: int
-) -> list[dict]:
+async def get_accounts(discord_user_id: int) -> list[dict]:
     crypto = HoYoLABCrypto()
 
     async with get_pool().connection() as connection:
@@ -1388,7 +1323,7 @@ async def get_accounts(
             WHERE discord_user_id = %s
             ORDER BY created_at ASC
             """,
-            (discord_user_id,)
+            (discord_user_id,),
         )
 
         rows = await rows.fetchall()
@@ -1397,61 +1332,21 @@ async def get_accounts(
 
     for row in rows:
         credentials = HoYoLABCredentials(
-            stoken=(
-                crypto.decrypt(row["stoken"])
-                if row["stoken"]
-                else None
-            ),
-            ltuid_v2=(
-                crypto.decrypt(row["ltuid_v2"])
-                if row["ltuid_v2"]
-                else None
-            ),
-            ltoken_v2=(
-                crypto.decrypt(row["ltoken_v2"])
-                if row["ltoken_v2"]
-                else None
-            ),
-            ltmid_v2=(
-                crypto.decrypt(row["ltmid_v2"])
-                if row["ltmid_v2"]
-                else None
-            ),
+            stoken=(crypto.decrypt(row["stoken"]) if row["stoken"] else None),
+            ltuid_v2=(crypto.decrypt(row["ltuid_v2"]) if row["ltuid_v2"] else None),
+            ltoken_v2=(crypto.decrypt(row["ltoken_v2"]) if row["ltoken_v2"] else None),
+            ltmid_v2=(crypto.decrypt(row["ltmid_v2"]) if row["ltmid_v2"] else None),
             cookie_token_v2=(
-                crypto.decrypt(row["cookie_token_v2"])
-                if row["cookie_token_v2"]
-                else None
+                crypto.decrypt(row["cookie_token_v2"]) if row["cookie_token_v2"] else None
             ),
             account_mid_v2=(
-                crypto.decrypt(row["account_mid_v2"])
-                if row["account_mid_v2"]
-                else None
+                crypto.decrypt(row["account_mid_v2"]) if row["account_mid_v2"] else None
             ),
-            account_id_v2=(
-                crypto.decrypt(row["account_id_v2"])
-                if row["account_id_v2"]
-                else None
-            ),
-            ltuid=(
-                crypto.decrypt(row["ltuid"])
-                if row["ltuid"]
-                else None
-            ),
-            ltoken=(
-                crypto.decrypt(row["ltoken"])
-                if row["ltoken"]
-                else None
-            ),
-            cookie_token=(
-                crypto.decrypt(row["cookie_token"])
-                if row["cookie_token"]
-                else None
-            ),
-            account_id=(
-                crypto.decrypt(row["account_id"])
-                if row["account_id"]
-                else None
-            ),
+            account_id_v2=(crypto.decrypt(row["account_id_v2"]) if row["account_id_v2"] else None),
+            ltuid=(crypto.decrypt(row["ltuid"]) if row["ltuid"] else None),
+            ltoken=(crypto.decrypt(row["ltoken"]) if row["ltoken"] else None),
+            cookie_token=(crypto.decrypt(row["cookie_token"]) if row["cookie_token"] else None),
+            account_id=(crypto.decrypt(row["account_id"]) if row["account_id"] else None),
         )
 
         accounts.append(
@@ -1469,17 +1364,14 @@ async def get_accounts(
                 "cyrene_nickname": row["cyrene_nickname"],
                 "level": row["level"],
                 "created_at": row["created_at"],
-                "updated_at": row["updated_at"]
+                "updated_at": row["updated_at"],
             }
         )
 
     return accounts
 
 
-async def get_account(
-    discord_user_id: int,
-    genshin_uid: str
-) -> dict | None:
+async def get_account(discord_user_id: int, genshin_uid: str) -> dict | None:
     crypto = HoYoLABCrypto()
 
     async with get_pool().connection() as connection:
@@ -1491,10 +1383,7 @@ async def get_account(
             AND genshin_uid = %s
             LIMIT 1
             """,
-            (
-                discord_user_id,
-                genshin_uid
-            )
+            (discord_user_id, genshin_uid),
         )
 
         row = await result.fetchone()
@@ -1503,85 +1392,38 @@ async def get_account(
         return None
 
     credentials = HoYoLABCredentials(
-        stoken=(
-            crypto.decrypt(row["stoken"])
-            if row["stoken"]
-            else None
-        ),
-        ltuid_v2=(
-            crypto.decrypt(row["ltuid_v2"])
-            if row["ltuid_v2"]
-            else None
-        ),
-        ltoken_v2=(
-            crypto.decrypt(row["ltoken_v2"])
-            if row["ltoken_v2"]
-            else None
-        ),
-        ltmid_v2=(
-            crypto.decrypt(row["ltmid_v2"])
-            if row["ltmid_v2"]
-            else None
-        ),
+        stoken=(crypto.decrypt(row["stoken"]) if row["stoken"] else None),
+        ltuid_v2=(crypto.decrypt(row["ltuid_v2"]) if row["ltuid_v2"] else None),
+        ltoken_v2=(crypto.decrypt(row["ltoken_v2"]) if row["ltoken_v2"] else None),
+        ltmid_v2=(crypto.decrypt(row["ltmid_v2"]) if row["ltmid_v2"] else None),
         cookie_token_v2=(
-            crypto.decrypt(row["cookie_token_v2"])
-            if row["cookie_token_v2"]
-            else None
+            crypto.decrypt(row["cookie_token_v2"]) if row["cookie_token_v2"] else None
         ),
-        account_mid_v2=(
-            crypto.decrypt(row["account_mid_v2"])
-            if row["account_mid_v2"]
-            else None
-        ),
-        account_id_v2=(
-            crypto.decrypt(row["account_id_v2"])
-            if row["account_id_v2"]
-            else None
-        ),
-        ltuid=(
-            crypto.decrypt(row["ltuid"])
-            if row["ltuid"]
-            else None
-        ),
-        ltoken=(
-            crypto.decrypt(row["ltoken"])
-            if row["ltoken"]
-            else None
-        ),
-        cookie_token=(
-            crypto.decrypt(row["cookie_token"])
-            if row["cookie_token"]
-            else None
-        ),
-        account_id=(
-            crypto.decrypt(row["account_id"])
-            if row["account_id"]
-            else None
-        ),
-)
+        account_mid_v2=(crypto.decrypt(row["account_mid_v2"]) if row["account_mid_v2"] else None),
+        account_id_v2=(crypto.decrypt(row["account_id_v2"]) if row["account_id_v2"] else None),
+        ltuid=(crypto.decrypt(row["ltuid"]) if row["ltuid"] else None),
+        ltoken=(crypto.decrypt(row["ltoken"]) if row["ltoken"] else None),
+        cookie_token=(crypto.decrypt(row["cookie_token"]) if row["cookie_token"] else None),
+        account_id=(crypto.decrypt(row["account_id"]) if row["account_id"] else None),
+    )
 
     return {
         "id": row["id"],
-
         "discord_user_id": row["discord_user_id"],
         "discord_username": row["discord_username"],
         "discord_display_name": row["discord_display_name"],
-
         "discord_guild_id": row["discord_guild_id"],
         "discord_guild_name": row["discord_guild_name"],
-
         "credentials": credentials,
-
         "genshin_uid": row["genshin_uid"],
         "genshin_server": row["genshin_server"],
         "nickname": row["nickname"],
         "cyrene_nickname": row["cyrene_nickname"],
         "level": row["level"],
-
         "created_at": row["created_at"],
-        "updated_at": row["updated_at"]
+        "updated_at": row["updated_at"],
     }
-    
+
 
 async def get_event_activity_check(
     discord_user_id: int,
@@ -1591,7 +1433,6 @@ async def get_event_activity_check(
 ) -> bool | None:
 
     async with get_pool().connection() as connection:
-
         result = await connection.execute(
             """
             SELECT checked
@@ -1607,7 +1448,7 @@ async def get_event_activity_check(
                 genshin_uid,
                 activity_type,
                 period_key,
-            )
+            ),
         )
 
         row = await result.fetchone()
@@ -1627,7 +1468,6 @@ async def set_event_activity_check(
 ) -> bool:
 
     async with get_pool().connection() as connection:
-
         await connection.execute(
             """
             INSERT INTO event_activity_checks (
@@ -1658,7 +1498,7 @@ async def set_event_activity_check(
                 activity_type,
                 period_key,
                 checked,
-            )
+            ),
         )
 
     return True
@@ -1672,7 +1512,6 @@ async def get_event_activity_checks(
 ) -> dict[str, bool | None]:
 
     async with get_pool().connection() as connection:
-
         result = await connection.execute(
             """
             SELECT activity_type, checked
@@ -1690,7 +1529,7 @@ async def get_event_activity_checks(
                 genshin_uid,
                 daily_period_key,
                 trounce_period_key,
-            )
+            ),
         )
 
         rows = await result.fetchall()
@@ -1714,21 +1553,13 @@ async def create_reminder(
     config: dict | None = None,
     delivery_type: str = "dm",
     reminder_mode: str = "automatic",
-    next_trigger_at: datetime | None = None
+    next_trigger_at: datetime | None = None,
 ) -> int:
 
-    if reminder_mode not in {
-        "automatic",
-        "manual"
-    }:
-        raise ValueError(
-            "Invalid reminder mode."
-        )
+    if reminder_mode not in {"automatic", "manual"}:
+        raise ValueError("Invalid reminder mode.")
 
-    if (
-        reminder_mode == "automatic"
-        and next_trigger_at is None
-    ):
+    if reminder_mode == "automatic" and next_trigger_at is None:
         next_trigger_at = datetime.now(timezone.utc)
 
     async with get_pool().connection() as connection:
@@ -1742,12 +1573,7 @@ async def create_reminder(
             AND genshin_uid IS NOT DISTINCT FROM %s
             LIMIT 1
             """,
-            (
-                discord_user_id,
-                reminder_type,
-                reminder_mode,
-                genshin_uid
-            )
+            (discord_user_id, reminder_type, reminder_mode, genshin_uid),
         )
 
         existing = await result.fetchone()
@@ -1768,13 +1594,7 @@ async def create_reminder(
                 WHERE discord_user_id = %s
                 AND id = %s
                 """,
-                (
-                    delivery_type,
-                    Jsonb(config or {}),
-                    next_trigger_at,
-                    discord_user_id,
-                    reminder_id
-                )
+                (delivery_type, Jsonb(config or {}), next_trigger_at, discord_user_id, reminder_id),
             )
 
             return reminder_id
@@ -1807,8 +1627,8 @@ async def create_reminder(
                 genshin_uid,
                 delivery_type,
                 Jsonb(config or {}),
-                next_trigger_at
-            )
+                next_trigger_at,
+            ),
         )
 
         row = await result.fetchone()
@@ -1816,11 +1636,7 @@ async def create_reminder(
     return row["id"]
 
 
-async def get_reminders(
-    discord_user_id: int,
-    *,
-    enabled_only: bool = False
-) -> list[dict]:
+async def get_reminders(discord_user_id: int, *, enabled_only: bool = False) -> list[dict]:
     async with get_pool().connection() as connection:
         query = """
             SELECT
@@ -1851,18 +1667,12 @@ async def get_reminders(
             ORDER BY r.created_at ASC
         """
 
-        result = await connection.execute(
-            query,
-            tuple(params)
-        )
+        result = await connection.execute(query, tuple(params))
 
         return await result.fetchall()
 
 
-async def get_reminder(
-    discord_user_id: int,
-    reminder_id: int
-) -> dict | None:
+async def get_reminder(discord_user_id: int, reminder_id: int) -> dict | None:
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1872,16 +1682,14 @@ async def get_reminder(
             AND id = %s
             LIMIT 1
             """,
-            (
-                discord_user_id,
-                reminder_id
-            )
+            (discord_user_id, reminder_id),
         )
 
         return await result.fetchone()
 
 
 _UNSET = object()
+
 
 async def update_reminder(
     discord_user_id: int,
@@ -1890,7 +1698,7 @@ async def update_reminder(
     enabled: bool | None = None,
     config: dict | None = None,
     next_trigger_at: datetime | None | object = _UNSET,
-    last_triggered_at: datetime | None = None
+    last_triggered_at: datetime | None = None,
 ) -> bool:
     updates = []
     values = []
@@ -1916,10 +1724,7 @@ async def update_reminder(
 
     updates.append("updated_at = NOW()")
 
-    values.extend([
-        discord_user_id,
-        reminder_id
-    ])
+    values.extend([discord_user_id, reminder_id])
 
     async with get_pool().connection() as connection:
         result = await connection.execute(
@@ -1929,16 +1734,13 @@ async def update_reminder(
             WHERE discord_user_id = %s
             AND id = %s
             """,
-            tuple(values)
+            tuple(values),
         )
 
     return result.rowcount > 0
 
 
-async def delete_reminder(
-    discord_user_id: int,
-    reminder_id: int
-) -> bool:
+async def delete_reminder(discord_user_id: int, reminder_id: int) -> bool:
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1946,10 +1748,7 @@ async def delete_reminder(
             WHERE discord_user_id = %s
             AND id = %s
             """,
-            (
-                discord_user_id,
-                reminder_id
-            )
+            (discord_user_id, reminder_id),
         )
 
     return result.rowcount > 0
@@ -1990,21 +1789,17 @@ async def get_achievement_progress(
             AND account_id = %s
             ORDER BY achievement_id, tier
             """,
-            (discord_user_id, account_id)
+            (discord_user_id, account_id),
         )
 
         return await result.fetchall()
 
 
 async def get_achievement_tier_progress(
-    discord_user_id: int,
-    account_id: int,
-    achievement_id: str,
-    tier: int
+    discord_user_id: int, account_id: int, achievement_id: str, tier: int
 ) -> dict | None:
 
     async with get_pool().connection() as connection:
-
         result = await connection.execute(
             """
             SELECT
@@ -2021,12 +1816,7 @@ async def get_achievement_tier_progress(
             AND tier = %s
             LIMIT 1
             """,
-            (
-                discord_user_id,
-                account_id,
-                achievement_id,
-                tier
-            )
+            (discord_user_id, account_id, achievement_id, tier),
         )
 
         return await result.fetchone()
@@ -2041,14 +1831,11 @@ async def update_achievement_tier(
     completed: bool | None = None,
     current: int | None = None,
     completed_at: datetime | None | object = _UNSET,
-    note: str | None | object = _UNSET
+    note: str | None | object = _UNSET,
 ) -> bool:
 
     existing = await get_achievement_tier_progress(
-        discord_user_id,
-        account_id,
-        achievement_id,
-        tier
+        discord_user_id, account_id, achievement_id, tier
     )
 
     # --------------------------------
@@ -2056,7 +1843,6 @@ async def update_achievement_tier(
     # --------------------------------
 
     if existing is None:
-
         if completed is None:
             completed = False
 
@@ -2064,33 +1850,18 @@ async def update_achievement_tier(
             current = 0
 
         if completed_at is _UNSET:
-            completed_at = (
-                datetime.now(timezone.utc)
-                if completed
-                else None
-            )
+            completed_at = datetime.now(timezone.utc) if completed else None
 
         if note is _UNSET:
             note = None
 
-        if not (
-            completed_at is None
-            or isinstance(completed_at, datetime)
-        ):
-            completed_at = (
-                datetime.now(timezone.utc)
-                if completed
-                else None
-            )
+        if not (completed_at is None or isinstance(completed_at, datetime)):
+            completed_at = datetime.now(timezone.utc) if completed else None
 
-        if not (
-            note is None
-            or isinstance(note, str)
-        ):
+        if not (note is None or isinstance(note, str)):
             note = None
 
         async with get_pool().connection() as connection:
-
             await connection.execute(
                 """
                 INSERT INTO achievement_progress (
@@ -2115,8 +1886,8 @@ async def update_achievement_tier(
                     completed,
                     current,
                     completed_at,
-                    note
-                )
+                    note,
+                ),
             )
 
         return True
@@ -2129,88 +1900,41 @@ async def update_achievement_tier(
     values = []
 
     if completed is not None:
+        updates.append("completed = %s")
 
-        updates.append(
-            "completed = %s"
-        )
-
-        values.append(
-            completed
-        )
-
+        values.append(completed)
 
         if completed:
-
-            completed_at = datetime.now(
-                timezone.utc
-            )
+            completed_at = datetime.now(timezone.utc)
 
         else:
-
             completed_at = None
 
-
     if current is not None:
+        updates.append("current = %s")
 
-        updates.append(
-            "current = %s"
-        )
-
-        values.append(
-            current
-        )
-
+        values.append(current)
 
     if completed_at is not _UNSET:
+        if completed_at is None or isinstance(completed_at, datetime):
+            updates.append("completed_at = %s")
 
-        if (
-            completed_at is None
-            or isinstance(completed_at, datetime)
-        ):
-
-            updates.append(
-                "completed_at = %s"
-            )
-
-            values.append(
-                completed_at
-            )
-
+            values.append(completed_at)
 
     if note is not _UNSET:
+        if note is None or isinstance(note, str):
+            updates.append("note = %s")
 
-        if (
-            note is None
-            or isinstance(note, str)
-        ):
-
-            updates.append(
-                "note = %s"
-            )
-
-            values.append(
-                note
-            )
-
+            values.append(note)
 
     if not updates:
         return False
 
+    updates.append("updated_at = NOW()")
 
-    updates.append(
-        "updated_at = NOW()"
-    )
-
-    values.extend([
-        discord_user_id,
-        account_id,
-        achievement_id,
-        tier
-    ])
-
+    values.extend([discord_user_id, account_id, achievement_id, tier])
 
     async with get_pool().connection() as connection:
-
         result = await connection.execute(
             f"""
             UPDATE achievement_progress
@@ -2220,9 +1944,8 @@ async def update_achievement_tier(
             AND achievement_id = %s
             AND tier = %s
             """,
-            tuple(values)
+            tuple(values),
         )
-
 
     return result.rowcount > 0
 
@@ -2236,14 +1959,10 @@ async def update_achievement_tier_note(
 ) -> bool:
 
     existing = await get_achievement_tier_progress(
-        discord_user_id,
-        account_id,
-        achievement_id,
-        tier
+        discord_user_id, account_id, achievement_id, tier
     )
 
     if existing is None:
-
         await update_achievement_tier(
             discord_user_id=discord_user_id,
             account_id=account_id,
@@ -2254,7 +1973,6 @@ async def update_achievement_tier_note(
         )
 
     async with get_pool().connection() as connection:
-
         result = await connection.execute(
             """
             UPDATE achievement_progress
@@ -2266,22 +1984,14 @@ async def update_achievement_tier_note(
             AND achievement_id = %s
             AND tier = %s
             """,
-            (
-                note,
-                discord_user_id,
-                account_id,
-                achievement_id,
-                tier
-            )
+            (note, discord_user_id, account_id, achievement_id, tier),
         )
 
     return result.rowcount > 0
 
 
 async def import_achievement_progress(
-    discord_user_id: int,
-    account_id: int,
-    progress_data: dict
+    discord_user_id: int, account_id: int, progress_data: dict
 ) -> None:
     async with get_pool().connection() as connection:
         for achievement_id, achievement_data in progress_data.items():
@@ -2290,23 +2000,16 @@ async def import_achievement_progress(
             for tier_number, tier_data in tiers.items():
                 tier = int(tier_number)
 
-                completed = bool(
-                    tier_data.get("completed", False)
-                )
+                completed = bool(tier_data.get("completed", False))
 
-                current = int(
-                    tier_data.get("current", 0)
-                )
+                current = int(tier_data.get("current", 0))
 
                 timestamp = tier_data.get("timestamp")
 
                 completed_at = None
 
                 if timestamp:
-                    completed_at = datetime.fromtimestamp(
-                        timestamp,
-                        tz=timezone.utc
-                    )
+                    completed_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
 
                 await connection.execute(
                     """
@@ -2343,8 +2046,8 @@ async def import_achievement_progress(
                         tier,
                         completed,
                         current,
-                        completed_at
-                    )
+                        completed_at,
+                    ),
                 )
 
 
@@ -2416,8 +2119,8 @@ async def import_wish_history(
             imported += int(bool(saved and saved["inserted"]))
 
     return imported
-                
-                
+
+
 async def create_custom_event(
     discord_user_id: int,
     title: str,
@@ -2436,9 +2139,7 @@ async def create_custom_event(
         # Validate the account assignment before creating the event.
         if account_scope == "account":
             if account_id is None:
-                raise ValueError(
-                    "An account must be selected for an account-specific event."
-                )
+                raise ValueError("An account must be selected for an account-specific event.")
 
             account_result = await connection.execute(
                 """
@@ -2451,9 +2152,7 @@ async def create_custom_event(
             )
 
             if await account_result.fetchone() is None:
-                raise ValueError(
-                    "The selected account does not belong to this user."
-                )
+                raise ValueError("The selected account does not belong to this user.")
 
         elif account_scope == "all":
             account_id = None
@@ -2556,8 +2255,8 @@ async def create_custom_event(
         )
 
         return event
-    
-    
+
+
 async def get_custom_events(
     discord_user_id: int,
     account_id: int | None = None,
@@ -2631,8 +2330,8 @@ async def get_custom_events(
         )
 
         return await result.fetchall()
-    
-    
+
+
 async def get_visible_custom_event(
     discord_user_id: int,
     event_id: int,
@@ -2670,8 +2369,8 @@ async def get_visible_custom_event(
         )
 
         return await result.fetchone()
-    
-    
+
+
 async def reorder_custom_events(
     discord_user_id: int,
     account_id: int,
@@ -2821,22 +2520,13 @@ async def reorder_custom_events(
                 ),
             )
 
-            existing_ids = [
-                int(row["event_id"])
-                for row in await result.fetchall()
-            ]
+            existing_ids = [int(row["event_id"]) for row in await result.fetchall()]
 
             existing_id_set = set(existing_ids)
-            requested_ids = [
-                int(event_id)
-                for event_id in ordered_event_ids
-            ]
+            requested_ids = [int(event_id) for event_id in ordered_event_ids]
 
             # Reject any event that is not visible to this account.
-            if any(
-                event_id not in existing_id_set
-                for event_id in requested_ids
-            ):
+            if any(event_id not in existing_id_set for event_id in requested_ids):
                 return False
 
             # Preserve the positions of events omitted from a partial
@@ -2844,9 +2534,7 @@ async def reorder_custom_events(
             requested_id_set = set(requested_ids)
 
             visible_positions = [
-                index
-                for index, event_id in enumerate(existing_ids)
-                if event_id in requested_id_set
+                index for index, event_id in enumerate(existing_ids) if event_id in requested_id_set
             ]
 
             if len(visible_positions) != len(requested_ids):
@@ -2882,7 +2570,7 @@ async def reorder_custom_events(
                 )
 
     return True
-    
+
 
 async def get_custom_event(
     discord_user_id: int,
@@ -2901,7 +2589,7 @@ async def get_custom_event(
         )
 
         return await result.fetchone()
-    
+
 
 async def get_custom_event_account_progress(
     discord_user_id: int,
@@ -2951,10 +2639,7 @@ async def get_custom_event_account_progress(
 
         rows = await result.fetchall()
 
-    return {
-        int(row["objective_index"]): int(row["current"])
-        for row in rows
-    }
+    return {int(row["objective_index"]): int(row["current"]) for row in rows}
 
 
 async def change_custom_event_account_progress(
@@ -3059,7 +2744,7 @@ async def change_custom_event_account_progress(
         row = await result.fetchone()
 
     return int(row["current"]) if row else None
-    
+
 
 async def update_custom_event(
     discord_user_id: int,
@@ -3115,7 +2800,7 @@ async def update_custom_event(
         )
 
         return await result.fetchone()
-    
+
 
 async def delete_custom_event(
     discord_user_id: int,
@@ -3133,7 +2818,7 @@ async def delete_custom_event(
         )
 
         return await result.fetchone() is not None
-    
+
 
 async def set_custom_event_completion(
     discord_user_id: int,
@@ -3328,7 +3013,7 @@ async def get_custom_event_completions(
 
     return [dict(row) for row in rows]
 
-    
+
 async def get_gift_code_settings(account_id: int) -> dict:
     """Return gift-code settings for an account."""
 
@@ -3345,9 +3030,7 @@ async def get_gift_code_settings(account_id: int) -> dict:
         row = await result.fetchone()
 
     return {
-        "auto_claim_enabled": (
-            row["auto_claim_enabled"] if row else False
-        ),
+        "auto_claim_enabled": (row["auto_claim_enabled"] if row else False),
     }
 
 
@@ -3396,11 +3079,7 @@ async def get_gift_code_redemptions(
         row["code"]: {
             "status": row["status"],
             "message": row["message"],
-            "attempted_at": (
-                row["attempted_at"].isoformat()
-                if row["attempted_at"]
-                else None
-            ),
+            "attempted_at": (row["attempted_at"].isoformat() if row["attempted_at"] else None),
         }
         for row in rows
     }
@@ -3440,8 +3119,8 @@ async def update_gift_code_redemption(
                 message,
             ),
         )
-        
-        
+
+
 async def get_gift_code_auto_claim_accounts() -> list[dict]:
     """Return accounts that have enabled automatic gift-code claiming."""
 
@@ -3451,7 +3130,9 @@ async def get_gift_code_auto_claim_accounts() -> list[dict]:
             SELECT
                 a.id AS account_id,
                 a.discord_user_id,
-                a.genshin_uid
+                a.genshin_uid,
+                a.nickname,
+                a.cyrene_nickname
             FROM accounts a
             INNER JOIN gift_code_settings s
                 ON s.account_id = a.id
@@ -3461,7 +3142,7 @@ async def get_gift_code_auto_claim_accounts() -> list[dict]:
         )
 
         return await result.fetchall()
-    
+
 
 async def get_daily_checkin_settings(
     account_id: int,
@@ -3485,13 +3166,9 @@ async def get_daily_checkin_settings(
         row = await result.fetchone()
 
     return {
-        "auto_checkin_enabled": (
-            row["auto_checkin_enabled"] if row else False
-        ),
+        "auto_checkin_enabled": (row["auto_checkin_enabled"] if row else False),
         "last_claimed_date": (
-            row["last_claimed_date"].isoformat()
-            if row and row["last_claimed_date"]
-            else None
+            row["last_claimed_date"].isoformat() if row and row["last_claimed_date"] else None
         ),
         "last_status": row["last_status"] if row else None,
         "last_message": row["last_message"] if row else None,
