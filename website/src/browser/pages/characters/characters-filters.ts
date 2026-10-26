@@ -194,13 +194,12 @@ function initCharactersFilters() {
 
         options.forEach((option, index) => {
             option.addEventListener("keydown", event => {
-                let nextIndex = index;
+                let nextIndex;
 
                 if (event.key === "ArrowDown") {
                     nextIndex = (index + 1) % options.length;
                 } else if (event.key === "ArrowUp") {
-                    nextIndex =
-                        (index - 1 + options.length) % options.length;
+                    nextIndex = (index - 1 + options.length) % options.length;
                 } else if (event.key === "Escape") {
                     closeDropdown(dropdown);
                     button.focus();

@@ -123,7 +123,7 @@
         const characterFiveStars = wishes.filter(wish => resultFor(wish));
         const wins = characterFiveStars.filter(wish => resultFor(wish) === "win").length;
         document.getElementById("wish-win-rate").textContent = characterFiveStars.length ? `${Math.round(wins / characterFiveStars.length * 100)}%` : "—";
-        let visible = wishes.filter(wish => (filter.value === "all" || category(wish.gacha_type) === filter.value) && selectedRarities.has(Number(wish.rank_type)));
+        const visible = wishes.filter(wish => (filter.value === "all" || category(wish.gacha_type) === filter.value) && selectedRarities.has(Number(wish.rank_type)));
         const pageSize = currentView === "grid" ? gridPageSize : listPageSize;
         const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
         currentPage = Math.min(currentPage, pageCount);

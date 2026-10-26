@@ -142,7 +142,7 @@ function initCustomEvents() {
 
         const text = await response.text();
 
-        let data = {};
+        let data;
 
         try {
             data = text ? JSON.parse(text) : {};
@@ -477,7 +477,11 @@ function initCustomEvents() {
             trigger.addEventListener("click", event => {
                 event.preventDefault();
                 event.stopPropagation();
-                popover.hidden ? openPicker() : closePicker();
+                if (popover.hidden) {
+                    openPicker();
+                } else {
+                    closePicker();
+                }
             });
             popover.addEventListener("click", event => event.stopPropagation());
             previous.addEventListener("click", () => {
@@ -1792,30 +1796,6 @@ function initCustomEvents() {
 
         accent.append(dragHandle);
 
-        let reminderElement = null;
-
-        if (event.reminder_minutes != null) {
-            let reminderLabel;
-
-            if (event.reminder_minutes === 0) {
-                reminderLabel = "Reminder: at start";
-            } else if (event.reminder_minutes % 60 === 0) {
-                const hours = event.reminder_minutes / 60;
-
-                reminderLabel =
-                    `Reminder: ${hours} ${hours === 1 ? "hour" : "hours"} before`;
-            } else {
-                reminderLabel =
-                    `Reminder: ${event.reminder_minutes} minutes before`;
-            }
-
-            reminderElement = makeElement(
-                "div",
-                "events-custom-card-reminder",
-                reminderLabel
-            );
-        }
-
         const content = makeElement("div", "events-custom-card-content");
         const topRow = makeElement("div", "events-custom-card-top-row");
 
@@ -1869,11 +1849,6 @@ function initCustomEvents() {
             )
         );
 
-        // Place the reminder directly after the account-scope chip.
-        if (reminderElement) {
-            topRow.append(reminderElement);
-        }
-
         const countdown = makeElement(
             "span",
             "events-custom-countdown",
@@ -1918,10 +1893,12 @@ function initCustomEvents() {
                     `Reminder: ${event.reminder_minutes} minutes before`;
             }
 
-            reminderElement = makeElement(
-                "div",
-                "events-custom-card-reminder",
-                reminderLabel
+            content.append(
+                makeElement(
+                    "div",
+                    "events-custom-card-reminder",
+                    reminderLabel
+                )
             );
         }
 
