@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from utils.constants.costs import TALENT_MORA_COSTS
 
-
 TALENT_BOOK_COSTS = {
     "teachings": [3, 0, 0, 0, 0, 0, 0, 0, 0],
     "guide": [0, 2, 4, 6, 9, 0, 0, 0, 0],

@@ -1,26 +1,23 @@
-import typing
 import asyncio
-import aiohttp
 import json
-import time
-import tempfile
 import re
+import tempfile
+import time
+import typing
 import uuid
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
-from datetime import (
-    datetime,
-    timedelta,
-    timezone
-)
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
+import aiohttp
 from fastapi import (
-    Cookie, 
-    logger,
+    Cookie,
     FastAPI,
+    File,
     HTTPException,
     Request,
-    File,
     UploadFile,
+    logger,
 )
 from fastapi.responses import (
     HTMLResponse,
@@ -31,85 +28,83 @@ from fastapi.responses import (
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from genshin.models.auth.geetest import (
-    SessionMMTv4,
     SessionMMTResult,
+    SessionMMTv4,
     SessionMMTv4Result,
 )
-from utils.web.sessions import (
-    get_challenge_session,
-    complete_challenge,
-)
-from utils.web.auth import (
-    create_verification,
-    get_verification,
-    create_web_session,
-    get_web_session,
-    delete_web_session,
-)
+from genshin.models.genshin.constants import CHARACTER_NAMES
+
+from utils.achievements.achievements import load_achievements
+from utils.achievements.importer import import_achievements
+from utils.achievements.progress import load_progress
+from utils.changing_variables.config import IT_ELEMENTS
+from utils.genshin_db import GenshinDB, GenshinDBError
+from utils.hoyolab.account_client import get_account_client
+from utils.hoyolab.account_limits import get_account_limit
+from utils.hoyolab.accounts import get_genshin_accounts
+from utils.hoyolab.daily_checkin_worker import request_daily_checkin
+from utils.hoyolab.daily_note import get_resin
 from utils.hoyolab.database import (
-    save_account,
+    change_custom_event_account_progress,
+    create_custom_event,
+    create_reminder,
+    delete_account,
+    delete_custom_event,
+    delete_reminder,
     get_account,
     get_account_count,
-    delete_account,
-    update_account_nickname,
     get_accounts,
-    get_reminders,
-    get_reminder,
-    create_reminder,
-    update_reminder,
-    delete_reminder,
-    get_gift_code_settings,
-    set_gift_code_auto_claim,
-    get_gift_code_redemptions,
-    update_gift_code_redemption,
-    update_achievement_tier,
-    get_event_activity_checks,
-    set_event_activity_check,
-    create_custom_event,
-    get_custom_events,
-    get_custom_event,
-    update_custom_event,
-    delete_custom_event,
-    set_custom_event_completion,
-    get_custom_event_completions,
-    get_daily_checkin_settings,
-    set_daily_checkin_enabled,
-    change_custom_event_account_progress,
-    get_custom_event_account_progress,
-    reorder_custom_events,
-    get_visible_custom_event,
     get_character_plans,
-    replace_character_plans,
+    get_custom_event,
+    get_custom_event_account_progress,
+    get_custom_event_completions,
+    get_custom_events,
+    get_daily_checkin_settings,
+    get_event_activity_checks,
+    get_gift_code_redemptions,
+    get_gift_code_settings,
+    get_reminder,
+    get_reminders,
+    get_visible_custom_event,
     get_wish_history,
     import_wish_history,
+    reorder_custom_events,
+    replace_character_plans,
+    save_account,
+    set_custom_event_completion,
+    set_daily_checkin_enabled,
+    set_event_activity_check,
+    set_gift_code_auto_claim,
+    update_account_nickname,
+    update_achievement_tier,
+    update_custom_event,
+    update_gift_code_redemption,
+    update_reminder,
 )
-from utils.hoyolab.login import login_with_password
-from utils.hoyolab.accounts import get_genshin_accounts
-from utils.hoyolab.account_limits import get_account_limit
 from utils.hoyolab.errors import (
-    HoYoLABAuthenticationError,
-    HoYoLABAccountNotFoundError,
     HoYoLABAccountLockedError,
     HoYoLABAccountMutedError,
-    HoYoLABVerificationError,
+    HoYoLABAccountNotFoundError,
+    HoYoLABAuthenticationError,
     HoYoLABCaptchaError,
-    HoYoLABRateLimitError,
     HoYoLABError,
+    HoYoLABRateLimitError,
+    HoYoLABVerificationError,
 )
-from utils.hoyolab.account_client import get_account_client
-from utils.hoyolab.daily_note import get_resin
-from utils.achievements.achievements import load_achievements
-from utils.achievements.progress import load_progress
-from utils.achievements.importer import import_achievements
-from collections import Counter
-from utils.changing_variables.config import IT_ELEMENTS
 from utils.hoyolab.gift_code_worker import request_gift_code_check
-from utils.hoyolab.daily_checkin_worker import request_daily_checkin
-from genshin.models.genshin.constants import CHARACTER_NAMES
+from utils.hoyolab.login import login_with_password
+from utils.web.auth import (
+    create_verification,
+    create_web_session,
+    delete_web_session,
+    get_verification,
+    get_web_session,
+)
 from utils.web.planner_costs import calculate_planner_costs
-from utils.genshin_db import GenshinDB, GenshinDBError
-
-
+from utils.web.sessions import (
+    complete_challenge,
+    get_challenge_session,
+)
 
 app = FastAPI(
     title="Cyrene Authentication",
@@ -3970,8 +3965,7 @@ async def upload_custom_event_icon(
     cyrene_session: str | None = Cookie(default=None),
     file: UploadFile = File(...),
 ):
-    # Use the same authentication as the Custom Events API.
-    user_id = await get_authenticated_user(cyrene_session)
+    await get_authenticated_user(cyrene_session)
 
     contents = await file.read(MAX_CUSTOM_EVENT_ICON_SIZE + 1)
     await file.close()

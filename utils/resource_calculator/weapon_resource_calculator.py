@@ -1,5 +1,12 @@
 from collections import defaultdict
-from utils.constants.costs import WEAPON_ASCENSION_LEVELS, WEAPON_MAX_LEVELS, WEAPON_EXP_COSTS, WEAPON_ASCENSION_COSTS, WEAPON_ORE_EXP
+
+from utils.constants.costs import (
+    WEAPON_ASCENSION_COSTS,
+    WEAPON_ASCENSION_LEVELS,
+    WEAPON_EXP_COSTS,
+    WEAPON_MAX_LEVELS,
+    WEAPON_ORE_EXP,
+)
 
 WEAPON_LEVEL_CAPS = [
     20,

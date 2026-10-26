@@ -1,12 +1,13 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from utils.weapon.weapons import get_weapon
-from utils.weapon.weapon_autocomplete import weapon_autocomplete
+from discord.ext import commands
+
 from utils.constants.colours import WEAPON_RARITY_COLOURS
-from utils.constants.stats import STAT_NAMES, PERCENT_STATS
+from utils.constants.stats import PERCENT_STATS, STAT_NAMES
+from utils.errors.error_handler import send_interaction_error, send_missing_argument, send_not_found
 from utils.icons import get_weapon_icon
-from utils.errors.error_handler import send_interaction_error, send_not_found, send_missing_argument
+from utils.weapon.weapon_autocomplete import weapon_autocomplete
+from utils.weapon.weapons import get_weapon
 
 
 class Weapon(commands.Cog):

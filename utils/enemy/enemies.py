@@ -2,7 +2,6 @@ import json
 import re
 from pathlib import Path
 
-
 ENEMIES_PATH = Path("data/enemy_groups/elite/elite_groups.json")
 
 

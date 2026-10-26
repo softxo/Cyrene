@@ -1,5 +1,6 @@
 from utils.character.character_loader import CHARACTERS
 
+
 def get_character(character_id: str):
     return CHARACTERS.get(character_id.lower())
 

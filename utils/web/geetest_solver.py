@@ -1,13 +1,14 @@
 from typing import Awaitable, Callable
+
 from genshin.models.auth.geetest import (
     SessionMMT,
     SessionMMTResult,
 )
+
 from utils.web.sessions import (
     create_challenge_session,
     delete_challenge_session,
 )
-
 
 ChallengeNotifier = Callable[
     [str],

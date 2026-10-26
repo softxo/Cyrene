@@ -3,14 +3,14 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
+from utils.achievements.achievements import (
+    load_achievements,
+)
 from utils.exporter.achievements.mapper import (
     AchievementMapper,
 )
 from utils.exporter.achievements.parser import (
     AchievementParser,
-)
-from utils.achievements.achievements import (
-    load_achievements,
 )
 
 

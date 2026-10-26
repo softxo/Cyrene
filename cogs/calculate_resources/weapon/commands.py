@@ -1,13 +1,23 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.weapon.weapons import get_weapon
-from utils.weapon.weapon_autocomplete import weapon_autocomplete
-from utils.resource_calculator.weapon_resource_calculator import calculate_weapon_resources
+
+from utils.errors.error_handler import (
+    send_interaction_error,
+    send_invalid_input,
+    send_missing_argument,
+    send_not_found,
+)
 from utils.icons import get_material_emoji, get_weapon_icon
-from utils.weapon.weapon_materials import get_weapon_material, get_common_material, get_elite_material
 from utils.materials.materials import MISC
-from utils.errors.error_handler import send_missing_argument, send_invalid_input, send_not_found, send_interaction_error
+from utils.resource_calculator.weapon_resource_calculator import calculate_weapon_resources
+from utils.weapon.weapon_autocomplete import weapon_autocomplete
+from utils.weapon.weapon_materials import (
+    get_common_material,
+    get_elite_material,
+    get_weapon_material,
+)
+from utils.weapon.weapons import get_weapon
 
 
 def format_weapon_resource_embed(

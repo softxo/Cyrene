@@ -1,39 +1,27 @@
-import discord
 import asyncio
 import os
 import selectors
 import traceback
-import uvicorn
 from pathlib import Path
-from discord.ext import commands
+
+import discord
+import uvicorn
 from discord import app_commands
+from discord.ext import commands
 from dotenv import load_dotenv
-from utils.character.character_loader import (
-    load_characters,
-    CHARACTERS
-)
-from utils.weapon.weapons import (
-    load_weapons,
-    WEAPONS
-)
-from utils.settings.prefix import get_prefix
-from utils.errors.error_handler import (
-    handle_app_command_error,
-    handle_prefix_command_error
-)
+
+from utils.character.character_loader import CHARACTERS, load_characters
 from utils.errors.error_database import initialise_database as initialise_error_database
-from utils.hoyolab.database import (
-    initialise_database as initialise_hoyolab_database,
-    close_database as close_hoyolab_database,
-    update_discord_user,
-    update_discord_server
-)
-from utils.web.app import app as web_app
-from utils.reminders.scheduler import ReminderScheduler
-from utils.hoyolab.gift_code_worker import gift_code_worker
+from utils.errors.error_handler import handle_app_command_error, handle_prefix_command_error
 from utils.hoyolab.daily_checkin_worker import daily_checkin_worker
-
-
+from utils.hoyolab.database import close_database as close_hoyolab_database
+from utils.hoyolab.database import initialise_database as initialise_hoyolab_database
+from utils.hoyolab.database import update_discord_server, update_discord_user
+from utils.hoyolab.gift_code_worker import gift_code_worker
+from utils.reminders.scheduler import ReminderScheduler
+from utils.settings.prefix import get_prefix
+from utils.weapon.weapons import WEAPONS, load_weapons
+from utils.web.app import app as web_app
 
 load_dotenv()
 

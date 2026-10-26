@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 BANNER_FILE = Path("data/banners/banners.json")
 
 

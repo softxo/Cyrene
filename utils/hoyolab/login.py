@@ -1,20 +1,21 @@
 import genshin
-from .auth import credentials_from_web_login
-from .errors import (
-    HoYoLABAuthenticationError,
-    HoYoLABAccountNotFoundError,
-    HoYoLABAccountLockedError,
-    HoYoLABAccountMutedError,
-    HoYoLABVerificationError,
-    HoYoLABCaptchaError,
-    HoYoLABRateLimitError,
-    HoYoLABUnexpectedError,
-)
+
 from utils.web.sessions import (
     create_challenge_session,
     delete_challenge_session,
 )
 
+from .auth import credentials_from_web_login
+from .errors import (
+    HoYoLABAccountLockedError,
+    HoYoLABAccountMutedError,
+    HoYoLABAccountNotFoundError,
+    HoYoLABAuthenticationError,
+    HoYoLABCaptchaError,
+    HoYoLABRateLimitError,
+    HoYoLABUnexpectedError,
+    HoYoLABVerificationError,
+)
 
 WEB_BASE_URL = "https://cyrene.apps.bot-hosting.cloud"
 

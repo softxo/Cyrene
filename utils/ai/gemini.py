@@ -1,6 +1,8 @@
-import os
 import logging
+import os
+
 from google import genai
+
 from utils.ai.conversation import conversations
 from utils.ai.prompts import CHARACTER_PROMPT
 

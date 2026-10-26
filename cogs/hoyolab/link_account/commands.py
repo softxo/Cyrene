@@ -1,31 +1,26 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.hoyolab.login import login_with_password
-from utils.constants.emojis import ERROR_EMOJIS
+
 from utils.constants.colours import ERROR_COLOURS
-from utils.hoyolab.errors import (
-    HoYoLABAuthenticationError,
-    HoYoLABAccountNotFoundError,
-    HoYoLABAccountLockedError,
-    HoYoLABAccountMutedError,
-    HoYoLABVerificationError,
-    HoYoLABCaptchaError,
-    HoYoLABRateLimitError,
-    HoYoLABError,
-    build_hoyolab_error_embed,
-)
+from utils.constants.emojis import ERROR_EMOJIS
+from utils.hoyolab.account_limits import get_account_limit
 from utils.hoyolab.accounts import get_genshin_accounts
 from utils.hoyolab.auth import HoYoLABCredentials
-from utils.hoyolab.database import (
-    save_account,
-    get_account,
-    get_account_count,
-    delete_account
-)
-from utils.hoyolab.account_limits import get_account_limit
 from utils.hoyolab.client import HoYoLABClient
-
+from utils.hoyolab.database import delete_account, get_account, get_account_count, save_account
+from utils.hoyolab.errors import (
+    HoYoLABAccountLockedError,
+    HoYoLABAccountMutedError,
+    HoYoLABAccountNotFoundError,
+    HoYoLABAuthenticationError,
+    HoYoLABCaptchaError,
+    HoYoLABError,
+    HoYoLABRateLimitError,
+    HoYoLABVerificationError,
+    build_hoyolab_error_embed,
+)
+from utils.hoyolab.login import login_with_password
 
 
 class GenshinAccountSelect(discord.ui.Select):

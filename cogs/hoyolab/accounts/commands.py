@@ -1,14 +1,11 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.hoyolab.database import (
-    get_accounts,
-    delete_account,
-    update_account_nickname
-)
+
 from cogs.hoyolab.link_account.commands import HoYoLABAccountsView
 from utils.constants.emojis import MISC_EMOJIS
 from utils.errors.error_handler import send_not_your_command
+from utils.hoyolab.database import delete_account, get_accounts, update_account_nickname
 
 
 def get_account_name(account: dict) -> str:

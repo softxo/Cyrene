@@ -11,7 +11,6 @@ from .database import (
     update_daily_checkin_status,
 )
 
-
 CHECK_INTERVAL = 15 * 60
 HOYOLAB_TIMEZONE = ZoneInfo("Asia/Shanghai")
 

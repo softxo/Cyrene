@@ -3,7 +3,6 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 EXPORT_PATH = (

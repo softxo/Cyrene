@@ -8,7 +8,6 @@ import genshin
 from .auth import HoYoLABCredentials
 
 
-
 class HoYoLABClient:
     BASE_URL = "https://bbs-api-os.hoyolab.com"
     CALCULATOR_BASE_URL = (

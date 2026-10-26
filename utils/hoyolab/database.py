@@ -1,11 +1,12 @@
 import os
-from psycopg.rows import dict_row
-from psycopg_pool import AsyncConnectionPool
 from datetime import datetime, timezone
+
+from psycopg.rows import dict_row
+from psycopg.types.json import Jsonb
+from psycopg_pool import AsyncConnectionPool
+
 from .auth import HoYoLABCredentials
 from .crypto import HoYoLABCrypto
-from psycopg.types.json import Jsonb
-
 
 _pool: AsyncConnectionPool | None = None
 

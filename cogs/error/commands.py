@@ -1,10 +1,16 @@
-import discord
 import io
-from discord.ext import commands
+
+import discord
 from discord import app_commands
+from discord.ext import commands
+
 from utils.errors.error_database import get_error
 from utils.errors.error_explanations import explain_error
-from utils.errors.error_handler import send_interaction_error, send_not_found
+from utils.errors.error_handler import (
+    send_context_error,
+    send_interaction_error,
+    send_not_found,
+)
 from utils.errors.error_permissions import ERROR_TRACE_USERS
 
 

@@ -1,13 +1,14 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from utils.character.characters import get_character
-from utils.resource_calculator.character_resource_calculator import calculate_character_resources
+from discord.ext import commands
+
 from utils.character.character_autocomplete import character_autocomplete
-from utils.icons import get_material_emoji, get_character_icon, get_character_splash
-from utils.materials.materials import GEMS, BOSSES, LOCAL_SPECIALTIES, COMMON, MISC
+from utils.character.characters import get_character
 from utils.constants.emojis import COLOURED_ELEMENT_EMOJIS
 from utils.errors.error_handler import send_interaction_error, send_invalid_input, send_not_found
+from utils.icons import get_character_icon, get_character_splash, get_material_emoji
+from utils.materials.materials import BOSSES, COMMON, GEMS, LOCAL_SPECIALTIES, MISC
+from utils.resource_calculator.character_resource_calculator import calculate_character_resources
 
 
 def format_resource_embed(

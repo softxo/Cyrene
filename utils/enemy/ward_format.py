@@ -1,4 +1,4 @@
-from utils.constants.emojis import COLOURED_ELEMENT_EMOJIS, WARD_EMOJIS, STAT_EMOJIS
+from utils.constants.emojis import COLOURED_ELEMENT_EMOJIS, STAT_EMOJIS, WARD_EMOJIS
 from utils.constants.stats import REFERENCE_NAMES
 
 TYPE_NAMES = {

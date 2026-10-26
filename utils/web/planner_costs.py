@@ -5,12 +5,13 @@ EXP helpers are retained. No local character or material catalogue is read.
 """
 
 import asyncio
+import logging
 import math
 import time
-import aiohttp
-import logging
-
 from collections import OrderedDict
+
+import aiohttp
+
 from utils.constants.costs import WEAPON_ORE_EXP
 from utils.genshin_db import GenshinDB, GenshinDBError
 from utils.resource_calculator.character_resource_calculator import calculate_character_exp_books
@@ -474,8 +475,6 @@ async def calculate_planner_costs(
             return await coroutine
         except GenshinDBError as error:
             return {"status": "unavailable", "items": [], "message": str(error)}
-
-    started = time.perf_counter()
 
     async with aiohttp.ClientSession() as session:
         db = GenshinDB(session)

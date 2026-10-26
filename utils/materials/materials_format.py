@@ -1,5 +1,6 @@
 from utils.icons import get_material_emoji
 
+
 def format_materials(material_data, costs, emojis):
     text = ""
 
