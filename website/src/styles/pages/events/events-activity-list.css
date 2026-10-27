@@ -401,10 +401,6 @@
     box-shadow: 0 7px 22px rgba(0, 0, 0, 0.1);
 }
 
-.event-list-item.completed .event-list-status {
-    color: var(--accent);
-}
-
 .event-list-left {
     display: flex;
     align-items: center;
@@ -748,17 +744,15 @@
 }
 
 .event-list-status.claimed {
-    background: var(--accent-soft);
-
-    border-color: var(--accent-border);
-
-    color: var(--accent);
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
 }
 
 .event-list-status.event-completion-pill {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
-    color: var(--accent);
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
 }
 
 .event-list-status.not-claimed {
@@ -772,11 +766,10 @@
 .event-limited-item.completed,
 .event-daily-item.completed,
 .event-trounce-item.completed {
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-
-    border-color: color-mix(in srgb, var(--accent) 65%, transparent);
-
-    box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: none;
+    opacity: 0.65;
 }
 
 /* ---------------------------------------------------------

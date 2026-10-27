@@ -15,7 +15,9 @@
         const popup = active.querySelector(".event-insight-popover");
         popup?.classList.remove("is-visible");
         const finish = () => {
-            if (popup?.isConnected && !popup.classList.contains("is-visible") && popup.matches(":popover-open"))
+            if (popup?.isConnected &&
+                !popup.classList.contains("is-visible") &&
+                popup.matches(":popover-open"))
                 popup.hidePopover();
         };
         if (immediate || window.matchMedia("(prefers-reduced-motion: reduce)").matches)

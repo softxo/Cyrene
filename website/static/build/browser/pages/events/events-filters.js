@@ -9,14 +9,18 @@
         if (Array.isArray(saved))
             disabled = new Set(saved.filter((value) => typeof value === "string"));
     }
-    catch { /* Storage can be unavailable; filtering still works for this visit. */ }
+    catch {
+        /* Storage can be unavailable; filtering still works for this visit. */
+    }
     const apply = () => {
-        document.querySelectorAll("[data-limited-category]").forEach(card => {
+        document.querySelectorAll("[data-limited-category]").forEach((card) => {
             const hidden = disabled.has(card.dataset.limitedCategory || "Other Events");
             if (card.hidden !== hidden)
                 card.hidden = hidden;
         });
-        document.querySelectorAll(".events-limited-list, [data-limited-account-group] .events-custom-list").forEach(list => {
+        document
+            .querySelectorAll(".events-limited-list, [data-limited-account-group] .events-custom-list")
+            .forEach((list) => {
             const cards = [...list.querySelectorAll("[data-limited-category]")];
             let empty = list.querySelector("[data-limited-filter-empty]");
             if (!cards.length)
@@ -28,24 +32,30 @@
                 empty.textContent = "No events match your selected categories.";
                 list.append(empty);
             }
-            const hidden = cards.some(card => !card.hidden);
+            const hidden = cards.some((card) => !card.hidden);
             if (empty.hidden !== hidden)
                 empty.hidden = hidden;
         });
-        document.querySelectorAll("[data-limited-account-group]").forEach(group => {
-            const cards = [...group.querySelectorAll("[data-limited-category]")].filter(card => !card.hidden);
-            const completed = cards.filter(card => card.classList.contains("completed")).length;
+        document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
+            const cards = [
+                ...group.querySelectorAll("[data-limited-category]"),
+            ].filter((card) => !card.hidden);
+            const completed = cards.filter((card) => card.classList.contains("completed")).length;
             const count = group.querySelector("[data-limited-account-count]");
             const text = `${completed}/${cards.length} complete`;
             if (count && count.textContent !== text)
                 count.textContent = text;
         });
-        document.querySelectorAll("[data-limited-filter-category]").forEach(input => {
+        document
+            .querySelectorAll("[data-limited-filter-category]")
+            .forEach((input) => {
             input.checked = !disabled.has(input.dataset.limitedFilterCategory || "");
         });
     };
     const positionOpenPopups = () => {
-        document.querySelectorAll(".events-limited-filter-popup:popover-open").forEach(popup => {
+        document
+            .querySelectorAll(".events-limited-filter-popup:popover-open")
+            .forEach((popup) => {
             const button = popup.parentElement?.querySelector("[data-limited-filter-button]");
             if (!button || !button.getClientRects().length) {
                 popup.hidePopover();
@@ -66,12 +76,12 @@
     let dismissingButton = null;
     // Native popovers light-dismiss before click fires. Remember their state
     // at pointerdown so clicking the trigger cannot immediately reopen them.
-    document.addEventListener("pointerdown", event => {
+    document.addEventListener("pointerdown", (event) => {
         const button = event.target.closest("[data-limited-filter-button]");
         const popup = button?.parentElement?.querySelector("[popover]");
         dismissingButton = popup?.matches(":popover-open") ? button : null;
     }, true);
-    document.addEventListener("click", event => {
+    document.addEventListener("click", (event) => {
         const button = event.target.closest("[data-limited-filter-button]");
         if (!button)
             return;
@@ -88,7 +98,9 @@
         const options = popup.querySelector("[data-limited-filter-options]");
         options.replaceChildren();
         const categories = new Set(["Quest", "World Exploration", "TCG", "Other Events"]);
-        document.querySelectorAll("[data-limited-category]").forEach(card => categories.add(card.dataset.limitedCategory));
+        document
+            .querySelectorAll("[data-limited-category]")
+            .forEach((card) => categories.add(card.dataset.limitedCategory));
         for (const category of categories) {
             const label = document.createElement("label");
             const input = document.createElement("input");
@@ -102,7 +114,7 @@
         popup.showPopover();
         positionOpenPopups();
     });
-    document.addEventListener("change", event => {
+    document.addEventListener("change", (event) => {
         const input = event.target;
         const category = input.dataset.limitedFilterCategory;
         if (!category)
@@ -114,11 +126,13 @@
         try {
             localStorage.setItem(key, JSON.stringify([...disabled]));
         }
-        catch { /* Keep session selection. */ }
+        catch {
+            /* Keep session selection. */
+        }
         apply();
     });
     new MutationObserver(apply).observe(document.body, { childList: true, subtree: true });
-    window.addEventListener("storage", event => {
+    window.addEventListener("storage", (event) => {
         if (event.key !== key)
             return;
         try {

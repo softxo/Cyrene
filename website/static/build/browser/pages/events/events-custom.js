@@ -41,7 +41,8 @@ function initCustomEvents() {
             iconImage.hidden = true;
         }
         if (iconFilename) {
-            iconFilename.textContent = filename || (src ? "Current event icon" : "No image selected");
+            iconFilename.textContent =
+                filename || (src ? "Current event icon" : "No image selected");
         }
         if (removeIconButton) {
             removeIconButton.hidden = !src;
@@ -52,11 +53,7 @@ function initCustomEvents() {
         if (!file) {
             return;
         }
-        const allowedTypes = [
-            "image/png",
-            "image/jpeg",
-            "image/webp",
-        ];
+        const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
             iconInput.value = "";
             clearPreviewObjectUrl();
@@ -101,9 +98,7 @@ function initCustomEvents() {
             credentials: "same-origin",
             ...options,
             headers: {
-                ...(options.body && !isFormData
-                    ? { "Content-Type": "application/json" }
-                    : {}),
+                ...(options.body && !isFormData ? { "Content-Type": "application/json" } : {}),
                 ...(options.headers || {}),
             },
         });
@@ -116,9 +111,7 @@ function initCustomEvents() {
             throw new Error(`The server returned an invalid response (${response.status}).`);
         }
         if (!response.ok || data.success === false) {
-            throw new Error(data.detail ||
-                data.error ||
-                `Request failed (${response.status}).`);
+            throw new Error(data.detail || data.error || `Request failed (${response.status}).`);
         }
         if (schema) {
             const result = schema.safeParse(data);
@@ -176,7 +169,7 @@ function initCustomEvents() {
     }
     let activeDateTimePicker = null;
     function initialiseDateTimePickers() {
-        $$('input[type="datetime-local"]', form).forEach(input => {
+        $$('input[type="datetime-local"]', form).forEach((input) => {
             if (input.dataset.customDateTimeInitialised === "true")
                 return;
             input.dataset.customDateTimeInitialised = "true";
@@ -218,8 +211,7 @@ function initCustomEvents() {
             header.append(previous, monthLabel, next);
             const weekdays = document.createElement("div");
             weekdays.className = "events-custom-calendar-weekdays";
-            ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                .forEach(day => {
+            ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach((day) => {
                 const label = document.createElement("span");
                 label.textContent = day;
                 weekdays.append(label);
@@ -275,29 +267,27 @@ function initCustomEvents() {
             let selectedDate = new Date();
             let displayedMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
             function valuesMatch(first, second) {
-                return first.getFullYear() === second.getFullYear() &&
+                return (first.getFullYear() === second.getFullYear() &&
                     first.getMonth() === second.getMonth() &&
-                    first.getDate() === second.getDate();
+                    first.getDate() === second.getDate());
             }
             function refreshTrigger() {
                 if (!input.value) {
-                    triggerValue.textContent = isRequired
-                        ? "Select date and time"
-                        : "No end date";
+                    triggerValue.textContent = isRequired ? "Select date and time" : "No end date";
                     trigger.classList.add("is-placeholder");
                     return;
                 }
                 const value = new Date(input.value);
                 triggerValue.textContent = new Intl.DateTimeFormat(undefined, {
                     dateStyle: "medium",
-                    timeStyle: "short"
+                    timeStyle: "short",
                 }).format(value);
                 trigger.classList.remove("is-placeholder");
             }
             function renderCalendar() {
                 monthLabel.textContent = new Intl.DateTimeFormat(undefined, {
                     month: "long",
-                    year: "numeric"
+                    year: "numeric",
                 }).format(displayedMonth);
                 grid.replaceChildren();
                 const firstDay = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth(), 1);
@@ -334,9 +324,10 @@ function initCustomEvents() {
             }
             function openPicker() {
                 activeDateTimePicker?.close();
-                $$(".custom-select.open", form).forEach(dropdown => {
+                $$(".custom-select.open", form).forEach((dropdown) => {
                     dropdown.classList.remove("open");
-                    dropdown.querySelector("[aria-expanded]")
+                    dropdown
+                        .querySelector("[aria-expanded]")
                         ?.setAttribute("aria-expanded", "false");
                 });
                 const parsed = input.value ? new Date(input.value) : new Date();
@@ -344,8 +335,7 @@ function initCustomEvents() {
                 displayedMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
                 hour.value = String(selectedDate.getHours()).padStart(2, "0");
                 const roundedMinute = Math.round(selectedDate.getMinutes() / 5) * 5;
-                minute.value = String(roundedMinute === 60 ? 55 : roundedMinute)
-                    .padStart(2, "0");
+                minute.value = String(roundedMinute === 60 ? 55 : roundedMinute).padStart(2, "0");
                 renderCalendar();
                 popover.hidden = false;
                 trigger.setAttribute("aria-expanded", "true");
@@ -355,7 +345,7 @@ function initCustomEvents() {
                 const hours = Math.max(0, Math.min(23, Number(hour.value) || 0));
                 const minutes = Math.max(0, Math.min(59, Number(minute.value) || 0));
                 selectedDate.setHours(hours, minutes, 0, 0);
-                const pad = value => String(value).padStart(2, "0");
+                const pad = (value) => String(value).padStart(2, "0");
                 input.value = `${selectedDate.getFullYear()}-${pad(selectedDate.getMonth() + 1)}-${pad(selectedDate.getDate())}T${pad(selectedDate.getHours())}:${pad(selectedDate.getMinutes())}`;
                 input.dispatchEvent(new Event("change", { bubbles: true }));
                 refreshTrigger();
@@ -364,7 +354,7 @@ function initCustomEvents() {
             }
             const picker = { close: closePicker, refresh: refreshTrigger };
             input.customDateTimePicker = picker;
-            trigger.addEventListener("click", event => {
+            trigger.addEventListener("click", (event) => {
                 event.preventDefault();
                 event.stopPropagation();
                 if (popover.hidden) {
@@ -374,7 +364,7 @@ function initCustomEvents() {
                     closePicker();
                 }
             });
-            popover.addEventListener("click", event => event.stopPropagation());
+            popover.addEventListener("click", (event) => event.stopPropagation());
             previous.addEventListener("click", () => {
                 displayedMonth.setMonth(displayedMonth.getMonth() - 1);
                 renderCalendar();
@@ -390,7 +380,10 @@ function initCustomEvents() {
                 minute.value = String(Math.floor(selectedDate.getMinutes() / 5) * 5).padStart(2, "0");
                 renderCalendar();
             });
-            [[hour, 23], [minute, 59]].forEach(([field, maximum]) => {
+            [
+                [hour, 23],
+                [minute, 59],
+            ].forEach(([field, maximum]) => {
                 field.addEventListener("input", () => {
                     field.value = field.value.replace(/\D/g, "").slice(0, 2);
                 });
@@ -411,7 +404,7 @@ function initCustomEvents() {
                 trigger.focus();
             });
             apply.addEventListener("click", commitValue);
-            document.addEventListener("click", event => {
+            document.addEventListener("click", (event) => {
                 if (!wrapper.contains(event.target))
                     closePicker();
             });
@@ -430,17 +423,17 @@ function initCustomEvents() {
         }[recurrence.type];
         if (!unit)
             return "One-time";
-        let label = interval === 1
-            ? `Every ${unit}`
-            : `Every ${interval} ${unit}s`;
+        let label = interval === 1 ? `Every ${unit}` : `Every ${interval} ${unit}s`;
         if (recurrence.type === "weekly" &&
             Array.isArray(recurrence.weekdays) &&
             recurrence.weekdays.length) {
             const names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-            label += " · " + recurrence.weekdays
-                .map(day => names[day])
-                .filter(Boolean)
-                .join(", ");
+            label +=
+                " · " +
+                    recurrence.weekdays
+                        .map((day) => names[day])
+                        .filter(Boolean)
+                        .join(", ");
         }
         return label;
     }
@@ -460,30 +453,21 @@ function initCustomEvents() {
         form.elements.event_id.value = event?.id ?? "";
         form.elements.title.value = event?.title ?? "";
         form.elements.description.value = event?.description ?? "";
-        form.elements.account_scope.value =
-            event?.account_scope ?? "all";
+        form.elements.account_scope.value = event?.account_scope ?? "all";
         const accountDropdown = $("[data-custom-account-select]", form);
         const defaultAccountId = accountDropdown?.querySelector("[data-account-id]")?.dataset.accountId ?? "";
-        updateAccountDropdown(event?.account_id != null
-            ? String(event.account_id)
-            : defaultAccountId);
-        form.elements.start_at.value =
-            toLocalInputValue(event?.start_at);
-        form.elements.end_at.value =
-            toLocalInputValue(event?.end_at);
-        $$('input[type="datetime-local"]', form).forEach(input => {
+        updateAccountDropdown(event?.account_id != null ? String(event.account_id) : defaultAccountId);
+        form.elements.start_at.value = toLocalInputValue(event?.start_at);
+        form.elements.end_at.value = toLocalInputValue(event?.end_at);
+        $$('input[type="datetime-local"]', form).forEach((input) => {
             input.customDateTimePicker?.refresh();
         });
         updateFormDropdown("recurrence_type", event?.recurrence?.type ?? "none");
-        form.elements.recurrence_interval.value =
-            event?.recurrence?.interval ?? 1;
-        form.elements.colour.value =
-            event?.colour ?? "#7c83ff";
-        updateFormDropdown("reminder_minutes", event?.reminder_minutes == null
-            ? ""
-            : String(event.reminder_minutes));
+        form.elements.recurrence_interval.value = event?.recurrence?.interval ?? 1;
+        form.elements.colour.value = event?.colour ?? "#7c83ff";
+        updateFormDropdown("reminder_minutes", event?.reminder_minutes == null ? "" : String(event.reminder_minutes));
         const weekdays = event?.recurrence?.weekdays ?? [];
-        $$('input[name="recurrence_weekdays"]', form).forEach(input => {
+        $$('input[name="recurrence_weekdays"]', form).forEach((input) => {
             input.checked = weekdays.includes(Number(input.value));
         });
         const objectives = $("[data-custom-objectives]", form);
@@ -493,14 +477,10 @@ function initCustomEvents() {
         }
         updateConditionalFields();
         if (titleElement) {
-            titleElement.textContent = event
-                ? "Edit Event"
-                : "Create Event";
+            titleElement.textContent = event ? "Edit Event" : "Create Event";
         }
         if (saveButton) {
-            saveButton.textContent = event
-                ? "Save Changes"
-                : "Save Event";
+            saveButton.textContent = event ? "Save Changes" : "Save Event";
         }
         modal.hidden = false;
         document.body.style.overflow = "hidden";
@@ -516,18 +496,16 @@ function initCustomEvents() {
         const hiddenInput = dropdown.querySelector('input[name="account_id"]');
         const valueElement = dropdown.querySelector(".custom-select-value");
         const options = Array.from(dropdown.querySelectorAll("[data-account-id]"));
-        const selectedOption = options.find(option => option.dataset.accountId === String(selectedId));
+        const selectedOption = options.find((option) => option.dataset.accountId === String(selectedId));
         if (hiddenInput) {
-            hiddenInput.value = selectedOption
-                ? selectedOption.dataset.accountId
-                : "";
+            hiddenInput.value = selectedOption ? selectedOption.dataset.accountId : "";
         }
         if (valueElement) {
             valueElement.textContent = selectedOption
                 ? selectedOption.textContent.trim()
                 : "Select an account";
         }
-        options.forEach(option => {
+        options.forEach((option) => {
             const isSelected = option === selectedOption;
             option.classList.toggle("active", isSelected);
             option.setAttribute("aria-selected", String(isSelected));
@@ -545,14 +523,14 @@ function initCustomEvents() {
             const isOpen = dropdown.classList.toggle("open");
             button.setAttribute("aria-expanded", String(isOpen));
         });
-        dropdown.querySelectorAll("[data-account-id]").forEach(option => {
+        dropdown.querySelectorAll("[data-account-id]").forEach((option) => {
             option.addEventListener("click", () => {
                 updateAccountDropdown(option.dataset.accountId);
                 dropdown.classList.remove("open");
                 button.setAttribute("aria-expanded", "false");
             });
         });
-        document.addEventListener("click", event => {
+        document.addEventListener("click", (event) => {
             if (!dropdown.contains(event.target)) {
                 dropdown.classList.remove("open");
                 button.setAttribute("aria-expanded", "false");
@@ -570,25 +548,23 @@ function initCustomEvents() {
         const hiddenInput = dropdown.querySelector(`input[name="${name}"]`);
         const valueElement = dropdown.querySelector(".custom-select-value");
         const options = Array.from(dropdown.querySelectorAll("[data-value]"));
-        const selectedOption = options.find(option => option.dataset.value === String(selectedValue));
+        const selectedOption = options.find((option) => option.dataset.value === String(selectedValue));
         if (hiddenInput) {
-            hiddenInput.value = selectedOption
-                ? selectedOption.dataset.value
-                : "";
+            hiddenInput.value = selectedOption ? selectedOption.dataset.value : "";
         }
         if (valueElement) {
             valueElement.textContent = selectedOption
                 ? selectedOption.textContent.trim()
                 : "Select an option";
         }
-        options.forEach(option => {
+        options.forEach((option) => {
             const selected = option === selectedOption;
             option.classList.toggle("active", selected);
             option.setAttribute("aria-selected", String(selected));
         });
     }
     function initialiseFormDropdowns() {
-        $$("[data-custom-dropdown]", form).forEach(dropdown => {
+        $$("[data-custom-dropdown]", form).forEach((dropdown) => {
             const button = dropdown.querySelector(".custom-select-button");
             if (!button)
                 return;
@@ -597,7 +573,7 @@ function initCustomEvents() {
                 const isOpen = dropdown.classList.toggle("open");
                 button.setAttribute("aria-expanded", String(isOpen));
             });
-            dropdown.querySelectorAll("[data-value]").forEach(option => {
+            dropdown.querySelectorAll("[data-value]").forEach((option) => {
                 option.addEventListener("click", () => {
                     updateFormDropdown(name, option.dataset.value);
                     dropdown.classList.remove("open");
@@ -610,12 +586,14 @@ function initCustomEvents() {
             });
         });
         // Close the menus when clicking outside them.
-        document.addEventListener("click", event => {
-            $$("[data-custom-dropdown]", form).forEach(dropdown => {
+        document.addEventListener("click", (event) => {
+            $$("[data-custom-dropdown]", form).forEach((dropdown) => {
                 if (dropdown.contains(event.target))
                     return;
                 dropdown.classList.remove("open");
-                dropdown.querySelector(".custom-select-button")?.setAttribute("aria-expanded", "false");
+                dropdown
+                    .querySelector(".custom-select-button")
+                    ?.setAttribute("aria-expanded", "false");
             });
         });
     }
@@ -626,12 +604,12 @@ function initCustomEvents() {
         document.body.style.overflow = "";
         clearError();
     }
-    modal.addEventListener("click", event => {
+    modal.addEventListener("click", (event) => {
         if (event.target.closest("[data-custom-close]")) {
             closeModal();
         }
     });
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && !modal.hidden) {
             if (activeDateTimePicker) {
                 activeDateTimePicker.close();
@@ -666,9 +644,8 @@ function initCustomEvents() {
             intervalContainer.hidden = recurrenceType === "none";
         }
     }
-    form.addEventListener("change", event => {
-        if (event.target.name === "account_scope" ||
-            event.target.name === "recurrence_type") {
+    form.addEventListener("change", (event) => {
+        if (event.target.name === "account_scope" || event.target.name === "recurrence_type") {
             updateConditionalFields();
         }
     });
@@ -738,12 +715,8 @@ function initCustomEvents() {
             const step = Number(input.step) || 1;
             const min = input.min === "" ? -Infinity : Number(input.min);
             const max = input.max === "" ? Infinity : Number(input.max);
-            const current = input.value === ""
-                ? (Number.isFinite(min) ? min : 0)
-                : Number(input.value);
-            const next = direction === "up"
-                ? Math.min(current + step, max)
-                : Math.max(current - step, min);
+            const current = input.value === "" ? (Number.isFinite(min) ? min : 0) : Number(input.value);
+            const next = direction === "up" ? Math.min(current + step, max) : Math.max(current - step, min);
             if (next === current) {
                 return;
             }
@@ -794,7 +767,7 @@ function initCustomEvents() {
             });
             button.addEventListener("touchend", stopHolding);
             button.addEventListener("touchcancel", stopHolding);
-            button.addEventListener("click", event => {
+            button.addEventListener("click", (event) => {
                 event.preventDefault();
             });
             window.addEventListener("blur", stopHolding);
@@ -807,7 +780,7 @@ function initCustomEvents() {
     form.querySelectorAll('input[type="number"]').forEach(enhanceNumberInput);
     $("[data-custom-add-objective]", modal)?.addEventListener("click", () => addObjective());
     function readObjectives() {
-        return $$(".events-custom-objective", form).map(row => ({
+        return $$(".events-custom-objective", form).map((row) => ({
             title: $("[data-objective-title]", row).value.trim(),
             current: 0,
             target: Number($("[data-objective-target]", row).value),
@@ -821,12 +794,10 @@ function initCustomEvents() {
         const recurrenceType = form.elements.recurrence_type.value;
         const recurrence = {
             type: recurrenceType,
-            interval: recurrenceType === "none"
-                ? 1
-                : Number(form.elements.recurrence_interval.value),
+            interval: recurrenceType === "none" ? 1 : Number(form.elements.recurrence_interval.value),
         };
         if (recurrenceType === "weekly") {
-            recurrence.weekdays = $$('input[name="recurrence_weekdays"]:checked', form).map(input => Number(input.value));
+            recurrence.weekdays = $$('input[name="recurrence_weekdays"]:checked', form).map((input) => Number(input.value));
             if (!recurrence.weekdays.length) {
                 throw new Error("Choose at least one weekday for a weekly event.");
             }
@@ -852,9 +823,7 @@ function initCustomEvents() {
             title: form.elements.title.value.trim(),
             description: form.elements.description.value.trim() || null,
             account_scope: accountScope,
-            account_id: accountScope === "account"
-                ? Number(form.elements.account_id.value)
-                : null,
+            account_id: accountScope === "account" ? Number(form.elements.account_id.value) : null,
             start_at: startAt,
             end_at: endAt,
             recurrence,
@@ -869,7 +838,7 @@ function initCustomEvents() {
     // CUSTOM EVENTS — DRAG AND DROP ORDER
     // =========================================
     function getOrderedEventIds(list) {
-        return Array.from(list.querySelectorAll(":scope > .events-custom-card")).map(card => card.dataset.customEventId);
+        return Array.from(list.querySelectorAll(":scope > .events-custom-card")).map((card) => card.dataset.customEventId);
     }
     function handleEventDragStart(event, card) {
         if (savingOrder) {
@@ -903,7 +872,7 @@ function initCustomEvents() {
         }
     }
     function handleEventDragEnd() {
-        $$("[data-custom-event-id]").forEach(card => {
+        $$("[data-custom-event-id]").forEach((card) => {
             card.classList.remove("is-dragging");
         });
         draggingEventId = null;
@@ -915,15 +884,15 @@ function initCustomEvents() {
             return;
         }
         const orderedIds = getOrderedEventIds(list);
-        const previousIds = previousEvents.map(event => String(event.id));
+        const previousIds = previousEvents.map((event) => String(event.id));
         if (orderedIds.length !== previousIds.length ||
             orderedIds.every((id, index) => id === previousIds[index])) {
             renderEvents();
             return;
         }
-        const eventsById = new Map(previousEvents.map(event => [String(event.id), event]));
-        const reorderedEvents = orderedIds.map(id => eventsById.get(id));
-        if (reorderedEvents.some(event => !event) ||
+        const eventsById = new Map(previousEvents.map((event) => [String(event.id), event]));
+        const reorderedEvents = orderedIds.map((id) => eventsById.get(id));
+        if (reorderedEvents.some((event) => !event) ||
             reorderedEvents.length !== previousEvents.length) {
             renderEvents();
             return;
@@ -937,7 +906,7 @@ function initCustomEvents() {
         }
         renderEvents();
         savingOrder = true;
-        $$("[data-custom-event-drag-handle]").forEach(handle => {
+        $$("[data-custom-event-drag-handle]").forEach((handle) => {
             handle.disabled = true;
         });
         try {
@@ -957,12 +926,11 @@ function initCustomEvents() {
                 events = previousEvents;
             }
             renderEvents();
-            alert(error.message ||
-                "Could not save the event order. Please try again.");
+            alert(error.message || "Could not save the event order. Please try again.");
         }
         finally {
             savingOrder = false;
-            $$("[data-custom-event-drag-handle]").forEach(handle => {
+            $$("[data-custom-event-drag-handle]").forEach((handle) => {
                 handle.disabled = false;
             });
         }
@@ -973,16 +941,16 @@ function initCustomEvents() {
         const dragHandle = card.querySelector("[data-custom-event-drag-handle]");
         if (dragHandle) {
             dragHandle.draggable = true;
-            dragHandle.addEventListener("dragstart", event => {
+            dragHandle.addEventListener("dragstart", (event) => {
                 event.stopPropagation();
                 handleEventDragStart(event, card);
             });
-            dragHandle.addEventListener("dragend", event => {
+            dragHandle.addEventListener("dragend", (event) => {
                 event.stopPropagation();
                 handleEventDragEnd();
             });
         }
-        card.addEventListener("dragover", event => {
+        card.addEventListener("dragover", (event) => {
             handleEventDragOver(event, list, card);
         });
         card.addEventListener("drop", async (event) => {
@@ -993,9 +961,7 @@ function initCustomEvents() {
             event.stopPropagation();
             const accountId = list.dataset.accountId || page.dataset.accountId;
             const previousEvents = page.dataset.overview === "true"
-                ? [
-                    ...(eventsByAccount.get(String(accountId)) || [])
-                ]
+                ? [...(eventsByAccount.get(String(accountId)) || [])]
                 : [...events];
             handleEventDragEnd();
             await saveEventOrder(list, previousEvents);
@@ -1037,8 +1003,7 @@ function initCustomEvents() {
         objective.current = next;
         function updateProgressUI(current) {
             ui.value.textContent = `${current}/${target}`;
-            ui.fill.style.width =
-                `${Math.min(100, (current / target) * 100)}%`;
+            ui.fill.style.width = `${Math.min(100, (current / target) * 100)}%`;
             ui.track.setAttribute("aria-valuenow", String(current));
             ui.increase.disabled = current >= target;
             ui.decrease.disabled = current <= 0;
@@ -1070,9 +1035,7 @@ function initCustomEvents() {
                     title: event.title,
                     description: event.description || null,
                     account_scope: event.account_scope,
-                    account_id: event.account_scope === "account"
-                        ? event.account_id
-                        : null,
+                    account_id: event.account_scope === "account" ? event.account_id : null,
                     start_at: event.start_at,
                     end_at: event.end_at || null,
                     recurrence: event.recurrence || {
@@ -1137,7 +1100,7 @@ function initCustomEvents() {
                     fill,
                     increase: increaseButton,
                     decrease: decreaseButton,
-                    track
+                    track,
                 });
             });
             const increaseButton = makeElement("button", "events-custom-progress-button", "+");
@@ -1150,7 +1113,7 @@ function initCustomEvents() {
                     fill,
                     increase: increaseButton,
                     decrease: decreaseButton,
-                    track
+                    track,
                 });
             });
             controls.append(track, decreaseButton, increaseButton);
@@ -1176,7 +1139,7 @@ function initCustomEvents() {
                 start.setDate(start.getDate() + interval);
             }
             else if (recurrence.type === "weekly") {
-                start.setDate(start.getDate() + (7 * interval));
+                start.setDate(start.getDate() + 7 * interval);
             }
             else if (recurrence.type === "monthly") {
                 const day = start.getDate();
@@ -1193,8 +1156,7 @@ function initCustomEvents() {
     }
     function getCompletionOccurrenceStart(event) {
         const recurrence = event.recurrence;
-        if (!recurrence ||
-            recurrence.type === "none") {
+        if (!recurrence || recurrence.type === "none") {
             return new Date(event.start_at).toISOString();
         }
         // On the normal account page, use the occurrence
@@ -1207,7 +1169,7 @@ function initCustomEvents() {
     }
     function renderEvent(event, list) {
         const occurrenceStart = getCompletionOccurrenceStart(event);
-        const completed = (event.completions || []).some(completion => completion.completed &&
+        const completed = (event.completions || []).some((completion) => completion.completed &&
             new Date(completion.occurrence_start).getTime() ===
                 new Date(occurrenceStart).getTime());
         const card = makeElement("article", `events-custom-card${completed ? " is-completed" : ""}`);
@@ -1239,19 +1201,18 @@ function initCustomEvents() {
         const date = new Date(event.start_at);
         const dateLabel = new Intl.DateTimeFormat(undefined, {
             day: "numeric",
-            month: "short"
+            month: "short",
         }).format(date);
-        topRow.append(makeElement("span", "events-custom-chip", dateLabel), makeElement("span", "events-custom-chip", recurrenceLabel(event.recurrence)), makeElement("span", "events-custom-chip", event.account_scope === "all"
-            ? "All accounts"
-            : "Specific account"));
+        topRow.append(makeElement("span", "events-custom-chip", dateLabel), makeElement("span", "events-custom-chip", recurrenceLabel(event.recurrence)), makeElement("span", "events-custom-chip", event.account_scope === "all" ? "All accounts" : "Specific account"));
         const countdown = makeElement("span", `events-custom-countdown${completed ? " event-completion-pill" : ""}`, completed ? "Completed" : "");
         const startValue = Number(event.start_at);
         const startTimestamp = Number.isFinite(startValue) && startValue > 0
-            ? (startValue < 1e12 ? startValue * 1000 : startValue)
+            ? startValue < 1e12
+                ? startValue * 1000
+                : startValue
             : new Date(event.start_at).getTime();
         if (!completed)
-            countdown.dataset.countdownTarget =
-                String(getCustomEventCountdownTarget(event));
+            countdown.dataset.countdownTarget = String(getCustomEventCountdownTarget(event));
         topRow.append(countdown);
         content.append(topRow);
         if (event.description) {
@@ -1264,12 +1225,10 @@ function initCustomEvents() {
             }
             else if (event.reminder_minutes % 60 === 0) {
                 const hours = event.reminder_minutes / 60;
-                reminderLabel =
-                    `Reminder: ${hours} ${hours === 1 ? "hour" : "hours"} before`;
+                reminderLabel = `Reminder: ${hours} ${hours === 1 ? "hour" : "hours"} before`;
             }
             else {
-                reminderLabel =
-                    `Reminder: ${event.reminder_minutes} minutes before`;
+                reminderLabel = `Reminder: ${event.reminder_minutes} minutes before`;
             }
             topRow.insertBefore(makeElement("span", "events-custom-card-reminder", reminderLabel), countdown);
         }
@@ -1287,7 +1246,9 @@ function initCustomEvents() {
         list.append(empty);
     }
     function updateCustomEventCountdowns() {
-        document.querySelectorAll(".events-custom-countdown[data-countdown-target]").forEach(timer => {
+        document
+            .querySelectorAll(".events-custom-countdown[data-countdown-target]")
+            .forEach((timer) => {
             const target = Number(timer.dataset.countdownTarget);
             if (!Number.isFinite(target)) {
                 timer.textContent = "—";
@@ -1321,7 +1282,7 @@ function initCustomEvents() {
     }
     function isEventCompleted(event) {
         const occurrence = new Date(getCompletionOccurrenceStart(event)).getTime();
-        return (event.completions || []).some(completion => completion.completed &&
+        return (event.completions || []).some((completion) => completion.completed &&
             new Date(completion.occurrence_start).getTime() === occurrence);
     }
     function initialiseAnimatedDetails(details, summary, content) {
@@ -1349,34 +1310,28 @@ function initCustomEvents() {
             }
             const expandedHeight = details.getBoundingClientRect().height;
             const endingHeight = opening ? expandedHeight : collapsedHeight;
-            const boxAnimation = details.animate([
-                { height: `${startingHeight}px` },
-                { height: `${endingHeight}px` }
-            ], {
+            const boxAnimation = details.animate([{ height: `${startingHeight}px` }, { height: `${endingHeight}px` }], {
                 duration: opening ? 220 : 200,
                 easing: opening
                     ? "cubic-bezier(0.22, 1, 0.36, 1)"
                     : "cubic-bezier(0.4, 0, 0.2, 1)",
-                fill: "forwards"
+                fill: "forwards",
             });
             const contentAnimation = content.animate(opening
                 ? [
                     { opacity: 0, transform: "translateY(-4px)" },
-                    { opacity: 1, transform: "translateY(0)" }
+                    { opacity: 1, transform: "translateY(0)" },
                 ]
                 : [
                     { opacity: 1, transform: "translateY(0)" },
-                    { opacity: 0, transform: "translateY(-4px)" }
+                    { opacity: 0, transform: "translateY(-4px)" },
                 ], {
                 duration: opening ? 180 : 150,
                 easing: "ease-out",
-                fill: "forwards"
+                fill: "forwards",
             });
             try {
-                await Promise.all([
-                    boxAnimation.finished,
-                    contentAnimation.finished
-                ]);
+                await Promise.all([boxAnimation.finished, contentAnimation.finished]);
             }
             catch {
                 // Cancelled animations safely settle into their target state.
@@ -1410,7 +1365,7 @@ function initCustomEvents() {
         const date = new Date(event.start_at);
         const dateLabel = new Intl.DateTimeFormat(undefined, {
             day: "numeric",
-            month: "short"
+            month: "short",
         }).format(date);
         summary.append(makeElement("span", "events-custom-chip", dateLabel), makeElement("span", "events-custom-chip", recurrenceLabel(event.recurrence)), makeElement("span", "events-custom-chip", event.account_scope === "all" ? "All accounts" : "Specific account"));
         if (event.reminder_minutes != null) {
@@ -1429,7 +1384,7 @@ function initCustomEvents() {
         const summaryStatus = makeElement("span", "events-custom-overview-summary-status");
         let objectiveSummary = null;
         if (objectives.length) {
-            const finished = objectives.filter(item => Number(item.current) >= Number(item.target)).length;
+            const finished = objectives.filter((item) => Number(item.current) >= Number(item.target)).length;
             objectiveSummary = makeElement("span", `events-custom-overview-progress${finished === objectives.length ? " event-completion-pill" : ""}`, `${finished}/${objectives.length} objectives`);
             summaryStatus.append(objectiveSummary);
         }
@@ -1487,7 +1442,7 @@ function initCustomEvents() {
                     value.textContent = `${currentValue}/${target}`;
                     fill.style.width = `${(currentValue / target) * 100}%`;
                     progress.setAttribute("aria-valuenow", String(currentValue));
-                    const finished = objectives.filter(entry => Number(entry.current) >= Number(entry.target)).length;
+                    const finished = objectives.filter((entry) => Number(entry.current) >= Number(entry.target)).length;
                     objectiveSummary.textContent = `${finished}/${objectives.length} objectives`;
                     objectiveSummary.classList.toggle("event-completion-pill", finished === objectives.length);
                     item.classList.toggle("is-finished", currentValue >= target);
@@ -1530,22 +1485,24 @@ function initCustomEvents() {
     function renderEvents() {
         const lists = $$("[data-custom-event-list]");
         const isOverview = page.dataset.overview === "true";
-        lists.forEach(list => {
+        lists.forEach((list) => {
             list.replaceChildren();
             const accountId = list.dataset.accountId || page.dataset.accountId;
-            const listEvents = isOverview
-                ? eventsByAccount.get(String(accountId)) || []
-                : events;
+            const listEvents = isOverview ? eventsByAccount.get(String(accountId)) || [] : events;
             if (isOverview) {
                 const completedCount = listEvents.filter(isEventCompleted).length;
-                const count = list.closest("[data-custom-account-group]")
+                const count = list
+                    .closest("[data-custom-account-group]")
                     ?.querySelector("[data-custom-account-count]");
                 if (count) {
                     count.textContent = listEvents.length
                         ? `${completedCount}/${listEvents.length} complete`
                         : "No events";
                 }
-                listEvents.slice().sort((a, b) => Number(isEventCompleted(a)) - Number(isEventCompleted(b))).forEach(event => renderOverviewEvent(event, list, accountId));
+                listEvents
+                    .slice()
+                    .sort((a, b) => Number(isEventCompleted(a)) - Number(isEventCompleted(b)))
+                    .forEach((event) => renderOverviewEvent(event, list, accountId));
                 if (!listEvents.length) {
                     list.append(makeElement("p", "events-custom-overview-empty", "No custom events for this account yet."));
                 }
@@ -1556,7 +1513,7 @@ function initCustomEvents() {
                 renderEmpty(list);
                 return;
             }
-            listEvents.forEach(event => {
+            listEvents.forEach((event) => {
                 renderEvent(event, list);
             });
         });
@@ -1569,19 +1526,14 @@ function initCustomEvents() {
         try {
             const isOverview = page.dataset.overview === "true";
             if (isOverview) {
-                const lists = $$("[data-custom-event-list]")
-                    .filter(list => list.dataset.accountId);
+                const lists = $$("[data-custom-event-list]").filter((list) => list.dataset.accountId);
                 const accountResults = await Promise.all(lists.map(async (list) => {
                     const accountId = list.dataset.accountId;
                     const params = new URLSearchParams({
                         account_id: accountId,
                     });
-                    const data = await apiRequest(`/api/custom-events?${params.toString()}`, {}, window.CyreneSchemas
-                        .customEventsListResponseSchema);
-                    return [
-                        String(accountId),
-                        data.events || [],
-                    ];
+                    const data = await apiRequest(`/api/custom-events?${params.toString()}`, {}, window.CyreneSchemas.customEventsListResponseSchema);
+                    return [String(accountId), data.events || []];
                 }));
                 eventsByAccount = new Map(accountResults);
             }
@@ -1591,9 +1543,7 @@ function initCustomEvents() {
                 if (accountId) {
                     params.set("account_id", accountId);
                 }
-                const suffix = params.toString()
-                    ? `?${params.toString()}`
-                    : "";
+                const suffix = params.toString() ? `?${params.toString()}` : "";
                 const data = await apiRequest(`/api/custom-events${suffix}`, {}, window.CyreneSchemas.customEventsListResponseSchema);
                 events = data.events || [];
             }
@@ -1601,13 +1551,12 @@ function initCustomEvents() {
         }
         catch (error) {
             console.error("Failed to load Custom Events:", error);
-            $$("[data-custom-account-count]").forEach(count => {
+            $$("[data-custom-account-count]").forEach((count) => {
                 count.textContent = "Unavailable";
             });
-            $$("[data-custom-event-list]").forEach(list => {
+            $$("[data-custom-event-list]").forEach((list) => {
                 list.replaceChildren();
-                renderEmpty(list, "Couldn't Load Custom Events", error.message ||
-                    "Please refresh the page and try again.");
+                renderEmpty(list, "Couldn't Load Custom Events", error.message || "Please refresh the page and try again.");
             });
         }
         finally {
@@ -1617,7 +1566,7 @@ function initCustomEvents() {
     // =========================================
     // CREATE / EDIT
     // =========================================
-    $$("[data-custom-create]").forEach(button => {
+    $$("[data-custom-create]").forEach((button) => {
         button.addEventListener("click", () => openModal());
     });
     form.addEventListener("submit", async (event) => {
@@ -1699,15 +1648,15 @@ function initCustomEvents() {
             return;
         event.completionSaving = true;
         const previousCompletions = event.completions;
-        const openCards = new Set($$(".events-custom-overview-event[open]").map(row => `${row.dataset.accountId}:${row.dataset.customEventId}`));
+        const openCards = new Set($$(".events-custom-overview-event[open]").map((row) => `${row.dataset.accountId}:${row.dataset.customEventId}`));
         const renderCompletion = () => {
             renderEvents();
-            $$(".events-custom-overview-event").forEach(row => {
+            $$(".events-custom-overview-event").forEach((row) => {
                 row.open = openCards.has(`${row.dataset.accountId}:${row.dataset.customEventId}`);
             });
         };
         const occurrence = new Date(occurrenceStart).getTime();
-        event.completions = (previousCompletions || []).filter(entry => new Date(entry.occurrence_start).getTime() !== occurrence);
+        event.completions = (previousCompletions || []).filter((entry) => new Date(entry.occurrence_start).getTime() !== occurrence);
         event.completions.push({ completed, occurrence_start: occurrenceStart });
         renderCompletion();
         const payload = {
@@ -1743,7 +1692,7 @@ function initCustomEvents() {
     updateFormDropdown("recurrence_type", form.elements.recurrence_type.value || "none");
     updateFormDropdown("reminder_minutes", form.elements.reminder_minutes.value || "");
     updateConditionalFields();
-    $$("[data-custom-account-group]").forEach(group => {
+    $$("[data-custom-account-group]").forEach((group) => {
         initialiseAnimatedDetails(group, group.querySelector(".events-custom-account-heading"), group.querySelector("[data-custom-event-list]"));
     });
     loadEvents();

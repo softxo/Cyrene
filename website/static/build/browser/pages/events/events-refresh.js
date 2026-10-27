@@ -49,7 +49,9 @@ window.refreshEvents = async function refreshEvents() {
         const parser = new DOMParser();
         const refreshedDocument = parser.parseFromString(html, "text/html");
         const refreshedPage = refreshedDocument.querySelector(".events-page");
-        if (activityRevision !== (window.eventsActivityRevision || 0) || !refreshedPage || document.querySelector('.event-checkmark[data-saving="true"]')) {
+        if (activityRevision !== (window.eventsActivityRevision || 0) ||
+            !refreshedPage ||
+            document.querySelector('.event-checkmark[data-saving="true"]')) {
             return;
         }
         // -------------------------------------------------
@@ -58,12 +60,7 @@ window.refreshEvents = async function refreshEvents() {
         // Keep existing elements wherever possible.
         // Change text and attributes only when necessary.
         // -------------------------------------------------
-        const preservedClasses = new Set([
-            "active",
-            "collapsed",
-            "open",
-            "is-dragging",
-        ]);
+        const preservedClasses = new Set(["active", "collapsed", "open", "is-dragging"]);
         function getNodeKey(node) {
             if (node.nodeType !== Node.ELEMENT_NODE) {
                 return null;
@@ -101,9 +98,8 @@ window.refreshEvents = async function refreshEvents() {
         function syncAttributes(current, refreshed) {
             const isFeaturedCard = current.matches(".event-featured-card");
             const wasDetailsOpen = current instanceof HTMLDetailsElement && current.open;
-            const wasCollapsed = isFeaturedCard &&
-                current.classList.contains("collapsed");
-            const previousClasses = new Set(Array.from(current.classList).filter(className => preservedClasses.has(className)));
+            const wasCollapsed = isFeaturedCard && current.classList.contains("collapsed");
+            const previousClasses = new Set(Array.from(current.classList).filter((className) => preservedClasses.has(className)));
             // Remove attributes that no longer exist.
             for (const attribute of Array.from(current.attributes)) {
                 if (!refreshed.hasAttribute(attribute.name)) {
@@ -112,14 +108,12 @@ window.refreshEvents = async function refreshEvents() {
             }
             // Apply only changed attributes.
             for (const attribute of Array.from(refreshed.attributes)) {
-                if (current.getAttribute(attribute.name) !==
-                    attribute.value) {
+                if (current.getAttribute(attribute.name) !== attribute.value) {
                     current.setAttribute(attribute.name, attribute.value);
                 }
             }
             // Preserve the user's current UI state.
-            if (current instanceof HTMLElement &&
-                refreshed instanceof HTMLElement) {
+            if (current instanceof HTMLElement && refreshed instanceof HTMLElement) {
                 for (const className of previousClasses) {
                     current.classList.add(className);
                 }
@@ -150,8 +144,7 @@ window.refreshEvents = async function refreshEvents() {
                 return replacement;
             }
             // Text and comment nodes: change only when necessary.
-            if (current.nodeType === Node.TEXT_NODE ||
-                current.nodeType === Node.COMMENT_NODE) {
+            if (current.nodeType === Node.TEXT_NODE || current.nodeType === Node.COMMENT_NODE) {
                 if (current.nodeValue !== refreshed.nodeValue) {
                     current.nodeValue = refreshed.nodeValue;
                 }
@@ -188,9 +181,7 @@ window.refreshEvents = async function refreshEvents() {
             let position = 0;
             for (const newChild of newChildren) {
                 const key = getNodeKey(newChild);
-                const matchingChild = key
-                    ? keyedChildren.get(key)
-                    : null;
+                const matchingChild = key ? keyedChildren.get(key) : null;
                 if (matchingChild && matchingChild.parentNode === current) {
                     patchNode(matchingChild, newChild);
                     position = Math.max(position, oldChildren.indexOf(matchingChild) + 1);
@@ -216,10 +207,8 @@ window.refreshEvents = async function refreshEvents() {
             }
             // Remove only children absent from the refreshed response.
             // Custom Events are deliberately outside the refreshed roots.
-            const retainedKeys = new Set(newChildren
-                .map(getNodeKey)
-                .filter(Boolean));
-            const retainedUnkeyedCount = newChildren.filter(child => !getNodeKey(child)).length;
+            const retainedKeys = new Set(newChildren.map(getNodeKey).filter(Boolean));
+            const retainedUnkeyedCount = newChildren.filter((child) => !getNodeKey(child)).length;
             let unkeyedSeen = 0;
             for (const child of Array.from(current.childNodes)) {
                 const key = getNodeKey(child);
@@ -259,14 +248,7 @@ window.refreshEvents = async function refreshEvents() {
         // OVERVIEW LAYOUT
         // -------------------------------------------------
         if (isOverview) {
-            for (const panel of [
-                "daily",
-                "resin",
-                "trounce",
-                "endgame",
-                "wishes",
-                "events",
-            ]) {
+            for (const panel of ["daily", "resin", "trounce", "endgame", "wishes", "events"]) {
                 refreshInPlace(`.events-overview-panel[data-overview-panel="${panel}"]`);
             }
         }

@@ -1238,7 +1238,8 @@
 
             <div
                 id="daily-commissions"
-                class="event-list-item event-daily-item{% if daily and daily.checked %} completed{% endif %}"
+                class="event-list-item event-daily-item{% if daily and (daily.checked or (daily.has_data and daily.completed >= daily.total and daily.claimed_reward)) %} completed{% endif %}"
+                data-automatic-complete="{{ 'true' if daily and daily.has_data and daily.completed >= daily.total and daily.claimed_reward else 'false' }}"
                 data-account-id="{{ selected_account.id if selected_account else '' }}"
             >
 
@@ -1383,7 +1384,7 @@
                 <div class="event-list-right">
 
                     <span
-                        class="event-list-status{% if trounce and trounce.has_data and trounce.remaining <= 0 %} event-completion-pill{% endif %}"
+                        class="event-list-status{% if trounce and (trounce.checked or (trounce.has_data and trounce.remaining <= 0)) %} event-completion-pill{% endif %}"
                     >
                         {% if trounce and trounce.has_data %}
 
@@ -2072,7 +2073,8 @@
         >
 
             {% for item in overview_data %}
-                <div class="overview-account-row overview-daily-row">
+                <div class="overview-account-row overview-daily-row{% if item.daily.checked or (item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward) %} completed{% endif %}"
+                    data-automatic-complete="{{ 'true' if item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward else 'false' }}">
 
                     <div class="overview-account-name">
                         <strong>{{ item.account.nickname }}</strong>
@@ -2269,7 +2271,7 @@
 
                         {% if item.trounce.has_data %}
 
-                            <span class="overview-status{% if item.trounce.remaining <= 0 %} event-completion-pill{% endif %}">
+                            <span class="overview-status{% if item.trounce.checked or item.trounce.remaining <= 0 %} event-completion-pill{% endif %}">
                                 {{ item.trounce.total - item.trounce.remaining }}
                                 /
                                 {{ item.trounce.total }}

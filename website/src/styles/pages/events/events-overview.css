@@ -74,13 +74,10 @@
 }
 
 .overview-account-row.completed {
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 65%, transparent);
-    box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.overview-account-row.completed .overview-status {
-    color: var(--accent);
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: none;
+    opacity: 0.65;
 }
 
 /* ---------------------------------------------------------
@@ -177,9 +174,9 @@
 
 .overview-status.event-completion-pill,
 .overview-status.event-completion-pill:hover {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
-    color: var(--accent);
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
 }
 
 /* =========================================================
@@ -219,11 +216,9 @@
 }
 
 .overview-claimed {
-    background: var(--accent-soft);
-
-    border-color: var(--accent-border);
-
-    color: var(--accent);
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
 }
 
 .overview-unclaimed {
