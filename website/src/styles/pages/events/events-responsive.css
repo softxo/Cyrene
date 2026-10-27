@@ -6,13 +6,11 @@
    RESPONSIVE LAYOUT
    ========================================================= */
 
-
 /* ---------------------------------------------------------
    Medium Desktop
    --------------------------------------------------------- */
 
 @media (max-width: 1350px) {
-
     .events-featured {
         gap: 14px;
     }
@@ -46,7 +44,6 @@
         left: 0;
         right: 0;
     }
-
 
     /* Abyss */
 
@@ -82,7 +79,6 @@
         height: 27px;
     }
 
-
     /* Stygian Onslaught */
 
     .stygian-boss-icon {
@@ -93,7 +89,6 @@
     .stygian-bosses-row {
         gap: 8px;
     }
-
 
     /* Collapsed Cards */
 
@@ -141,13 +136,11 @@
     }
 }
 
-
 /* ---------------------------------------------------------
    Controls — Narrow Desktop
    --------------------------------------------------------- */
 
 @media (max-width: 1150px) {
-
     .events-controls-right {
         justify-content: flex-start;
 
@@ -178,13 +171,11 @@
     }
 }
 
-
 /* ---------------------------------------------------------
    Mobile
    --------------------------------------------------------- */
 
 @media (max-width: 650px) {
-
     .events-controls-right {
         align-items: stretch;
 
@@ -230,7 +221,6 @@
         flex: 0 0 auto;
     }
 
-
     /* Overview Rows */
 
     .overview-account-row {
@@ -266,7 +256,6 @@
         transform: none;
     }
 
-
     /* Featured Cards */
 
     .events-featured {
@@ -295,7 +284,6 @@
 
         padding: 4px 14px 14px;
     }
-
 
     /* Collapsed Card */
 
@@ -354,7 +342,6 @@
         gap: 7px;
     }
 
-
     /* Time Badge */
 
     .event-time-left {
@@ -373,7 +360,6 @@
         width: 32px;
         height: 32px;
     }
-
 
     /* Activity List */
 
@@ -420,7 +406,6 @@
         padding-right: 7px;
     }
 
-
     /* Wishes */
 
     .wish-banners {
@@ -428,13 +413,11 @@
     }
 }
 
-
 /* ---------------------------------------------------------
    Small Mobile
    --------------------------------------------------------- */
 
 @media (max-width: 480px) {
-
     .events-layout-switch {
         width: 100%;
     }
@@ -447,7 +430,6 @@
     .events-controls-right {
         flex-direction: column;
     }
-
 
     /* Featured Cards */
 
@@ -477,7 +459,6 @@
     .event-stat-label {
         font-size: 10px;
     }
-
 
     /* Abyss */
 
@@ -514,7 +495,6 @@
         padding-left: 6px;
     }
 
-
     /* Imaginarium Theater */
 
     .it-stella {
@@ -525,7 +505,6 @@
     .it-stella-box {
         padding: 7px 2px;
     }
-
 
     /* Stygian Onslaught */
 
@@ -558,7 +537,6 @@
 
         font-size: 10px;
     }
-
 
     /* Activity Rows */
 
@@ -599,7 +577,6 @@
     }
 }
 
-
 /* =========================================================
    HOVER EFFECT PREFERENCE
    =========================================================
@@ -607,6 +584,25 @@
 
    Colour, border, background and shadow hover states remain active.
    ========================================================= */
+
+@media (max-width: 600px) {
+    .event-limited-main:has(.event-insight) {
+        flex-wrap: wrap;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-list-left {
+        flex: 1 1 100%;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-limited-rewards {
+        max-width: 45%;
+        flex-shrink: 0;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-list-right {
+        margin-left: auto;
+    }
+}
 
 html[data-hover-effects="off"] .event-featured-card:hover {
     transform: none;

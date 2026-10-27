@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import re
 import tempfile
 import time
@@ -16,6 +17,7 @@ from fastapi import (
     File,
     HTTPException,
     Request,
+    Response,
     UploadFile,
     logger,
 )
@@ -63,6 +65,7 @@ from utils.hoyolab.database import (
     get_event_activity_checks,
     get_gift_code_redemptions,
     get_gift_code_settings,
+    get_limited_event_checks,
     get_reminder,
     get_reminders,
     get_visible_custom_event,
@@ -93,6 +96,7 @@ from utils.hoyolab.errors import (
 )
 from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.login import login_with_password
+from utils.web.announcement_events import announcement_reward_events, merge_announcement_events
 from utils.web.auth import (
     create_verification,
     create_web_session,
@@ -100,7 +104,13 @@ from utils.web.auth import (
     get_verification,
     get_web_session,
 )
+from utils.web.limited_event_checks import (
+    apply_completion_checks,
+    completion_token,
+    valid_completion_token,
+)
 from utils.web.planner_costs import calculate_planner_costs
+from utils.web.quest_reward_details import enrich_quest_rewards
 from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
@@ -1571,13 +1581,11 @@ async def get_single_account_events(
                     }
                 )
 
-            limited_events.sort(
-                key=lambda event: (
-                    event["is_upcoming"],
-                    event["is_tcg"],
-                    event["start_time"] if event["is_upcoming"] else event["end_time"],
-                )
+            limited_events = merge_announcement_events(
+                limited_events,
+                announcement_reward_events(announcements, account["genshin_server"], now_timestamp),
             )
+            await enrich_quest_rewards(limited_events)
 
             def find_wish_announcement(names):
                 """
@@ -1981,6 +1989,18 @@ async def get_single_account_events(
         print(f"Error: {error}")
         print("================================")
 
+    if limited_events:
+        apply_completion_checks(
+            limited_events, await get_limited_event_checks(user_id, account["genshin_uid"])
+        )
+        for event in limited_events:
+            expires = min(
+                event["end_time"] or int(time.time()) + 7 * 86400, int(time.time()) + 7 * 86400
+            )
+            event["completion_token"] = completion_token(
+                user_id, account["genshin_uid"], event["completion_key"], expires
+            )
+
     result = {
         "account": account,
         "abyss": abyss_data,
@@ -2279,6 +2299,7 @@ async def update_event_activity_check(
     if activity_type not in {
         "daily_commissions",
         "trounce_domains",
+        "limited_event",
     }:
         return JSONResponse(
             {
@@ -2335,6 +2356,15 @@ async def update_event_activity_check(
     daily_period_key, weekly_period_key = get_event_activity_period_keys(account["genshin_server"])
 
     period_key = daily_period_key if activity_type == "daily_commissions" else weekly_period_key
+
+    if activity_type == "limited_event":
+        period_key = data.get("event_key")
+        if not valid_completion_token(
+            data.get("event_token"), user_id, account["genshin_uid"], period_key
+        ):
+            return JSONResponse(
+                {"success": False, "error": "Event not found for this account."}, status_code=404
+            )
 
     # =========================================
     # SAVE CHECKMARK
@@ -4226,18 +4256,31 @@ async def _get_achievement_account(
 
 
 @app.get("/api/achievements")
-async def achievements_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+async def achievements_data(
+    account_id: int,
+    response: Response,
+    cyrene_session: str | None = Cookie(default=None),
+):
+    response.headers["Cache-Control"] = "no-store, private"
     user_id = await get_authenticated_user(cyrene_session)
 
     if user_id is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
 
-    await _get_achievement_account(user_id, account_id)
+    account = await _get_achievement_account(user_id, account_id)
 
     source_achievements = load_achievements()
     saved_progress = await load_progress(
         user_id,
         account_id,
+    )
+
+    logging.getLogger("uvicorn.error").info(
+        "Achievement read: user=%s account=%s uid=%s saved_achievements=%s",
+        user_id,
+        account_id,
+        account["genshin_uid"],
+        len(saved_progress),
     )
 
     achievements = []
@@ -4442,7 +4485,7 @@ async def import_achievements_api(
     if user_id is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
 
-    await _get_achievement_account(user_id, account_id)
+    account = await _get_achievement_account(user_id, account_id)
     form = await request.form()
 
     uploaded_file = form.get("file")
@@ -4470,6 +4513,16 @@ async def import_achievements_api(
     finally:
         Path(temp_path).unlink(missing_ok=True)
 
+    saved_progress = await load_progress(user_id, account_id)
+    saved_tiers = sum(len(item["tiers"]) for item in saved_progress.values())
+    logging.getLogger("uvicorn.error").info(
+        "Achievement import verified: user=%s account=%s uid=%s matched=%s saved_tiers=%s",
+        user_id,
+        account_id,
+        account["genshin_uid"],
+        result["matched"],
+        saved_tiers,
+    )
     return result
 
 

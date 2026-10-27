@@ -17,7 +17,9 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
     }
     const timers = document.querySelectorAll(".event-time-left[data-end-time]");
     const now = Math.floor(Date.now() / 1000);
-    timers.forEach(timer => {
+    timers.forEach((timer) => {
+        if (timer.dataset.limitedComplete === "true")
+            return;
         const endTime = Number(timer.dataset.endTime);
         const startTime = Number(timer.dataset.startTime);
         if (!endTime) {
@@ -38,10 +40,9 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // EXPIRED
         // -----------------------------------------
         if (originalRemaining <= 0) {
-            timer.textContent =
-                timer.classList.contains("stygian-reset-timer")
-                    ? "Resetting..."
-                    : "Updating...";
+            timer.textContent = timer.classList.contains("stygian-reset-timer")
+                ? "Resetting..."
+                : "Updating...";
             timer.classList.add("expired");
             timer.classList.remove("warning", "danger");
             return;
@@ -67,7 +68,7 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
     // =====================================================
     // OVERVIEW — RESIN COUNTDOWNS
     // =====================================================
-    document.querySelectorAll(".overview-resin-timer[data-resin-timestamp]").forEach(timer => {
+    document.querySelectorAll(".overview-resin-timer[data-resin-timestamp]").forEach((timer) => {
         let timestamp = Number(timer.dataset.resinTimestamp);
         const currentTime = Math.floor(Date.now() / 1000);
         // -----------------------------------------
@@ -80,30 +81,25 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // -----------------------------------------
         // NEXT RESIN
         // -----------------------------------------
-        if (timer.dataset.resinKind === "next" &&
-            timestamp <= currentTime) {
+        if (timer.dataset.resinKind === "next" && timestamp <= currentTime) {
             // Each Resin takes 8 minutes.
             while (timestamp <= currentTime) {
                 timestamp += 480;
             }
-            timer.dataset.resinTimestamp =
-                String(timestamp);
+            timer.dataset.resinTimestamp = String(timestamp);
         }
         const remaining = Math.max(0, timestamp - currentTime);
         const hours = Math.floor(remaining / 3600);
         const minutes = Math.floor((remaining % 3600) / 60);
         const seconds = remaining % 60;
         if (hours > 0) {
-            timer.textContent =
-                `${hours}h ${minutes}m`;
+            timer.textContent = `${hours}h ${minutes}m`;
         }
         else if (minutes > 0) {
-            timer.textContent =
-                `${minutes}m ${seconds}s`;
+            timer.textContent = `${minutes}m ${seconds}s`;
         }
         else {
-            timer.textContent =
-                `${seconds}s`;
+            timer.textContent = `${seconds}s`;
         }
     });
 };

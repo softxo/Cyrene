@@ -93,6 +93,26 @@ async def initialise_database() -> None:
             """
         )
 
+        # Progress survives credential unlinking. Identity remains private to
+        # the Cyrene user and follows the game UID across new account rows.
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS game_data_accounts (
+                id INTEGER PRIMARY KEY,
+                discord_user_id BIGINT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                UNIQUE (discord_user_id, genshin_uid)
+            )
+            """
+        )
+        await connection.execute(
+            """
+            INSERT INTO game_data_accounts (id, discord_user_id, genshin_uid)
+            SELECT id, discord_user_id, genshin_uid FROM accounts
+            ON CONFLICT (discord_user_id, genshin_uid) DO NOTHING
+            """
+        )
+
         # =========================================
         # CHARACTER PLANNER
         # =========================================
@@ -217,8 +237,8 @@ async def initialise_database() -> None:
                 id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
                 discord_user_id BIGINT NOT NULL,
-                account_id INTEGER REFERENCES accounts(id)
-                    ON DELETE CASCADE,
+                account_id INTEGER REFERENCES game_data_accounts(id)
+                    ON DELETE RESTRICT,
                 achievement_id TEXT NOT NULL,
                 tier INTEGER NOT NULL,
 
@@ -238,7 +258,7 @@ async def initialise_database() -> None:
             """
             ALTER TABLE achievement_progress
             ADD COLUMN IF NOT EXISTS account_id INTEGER
-                REFERENCES accounts(id) ON DELETE CASCADE
+                REFERENCES game_data_accounts(id) ON DELETE RESTRICT
             """
         )
 
@@ -250,6 +270,15 @@ async def initialise_database() -> None:
             """
         )
 
+        await connection.execute(
+            """
+            ALTER TABLE achievement_progress
+            ADD COLUMN IF NOT EXISTS note TEXT
+            """
+        )
+
+        await _migrate_game_data_foreign_key(connection, "achievement_progress")
+
         # Existing user-wide progress belongs to the user's first linked
         # account. Rows without a linked account remain available for a later
         # migration instead of being discarded.
@@ -257,10 +286,13 @@ async def initialise_database() -> None:
             """
             UPDATE achievement_progress AS progress
             SET account_id = (
-                SELECT id
-                FROM accounts
-                WHERE discord_user_id = progress.discord_user_id
-                ORDER BY id
+                SELECT saved.id
+                FROM accounts AS linked
+                JOIN game_data_accounts AS saved
+                  ON saved.discord_user_id = linked.discord_user_id
+                 AND saved.genshin_uid = linked.genshin_uid
+                WHERE linked.discord_user_id = progress.discord_user_id
+                ORDER BY linked.id
                 LIMIT 1
             )
             WHERE progress.account_id IS NULL
@@ -314,8 +346,8 @@ async def initialise_database() -> None:
         await connection.execute(
             """
             CREATE TABLE IF NOT EXISTS wish_history (
-                account_id INTEGER NOT NULL REFERENCES accounts(id)
-                    ON DELETE CASCADE,
+                account_id INTEGER NOT NULL REFERENCES game_data_accounts(id)
+                    ON DELETE RESTRICT,
                 wish_id TEXT NOT NULL,
                 genshin_uid TEXT NOT NULL,
                 gacha_type TEXT NOT NULL,
@@ -343,6 +375,8 @@ async def initialise_database() -> None:
             ON wish_history(account_id, pulled_at DESC, wish_id DESC)
             """
         )
+
+        await _migrate_game_data_foreign_key(connection, "wish_history")
 
         # =========================================
         # EVENT ACTIVITY CHECKS
@@ -435,7 +469,10 @@ async def initialise_database() -> None:
                     CHECK (account_scope IN ('all', 'account')),
 
                 account_id INTEGER
-                    REFERENCES accounts(id) ON DELETE CASCADE,
+                    REFERENCES accounts(id) ON DELETE SET NULL,
+
+                genshin_uid TEXT,
+                genshin_server TEXT,
 
                 start_at TIMESTAMPTZ NOT NULL,
                 end_at TIMESTAMPTZ,
@@ -454,7 +491,8 @@ async def initialise_database() -> None:
                 CHECK (
                     (account_scope = 'all' AND account_id IS NULL)
                     OR
-                    (account_scope = 'account' AND account_id IS NOT NULL)
+                    (account_scope = 'account' AND (account_id IS NOT NULL
+                        OR (genshin_uid IS NOT NULL AND genshin_server IS NOT NULL)))
                 ),
 
                 CHECK (
@@ -468,6 +506,62 @@ async def initialise_database() -> None:
             )
             """
         )
+
+        # Keep the event itself after unlinking; its objectives and completions
+        # already follow UID + server, but cascade through their parent event.
+        await connection.execute(
+            """
+            ALTER TABLE custom_events
+                ADD COLUMN IF NOT EXISTS genshin_uid TEXT,
+                ADD COLUMN IF NOT EXISTS genshin_server TEXT
+            """
+        )
+        await connection.execute(
+            """
+            UPDATE custom_events AS e
+            SET genshin_uid = a.genshin_uid, genshin_server = a.genshin_server
+            FROM accounts AS a
+            WHERE e.account_id = a.id
+              AND (e.genshin_uid IS NULL OR e.genshin_server IS NULL)
+            """
+        )
+        constraints = await connection.execute(
+            """
+            SELECT conname FROM pg_constraint
+            WHERE conrelid = 'custom_events'::regclass AND contype = 'c'
+              AND pg_get_constraintdef(oid) LIKE '%account_scope%'
+              AND pg_get_constraintdef(oid) LIKE '%account_id%'
+            """
+        )
+        for row in await constraints.fetchall():
+            name = row["conname"].replace('"', '""')
+            await connection.execute(f'ALTER TABLE custom_events DROP CONSTRAINT "{name}"')
+        await connection.execute(
+            """
+            ALTER TABLE custom_events ADD CONSTRAINT custom_events_account_identity_check
+            CHECK (
+                (account_scope = 'all' AND account_id IS NULL)
+                OR (account_scope = 'account' AND (
+                    account_id IS NOT NULL OR
+                    (genshin_uid IS NOT NULL AND genshin_server IS NOT NULL)
+                ))
+            )
+            """
+        )
+        constraints = await connection.execute(
+            """
+            SELECT conname FROM pg_constraint
+            WHERE conrelid = 'custom_events'::regclass AND contype = 'f'
+              AND confrelid = 'accounts'::regclass
+            """
+        )
+        for row in await constraints.fetchall():
+            name = row["conname"].replace('"', '""')
+            await connection.execute(f'ALTER TABLE custom_events DROP CONSTRAINT "{name}"')
+            await connection.execute(
+                "ALTER TABLE custom_events ADD FOREIGN KEY (account_id) "
+                "REFERENCES accounts(id) ON DELETE SET NULL"
+            )
 
         await connection.execute(
             """
@@ -580,7 +674,8 @@ async def initialise_database() -> None:
                 ON a.discord_user_id = e.discord_user_id
             WHERE
                 e.account_scope = 'all'
-                OR e.account_id = a.id
+                OR (e.genshin_uid = a.genshin_uid
+                      AND e.genshin_server = a.genshin_server)
             ON CONFLICT (
                 discord_user_id,
                 account_id,
@@ -1101,7 +1196,9 @@ async def save_account(
             WHERE e.discord_user_id = %s
               AND (
                   e.account_scope = 'all'
-                  OR e.account_id = %s
+                  OR (e.genshin_uid, e.genshin_server) = (
+                      SELECT genshin_uid, genshin_server FROM accounts WHERE id = %s
+                  )
               )
               AND NOT EXISTS (
                   SELECT 1
@@ -1514,6 +1611,19 @@ async def set_event_activity_check(
     return True
 
 
+async def get_limited_event_checks(discord_user_id: int, genshin_uid: str) -> dict[str, bool]:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT period_key, checked FROM event_activity_checks
+            WHERE discord_user_id = %s AND genshin_uid = %s
+            AND activity_type = 'limited_event'
+            """,
+            (discord_user_id, genshin_uid),
+        )
+        return {row["period_key"]: bool(row["checked"]) for row in await result.fetchall()}
+
+
 async def get_event_activity_checks(
     discord_user_id: int,
     genshin_uid: str,
@@ -1780,10 +1890,48 @@ async def get_due_reminders() -> list[dict]:
         return await result.fetchall()
 
 
+async def _migrate_game_data_foreign_key(connection, table: str) -> None:
+    # Both identifiers are internal constants, never request input.
+    result = await connection.execute(
+        """
+        SELECT conname FROM pg_constraint
+        WHERE conrelid = %s::regclass AND contype = 'f'
+          AND confrelid = 'accounts'::regclass
+        """,
+        (table,),
+    )
+    for row in await result.fetchall():
+        constraint = row["conname"].replace('"', '""')
+        await connection.execute(f'ALTER TABLE {table} DROP CONSTRAINT "{constraint}"')
+        await connection.execute(
+            f"ALTER TABLE {table} ADD FOREIGN KEY (account_id) "
+            "REFERENCES game_data_accounts(id) ON DELETE RESTRICT"
+        )
+
+
+async def _get_game_data_account_id(account_id: int) -> int:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            INSERT INTO game_data_accounts (id, discord_user_id, genshin_uid)
+            SELECT id, discord_user_id, genshin_uid FROM accounts WHERE id = %s
+            ON CONFLICT (discord_user_id, genshin_uid) DO UPDATE
+                SET genshin_uid = EXCLUDED.genshin_uid
+            RETURNING id
+            """,
+            (account_id,),
+        )
+        row = await result.fetchone()
+        if row is None:
+            raise ValueError("Genshin account not found.")
+        return row["id"]
+
+
 async def get_achievement_progress(
     discord_user_id: int,
     account_id: int,
 ) -> list[dict]:
+    account_id = await _get_game_data_account_id(account_id)
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1809,6 +1957,7 @@ async def get_achievement_tier_progress(
     discord_user_id: int, account_id: int, achievement_id: str, tier: int
 ) -> dict | None:
 
+    account_id = await _get_game_data_account_id(account_id)
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -1847,6 +1996,8 @@ async def update_achievement_tier(
     existing = await get_achievement_tier_progress(
         discord_user_id, account_id, achievement_id, tier
     )
+
+    account_id = await _get_game_data_account_id(account_id)
 
     # --------------------------------
     # CREATE NEW PROGRESS ROW
@@ -1982,6 +2133,8 @@ async def update_achievement_tier_note(
             current=0,
         )
 
+    account_id = await _get_game_data_account_id(account_id)
+
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -2003,6 +2156,7 @@ async def update_achievement_tier_note(
 async def import_achievement_progress(
     discord_user_id: int, account_id: int, progress_data: dict
 ) -> None:
+    account_id = await _get_game_data_account_id(account_id)
     async with get_pool().connection() as connection:
         for achievement_id, achievement_data in progress_data.items():
             tiers = achievement_data.get("tiers", {})
@@ -2064,6 +2218,7 @@ async def import_achievement_progress(
 async def get_wish_history(
     account_id: int,
 ) -> list[dict]:
+    account_id = await _get_game_data_account_id(account_id)
     async with get_pool().connection() as connection:
         result = await connection.execute(
             """
@@ -2093,6 +2248,7 @@ async def import_wish_history(
         return 0
 
     imported = 0
+    account_id = await _get_game_data_account_id(account_id)
     async with get_pool().connection() as connection:
         for wish in wishes:
             result = await connection.execute(
@@ -2131,6 +2287,26 @@ async def import_wish_history(
     return imported
 
 
+async def _custom_event_identity(
+    connection,
+    discord_user_id: int,
+    account_scope: str,
+    account_id: int | None,
+) -> tuple[str | None, str | None]:
+    if account_scope == "all":
+        return None, None
+    if account_scope != "account" or account_id is None:
+        raise ValueError("An account must be selected for an account-specific event.")
+    result = await connection.execute(
+        "SELECT genshin_uid, genshin_server FROM accounts WHERE id = %s AND discord_user_id = %s",
+        (account_id, discord_user_id),
+    )
+    account = await result.fetchone()
+    if account is None:
+        raise ValueError("The selected account does not belong to this user.")
+    return account["genshin_uid"], account["genshin_server"]
+
+
 async def create_custom_event(
     discord_user_id: int,
     title: str,
@@ -2146,29 +2322,14 @@ async def create_custom_event(
     icon_url: str | None = None,
 ) -> dict:
     async with get_pool().connection() as connection:
-        # Validate the account assignment before creating the event.
-        if account_scope == "account":
-            if account_id is None:
-                raise ValueError("An account must be selected for an account-specific event.")
-
-            account_result = await connection.execute(
-                """
-                SELECT id
-                FROM accounts
-                WHERE id = %s
-                  AND discord_user_id = %s
-                """,
-                (account_id, discord_user_id),
-            )
-
-            if await account_result.fetchone() is None:
-                raise ValueError("The selected account does not belong to this user.")
-
-        elif account_scope == "all":
+        genshin_uid, genshin_server = await _custom_event_identity(
+            connection,
+            discord_user_id,
+            account_scope,
+            account_id,
+        )
+        if account_scope == "all":
             account_id = None
-
-        else:
-            raise ValueError("Invalid custom event account scope.")
 
         # Create the event, preserving the existing global order for compatibility with other callers.
         result = await connection.execute(
@@ -2180,6 +2341,8 @@ async def create_custom_event(
                 description,
                 account_scope,
                 account_id,
+                genshin_uid,
+                genshin_server,
                 start_at,
                 end_at,
                 recurrence,
@@ -2198,7 +2361,7 @@ async def create_custom_event(
                     ),
                     1
                 ),
-                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s, %s, %s,
                 %s, %s, %s, %s, %s
             )
             RETURNING *
@@ -2210,6 +2373,8 @@ async def create_custom_event(
                 description,
                 account_scope,
                 account_id,
+                genshin_uid,
+                genshin_server,
                 start_at,
                 end_at,
                 Jsonb(recurrence),
@@ -2252,7 +2417,8 @@ async def create_custom_event(
             WHERE e.id = %s
               AND (
                   e.account_scope = 'all'
-                  OR e.account_id = a.id
+                  OR (e.genshin_uid = a.genshin_uid
+                      AND e.genshin_server = a.genshin_server)
               )
             ON CONFLICT (
                 discord_user_id,
@@ -2265,6 +2431,20 @@ async def create_custom_event(
         )
 
         return event
+
+
+async def _custom_events_with_linked_accounts(connection, events: list[dict]) -> list[dict]:
+    for event in events:
+        if event["account_scope"] != "account":
+            continue
+        result = await connection.execute(
+            "SELECT id FROM accounts WHERE discord_user_id = %s "
+            "AND genshin_uid = %s AND genshin_server = %s",
+            (event["discord_user_id"], event["genshin_uid"], event["genshin_server"]),
+        )
+        account = await result.fetchone()
+        event["account_id"] = account["id"] if account else None
+    return events
 
 
 async def get_custom_events(
@@ -2296,8 +2476,6 @@ async def get_custom_events(
                         AS account_sort_order
                 FROM custom_events AS e
 
-                LEFT JOIN accounts AS owner_account
-                    ON owner_account.id = e.account_id
 
                 LEFT JOIN custom_event_account_order AS o
                     ON o.event_id = e.id
@@ -2308,8 +2486,8 @@ async def get_custom_events(
                     e.account_scope = 'all'
                     OR (
                         e.account_scope = 'account'
-                        AND owner_account.genshin_uid = %s
-                        AND owner_account.genshin_server = %s
+                        AND e.genshin_uid = %s
+                        AND e.genshin_server = %s
                     )
 
                 ORDER BY
@@ -2325,7 +2503,7 @@ async def get_custom_events(
                 ),
             )
 
-            return await result.fetchall()
+            return await _custom_events_with_linked_accounts(connection, await result.fetchall())
 
         # Without a selected Genshin account, retain the original
         # owner-only behaviour for compatibility with existing callers.
@@ -2339,7 +2517,7 @@ async def get_custom_events(
             (discord_user_id,),
         )
 
-        return await result.fetchall()
+        return await _custom_events_with_linked_accounts(connection, await result.fetchall())
 
 
 async def get_visible_custom_event(
@@ -2359,17 +2537,15 @@ async def get_visible_custom_event(
                 ON viewer_account.id = %s
                AND viewer_account.discord_user_id = %s
 
-            LEFT JOIN accounts AS owner_account
-                ON owner_account.id = e.account_id
 
             WHERE e.id = %s
               AND (
                   e.account_scope = 'all'
                   OR (
                       e.account_scope = 'account'
-                      AND owner_account.genshin_uid =
+                      AND e.genshin_uid =
                           viewer_account.genshin_uid
-                      AND owner_account.genshin_server =
+                      AND e.genshin_server =
                           viewer_account.genshin_server
                   )
               )
@@ -2436,14 +2612,12 @@ async def reorder_custom_events(
                         e.sort_order,
                         e.start_at
                     FROM custom_events e
-                    LEFT JOIN accounts owner_account
-                        ON owner_account.id = e.account_id
                     WHERE
                         e.account_scope = 'all'
                         OR (
                             e.account_scope = 'account'
-                            AND owner_account.genshin_uid = %s
-                            AND owner_account.genshin_server = %s
+                            AND e.genshin_uid = %s
+                            AND e.genshin_server = %s
                         )
                 ),
                 current_max AS (
@@ -2504,16 +2678,14 @@ async def reorder_custom_events(
                 FROM custom_event_account_order o
                 INNER JOIN custom_events e
                     ON e.id = o.event_id
-                LEFT JOIN accounts owner_account
-                    ON owner_account.id = e.account_id
                 WHERE o.discord_user_id = %s
                   AND o.account_id = %s
                   AND (
                       e.account_scope = 'all'
                       OR (
                           e.account_scope = 'account'
-                          AND owner_account.genshin_uid = %s
-                          AND owner_account.genshin_server = %s
+                          AND e.genshin_uid = %s
+                          AND e.genshin_server = %s
                       )
                   )
                 ORDER BY
@@ -2623,8 +2795,6 @@ async def get_custom_event_account_progress(
                 ON viewer_account.id = %s
                AND viewer_account.discord_user_id = %s
 
-            LEFT JOIN accounts AS owner_account
-                ON owner_account.id = e.account_id
 
             WHERE p.event_id = %s
               AND p.genshin_uid = viewer_account.genshin_uid
@@ -2633,9 +2803,9 @@ async def get_custom_event_account_progress(
                   e.account_scope = 'all'
                   OR (
                       e.account_scope = 'account'
-                      AND owner_account.genshin_uid =
+                      AND e.genshin_uid =
                           viewer_account.genshin_uid
-                      AND owner_account.genshin_server =
+                      AND e.genshin_server =
                           viewer_account.genshin_server
                   )
               )
@@ -2695,17 +2865,15 @@ async def change_custom_event_account_progress(
                 ON viewer_account.id = %s
                AND viewer_account.discord_user_id = %s
 
-            LEFT JOIN accounts AS owner_account
-                ON owner_account.id = e.account_id
 
             WHERE e.id = %s
               AND (
                   e.account_scope = 'all'
                   OR (
                       e.account_scope = 'account'
-                      AND owner_account.genshin_uid =
+                      AND e.genshin_uid =
                           viewer_account.genshin_uid
-                      AND owner_account.genshin_server =
+                      AND e.genshin_server =
                           viewer_account.genshin_server
                   )
               )
@@ -2772,6 +2940,14 @@ async def update_custom_event(
     icon_url: str | None = None,
 ) -> dict | None:
     async with get_pool().connection() as connection:
+        genshin_uid, genshin_server = await _custom_event_identity(
+            connection,
+            discord_user_id,
+            account_scope,
+            account_id,
+        )
+        if account_scope == "all":
+            account_id = None
         result = await connection.execute(
             """
             UPDATE custom_events
@@ -2780,6 +2956,8 @@ async def update_custom_event(
                 description = %s,
                 account_scope = %s,
                 account_id = %s,
+                genshin_uid = %s,
+                genshin_server = %s,
                 start_at = %s,
                 end_at = %s,
                 recurrence = %s,
@@ -2797,6 +2975,8 @@ async def update_custom_event(
                 description,
                 account_scope,
                 account_id,
+                genshin_uid,
+                genshin_server,
                 start_at,
                 end_at,
                 Jsonb(recurrence),
@@ -2919,17 +3099,15 @@ async def set_custom_event_completion(
                     ON viewer_account.id = %s
                    AND viewer_account.discord_user_id = %s
 
-                LEFT JOIN accounts AS owner_account
-                    ON owner_account.id = e.account_id
 
                 WHERE e.id = %s
                   AND (
                       e.account_scope = 'all'
                       OR (
                           e.account_scope = 'account'
-                          AND owner_account.genshin_uid =
+                          AND e.genshin_uid =
                               viewer_account.genshin_uid
-                          AND owner_account.genshin_server =
+                          AND e.genshin_server =
                               viewer_account.genshin_server
                       )
                   )

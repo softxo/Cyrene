@@ -1,4 +1,5 @@
 .env
+/website/static/cache/
 .venv/
 __pycache__/
 *.pyc

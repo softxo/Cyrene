@@ -1,6 +1,5 @@
 // @ts-nocheck -- Legacy global script; types will be tightened incrementally.
 window.initAchievements = function () {
-
     const page = document.querySelector(".achievements-page");
     const accountId = page?.dataset.achievementAccountId;
 
@@ -14,14 +13,14 @@ window.initAchievements = function () {
     const accountButton = accountSelect?.querySelector(".custom-select-button");
     const accountInput = accountSelect?.querySelector('input[name="account_id"]');
 
-    accountButton?.addEventListener("click", event => {
+    accountButton?.addEventListener("click", (event) => {
         event.stopPropagation();
         const open = !accountSelect.classList.contains("open");
         accountSelect.classList.toggle("open", open);
         accountButton.setAttribute("aria-expanded", String(open));
     });
 
-    accountSelect?.querySelectorAll(".custom-select-option").forEach(option => {
+    accountSelect?.querySelectorAll(".custom-select-option").forEach((option) => {
         option.addEventListener("click", () => {
             if (!option.dataset.value || !accountInput) {
                 return;
@@ -31,69 +30,41 @@ window.initAchievements = function () {
         });
     });
 
-    const categories = document.getElementById(
-        "achievement-categories"
-    );
+    const categories = document.getElementById("achievement-categories");
 
-    const categoryGrid = document.getElementById(
-        "achievement-category-grid"
-    );
+    const categoryGrid = document.getElementById("achievement-category-grid");
 
-    const browser = document.getElementById(
-        "achievement-browser"
-    );
+    const browser = document.getElementById("achievement-browser");
 
-    const backButton = document.getElementById(
-        "achievement-back"
-    );
+    const backButton = document.getElementById("achievement-back");
 
-    const sidebarList = document.getElementById(
-        "achievement-sidebar-list"
-    );
+    const sidebarList = document.getElementById("achievement-sidebar-list");
 
-    const achievementList = document.getElementById(
-        "achievement-list"
-    );
+    const achievementList = document.getElementById("achievement-list");
 
-    const categoryTitle = document.getElementById(
-        "achievement-category-title"
-    );
+    const categoryTitle = document.getElementById("achievement-category-title");
 
-    const categoryPercent = document.getElementById(
-        "achievement-category-percent"
-    );
+    const categoryPercent = document.getElementById("achievement-category-percent");
 
-    const categoryProgressFill = document.getElementById(
-        "achievement-category-progress-fill"
-    );
+    const categoryProgressFill = document.getElementById("achievement-category-progress-fill");
 
     /* =========================================================
        ACHIEVEMENT NOTES MODAL
        ========================================================= */
 
-    const achievementNotesModal = document.getElementById(
-        "achievement-notes-modal"
-    );
+    const achievementNotesModal = document.getElementById("achievement-notes-modal");
 
-    const achievementNotesModalClose = document.getElementById(
-        "achievement-notes-modal-close"
-    );
+    const achievementNotesModalClose = document.getElementById("achievement-notes-modal-close");
 
-    const achievementNotesModalCancel = document.getElementById(
-        "achievement-notes-cancel"
-    );
+    const achievementNotesModalCancel = document.getElementById("achievement-notes-cancel");
 
-    const achievementNotesModalAdd = document.getElementById(
-        "achievement-notes-add"
-    );
+    const achievementNotesModalAdd = document.getElementById("achievement-notes-add");
 
     const achievementNotesModalBackdrop = document.getElementById(
-        "achievement-notes-modal-backdrop"
+        "achievement-notes-modal-backdrop",
     );
 
-    const achievementNotesInput = document.getElementById(
-        "achievement-notes-input"
-    );
+    const achievementNotesInput = document.getElementById("achievement-notes-input");
 
     function openAchievementNotesModal() {
         achievementNotesModal.hidden = false;
@@ -105,131 +76,83 @@ window.initAchievements = function () {
         });
     }
 
-
     function closeAchievementNotesModal() {
         achievementNotesModal.hidden = true;
 
         achievementNotesInput.value = "";
     }
 
-    achievementNotesModalClose.addEventListener(
-        "click",
-        closeAchievementNotesModal
-    );
+    achievementNotesModalClose.addEventListener("click", closeAchievementNotesModal);
 
-    achievementNotesModalCancel.addEventListener(
-        "click",
-        closeAchievementNotesModal
-    );
+    achievementNotesModalCancel.addEventListener("click", closeAchievementNotesModal);
 
-    achievementNotesModalBackdrop.addEventListener(
-        "click",
-        closeAchievementNotesModal
-    );
+    achievementNotesModalBackdrop.addEventListener("click", closeAchievementNotesModal);
 
-    achievementNotesModalAdd.addEventListener(
-        "click",
-        async () => {
+    achievementNotesModalAdd.addEventListener("click", async () => {
+        const note = achievementNotesInput.value.trim();
 
-            const note =
-                achievementNotesInput.value.trim();
-
-            if (!note) {
-                achievementNotesInput.focus();
-                return;
-            }
-
-            if (!achievementNoteTarget) {
-                return;
-            }
-
-            const {
-                achievement,
-                tier
-            } = achievementNoteTarget;
-
-            try {
-
-                const response =
-                    await fetch(
-                        achievementApiUrl(`/api/achievements/${encodeURIComponent(
-                            tier.genshin_id
-                        )}/tiers/${tier.tier}/note`),
-                        {
-                            method: "PATCH",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-                                note: note
-                            })
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const result =
-                        await response.json();
-
-                    throw new Error(
-                        result.detail ||
-                        "Failed to save note."
-                    );
-
-                }
-
-
-                /*
-                 * Update the local achievement state
-                 * only after the database save succeeds.
-                 */
-
-                tier.note =
-                    note;
-
-
-                /*
-                 * Rebuild the achievement so the
-                 * note immediately appears.
-                 */
-
-                buildAchievements(
-                    achievement.category
-                );
-
-
-                console.log(
-                    "Achievement note saved:",
-                    achievement.name,
-                    tier.tier,
-                    note
-                );
-
-
-                closeAchievementNotesModal();
-
-                achievementNoteTarget =
-                    null;
-
-            } catch (error) {
-
-                console.error(
-                    "[Achievements] Failed to save note:",
-                    error
-                );
-
-                alert(
-                    error.message
-                );
-
-            }
-
+        if (!note) {
+            achievementNotesInput.focus();
+            return;
         }
-    );
+
+        if (!achievementNoteTarget) {
+            return;
+        }
+
+        const { achievement, tier } = achievementNoteTarget;
+
+        try {
+            const response = await fetch(
+                achievementApiUrl(
+                    `/api/achievements/${encodeURIComponent(
+                        tier.genshin_id,
+                    )}/tiers/${tier.tier}/note`,
+                ),
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+
+                    body: JSON.stringify({
+                        note: note,
+                    }),
+                },
+            );
+
+            if (!response.ok) {
+                const result = await response.json();
+
+                throw new Error(result.detail || "Failed to save note.");
+            }
+
+            /*
+             * Update the local achievement state
+             * only after the database save succeeds.
+             */
+
+            tier.note = note;
+
+            /*
+             * Rebuild the achievement so the
+             * note immediately appears.
+             */
+
+            buildAchievements(achievement.category);
+
+            console.log("Achievement note saved:", achievement.name, tier.tier, note);
+
+            closeAchievementNotesModal();
+
+            achievementNoteTarget = null;
+        } catch (error) {
+            console.error("[Achievements] Failed to save note:", error);
+
+            alert(error.message);
+        }
+    });
 
     let achievementData = null;
 
@@ -244,12 +167,9 @@ window.initAchievements = function () {
     let activeCategory = null;
 
     const CATEGORY_ICONS = {
+        "Wonders of the World": "/static/images/achievements/categories/Wonders_of_the_World.png",
 
-        "Wonders of the World":
-            "/static/images/achievements/categories/Wonders_of_the_World.png",
-
-        "Memories of the Heart":
-            "/static/images/achievements/categories/Memories_of_the_Heart.png",
+        "Memories of the Heart": "/static/images/achievements/categories/Memories_of_the_Heart.png",
 
         "Mortal Travails: Series I":
             "/static/images/achievements/categories/Mortal_Travails_Series_I.png",
@@ -272,11 +192,9 @@ window.initAchievements = function () {
         "Mortal Travails: Series VII":
             "/static/images/achievements/categories/Mortal_Travails_Series_VII.png",
 
-        "The Art of Adventure":
-            "/static/images/achievements/categories/The_Art_of_Adventure.png",
+        "The Art of Adventure": "/static/images/achievements/categories/The_Art_of_Adventure.png",
 
-        "The Hero's Journey":
-            "/static/images/achievements/categories/The_Heros_Journey.png",
+        "The Hero's Journey": "/static/images/achievements/categories/The_Heros_Journey.png",
 
         "Mondstadt: The City of Wind and Song":
             "/static/images/achievements/categories/Mondstadt_The_City_of_Wind_and_Song.png",
@@ -290,26 +208,20 @@ window.initAchievements = function () {
         "Elemental Specialist: Series II":
             "/static/images/achievements/categories/Elemental_Specialist_Series_II.png",
 
-        "Marksmanship":
-            "/static/images/achievements/categories/Marksmanship.png",
+        Marksmanship: "/static/images/achievements/categories/Marksmanship.png",
 
-        "Challenger: Series I":
-            "/static/images/achievements/categories/Challenger_Series_I.png",
+        "Challenger: Series I": "/static/images/achievements/categories/Challenger_Series_I.png",
 
-        "Challenger: Series II":
-            "/static/images/achievements/categories/Challenger_Series_II.png",
+        "Challenger: Series II": "/static/images/achievements/categories/Challenger_Series_II.png",
 
         "Challenger: Series III":
             "/static/images/achievements/categories/Challenger_Series_III.png",
 
-        "Challenger: Series IV":
-            "/static/images/achievements/categories/Challenger_Series_IV.png",
+        "Challenger: Series IV": "/static/images/achievements/categories/Challenger_Series_IV.png",
 
-        "Challenger: Series V":
-            "/static/images/achievements/categories/Challenger_Series_V.png",
+        "Challenger: Series V": "/static/images/achievements/categories/Challenger_Series_V.png",
 
-        "Challenger: Series VI":
-            "/static/images/achievements/categories/Challenger_Series_VI.png",
+        "Challenger: Series VI": "/static/images/achievements/categories/Challenger_Series_VI.png",
 
         "Challenger: Series VII":
             "/static/images/achievements/categories/Challenger_Series_VII.png",
@@ -317,17 +229,14 @@ window.initAchievements = function () {
         "Challenger: Series VIII":
             "/static/images/achievements/categories/Challenger_Series_VIII.png",
 
-        "Challenger: Series IX":
-            "/static/images/achievements/categories/Challenger_Series_IX.png",
+        "Challenger: Series IX": "/static/images/achievements/categories/Challenger_Series_IX.png",
 
-        "Challenger: Series X":
-            "/static/images/achievements/categories/Challenger_Series_X.png",
+        "Challenger: Series X": "/static/images/achievements/categories/Challenger_Series_X.png",
 
         "Domains and Spiral Abyss: Series I":
             "/static/images/achievements/categories/Domains_and_Spiral_Abyss_Series_I.png",
 
-        "Olah!: Series I":
-            "/static/images/achievements/categories/Olah!_Series_I.png",
+        "Olah!: Series I": "/static/images/achievements/categories/Olah!_Series_I.png",
 
         "Snezhnaya Does Not Believe in Tears: Series I":
             "/static/images/achievements/categories/Snezhnaya_Does_Not_Believe_in_Tears_Series_I.png",
@@ -380,11 +289,9 @@ window.initAchievements = function () {
         "Teyvat Fishing Guide: Series I":
             "/static/images/achievements/categories/Teyvat_Fishing_Guide_Series_I.png",
 
-        "The Light of Day":
-            "/static/images/achievements/categories/The_Light_of_Day.png",
+        "The Light of Day": "/static/images/achievements/categories/The_Light_of_Day.png",
 
-        "Chasmlighter":
-            "/static/images/achievements/categories/Chasmlighter.png",
+        Chasmlighter: "/static/images/achievements/categories/Chasmlighter.png",
 
         "Sumeru: The Rainforest of Lore":
             "/static/images/achievements/categories/Sumeru_The_Rainforest_of_Lore.png",
@@ -395,11 +302,9 @@ window.initAchievements = function () {
         "Sumeru: The Gilded Desert - Series II":
             "/static/images/achievements/categories/Sumeru_The_Gilded_Desert_Series_II.png",
 
-        "Genius Invokation TCG":
-            "/static/images/achievements/categories/Genius_Invokation_TCG.png",
+        "Genius Invokation TCG": "/static/images/achievements/categories/Genius_Invokation_TCG.png",
 
-        "Blessed Hamada":
-            "/static/images/achievements/categories/Blessed_Hamada.png",
+        "Blessed Hamada": "/static/images/achievements/categories/Blessed_Hamada.png",
 
         "Fontaine: Dance of the Dew-White Springs (I)":
             "/static/images/achievements/categories/Fontaine_Dance_of_the_Dew_White_Springs_I.png",
@@ -410,8 +315,7 @@ window.initAchievements = function () {
         "Fontaine: Dance of the Dew-White Springs (III)":
             "/static/images/achievements/categories/Fontaine_Dance_of_the_Dew_White_Springs_III.png",
 
-        "Chenyu's Splendor":
-            "/static/images/achievements/categories/Chenyus_Splendor.png",
+        "Chenyu's Splendor": "/static/images/achievements/categories/Chenyus_Splendor.png",
 
         "Rhapsodia in the Ancient Sea":
             "/static/images/achievements/categories/Rhapsodia_in_the_Ancient_Sea.png",
@@ -428,14 +332,11 @@ window.initAchievements = function () {
         "Natlan: The Land of Fire and Competition (II)":
             "/static/images/achievements/categories/Natlan_The_Land_of_Fire_and_Competition_II.png",
 
-        "Duelist: Series I":
-            "/static/images/achievements/categories/Duelist_Series_I.png",
+        "Duelist: Series I": "/static/images/achievements/categories/Duelist_Series_I.png",
 
-        "Duelist: Series II":
-            "/static/images/achievements/categories/Duelist_Series_II.png",
+        "Duelist: Series II": "/static/images/achievements/categories/Duelist_Series_II.png",
 
-        "Duelist: Series III":
-            "/static/images/achievements/categories/Duelist_Series_III.png",
+        "Duelist: Series III": "/static/images/achievements/categories/Duelist_Series_III.png",
 
         "Repertoire of Myriad Melodies":
             "/static/images/achievements/categories/Repertoire_of_Myriad_Melodies.png",
@@ -455,19 +356,16 @@ window.initAchievements = function () {
         "Demon Mountain's Breath":
             "/static/images/achievements/categories/Demon_Mountains_Breath.png",
 
-        "Unfettered Crescent":
-            "/static/images/achievements/categories/Unfettered_Crescent.png",
+        "Unfettered Crescent": "/static/images/achievements/categories/Unfettered_Crescent.png",
 
         "Snezhnaya: Sacred city of ice and pale star (I)":
             "/static/images/achievements/categories/Snezhnaya_Sacred_city_of_ice_and_pale_star_I.png",
 
         "Land of Surging Shadows":
             "/static/images/achievements/categories/Land_of_Surging_Shadows.png",
-
     };
 
     const CATEGORY_SIDEBAR_ICONS = {
-
         "Wonders of the World":
             "/static/images/achievements/categories/sidebar/Wonders_of_the_World.png",
 
@@ -513,44 +411,32 @@ window.initAchievements = function () {
         "Elemental Specialist: Series II":
             "/static/images/achievements/categories/sidebar/Elemental_Specialist_Series_II.png",
 
-        "Marksmanship":
-            "/static/images/achievements/categories/sidebar/Marksmanship.png",
+        Marksmanship: "/static/images/achievements/categories/sidebar/Marksmanship.png",
 
-        "Challenger: Series I":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series I": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series II":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series II": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series III":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series III": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series IV":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series IV": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series V":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series V": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series VI":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series VI": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series VII":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series VII": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series VIII":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series VIII": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series IX":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series IX": "/static/images/achievements/categories/sidebar/Challenger.png",
 
-        "Challenger: Series X":
-            "/static/images/achievements/categories/sidebar/Challenger.png",
+        "Challenger: Series X": "/static/images/achievements/categories/sidebar/Challenger.png",
 
         "Domains and Spiral Abyss: Series I":
             "/static/images/achievements/categories/sidebar/Domains_and_Spiral_Abyss_Series_I.png",
 
-        "Olah!: Series I":
-            "/static/images/achievements/categories/sidebar/Olah!_Series_I.png",
+        "Olah!: Series I": "/static/images/achievements/categories/sidebar/Olah!_Series_I.png",
 
         "Snezhnaya Does Not Believe in Tears: Series I":
             "/static/images/achievements/categories/sidebar/Snezhnaya_Does_Not_Believe_in_Tears_Series_I.png",
@@ -603,11 +489,9 @@ window.initAchievements = function () {
         "Teyvat Fishing Guide: Series I":
             "/static/images/achievements/categories/sidebar/Teyvat_Fishing_Guide_Series_I.png",
 
-        "The Light of Day":
-            "/static/images/achievements/categories/sidebar/The_Light_of_Day.png",
+        "The Light of Day": "/static/images/achievements/categories/sidebar/The_Light_of_Day.png",
 
-        "Chasmlighter":
-            "/static/images/achievements/categories/sidebar/Chasmlighter.png",
+        Chasmlighter: "/static/images/achievements/categories/sidebar/Chasmlighter.png",
 
         "Sumeru: The Rainforest of Lore":
             "/static/images/achievements/categories/sidebar/Sumeru_The_Rainforest_of_Lore.png",
@@ -621,8 +505,7 @@ window.initAchievements = function () {
         "Genius Invokation TCG":
             "/static/images/achievements/categories/sidebar/Genius_Invokation_TCG.png",
 
-        "Blessed Hamada":
-            "/static/images/achievements/categories/sidebar/Blessed_Hamada.png",
+        "Blessed Hamada": "/static/images/achievements/categories/sidebar/Blessed_Hamada.png",
 
         "Fontaine: Dance of the Dew-White Springs (I)":
             "/static/images/achievements/categories/sidebar/Fontaine_Dance_of_the_Dew_White_Springs.png",
@@ -633,8 +516,7 @@ window.initAchievements = function () {
         "Fontaine: Dance of the Dew-White Springs (III)":
             "/static/images/achievements/categories/sidebar/Fontaine_Dance_of_the_Dew_White_Springs.png",
 
-        "Chenyu's Splendor":
-            "/static/images/achievements/categories/sidebar/Chenyus_Splendor.png",
+        "Chenyu's Splendor": "/static/images/achievements/categories/sidebar/Chenyus_Splendor.png",
 
         "Rhapsodia in the Ancient Sea":
             "/static/images/achievements/categories/sidebar/Rhapsodia_in_the_Ancient_Sea.png",
@@ -651,14 +533,11 @@ window.initAchievements = function () {
         "Natlan: The Land of Fire and Competition (II)":
             "/static/images/achievements/categories/sidebar/Natlan_The_Land_of_Fire_and_Competition.png",
 
-        "Duelist: Series I":
-            "/static/images/achievements/categories/sidebar/Duelist.png",
+        "Duelist: Series I": "/static/images/achievements/categories/sidebar/Duelist.png",
 
-        "Duelist: Series II":
-            "/static/images/achievements/categories/sidebar/Duelist.png",
+        "Duelist: Series II": "/static/images/achievements/categories/sidebar/Duelist.png",
 
-        "Duelist: Series III":
-            "/static/images/achievements/categories/sidebar/Duelist.png",
+        "Duelist: Series III": "/static/images/achievements/categories/sidebar/Duelist.png",
 
         "Repertoire of Myriad Melodies":
             "/static/images/achievements/categories/sidebar/Repertoire_of_Myriad_Melodies.png",
@@ -686,9 +565,7 @@ window.initAchievements = function () {
 
         "Land of Surging Shadows":
             "/static/images/achievements/categories/sidebar/Land_of_Surging_Shadows.png",
-
     };
-
 
     const CATEGORY_ORDER = [
         "Wonders of the World",
@@ -764,1198 +641,672 @@ window.initAchievements = function () {
         "Demon Mountain's Breath",
         "Unfettered Crescent",
         "Snezhnaya: Sacred city of ice and pale star (I)",
-        "Land of Surging Shadows"
+        "Land of Surging Shadows",
     ];
 
+    /*
+     * --------------------------------------------------
+     * CATEGORY PAGE CONTROLS
+     * --------------------------------------------------
+     */
 
+    const achievementSearchInputs = document.querySelectorAll("[data-achievement-search]");
+
+    const achievementHideCompletedInputs = document.querySelectorAll(
+        "[data-achievement-hide-completed]",
+    );
+
+    const achievementImportButton = document.getElementById("achievement-import-button");
+
+    const achievementImportInput = document.getElementById("achievement-import-input");
+
+    const achievementImportSuccess = document.getElementById("achievement-import-success");
+
+    const achievementImportSuccessMessage = document.getElementById(
+        "achievement-import-success-message",
+    );
+
+    let achievementImportSuccessTimer = null;
+
+    function showAchievementImportSuccess(result) {
+        if (!achievementImportSuccess) {
+            return;
+        }
+
+        if (achievementImportSuccessMessage) {
+            const matched = Number(result?.matched) || 0;
+            achievementImportSuccessMessage.textContent = `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
+        }
+
+        window.clearTimeout(achievementImportSuccessTimer);
+        achievementImportSuccess.hidden = false;
+
+        achievementImportSuccessTimer = window.setTimeout(() => {
+            achievementImportSuccess.hidden = true;
+        }, 2200);
+    }
+
+    if (achievementImportButton && achievementImportInput) {
+        achievementImportButton.addEventListener("click", () => {
+            achievementImportInput.click();
+        });
+
+        achievementImportInput.addEventListener("change", async () => {
+            const file = achievementImportInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            try {
+                achievementImportButton.disabled = true;
+
+                const response = await fetch(achievementApiUrl("/api/achievements/import"), {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || "Failed to import achievements.");
+                }
+
+                console.log("Achievement import:", result);
+
+                achievementImportInput.value = "";
+
+                if (await loadAchievements()) {
+                    showAchievementImportSuccess(result);
+                }
+            } catch (error) {
+                console.error("Achievement import failed:", error);
+
+                achievementImportInput.value = "";
+
+                alert(error.message);
+            } finally {
+                achievementImportButton.disabled = false;
+            }
+        });
+    }
+
+    /*
+     * --------------------------------------------------
+     * CATEGORY FILTERS
+     * --------------------------------------------------
+     */
+
+    function getAchievementVersions(achievement) {
+        if (!achievement.version) {
+            return [];
+        }
+
+        return [String(achievement.version)];
+    }
+
+    function buildVersionOptions() {
+        const select = document.getElementById("achievement-version-select");
+
+        if (!select || !achievementData) {
+            return;
+        }
+
+        const menu = select.querySelector(".custom-select-menu");
+
+        const value = select.querySelector(".custom-select-value");
+
+        if (!menu || !value) {
+            return;
+        }
+
+        menu.innerHTML = "";
+
+        const versions = new Set();
+
+        achievementData.achievements.forEach((achievement) => {
+            getAchievementVersions(achievement).forEach((version) => {
+                versions.add(version);
+            });
+        });
 
         /*
-         * --------------------------------------------------
-         * CATEGORY PAGE CONTROLS
-         * --------------------------------------------------
+         * ------------------------------------------
+         * VERSION POSITION
+         * ------------------------------------------
          */
 
-        const achievementSearchInputs =
-            document.querySelectorAll(
-                "[data-achievement-search]"
-            );
-
-        const achievementHideCompletedInputs =
-            document.querySelectorAll(
-                "[data-achievement-hide-completed]"
-            );
-
-        const achievementImportButton =
-            document.getElementById(
-                "achievement-import-button"
-            );
-
-        const achievementImportInput =
-            document.getElementById(
-                "achievement-import-input"
-            );
-
-        const achievementImportSuccess =
-            document.getElementById(
-                "achievement-import-success"
-            );
-
-        const achievementImportSuccessMessage =
-            document.getElementById(
-                "achievement-import-success-message"
-            );
-
-        let achievementImportSuccessTimer = null;
-
-        function showAchievementImportSuccess(result) {
-            if (!achievementImportSuccess) {
-                return;
-            }
-
-            if (achievementImportSuccessMessage) {
-                const matched = Number(result?.matched) || 0;
-                achievementImportSuccessMessage.textContent =
-                    `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
-            }
-
-            window.clearTimeout(achievementImportSuccessTimer);
-            achievementImportSuccess.hidden = false;
-
-            achievementImportSuccessTimer = window.setTimeout(() => {
-                achievementImportSuccess.hidden = true;
-            }, 2200);
-        }
-
-
-        if (
-            achievementImportButton &&
-            achievementImportInput
-        ) {
-
-            achievementImportButton.addEventListener(
-                "click",
-                () => {
-
-                    achievementImportInput.click();
-
-                }
-            );
-
-
-            achievementImportInput.addEventListener(
-                "change",
-                async () => {
-
-                    const file =
-                        achievementImportInput.files[0];
-
-                    if (!file) {
-                        return;
-                    }
-
-
-                    const formData =
-                        new FormData();
-
-                    formData.append(
-                        "file",
-                        file
-                    );
-
-
-                    try {
-
-                        achievementImportButton.disabled = true;
-
-                        const response =
-                            await fetch(
-                                achievementApiUrl("/api/achievements/import"),
-                                {
-                                    method: "POST",
-                                    body: formData,
-                                }
-                            );
-
-
-                        const result =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                result.detail ||
-                                "Failed to import achievements."
-                            );
-
-                        }
-
-
-                        console.log(
-                            "Achievement import:",
-                            result
-                        );
-
-
-                        achievementImportInput.value = "";
-
-
-                        await loadAchievements();
-                        showAchievementImportSuccess(result);
-
-                    } catch (error) {
-
-                        console.error(
-                            "Achievement import failed:",
-                            error
-                        );
-
-                        achievementImportInput.value = "";
-
-                        alert(
-                            error.message
-                        );
-
-                    } finally {
-
-                        achievementImportButton.disabled = false;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /*
-         * --------------------------------------------------
-         * CATEGORY FILTERS
-         * --------------------------------------------------
-         */
-
-        function getAchievementVersions(achievement) {
-
-            if (!achievement.version) {
-                return [];
-            }
-
-            return [
-                String(achievement.version)
-            ];
-
-        }
-
-
-        function buildVersionOptions() {
-
-            const select =
-                document.getElementById(
-                    "achievement-version-select"
-                );
-
-            if (
-                !select ||
-                !achievementData
-            ) {
-                return;
-            }
-
-
-            const menu =
-                select.querySelector(
-                    ".custom-select-menu"
-                );
-
-            const value =
-                select.querySelector(
-                    ".custom-select-value"
-                );
-
-
-            if (
-                !menu ||
-                !value
-            ) {
-                return;
-            }
-
-
-            menu.innerHTML = "";
-
-
-            const versions =
-                new Set();
-
-
-            achievementData.achievements.forEach(
-                achievement => {
-
-                    getAchievementVersions(
-                        achievement
-                    ).forEach(
-                        version => {
-
-                            versions.add(
-                                version
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
+        function getVersionPosition(version) {
+            const value = String(version).trim();
 
             /*
-             * ------------------------------------------
-             * VERSION POSITION
-             * ------------------------------------------
+             * Normal versions:
+             *
+             * 1.0
+             * 2.4
+             * 6.2
              */
 
-            function getVersionPosition(version) {
+            const normalMatch = value.match(/^(\d+)\.(\d+)$/);
 
-                const value =
-                    String(version).trim();
-
-
-                /*
-                 * Normal versions:
-                 *
-                 * 1.0
-                 * 2.4
-                 * 6.2
-                 */
-
-                const normalMatch =
-                    value.match(/^(\d+)\.(\d+)$/);
-
-
-                if (normalMatch) {
-
-                    return {
-                        major: Number(normalMatch[1]),
-                        minor: Number(normalMatch[2])
-                    };
-
-                }
-
-
-                /*
-                 * Luna:
-                 *
-                 * "Luna IV" [6.3]
-                 */
-
-                const lunaMatch =
-                    value.match(/\[(\d+)\.(\d+)\]/);
-
-
-                if (lunaMatch) {
-
-                    return {
-                        major: Number(lunaMatch[1]),
-                        minor: Number(lunaMatch[2])
-                    };
-
-                }
-
-
+            if (normalMatch) {
                 return {
-                    major: 999,
-                    minor: 999
+                    major: Number(normalMatch[1]),
+                    minor: Number(normalMatch[2]),
                 };
-
-            }
-
-
-            function formatVersionLabel(version) {
-
-                const value =
-                    String(version).trim();
-
-
-                const lunaMatch =
-                    value.match(/^"?(Luna[^"]*)"?.*\[(\d+\.\d+)\]/i);
-
-
-                if (lunaMatch) {
-
-                    return lunaMatch[1];
-
-                }
-
-
-                return value;
-
-            }
-
-
-            /*
-             * ------------------------------------------
-             * SORT VERSIONS
-             * ------------------------------------------
-             */
-
-            const sortedVersions =
-                [...versions].sort((a, b) => {
-
-                    const aPosition =
-                        getVersionPosition(a);
-
-                    const bPosition =
-                        getVersionPosition(b);
-
-
-                    /*
-                     * Sort by major version first.
-                     *
-                     * 1.x
-                     * 2.x
-                     * 3.x
-                     * ...
-                     *
-                     * Then sort by minor version
-                     * inside each major version.
-                     */
-
-                    if (
-                        aPosition.major !==
-                        bPosition.major
-                    ) {
-
-                        return (
-                            aPosition.major -
-                            bPosition.major
-                        );
-
-                    }
-
-
-                    return (
-                        aPosition.minor -
-                        bPosition.minor
-                    );
-
-                });
-
-
-            /*
-             * ------------------------------------------
-             * ALL VERSIONS
-             * ------------------------------------------
-             */
-
-            const allOption =
-                document.createElement(
-                    "button"
-                );
-
-            allOption.type =
-                "button";
-
-            allOption.className =
-                "custom-select-option";
-
-            allOption.classList.add(
-                "version-all-option"
-            );
-
-            allOption.style.gridColumn = "1 / -1";
-
-            allOption.dataset.value =
-                "all";
-
-            const allVersionsSelected =
-                achievementSelectedVersion === "all";
-
-            allOption.classList.toggle(
-                "selected",
-                allVersionsSelected
-            );
-
-            allOption.setAttribute(
-                "aria-selected",
-                allVersionsSelected
-                    ? "true"
-                    : "false"
-            );
-
-            allOption.textContent =
-                "All Versions";
-
-            allOption.setAttribute(
-                "role",
-                "option"
-            );
-
-            allOption.addEventListener(
-            "click",
-            () => {
-
-                achievementSelectedVersion = "all";
-
-
-                const hiddenVersionInput =
-                    document.getElementById(
-                        "achievement-version"
-                    );
-
-
-                if (hiddenVersionInput) {
-
-                    hiddenVersionInput.value = "all";
-
-                }
-
-
-                value.textContent =
-                    "All Versions";
-
-
-                menu
-                    .querySelectorAll(
-                        ".custom-select-option"
-                    )
-                    .forEach(
-                        otherOption => {
-
-                            const selected =
-                                otherOption ===
-                                allOption;
-
-
-                            otherOption.classList.toggle(
-                                "selected",
-                                selected
-                            );
-
-
-                            otherOption.setAttribute(
-                                "aria-selected",
-                                selected
-                                    ? "true"
-                                    : "false"
-                            );
-
-                        }
-                    );
-
-
-                select.classList.remove(
-                    "open"
-                );
-
-
-                const button =
-                    select.querySelector(
-                        ".custom-select-button"
-                    );
-
-
-                if (button) {
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                }
-
-
-                rebuildCategoryView();
-                syncSecondaryVersionSelect();
-
-            }
-        );
-
-            menu.appendChild(
-                allOption
-            );
-
-            /*
-             * ------------------------------------------
-             * BUILD VERSION GRID
-             * ------------------------------------------
-             *
-             * Versions are arranged by:
-             *
-             *       1.x    2.x    3.x
-             *       ─────────────────
-             *  .0   1.0    2.0
-             *  .1   1.1    2.1
-             *  .2   1.2    2.2
-             *  .3   1.3    2.3
-             *
-             * Missing versions leave an empty space.
-             */
-
-            const versionGroups = new Map();
-
-
-            sortedVersions.forEach(version => {
-
-                const position =
-                    getVersionPosition(version);
-
-                if (
-                    position.major === 999
-                ) {
-                    return;
-                }
-
-                if (!versionGroups.has(position.major)) {
-
-                    versionGroups.set(
-                        position.major,
-                        []
-                    );
-
-                }
-
-                versionGroups
-                    .get(position.major)
-                    .push({
-                        version,
-                        minor: position.minor
-                    });
-
-            });
-
-
-            /*
-             * Sort the major-version columns.
-             */
-
-            const majorVersions =
-                [...versionGroups.keys()]
-                    .sort(
-                        (a, b) => a - b
-                    );
-
-
-            /*
-             * Find the highest minor version.
-             *
-             * This determines how many rows
-             * the grid needs.
-             */
-
-            const maxMinor =
-                Math.max(
-                    ...[
-                        ...versionGroups.values()
-                    ].flatMap(
-                        versions =>
-                            versions.map(
-                                entry => entry.minor
-                            )
-                    ),
-                    0
-                );
-
-
-            /*
-             * Build the grid row-by-row.
-             *
-             * This is important:
-             *
-             * Row 0:
-             * 1.0   2.0
-             *
-             * Row 1:
-             * 1.1   2.1
-             *
-             * Row 2:
-             * 1.2   2.2
-             *
-             * etc.
-             *
-             * Missing versions are represented by
-             * empty grid cells.
-             */
-
-            for (
-                let minor = 0;
-                minor <= maxMinor;
-                minor++
-            ) {
-
-                majorVersions.forEach(
-                    major => {
-
-                        const versionsForMajor =
-                            versionGroups.get(
-                                major
-                            );
-
-
-                        const versionEntry =
-                            versionsForMajor.find(
-                                entry =>
-                                    entry.minor === minor
-                            );
-
-
-                        /*
-                         * No version exists at this
-                         * position.
-                         *
-                         * Leave the grid cell empty.
-                         */
-
-                        if (!versionEntry) {
-
-                            const spacer =
-                                document.createElement(
-                                    "div"
-                                );
-
-                            spacer.className =
-                                "custom-select-option-spacer";
-
-                            menu.appendChild(
-                                spacer
-                            );
-
-                            return;
-
-                        }
-
-
-                        const version =
-                            versionEntry.version;
-
-
-                        const option =
-                            document.createElement(
-                                "button"
-                            );
-
-                        if (minor === 0) {
-                            option.classList.add(
-                                "achievement-version-first-row"
-                            );
-                        }
-
-
-                        option.type =
-                            "button";
-
-
-                        option.className =
-                            "custom-select-option";
-
-
-                        option.setAttribute(
-                            "role",
-                            "option"
-                        );
-
-
-                        option.setAttribute(
-                            "aria-selected",
-                            "false"
-                        );
-
-
-                        option.dataset.value =
-                            version;
-
-
-                        option.textContent =
-                            formatVersionLabel(
-                                version
-                            );
-
-
-                        option.addEventListener(
-                            "click",
-                            () => {
-
-                                const selectedValue =
-                                    option.dataset.value;
-
-
-                                achievementSelectedVersion =
-                                    selectedValue;
-
-
-                                const hiddenVersionInput =
-                                    document.getElementById(
-                                        "achievement-version"
-                                    );
-
-
-                                if (hiddenVersionInput) {
-
-                                    hiddenVersionInput.value =
-                                        selectedValue;
-
-                                }
-
-
-                                value.textContent =
-                                    option.textContent;
-
-
-                                menu
-                                    .querySelectorAll(
-                                        ".custom-select-option"
-                                    )
-                                    .forEach(
-                                        otherOption => {
-
-                                            const selected =
-                                                otherOption ===
-                                                option;
-
-
-                                            otherOption.classList.toggle(
-                                                "selected",
-                                                selected
-                                            );
-
-
-                                            otherOption.setAttribute(
-                                                "aria-selected",
-                                                selected
-                                                    ? "true"
-                                                    : "false"
-                                            );
-
-                                        }
-                                    );
-
-
-                                select.classList.remove(
-                                    "open"
-                                );
-
-
-                                select
-                                    .querySelector(
-                                        ".custom-select-button"
-                                    )
-                                    .setAttribute(
-                                        "aria-expanded",
-                                        "false"
-                                    );
-
-
-                                rebuildCategoryView();
-                                syncSecondaryVersionSelect();
-
-                            }
-                        );
-
-
-                        menu.appendChild(
-                            option
-                        );
-
-                    }
-                );
-
-            }
-
-
-            /*
-             * ------------------------------------------
-             * RESTORE SELECTED VERSION
-             * ------------------------------------------
-             */
-
-            menu
-                .querySelectorAll(
-                    ".custom-select-option"
-                )
-                .forEach(option => {
-
-                    const selected =
-                        option.dataset.value ===
-                        achievementSelectedVersion;
-
-                    option.classList.toggle(
-                        "selected",
-                        selected
-                    );
-
-                    option.setAttribute(
-                        "aria-selected",
-                        selected
-                            ? "true"
-                            : "false"
-                    );
-
-                });
-
-
-            function focusSelectedVersionOption() {
-
-                const selectedOption =
-                    menu.querySelector(
-                        ".custom-select-option.selected"
-                    );
-
-                if (!selectedOption) {
-                    return;
-                }
-
-                /*
-                 * Make sure the selected option is
-                 * actually keyboard-focusable.
-                 */
-                selectedOption.setAttribute(
-                    "tabindex",
-                    "0"
-                );
-
-                /*
-                 * Move real browser focus to it.
-                 */
-                selectedOption.focus({
-                    preventScroll: true
-                });
-
             }
 
             /*
-             * ------------------------------------------
-             * DROPDOWN BUTTON
-             * ------------------------------------------
+             * Luna:
+             *
+             * "Luna IV" [6.3]
              */
 
-            const button =
-                select.querySelector(
-                    ".custom-select-button"
-                );
+            const lunaMatch = value.match(/\[(\d+)\.(\d+)\]/);
 
-            if (button) {
-
-                button.onclick = function (event) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    const shouldOpen =
-                        !select.classList.contains("open");
-
-
-                    /*
-                     * Close every other custom dropdown.
-                     */
-
-                    document
-                        .querySelectorAll(
-                            ".custom-select.open"
-                        )
-                        .forEach(
-                            otherSelect => {
-
-                                if (
-                                    otherSelect !== select
-                                ) {
-
-                                    otherSelect.classList.remove(
-                                        "open"
-                                    );
-
-                                    const otherButton =
-                                        otherSelect.querySelector(
-                                            ".custom-select-button"
-                                        );
-
-                                    if (otherButton) {
-
-                                        otherButton.setAttribute(
-                                            "aria-expanded",
-                                            "false"
-                                        );
-
-                                    }
-
-                                }
-
-                            }
-                        );
-
-
-                    /*
-                     * Toggle this dropdown.
-                     */
-
-                    select.classList.toggle(
-                        "open",
-                        shouldOpen
-                    );
-
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        shouldOpen
-                            ? "true"
-                            : "false"
-                    );
-
-
-                    /*
-                     * Focus the currently selected option.
-                     *
-                     * Do this after opening so the browser
-                     * has already applied the open state.
-                     */
-
-                    if (shouldOpen) {
-
-                        requestAnimationFrame(() => {
-
-                            requestAnimationFrame(() => {
-
-                                focusSelectedVersionOption();
-
-                            });
-
-                        });
-
-                    }
-
+            if (lunaMatch) {
+                return {
+                    major: Number(lunaMatch[1]),
+                    minor: Number(lunaMatch[2]),
                 };
-
             }
 
-        }
-
-
-        function syncSecondaryVersionSelect() {
-            const primary = document.getElementById(
-                "achievement-version-select"
-            );
-            const secondary = [...document.querySelectorAll(
-                "[data-achievement-version-select]"
-            )].find(select => select !== primary);
-
-            if (!primary || !secondary) {
-                return;
-            }
-
-            const primaryMenu = primary.querySelector(".custom-select-menu");
-            const secondaryMenu = secondary.querySelector(".custom-select-menu");
-            const secondaryValue = secondary.querySelector(".custom-select-value");
-            const secondaryButton = secondary.querySelector(".custom-select-button");
-
-            if (!primaryMenu || !secondaryMenu || !secondaryValue || !secondaryButton) {
-                return;
-            }
-
-            const selected = primaryMenu.querySelector(
-                ".custom-select-option.selected"
-            );
-            secondaryValue.textContent = selected?.textContent || "All Versions";
-            secondaryMenu.innerHTML = primaryMenu.innerHTML;
-
-            secondaryMenu.querySelectorAll(".custom-select-option").forEach(option => {
-                option.addEventListener("click", () => {
-                    const primaryOption = [...primaryMenu.querySelectorAll(
-                        ".custom-select-option"
-                    )].find(item => item.dataset.value === option.dataset.value);
-
-                    primaryOption?.click();
-                    secondary.classList.remove("open");
-                    secondaryButton.setAttribute("aria-expanded", "false");
-                });
-            });
-
-            secondaryButton.onclick = event => {
-                event.preventDefault();
-                event.stopPropagation();
-                const open = !secondary.classList.contains("open");
-                secondary.classList.toggle("open", open);
-                secondaryButton.setAttribute("aria-expanded", String(open));
+            return {
+                major: 999,
+                minor: 999,
             };
         }
 
+        function formatVersionLabel(version) {
+            const value = String(version).trim();
 
-        function achievementIsCompleted(
-            achievement
-        ) {
+            const lunaMatch = value.match(/^"?(Luna[^"]*)"?.*\[(\d+\.\d+)\]/i);
 
-            if (
-                !Array.isArray(
-                    achievement.tiers
-                ) ||
-                achievement.tiers.length === 0
-            ) {
-
-                return false;
-
+            if (lunaMatch) {
+                return lunaMatch[1];
             }
 
-
-            return achievement.tiers.every(
-                tier =>
-                    tier.completed === true
-            );
-
+            return value;
         }
 
+        /*
+         * ------------------------------------------
+         * SORT VERSIONS
+         * ------------------------------------------
+         */
 
-        function achievementMatchesFilters(
-            achievement
-        ) {
+        const sortedVersions = [...versions].sort((a, b) => {
+            const aPosition = getVersionPosition(a);
 
-            /*
-             * ------------------------------------------
-             * SEARCH
-             * ------------------------------------------
-             */
-
-            if (achievementSearchQuery) {
-
-                const query =
-                    achievementSearchQuery
-                        .toLowerCase()
-                        .trim();
-
-
-                const name =
-                    String(
-                        achievement.name || ""
-                    ).toLowerCase();
-
-
-                const descriptions =
-                    Array.isArray(
-                        achievement.tiers
-                    )
-                        ? achievement.tiers
-                            .map(
-                                tier =>
-                                    String(
-                                        tier.description ||
-                                        ""
-                                    )
-                            )
-                            .join(" ")
-                            .toLowerCase()
-                        : "";
-
-
-                if (
-                    !name.includes(query) &&
-                    !descriptions.includes(query)
-                ) {
-
-                    return false;
-
-                }
-
-            }
-
+            const bPosition = getVersionPosition(b);
 
             /*
-             * ------------------------------------------
-             * VERSION
-             * ------------------------------------------
+             * Sort by major version first.
+             *
+             * 1.x
+             * 2.x
+             * 3.x
+             * ...
+             *
+             * Then sort by minor version
+             * inside each major version.
              */
 
-            if (
-                achievementSelectedVersion !== "all"
-            ) {
-
-                const versions =
-                    getAchievementVersions(
-                        achievement
-                    );
-
-
-                if (
-                    !versions.includes(
-                        achievementSelectedVersion
-                    )
-                ) {
-
-                    return false;
-
-                }
-
+            if (aPosition.major !== bPosition.major) {
+                return aPosition.major - bPosition.major;
             }
 
+            return aPosition.minor - bPosition.minor;
+        });
 
-            /*
-             * ------------------------------------------
-             * HIDE COMPLETED
-             * ------------------------------------------
-             */
+        /*
+         * ------------------------------------------
+         * ALL VERSIONS
+         * ------------------------------------------
+         */
 
-            if (
-                hideCompletedAchievements &&
-                achievementIsCompleted(
-                    achievement
-                )
-            ) {
+        const allOption = document.createElement("button");
 
-                return false;
+        allOption.type = "button";
 
+        allOption.className = "custom-select-option";
+
+        allOption.classList.add("version-all-option");
+
+        allOption.style.gridColumn = "1 / -1";
+
+        allOption.dataset.value = "all";
+
+        const allVersionsSelected = achievementSelectedVersion === "all";
+
+        allOption.classList.toggle("selected", allVersionsSelected);
+
+        allOption.setAttribute("aria-selected", allVersionsSelected ? "true" : "false");
+
+        allOption.textContent = "All Versions";
+
+        allOption.setAttribute("role", "option");
+
+        allOption.addEventListener("click", () => {
+            achievementSelectedVersion = "all";
+
+            const hiddenVersionInput = document.getElementById("achievement-version");
+
+            if (hiddenVersionInput) {
+                hiddenVersionInput.value = "all";
             }
 
+            value.textContent = "All Versions";
 
-            return true;
+            menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
+                const selected = otherOption === allOption;
 
-        }
+                otherOption.classList.toggle("selected", selected);
 
+                otherOption.setAttribute("aria-selected", selected ? "true" : "false");
+            });
 
-        function rebuildCategoryView() {
+            select.classList.remove("open");
 
-            if (activeCategory && !browser.hidden) {
-                buildAchievements(activeCategory);
+            const button = select.querySelector(".custom-select-button");
+
+            if (button) {
+                button.setAttribute("aria-expanded", "false");
+            }
+
+            rebuildCategoryView();
+            syncSecondaryVersionSelect();
+        });
+
+        menu.appendChild(allOption);
+
+        /*
+         * ------------------------------------------
+         * BUILD VERSION GRID
+         * ------------------------------------------
+         *
+         * Versions are arranged by:
+         *
+         *       1.x    2.x    3.x
+         *       ─────────────────
+         *  .0   1.0    2.0
+         *  .1   1.1    2.1
+         *  .2   1.2    2.2
+         *  .3   1.3    2.3
+         *
+         * Missing versions leave an empty space.
+         */
+
+        const versionGroups = new Map();
+
+        sortedVersions.forEach((version) => {
+            const position = getVersionPosition(version);
+
+            if (position.major === 999) {
                 return;
             }
 
-            buildCategories();
+            if (!versionGroups.has(position.major)) {
+                versionGroups.set(position.major, []);
+            }
 
+            versionGroups.get(position.major).push({
+                version,
+                minor: position.minor,
+            });
+        });
+
+        /*
+         * Sort the major-version columns.
+         */
+
+        const majorVersions = [...versionGroups.keys()].sort((a, b) => a - b);
+
+        /*
+         * Find the highest minor version.
+         *
+         * This determines how many rows
+         * the grid needs.
+         */
+
+        const maxMinor = Math.max(
+            ...[...versionGroups.values()].flatMap((versions) =>
+                versions.map((entry) => entry.minor),
+            ),
+            0,
+        );
+
+        /*
+         * Build the grid row-by-row.
+         *
+         * This is important:
+         *
+         * Row 0:
+         * 1.0   2.0
+         *
+         * Row 1:
+         * 1.1   2.1
+         *
+         * Row 2:
+         * 1.2   2.2
+         *
+         * etc.
+         *
+         * Missing versions are represented by
+         * empty grid cells.
+         */
+
+        for (let minor = 0; minor <= maxMinor; minor++) {
+            majorVersions.forEach((major) => {
+                const versionsForMajor = versionGroups.get(major);
+
+                const versionEntry = versionsForMajor.find((entry) => entry.minor === minor);
+
+                /*
+                 * No version exists at this
+                 * position.
+                 *
+                 * Leave the grid cell empty.
+                 */
+
+                if (!versionEntry) {
+                    const spacer = document.createElement("div");
+
+                    spacer.className = "custom-select-option-spacer";
+
+                    menu.appendChild(spacer);
+
+                    return;
+                }
+
+                const version = versionEntry.version;
+
+                const option = document.createElement("button");
+
+                if (minor === 0) {
+                    option.classList.add("achievement-version-first-row");
+                }
+
+                option.type = "button";
+
+                option.className = "custom-select-option";
+
+                option.setAttribute("role", "option");
+
+                option.setAttribute("aria-selected", "false");
+
+                option.dataset.value = version;
+
+                option.textContent = formatVersionLabel(version);
+
+                option.addEventListener("click", () => {
+                    const selectedValue = option.dataset.value;
+
+                    achievementSelectedVersion = selectedValue;
+
+                    const hiddenVersionInput = document.getElementById("achievement-version");
+
+                    if (hiddenVersionInput) {
+                        hiddenVersionInput.value = selectedValue;
+                    }
+
+                    value.textContent = option.textContent;
+
+                    menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
+                        const selected = otherOption === option;
+
+                        otherOption.classList.toggle("selected", selected);
+
+                        otherOption.setAttribute("aria-selected", selected ? "true" : "false");
+                    });
+
+                    select.classList.remove("open");
+
+                    select
+                        .querySelector(".custom-select-button")
+                        .setAttribute("aria-expanded", "false");
+
+                    rebuildCategoryView();
+                    syncSecondaryVersionSelect();
+                });
+
+                menu.appendChild(option);
+            });
         }
 
+        /*
+         * ------------------------------------------
+         * RESTORE SELECTED VERSION
+         * ------------------------------------------
+         */
 
-        achievementSearchInputs.forEach(achievementSearch => {
-            achievementSearch.addEventListener(
-                "input",
-                () => {
+        menu.querySelectorAll(".custom-select-option").forEach((option) => {
+            const selected = option.dataset.value === achievementSelectedVersion;
 
-                    achievementSearchQuery =
-                        achievementSearch.value;
+            option.classList.toggle("selected", selected);
 
-                    achievementSearchInputs.forEach(input => {
-                        if (input !== achievementSearch) {
-                            input.value = achievementSearch.value;
+            option.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        function focusSelectedVersionOption() {
+            const selectedOption = menu.querySelector(".custom-select-option.selected");
+
+            if (!selectedOption) {
+                return;
+            }
+
+            /*
+             * Make sure the selected option is
+             * actually keyboard-focusable.
+             */
+            selectedOption.setAttribute("tabindex", "0");
+
+            /*
+             * Move real browser focus to it.
+             */
+            selectedOption.focus({
+                preventScroll: true,
+            });
+        }
+
+        /*
+         * ------------------------------------------
+         * DROPDOWN BUTTON
+         * ------------------------------------------
+         */
+
+        const button = select.querySelector(".custom-select-button");
+
+        if (button) {
+            button.onclick = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const shouldOpen = !select.classList.contains("open");
+
+                /*
+                 * Close every other custom dropdown.
+                 */
+
+                document.querySelectorAll(".custom-select.open").forEach((otherSelect) => {
+                    if (otherSelect !== select) {
+                        otherSelect.classList.remove("open");
+
+                        const otherButton = otherSelect.querySelector(".custom-select-button");
+
+                        if (otherButton) {
+                            otherButton.setAttribute("aria-expanded", "false");
                         }
+                    }
+                });
+
+                /*
+                 * Toggle this dropdown.
+                 */
+
+                select.classList.toggle("open", shouldOpen);
+
+                button.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+
+                /*
+                 * Focus the currently selected option.
+                 *
+                 * Do this after opening so the browser
+                 * has already applied the open state.
+                 */
+
+                if (shouldOpen) {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            focusSelectedVersionOption();
+                        });
                     });
-
-                    rebuildCategoryView();
-
                 }
-            );
+            };
+        }
+    }
+
+    function syncSecondaryVersionSelect() {
+        const primary = document.getElementById("achievement-version-select");
+        const secondary = [...document.querySelectorAll("[data-achievement-version-select]")].find(
+            (select) => select !== primary,
+        );
+
+        if (!primary || !secondary) {
+            return;
+        }
+
+        const primaryMenu = primary.querySelector(".custom-select-menu");
+        const secondaryMenu = secondary.querySelector(".custom-select-menu");
+        const secondaryValue = secondary.querySelector(".custom-select-value");
+        const secondaryButton = secondary.querySelector(".custom-select-button");
+
+        if (!primaryMenu || !secondaryMenu || !secondaryValue || !secondaryButton) {
+            return;
+        }
+
+        const selected = primaryMenu.querySelector(".custom-select-option.selected");
+        secondaryValue.textContent = selected?.textContent || "All Versions";
+        secondaryMenu.innerHTML = primaryMenu.innerHTML;
+
+        secondaryMenu.querySelectorAll(".custom-select-option").forEach((option) => {
+            option.addEventListener("click", () => {
+                const primaryOption = [
+                    ...primaryMenu.querySelectorAll(".custom-select-option"),
+                ].find((item) => item.dataset.value === option.dataset.value);
+
+                primaryOption?.click();
+                secondary.classList.remove("open");
+                secondaryButton.setAttribute("aria-expanded", "false");
+            });
         });
 
+        secondaryButton.onclick = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = !secondary.classList.contains("open");
+            secondary.classList.toggle("open", open);
+            secondaryButton.setAttribute("aria-expanded", String(open));
+        };
+    }
 
-        achievementHideCompletedInputs.forEach(achievementHideCompleted => {
-            achievementHideCompleted.addEventListener(
-                "change",
-                () => {
+    function achievementIsCompleted(achievement) {
+        if (!Array.isArray(achievement.tiers) || achievement.tiers.length === 0) {
+            return false;
+        }
 
-                    hideCompletedAchievements =
-                        achievementHideCompleted.checked;
+        return achievement.tiers.every((tier) => tier.completed === true);
+    }
 
-                    achievementHideCompletedInputs.forEach(input => {
-                        input.checked = achievementHideCompleted.checked;
-                    });
+    function achievementMatchesFilters(achievement) {
+        /*
+         * ------------------------------------------
+         * SEARCH
+         * ------------------------------------------
+         */
 
-                    rebuildCategoryView();
+        if (achievementSearchQuery) {
+            const query = achievementSearchQuery.toLowerCase().trim();
 
+            const name = String(achievement.name || "").toLowerCase();
+
+            const descriptions = Array.isArray(achievement.tiers)
+                ? achievement.tiers
+                      .map((tier) => String(tier.description || ""))
+                      .join(" ")
+                      .toLowerCase()
+                : "";
+
+            if (!name.includes(query) && !descriptions.includes(query)) {
+                return false;
+            }
+        }
+
+        /*
+         * ------------------------------------------
+         * VERSION
+         * ------------------------------------------
+         */
+
+        if (achievementSelectedVersion !== "all") {
+            const versions = getAchievementVersions(achievement);
+
+            if (!versions.includes(achievementSelectedVersion)) {
+                return false;
+            }
+        }
+
+        /*
+         * ------------------------------------------
+         * HIDE COMPLETED
+         * ------------------------------------------
+         */
+
+        if (hideCompletedAchievements && achievementIsCompleted(achievement)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function rebuildCategoryView() {
+        if (activeCategory && !browser.hidden) {
+            buildAchievements(activeCategory);
+            return;
+        }
+
+        buildCategories();
+    }
+
+    achievementSearchInputs.forEach((achievementSearch) => {
+        achievementSearch.addEventListener("input", () => {
+            achievementSearchQuery = achievementSearch.value;
+
+            achievementSearchInputs.forEach((input) => {
+                if (input !== achievementSearch) {
+                    input.value = achievementSearch.value;
                 }
-            );
-        });
+            });
 
+            rebuildCategoryView();
+        });
+    });
+
+    achievementHideCompletedInputs.forEach((achievementHideCompleted) => {
+        achievementHideCompleted.addEventListener("change", () => {
+            hideCompletedAchievements = achievementHideCompleted.checked;
+
+            achievementHideCompletedInputs.forEach((input) => {
+                input.checked = achievementHideCompleted.checked;
+            });
+
+            rebuildCategoryView();
+        });
+    });
 
     /*
      * --------------------------------------------------
@@ -1964,29 +1315,23 @@ window.initAchievements = function () {
      */
 
     async function loadAchievements() {
-
         if (!accountId) {
             return;
         }
 
         try {
-
-            const response = await fetch(
-                achievementApiUrl("/api/achievements")
-            );
-
+            const response = await fetch(achievementApiUrl("/api/achievements"), {
+                cache: "no-store",
+            });
 
             if (!response.ok) {
-
-                throw new Error(
-                    "Failed to load achievements."
-                );
-
+                throw new Error("Failed to load achievements.");
             }
 
+            achievementData = await response.json();
 
-            achievementData =
-                await response.json();
+            const loadError = document.getElementById("achievement-load-error");
+            if (loadError) loadError.hidden = true;
 
             buildVersionOptions();
             syncSecondaryVersionSelect();
@@ -1994,18 +1339,19 @@ window.initAchievements = function () {
             buildCategories();
 
             updateOverallAchievementProgress();
-
+            return true;
         } catch (error) {
-
-            console.error(
-                "[Achievements] INITIALIZATION ERROR:",
-                error
-            );
-
+            console.error("[Achievements] INITIALIZATION ERROR:", error);
+            const loadError = document.getElementById("achievement-load-error");
+            const message = document.getElementById("achievement-load-error-message");
+            if (message) {
+                message.textContent =
+                    "Cyrene could not read your saved achievement progress. Please retry.";
+            }
+            if (loadError) loadError.hidden = false;
+            return false;
         }
-
     }
-
 
     /*
      * --------------------------------------------------
@@ -2014,160 +1360,97 @@ window.initAchievements = function () {
      */
 
     function buildCategories() {
-
         if (!categoryGrid || !achievementData) {
             return;
         }
 
-
         categoryGrid.innerHTML = "";
 
+        const categoryEntries = CATEGORY_ORDER.map((category) => {
+            const data = achievementData.categories[category];
 
-        const categoryEntries =
-            CATEGORY_ORDER.map(
-                category => {
+            if (!data) {
+                return null;
+            }
 
-                    const data =
-                        achievementData.categories[category];
+            /*
+             * Get only achievements belonging
+             * to this category.
+             */
 
-                    if (!data) {
-                        return null;
-                    }
+            const categoryAchievements = achievementData.achievements.filter(
+                (achievement) => achievement.category === category,
+            );
 
-                    /*
-                     * Get only achievements belonging
-                     * to this category.
-                     */
+            /*
+             * Apply the currently active
+             * Search / Version / Hide Completed
+             * filters.
+             */
 
-                    const categoryAchievements =
-                        achievementData.achievements.filter(
-                            achievement =>
-                                achievement.category === category
-                        );
+            const filteredAchievements = categoryAchievements.filter((achievement) =>
+                achievementMatchesFilters(achievement),
+            );
 
+            /*
+             * Don't display categories that
+             * have no matching achievements.
+             */
 
-                    /*
-                     * Apply the currently active
-                     * Search / Version / Hide Completed
-                     * filters.
-                     */
+            if (filteredAchievements.length === 0) {
+                return null;
+            }
 
-                    const filteredAchievements =
-                        categoryAchievements.filter(
-                            achievement =>
-                                achievementMatchesFilters(
-                                    achievement
-                                )
-                        );
+            /*
+             * Count tiers rather than achievement
+             * objects, matching the way Overall
+             * Progress is calculated.
+             */
 
+            let total = 0;
+            let completed = 0;
 
-                    /*
-                     * Don't display categories that
-                     * have no matching achievements.
-                     */
-
-                    if (
-                        filteredAchievements.length === 0
-                    ) {
-
-                        return null;
-
-                    }
-
-
-                    /*
-                     * Count tiers rather than achievement
-                     * objects, matching the way Overall
-                     * Progress is calculated.
-                     */
-
-                    let total = 0;
-                    let completed = 0;
-
-
-                    filteredAchievements.forEach(
-                        achievement => {
-
-                            if (
-                                !Array.isArray(
-                                    achievement.tiers
-                                )
-                            ) {
-                                return;
-                            }
-
-
-                            achievement.tiers.forEach(
-                                tier => {
-
-                                    total++;
-
-
-                                    if (
-                                        tier.completed === true
-                                    ) {
-
-                                        completed++;
-
-                                    }
-
-                                }
-                            );
-
-                        }
-                    );
-
-
-                    return {
-                        category,
-                        data,
-                        total,
-                        completed
-                    };
-
+            filteredAchievements.forEach((achievement) => {
+                if (!Array.isArray(achievement.tiers)) {
+                    return;
                 }
-            )
-            .filter(Boolean);
 
+                achievement.tiers.forEach((tier) => {
+                    total++;
+
+                    if (tier.completed === true) {
+                        completed++;
+                    }
+                });
+            });
+
+            return {
+                category,
+                data,
+                total,
+                completed,
+            };
+        }).filter(Boolean);
 
         /*
          * Build category cards.
          */
 
-        categoryEntries.forEach(
-            ({
-                category,
-                total,
-                completed
-            }) => {
+        categoryEntries.forEach(({ category, total, completed }) => {
+            const button = document.createElement("button");
 
-                const button =
-                    document.createElement("button");
+            button.type = "button";
 
+            button.className = "achievement-category";
 
-                button.type =
-                    "button";
+            const progress = total > 0 ? (completed / total) * 100 : 0;
 
-
-                button.className =
-                    "achievement-category";
-
-
-                const progress =
-                    total > 0
-                        ? (completed / total) * 100
-                        : 0;
-
-
-                button.innerHTML = `
+            button.innerHTML = `
 
                     <div class="achievement-category-icon">
                 
                         <img
-                            src="${
-                                CATEGORY_ICONS[category]
-                                || "/static/images/Achievements.webp"
-                            }"
+                            src="${CATEGORY_ICONS[category] || "/static/images/Achievements.webp"}"
                             alt=""
                         >
                 
@@ -2176,11 +1459,7 @@ window.initAchievements = function () {
                 
                     <div class="achievement-category-content">
                 
-                        <h3 class="${
-                            category.length > 30
-                                ? "long-category-name"
-                                : ""
-                        }">
+                        <h3 class="${category.length > 30 ? "long-category-name" : ""}">
                             ${escapeHTML(category)}
                         </h3>
                 
@@ -2213,25 +1492,13 @@ window.initAchievements = function () {
                 
                 `;
 
+            button.addEventListener("click", () => {
+                openCategory(category);
+            });
 
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openCategory(category);
-
-                    }
-                );
-
-
-                categoryGrid.appendChild(
-                    button
-                );
-
-            }
-        );
+            categoryGrid.appendChild(button);
+        });
     }
-
 
     /*
      * --------------------------------------------------
@@ -2239,60 +1506,40 @@ window.initAchievements = function () {
      * --------------------------------------------------
      */
 
-    function buildSidebar(
-        selectedCategory
-    ) {
-
+    function buildSidebar(selectedCategory) {
         if (!sidebarList || !achievementData) {
             return;
         }
 
-
         sidebarList.innerHTML = "";
 
+        CATEGORY_ORDER.forEach((category) => {
+            const data = achievementData.categories[category];
 
-        CATEGORY_ORDER.forEach(
-            category => {
+            if (!data) {
+                return;
+            }
 
-                const data =
-                    achievementData.categories[category];
+            const button = document.createElement("button");
 
-                if (!data) {
-                    return;
-                }
+            button.type = "button";
 
-                const button =
-                    document.createElement("button");
+            button.className = "achievement-sidebar-item";
 
-                button.type = "button";
+            if (category === selectedCategory) {
+                button.classList.add("active");
+            }
 
-                button.className =
-                    "achievement-sidebar-item";
+            const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
 
-
-                if (
-                    category === selectedCategory
-                ) {
-
-                    button.classList.add("active");
-
-                }
-
-
-                const progress =
-                    data.total > 0
-                        ? (data.completed / data.total) * 100
-                        : 0;
-
-
-                button.innerHTML = `
+            button.innerHTML = `
                 
                     <div class="achievement-sidebar-icon">
                 
                         <img
                             src="${
-                                CATEGORY_SIDEBAR_ICONS[category]
-                                || "/static/images/Achievements.webp"
+                                CATEGORY_SIDEBAR_ICONS[category] ||
+                                "/static/images/Achievements.webp"
                             }"
                             alt=""
                         >
@@ -2329,24 +1576,13 @@ window.initAchievements = function () {
                 
                 `;
 
+            button.addEventListener("click", () => {
+                openCategory(category);
+            });
 
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openCategory(category);
-
-                    }
-                );
-
-
-                sidebarList.appendChild(button);
-
-            }
-        );
-
+            sidebarList.appendChild(button);
+        });
     }
-
 
     /*
      * --------------------------------------------------
@@ -2355,65 +1591,40 @@ window.initAchievements = function () {
      */
 
     function openCategory(category) {
-
         if (!achievementData) {
             return;
         }
 
-
         activeCategory = category;
         syncSecondaryVersionSelect();
 
-        const data =
-            achievementData.categories[category];
-
+        const data = achievementData.categories[category];
 
         if (!data) {
             return;
         }
 
+        categoryTitle.textContent = category;
 
-        categoryTitle.textContent =
-            category;
+        const percentage = data.total > 0 ? (data.completed / data.total) * 100 : 0;
 
+        const roundedPercentage = Math.round(percentage * 10) / 10;
 
-        const percentage =
-            data.total > 0
-                ? (data.completed / data.total) * 100
-                : 0;
+        categoryPercent.textContent = `${roundedPercentage}% (${data.completed}/${data.total})`;
 
-
-        const roundedPercentage =
-            Math.round(percentage * 10) / 10;
-
-
-        categoryPercent.textContent =
-            `${roundedPercentage}% (${data.completed}/${data.total})`;
-
-
-        categoryProgressFill.style.width =
-            `${percentage}%`;
-
+        categoryProgressFill.style.width = `${percentage}%`;
 
         buildSidebar(category);
 
         buildAchievements(category);
 
-
         categories.hidden = true;
 
         browser.hidden = false;
-
     }
 
-
     function formatCompletedAt(timestamp) {
-
-        if (
-            timestamp === null ||
-            timestamp === undefined ||
-            timestamp === ""
-        ) {
+        if (timestamp === null || timestamp === undefined || timestamp === "") {
             return "";
         }
 
@@ -2426,85 +1637,53 @@ window.initAchievements = function () {
          * convert it to milliseconds first.
          */
 
-        if (
-            typeof timestamp === "number" ||
-            /^\d+$/.test(String(timestamp))
-        ) {
+        if (typeof timestamp === "number" || /^\d+$/.test(String(timestamp))) {
+            const numericTimestamp = Number(timestamp);
 
-            const numericTimestamp =
-                Number(timestamp);
-
-            date =
-                new Date(
-                    numericTimestamp < 100000000000
-                        ? numericTimestamp * 1000
-                        : numericTimestamp
-                );
-
+            date = new Date(
+                numericTimestamp < 100000000000 ? numericTimestamp * 1000 : numericTimestamp,
+            );
         } else {
-
             /*
              * ISO timestamp, e.g.
              *
              * 2026-08-27T11:28:16.904Z
              */
 
-            date =
-                new Date(timestamp);
-
+            date = new Date(timestamp);
         }
 
         if (Number.isNaN(date.getTime())) {
             return "";
         }
 
-        const day =
-            String(
-                date.getDate()
-            ).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
 
-        const month =
-            String(
-                date.getMonth() + 1
-            ).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
 
-        const year =
-            date.getFullYear();
+        const year = date.getFullYear();
 
-        const hours =
-            String(
-                date.getHours()
-            ).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
 
-        const minutes =
-            String(
-                date.getMinutes()
-            ).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
 
         return `${day}-${month}-${year} ${hours}:${minutes}`;
     }
 
-
     function formatAchievementNote(note) {
-
         if (!note) {
             return "";
         }
 
-        const lines =
-            escapeHTML(note)
-                .split(/\r?\n/);
+        const lines = escapeHTML(note).split(/\r?\n/);
 
         let html = "";
         let inList = false;
 
-        lines.forEach(line => {
-
-            const bulletMatch =
-                line.match(/^\s*-\s+(.*)$/);
+        lines.forEach((line) => {
+            const bulletMatch = line.match(/^\s*-\s+(.*)$/);
 
             if (bulletMatch) {
-
                 if (!inList) {
                     html += "<ul>";
                     inList = true;
@@ -2527,7 +1706,6 @@ window.initAchievements = function () {
             } else {
                 html += `${line}<br>`;
             }
-
         });
 
         if (inList) {
@@ -2537,7 +1715,6 @@ window.initAchievements = function () {
         return html;
     }
 
-
     /*
      * --------------------------------------------------
      * BUILD ACHIEVEMENTS
@@ -2545,44 +1722,27 @@ window.initAchievements = function () {
      */
 
     function buildAchievements(category) {
-
-        if (
-            !achievementList ||
-            !achievementData
-        ) {
+        if (!achievementList || !achievementData) {
             return;
         }
 
-
         achievementList.innerHTML = "";
 
+        const achievements = achievementData.achievements.filter(
+            (achievement) =>
+                achievement.category === category && achievementMatchesFilters(achievement),
+        );
 
-        const achievements =
-            achievementData.achievements.filter(
-                achievement =>
-                    achievement.category === category &&
-                    achievementMatchesFilters(achievement)
-            );
+        const fragment = document.createDocumentFragment();
 
-        const fragment =
-            document.createDocumentFragment();
+        achievements.forEach((achievement) => {
+            const item = document.createElement("div");
 
+            item.className = "achievement-item";
 
-        achievements.forEach(
-            achievement => {
+            const totalTiers = achievement.tiers?.length || 1;
 
-                const item =
-                    document.createElement("div");
-
-                item.className =
-                    "achievement-item";
-
-
-                const totalTiers =
-                    achievement.tiers?.length || 1;
-
-
-                item.innerHTML = `
+            item.innerHTML = `
     
                     <!-- Large achievement icon -->
     
@@ -2590,10 +1750,7 @@ window.initAchievements = function () {
     
                         <img
                             class="achievement-item-main-icon"
-                            src="${getTierImage(
-                                0,
-                                totalTiers
-                            )}"
+                            src="${getTierImage(0, totalTiers)}"
                             alt=""
                         >
     
@@ -2609,18 +1766,14 @@ window.initAchievements = function () {
                             <div class="achievement-title-row">
 
                                 <h3>
-                                    ${escapeHTML(
-                                        achievement.name
-                                    )}
+                                    ${escapeHTML(achievement.name)}
                                 </h3>
                             
                                 ${
                                     achievement.version
                                         ? `
                                             <span class="achievement-version-badge">
-                                                ${escapeHTML(
-                                                    achievement.version
-                                                )}
+                                                ${escapeHTML(achievement.version)}
                                             </span>
                                         `
                                         : ""
@@ -2633,9 +1786,8 @@ window.initAchievements = function () {
     
                         <div class="achievement-tier-list">
     
-                            ${achievement.tiers.map(
-                                tier => {
-    
+                            ${achievement.tiers
+                                .map((tier) => {
                                     return `
     
                                         <div
@@ -2650,10 +1802,7 @@ window.initAchievements = function () {
                                             <div class="achievement-tier-icon">
     
                                                 <img
-                                                    src="${getTierImage(
-                                                        tier.tier,
-                                                        totalTiers
-                                                    )}"
+                                                    src="${getTierImage(tier.tier, totalTiers)}"
                                                     alt="${tier.tier}/${totalTiers}"
                                                 >
     
@@ -2664,9 +1813,7 @@ window.initAchievements = function () {
 
                                                 <div class="achievement-tier-description">
                                                     <p>
-                                                        ${escapeHTML(
-                                                            tier.description
-                                                        )}
+                                                        ${escapeHTML(tier.description)}
                                                     </p>
                                                 </div>
                                             
@@ -2705,7 +1852,7 @@ window.initAchievements = function () {
                                                                         ? `
                                                                             <span class="achievement-tier-completed-at">
                                                                                 ${formatCompletedAt(
-                                                                                    tier.timestamp
+                                                                                    tier.timestamp,
                                                                                 )}
                                                                             </span>
                                                                         `
@@ -2812,9 +1959,8 @@ window.initAchievements = function () {
                                         </div>
     
                                     `;
-    
-                                }
-                            ).join("")}
+                                })
+                                .join("")}
     
                         </div>
     
@@ -2822,262 +1968,153 @@ window.initAchievements = function () {
     
                 `;
 
-                const tierButtons =
-                    item.querySelectorAll(
-                        ".achievement-complete-button"
+            const tierButtons = item.querySelectorAll(".achievement-complete-button");
+
+            const notesButtons = item.querySelectorAll(".achievement-notes-button");
+
+            const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
+
+            notesButtons.forEach((button) => {
+                button.addEventListener("click", (event) => {
+                    event.stopPropagation();
+
+                    achievementNoteTarget = {
+                        achievement,
+                        tier: achievement.tiers[Array.from(notesButtons).indexOf(button)],
+                    };
+
+                    const modal = document.getElementById("achievement-notes-modal");
+
+                    const input = document.getElementById("achievement-notes-input");
+
+                    if (!modal || !input) {
+                        return;
+                    }
+
+                    /*
+                     * Clear the input whenever the
+                     * Notes button is opened.
+                     */
+
+                    input.value = "";
+
+                    /*
+                     * Show the modal.
+                     */
+
+                    modal.hidden = false;
+
+                    /*
+                     * Focus the textarea so the user
+                     * can immediately start typing.
+                     */
+
+                    requestAnimationFrame(() => {
+                        input.focus();
+                    });
+                });
+            });
+
+            noteRemoveButtons.forEach((button) => {
+                button.addEventListener("click", async (event) => {
+                    event.stopPropagation();
+
+                    const tierElement = button.closest(".achievement-tier");
+
+                    if (!tierElement) {
+                        return;
+                    }
+
+                    const tierNumber = Number(tierElement.dataset.tier);
+
+                    const tier = achievement.tiers.find(
+                        (achievementTier) => achievementTier.tier === tierNumber,
                     );
 
-                const notesButtons =
-                    item.querySelectorAll(
-                        ".achievement-notes-button"
-                    );
+                    if (!tier) {
+                        return;
+                    }
 
-                const noteRemoveButtons =
-                    item.querySelectorAll(
-                        ".achievement-tier-note-remove"
-                    );
+                    try {
+                        const response = await fetch(
+                            achievementApiUrl(
+                                `/api/achievements/${encodeURIComponent(
+                                    tier.genshin_id,
+                                )}/tiers/${tier.tier}/note`,
+                            ),
+                            {
+                                method: "PATCH",
 
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
 
-                notesButtons.forEach(
-                    button => {
-
-                        button.addEventListener(
-                            "click",
-                            event => {
-
-                                event.stopPropagation();
-
-                                achievementNoteTarget = {
-                                    achievement,
-                                    tier: achievement.tiers[
-                                        Array.from(
-                                            notesButtons
-                                        ).indexOf(button)
-                                    ]
-                                };
-
-                                const modal =
-                                    document.getElementById(
-                                        "achievement-notes-modal"
-                                    );
-
-                                const input =
-                                    document.getElementById(
-                                        "achievement-notes-input"
-                                    );
-
-                                if (!modal || !input) {
-                                    return;
-                                }
-
-                                /*
-                                 * Clear the input whenever the
-                                 * Notes button is opened.
-                                 */
-
-                                input.value = "";
-
-                                /*
-                                 * Show the modal.
-                                 */
-
-                                modal.hidden = false;
-
-                                /*
-                                 * Focus the textarea so the user
-                                 * can immediately start typing.
-                                 */
-
-                                requestAnimationFrame(() => {
-
-                                    input.focus();
-
-                                });
-
-                            }
+                                body: JSON.stringify({
+                                    note: null,
+                                }),
+                            },
                         );
 
+                        if (!response.ok) {
+                            const result = await response.json();
+
+                            throw new Error(result.detail || "Failed to remove note.");
+                        }
+
+                        /*
+                         * Update local state.
+                         */
+
+                        tier.note = null;
+
+                        /*
+                         * Remove the note box immediately.
+                         */
+
+                        const noteElement = button.closest(".achievement-tier-note");
+
+                        if (noteElement) {
+                            noteElement.remove();
+                        }
+
+                        console.log("Achievement note removed:", achievement.name, tier.tier);
+                    } catch (error) {
+                        console.error("[Achievements] Failed to remove note:", error);
+
+                        alert(error.message);
                     }
-                );
+                });
+            });
 
+            tierButtons.forEach((button, index) => {
+                const tier = achievement.tiers[index];
 
-                noteRemoveButtons.forEach(
-                    button => {
+                button.addEventListener("click", () => {
+                    console.log("[Achievements] Completion button clicked", {
+                        achievement: achievement.name,
+                        tier: tier.tier,
+                        completed: tier.completed,
+                        disabled: button.disabled,
+                        locked: button.closest(".achievement-tier")?.classList.contains("locked"),
+                    });
 
-                        button.addEventListener(
-                            "click",
-                            async event => {
+                    toggleTierCompleted(achievement, tier, item, button);
+                });
+            });
 
-                                event.stopPropagation();
+            fragment.appendChild(item);
 
-                                const tierElement =
-                                    button.closest(
-                                        ".achievement-tier"
-                                    );
-
-                                if (!tierElement) {
-                                    return;
-                                }
-
-                                const tierNumber =
-                                    Number(
-                                        tierElement.dataset.tier
-                                    );
-
-                                const tier =
-                                    achievement.tiers.find(
-                                        achievementTier =>
-                                            achievementTier.tier === tierNumber
-                                    );
-
-                                if (!tier) {
-                                    return;
-                                }
-
-                                try {
-
-                                    const response =
-                                        await fetch(
-                                            achievementApiUrl(`/api/achievements/${encodeURIComponent(
-                                                tier.genshin_id
-                                            )}/tiers/${tier.tier}/note`),
-                                            {
-                                                method: "PATCH",
-
-                                                headers: {
-                                                    "Content-Type":
-                                                        "application/json"
-                                                },
-
-                                                body: JSON.stringify({
-                                                    note: null
-                                                })
-                                            }
-                                        );
-
-
-                                    if (!response.ok) {
-
-                                        const result =
-                                            await response.json();
-
-                                        throw new Error(
-                                            result.detail ||
-                                            "Failed to remove note."
-                                        );
-
-                                    }
-
-
-                                    /*
-                                     * Update local state.
-                                     */
-
-                                    tier.note = null;
-
-
-                                    /*
-                                     * Remove the note box immediately.
-                                     */
-
-                                    const noteElement =
-                                        button.closest(
-                                            ".achievement-tier-note"
-                                        );
-
-                                    if (noteElement) {
-
-                                        noteElement.remove();
-
-                                    }
-
-
-                                    console.log(
-                                        "Achievement note removed:",
-                                        achievement.name,
-                                        tier.tier
-                                    );
-
-                                } catch (error) {
-
-                                    console.error(
-                                        "[Achievements] Failed to remove note:",
-                                        error
-                                    );
-
-                                    alert(
-                                        error.message
-                                    );
-
-                                }
-
-                            }
-                        );
-
-                    }
-                );
-
-
-                tierButtons.forEach(
-                    (button, index) => {
-
-                        const tier =
-                            achievement.tiers[index];
-
-
-                        button.addEventListener(
-                            "click",
-                            () => {
-
-                                console.log(
-                                    "[Achievements] Completion button clicked",
-                                    {
-                                        achievement: achievement.name,
-                                        tier: tier.tier,
-                                        completed: tier.completed,
-                                        disabled: button.disabled,
-                                        locked: button.closest(
-                                            ".achievement-tier"
-                                        )?.classList.contains("locked")
-                                    }
-                                );
-
-                                toggleTierCompleted(
-                                    achievement,
-                                    tier,
-                                    item,
-                                    button
-                                );
-
-                            }
-                        );
-
-                    }
-                );
-
-
-                fragment.appendChild(item);
-
-                updateLockedTiers(item);
-                updateAchievementProgress(item);
-
-            }
-        );
+            updateLockedTiers(item);
+            updateAchievementProgress(item);
+        });
 
         achievementList.appendChild(fragment);
         achievementList.parentElement.scrollTop = 0;
-
     }
 
-    function getTierImage(
-        currentTier,
-        totalTiers
-    ) {
-
+    function getTierImage(currentTier, totalTiers) {
         return `/static/images/achievements/tiers/Achievement_${currentTier}_${totalTiers}.png`;
-
     }
-
 
     /*
      * --------------------------------------------------
@@ -3086,51 +2123,33 @@ window.initAchievements = function () {
      */
 
     function getAchievementDescription(achievement) {
-
-        if (
-            !achievement.tiers ||
-            achievement.tiers.length === 0
-        ) {
+        if (!achievement.tiers || achievement.tiers.length === 0) {
             return "";
         }
 
-
-        const totalTiers =
-            achievement.tiers.length;
-
+        const totalTiers = achievement.tiers.length;
 
         return achievement.tiers
-            .map(tier => {
-
-                const tierNumber =
-                    tier.tier;
-
+            .map((tier) => {
+                const tierNumber = tier.tier;
 
                 return `
                     <div class="achievement-tier-row">
     
                         <img
-                            src="${getTierImage(
-                                tierNumber,
-                                totalTiers
-                            )}"
+                            src="${getTierImage(tierNumber, totalTiers)}"
                             alt="${tierNumber}/${totalTiers}"
                         >
     
                         <span>
-                            ${escapeHTML(
-                                tier.description
-                            )}
+                            ${escapeHTML(tier.description)}
                         </span>
     
                     </div>
                 `;
-
             })
             .join("");
-
     }
-
 
     /*
      * --------------------------------------------------
@@ -3138,39 +2157,18 @@ window.initAchievements = function () {
      * --------------------------------------------------
      */
 
-    async function toggleTierCompleted(
-        achievement,
-        tier,
-        item,
-        button
-    ) {
+    async function toggleTierCompleted(achievement, tier, item, button) {
+        const totalTiers = achievement.tiers?.length || 1;
 
-        const totalTiers =
-            achievement.tiers?.length || 1;
+        const tierContainer = button.closest(".achievement-tier");
 
-
-        const tierContainer =
-            button.closest(
-                ".achievement-tier"
-            );
-
-        if (
-            tierContainer.classList.contains(
-                "locked"
-            )
-        ) {
+        if (tierContainer.classList.contains("locked")) {
             return;
         }
 
+        const tierImage = tierContainer.querySelector(".achievement-tier-icon img");
 
-        const tierImage =
-            tierContainer.querySelector(
-                ".achievement-tier-icon img"
-            );
-
-
-        const isCompleted =
-            tier.completed === true;
+        const isCompleted = tier.completed === true;
 
         /*
          * ------------------------------------------
@@ -3179,33 +2177,20 @@ window.initAchievements = function () {
          */
 
         if (isCompleted) {
-
             /*
              * Uncompleting a tier also uncompletes
              * every tier after it.
              */
 
-            achievement.tiers.forEach(
-                achievementTier => {
-
-                    if (
-                        achievementTier.tier >= tier.tier
-                    ) {
-
-                        achievementTier.completed = false;
-                        achievementTier.timestamp = null;
-
-                    }
-
+            achievement.tiers.forEach((achievementTier) => {
+                if (achievementTier.tier >= tier.tier) {
+                    achievementTier.completed = false;
+                    achievementTier.timestamp = null;
                 }
-            );
-
+            });
         } else {
-
             tier.completed = true;
-
         }
-
 
         /*
          * ------------------------------------------
@@ -3214,7 +2199,6 @@ window.initAchievements = function () {
          */
 
         try {
-
             /*
              * When completing:
              *
@@ -3226,58 +2210,36 @@ window.initAchievements = function () {
              * it must be saved as incomplete.
              */
 
-            const tiersToSave =
-                isCompleted
-                    ? achievement.tiers.filter(
-                        achievementTier =>
-                            achievementTier.tier >= tier.tier
-                    )
-                    : [tier];
+            const tiersToSave = isCompleted
+                ? achievement.tiers.filter((achievementTier) => achievementTier.tier >= tier.tier)
+                : [tier];
 
+            for (const achievementTier of tiersToSave) {
+                const response = await fetch(
+                    achievementApiUrl(
+                        `/api/achievements/${encodeURIComponent(
+                            achievementTier.genshin_id,
+                        )}/tiers/${achievementTier.tier}`,
+                    ),
+                    {
+                        method: "PATCH",
 
-            for (
-                const achievementTier
-                of tiersToSave
-            ) {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
 
-                const response =
-                    await fetch(
-                        achievementApiUrl(`/api/achievements/${encodeURIComponent(
-                            achievementTier.genshin_id
-                        )}/tiers/${achievementTier.tier}`),
-                        {
-                            method: "PATCH",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-                                completed:
-                                    achievementTier.completed
-                            })
-                        }
-                    );
-
+                        body: JSON.stringify({
+                            completed: achievementTier.completed,
+                        }),
+                    },
+                );
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        `Failed to save Tier ${achievementTier.tier}.`
-                    );
-
+                    throw new Error(`Failed to save Tier ${achievementTier.tier}.`);
                 }
-
             }
-
         } catch (error) {
-
-            console.error(
-                "[Achievements] Failed to save completion:",
-                error
-            );
-
+            console.error("[Achievements] Failed to save completion:", error);
 
             /*
              * The database update failed.
@@ -3289,9 +2251,7 @@ window.initAchievements = function () {
             await loadAchievements();
 
             return;
-
         }
-
 
         /*
          * ------------------------------------------
@@ -3299,94 +2259,52 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
 
-        achievement.tiers.forEach(
-            achievementTier => {
+        achievement.tiers.forEach((achievementTier) => {
+            /*
+             * Only tiers affected by this action
+             * need their visual state changed.
+             */
 
-                /*
-                 * Only tiers affected by this action
-                 * need their visual state changed.
-                 */
-
-                if (
-                    isCompleted &&
-                    achievementTier.tier < tier.tier
-                ) {
-                    return;
-                }
-
-
-                const otherTier =
-                    item.querySelector(
-                        `.achievement-tier[data-tier="${achievementTier.tier}"]`
-                    );
-
-
-                if (!otherTier) {
-                    return;
-                }
-
-
-                const otherButton =
-                    otherTier.querySelector(
-                        ".achievement-complete-button"
-                    );
-
-
-                const otherImage =
-                    otherTier.querySelector(
-                        ".achievement-tier-icon img"
-                    );
-
-
-                const completed =
-                    achievementTier.completed === true;
-
-
-                /*
-                 * Completed state
-                 */
-
-                otherTier.classList.toggle(
-                    "completed",
-                    completed
-                );
-
-
-                if (otherButton) {
-
-                    otherButton.classList.toggle(
-                        "completed",
-                        completed
-                    );
-
-                    otherButton.title =
-                        completed
-                            ? "Mark Incomplete"
-                            : "Mark Completed";
-
-                }
-
-
-                /*
-                 * Tier icon
-                 */
-
-                if (otherImage) {
-
-                    otherImage.src =
-                        getTierImage(
-                            achievementTier.tier,
-                            totalTiers
-                        );
-
-                    otherImage.alt =
-                        `${achievementTier.tier}/${totalTiers}`;
-
-                }
-
+            if (isCompleted && achievementTier.tier < tier.tier) {
+                return;
             }
-        );
 
+            const otherTier = item.querySelector(
+                `.achievement-tier[data-tier="${achievementTier.tier}"]`,
+            );
+
+            if (!otherTier) {
+                return;
+            }
+
+            const otherButton = otherTier.querySelector(".achievement-complete-button");
+
+            const otherImage = otherTier.querySelector(".achievement-tier-icon img");
+
+            const completed = achievementTier.completed === true;
+
+            /*
+             * Completed state
+             */
+
+            otherTier.classList.toggle("completed", completed);
+
+            if (otherButton) {
+                otherButton.classList.toggle("completed", completed);
+
+                otherButton.title = completed ? "Mark Incomplete" : "Mark Completed";
+            }
+
+            /*
+             * Tier icon
+             */
+
+            if (otherImage) {
+                otherImage.src = getTierImage(achievementTier.tier, totalTiers);
+
+                otherImage.alt = `${achievementTier.tier}/${totalTiers}`;
+            }
+        });
 
         /*
          * ------------------------------------------
@@ -3394,25 +2312,14 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
 
-        const updatedTier =
-            tierContainer;
+        const updatedTier = tierContainer;
 
-        const tierContent =
-            updatedTier.querySelector(
-                ".achievement-tier-content"
-            );
+        const tierContent = updatedTier.querySelector(".achievement-tier-content");
 
         if (tierContent) {
+            const descriptionContainer = tierContent.querySelector(".achievement-tier-description");
 
-            const descriptionContainer =
-                tierContent.querySelector(
-                    ".achievement-tier-description"
-                );
-
-            let progressRow =
-                tierContent.querySelector(
-                    ".achievement-tier-progress-row"
-                );
+            let progressRow = tierContent.querySelector(".achievement-tier-progress-row");
 
             /*
              * ------------------------------------------
@@ -3424,18 +2331,13 @@ window.initAchievements = function () {
              * Create/update the Completed At display.
              */
 
-            if (achievement.tiers.find(
-                achievementTier =>
-                    achievementTier.tier === tier.tier
-            )?.completed) {
+            if (
+                achievement.tiers.find((achievementTier) => achievementTier.tier === tier.tier)
+                    ?.completed
+            ) {
+                const completedAt = new Date();
 
-                const completedAt =
-                    new Date();
-
-                const formattedCompletedAt =
-                    formatCompletedAt(
-                        completedAt.toISOString()
-                    );
+                const formattedCompletedAt = formatCompletedAt(completedAt.toISOString());
 
                 /*
                  * Create the progress row if it
@@ -3443,14 +2345,9 @@ window.initAchievements = function () {
                  */
 
                 if (!progressRow) {
+                    progressRow = document.createElement("div");
 
-                    progressRow =
-                        document.createElement(
-                            "div"
-                        );
-
-                    progressRow.className =
-                        "achievement-tier-progress-row";
+                    progressRow.className = "achievement-tier-progress-row";
 
                     /*
                      * The progress row belongs directly
@@ -3458,20 +2355,10 @@ window.initAchievements = function () {
                      */
 
                     if (descriptionContainer) {
-
-                        descriptionContainer.insertAdjacentElement(
-                            "afterend",
-                            progressRow
-                        );
-
+                        descriptionContainer.insertAdjacentElement("afterend", progressRow);
                     } else {
-
-                        tierContent.prepend(
-                            progressRow
-                        );
-
+                        tierContent.prepend(progressRow);
                     }
-
                 }
 
                 /*
@@ -3480,36 +2367,23 @@ window.initAchievements = function () {
                  * We don't want duplicate timestamps.
                  */
 
-                const oldCompletedAt =
-                    progressRow.querySelector(
-                        ".achievement-tier-completed-at"
-                    );
+                const oldCompletedAt = progressRow.querySelector(".achievement-tier-completed-at");
 
                 if (oldCompletedAt) {
-
                     oldCompletedAt.remove();
-
                 }
 
                 /*
                  * Create the new timestamp.
                  */
 
-                const completedAtElement =
-                    document.createElement(
-                        "span"
-                    );
+                const completedAtElement = document.createElement("span");
 
-                completedAtElement.className =
-                    "achievement-tier-completed-at";
+                completedAtElement.className = "achievement-tier-completed-at";
 
-                completedAtElement.textContent =
-                    formattedCompletedAt;
+                completedAtElement.textContent = formattedCompletedAt;
 
-                progressRow.appendChild(
-                    completedAtElement
-                );
-
+                progressRow.appendChild(completedAtElement);
             }
 
             /*
@@ -3521,20 +2395,14 @@ window.initAchievements = function () {
              *
              * Remove the Completed At display.
              */
-
             else {
-
                 if (progressRow) {
-
-                    const completedAtElement =
-                        progressRow.querySelector(
-                            ".achievement-tier-completed-at"
-                        );
+                    const completedAtElement = progressRow.querySelector(
+                        ".achievement-tier-completed-at",
+                    );
 
                     if (completedAtElement) {
-
                         completedAtElement.remove();
-
                     }
 
                     /*
@@ -3542,23 +2410,14 @@ window.initAchievements = function () {
                      * left in this row, remove the row too.
                      */
 
-                    const hasProgress =
-                        progressRow.querySelector(
-                            ".achievement-tier-progress"
-                        );
+                    const hasProgress = progressRow.querySelector(".achievement-tier-progress");
 
                     if (!hasProgress) {
-
                         progressRow.remove();
-
                     }
-
                 }
-
             }
-
         }
-
 
         /*
          * ------------------------------------------
@@ -3572,53 +2431,28 @@ window.initAchievements = function () {
         updateCategoryProgress();
         updateCategoryHeaderProgress();
         updateOverallAchievementProgress();
-
     }
 
     function updateAchievementProgress(item) {
+        const tiers = item.querySelectorAll(".achievement-tier");
 
-        const tiers =
-            item.querySelectorAll(
-                ".achievement-tier"
-            );
+        const completedTiers = item.querySelectorAll(".achievement-tier.completed");
 
+        const totalTiers = tiers.length;
 
-        const completedTiers =
-            item.querySelectorAll(
-                ".achievement-tier.completed"
-            );
+        const completedCount = completedTiers.length;
 
-
-        const totalTiers =
-            tiers.length;
-
-
-        const completedCount =
-            completedTiers.length;
-
-
-        const achievementTierCount =
-            item.querySelector(
-                ".achievement-tier-count"
-            );
+        const achievementTierCount = item.querySelector(".achievement-tier-count");
 
         if (achievementTierCount) {
-
-            achievementTierCount.textContent =
-                `${completedCount}/${totalTiers}`;
-
+            achievementTierCount.textContent = `${completedCount}/${totalTiers}`;
         }
-
 
         /*
          * Remove previous progress states.
          */
 
-        item.classList.remove(
-            "progress-low",
-            "progress-high"
-        );
-
+        item.classList.remove("progress-low", "progress-high");
 
         /*
          * Force the browser to register
@@ -3628,113 +2462,61 @@ window.initAchievements = function () {
 
         void item.offsetWidth;
 
-
         /*
          * Do not apply progress colour
          * to a fully completed achievement.
          */
 
-        if (
-            totalTiers === 0 ||
-            completedCount === totalTiers
-        ) {
+        if (totalTiers === 0 || completedCount === totalTiers) {
             return;
         }
 
-
-        const progress =
-            completedCount / totalTiers;
-
+        const progress = completedCount / totalTiers;
 
         /*
          * 1/3 complete.
          */
 
-        if (
-            progress >= 1 / 3 &&
-            progress < 1 / 2
-        ) {
-
-            item.classList.add(
-                "progress-low"
-            );
-
+        if (progress >= 1 / 3 && progress < 1 / 2) {
+            item.classList.add("progress-low");
         }
-
 
         /*
          * 1/2 complete or more,
          * but not fully completed.
          */
-
-        else if (
-            progress >= 1 / 2
-        ) {
-
-            item.classList.add(
-                "progress-high"
-            );
-
+        else if (progress >= 1 / 2) {
+            item.classList.add("progress-high");
         }
-
     }
 
     function updateCategoryProgress() {
-
         if (!achievementData) {
             return;
         }
-
 
         /*
          * Recalculate every category from the
          * current tier completion state.
          */
 
-        Object.entries(
-            achievementData.categories
-        ).forEach(
-            ([category, data]) => {
+        Object.entries(achievementData.categories).forEach(([category, data]) => {
+            let completed = 0;
 
-                let completed = 0;
+            achievementData.achievements.forEach((achievement) => {
+                if (achievement.category !== category || !Array.isArray(achievement.tiers)) {
+                    return;
+                }
 
-
-                achievementData.achievements.forEach(
-                    achievement => {
-
-                        if (
-                            achievement.category !== category ||
-                            !Array.isArray(
-                                achievement.tiers
-                            )
-                        ) {
-                            return;
-                        }
-
-
-                        achievement.tiers.forEach(
-                            tier => {
-
-                                if (
-                                    tier.completed === true
-                                ) {
-
-                                    completed++;
-
-                                }
-
-                            }
-                        );
-
+                achievement.tiers.forEach((tier) => {
+                    if (tier.completed === true) {
+                        completed++;
                     }
-                );
+                });
+            });
 
-
-                data.completed = completed;
-
-            }
-        );
-
+            data.completed = completed;
+        });
 
         /*
          * Rebuild the category cards.
@@ -3742,17 +2524,8 @@ window.initAchievements = function () {
 
         buildCategories();
 
-
-        if (
-            browser &&
-            !browser.hidden &&
-            categoryTitle &&
-            sidebarList
-        ) {
-
-            const currentCategory =
-                categoryTitle.textContent;
-
+        if (browser && !browser.hidden && categoryTitle && sidebarList) {
+            const currentCategory = categoryTitle.textContent;
 
             /*
              * Update the existing sidebar progress
@@ -3760,201 +2533,106 @@ window.initAchievements = function () {
              * and recreating them.
              */
 
-            sidebarList
-                .querySelectorAll(
-                    ".achievement-sidebar-item"
-                )
-                .forEach(item => {
+            sidebarList.querySelectorAll(".achievement-sidebar-item").forEach((item) => {
+                const categoryName = item
+                    .querySelector(".achievement-sidebar-name")
+                    ?.textContent.trim();
 
-                    const categoryName =
-                        item
-                            .querySelector(
-                                ".achievement-sidebar-name"
-                            )
-                            ?.textContent
-                            .trim();
+                if (!categoryName) {
+                    return;
+                }
 
+                const data = achievementData.categories[categoryName];
 
-                    if (!categoryName) {
-                        return;
-                    }
+                if (!data) {
+                    return;
+                }
 
+                const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
 
-                    const data =
-                        achievementData.categories[
-                            categoryName
-                        ];
+                const progressFill = item.querySelector(".achievement-sidebar-progress-fill");
 
+                const count = item.querySelector(".achievement-sidebar-progress-row small");
 
-                    if (!data) {
-                        return;
-                    }
+                if (progressFill) {
+                    progressFill.style.width = `${progress}%`;
+                }
 
-
-                    const progress =
-                        data.total > 0
-                            ? (
-                                data.completed /
-                                data.total
-                            ) * 100
-                            : 0;
-
-
-                    const progressFill =
-                        item.querySelector(
-                            ".achievement-sidebar-progress-fill"
-                        );
-
-
-                    const count =
-                        item.querySelector(
-                            ".achievement-sidebar-progress-row small"
-                        );
-
-
-                    if (progressFill) {
-
-                        progressFill.style.width =
-                            `${progress}%`;
-
-                    }
-
-
-                    if (count) {
-
-                        count.textContent =
-                            `${data.completed}/${data.total}`;
-
-                    }
-
-                });
-
+                if (count) {
+                    count.textContent = `${data.completed}/${data.total}`;
+                }
+            });
 
             /*
              * Keep the currently selected sidebar
              * category state intact.
              */
 
-            const activeItem =
-                sidebarList.querySelector(
-                    ".achievement-sidebar-item.active"
-                );
-
+            const activeItem = sidebarList.querySelector(".achievement-sidebar-item.active");
 
             if (
                 !activeItem ||
-                activeItem
-                    .querySelector(
-                        ".achievement-sidebar-name"
-                    )
-                    ?.textContent
-                    .trim() !== currentCategory
-            ) {
-
-                buildSidebar(
+                activeItem.querySelector(".achievement-sidebar-name")?.textContent.trim() !==
                     currentCategory
-                );
-
+            ) {
+                buildSidebar(currentCategory);
             }
-
         }
-
     }
 
     function updateLockedTiers(item) {
-
-        const tiers =
-            item.querySelectorAll(
-                ".achievement-tier"
-            );
-
+        const tiers = item.querySelectorAll(".achievement-tier");
 
         let previousCompleted = true;
 
+        tiers.forEach((tier) => {
+            const button = tier.querySelector(".achievement-complete-button");
 
-        tiers.forEach(
-            tier => {
-
-                const button =
-                    tier.querySelector(
-                        ".achievement-complete-button"
-                    );
-
-
-                if (!button) {
-                    return;
-                }
-
-
-                const isCompleted =
-                    tier.classList.contains(
-                        "completed"
-                    );
-
-
-                /*
-                 * ------------------------------------------
-                 * DETERMINE WHETHER THIS TIER IS LOCKED
-                 * ------------------------------------------
-                 */
-
-                const locked =
-                    !previousCompleted;
-
-
-                tier.classList.toggle(
-                    "locked",
-                    locked
-                );
-
-
-                /*
-                 * ------------------------------------------
-                 * BUTTON STATE
-                 * ------------------------------------------
-                 *
-                 * Do NOT use button.disabled.
-                 *
-                 * The button must remain clickable so our
-                 * JavaScript can control the state.
-                 */
-
-                if (locked) {
-
-                    button.setAttribute(
-                        "aria-disabled",
-                        "true"
-                    );
-
-                    button.title =
-                        "Complete the previous tier first";
-
-                } else {
-
-                    button.removeAttribute(
-                        "aria-disabled"
-                    );
-
-                    button.title =
-                        isCompleted
-                            ? "Mark Incomplete"
-                            : "Mark Completed";
-
-                }
-
-
-                /*
-                 * ------------------------------------------
-                 * NEXT TIER
-                 * ------------------------------------------
-                 */
-
-                previousCompleted =
-                    isCompleted;
-
+            if (!button) {
+                return;
             }
-        );
 
+            const isCompleted = tier.classList.contains("completed");
+
+            /*
+             * ------------------------------------------
+             * DETERMINE WHETHER THIS TIER IS LOCKED
+             * ------------------------------------------
+             */
+
+            const locked = !previousCompleted;
+
+            tier.classList.toggle("locked", locked);
+
+            /*
+             * ------------------------------------------
+             * BUTTON STATE
+             * ------------------------------------------
+             *
+             * Do NOT use button.disabled.
+             *
+             * The button must remain clickable so our
+             * JavaScript can control the state.
+             */
+
+            if (locked) {
+                button.setAttribute("aria-disabled", "true");
+
+                button.title = "Complete the previous tier first";
+            } else {
+                button.removeAttribute("aria-disabled");
+
+                button.title = isCompleted ? "Mark Incomplete" : "Mark Completed";
+            }
+
+            /*
+             * ------------------------------------------
+             * NEXT TIER
+             * ------------------------------------------
+             */
+
+            previousCompleted = isCompleted;
+        });
 
         /*
          * ------------------------------------------
@@ -3962,63 +2640,27 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
 
-        const mainIcon =
-            item.querySelector(
-                ".achievement-item-main-icon"
-            );
-
+        const mainIcon = item.querySelector(".achievement-item-main-icon");
 
         if (mainIcon) {
-
-            const totalTiers =
-                tiers.length;
-
+            const totalTiers = tiers.length;
 
             let highestCompletedTier = 0;
 
+            tiers.forEach((tier) => {
+                if (tier.classList.contains("completed")) {
+                    const tierNumber = Number(tier.dataset.tier);
 
-            tiers.forEach(
-                tier => {
-
-                    if (
-                        tier.classList.contains(
-                            "completed"
-                        )
-                    ) {
-
-                        const tierNumber =
-                            Number(
-                                tier.dataset.tier
-                            );
-
-
-                        if (
-                            tierNumber >
-                            highestCompletedTier
-                        ) {
-
-                            highestCompletedTier =
-                                tierNumber;
-
-                        }
-
+                    if (tierNumber > highestCompletedTier) {
+                        highestCompletedTier = tierNumber;
                     }
-
                 }
-            );
+            });
 
+            mainIcon.src = getTierImage(highestCompletedTier, totalTiers);
 
-            mainIcon.src =
-                getTierImage(
-                    highestCompletedTier,
-                    totalTiers
-                );
-
-            mainIcon.alt =
-                `${highestCompletedTier}/${totalTiers}`;
-
+            mainIcon.alt = `${highestCompletedTier}/${totalTiers}`;
         }
-
 
         /*
          * ------------------------------------------
@@ -4028,59 +2670,28 @@ window.initAchievements = function () {
 
         const allTiersCompleted =
             tiers.length > 0 &&
-            Array.from(tiers).every(
-                tier =>
-                    tier.classList.contains(
-                        "completed"
-                    )
-            );
+            Array.from(tiers).every((tier) => tier.classList.contains("completed"));
 
-
-        item.classList.toggle(
-            "completed",
-            allTiersCompleted
-        );
-
+        item.classList.toggle("completed", allTiersCompleted);
     }
 
-
     function updateOverallAchievementProgress() {
-
         if (!achievementData) {
             return;
         }
 
+        const countElement = document.getElementById("achievement-overall-count");
 
-        const countElement =
-            document.getElementById(
-                "achievement-overall-count"
-            );
+        const percentElement = document.getElementById("achievement-overall-percent");
 
+        const progressFill = document.getElementById("achievement-overall-progress-fill");
 
-        const percentElement =
-            document.getElementById(
-                "achievement-overall-percent"
-            );
-
-
-        const progressFill =
-            document.getElementById(
-                "achievement-overall-progress-fill"
-            );
-
-
-        if (
-            !countElement ||
-            !percentElement ||
-            !progressFill
-        ) {
+        if (!countElement || !percentElement || !progressFill) {
             return;
         }
 
-
         let totalAchievements = 0;
         let completedAchievements = 0;
-
 
         /*
          * Every tier counts as its own achievement.
@@ -4095,178 +2706,96 @@ window.initAchievements = function () {
          * = 3 total achievements
          */
 
-        achievementData.achievements.forEach(
-            achievement => {
-
-                if (
-                    !Array.isArray(
-                        achievement.tiers
-                    )
-                ) {
-                    return;
-                }
-
-
-                achievement.tiers.forEach(
-                    tier => {
-
-                        totalAchievements++;
-
-
-                        if (
-                            tier.completed === true
-                        ) {
-
-                            completedAchievements++;
-
-                        }
-
-                    }
-                );
-
+        achievementData.achievements.forEach((achievement) => {
+            if (!Array.isArray(achievement.tiers)) {
+                return;
             }
-        );
 
+            achievement.tiers.forEach((tier) => {
+                totalAchievements++;
+
+                if (tier.completed === true) {
+                    completedAchievements++;
+                }
+            });
+        });
 
         /*
          * No achievements available.
          */
 
         if (totalAchievements === 0) {
+            countElement.textContent = "0 / 0";
 
-            countElement.textContent =
-                "0 / 0";
+            percentElement.textContent = "0%";
 
-            percentElement.textContent =
-                "0%";
-
-            progressFill.style.width =
-                "0%";
+            progressFill.style.width = "0%";
 
             return;
-
         }
-
 
         /*
          * Calculate percentage.
          */
 
-        const percentage =
-            (
-                completedAchievements /
-                totalAchievements
-            ) * 100;
-
+        const percentage = (completedAchievements / totalAchievements) * 100;
 
         /*
          * Update the number.
          */
 
-        countElement.textContent =
-            `${completedAchievements} / ${totalAchievements}`;
-
+        countElement.textContent = `${completedAchievements} / ${totalAchievements}`;
 
         /*
          * Update percentage.
          */
 
-        percentElement.textContent =
-            `${percentage.toFixed(1)}%`;
-
+        percentElement.textContent = `${percentage.toFixed(1)}%`;
 
         /*
          * Update progress bar.
 
          */
 
-        progressFill.style.width =
-            `${percentage}%`;
-
+        progressFill.style.width = `${percentage}%`;
     }
 
-
     function updateCategoryHeaderProgress() {
-
-        if (
-            !achievementData ||
-            !categoryTitle ||
-            !categoryPercent ||
-            !categoryProgressFill
-        ) {
+        if (!achievementData || !categoryTitle || !categoryPercent || !categoryProgressFill) {
             return;
         }
 
+        const category = categoryTitle.textContent.trim();
 
-        const category =
-            categoryTitle.textContent.trim();
-
-
-        const achievements =
-            achievementData.achievements.filter(
-                achievement =>
-                    achievement.category === category
-            );
-
+        const achievements = achievementData.achievements.filter(
+            (achievement) => achievement.category === category,
+        );
 
         let total = 0;
         let completed = 0;
 
-
-        achievements.forEach(
-            achievement => {
-
-                if (
-                    !Array.isArray(
-                        achievement.tiers
-                    )
-                ) {
-                    return;
-                }
-
-
-                achievement.tiers.forEach(
-                    tier => {
-
-                        total++;
-
-
-                        if (
-                            tier.completed === true
-                        ) {
-
-                            completed++;
-
-                        }
-
-                    }
-                );
-
+        achievements.forEach((achievement) => {
+            if (!Array.isArray(achievement.tiers)) {
+                return;
             }
-        );
 
+            achievement.tiers.forEach((tier) => {
+                total++;
 
-        const percentage =
-            total > 0
-                ? (completed / total) * 100
-                : 0;
+                if (tier.completed === true) {
+                    completed++;
+                }
+            });
+        });
 
+        const percentage = total > 0 ? (completed / total) * 100 : 0;
 
-        const roundedPercentage =
-            Math.round(
-                percentage * 10
-            ) / 10;
+        const roundedPercentage = Math.round(percentage * 10) / 10;
 
+        categoryPercent.textContent = `${roundedPercentage}% (${completed}/${total})`;
 
-        categoryPercent.textContent =
-            `${roundedPercentage}% (${completed}/${total})`;
-
-
-        categoryProgressFill.style.width =
-            `${percentage}%`;
-
+        categoryProgressFill.style.width = `${percentage}%`;
     }
-
 
     /*
      * --------------------------------------------------
@@ -4275,23 +2804,14 @@ window.initAchievements = function () {
      */
 
     function closeBrowser() {
-
         browser.hidden = true;
 
         categories.hidden = false;
-
     }
-
 
     if (backButton) {
-
-        backButton.addEventListener(
-            "click",
-            closeBrowser
-        );
-
+        backButton.addEventListener("click", closeBrowser);
     }
-
 
     /*
      * --------------------------------------------------
@@ -4303,17 +2823,12 @@ window.initAchievements = function () {
      */
 
     function escapeHTML(value) {
+        const div = document.createElement("div");
 
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            value ?? "";
+        div.textContent = value ?? "";
 
         return div.innerHTML;
-
     }
-
 
     /*
      * --------------------------------------------------
@@ -4322,72 +2837,26 @@ window.initAchievements = function () {
      */
 
     loadAchievements();
-
 };
 
+document.addEventListener("click", (event) => {
+    document.querySelectorAll(".custom-select.open").forEach((select) => {
+        if (!select.contains(event.target)) {
+            select.classList.remove("open");
 
-document.addEventListener(
-    "click",
-    event => {
+            const button = select.querySelector(".custom-select-button");
 
-        document
-            .querySelectorAll(
-                ".custom-select.open"
-            )
-            .forEach(
-                select => {
-
-                    if (
-                        !select.contains(
-                            event.target
-                        )
-                    ) {
-
-                        select.classList.remove(
-                            "open"
-                        );
-
-
-                        const button =
-                            select.querySelector(
-                                ".custom-select-button"
-                            );
-
-
-                        if (button) {
-
-                            button.setAttribute(
-                                "aria-expanded",
-                                "false"
-                            );
-
-                        }
-
-                    }
-
-                }
-            );
-
-    }
-);
-
+            if (button) {
+                button.setAttribute("aria-expanded", "false");
+            }
+        }
+    });
+});
 
 function tryInitAchievements() {
-
-    if (
-        document.getElementById(
-            "achievement-categories"
-        )
-    ) {
-
+    if (document.getElementById("achievement-categories")) {
         window.initAchievements();
-
     }
-
 }
 
-
-document.addEventListener(
-    "DOMContentLoaded",
-    tryInitAchievements
-);
+document.addEventListener("DOMContentLoaded", tryInitAchievements);

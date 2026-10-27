@@ -1,65 +1,91 @@
-// @ts-nocheck -- Legacy global script; types will be tightened incrementally.
-// =========================================================
-// EVENTS — ACTIVITY CHECKMARKS
-// =========================================================
+// @ts-nocheck -- Shared legacy Events globals.
 window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
-    document.querySelectorAll(".event-checkmark[data-activity-type]").forEach(checkmark => {
-        if (checkmark.dataset.initialised === "true") {
-            return;
+    function render(button, checked) {
+        button.setAttribute("aria-pressed", String(checked));
+        button.classList.toggle("event-checkmark-empty", !checked);
+        const row = button.closest(".event-list-item, .overview-account-row");
+        const completed = checked || (["daily_commissions", "trounce_domains"].includes(button.dataset.activityType) && row?.dataset.automaticComplete === "true");
+        row?.classList.toggle("completed", completed);
+        if (button.dataset.activityType === "trounce_domains") {
+            row?.querySelector(".event-list-status, .overview-status")?.classList.toggle("event-completion-pill", completed);
         }
+        const status = row?.querySelector("[data-limited-status]");
+        if (status) {
+            status.textContent = checked ? "Completed" : status.dataset.baseStatus;
+            status.classList.toggle("event-completion-pill", checked);
+            status.classList.toggle("event-limited-completed", checked);
+        }
+        document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
+            const cards = group.querySelectorAll(".events-limited-overview-event:not([hidden])");
+            const completed = group.querySelectorAll(".events-limited-overview-event.completed:not([hidden])").length;
+            const count = group.querySelector("[data-limited-account-count]");
+            if (count)
+                count.textContent = `${completed}/${cards.length} complete`;
+        });
+    }
+    document.querySelectorAll(".event-checkmark[data-activity-type]").forEach((checkmark) => {
+        if (checkmark.dataset.initialised === "true")
+            return;
         checkmark.dataset.initialised = "true";
         checkmark.addEventListener("click", async (event) => {
             event.preventDefault();
             event.stopPropagation();
-            const accountId = checkmark.dataset.accountId;
-            const activityType = checkmark.dataset.activityType;
-            if (!accountId || !activityType) {
+            if (checkmark.dataset.saving === "true")
                 return;
-            }
-            const currentlyChecked = checkmark.getAttribute("aria-pressed") === "true";
-            const newChecked = !currentlyChecked;
-            // Prevent duplicate requests.
-            if (checkmark.dataset.saving === "true") {
+            const { accountId, activityType, eventKey, eventToken } = checkmark.dataset;
+            if (!accountId || !activityType)
                 return;
-            }
-            checkmark.dataset.saving = "true";
+            const buttons = [
+                ...document.querySelectorAll(".event-checkmark[data-activity-type]"),
+            ].filter((button) => button.dataset.accountId === accountId &&
+                button.dataset.activityType === activityType &&
+                button.dataset.eventKey === eventKey);
+            const previous = buttons.map((button) => [
+                button,
+                button.getAttribute("aria-pressed") === "true",
+            ]);
+            const checked = checkmark.getAttribute("aria-pressed") !== "true";
+            window.eventsActivityRevision = (window.eventsActivityRevision || 0) + 1;
+            buttons.forEach((button) => {
+                button.dataset.saving = "true";
+                button.setAttribute("aria-busy", "true");
+                render(button, checked);
+            });
             try {
                 const response = await fetch("/api/events/activity-check", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
+                    signal: AbortSignal.timeout(15000),
                     body: JSON.stringify({
                         account_id: Number(accountId),
                         activity_type: activityType,
-                        checked: newChecked,
+                        checked,
+                        event_key: eventKey,
+                        event_token: eventToken,
                     }),
                 });
-                const responseText = await response.text();
-                let data;
-                try {
-                    data = JSON.parse(responseText);
+                const data = await response.json();
+                if (!response.ok || !data.success || typeof data.checked !== "boolean") {
+                    throw new Error(data.error || "Could not save completion.");
                 }
-                catch {
-                    throw new Error(`Server returned ${response.status}: ${responseText}`);
-                }
-                if (!response.ok || !data.success) {
-                    throw new Error(data.error ||
-                        `Failed to save activity check (${response.status}).`);
-                }
-                checkmark.setAttribute("aria-pressed", String(data.checked));
-                checkmark.classList.toggle("event-checkmark-empty", !data.checked);
-                const row = checkmark.closest(".event-list-item, .overview-account-row");
-                if (row) {
-                    row.classList.toggle("completed", data.checked ||
-                        row.dataset.automaticComplete === "true");
-                }
+                buttons.forEach((button) => {
+                    render(button, data.checked);
+                    button.removeAttribute("aria-description");
+                });
             }
             catch (error) {
+                previous.forEach(([button, value]) => {
+                    render(button, value);
+                    button.setAttribute("aria-description", "Could not save completion. Please try again.");
+                });
                 console.error("Failed to update activity checkmark:", error);
             }
             finally {
-                delete checkmark.dataset.saving;
+                window.eventsActivityRevision = (window.eventsActivityRevision || 0) + 1;
+                buttons.forEach((button) => {
+                    delete button.dataset.saving;
+                    button.removeAttribute("aria-busy");
+                });
             }
         });
     });
