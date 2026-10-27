@@ -1,0 +1,41 @@
+import hashlib
+import hmac
+import os
+import re
+import time
+
+from utils.web.announcement_events import normalise_name
+
+
+def completion_key(event: dict) -> str:
+    # Preserve a check when an announcement later appears in HoYoLAB's calendar,
+    # while keeping subsequent runs of the same named event independent.
+    identity = f"{normalise_name(event['name'])}|{int(event['end_time'])}"
+    return "limited:v1:" + hashlib.sha256(identity.encode()).hexdigest()
+
+
+def apply_completion_checks(events: list[dict], checks: dict[str, bool]) -> None:
+    for event in events:
+        key = completion_key(event)
+        event["completion_key"] = key
+        event["automatic_finished"] = event["is_finished"]
+        event["manual_checked"] = checks.get(key)
+        event["is_finished"] = checks.get(key, event["is_finished"])
+
+
+def completion_token(user_id: int, uid: str, key: str, expires: int) -> str:
+    secret = os.environ["HOYOLAB_ENCRYPTION_KEY"].encode()
+    message = f"cyrene-limited-check-v1|{user_id}|{uid}|{key}|{expires}".encode()
+    return f"{expires}." + hmac.new(secret, message, hashlib.sha256).hexdigest()
+
+
+def valid_completion_token(token, user_id: int, uid: str, key) -> bool:
+    if not isinstance(key, str) or not re.fullmatch(r"limited:v1:[a-f0-9]{64}", key):
+        return False
+    try:
+        expires = int(token.split(".", 1)[0])
+        if expires <= time.time() or expires > time.time() + 7 * 86400 + 60:
+            return False
+        return hmac.compare_digest(token, completion_token(user_id, uid, key, expires))
+    except AttributeError, TypeError, ValueError, KeyError:
+        return False

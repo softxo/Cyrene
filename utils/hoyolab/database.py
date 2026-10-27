@@ -1611,6 +1611,19 @@ async def set_event_activity_check(
     return True
 
 
+async def get_limited_event_checks(discord_user_id: int, genshin_uid: str) -> dict[str, bool]:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """
+            SELECT period_key, checked FROM event_activity_checks
+            WHERE discord_user_id = %s AND genshin_uid = %s
+            AND activity_type = 'limited_event'
+            """,
+            (discord_user_id, genshin_uid),
+        )
+        return {row["period_key"]: bool(row["checked"]) for row in await result.fetchall()}
+
+
 async def get_event_activity_checks(
     discord_user_id: int,
     genshin_uid: str,

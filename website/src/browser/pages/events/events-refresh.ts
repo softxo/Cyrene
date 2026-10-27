@@ -4,7 +4,7 @@
 // =========================================================
 
 window.refreshEvents = async function refreshEvents() {
-    if (window.eventsRefreshing) {
+    if (window.eventsRefreshing || document.querySelector('.event-checkmark[data-saving="true"]')) {
         return;
     }
 
@@ -15,47 +15,35 @@ window.refreshEvents = async function refreshEvents() {
     }
 
     // Never refresh while the user is editing or rearranging events.
-    const customModal = currentPage.querySelector(
-        "[data-custom-modal]"
-    );
+    const customModal = currentPage.querySelector("[data-custom-modal]");
 
     if (customModal && !customModal.hidden) {
         return;
     }
 
     if (
-        currentPage.querySelector(
-            ".custom-select.open, .events-custom-dropdown.open"
-        ) ||
-        currentPage.querySelector(
-            ".events-custom-card.is-dragging"
-        ) ||
+        currentPage.querySelector(".custom-select.open, .events-custom-dropdown.open") ||
+        currentPage.querySelector(".events-custom-card.is-dragging") ||
         window.eventsRefreshingOrder
     ) {
         return;
     }
 
+    const activityRevision = window.eventsActivityRevision || 0;
     window.eventsRefreshing = true;
 
     try {
-        const isOverview =
-            currentPage.dataset.overview === "true";
+        const isOverview = currentPage.dataset.overview === "true";
 
-        const accountId =
-            currentPage.dataset.accountId || "";
+        const accountId = currentPage.dataset.accountId || "";
 
         const params = new URLSearchParams();
 
         // Preserve the currently selected account tab.
-        const activeAccountTab = currentPage.querySelector(
-            ".events-account-tab.active"
-        );
+        const activeAccountTab = currentPage.querySelector(".events-account-tab.active");
 
         if (activeAccountTab) {
-            params.set(
-                "tab",
-                activeAccountTab.dataset.accountTab
-            );
+            params.set("tab", activeAccountTab.dataset.accountTab);
         }
 
         if (isOverview) {
@@ -66,14 +54,11 @@ window.refreshEvents = async function refreshEvents() {
             params.set("account_id", accountId);
         }
 
-        const response = await fetch(
-            `/events/refresh?${params.toString()}`,
-            {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-            }
-        );
+        const response = await fetch(`/events/refresh?${params.toString()}`, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        });
 
         if (!response.ok) {
             return;
@@ -82,15 +67,15 @@ window.refreshEvents = async function refreshEvents() {
         const html = await response.text();
         const parser = new DOMParser();
 
-        const refreshedDocument = parser.parseFromString(
-            html,
-            "text/html"
-        );
+        const refreshedDocument = parser.parseFromString(html, "text/html");
 
-        const refreshedPage =
-            refreshedDocument.querySelector(".events-page");
+        const refreshedPage = refreshedDocument.querySelector(".events-page");
 
-        if (!refreshedPage) {
+        if (
+            activityRevision !== (window.eventsActivityRevision || 0) ||
+            !refreshedPage ||
+            document.querySelector('.event-checkmark[data-saving="true"]')
+        ) {
             return;
         }
 
@@ -101,12 +86,7 @@ window.refreshEvents = async function refreshEvents() {
         // Change text and attributes only when necessary.
         // -------------------------------------------------
 
-        const preservedClasses = new Set([
-            "active",
-            "collapsed",
-            "open",
-            "is-dragging",
-        ]);
+        const preservedClasses = new Set(["active", "collapsed", "open", "is-dragging"]);
 
         function getNodeKey(node) {
             if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -127,7 +107,7 @@ window.refreshEvents = async function refreshEvents() {
             const activityAccount = node.dataset.accountId;
 
             if (activityType && activityAccount) {
-                return `activity:${activityType}:${activityAccount}`;
+                return `activity:${activityType}:${activityAccount}:${node.dataset.eventKey || ""}`;
             }
 
             const overviewPanel = node.dataset.overviewPanel;
@@ -148,8 +128,7 @@ window.refreshEvents = async function refreshEvents() {
                 return `limited-event:${limitedEventId}`;
             }
 
-            const customAccountGroup =
-                node.matches("[data-custom-account-group]");
+            const customAccountGroup = node.matches("[data-custom-account-group]");
 
             if (customAccountGroup) {
                 return `custom-account:${node.dataset.accountId}`;
@@ -159,20 +138,16 @@ window.refreshEvents = async function refreshEvents() {
         }
 
         function syncAttributes(current, refreshed) {
-            const isFeaturedCard =
-                current.matches(".event-featured-card");
+            const isFeaturedCard = current.matches(".event-featured-card");
 
-            const wasDetailsOpen =
-                current instanceof HTMLDetailsElement && current.open;
+            const wasDetailsOpen = current instanceof HTMLDetailsElement && current.open;
 
-            const wasCollapsed =
-                isFeaturedCard &&
-                current.classList.contains("collapsed");
+            const wasCollapsed = isFeaturedCard && current.classList.contains("collapsed");
 
             const previousClasses = new Set(
-                Array.from(current.classList).filter(
-                    className => preservedClasses.has(className)
-                )
+                Array.from(current.classList).filter((className) =>
+                    preservedClasses.has(className),
+                ),
             );
 
             // Remove attributes that no longer exist.
@@ -184,22 +159,13 @@ window.refreshEvents = async function refreshEvents() {
 
             // Apply only changed attributes.
             for (const attribute of Array.from(refreshed.attributes)) {
-                if (
-                    current.getAttribute(attribute.name) !==
-                    attribute.value
-                ) {
-                    current.setAttribute(
-                        attribute.name,
-                        attribute.value
-                    );
+                if (current.getAttribute(attribute.name) !== attribute.value) {
+                    current.setAttribute(attribute.name, attribute.value);
                 }
             }
 
             // Preserve the user's current UI state.
-            if (
-                current instanceof HTMLElement &&
-                refreshed instanceof HTMLElement
-            ) {
+            if (current instanceof HTMLElement && refreshed instanceof HTMLElement) {
                 for (const className of previousClasses) {
                     current.classList.add(className);
                 }
@@ -211,32 +177,25 @@ window.refreshEvents = async function refreshEvents() {
 
             // Preserve expanded/collapsed state and open controls.
             if (current.matches(".event-featured-card")) {
-                current.classList.toggle(
-                    "collapsed",
-                    wasCollapsed
-                );
+                current.classList.toggle("collapsed", wasCollapsed);
 
-                const toggle = current.querySelector(
-                    ".event-featured-toggle"
-                );
+                const toggle = current.querySelector(".event-featured-toggle");
 
                 if (toggle) {
                     toggle.setAttribute(
                         "aria-expanded",
-                        String(!current.classList.contains("collapsed"))
+                        String(!current.classList.contains("collapsed")),
                     );
                 }
             }
 
             if (current.matches(".event-featured-toggle")) {
-                const card = current.closest(
-                    ".event-featured-card"
-                );
+                const card = current.closest(".event-featured-card");
 
                 if (card) {
                     current.setAttribute(
                         "aria-expanded",
-                        String(!card.classList.contains("collapsed"))
+                        String(!card.classList.contains("collapsed")),
                     );
                 }
             }
@@ -251,10 +210,7 @@ window.refreshEvents = async function refreshEvents() {
             }
 
             // Text and comment nodes: change only when necessary.
-            if (
-                current.nodeType === Node.TEXT_NODE ||
-                current.nodeType === Node.COMMENT_NODE
-            ) {
+            if (current.nodeType === Node.TEXT_NODE || current.nodeType === Node.COMMENT_NODE) {
                 if (current.nodeValue !== refreshed.nodeValue) {
                     current.nodeValue = refreshed.nodeValue;
                 }
@@ -267,6 +223,12 @@ window.refreshEvents = async function refreshEvents() {
                 const replacement = refreshed.cloneNode(true);
                 current.replaceWith(replacement);
                 return replacement;
+            }
+
+            // Category controls are client-owned: preserve their open popover,
+            // generated toggles and anchor coordinates during background refresh.
+            if (current instanceof HTMLElement && current.matches(".events-limited-filter")) {
+                return current;
             }
 
             syncAttributes(current, refreshed);
@@ -299,16 +261,11 @@ window.refreshEvents = async function refreshEvents() {
             for (const newChild of newChildren) {
                 const key = getNodeKey(newChild);
 
-                const matchingChild = key
-                    ? keyedChildren.get(key)
-                    : null;
+                const matchingChild = key ? keyedChildren.get(key) : null;
 
                 if (matchingChild && matchingChild.parentNode === current) {
                     patchNode(matchingChild, newChild);
-                    position = Math.max(
-                        position,
-                        oldChildren.indexOf(matchingChild) + 1
-                    );
+                    position = Math.max(position, oldChildren.indexOf(matchingChild) + 1);
                     continue;
                 }
 
@@ -338,15 +295,9 @@ window.refreshEvents = async function refreshEvents() {
 
             // Remove only children absent from the refreshed response.
             // Custom Events are deliberately outside the refreshed roots.
-            const retainedKeys = new Set(
-                newChildren
-                    .map(getNodeKey)
-                    .filter(Boolean)
-            );
+            const retainedKeys = new Set(newChildren.map(getNodeKey).filter(Boolean));
 
-            const retainedUnkeyedCount = newChildren.filter(
-                child => !getNodeKey(child)
-            ).length;
+            const retainedUnkeyedCount = newChildren.filter((child) => !getNodeKey(child)).length;
 
             let unkeyedSeen = 0;
 
@@ -397,17 +348,8 @@ window.refreshEvents = async function refreshEvents() {
         // -------------------------------------------------
 
         if (isOverview) {
-            for (const panel of [
-                "daily",
-                "resin",
-                "trounce",
-                "endgame",
-                "wishes",
-                "events",
-            ]) {
-                refreshInPlace(
-                    `.events-overview-panel[data-overview-panel="${panel}"]`
-                );
+            for (const panel of ["daily", "resin", "trounce", "endgame", "wishes", "events"]) {
+                refreshInPlace(`.events-overview-panel[data-overview-panel="${panel}"]`);
             }
         }
 
@@ -432,12 +374,8 @@ window.refreshEvents = async function refreshEvents() {
         if (window.updateResinTimers) {
             window.updateResinTimers();
         }
-
     } catch (error) {
-        console.error(
-            "Failed to refresh Events:",
-            error
-        );
+        console.error("Failed to refresh Events:", error);
     } finally {
         window.eventsRefreshing = false;
     }

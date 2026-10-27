@@ -78,12 +78,27 @@ class EnrichmentTests(unittest.IsolatedAsyncioTestCase):
                 await localise_reward_images(details)
         self.assertEqual(details["rewards"][0]["icon"], "/static/images/misc/Primogem.webp")
         self.assertEqual(
-            details["insight_rewards"][0]["icon"], f"/static/cache/quest-rewards/{digest}.webp"
+            details["insight_rewards"][0]["icon"],
+            f"/static/images/events/quest-rewards/{digest}.webp",
         )
 
     async def test_html_error_pages_are_not_cached_as_images(self):
         self.assertIsNone(image_extension(b"<html>Access denied</html>"))
         self.assertEqual(image_extension(b"RIFF1234WEBP"), ".webp")
+
+    async def test_old_cache_urls_migrate_to_shipped_assets_without_network(self):
+        filename = "a" * 64 + ".webp"
+        details = {
+            "rewards": [],
+            "insight_rewards": [{"icon": "/static/cache/quest-rewards/" + filename, "rewards": []}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / filename).write_bytes(b"RIFF1234WEBP")
+            with patch("utils.web.quest_reward_details.IMAGE_DIRECTORY", Path(directory)):
+                await localise_reward_images(details)
+        self.assertEqual(
+            details["insight_rewards"][0]["icon"], "/static/images/events/quest-rewards/" + filename
+        )
 
     async def test_failed_lookup_preserves_official_rewards(self):
         event = {

@@ -697,7 +697,7 @@ function initCustomEvents() {
         currentInput.min = "0";
         currentInput.value = "0";
         currentInput.disabled = true;
-        currentInput.title = "Progress is tracked separately for each account.";
+        currentInput.setAttribute("aria-description", "Progress is tracked separately for each account.");
         currentInput.setAttribute("aria-label", "Progress is tracked separately for each account");
         currentInput.dataset.objectiveCurrent = "";
         const targetInput = document.createElement("input");
@@ -877,6 +877,8 @@ function initCustomEvents() {
             return;
         }
         draggingEventId = card.dataset.customEventId;
+        const bounds = card.getBoundingClientRect();
+        event.dataTransfer.setDragImage(card, event.clientX - bounds.left, event.clientY - bounds.top);
         card.classList.add("is-dragging");
         event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("text/plain", draggingEventId);
@@ -1216,7 +1218,6 @@ function initCustomEvents() {
         dragHandle.type = "button";
         dragHandle.draggable = true;
         dragHandle.dataset.customEventDragHandle = "";
-        dragHandle.title = "Drag to reorder events";
         dragHandle.setAttribute("aria-label", `Reorder ${event.title}`);
         accent.append(dragHandle);
         const content = makeElement("div", "events-custom-card-content");
@@ -1243,13 +1244,14 @@ function initCustomEvents() {
         topRow.append(makeElement("span", "events-custom-chip", dateLabel), makeElement("span", "events-custom-chip", recurrenceLabel(event.recurrence)), makeElement("span", "events-custom-chip", event.account_scope === "all"
             ? "All accounts"
             : "Specific account"));
-        const countdown = makeElement("span", "events-custom-countdown", completed ? "Completed" : "");
+        const countdown = makeElement("span", `events-custom-countdown${completed ? " event-completion-pill" : ""}`, completed ? "Completed" : "");
         const startValue = Number(event.start_at);
         const startTimestamp = Number.isFinite(startValue) && startValue > 0
             ? (startValue < 1e12 ? startValue * 1000 : startValue)
             : new Date(event.start_at).getTime();
-        countdown.dataset.countdownTarget =
-            String(getCustomEventCountdownTarget(event));
+        if (!completed)
+            countdown.dataset.countdownTarget =
+                String(getCustomEventCountdownTarget(event));
         topRow.append(countdown);
         content.append(topRow);
         if (event.description) {
@@ -1269,7 +1271,7 @@ function initCustomEvents() {
                 reminderLabel =
                     `Reminder: ${event.reminder_minutes} minutes before`;
             }
-            content.append(makeElement("div", "events-custom-card-reminder", reminderLabel));
+            topRow.insertBefore(makeElement("span", "events-custom-card-reminder", reminderLabel), countdown);
         }
         renderProgress(event, content);
         const actions = makeElement("div", "events-custom-card-actions");
@@ -1390,6 +1392,8 @@ function initCustomEvents() {
     function renderOverviewEvent(event, list, accountId) {
         const completed = isEventCompleted(event);
         const row = makeElement("details", "events-custom-overview-event");
+        row.dataset.customEventId = String(event.id);
+        row.dataset.accountId = String(accountId);
         row.style.setProperty("--custom-event-colour", event.colour || "#7c83ff");
         const summary = makeElement("summary", "events-custom-overview-summary");
         const icon = document.createElement("img");
@@ -1429,7 +1433,7 @@ function initCustomEvents() {
             objectiveSummary = makeElement("span", `events-custom-overview-progress${finished === objectives.length ? " event-completion-pill" : ""}`, `${finished}/${objectives.length} objectives`);
             summaryStatus.append(objectiveSummary);
         }
-        const status = makeElement("span", "events-custom-countdown", completed ? "Completed" : "");
+        const status = makeElement("span", `events-custom-countdown${completed ? " event-completion-pill" : ""}`, completed ? "Completed" : "");
         if (completed) {
             row.classList.add("is-completed");
         }
@@ -1691,6 +1695,21 @@ function initCustomEvents() {
     // MANUAL COMPLETION
     // =========================================
     async function toggleCompletion(event, completed, occurrenceStart, accountId = null) {
+        if (event.completionSaving)
+            return;
+        event.completionSaving = true;
+        const previousCompletions = event.completions;
+        const openCards = new Set($$(".events-custom-overview-event[open]").map(row => `${row.dataset.accountId}:${row.dataset.customEventId}`));
+        const renderCompletion = () => {
+            renderEvents();
+            $$(".events-custom-overview-event").forEach(row => {
+                row.open = openCards.has(`${row.dataset.accountId}:${row.dataset.customEventId}`);
+            });
+        };
+        const occurrence = new Date(occurrenceStart).getTime();
+        event.completions = (previousCompletions || []).filter(entry => new Date(entry.occurrence_start).getTime() !== occurrence);
+        event.completions.push({ completed, occurrence_start: occurrenceStart });
+        renderCompletion();
         const payload = {
             completed,
             occurrence_start: occurrenceStart,
@@ -1703,11 +1722,16 @@ function initCustomEvents() {
             await apiRequest(`/api/custom-events/${encodeURIComponent(event.id)}/completion`, {
                 method: "POST",
                 body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(15000),
             }, window.CyreneSchemas.customEventCompletionResponseSchema);
-            await loadEvents();
         }
         catch (error) {
+            event.completions = previousCompletions;
+            renderCompletion();
             window.alert(error.message || "Unable to update event completion.");
+        }
+        finally {
+            event.completionSaving = false;
         }
     }
     // =========================================

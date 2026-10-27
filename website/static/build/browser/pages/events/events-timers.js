@@ -18,6 +18,8 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
     const timers = document.querySelectorAll(".event-time-left[data-end-time]");
     const now = Math.floor(Date.now() / 1000);
     timers.forEach(timer => {
+        if (timer.dataset.limitedComplete === "true")
+            return;
         const endTime = Number(timer.dataset.endTime);
         const startTime = Number(timer.dataset.startTime);
         if (!endTime) {

@@ -8,7 +8,11 @@
         <img src="{{ insight.icon }}" alt="{{ insight.character }}" loading="lazy">
     </button>
     <div class="event-insight-popover" popover="manual" role="dialog" aria-label="{{ insight.character }} Insight rewards">
-        <strong>{{ insight.character }} · Insight Rewards</strong>
+      <div class="event-insight-content">
+        <div class="event-insight-heading">
+            <img src="{{ insight.icon }}" alt="" loading="lazy">
+            <div><span>Insight Rewards</span><strong>{{ insight.character }}</strong></div>
+        </div>
         <p>{{ insight.task }}</p>
         <div class="event-insight-items">
             {% for reward in insight.rewards %}
@@ -22,19 +26,45 @@
             {% endfor %}
         </div>
         <a href="{{ event.reward_source }}" target="_blank" rel="noopener noreferrer">Reward details · Genshin Impact Wiki</a>
+      </div>
     </div>
 </div>
 {% endfor %}
 {% endmacro %}
 
-{% macro limited_event_card(event) %}
+{% macro limited_event_filters() %}
+<div class="events-limited-filter">
+    <button type="button" class="events-limited-filter-button" data-limited-filter-button aria-label="Choose Limited event categories" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m9 3-.6 2.4-2 .9-2.2-.7-2 3.4L4 10.7v2.6L2.2 15l2 3.4 2.2-.7 2 .9L9 21h4l.6-2.4 2-.9 2.2.7 2-3.4-1.8-1.7v-2.6L19.8 9l-2-3.4-2.2.7-2-.9L13 3Z"/><circle cx="11" cy="12" r="3.2"/></svg>
+    </button>
+    <div class="events-limited-filter-popup" popover="auto" role="dialog" aria-label="Limited event categories">
+        <strong>Show events</strong>
+        <div data-limited-filter-options></div>
+        <small>Applies to Normal and Overview.</small>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro limited_event_check(event, account) %}
+<button type="button"
+    class="event-checkmark{% if not event.is_finished %} event-checkmark-empty{% endif %}"
+    data-activity-type="limited_event" data-event-key="{{ event.completion_key }}"
+    data-event-token="{{ event.completion_token }}"
+    data-account-id="{{ account.id }}"
+    aria-label="Mark {{ event.name }} complete for {{ account.nickname }}"
+    aria-pressed="{{ 'true' if event.is_finished else 'false' }}"
+></button>
+{% endmacro %}
+
+{% macro limited_event_card(event, account, overview_card=false) %}
 <article
-    class="event-list-item event-limited-item{% if event.is_upcoming %} upcoming{% endif %}{% if event.is_finished %} completed{% endif %}"
+    class="event-list-item event-limited-item{% if overview_card %} events-limited-overview-event{% endif %}{% if event.is_upcoming %} upcoming{% endif %}{% if event.is_finished %} completed{% endif %}"
     data-limited-event-id="{{ event.id }}"
-    {% if event.description %}title="{{ event.description }}"{% endif %}
+    data-limited-category="{{ 'TCG' if event.is_tcg else (event.category or 'Other Events') }}"
 >
     <div class="event-limited-main">
         <div class="event-list-left">
+            <div class="event-list-check">{{ limited_event_check(event, account) }}</div>
             <div class="event-list-icon event-limited-icon">
                 <img
                     src="{{ event.icon or '/static/images/ui/ui_icons/Events.webp' }}"
@@ -60,7 +90,7 @@
             {% for reward in event.rewards %}
             <span
                 class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
-                title="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
+                role="img" aria-label="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
             >
                 {% if reward.icon %}
                 <img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">
@@ -77,7 +107,8 @@
         {% endif %}
 
         <div class="event-list-right">
-            <span class="event-list-status{% if event.is_finished %} event-limited-completed event-completion-pill{% endif %}">
+            <span data-limited-status data-base-status="{{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}"
+                class="event-list-status{% if event.is_finished %} event-limited-completed event-completion-pill{% endif %}">
                 {% if event.is_finished %}
                 Completed
                 {% else %}
@@ -100,65 +131,8 @@
 </article>
 {% endmacro %}
 
-{% macro limited_event_overview_card(event) %}
-<details
-    class="events-custom-overview-event events-limited-overview-event{% if event.is_finished %} is-completed{% endif %}"
-    data-limited-event-id="{{ event.id }}"
-    style="--custom-event-colour: var(--accent)"
->
-    <summary class="events-custom-overview-summary">
-        <img
-            class="events-custom-overview-icon"
-            src="{{ event.icon or '/static/images/ui/ui_icons/Events.webp' }}"
-            alt=""
-            loading="lazy"
-        >
-        {% if event.is_tcg %}
-        <span class="event-limited-pill event-limited-category">TCG</span>
-        {% endif %}
-        {% if event.category %}
-        <span class="event-limited-pill event-limited-category">{{ event.category }}</span>
-        {% endif %}
-        <span class="events-custom-overview-name">{{ event.name }}</span>
-        <span class="events-custom-overview-summary-status">
-            {% if event.is_finished %}
-            <span class="events-custom-countdown event-completion-pill">Completed</span>
-            {% else %}
-            <span
-                class="events-custom-countdown event-time-left{% if event.is_upcoming %} upcoming{% endif %}"
-                data-start-time="{{ event.start_time }}"
-                data-end-time="{{ event.end_time }}"
-            >{{ 'Upcoming' if event.is_unscheduled_upcoming else 'Calculating...' }}</span>
-            {% endif %}
-            <span class="events-custom-overview-toggle" aria-hidden="true"></span>
-        </span>
-    </summary>
-    <div class="events-custom-overview-details">
-        {% if event.description %}
-        <p class="events-custom-card-description">{{ event.description }}</p>
-        {% endif %}
-        {% if event.rewards %}
-        <div class="event-limited-rewards" aria-label="Event rewards">
-            {% for reward in event.rewards %}
-            <span
-                class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
-                title="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
-            >
-                {% if reward.icon %}
-                <img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">
-                {% else %}
-                {{ reward.name }}
-                {% endif %}
-                {% if reward.amount %}
-                <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
-                {% endif %}
-            </span>
-            {% endfor %}
-            {{ insight_reward_icons(event) }}
-        </div>
-        {% endif %}
-    </div>
-</details>
+{% macro limited_event_overview_card(event, account) %}
+{{ limited_event_card(event, account, true) }}
 {% endmacro %}
 
 {% block title %}Cyrene • Events{% endblock %}
@@ -220,7 +194,7 @@
                     class="events-account-tab {% if tab == 'events' %}active{% endif %}"
                     data-account-tab="events"
                 >
-                    Events
+                    Limited
                 </button>
 
                 <button
@@ -1588,12 +1562,13 @@
         >
             <div class="events-list-header">
                 <h2>Limited-Time Events</h2>
+                {{ limited_event_filters() }}
             </div>
 
             {% if limited_events %}
             <div class="events-limited-list">
                 {% for event in limited_events %}
-                    {{ limited_event_card(event) }}
+                    {{ limited_event_card(event, selected_account) }}
                 {% endfor %}
             </div>
             {% else %}
@@ -2651,20 +2626,27 @@
             class="events-overview-panel events-custom-overview events-limited-overview"
             data-overview-panel="events"
         >
-            {% set limited_data = namespace(items=[]) %}
+            <div class="events-list-header events-limited-filter-header"><h2>Limited-Time Events</h2>{{ limited_event_filters() }}</div>
             {% for item in overview_data %}
-                {% if not limited_data.items and item.limited_events %}
-                    {% set limited_data.items = item.limited_events %}
-                {% endif %}
-            {% endfor %}
-
-            {% if limited_data.items %}
-                {% for event in limited_data.items %}
-                    {{ limited_event_overview_card(event) }}
-                {% endfor %}
+            <details open class="events-custom-account-group" data-limited-account-group data-account-id="{{ item.account.id }}">
+                <summary class="events-custom-account-heading">
+                    <div class="events-custom-account-info overview-account-name">
+                        <strong>{{ item.account.nickname }}</strong>
+                        <span>{{ item.account.genshin_uid }}</span>
+                    </div>
+                    <span class="events-custom-account-count" data-limited-account-count>{{ item.limited_events | selectattr('is_finished') | list | length }}/{{ item.limited_events | length }} complete</span>
+                </summary>
+                <div class="events-custom-list">
+                    {% for event in item.limited_events %}
+                        {{ limited_event_overview_card(event, item.account) }}
+                    {% else %}
+                        <div class="wish-banners-empty">No Active Events</div>
+                    {% endfor %}
+                </div>
+            </details>
             {% else %}
-                <div class="wish-banners-empty">No Active Events</div>
-            {% endif %}
+                <div class="wish-banners-empty">No linked accounts</div>
+            {% endfor %}
         </div>
 
         <!-- CUSTOM EVENTS OVERVIEW -->

@@ -4,7 +4,6 @@
 // =========================================================
 
 window.updateEventTimeLeft = function updateEventTimeLeft() {
-
     function formatCountdown(remaining) {
         const days = Math.floor(remaining / 86400);
         const hours = Math.floor((remaining % 86400) / 3600);
@@ -21,21 +20,16 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         return `${minutes}m`;
     }
 
-    const timers =
-        document.querySelectorAll(
-            ".event-time-left[data-end-time]"
-        );
+    const timers = document.querySelectorAll(".event-time-left[data-end-time]");
 
-    const now =
-        Math.floor(Date.now() / 1000);
+    const now = Math.floor(Date.now() / 1000);
 
-    timers.forEach(timer => {
+    timers.forEach((timer) => {
+        if (timer.dataset.limitedComplete === "true") return;
 
-        const endTime =
-            Number(timer.dataset.endTime);
+        const endTime = Number(timer.dataset.endTime);
 
-        const startTime =
-            Number(timer.dataset.startTime);
+        const startTime = Number(timer.dataset.startTime);
 
         if (!endTime) {
             return;
@@ -44,11 +38,7 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         if (startTime && startTime > now) {
             timer.textContent = `Starts in ${formatCountdown(startTime - now)}`;
             timer.classList.add("upcoming");
-            timer.classList.remove(
-                "expired",
-                "warning",
-                "danger"
-            );
+            timer.classList.remove("expired", "warning", "danger");
             return;
         }
 
@@ -57,26 +47,20 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         eventItem?.classList.remove("upcoming");
         eventItem?.querySelector(".event-limited-upcoming-label")?.remove();
 
-        const originalRemaining =
-            endTime - now;
+        const originalRemaining = endTime - now;
 
         // -----------------------------------------
         // EXPIRED
         // -----------------------------------------
 
         if (originalRemaining <= 0) {
-
-            timer.textContent =
-                timer.classList.contains("stygian-reset-timer")
-                    ? "Resetting..."
-                    : "Updating...";
+            timer.textContent = timer.classList.contains("stygian-reset-timer")
+                ? "Resetting..."
+                : "Updating...";
 
             timer.classList.add("expired");
 
-            timer.classList.remove(
-                "warning",
-                "danger"
-            );
+            timer.classList.remove("warning", "danger");
 
             return;
         }
@@ -93,104 +77,64 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // TIME STATUS
         // -----------------------------------------
 
-        timer.classList.remove(
-            "warning",
-            "danger"
-        );
+        timer.classList.remove("warning", "danger");
 
         // Less than 1 day remaining.
         if (originalRemaining < 86400) {
-
             timer.classList.add("danger");
 
-        // Less than 3 days remaining.
+            // Less than 3 days remaining.
         } else if (originalRemaining < 259200) {
-
             timer.classList.add("warning");
-
         }
-
     });
-
 
     // =====================================================
     // OVERVIEW — RESIN COUNTDOWNS
     // =====================================================
 
-    document.querySelectorAll(
-        ".overview-resin-timer[data-resin-timestamp]"
-    ).forEach(timer => {
+    document.querySelectorAll(".overview-resin-timer[data-resin-timestamp]").forEach((timer) => {
+        let timestamp = Number(timer.dataset.resinTimestamp);
 
-        let timestamp =
-            Number(timer.dataset.resinTimestamp);
-
-        const currentTime =
-            Math.floor(Date.now() / 1000);
+        const currentTime = Math.floor(Date.now() / 1000);
 
         // -----------------------------------------
         // FULL RESIN
         // -----------------------------------------
 
         if (!timestamp) {
-
             timer.textContent = "Full";
 
             return;
-
         }
 
         // -----------------------------------------
         // NEXT RESIN
         // -----------------------------------------
 
-        if (
-            timer.dataset.resinKind === "next" &&
-            timestamp <= currentTime
-        ) {
-
+        if (timer.dataset.resinKind === "next" && timestamp <= currentTime) {
             // Each Resin takes 8 minutes.
             while (timestamp <= currentTime) {
-
                 timestamp += 480;
-
             }
 
-            timer.dataset.resinTimestamp =
-                String(timestamp);
-
+            timer.dataset.resinTimestamp = String(timestamp);
         }
 
-        const remaining =
-            Math.max(0, timestamp - currentTime);
+        const remaining = Math.max(0, timestamp - currentTime);
 
-        const hours =
-            Math.floor(remaining / 3600);
+        const hours = Math.floor(remaining / 3600);
 
-        const minutes =
-            Math.floor(
-                (remaining % 3600) / 60
-            );
+        const minutes = Math.floor((remaining % 3600) / 60);
 
-        const seconds =
-            remaining % 60;
+        const seconds = remaining % 60;
 
         if (hours > 0) {
-
-            timer.textContent =
-                `${hours}h ${minutes}m`;
-
+            timer.textContent = `${hours}h ${minutes}m`;
         } else if (minutes > 0) {
-
-            timer.textContent =
-                `${minutes}m ${seconds}s`;
-
+            timer.textContent = `${minutes}m ${seconds}s`;
         } else {
-
-            timer.textContent =
-                `${seconds}s`;
-
+            timer.textContent = `${seconds}s`;
         }
-
     });
-
 };

@@ -86,11 +86,12 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-dropdown.js",
         "/static/build/browser/pages/events/events-tabs.js",
         "/static/build/browser/pages/events/events-cards.js",
-        "/static/build/browser/pages/events/events-rewards.js?v=1",
-        "/static/build/browser/pages/events/events-timers.js",
-        "/static/build/browser/pages/events/events-activity.js",
-        "/static/build/browser/pages/events/events-refresh.js",
-        "/static/build/browser/pages/events/events-custom.js",
+        "/static/build/browser/pages/events/events-rewards.js?v=2",
+        "/static/build/browser/pages/events/events-filters.js?v=5",
+        "/static/build/browser/pages/events/events-timers.js?v=2",
+        "/static/build/browser/pages/events/events-activity.js?v=6",
+        "/static/build/browser/pages/events/events-refresh.js?v=3",
+        "/static/build/browser/pages/events/events-custom.js?v=4",
         "/static/build/browser/pages/events/events.js",
     ],
 
@@ -106,7 +107,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=7",
+    "/events": "/static/build/css/events.css?v=13",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 

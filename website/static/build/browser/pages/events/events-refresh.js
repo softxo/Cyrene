@@ -3,7 +3,7 @@
 // EVENTS — FLICKER-FREE AUTOMATIC REFRESH
 // =========================================================
 window.refreshEvents = async function refreshEvents() {
-    if (window.eventsRefreshing) {
+    if (window.eventsRefreshing || document.querySelector('.event-checkmark[data-saving="true"]')) {
         return;
     }
     const currentPage = document.querySelector(".events-page");
@@ -20,6 +20,7 @@ window.refreshEvents = async function refreshEvents() {
         window.eventsRefreshingOrder) {
         return;
     }
+    const activityRevision = window.eventsActivityRevision || 0;
     window.eventsRefreshing = true;
     try {
         const isOverview = currentPage.dataset.overview === "true";
@@ -48,7 +49,7 @@ window.refreshEvents = async function refreshEvents() {
         const parser = new DOMParser();
         const refreshedDocument = parser.parseFromString(html, "text/html");
         const refreshedPage = refreshedDocument.querySelector(".events-page");
-        if (!refreshedPage) {
+        if (activityRevision !== (window.eventsActivityRevision || 0) || !refreshedPage || document.querySelector('.event-checkmark[data-saving="true"]')) {
             return;
         }
         // -------------------------------------------------
@@ -77,7 +78,7 @@ window.refreshEvents = async function refreshEvents() {
             const activityType = node.dataset.activityType;
             const activityAccount = node.dataset.accountId;
             if (activityType && activityAccount) {
-                return `activity:${activityType}:${activityAccount}`;
+                return `activity:${activityType}:${activityAccount}:${node.dataset.eventKey || ""}`;
             }
             const overviewPanel = node.dataset.overviewPanel;
             if (overviewPanel) {
@@ -161,6 +162,11 @@ window.refreshEvents = async function refreshEvents() {
                 const replacement = refreshed.cloneNode(true);
                 current.replaceWith(replacement);
                 return replacement;
+            }
+            // Category controls are client-owned: preserve their open popover,
+            // generated toggles and anchor coordinates during background refresh.
+            if (current instanceof HTMLElement && current.matches(".events-limited-filter")) {
+                return current;
             }
             syncAttributes(current, refreshed);
             // Preserve the contents and live state of form controls.

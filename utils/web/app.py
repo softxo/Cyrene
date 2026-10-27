@@ -65,6 +65,7 @@ from utils.hoyolab.database import (
     get_event_activity_checks,
     get_gift_code_redemptions,
     get_gift_code_settings,
+    get_limited_event_checks,
     get_reminder,
     get_reminders,
     get_visible_custom_event,
@@ -102,6 +103,11 @@ from utils.web.auth import (
     delete_web_session,
     get_verification,
     get_web_session,
+)
+from utils.web.limited_event_checks import (
+    apply_completion_checks,
+    completion_token,
+    valid_completion_token,
 )
 from utils.web.planner_costs import calculate_planner_costs
 from utils.web.quest_reward_details import enrich_quest_rewards
@@ -1983,6 +1989,18 @@ async def get_single_account_events(
         print(f"Error: {error}")
         print("================================")
 
+    if limited_events:
+        apply_completion_checks(
+            limited_events, await get_limited_event_checks(user_id, account["genshin_uid"])
+        )
+        for event in limited_events:
+            expires = min(
+                event["end_time"] or int(time.time()) + 7 * 86400, int(time.time()) + 7 * 86400
+            )
+            event["completion_token"] = completion_token(
+                user_id, account["genshin_uid"], event["completion_key"], expires
+            )
+
     result = {
         "account": account,
         "abyss": abyss_data,
@@ -2281,6 +2299,7 @@ async def update_event_activity_check(
     if activity_type not in {
         "daily_commissions",
         "trounce_domains",
+        "limited_event",
     }:
         return JSONResponse(
             {
@@ -2337,6 +2356,15 @@ async def update_event_activity_check(
     daily_period_key, weekly_period_key = get_event_activity_period_keys(account["genshin_server"])
 
     period_key = daily_period_key if activity_type == "daily_commissions" else weekly_period_key
+
+    if activity_type == "limited_event":
+        period_key = data.get("event_key")
+        if not valid_completion_token(
+            data.get("event_token"), user_id, account["genshin_uid"], period_key
+        ):
+            return JSONResponse(
+                {"success": False, "error": "Event not found for this account."}, status_code=404
+            )
 
     # =========================================
     # SAVE CHECKMARK

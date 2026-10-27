@@ -13,7 +13,6 @@
     display: none;
 }
 
-
 /* =========================================================
    EVENTS OVERVIEW
    ========================================================= */
@@ -21,7 +20,6 @@
 .events-overview {
     margin-top: 28px;
 }
-
 
 /* ---------------------------------------------------------
    Overview Panels
@@ -38,7 +36,6 @@
 .events-overview-panel.active {
     display: flex;
 }
-
 
 /* ---------------------------------------------------------
    Overview Account Row
@@ -82,6 +79,9 @@
     box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
+.overview-account-row.completed .overview-status {
+    color: var(--accent);
+}
 
 /* ---------------------------------------------------------
    Account Name
@@ -110,7 +110,6 @@
 
     font-size: 13px;
 }
-
 
 /* ---------------------------------------------------------
    Account Status
@@ -146,7 +145,7 @@
 
     padding: 6px 12px;
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
 
     background: rgba(0, 0, 0, 0.28);
@@ -173,16 +172,15 @@
 
     border-color: rgba(255, 255, 255, 0.16);
 
-    color: rgba(255, 255, 255, 0.90);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .overview-status.event-completion-pill,
 .overview-status.event-completion-pill:hover {
-    background: rgba(93, 231, 151, 0.16);
-    border-color: rgba(93, 231, 151, 0.32);
-    color: #72eea2;
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
 }
-
 
 /* =========================================================
    OVERVIEW DAILY STATUS
@@ -221,11 +219,11 @@
 }
 
 .overview-claimed {
-    background: rgba(93, 231, 151, 0.16);
+    background: var(--accent-soft);
 
-    border-color: rgba(93, 231, 151, 0.32);
+    border-color: var(--accent-border);
 
-    color: #72eea2;
+    color: var(--accent);
 }
 
 .overview-unclaimed {
@@ -237,13 +235,12 @@
 }
 
 .overview-unclaimed.ready {
-    background: rgba(227, 154, 63, 0.20);
+    background: rgba(227, 154, 63, 0.2);
 
     border-color: rgba(227, 154, 63, 0.38);
 
     color: #f0ad5a;
 }
-
 
 /* =========================================================
    OVERVIEW ENCOUNTER POINTS
@@ -301,7 +298,6 @@
 
     transform: translateX(-2px);
 }
-
 
 /* =========================================================
    OVERVIEW RESIN

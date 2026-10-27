@@ -25,8 +25,14 @@ _cache: OrderedDict = OrderedDict()
 _lock = asyncio.Lock()
 logger = logging.getLogger(__name__)
 IMAGE_DIRECTORY = (
-    Path(__file__).resolve().parents[2] / "website" / "static" / "cache" / "quest-rewards"
+    Path(__file__).resolve().parents[2]
+    / "website"
+    / "static"
+    / "images"
+    / "events"
+    / "quest-rewards"
 )
+IMAGE_URL_PREFIX = "/static/images/events/quest-rewards/"
 
 
 def image_extension(data: bytes) -> str | None:
@@ -53,8 +59,18 @@ async def localise_reward_images(details: dict) -> None:
             entry["icon"] = "/static/images/misc/Primogem.webp"
             continue
         url = entry.get("icon", "")
+        if url.startswith((IMAGE_URL_PREFIX, "/static/cache/quest-rewards/")):
+            filename = url.rsplit("/", 1)[-1]
+            if (
+                re.fullmatch(r"[0-9a-f]{64}\.(?:webp|png|jpg|gif)", filename)
+                and (IMAGE_DIRECTORY / filename).is_file()
+            ):
+                entry["icon"] = IMAGE_URL_PREFIX + filename
+                continue
+            url = entry.get("source_icon", "")
         parsed = urlsplit(url)
         if parsed.scheme == "https" and parsed.hostname == "static.wikia.nocookie.net":
+            entry["source_icon"] = url
             remote.setdefault(url, []).append(entry)
     if not remote:
         return
@@ -71,7 +87,7 @@ async def localise_reward_images(details: dict) -> None:
             for extension in (".webp", ".png", ".jpg", ".gif"):
                 if (IMAGE_DIRECTORY / (digest + extension)).is_file():
                     for target in targets:
-                        target["icon"] = f"/static/cache/quest-rewards/{digest}{extension}"
+                        target["icon"] = f"{IMAGE_URL_PREFIX}{digest}{extension}"
                     return
             temporary = None
             try:
@@ -93,7 +109,7 @@ async def localise_reward_images(details: dict) -> None:
                 temporary.write_bytes(data)
                 temporary.replace(IMAGE_DIRECTORY / name)
                 for target in targets:
-                    target["icon"] = f"/static/cache/quest-rewards/{name}"
+                    target["icon"] = IMAGE_URL_PREFIX + name
             except aiohttp.ClientError, asyncio.TimeoutError, OSError:
                 logger.warning("Quest reward image unavailable: %s", digest)
             finally:
