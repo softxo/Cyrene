@@ -1,5 +1,32 @@
 {% extends "base.html" %}
 
+{% macro insight_reward_icons(event) %}
+{% for insight in event.insight_rewards %}
+<div class="event-insight">
+    <button type="button" class="event-limited-reward event-insight-trigger"
+        aria-label="{{ insight.character }} Insight rewards" aria-haspopup="dialog" aria-expanded="false">
+        <img src="{{ insight.icon }}" alt="{{ insight.character }}" loading="lazy">
+    </button>
+    <div class="event-insight-popover" popover="manual" role="dialog" aria-label="{{ insight.character }} Insight rewards">
+        <strong>{{ insight.character }} · Insight Rewards</strong>
+        <p>{{ insight.task }}</p>
+        <div class="event-insight-items">
+            {% for reward in insight.rewards %}
+            <div class="event-insight-item">
+                <span class="event-limited-reward rarity-{{ reward.rarity }}">
+                    <img src="{{ reward.icon }}" alt="" loading="lazy">
+                    <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
+                </span>
+                <span>{{ reward.name }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ event.reward_source }}" target="_blank" rel="noopener noreferrer">Reward details · Genshin Impact Wiki</a>
+    </div>
+</div>
+{% endfor %}
+{% endmacro %}
+
 {% macro limited_event_card(event) %}
 <article
     class="event-list-item event-limited-item{% if event.is_upcoming %} upcoming{% endif %}{% if event.is_finished %} completed{% endif %}"
@@ -17,8 +44,11 @@
             </div>
             <div class="event-limited-title">
                 <div class="event-limited-name-line">
+                    {% if event.category %}
+                    <span class="event-limited-pill event-limited-category">{{ event.category }}</span>
+                    {% endif %}
                     {% if event.is_tcg %}
-                    <span class="event-limited-pill event-limited-tcg">TCG</span>
+                    <span class="event-limited-pill event-limited-category">TCG</span>
                     {% endif %}
                     <div class="event-list-name">{{ event.name }}</div>
                 </div>
@@ -29,15 +59,20 @@
         <div class="event-limited-rewards" aria-label="Event rewards">
             {% for reward in event.rewards %}
             <span
-                class="event-limited-reward rarity-{{ reward.rarity }}"
+                class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
                 title="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
             >
+                {% if reward.icon %}
                 <img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">
+                {% else %}
+                {{ reward.name }}
+                {% endif %}
                 {% if reward.amount %}
                 <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
                 {% endif %}
             </span>
             {% endfor %}
+            {{ insight_reward_icons(event) }}
         </div>
         {% endif %}
 
@@ -46,7 +81,7 @@
                 {% if event.is_finished %}
                 Completed
                 {% else %}
-                Limited Time
+                {{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}
                 {% endif %}
             </span>
             <div
@@ -79,7 +114,10 @@
             loading="lazy"
         >
         {% if event.is_tcg %}
-        <span class="event-limited-pill event-limited-tcg">TCG</span>
+        <span class="event-limited-pill event-limited-category">TCG</span>
+        {% endif %}
+        {% if event.category %}
+        <span class="event-limited-pill event-limited-category">{{ event.category }}</span>
         {% endif %}
         <span class="events-custom-overview-name">{{ event.name }}</span>
         <span class="events-custom-overview-summary-status">
@@ -103,15 +141,20 @@
         <div class="event-limited-rewards" aria-label="Event rewards">
             {% for reward in event.rewards %}
             <span
-                class="event-limited-reward rarity-{{ reward.rarity }}"
+                class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
                 title="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
             >
+                {% if reward.icon %}
                 <img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">
+                {% else %}
+                {{ reward.name }}
+                {% endif %}
                 {% if reward.amount %}
                 <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
                 {% endif %}
             </span>
             {% endfor %}
+            {{ insight_reward_icons(event) }}
         </div>
         {% endif %}
     </div>

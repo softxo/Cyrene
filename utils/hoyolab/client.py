@@ -181,7 +181,7 @@ class HoYoLABClient:
             cookies=self.credentials.as_cookies(), game=genshin.types.Game.GENSHIN
         )
 
-        return await client.get_genshin_announcements()
+        return await client.get_genshin_announcements(uid=int(self.genshin_uid), lang="en-us")
 
     async def get_genshin_banner_announcements(self) -> list[dict]:
         if self.session is None:

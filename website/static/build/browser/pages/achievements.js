@@ -10,13 +10,13 @@ window.initAchievements = function () {
     const accountSelect = accountForm?.querySelector(".achievements-account-select");
     const accountButton = accountSelect?.querySelector(".custom-select-button");
     const accountInput = accountSelect?.querySelector('input[name="account_id"]');
-    accountButton?.addEventListener("click", event => {
+    accountButton?.addEventListener("click", (event) => {
         event.stopPropagation();
         const open = !accountSelect.classList.contains("open");
         accountSelect.classList.toggle("open", open);
         accountButton.setAttribute("aria-expanded", String(open));
     });
-    accountSelect?.querySelectorAll(".custom-select-option").forEach(option => {
+    accountSelect?.querySelectorAll(".custom-select-option").forEach((option) => {
         option.addEventListener("click", () => {
             if (!option.dataset.value || !accountInput) {
                 return;
@@ -71,23 +71,21 @@ window.initAchievements = function () {
             const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`), {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    note: note
-                })
+                    note: note,
+                }),
             });
             if (!response.ok) {
                 const result = await response.json();
-                throw new Error(result.detail ||
-                    "Failed to save note.");
+                throw new Error(result.detail || "Failed to save note.");
             }
             /*
              * Update the local achievement state
              * only after the database save succeeds.
              */
-            tier.note =
-                note;
+            tier.note = note;
             /*
              * Rebuild the achievement so the
              * note immediately appears.
@@ -95,8 +93,7 @@ window.initAchievements = function () {
             buildAchievements(achievement.category);
             console.log("Achievement note saved:", achievement.name, tier.tier, note);
             closeAchievementNotesModal();
-            achievementNoteTarget =
-                null;
+            achievementNoteTarget = null;
         }
         catch (error) {
             console.error("[Achievements] Failed to save note:", error);
@@ -125,7 +122,7 @@ window.initAchievements = function () {
         "Liyue: The Harbor of Stone and Contracts": "/static/images/achievements/categories/Liyue_The_Harbor_of_Stone_and_Contracts.png",
         "Elemental Specialist: Series I": "/static/images/achievements/categories/Elemental_Specialist_Series_I.png",
         "Elemental Specialist: Series II": "/static/images/achievements/categories/Elemental_Specialist_Series_II.png",
-        "Marksmanship": "/static/images/achievements/categories/Marksmanship.png",
+        Marksmanship: "/static/images/achievements/categories/Marksmanship.png",
         "Challenger: Series I": "/static/images/achievements/categories/Challenger_Series_I.png",
         "Challenger: Series II": "/static/images/achievements/categories/Challenger_Series_II.png",
         "Challenger: Series III": "/static/images/achievements/categories/Challenger_Series_III.png",
@@ -156,7 +153,7 @@ window.initAchievements = function () {
         "The Chronicles of the Sea of Fog": "/static/images/achievements/categories/The_Chronicles_of_the_Sea_of_Fog.png",
         "Teyvat Fishing Guide: Series I": "/static/images/achievements/categories/Teyvat_Fishing_Guide_Series_I.png",
         "The Light of Day": "/static/images/achievements/categories/The_Light_of_Day.png",
-        "Chasmlighter": "/static/images/achievements/categories/Chasmlighter.png",
+        Chasmlighter: "/static/images/achievements/categories/Chasmlighter.png",
         "Sumeru: The Rainforest of Lore": "/static/images/achievements/categories/Sumeru_The_Rainforest_of_Lore.png",
         "Sumeru: The Gilded Desert - Series I": "/static/images/achievements/categories/Sumeru_The_Gilded_Desert_Series_I.png",
         "Sumeru: The Gilded Desert - Series II": "/static/images/achievements/categories/Sumeru_The_Gilded_Desert_Series_II.png",
@@ -200,7 +197,7 @@ window.initAchievements = function () {
         "Liyue: The Harbor of Stone and Contracts": "/static/images/achievements/categories/sidebar/Liyue_The_Harbor_of_Stone_and_Contracts.png",
         "Elemental Specialist: Series I": "/static/images/achievements/categories/sidebar/Elemental_Specialist_Series_I.png",
         "Elemental Specialist: Series II": "/static/images/achievements/categories/sidebar/Elemental_Specialist_Series_II.png",
-        "Marksmanship": "/static/images/achievements/categories/sidebar/Marksmanship.png",
+        Marksmanship: "/static/images/achievements/categories/sidebar/Marksmanship.png",
         "Challenger: Series I": "/static/images/achievements/categories/sidebar/Challenger.png",
         "Challenger: Series II": "/static/images/achievements/categories/sidebar/Challenger.png",
         "Challenger: Series III": "/static/images/achievements/categories/sidebar/Challenger.png",
@@ -231,7 +228,7 @@ window.initAchievements = function () {
         "The Chronicles of the Sea of Fog": "/static/images/achievements/categories/sidebar/Inazuma_The_Islands_of_Thunder_and_Eternity.png",
         "Teyvat Fishing Guide: Series I": "/static/images/achievements/categories/sidebar/Teyvat_Fishing_Guide_Series_I.png",
         "The Light of Day": "/static/images/achievements/categories/sidebar/The_Light_of_Day.png",
-        "Chasmlighter": "/static/images/achievements/categories/sidebar/Chasmlighter.png",
+        Chasmlighter: "/static/images/achievements/categories/sidebar/Chasmlighter.png",
         "Sumeru: The Rainforest of Lore": "/static/images/achievements/categories/sidebar/Sumeru_The_Rainforest_of_Lore.png",
         "Sumeru: The Gilded Desert - Series I": "/static/images/achievements/categories/sidebar/Sumeru_The_Gilded_Desert.png",
         "Sumeru: The Gilded Desert - Series II": "/static/images/achievements/categories/sidebar/Sumeru_The_Gilded_Desert.png",
@@ -333,7 +330,7 @@ window.initAchievements = function () {
         "Demon Mountain's Breath",
         "Unfettered Crescent",
         "Snezhnaya: Sacred city of ice and pale star (I)",
-        "Land of Surging Shadows"
+        "Land of Surging Shadows",
     ];
     /*
      * --------------------------------------------------
@@ -353,8 +350,7 @@ window.initAchievements = function () {
         }
         if (achievementImportSuccessMessage) {
             const matched = Number(result?.matched) || 0;
-            achievementImportSuccessMessage.textContent =
-                `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
+            achievementImportSuccessMessage.textContent = `${matched} achievement${matched === 1 ? "" : "s"} imported successfully.`;
         }
         window.clearTimeout(achievementImportSuccessTimer);
         achievementImportSuccess.hidden = false;
@@ -362,8 +358,7 @@ window.initAchievements = function () {
             achievementImportSuccess.hidden = true;
         }, 2200);
     }
-    if (achievementImportButton &&
-        achievementImportInput) {
+    if (achievementImportButton && achievementImportInput) {
         achievementImportButton.addEventListener("click", () => {
             achievementImportInput.click();
         });
@@ -382,8 +377,7 @@ window.initAchievements = function () {
                 });
                 const result = await response.json();
                 if (!response.ok) {
-                    throw new Error(result.detail ||
-                        "Failed to import achievements.");
+                    throw new Error(result.detail || "Failed to import achievements.");
                 }
                 console.log("Achievement import:", result);
                 achievementImportInput.value = "";
@@ -410,26 +404,22 @@ window.initAchievements = function () {
         if (!achievement.version) {
             return [];
         }
-        return [
-            String(achievement.version)
-        ];
+        return [String(achievement.version)];
     }
     function buildVersionOptions() {
         const select = document.getElementById("achievement-version-select");
-        if (!select ||
-            !achievementData) {
+        if (!select || !achievementData) {
             return;
         }
         const menu = select.querySelector(".custom-select-menu");
         const value = select.querySelector(".custom-select-value");
-        if (!menu ||
-            !value) {
+        if (!menu || !value) {
             return;
         }
         menu.innerHTML = "";
         const versions = new Set();
-        achievementData.achievements.forEach(achievement => {
-            getAchievementVersions(achievement).forEach(version => {
+        achievementData.achievements.forEach((achievement) => {
+            getAchievementVersions(achievement).forEach((version) => {
                 versions.add(version);
             });
         });
@@ -451,7 +441,7 @@ window.initAchievements = function () {
             if (normalMatch) {
                 return {
                     major: Number(normalMatch[1]),
-                    minor: Number(normalMatch[2])
+                    minor: Number(normalMatch[2]),
                 };
             }
             /*
@@ -463,12 +453,12 @@ window.initAchievements = function () {
             if (lunaMatch) {
                 return {
                     major: Number(lunaMatch[1]),
-                    minor: Number(lunaMatch[2])
+                    minor: Number(lunaMatch[2]),
                 };
             }
             return {
                 major: 999,
-                minor: 999
+                minor: 999,
             };
         }
         function formatVersionLabel(version) {
@@ -498,13 +488,10 @@ window.initAchievements = function () {
              * Then sort by minor version
              * inside each major version.
              */
-            if (aPosition.major !==
-                bPosition.major) {
-                return (aPosition.major -
-                    bPosition.major);
+            if (aPosition.major !== bPosition.major) {
+                return aPosition.major - bPosition.major;
             }
-            return (aPosition.minor -
-                bPosition.minor);
+            return aPosition.minor - bPosition.minor;
         });
         /*
          * ------------------------------------------
@@ -512,21 +499,15 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
         const allOption = document.createElement("button");
-        allOption.type =
-            "button";
-        allOption.className =
-            "custom-select-option";
+        allOption.type = "button";
+        allOption.className = "custom-select-option";
         allOption.classList.add("version-all-option");
         allOption.style.gridColumn = "1 / -1";
-        allOption.dataset.value =
-            "all";
+        allOption.dataset.value = "all";
         const allVersionsSelected = achievementSelectedVersion === "all";
         allOption.classList.toggle("selected", allVersionsSelected);
-        allOption.setAttribute("aria-selected", allVersionsSelected
-            ? "true"
-            : "false");
-        allOption.textContent =
-            "All Versions";
+        allOption.setAttribute("aria-selected", allVersionsSelected ? "true" : "false");
+        allOption.textContent = "All Versions";
         allOption.setAttribute("role", "option");
         allOption.addEventListener("click", () => {
             achievementSelectedVersion = "all";
@@ -534,17 +515,11 @@ window.initAchievements = function () {
             if (hiddenVersionInput) {
                 hiddenVersionInput.value = "all";
             }
-            value.textContent =
-                "All Versions";
-            menu
-                .querySelectorAll(".custom-select-option")
-                .forEach(otherOption => {
-                const selected = otherOption ===
-                    allOption;
+            value.textContent = "All Versions";
+            menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
+                const selected = otherOption === allOption;
                 otherOption.classList.toggle("selected", selected);
-                otherOption.setAttribute("aria-selected", selected
-                    ? "true"
-                    : "false");
+                otherOption.setAttribute("aria-selected", selected ? "true" : "false");
             });
             select.classList.remove("open");
             const button = select.querySelector(".custom-select-button");
@@ -572,7 +547,7 @@ window.initAchievements = function () {
          * Missing versions leave an empty space.
          */
         const versionGroups = new Map();
-        sortedVersions.forEach(version => {
+        sortedVersions.forEach((version) => {
             const position = getVersionPosition(version);
             if (position.major === 999) {
                 return;
@@ -580,27 +555,22 @@ window.initAchievements = function () {
             if (!versionGroups.has(position.major)) {
                 versionGroups.set(position.major, []);
             }
-            versionGroups
-                .get(position.major)
-                .push({
+            versionGroups.get(position.major).push({
                 version,
-                minor: position.minor
+                minor: position.minor,
             });
         });
         /*
          * Sort the major-version columns.
          */
-        const majorVersions = [...versionGroups.keys()]
-            .sort((a, b) => a - b);
+        const majorVersions = [...versionGroups.keys()].sort((a, b) => a - b);
         /*
          * Find the highest minor version.
          *
          * This determines how many rows
          * the grid needs.
          */
-        const maxMinor = Math.max(...[
-            ...versionGroups.values()
-        ].flatMap(versions => versions.map(entry => entry.minor)), 0);
+        const maxMinor = Math.max(...[...versionGroups.values()].flatMap((versions) => versions.map((entry) => entry.minor)), 0);
         /*
          * Build the grid row-by-row.
          *
@@ -621,9 +591,9 @@ window.initAchievements = function () {
          * empty grid cells.
          */
         for (let minor = 0; minor <= maxMinor; minor++) {
-            majorVersions.forEach(major => {
+            majorVersions.forEach((major) => {
                 const versionsForMajor = versionGroups.get(major);
-                const versionEntry = versionsForMajor.find(entry => entry.minor === minor);
+                const versionEntry = versionsForMajor.find((entry) => entry.minor === minor);
                 /*
                  * No version exists at this
                  * position.
@@ -632,8 +602,7 @@ window.initAchievements = function () {
                  */
                 if (!versionEntry) {
                     const spacer = document.createElement("div");
-                    spacer.className =
-                        "custom-select-option-spacer";
+                    spacer.className = "custom-select-option-spacer";
                     menu.appendChild(spacer);
                     return;
                 }
@@ -642,36 +611,24 @@ window.initAchievements = function () {
                 if (minor === 0) {
                     option.classList.add("achievement-version-first-row");
                 }
-                option.type =
-                    "button";
-                option.className =
-                    "custom-select-option";
+                option.type = "button";
+                option.className = "custom-select-option";
                 option.setAttribute("role", "option");
                 option.setAttribute("aria-selected", "false");
-                option.dataset.value =
-                    version;
-                option.textContent =
-                    formatVersionLabel(version);
+                option.dataset.value = version;
+                option.textContent = formatVersionLabel(version);
                 option.addEventListener("click", () => {
                     const selectedValue = option.dataset.value;
-                    achievementSelectedVersion =
-                        selectedValue;
+                    achievementSelectedVersion = selectedValue;
                     const hiddenVersionInput = document.getElementById("achievement-version");
                     if (hiddenVersionInput) {
-                        hiddenVersionInput.value =
-                            selectedValue;
+                        hiddenVersionInput.value = selectedValue;
                     }
-                    value.textContent =
-                        option.textContent;
-                    menu
-                        .querySelectorAll(".custom-select-option")
-                        .forEach(otherOption => {
-                        const selected = otherOption ===
-                            option;
+                    value.textContent = option.textContent;
+                    menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
+                        const selected = otherOption === option;
                         otherOption.classList.toggle("selected", selected);
-                        otherOption.setAttribute("aria-selected", selected
-                            ? "true"
-                            : "false");
+                        otherOption.setAttribute("aria-selected", selected ? "true" : "false");
                     });
                     select.classList.remove("open");
                     select
@@ -688,15 +645,10 @@ window.initAchievements = function () {
          * RESTORE SELECTED VERSION
          * ------------------------------------------
          */
-        menu
-            .querySelectorAll(".custom-select-option")
-            .forEach(option => {
-            const selected = option.dataset.value ===
-                achievementSelectedVersion;
+        menu.querySelectorAll(".custom-select-option").forEach((option) => {
+            const selected = option.dataset.value === achievementSelectedVersion;
             option.classList.toggle("selected", selected);
-            option.setAttribute("aria-selected", selected
-                ? "true"
-                : "false");
+            option.setAttribute("aria-selected", selected ? "true" : "false");
         });
         function focusSelectedVersionOption() {
             const selectedOption = menu.querySelector(".custom-select-option.selected");
@@ -712,7 +664,7 @@ window.initAchievements = function () {
              * Move real browser focus to it.
              */
             selectedOption.focus({
-                preventScroll: true
+                preventScroll: true,
             });
         }
         /*
@@ -729,9 +681,7 @@ window.initAchievements = function () {
                 /*
                  * Close every other custom dropdown.
                  */
-                document
-                    .querySelectorAll(".custom-select.open")
-                    .forEach(otherSelect => {
+                document.querySelectorAll(".custom-select.open").forEach((otherSelect) => {
                     if (otherSelect !== select) {
                         otherSelect.classList.remove("open");
                         const otherButton = otherSelect.querySelector(".custom-select-button");
@@ -744,9 +694,7 @@ window.initAchievements = function () {
                  * Toggle this dropdown.
                  */
                 select.classList.toggle("open", shouldOpen);
-                button.setAttribute("aria-expanded", shouldOpen
-                    ? "true"
-                    : "false");
+                button.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
                 /*
                  * Focus the currently selected option.
                  *
@@ -765,7 +713,7 @@ window.initAchievements = function () {
     }
     function syncSecondaryVersionSelect() {
         const primary = document.getElementById("achievement-version-select");
-        const secondary = [...document.querySelectorAll("[data-achievement-version-select]")].find(select => select !== primary);
+        const secondary = [...document.querySelectorAll("[data-achievement-version-select]")].find((select) => select !== primary);
         if (!primary || !secondary) {
             return;
         }
@@ -779,15 +727,17 @@ window.initAchievements = function () {
         const selected = primaryMenu.querySelector(".custom-select-option.selected");
         secondaryValue.textContent = selected?.textContent || "All Versions";
         secondaryMenu.innerHTML = primaryMenu.innerHTML;
-        secondaryMenu.querySelectorAll(".custom-select-option").forEach(option => {
+        secondaryMenu.querySelectorAll(".custom-select-option").forEach((option) => {
             option.addEventListener("click", () => {
-                const primaryOption = [...primaryMenu.querySelectorAll(".custom-select-option")].find(item => item.dataset.value === option.dataset.value);
+                const primaryOption = [
+                    ...primaryMenu.querySelectorAll(".custom-select-option"),
+                ].find((item) => item.dataset.value === option.dataset.value);
                 primaryOption?.click();
                 secondary.classList.remove("open");
                 secondaryButton.setAttribute("aria-expanded", "false");
             });
         });
-        secondaryButton.onclick = event => {
+        secondaryButton.onclick = (event) => {
             event.preventDefault();
             event.stopPropagation();
             const open = !secondary.classList.contains("open");
@@ -796,11 +746,10 @@ window.initAchievements = function () {
         };
     }
     function achievementIsCompleted(achievement) {
-        if (!Array.isArray(achievement.tiers) ||
-            achievement.tiers.length === 0) {
+        if (!Array.isArray(achievement.tiers) || achievement.tiers.length === 0) {
             return false;
         }
-        return achievement.tiers.every(tier => tier.completed === true);
+        return achievement.tiers.every((tier) => tier.completed === true);
     }
     function achievementMatchesFilters(achievement) {
         /*
@@ -809,19 +758,15 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
         if (achievementSearchQuery) {
-            const query = achievementSearchQuery
-                .toLowerCase()
-                .trim();
+            const query = achievementSearchQuery.toLowerCase().trim();
             const name = String(achievement.name || "").toLowerCase();
             const descriptions = Array.isArray(achievement.tiers)
                 ? achievement.tiers
-                    .map(tier => String(tier.description ||
-                    ""))
+                    .map((tier) => String(tier.description || ""))
                     .join(" ")
                     .toLowerCase()
                 : "";
-            if (!name.includes(query) &&
-                !descriptions.includes(query)) {
+            if (!name.includes(query) && !descriptions.includes(query)) {
                 return false;
             }
         }
@@ -841,8 +786,7 @@ window.initAchievements = function () {
          * HIDE COMPLETED
          * ------------------------------------------
          */
-        if (hideCompletedAchievements &&
-            achievementIsCompleted(achievement)) {
+        if (hideCompletedAchievements && achievementIsCompleted(achievement)) {
             return false;
         }
         return true;
@@ -854,11 +798,10 @@ window.initAchievements = function () {
         }
         buildCategories();
     }
-    achievementSearchInputs.forEach(achievementSearch => {
+    achievementSearchInputs.forEach((achievementSearch) => {
         achievementSearch.addEventListener("input", () => {
-            achievementSearchQuery =
-                achievementSearch.value;
-            achievementSearchInputs.forEach(input => {
+            achievementSearchQuery = achievementSearch.value;
+            achievementSearchInputs.forEach((input) => {
                 if (input !== achievementSearch) {
                     input.value = achievementSearch.value;
                 }
@@ -866,11 +809,10 @@ window.initAchievements = function () {
             rebuildCategoryView();
         });
     });
-    achievementHideCompletedInputs.forEach(achievementHideCompleted => {
+    achievementHideCompletedInputs.forEach((achievementHideCompleted) => {
         achievementHideCompleted.addEventListener("change", () => {
-            hideCompletedAchievements =
-                achievementHideCompleted.checked;
-            achievementHideCompletedInputs.forEach(input => {
+            hideCompletedAchievements = achievementHideCompleted.checked;
+            achievementHideCompletedInputs.forEach((input) => {
                 input.checked = achievementHideCompleted.checked;
             });
             rebuildCategoryView();
@@ -886,12 +828,13 @@ window.initAchievements = function () {
             return;
         }
         try {
-            const response = await fetch(achievementApiUrl("/api/achievements"), { cache: "no-store" });
+            const response = await fetch(achievementApiUrl("/api/achievements"), {
+                cache: "no-store",
+            });
             if (!response.ok) {
                 throw new Error("Failed to load achievements.");
             }
-            achievementData =
-                await response.json();
+            achievementData = await response.json();
             const loadError = document.getElementById("achievement-load-error");
             if (loadError)
                 loadError.hidden = true;
@@ -906,7 +849,8 @@ window.initAchievements = function () {
             const loadError = document.getElementById("achievement-load-error");
             const message = document.getElementById("achievement-load-error-message");
             if (message) {
-                message.textContent = "Cyrene could not read your saved achievement progress. Please retry.";
+                message.textContent =
+                    "Cyrene could not read your saved achievement progress. Please retry.";
             }
             if (loadError)
                 loadError.hidden = false;
@@ -923,7 +867,7 @@ window.initAchievements = function () {
             return;
         }
         categoryGrid.innerHTML = "";
-        const categoryEntries = CATEGORY_ORDER.map(category => {
+        const categoryEntries = CATEGORY_ORDER.map((category) => {
             const data = achievementData.categories[category];
             if (!data) {
                 return null;
@@ -932,13 +876,13 @@ window.initAchievements = function () {
              * Get only achievements belonging
              * to this category.
              */
-            const categoryAchievements = achievementData.achievements.filter(achievement => achievement.category === category);
+            const categoryAchievements = achievementData.achievements.filter((achievement) => achievement.category === category);
             /*
              * Apply the currently active
              * Search / Version / Hide Completed
              * filters.
              */
-            const filteredAchievements = categoryAchievements.filter(achievement => achievementMatchesFilters(achievement));
+            const filteredAchievements = categoryAchievements.filter((achievement) => achievementMatchesFilters(achievement));
             /*
              * Don't display categories that
              * have no matching achievements.
@@ -953,11 +897,11 @@ window.initAchievements = function () {
              */
             let total = 0;
             let completed = 0;
-            filteredAchievements.forEach(achievement => {
+            filteredAchievements.forEach((achievement) => {
                 if (!Array.isArray(achievement.tiers)) {
                     return;
                 }
-                achievement.tiers.forEach(tier => {
+                achievement.tiers.forEach((tier) => {
                     total++;
                     if (tier.completed === true) {
                         completed++;
@@ -968,29 +912,23 @@ window.initAchievements = function () {
                 category,
                 data,
                 total,
-                completed
+                completed,
             };
-        })
-            .filter(Boolean);
+        }).filter(Boolean);
         /*
          * Build category cards.
          */
         categoryEntries.forEach(({ category, total, completed }) => {
             const button = document.createElement("button");
-            button.type =
-                "button";
-            button.className =
-                "achievement-category";
-            const progress = total > 0
-                ? (completed / total) * 100
-                : 0;
+            button.type = "button";
+            button.className = "achievement-category";
+            const progress = total > 0 ? (completed / total) * 100 : 0;
             button.innerHTML = `
 
                     <div class="achievement-category-icon">
                 
                         <img
-                            src="${CATEGORY_ICONS[category]
-                || "/static/images/Achievements.webp"}"
+                            src="${CATEGORY_ICONS[category] || "/static/images/Achievements.webp"}"
                             alt=""
                         >
                 
@@ -999,9 +937,7 @@ window.initAchievements = function () {
                 
                     <div class="achievement-category-content">
                 
-                        <h3 class="${category.length > 30
-                ? "long-category-name"
-                : ""}">
+                        <h3 class="${category.length > 30 ? "long-category-name" : ""}">
                             ${escapeHTML(category)}
                         </h3>
                 
@@ -1049,28 +985,25 @@ window.initAchievements = function () {
             return;
         }
         sidebarList.innerHTML = "";
-        CATEGORY_ORDER.forEach(category => {
+        CATEGORY_ORDER.forEach((category) => {
             const data = achievementData.categories[category];
             if (!data) {
                 return;
             }
             const button = document.createElement("button");
             button.type = "button";
-            button.className =
-                "achievement-sidebar-item";
+            button.className = "achievement-sidebar-item";
             if (category === selectedCategory) {
                 button.classList.add("active");
             }
-            const progress = data.total > 0
-                ? (data.completed / data.total) * 100
-                : 0;
+            const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
             button.innerHTML = `
                 
                     <div class="achievement-sidebar-icon">
                 
                         <img
-                            src="${CATEGORY_SIDEBAR_ICONS[category]
-                || "/static/images/Achievements.webp"}"
+                            src="${CATEGORY_SIDEBAR_ICONS[category] ||
+                "/static/images/Achievements.webp"}"
                             alt=""
                         >
                 
@@ -1126,25 +1059,18 @@ window.initAchievements = function () {
         if (!data) {
             return;
         }
-        categoryTitle.textContent =
-            category;
-        const percentage = data.total > 0
-            ? (data.completed / data.total) * 100
-            : 0;
+        categoryTitle.textContent = category;
+        const percentage = data.total > 0 ? (data.completed / data.total) * 100 : 0;
         const roundedPercentage = Math.round(percentage * 10) / 10;
-        categoryPercent.textContent =
-            `${roundedPercentage}% (${data.completed}/${data.total})`;
-        categoryProgressFill.style.width =
-            `${percentage}%`;
+        categoryPercent.textContent = `${roundedPercentage}% (${data.completed}/${data.total})`;
+        categoryProgressFill.style.width = `${percentage}%`;
         buildSidebar(category);
         buildAchievements(category);
         categories.hidden = true;
         browser.hidden = false;
     }
     function formatCompletedAt(timestamp) {
-        if (timestamp === null ||
-            timestamp === undefined ||
-            timestamp === "") {
+        if (timestamp === null || timestamp === undefined || timestamp === "") {
             return "";
         }
         let date;
@@ -1154,13 +1080,9 @@ window.initAchievements = function () {
          * If the value is small enough to be seconds,
          * convert it to milliseconds first.
          */
-        if (typeof timestamp === "number" ||
-            /^\d+$/.test(String(timestamp))) {
+        if (typeof timestamp === "number" || /^\d+$/.test(String(timestamp))) {
             const numericTimestamp = Number(timestamp);
-            date =
-                new Date(numericTimestamp < 100000000000
-                    ? numericTimestamp * 1000
-                    : numericTimestamp);
+            date = new Date(numericTimestamp < 100000000000 ? numericTimestamp * 1000 : numericTimestamp);
         }
         else {
             /*
@@ -1168,8 +1090,7 @@ window.initAchievements = function () {
              *
              * 2026-08-27T11:28:16.904Z
              */
-            date =
-                new Date(timestamp);
+            date = new Date(timestamp);
         }
         if (Number.isNaN(date.getTime())) {
             return "";
@@ -1185,11 +1106,10 @@ window.initAchievements = function () {
         if (!note) {
             return "";
         }
-        const lines = escapeHTML(note)
-            .split(/\r?\n/);
+        const lines = escapeHTML(note).split(/\r?\n/);
         let html = "";
         let inList = false;
-        lines.forEach(line => {
+        lines.forEach((line) => {
             const bulletMatch = line.match(/^\s*-\s+(.*)$/);
             if (bulletMatch) {
                 if (!inList) {
@@ -1223,18 +1143,15 @@ window.initAchievements = function () {
      * --------------------------------------------------
      */
     function buildAchievements(category) {
-        if (!achievementList ||
-            !achievementData) {
+        if (!achievementList || !achievementData) {
             return;
         }
         achievementList.innerHTML = "";
-        const achievements = achievementData.achievements.filter(achievement => achievement.category === category &&
-            achievementMatchesFilters(achievement));
+        const achievements = achievementData.achievements.filter((achievement) => achievement.category === category && achievementMatchesFilters(achievement));
         const fragment = document.createDocumentFragment();
-        achievements.forEach(achievement => {
+        achievements.forEach((achievement) => {
             const item = document.createElement("div");
-            item.className =
-                "achievement-item";
+            item.className = "achievement-item";
             const totalTiers = achievement.tiers?.length || 1;
             item.innerHTML = `
     
@@ -1278,7 +1195,8 @@ window.initAchievements = function () {
     
                         <div class="achievement-tier-list">
     
-                            ${achievement.tiers.map(tier => {
+                            ${achievement.tiers
+                .map((tier) => {
                 return `
     
                                         <div
@@ -1432,7 +1350,8 @@ window.initAchievements = function () {
                                         </div>
     
                                     `;
-            }).join("")}
+            })
+                .join("")}
     
                         </div>
     
@@ -1442,12 +1361,12 @@ window.initAchievements = function () {
             const tierButtons = item.querySelectorAll(".achievement-complete-button");
             const notesButtons = item.querySelectorAll(".achievement-notes-button");
             const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
-            notesButtons.forEach(button => {
-                button.addEventListener("click", event => {
+            notesButtons.forEach((button) => {
+                button.addEventListener("click", (event) => {
                     event.stopPropagation();
                     achievementNoteTarget = {
                         achievement,
-                        tier: achievement.tiers[Array.from(notesButtons).indexOf(button)]
+                        tier: achievement.tiers[Array.from(notesButtons).indexOf(button)],
                     };
                     const modal = document.getElementById("achievement-notes-modal");
                     const input = document.getElementById("achievement-notes-input");
@@ -1472,7 +1391,7 @@ window.initAchievements = function () {
                     });
                 });
             });
-            noteRemoveButtons.forEach(button => {
+            noteRemoveButtons.forEach((button) => {
                 button.addEventListener("click", async (event) => {
                     event.stopPropagation();
                     const tierElement = button.closest(".achievement-tier");
@@ -1480,7 +1399,7 @@ window.initAchievements = function () {
                         return;
                     }
                     const tierNumber = Number(tierElement.dataset.tier);
-                    const tier = achievement.tiers.find(achievementTier => achievementTier.tier === tierNumber);
+                    const tier = achievement.tiers.find((achievementTier) => achievementTier.tier === tierNumber);
                     if (!tier) {
                         return;
                     }
@@ -1488,16 +1407,15 @@ window.initAchievements = function () {
                         const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(tier.genshin_id)}/tiers/${tier.tier}/note`), {
                             method: "PATCH",
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
                             },
                             body: JSON.stringify({
-                                note: null
-                            })
+                                note: null,
+                            }),
                         });
                         if (!response.ok) {
                             const result = await response.json();
-                            throw new Error(result.detail ||
-                                "Failed to remove note.");
+                            throw new Error(result.detail || "Failed to remove note.");
                         }
                         /*
                          * Update local state.
@@ -1526,7 +1444,7 @@ window.initAchievements = function () {
                         tier: tier.tier,
                         completed: tier.completed,
                         disabled: button.disabled,
-                        locked: button.closest(".achievement-tier")?.classList.contains("locked")
+                        locked: button.closest(".achievement-tier")?.classList.contains("locked"),
                     });
                     toggleTierCompleted(achievement, tier, item, button);
                 });
@@ -1547,13 +1465,12 @@ window.initAchievements = function () {
      * --------------------------------------------------
      */
     function getAchievementDescription(achievement) {
-        if (!achievement.tiers ||
-            achievement.tiers.length === 0) {
+        if (!achievement.tiers || achievement.tiers.length === 0) {
             return "";
         }
         const totalTiers = achievement.tiers.length;
         return achievement.tiers
-            .map(tier => {
+            .map((tier) => {
             const tierNumber = tier.tier;
             return `
                     <div class="achievement-tier-row">
@@ -1595,7 +1512,7 @@ window.initAchievements = function () {
              * Uncompleting a tier also uncompletes
              * every tier after it.
              */
-            achievement.tiers.forEach(achievementTier => {
+            achievement.tiers.forEach((achievementTier) => {
                 if (achievementTier.tier >= tier.tier) {
                     achievementTier.completed = false;
                     achievementTier.timestamp = null;
@@ -1622,17 +1539,17 @@ window.initAchievements = function () {
              * it must be saved as incomplete.
              */
             const tiersToSave = isCompleted
-                ? achievement.tiers.filter(achievementTier => achievementTier.tier >= tier.tier)
+                ? achievement.tiers.filter((achievementTier) => achievementTier.tier >= tier.tier)
                 : [tier];
             for (const achievementTier of tiersToSave) {
                 const response = await fetch(achievementApiUrl(`/api/achievements/${encodeURIComponent(achievementTier.genshin_id)}/tiers/${achievementTier.tier}`), {
                     method: "PATCH",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        completed: achievementTier.completed
-                    })
+                        completed: achievementTier.completed,
+                    }),
                 });
                 if (!response.ok) {
                     throw new Error(`Failed to save Tier ${achievementTier.tier}.`);
@@ -1655,13 +1572,12 @@ window.initAchievements = function () {
          * UPDATE ALL TIER UI
          * ------------------------------------------
          */
-        achievement.tiers.forEach(achievementTier => {
+        achievement.tiers.forEach((achievementTier) => {
             /*
              * Only tiers affected by this action
              * need their visual state changed.
              */
-            if (isCompleted &&
-                achievementTier.tier < tier.tier) {
+            if (isCompleted && achievementTier.tier < tier.tier) {
                 return;
             }
             const otherTier = item.querySelector(`.achievement-tier[data-tier="${achievementTier.tier}"]`);
@@ -1677,19 +1593,14 @@ window.initAchievements = function () {
             otherTier.classList.toggle("completed", completed);
             if (otherButton) {
                 otherButton.classList.toggle("completed", completed);
-                otherButton.title =
-                    completed
-                        ? "Mark Incomplete"
-                        : "Mark Completed";
+                otherButton.title = completed ? "Mark Incomplete" : "Mark Completed";
             }
             /*
              * Tier icon
              */
             if (otherImage) {
-                otherImage.src =
-                    getTierImage(achievementTier.tier, totalTiers);
-                otherImage.alt =
-                    `${achievementTier.tier}/${totalTiers}`;
+                otherImage.src = getTierImage(achievementTier.tier, totalTiers);
+                otherImage.alt = `${achievementTier.tier}/${totalTiers}`;
             }
         });
         /*
@@ -1711,7 +1622,8 @@ window.initAchievements = function () {
              *
              * Create/update the Completed At display.
              */
-            if (achievement.tiers.find(achievementTier => achievementTier.tier === tier.tier)?.completed) {
+            if (achievement.tiers.find((achievementTier) => achievementTier.tier === tier.tier)
+                ?.completed) {
                 const completedAt = new Date();
                 const formattedCompletedAt = formatCompletedAt(completedAt.toISOString());
                 /*
@@ -1719,10 +1631,8 @@ window.initAchievements = function () {
                  * doesn't already exist.
                  */
                 if (!progressRow) {
-                    progressRow =
-                        document.createElement("div");
-                    progressRow.className =
-                        "achievement-tier-progress-row";
+                    progressRow = document.createElement("div");
+                    progressRow.className = "achievement-tier-progress-row";
                     /*
                      * The progress row belongs directly
                      * after the description.
@@ -1747,10 +1657,8 @@ window.initAchievements = function () {
                  * Create the new timestamp.
                  */
                 const completedAtElement = document.createElement("span");
-                completedAtElement.className =
-                    "achievement-tier-completed-at";
-                completedAtElement.textContent =
-                    formattedCompletedAt;
+                completedAtElement.className = "achievement-tier-completed-at";
+                completedAtElement.textContent = formattedCompletedAt;
                 progressRow.appendChild(completedAtElement);
             }
             /*
@@ -1797,8 +1705,7 @@ window.initAchievements = function () {
         const completedCount = completedTiers.length;
         const achievementTierCount = item.querySelector(".achievement-tier-count");
         if (achievementTierCount) {
-            achievementTierCount.textContent =
-                `${completedCount}/${totalTiers}`;
+            achievementTierCount.textContent = `${completedCount}/${totalTiers}`;
         }
         /*
          * Remove previous progress states.
@@ -1814,16 +1721,14 @@ window.initAchievements = function () {
          * Do not apply progress colour
          * to a fully completed achievement.
          */
-        if (totalTiers === 0 ||
-            completedCount === totalTiers) {
+        if (totalTiers === 0 || completedCount === totalTiers) {
             return;
         }
         const progress = completedCount / totalTiers;
         /*
          * 1/3 complete.
          */
-        if (progress >= 1 / 3 &&
-            progress < 1 / 2) {
+        if (progress >= 1 / 3 && progress < 1 / 2) {
             item.classList.add("progress-low");
         }
         /*
@@ -1844,12 +1749,11 @@ window.initAchievements = function () {
          */
         Object.entries(achievementData.categories).forEach(([category, data]) => {
             let completed = 0;
-            achievementData.achievements.forEach(achievement => {
-                if (achievement.category !== category ||
-                    !Array.isArray(achievement.tiers)) {
+            achievementData.achievements.forEach((achievement) => {
+                if (achievement.category !== category || !Array.isArray(achievement.tiers)) {
                     return;
                 }
-                achievement.tiers.forEach(tier => {
+                achievement.tiers.forEach((tier) => {
                     if (tier.completed === true) {
                         completed++;
                     }
@@ -1861,23 +1765,17 @@ window.initAchievements = function () {
          * Rebuild the category cards.
          */
         buildCategories();
-        if (browser &&
-            !browser.hidden &&
-            categoryTitle &&
-            sidebarList) {
+        if (browser && !browser.hidden && categoryTitle && sidebarList) {
             const currentCategory = categoryTitle.textContent;
             /*
              * Update the existing sidebar progress
              * bars instead of immediately destroying
              * and recreating them.
              */
-            sidebarList
-                .querySelectorAll(".achievement-sidebar-item")
-                .forEach(item => {
+            sidebarList.querySelectorAll(".achievement-sidebar-item").forEach((item) => {
                 const categoryName = item
                     .querySelector(".achievement-sidebar-name")
-                    ?.textContent
-                    .trim();
+                    ?.textContent.trim();
                 if (!categoryName) {
                     return;
                 }
@@ -1885,19 +1783,14 @@ window.initAchievements = function () {
                 if (!data) {
                     return;
                 }
-                const progress = data.total > 0
-                    ? (data.completed /
-                        data.total) * 100
-                    : 0;
+                const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
                 const progressFill = item.querySelector(".achievement-sidebar-progress-fill");
                 const count = item.querySelector(".achievement-sidebar-progress-row small");
                 if (progressFill) {
-                    progressFill.style.width =
-                        `${progress}%`;
+                    progressFill.style.width = `${progress}%`;
                 }
                 if (count) {
-                    count.textContent =
-                        `${data.completed}/${data.total}`;
+                    count.textContent = `${data.completed}/${data.total}`;
                 }
             });
             /*
@@ -1906,10 +1799,8 @@ window.initAchievements = function () {
              */
             const activeItem = sidebarList.querySelector(".achievement-sidebar-item.active");
             if (!activeItem ||
-                activeItem
-                    .querySelector(".achievement-sidebar-name")
-                    ?.textContent
-                    .trim() !== currentCategory) {
+                activeItem.querySelector(".achievement-sidebar-name")?.textContent.trim() !==
+                    currentCategory) {
                 buildSidebar(currentCategory);
             }
         }
@@ -1917,7 +1808,7 @@ window.initAchievements = function () {
     function updateLockedTiers(item) {
         const tiers = item.querySelectorAll(".achievement-tier");
         let previousCompleted = true;
-        tiers.forEach(tier => {
+        tiers.forEach((tier) => {
             const button = tier.querySelector(".achievement-complete-button");
             if (!button) {
                 return;
@@ -1942,23 +1833,18 @@ window.initAchievements = function () {
              */
             if (locked) {
                 button.setAttribute("aria-disabled", "true");
-                button.title =
-                    "Complete the previous tier first";
+                button.title = "Complete the previous tier first";
             }
             else {
                 button.removeAttribute("aria-disabled");
-                button.title =
-                    isCompleted
-                        ? "Mark Incomplete"
-                        : "Mark Completed";
+                button.title = isCompleted ? "Mark Incomplete" : "Mark Completed";
             }
             /*
              * ------------------------------------------
              * NEXT TIER
              * ------------------------------------------
              */
-            previousCompleted =
-                isCompleted;
+            previousCompleted = isCompleted;
         });
         /*
          * ------------------------------------------
@@ -1969,20 +1855,16 @@ window.initAchievements = function () {
         if (mainIcon) {
             const totalTiers = tiers.length;
             let highestCompletedTier = 0;
-            tiers.forEach(tier => {
+            tiers.forEach((tier) => {
                 if (tier.classList.contains("completed")) {
                     const tierNumber = Number(tier.dataset.tier);
-                    if (tierNumber >
-                        highestCompletedTier) {
-                        highestCompletedTier =
-                            tierNumber;
+                    if (tierNumber > highestCompletedTier) {
+                        highestCompletedTier = tierNumber;
                     }
                 }
             });
-            mainIcon.src =
-                getTierImage(highestCompletedTier, totalTiers);
-            mainIcon.alt =
-                `${highestCompletedTier}/${totalTiers}`;
+            mainIcon.src = getTierImage(highestCompletedTier, totalTiers);
+            mainIcon.alt = `${highestCompletedTier}/${totalTiers}`;
         }
         /*
          * ------------------------------------------
@@ -1990,7 +1872,7 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
         const allTiersCompleted = tiers.length > 0 &&
-            Array.from(tiers).every(tier => tier.classList.contains("completed"));
+            Array.from(tiers).every((tier) => tier.classList.contains("completed"));
         item.classList.toggle("completed", allTiersCompleted);
     }
     function updateOverallAchievementProgress() {
@@ -2000,9 +1882,7 @@ window.initAchievements = function () {
         const countElement = document.getElementById("achievement-overall-count");
         const percentElement = document.getElementById("achievement-overall-percent");
         const progressFill = document.getElementById("achievement-overall-progress-fill");
-        if (!countElement ||
-            !percentElement ||
-            !progressFill) {
+        if (!countElement || !percentElement || !progressFill) {
             return;
         }
         let totalAchievements = 0;
@@ -2019,11 +1899,11 @@ window.initAchievements = function () {
          *
          * = 3 total achievements
          */
-        achievementData.achievements.forEach(achievement => {
+        achievementData.achievements.forEach((achievement) => {
             if (!Array.isArray(achievement.tiers)) {
                 return;
             }
-            achievement.tiers.forEach(tier => {
+            achievement.tiers.forEach((tier) => {
                 totalAchievements++;
                 if (tier.completed === true) {
                     completedAchievements++;
@@ -2034,66 +1914,52 @@ window.initAchievements = function () {
          * No achievements available.
          */
         if (totalAchievements === 0) {
-            countElement.textContent =
-                "0 / 0";
-            percentElement.textContent =
-                "0%";
-            progressFill.style.width =
-                "0%";
+            countElement.textContent = "0 / 0";
+            percentElement.textContent = "0%";
+            progressFill.style.width = "0%";
             return;
         }
         /*
          * Calculate percentage.
          */
-        const percentage = (completedAchievements /
-            totalAchievements) * 100;
+        const percentage = (completedAchievements / totalAchievements) * 100;
         /*
          * Update the number.
          */
-        countElement.textContent =
-            `${completedAchievements} / ${totalAchievements}`;
+        countElement.textContent = `${completedAchievements} / ${totalAchievements}`;
         /*
          * Update percentage.
          */
-        percentElement.textContent =
-            `${percentage.toFixed(1)}%`;
+        percentElement.textContent = `${percentage.toFixed(1)}%`;
         /*
          * Update progress bar.
 
          */
-        progressFill.style.width =
-            `${percentage}%`;
+        progressFill.style.width = `${percentage}%`;
     }
     function updateCategoryHeaderProgress() {
-        if (!achievementData ||
-            !categoryTitle ||
-            !categoryPercent ||
-            !categoryProgressFill) {
+        if (!achievementData || !categoryTitle || !categoryPercent || !categoryProgressFill) {
             return;
         }
         const category = categoryTitle.textContent.trim();
-        const achievements = achievementData.achievements.filter(achievement => achievement.category === category);
+        const achievements = achievementData.achievements.filter((achievement) => achievement.category === category);
         let total = 0;
         let completed = 0;
-        achievements.forEach(achievement => {
+        achievements.forEach((achievement) => {
             if (!Array.isArray(achievement.tiers)) {
                 return;
             }
-            achievement.tiers.forEach(tier => {
+            achievement.tiers.forEach((tier) => {
                 total++;
                 if (tier.completed === true) {
                     completed++;
                 }
             });
         });
-        const percentage = total > 0
-            ? (completed / total) * 100
-            : 0;
+        const percentage = total > 0 ? (completed / total) * 100 : 0;
         const roundedPercentage = Math.round(percentage * 10) / 10;
-        categoryPercent.textContent =
-            `${roundedPercentage}% (${completed}/${total})`;
-        categoryProgressFill.style.width =
-            `${percentage}%`;
+        categoryPercent.textContent = `${roundedPercentage}% (${completed}/${total})`;
+        categoryProgressFill.style.width = `${percentage}%`;
     }
     /*
      * --------------------------------------------------
@@ -2117,8 +1983,7 @@ window.initAchievements = function () {
      */
     function escapeHTML(value) {
         const div = document.createElement("div");
-        div.textContent =
-            value ?? "";
+        div.textContent = value ?? "";
         return div.innerHTML;
     }
     /*
@@ -2128,10 +1993,8 @@ window.initAchievements = function () {
      */
     loadAchievements();
 };
-document.addEventListener("click", event => {
-    document
-        .querySelectorAll(".custom-select.open")
-        .forEach(select => {
+document.addEventListener("click", (event) => {
+    document.querySelectorAll(".custom-select.open").forEach((select) => {
         if (!select.contains(event.target)) {
             select.classList.remove("open");
             const button = select.querySelector(".custom-select-button");

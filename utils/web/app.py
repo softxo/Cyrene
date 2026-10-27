@@ -95,6 +95,7 @@ from utils.hoyolab.errors import (
 )
 from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.login import login_with_password
+from utils.web.announcement_events import announcement_reward_events, merge_announcement_events
 from utils.web.auth import (
     create_verification,
     create_web_session,
@@ -103,6 +104,7 @@ from utils.web.auth import (
     get_web_session,
 )
 from utils.web.planner_costs import calculate_planner_costs
+from utils.web.quest_reward_details import enrich_quest_rewards
 from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
@@ -1573,13 +1575,11 @@ async def get_single_account_events(
                     }
                 )
 
-            limited_events.sort(
-                key=lambda event: (
-                    event["is_upcoming"],
-                    event["is_tcg"],
-                    event["start_time"] if event["is_upcoming"] else event["end_time"],
-                )
+            limited_events = merge_announcement_events(
+                limited_events,
+                announcement_reward_events(announcements, account["genshin_server"], now_timestamp),
             )
+            await enrich_quest_rewards(limited_events)
 
             def find_wish_announcement(names):
                 """

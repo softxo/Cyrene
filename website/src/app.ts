@@ -86,6 +86,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-dropdown.js",
         "/static/build/browser/pages/events/events-tabs.js",
         "/static/build/browser/pages/events/events-cards.js",
+        "/static/build/browser/pages/events/events-rewards.js?v=1",
         "/static/build/browser/pages/events/events-timers.js",
         "/static/build/browser/pages/events/events-activity.js",
         "/static/build/browser/pages/events/events-refresh.js",
@@ -105,7 +106,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=4",
+    "/events": "/static/build/css/events.css?v=7",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 

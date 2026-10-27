@@ -1811,10 +1811,25 @@
     letter-spacing: 0.06em;
 }
 
-.event-limited-tcg {
-    border: 1px solid rgba(206, 171, 255, 0.45);
-    background: rgba(139, 91, 201, 0.22);
-    color: #ddc2ff;
+.event-limited-category {
+    border: 1px solid var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.event-limited-reward.event-limited-reward-label {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0 9px;
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.event-limited-name-line:has(.event-limited-category) {
+    flex-wrap: wrap;
 }
 
 .event-limited-completed {
@@ -1855,6 +1870,61 @@
 
 .event-limited-rewards::-webkit-scrollbar {
     display: none;
+}
+
+.event-insight { flex: 0 0 auto; }
+
+.event-insight-trigger { cursor: pointer; }
+
+.event-insight-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.event-insight-trigger:hover,
+.event-insight-trigger:focus-visible {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent-soft);
+}
+
+.event-insight-popover {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    width: 340px;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+    overflow-y: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--accent-border);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text-primary);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    font-size: 13px;
+}
+
+.event-insight-popover p {
+    margin: 5px 0 14px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.event-insight-items { display: grid; gap: 10px; }
+
+.event-insight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.event-insight-popover > a {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--accent);
+    font-size: 11px;
 }
 
 .event-limited-reward {
@@ -3793,6 +3863,25 @@
 
    Colour, border, background and shadow hover states remain active.
    ========================================================= */
+
+@media (max-width: 600px) {
+    .event-limited-main:has(.event-insight) {
+        flex-wrap: wrap;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-list-left {
+        flex: 1 1 100%;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-limited-rewards {
+        max-width: 45%;
+        flex-shrink: 0;
+    }
+
+    .event-limited-main:has(.event-insight) > .event-list-right {
+        margin-left: auto;
+    }
+}
 
 html[data-hover-effects="off"] .event-featured-card:hover {
     transform: none;
