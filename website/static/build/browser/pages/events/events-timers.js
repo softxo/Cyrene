@@ -15,7 +15,11 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         }
         return `${minutes}m`;
     }
-    const timers = document.querySelectorAll(".event-time-left[data-end-time]");
+    function updateDailyUrgency(timer, remaining) {
+        timer.classList.toggle("danger", remaining > 0 && remaining <= 4 * 3600);
+        timer.classList.toggle("warning", remaining > 4 * 3600 && remaining <= 10 * 3600);
+    }
+    const timers = document.querySelectorAll(".event-time-left[data-end-time], [data-daily-event-reset][data-end-time]");
     const now = Math.floor(Date.now() / 1000);
     timers.forEach((timer) => {
         if (timer.dataset.limitedComplete === "true")
@@ -36,6 +40,26 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         eventItem?.classList.remove("upcoming");
         eventItem?.querySelector(".event-limited-upcoming-label")?.remove();
         const originalRemaining = endTime - now;
+        if (timer.hasAttribute("data-daily-event-reset")) {
+            const eventEnd = Number(timer.dataset.eventEndTime);
+            timer.classList.remove("warning", "danger", "expired");
+            if (eventEnd && eventEnd <= now) {
+                timer.textContent = "Ended";
+            }
+            else if (originalRemaining <= 0) {
+                timer.textContent = "Resetting...";
+                // Refresh completion identity as well as the timer at the daily boundary.
+                if (now >= Number(timer.dataset.nextResetRefresh || 0)) {
+                    timer.dataset.nextResetRefresh = String(now + 60);
+                    window.refreshEvents?.();
+                }
+            }
+            else {
+                timer.textContent = formatCountdown(originalRemaining);
+                updateDailyUrgency(timer, originalRemaining);
+            }
+            return;
+        }
         // -----------------------------------------
         // EXPIRED
         // -----------------------------------------
@@ -56,8 +80,11 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // TIME STATUS
         // -----------------------------------------
         timer.classList.remove("warning", "danger");
-        // Less than 1 day remaining.
-        if (originalRemaining < 86400) {
+        if (timer.classList.contains("event-daily-reset")) {
+            updateDailyUrgency(timer, originalRemaining);
+            // Less than 1 day remaining for event expiry timers.
+        }
+        else if (originalRemaining < 86400) {
             timer.classList.add("danger");
             // Less than 3 days remaining.
         }

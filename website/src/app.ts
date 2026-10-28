@@ -76,9 +76,9 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-planner.js?v=9",
         "/static/build/browser/pages/characters/characters.js",
     ],
-    "/achievements": "/static/build/browser/pages/achievements.js?v=2",
+    "/achievements": "/static/build/browser/pages/achievements.js?v=3",
     "/inventory": "/static/build/browser/pages/inventory.js",
-    "/planner": "/static/build/browser/pages/planner.js",
+    "/planner": "/static/build/browser/pages/planner.js?v=2",
     "/verify": "/static/build/browser/pages/verification.js",
     "/codes": "/static/build/browser/pages/codes.js",
 
@@ -87,11 +87,11 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-tabs.js",
         "/static/build/browser/pages/events/events-cards.js",
         "/static/build/browser/pages/events/events-rewards.js?v=2",
-        "/static/build/browser/pages/events/events-filters.js?v=5",
-        "/static/build/browser/pages/events/events-timers.js?v=2",
-        "/static/build/browser/pages/events/events-activity.js?v=8",
+        "/static/build/browser/pages/events/events-filters.js?v=6",
+        "/static/build/browser/pages/events/events-timers.js?v=5",
+        "/static/build/browser/pages/events/events-activity.js?v=9",
         "/static/build/browser/pages/events/events-refresh.js?v=3",
-        "/static/build/browser/pages/events/events-custom.js?v=4",
+        "/static/build/browser/pages/events/events-custom.js?v=6",
         "/static/build/browser/pages/events/events.js",
     ],
 
@@ -107,7 +107,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=15",
+    "/events": "/static/build/css/events.css?v=21",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 

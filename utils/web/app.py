@@ -105,6 +105,7 @@ from utils.web.auth import (
     get_web_session,
 )
 from utils.web.limited_event_checks import (
+    annotate_daily_events,
     apply_completion_checks,
     completion_token,
     valid_completion_token,
@@ -1269,7 +1270,11 @@ async def get_single_account_events(
     if cached:
         cache_age = time.monotonic() - cached["timestamp"]
 
-        if cache_age < EVENTS_CACHE_TTL:
+        daily_period_expired = any(
+            event.get("daily_reset_time", float("inf")) <= time.time()
+            for event in cached["data"].get("limited_events", [])
+        )
+        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired:
             return cached["data"]
 
     abyss_data = {
@@ -1936,12 +1941,12 @@ async def get_single_account_events(
                     )
 
                 difficulty_icons = {
-                    1: "SO_Diff_I.webp",
-                    2: "SO_Diff_II.webp",
-                    3: "SO_Diff_III.webp",
-                    4: "SO_Diff_IV.webp",
-                    5: "SO_Diff_V.webp",
-                    6: "SO_Diff_VI.webp",
+                    1: "SO_Diff_I.png",
+                    2: "SO_Diff_II.png",
+                    3: "SO_Diff_III.png",
+                    4: "SO_Diff_IV.png",
+                    5: "SO_Diff_V.png",
+                    6: "SO_Diff_VI.png",
                 }
 
                 stygian_data = {
@@ -1949,7 +1954,7 @@ async def get_single_account_events(
                     "end_time": int(current_stygian["schedule"]["end_time"]),
                     "difficulty": (record["difficulty"] if record else 0),
                     "difficulty_icon": (
-                        "SO_Diff_VI_180.webp"
+                        "SO_Diff_VI_180.png"
                         if (record and record["difficulty"] == 6 and record["second"] < 180)
                         else (difficulty_icons.get(record["difficulty"], "") if record else "")
                     ),
@@ -1990,6 +1995,7 @@ async def get_single_account_events(
         print("================================")
 
     if limited_events:
+        annotate_daily_events(limited_events, get_daily_reset_timestamp(account["genshin_server"]))
         apply_completion_checks(
             limited_events, await get_limited_event_checks(user_id, account["genshin_uid"])
         )
@@ -1997,6 +2003,8 @@ async def get_single_account_events(
             expires = min(
                 event["end_time"] or int(time.time()) + 7 * 86400, int(time.time()) + 7 * 86400
             )
+            if event.get("daily_reset_time"):
+                expires = min(expires, event["daily_reset_time"])
             event["completion_token"] = completion_token(
                 user_id, account["genshin_uid"], event["completion_key"], expires
             )

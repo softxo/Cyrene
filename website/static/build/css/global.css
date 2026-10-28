@@ -977,9 +977,11 @@ body {
 }
 
 .nav-icon img {
-    width: 33px;
-    height: 33px;
+    width: var(--nav-art-width, 28px);
+    height: var(--nav-art-height, 28px);
 
+    flex-shrink: 0;
+    transform: translate(var(--nav-art-x, 0px), var(--nav-art-y, 0px));
     display: block;
 
     object-fit: contain;
@@ -990,6 +992,84 @@ body {
     transition:
         opacity 0.15s ease,
         filter 0.15s ease;
+}
+
+/* Optical sizes balance dense and open silhouettes; offsets centre visible artwork. */
+.nav-icon img[src$="/Home.png"] {
+    --nav-art-width: 27.871px;
+    --nav-art-height: 26.129px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Characters.png"] {
+    --nav-art-width: 28.508px;
+    --nav-art-height: 30.966px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: -0.492px;
+}
+
+.nav-icon img[src$="/Weapons.png"] {
+    --nav-art-width: 30.732px;
+    --nav-art-height: 30.732px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Inventory.png"] {
+    --nav-art-width: 27.931px;
+    --nav-art-height: 29.793px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Planner.png"] {
+    --nav-art-width: 27.027px;
+    --nav-art-height: 27.703px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Events.png"] {
+    --nav-art-width: 25.627px;
+    --nav-art-height: 29.424px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.712px;
+}
+
+.nav-icon img[src$="/Achievements.png"] {
+    --nav-art-width: 29.000px;
+    --nav-art-height: 29.000px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Wishes.png"] {
+    --nav-art-width: 30.897px;
+    --nav-art-height: 30.897px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Codes.png"] {
+    --nav-art-width: 28.476px;
+    --nav-art-height: 22.286px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.619px;
+}
+
+.nav-icon img[src$="/Discord.png"] {
+    --nav-art-width: 30.000px;
+    --nav-art-height: 30.000px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
+}
+
+.nav-icon img[src$="/Settings.png"] {
+    --nav-art-width: 26.839px;
+    --nav-art-height: 26.839px;
+    --nav-art-x: 0.000px;
+    --nav-art-y: 0.000px;
 }
 
 .nav-item:hover .nav-icon img,

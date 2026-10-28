@@ -63,12 +63,11 @@
 
     border-radius: 14px;
     border: 1px solid rgba(var(--event-accent-rgb), 0.18);
-    background:
-        linear-gradient(
-            145deg,
-            rgba(var(--event-accent-rgb), 0.10),
-            rgba(255, 255, 255, 0.035)
-        );
+    background: linear-gradient(
+        145deg,
+        rgba(var(--event-accent-rgb), 0.1),
+        rgba(255, 255, 255, 0.035)
+    );
 
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
@@ -176,7 +175,7 @@
     width: 55px;
     height: 55px;
     object-fit: contain;
-    filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.30));
+    filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.3));
 }
 
 .stygian-team {
@@ -216,7 +215,6 @@
 
     box-sizing: border-box;
 }
-
 
 /* =========================================================
    IMAGINARIUM THEATER
@@ -279,12 +277,11 @@
     border-radius: 14px;
     border: 1px solid rgba(var(--event-accent-rgb), 0.18);
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(var(--event-accent-rgb), 0.10),
-            rgba(255, 255, 255, 0.035)
-        );
+    background: linear-gradient(
+        145deg,
+        rgba(var(--event-accent-rgb), 0.1),
+        rgba(255, 255, 255, 0.035)
+    );
 }
 
 .it-stella-row {
@@ -358,9 +355,9 @@
     box-sizing: border-box;
 
     border-radius: 50%;
-    border: 1px solid rgba(var(--event-accent-rgb), 0.20);
+    border: 1px solid rgba(var(--event-accent-rgb), 0.2);
 
-    background: rgba(var(--event-accent-rgb), 0.10);
+    background: rgba(var(--event-accent-rgb), 0.1);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -376,7 +373,6 @@
     object-fit: contain;
 }
 
-
 /* =========================================================
    SPIRAL ABYSS
    ========================================================= */
@@ -390,8 +386,7 @@
 .abyss-summary {
     display: grid;
 
-    grid-template-columns:
-        1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 
     gap: 12px;
     align-items: stretch;
@@ -474,12 +469,11 @@
 
     border-radius: 14px;
     border: 1px solid rgba(var(--event-accent-rgb), 0.18);
-    background:
-        linear-gradient(
-            145deg,
-            rgba(var(--event-accent-rgb), 0.10),
-            rgba(255, 255, 255, 0.035)
-        );
+    background: linear-gradient(
+        145deg,
+        rgba(var(--event-accent-rgb), 0.1),
+        rgba(255, 255, 255, 0.035)
+    );
 
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
@@ -563,5 +557,10 @@
     background: rgba(var(--event-accent-rgb), 0.09);
     border: 1px solid rgba(var(--event-accent-rgb), 0.24);
 
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.20);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Reduce only the Stella artwork, preserving card spacing in every view. */
+img[src$="/IT_Stella.png"] {
+    scale: 0.85;
 }

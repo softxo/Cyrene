@@ -1726,6 +1726,10 @@
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.20);
 }
 
+/* Reduce only the Stella artwork, preserving card spacing in every view. */
+img[src$="/IT_Stella.png"] {
+    scale: 0.85;
+}
 /* =========================================================
    EVENTS — ACTIVITY LIST, COMPLETION STATES, DAILY COMMISSIONS, ENCOUNTER POINTS AND TROUNCE
    ========================================================= */
@@ -2129,7 +2133,6 @@
     box-shadow: 0 7px 22px rgba(0, 0, 0, 0.1);
 }
 
-
 .event-list-left {
     display: flex;
     align-items: center;
@@ -2517,7 +2520,7 @@
 
     padding: 4px 10px;
 
-    gap: 0;
+    gap: 4px;
 
     margin-left: 10px;
 
@@ -2550,14 +2553,17 @@
 }
 
 .event-encounter-points-icon {
-    width: 25px;
-    height: 25px;
+    /* Tint the Encounter Points silhouette purple. */
+    background-color: #a87bfa;
+    mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain no-repeat;
+    -webkit-mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain no-repeat;
+    width: 18px;
+    height: 18px;
 
     object-fit: contain;
 
     flex-shrink: 0;
 
-    transform: translateX(-3px);
 }
 
 .event-encounter-points-value {
@@ -2570,7 +2576,6 @@
 
     white-space: nowrap;
 
-    transform: translateX(-2px);
 }
 
 /* =========================================================
@@ -2581,6 +2586,16 @@
     margin-top: 10px;
 }
 
+/* Daily bonus reset occupies the status column, before the event expiry timer. */
+.event-limited-item .event-list-right [data-daily-event-reset] {
+    width: 112px;
+    min-width: 112px;
+    max-width: 112px;
+    flex-basis: 112px;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+}
 /* =========================================================
    EVENTS — WISH BANNER CARDS, BANNER CONTENT AND WISH-RELATED RESPONSIVE RULES
    Extracted from the original events.css.
@@ -3027,7 +3042,6 @@
     opacity: 0.65;
 }
 
-
 /* ---------------------------------------------------------
    Account Name
    --------------------------------------------------------- */
@@ -3201,7 +3215,7 @@
 
     padding: 4px 10px;
 
-    gap: 0;
+    gap: 4px;
 
     border: 1px solid rgba(157, 130, 230, 0.28);
     border-radius: 999px;
@@ -3219,14 +3233,17 @@
 }
 
 .overview-encounter-points-icon {
-    width: 25px;
-    height: 25px;
+    /* Tint the Encounter Points silhouette purple. */
+    background-color: #a87bfa;
+    mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain no-repeat;
+    -webkit-mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain no-repeat;
+    width: 18px;
+    height: 18px;
 
     object-fit: contain;
 
     flex-shrink: 0;
 
-    transform: translateX(-2px);
 }
 
 .overview-encounter-points-value {
@@ -3239,7 +3256,6 @@
 
     white-space: nowrap;
 
-    transform: translateX(-2px);
 }
 
 /* =========================================================
@@ -7184,6 +7200,7 @@ html[data-hover-effects="off"] .overview-account-row:hover {
 }
 
 /* Completed status pills retain Daily's green. */
+.events-page .events-custom-account-count.event-completion-pill,
 .events-page .event-list-status.event-completion-pill,
 .events-page .overview-status.event-completion-pill,
 .events-page .events-custom-countdown.event-completion-pill {

@@ -222,7 +222,7 @@ function renderPlanner(plannerData) {
                 title="Delete reminder"
             >
                 <img
-                    src="/static/images/ui/ui_buttons/Delete.webp"
+                    src="/static/images/ui/ui_buttons/Delete.png"
                     alt=""
                 >
             </button>

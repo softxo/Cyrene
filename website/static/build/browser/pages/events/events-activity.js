@@ -4,7 +4,9 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
         button.setAttribute("aria-pressed", String(checked));
         button.classList.toggle("event-checkmark-empty", !checked);
         const row = button.closest(".event-list-item, .overview-account-row");
-        const completed = checked || (["daily_commissions", "trounce_domains"].includes(button.dataset.activityType) && row?.dataset.automaticComplete === "true");
+        const completed = checked ||
+            (["daily_commissions", "trounce_domains"].includes(button.dataset.activityType) &&
+                row?.dataset.automaticComplete === "true");
         row?.classList.toggle("completed", completed);
         if (button.dataset.activityType === "trounce_domains") {
             row?.querySelector(".event-list-status, .overview-status")?.classList.toggle("event-completion-pill", completed);
@@ -19,8 +21,10 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
             const cards = group.querySelectorAll(".events-limited-overview-event:not([hidden])");
             const completed = group.querySelectorAll(".events-limited-overview-event.completed:not([hidden])").length;
             const count = group.querySelector("[data-limited-account-count]");
-            if (count)
+            if (count) {
                 count.textContent = `${completed}/${cards.length} complete`;
+                count.classList.toggle("event-completion-pill", cards.length > 0 && completed === cards.length);
+            }
         });
     }
     document.querySelectorAll(".event-checkmark[data-activity-type]").forEach((checkmark) => {

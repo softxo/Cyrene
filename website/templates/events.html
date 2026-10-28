@@ -67,7 +67,7 @@
             <div class="event-list-check">{{ limited_event_check(event, account) }}</div>
             <div class="event-list-icon event-limited-icon">
                 <img
-                    src="{{ event.icon or '/static/images/ui/ui_icons/Events.webp' }}"
+                    src="{{ event.icon or '/static/images/ui/ui_icons/Events.png' }}"
                     alt=""
                     loading="lazy"
                 >
@@ -107,6 +107,11 @@
         {% endif %}
 
         <div class="event-list-right">
+            {% if event.daily_reset_time %}
+            <span class="event-daily-reset" data-daily-event-reset
+                data-start-time="{{ event.start_time }}" data-end-time="{{ event.daily_reset_time }}"
+                data-event-end-time="{{ event.end_time }}" title="Daily reset">Calculating...</span>
+            {% else %}
             <span data-limited-status data-base-status="{{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}"
                 class="event-list-status{% if event.is_finished %} event-limited-completed event-completion-pill{% endif %}">
                 {% if event.is_finished %}
@@ -115,6 +120,7 @@
                 {{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}
                 {% endif %}
             </span>
+            {% endif %}
             <div
                 class="event-time-left{% if event.is_upcoming %} upcoming{% endif %}"
                 data-start-time="{{ event.start_time }}"
@@ -385,7 +391,7 @@
 
                         <div class="event-featured-title">
                             <img
-                                src="/static/images/events/spiral_abyss/Spiral_Abyss.webp"
+                                src="/static/images/events/spiral_abyss/Spiral_Abyss.png"
                                 alt=""
                                 class="event-featured-icon"
                             >
@@ -446,7 +452,7 @@
                             <div class="event-collapsed-value">
 
                                 <img
-                                    src="/static/images/events/spiral_abyss/Abyssal_Star.webp"
+                                    src="/static/images/events/spiral_abyss/Abyssal_Star.png"
                                     alt="Abyssal Stars"
                                 >
 
@@ -495,7 +501,7 @@
                                     <div class="abyss-stars-value">
                 
                                         <img
-                                            src="/static/images/events/spiral_abyss/Abyssal_Star.webp"
+                                            src="/static/images/events/spiral_abyss/Abyssal_Star.png"
                                             alt="Abyssal Stars"
                                         >
                 
@@ -608,7 +614,7 @@
 
                 <img
                     src="/static/images/events/IT.png"
-                    alt="Imaginarium Theater"
+                    alt="Imaginarium Theatre"
                     class="event-featured-image"
                 >
 
@@ -620,13 +626,13 @@
 
                         <div class="event-featured-title">
                             <img
-                                src="/static/images/events/imaginarium_theater/Imaginarium_Theater.webp"
+                                src="/static/images/events/imaginarium_theatre/Imaginarium_Theatre.png"
                                 alt=""
                                 class="event-featured-icon"
                             >
 
                             <div class="event-featured-name">
-                                Imaginarium Theater
+                                Imaginarium Theatre
                             </div>
                         </div>
 
@@ -643,7 +649,7 @@
                             <button
                                 type="button"
                                 class="event-featured-toggle"
-                                aria-label="Expand Imaginarium Theater"
+                                aria-label="Expand Imaginarium Theatre"
                                 aria-expanded="false"
                             >
                                 <span class="event-toggle-icon"></span>
@@ -674,7 +680,7 @@
                                 {% if theater and theater.best_round > 0 %}
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Act_{{ theater.best_round }}.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Act_{{ theater.best_round }}.png"
                                         alt="Act {{ theater.best_round }}"
                                         class="it-act-icon"
                                     >
@@ -707,7 +713,7 @@
                                 {% if theater and theater.best_round > 0 %}
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Stella.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Stella.png"
                                         alt="Stella"
                                         title="Stellas Earned"
                                         class="it-stella"
@@ -747,7 +753,7 @@
                                 <div class="it-record">
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Act_{{ theater.best_round }}.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Act_{{ theater.best_round }}.png"
                                         alt="Act {{ theater.best_round }}"
                                         class="it-act-icon"
                                     >
@@ -767,7 +773,7 @@
                                     </strong>
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Arcanum_{{ theater.arcanums }}.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Arcanum_{{ theater.arcanums }}.webp"
                                         alt="{{ theater.arcanums }} Arcanums"
                                         class="it-arcanum-icon"
                                     >
@@ -794,7 +800,7 @@
                                     {% for i in range(theater.best_round) %}
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Stella.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Stella.png"
                                         alt="Stella"
                                         class="it-stella{% if i >= theater.medals %} it-stella-inactive{% endif %}"
                                     >
@@ -821,7 +827,7 @@
                                 <div class="it-element">
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/elements/{{ element }}.webp"
+                                        src="/static/images/events/imaginarium_theatre/elements/{{ element }}.webp"
                                         alt="{{ element }}"
                                         class="it-element-icon"
                                     >
@@ -872,7 +878,7 @@
 
                         <div class="event-featured-title">
                             <img
-                                src="/static/images/events/stygian_onslaught/Stygian_Onslaught.webp"
+                                src="/static/images/events/stygian_onslaught/Stygian_Onslaught.png"
                                 alt=""
                                 class="event-featured-icon"
                             >
@@ -1276,11 +1282,7 @@
 
                     <div class="event-encounter-points">
 
-                        <img
-                            src="/static/images/events/daily_commissions/encounter_points.png"
-                            alt="Encounter Points"
-                            class="event-encounter-points-icon"
-                        >
+                        <span role="img" aria-label="Encounter Points" class="event-encounter-points-icon"></span>
 
                         <span class="event-encounter-points-value">
 
@@ -1367,7 +1369,7 @@
                     <div class="event-list-icon">
 
                         <img 
-                            src="/static/images/events/trounce_domains/Trounce_Domains.webp"
+                            src="/static/images/events/trounce_domains/Trounce_Domains.png"
                             alt="Trounce Domains"
                         >
 
@@ -2084,11 +2086,7 @@
                     {% if item.daily.has_data %}
 
                         <div class="overview-encounter-points">
-                            <img
-                                src="/static/images/events/daily_commissions/encounter_points.png"
-                                alt="Encounter Points"
-                                class="overview-encounter-points-icon"
-                            >
+                            <span role="img" aria-label="Encounter Points" class="overview-encounter-points-icon"></span>
 
                             <span class="overview-encounter-points-value">
                                 {{ item.daily.encounter_points }}
@@ -2333,7 +2331,7 @@
                                     <strong>{{ item.abyss.total_stars }}</strong>
 
                                     <img
-                                        src="/static/images/events/spiral_abyss/Abyssal_Star.webp"
+                                        src="/static/images/events/spiral_abyss/Abyssal_Star.png"
                                         alt="Abyssal Stars"
                                         title="Abyssal Stars"
                                     >
@@ -2360,7 +2358,7 @@
                                 {% if item.theater.best_round > 0 %}
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Act_{{ item.theater.best_round }}.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Act_{{ item.theater.best_round }}.png"
                                         alt="Act {{ item.theater.best_round }}"
                                         title="Act {{ item.theater.best_round }}"
                                     >
@@ -2372,7 +2370,7 @@
                                     <strong>{{ item.theater.medals }}</strong>
 
                                     <img
-                                        src="/static/images/events/imaginarium_theater/IT_Stella.webp"
+                                        src="/static/images/events/imaginarium_theatre/IT_Stella.png"
                                         alt="Stellas"
                                         title="Stellas"
                                     >
@@ -2636,7 +2634,7 @@
                         <strong>{{ item.account.nickname }}</strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
-                    <span class="events-custom-account-count" data-limited-account-count>{{ item.limited_events | selectattr('is_finished') | list | length }}/{{ item.limited_events | length }} complete</span>
+                    <span class="events-custom-account-count{% if item.limited_events and (item.limited_events | selectattr('is_finished') | list | length) == (item.limited_events | length) %} event-completion-pill{% endif %}" data-limited-account-count>{{ item.limited_events | selectattr('is_finished') | list | length }}/{{ item.limited_events | length }} complete</span>
                 </summary>
                 <div class="events-custom-list">
                     {% for event in item.limited_events %}

@@ -42,6 +42,10 @@
             const count = group.querySelector<HTMLElement>("[data-limited-account-count]");
             const text = `${completed}/${cards.length} complete`;
             if (count && count.textContent !== text) count.textContent = text;
+            count?.classList.toggle(
+                "event-completion-pill",
+                cards.length > 0 && completed === cards.length,
+            );
         });
         document
             .querySelectorAll<HTMLInputElement>("[data-limited-filter-category]")
@@ -103,7 +107,7 @@
         }
         const options = popup.querySelector<HTMLElement>("[data-limited-filter-options]")!;
         options.replaceChildren();
-        const categories = new Set(["Quest", "World Exploration", "TCG", "Other Events"]);
+        const categories = new Set(["Quest", "World Exploration", "Daily", "TCG", "Other Events"]);
         document
             .querySelectorAll<HTMLElement>("[data-limited-category]")
             .forEach((card) => categories.add(card.dataset.limitedCategory!));

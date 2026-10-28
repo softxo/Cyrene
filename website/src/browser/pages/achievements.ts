@@ -1450,7 +1450,7 @@ window.initAchievements = function () {
                     <div class="achievement-category-icon">
                 
                         <img
-                            src="${CATEGORY_ICONS[category] || "/static/images/Achievements.webp"}"
+                            src="${CATEGORY_ICONS[category] || "/static/images/ui/ui_icons/Achievements.png"}"
                             alt=""
                         >
                 
@@ -1539,7 +1539,7 @@ window.initAchievements = function () {
                         <img
                             src="${
                                 CATEGORY_SIDEBAR_ICONS[category] ||
-                                "/static/images/Achievements.webp"
+                                "/static/images/ui/ui_icons/Achievements.png"
                             }"
                             alt=""
                         >

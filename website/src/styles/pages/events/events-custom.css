@@ -2697,6 +2697,7 @@
 }
 
 /* Completed status pills retain Daily's green. */
+.events-page .events-custom-account-count.event-completion-pill,
 .events-page .event-list-status.event-completion-pill,
 .events-page .overview-status.event-completion-pill,
 .events-page .events-custom-countdown.event-completion-pill {

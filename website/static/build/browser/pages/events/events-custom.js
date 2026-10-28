@@ -1187,12 +1187,12 @@ function initCustomEvents() {
         const titleGroup = makeElement("div", "events-custom-card-title-group");
         const icon = document.createElement("img");
         icon.className = "events-custom-card-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.webp";
+        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
         icon.addEventListener("error", () => {
-            icon.src = "/static/images/ui/ui_icons/Events.webp";
+            icon.src = "/static/images/ui/ui_icons/Events.png";
         }, { once: true });
         titleGroup.append(icon);
         const title = makeElement("h3", "events-custom-card-title", event.title);
@@ -1353,12 +1353,12 @@ function initCustomEvents() {
         const summary = makeElement("summary", "events-custom-overview-summary");
         const icon = document.createElement("img");
         icon.className = "events-custom-overview-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.webp";
+        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
         icon.addEventListener("error", () => {
-            icon.src = "/static/images/ui/ui_icons/Events.webp";
+            icon.src = "/static/images/ui/ui_icons/Events.png";
         }, { once: true });
         const title = makeElement("span", "events-custom-overview-name", event.title);
         summary.append(icon, title);
@@ -1495,6 +1495,7 @@ function initCustomEvents() {
                     .closest("[data-custom-account-group]")
                     ?.querySelector("[data-custom-account-count]");
                 if (count) {
+                    count.classList.toggle("event-completion-pill", listEvents.length > 0 && completedCount === listEvents.length);
                     count.textContent = listEvents.length
                         ? `${completedCount}/${listEvents.length} complete`
                         : "No events";
@@ -1553,6 +1554,7 @@ function initCustomEvents() {
             console.error("Failed to load Custom Events:", error);
             $$("[data-custom-account-count]").forEach((count) => {
                 count.textContent = "Unavailable";
+                count.classList.remove("event-completion-pill");
             });
             $$("[data-custom-event-list]").forEach((list) => {
                 list.replaceChildren();
