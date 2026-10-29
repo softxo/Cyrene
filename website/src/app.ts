@@ -72,7 +72,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
-        "/static/build/browser/pages/characters/characters-showcase.js?v=6",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=7",
         "/static/build/browser/pages/characters/characters-planner.js?v=9",
         "/static/build/browser/pages/characters/characters.js",
     ],

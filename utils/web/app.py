@@ -19,8 +19,8 @@ from fastapi import (
     Request,
     Response,
     UploadFile,
-    logger,
 )
+from fastapi.logger import logger
 from fastapi.responses import (
     HTMLResponse,
     JSONResponse,
@@ -35,6 +35,7 @@ from genshin.models.auth.geetest import (
     SessionMMTv4Result,
 )
 from genshin.models.genshin.constants import CHARACTER_NAMES
+from jinja2.utils import htmlsafe_json_dumps
 
 from utils.achievements.achievements import load_achievements
 from utils.achievements.importer import import_achievements
@@ -109,7 +110,7 @@ from utils.web.limited_event_checks import (
     completion_token,
     valid_completion_token,
 )
-from utils.web.planner_costs import calculate_planner_costs
+from utils.web.planner_costs import PlannerValidationError, calculate_planner_costs
 from utils.web.quest_reward_details import enrich_quest_rewards
 from utils.web.sessions import (
     complete_challenge,
@@ -2828,10 +2829,10 @@ async def inventory_data(
             session.user_id,
             selected_account,
         )
-    except RuntimeError as error:
+    except RuntimeError:
         return JSONResponse(
             status_code=404,
-            content={"error": str(error)},
+            content={"error": "Unable to load the selected account."},
         )
     except Exception:
         logger.exception(
@@ -3371,10 +3372,15 @@ async def character_planner_costs(
             current_ascension=current_ascension,
             weapon_ascension=weapon_ascension,
         )
-    except ValueError as error:
+    except PlannerValidationError as error:
         return JSONResponse(
             status_code=400,
-            content={"error": str(error)},
+            content={"error": error.public_message},
+        )
+    except ValueError:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Couldn't calculate planner costs. Please try again."},
         )
 
     return {
@@ -4587,6 +4593,8 @@ async def challenge(token: str):
         )
 
     mmt = session.mmt
+    mmt_json = htmlsafe_json_dumps(mmt.model_dump(mode="json"))
+    submission_url_json = htmlsafe_json_dumps(f"/challenge/{session.token}/send-data")
 
     print("===== GEETEST MMT =====")
     print(mmt)
@@ -4600,7 +4608,7 @@ async def challenge(token: str):
         gt_url = "https://static.geetest.com/v4/gt4.js"
 
         captcha_script = f"""
-        const mmt = {mmt.model_dump_json()};
+        const mmt = {mmt_json};
 
         const initParams = {{
             captchaId: mmt.captcha_id ?? mmt.gt,
@@ -4637,7 +4645,7 @@ async def challenge(token: str):
                     console.log("==========================");
 
                     const response = await fetch(
-                        "/challenge/{token}/send-data",
+                        {submission_url_json},
                         {{
                             method: "POST",
 
@@ -4683,7 +4691,7 @@ async def challenge(token: str):
         gt_url = "https://static.geetest.com/static/js/gt.0.5.0.js"
 
         captcha_script = f"""
-        const mmt = {mmt.model_dump_json()};
+        const mmt = {mmt_json};
 
         const initParams = {{
             gt: mmt.gt,
@@ -4717,7 +4725,7 @@ async def challenge(token: str):
                     console.log("==========================");
 
                     const response = await fetch(
-                        "/challenge/{token}/send-data",
+                        {submission_url_json},
                         {{
                             method: "POST",
 
