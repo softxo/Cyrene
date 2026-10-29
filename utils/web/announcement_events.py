@@ -138,6 +138,13 @@ def announcement_reward_events(announcements, server: str, now: int) -> list[dic
                 "id": f"announcement:{announcement.id}",
                 "name": name,
                 "category": category,
+                "quest_type": "archon" if re.search(r"\barchon quest\b", title, re.I) else None,
+                "quest_is_mainline": bool(re.search(
+                    r'\bArchon Quests?\s+(?:Chapter\s+[IVXLCDM\d]+|Prologue)'
+                    r'\s*:\s*Act\s+[IVXLCDM\d]+\s*["“]'
+                    + re.escape(name) + r'["”]',
+                    plain_text(content), re.I,
+                )),
                 "description": "Bonus reward period. Account completion is not available from HoYoLAB's calendar.",
                 "icon": announcement.img or announcement.banner,
                 "is_tcg": False,
@@ -174,6 +181,9 @@ def merge_announcement_events(events: list[dict], supplements: list[dict]) -> li
             result.append(dict(supplement))
         else:
             match["category"] = supplement["category"]
+            for key in ("quest_type", "quest_is_mainline"):
+                if key in supplement:
+                    match[key] = supplement[key]
     return sorted(
         result,
         key=lambda event: (

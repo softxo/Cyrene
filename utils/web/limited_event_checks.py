@@ -7,6 +7,57 @@ import time
 from utils.web.announcement_events import normalise_name
 
 
+def apply_archon_quest_progress(events: list[dict], notes: dict, now: int) -> None:
+    """Use per-account Notes only for identified, currently active Archon campaigns."""
+    if not isinstance(notes, dict) or notes.get("retcode") != 0:
+        return
+    data = notes.get("data")
+    progress = data.get("archon_quest_progress") if isinstance(data, dict) else None
+    if not isinstance(progress, dict) or progress.get("is_open_archon_quest") is not True:
+        return
+    quests = progress.get("list")
+    if not isinstance(quests, list):
+        return
+    for event in events:
+        # Keep calendar-provided progress authoritative; never infer other quest types.
+        if (
+            event.get("quest_type") != "archon"
+            or event.get("progress_available") is not False
+            or event.get("is_upcoming")
+            or not event.get("start_time", 0) <= now < event.get("end_time", 0)
+        ):
+            continue
+        name = normalise_name(event["name"])
+        matches = [
+            quest for quest in quests
+            if isinstance(quest, dict) and name
+            and normalise_name(str(quest.get("chapter_title", ""))) == name
+        ]
+        statuses = {quest.get("status") for quest in matches if isinstance(quest.get("status"), str)}
+        finished = None
+        if len(statuses) == 1:
+            status = next(iter(statuses))
+            if status == "StatusFinished":
+                finished = True
+            elif status in {"StatusOngoing", "StatusNotOpen"}:
+                finished = False
+        elif not matches and event.get("quest_is_mainline") is True:
+            # Empty lists alone prove nothing. This explicit flag covers mainline only.
+            if progress.get("is_finish_all_mainline") is True:
+                finished = True
+        if finished is None:
+            continue
+        event["is_finished"] = finished
+        event["progress_available"] = True
+        event["completion_source"] = "archon_quest_notes"
+        event["description"] = (
+            "Archon Quest completed according to HoYoLAB Real-Time Notes. "
+            "Bonus reward claiming is not reported."
+            if finished else
+            "HoYoLAB Real-Time Notes reports this Archon Quest is not completed."
+        )
+
+
 def annotate_daily_events(events: list[dict], reset_time: int) -> None:
     # Explicit recurring reward campaigns, not ordinary events mentioning daily tasks.
     campaigns = (
