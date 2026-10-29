@@ -79,6 +79,39 @@ window.refreshEvents = async function refreshEvents() {
             return;
         }
 
+        // A new server template can arrive while this tab still has older CSS.
+        // Load the matching stylesheet before inserting any new card markup.
+        const refreshedStyle = refreshedDocument.querySelector('link[data-page-style="/events"]');
+        const currentStyles = [...document.querySelectorAll('link[data-page-style="/events"]')];
+        if (refreshedStyle) {
+            const href = new URL(refreshedStyle.getAttribute("href"), window.location.origin).href;
+            if (!currentStyles.some((link) => link.href === href)) {
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.href = href;
+                link.dataset.pageStyle = "/events";
+                try {
+                    await new Promise((resolve, reject) => {
+                        link.addEventListener("load", resolve, { once: true });
+                        link.addEventListener("error", reject, { once: true });
+                        document.head.appendChild(link);
+                    });
+                } catch (error) {
+                    link.remove();
+                    throw error;
+                }
+                // Do not insert stale data if the user navigated or checked an event while CSS loaded.
+                if (
+                    !currentPage.isConnected ||
+                    activityRevision !== (window.eventsActivityRevision || 0)
+                ) {
+                    link.remove();
+                    return;
+                }
+                currentStyles.forEach((old) => old.remove());
+            }
+        }
+
         // -------------------------------------------------
         // DOM SYNCHRONISATION
         //

@@ -86,11 +86,11 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-dropdown.js",
         "/static/build/browser/pages/events/events-tabs.js",
         "/static/build/browser/pages/events/events-cards.js",
-        "/static/build/browser/pages/events/events-rewards.js?v=2",
+        "/static/build/browser/pages/events/events-rewards.js?v=3",
         "/static/build/browser/pages/events/events-filters.js?v=6",
-        "/static/build/browser/pages/events/events-timers.js?v=5",
+        "/static/build/browser/pages/events/events-timers.js?v=6",
         "/static/build/browser/pages/events/events-activity.js?v=9",
-        "/static/build/browser/pages/events/events-refresh.js?v=3",
+        "/static/build/browser/pages/events/events-refresh.js?v=4",
         "/static/build/browser/pages/events/events-custom.js?v=6",
         "/static/build/browser/pages/events/events.js",
     ],
@@ -107,7 +107,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=21",
+    "/events": "/static/build/css/events.css?v=30",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 
@@ -164,7 +164,13 @@ async function loadPageScript(path: string): Promise<void> {
    4. PAGE STYLE LOADER
    ========================================================= */
 
-async function loadPageStyle(path: string): Promise<void> {
+async function loadPageStyle(path: string, serverDocument?: Document): Promise<void> {
+    const serverStyle = serverDocument?.querySelector<HTMLLinkElement>(
+        `link[data-page-style="${path}"]`,
+    );
+    if (serverStyle?.getAttribute("href")) {
+        pageStyles[path] = serverStyle.getAttribute("href")!;
+    }
     const styleHref = pageStyles[path];
 
     if (!styleHref) {
@@ -366,7 +372,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
 
         // Keep the current page visible until the destination stylesheet is
         // ready, preventing an unstyled frame during client-side navigation.
-        await loadPageStyle(finalPath);
+        await loadPageStyle(finalPath, newDocument);
 
         /*
          * Replace the current page content.

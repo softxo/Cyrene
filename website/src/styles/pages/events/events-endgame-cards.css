@@ -172,6 +172,7 @@
 }
 
 .stygian-boss-icon {
+    margin-top: 8px;
     width: 55px;
     height: 55px;
     object-fit: contain;
@@ -563,4 +564,138 @@
 /* Reduce only the Stella artwork, preserving card spacing in every view. */
 img[src$="/IT_Stella.png"] {
     scale: 0.85;
+}
+
+/* The current season's trial cast is shared by all accounts. */
+.it-opening-cast {
+    container-type: inline-size;
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.it-opening-cast-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px 4px;
+    padding: 8px 6px;
+    border: 1px solid rgba(var(--event-accent-rgb), 0.2);
+    border-radius: 14px;
+    background: rgba(var(--event-accent-rgb), 0.06);
+}
+
+.it-opening-character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.it-opening-portrait {
+    position: relative;
+    width: min(32px, 100%);
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #6b536f, #b18b6a);
+}
+
+.it-opening-portrait.rarity-4 {
+    background: linear-gradient(145deg, #534c72, #8f78ac);
+}
+
+.it-opening-portrait > img:first-child {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: inherit;
+}
+
+.it-opening-portrait .it-opening-element {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--surface);
+}
+
+.it-opening-character > span {
+    color: var(--text-primary);
+    font-size: 9px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.it-opening-cast-grid > .event-no-record {
+    grid-column: 1 / -1;
+}
+
+/* Make room inside the existing Theater panel, preserving its dimensions. */
+.event-featured-card[data-event-type="theater"] .it-best-record {
+    gap: 6px;
+    padding-bottom: 0;
+}
+
+.event-featured-card[data-event-type="theater"] .it-stellas {
+    margin-top: 8px;
+    gap: 4px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-stella-box {
+    min-height: 44px;
+    padding: 5px 6px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-elements {
+    margin-top: 8px;
+    gap: 4px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-element {
+    width: 32px;
+    height: 32px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-element-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-stella-row {
+    flex-wrap: nowrap;
+    gap: 1px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-stella-row .it-stella {
+    flex: 0 1 24px;
+    min-width: 0;
+    width: 24px;
+    height: auto;
+    aspect-ratio: 1;
+}
+
+@container (min-width: 300px) {
+    .it-opening-cast-grid {
+        padding: 11px 8px;
+        column-gap: 8px;
+    }
+}
+
+/* Share the panel's spare height between sections instead of bunching them at the top. */
+.event-featured-card[data-event-type="theater"] .event-featured-panel {
+    justify-content: space-between;
+    row-gap: 10px;
+}
+
+.event-featured-card[data-event-type="theater"] .it-stellas,
+.event-featured-card[data-event-type="theater"] .it-elements,
+.event-featured-card[data-event-type="theater"] .it-opening-cast {
+    margin-top: 0;
+    gap: 6px;
 }

@@ -39,7 +39,6 @@ from genshin.models.genshin.constants import CHARACTER_NAMES
 from utils.achievements.achievements import load_achievements
 from utils.achievements.importer import import_achievements
 from utils.achievements.progress import load_progress
-from utils.changing_variables.config import IT_ELEMENTS
 from utils.genshin_db import GenshinDB, GenshinDBError
 from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.account_limits import get_account_limit
@@ -116,6 +115,7 @@ from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
 )
+from utils.web.theater_elements import get_theater_season
 
 app = FastAPI(
     title="Cyrene Authentication",
@@ -1291,7 +1291,8 @@ async def get_single_account_events(
         "arcanums": 0,
         "medals": 0,
         "end_time": 0,
-        "elements": IT_ELEMENTS,
+        "elements": [],
+        "opening_cast": [],
     }
 
     stygian_data = {
@@ -1978,13 +1979,16 @@ async def get_single_account_events(
 
                 arcanums = sum(1 for act in acts if act.get("is_tarot") is True)
 
+                season_details = await get_theater_season(
+                    schedule.get("start_time", 0), account["genshin_server"]
+                )
                 theater_data = {
                     "has_data": stat["max_round_id"] > 0,
                     "best_round": stat["max_round_id"],
                     "arcanums": arcanums,
                     "medals": stat["medal_num"],
                     "end_time": schedule["end_time"],
-                    "elements": IT_ELEMENTS,
+                    **season_details,
                 }
 
     except Exception as error:
@@ -2115,7 +2119,8 @@ async def get_events_data(
             "arcanums": 0,
             "medals": 0,
             "end_time": 0,
-            "elements": IT_ELEMENTS,
+            "elements": [],
+            "opening_cast": [],
         },
         "stygian": {
             "has_data": False,

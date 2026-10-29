@@ -107,7 +107,13 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
 
         if (timer.classList.contains("event-daily-reset")) {
             updateDailyUrgency(timer, originalRemaining);
-            // Less than 1 day remaining for event expiry timers.
+        } else if (timer.dataset.countdownKind === "long-event") {
+            if (originalRemaining <= 3 * 86400) {
+                timer.classList.add("danger");
+            } else if (originalRemaining <= 7 * 86400) {
+                timer.classList.add("warning");
+            }
+            // Other limited event expiry timers keep their existing thresholds.
         } else if (originalRemaining < 86400) {
             timer.classList.add("danger");
 
