@@ -78,6 +78,9 @@
         "vite": {
             "config": [
                 "config/vite.config.ts"
+            ],
+            "entry": [
+                "website/src/app.ts"
             ]
         },
         "playwright": {
