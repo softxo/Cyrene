@@ -92,13 +92,27 @@ function initCharacterShowcase() {
     }
 
     function cleanGameText(value) {
-        // Parse formatting in an inert template; only its text ever leaves this function.
-        // Preserve literal entity text, as the previous formatter did.
-        const template = document.createElement("template");
-        template.innerHTML = String(value ?? "")
-            .replaceAll("&", "&amp;")
-            .replace(/\\n/g, " ");
-        return (template.content.textContent ?? "")
+        // Remove display-formatting spans without ever interpreting the value as HTML.
+        // This is text formatting; callers must continue using textContent or text properties.
+        const input = String(value ?? "").replace(/\\n/g, " ");
+        let text = "";
+        let index = 0;
+
+        while (index < input.length) {
+            if (input[index] === "<") {
+                const end = input.indexOf(">", index + 1);
+                if (end === -1) {
+                    text += input.slice(index);
+                    break;
+                }
+                index = end + 1;
+            } else {
+                text += input[index];
+                index += 1;
+            }
+        }
+
+        return text
             .replace(/\{LINK#\d+\}/g, "")
             .replace(/\s+/g, " ")
             .trim();

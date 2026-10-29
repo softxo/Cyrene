@@ -52,7 +52,9 @@ for (const version of ["v3", "v4"]) {
     });
 }
 
-test("showcase inert formatting preserves text and C3/C5 talent rendering", async ({ page }) => {
+test("showcase text formatting never parses HTML and preserves C3/C5 rendering", async ({
+    page,
+}) => {
     const blocked: string[] = [];
     await page.route("https://attack.invalid/**", (route) => {
         blocked.push(route.request().url());
@@ -80,11 +82,26 @@ test("showcase inert formatting preserves text and C3/C5 talent rendering", asyn
     await page.evaluate(() => window["initCharacterShowcase"]());
     const result = await page.evaluate((payload) => {
         const api = window["showcaseTest"];
-        const normal = api.cleanGameText("<color=#fff>ATK</color>\\n{LINK#123} Bonus &amp; Value");
+        const innerHTML = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+        Object.defineProperty(Element.prototype, "innerHTML", {
+            ...innerHTML,
+            set() {
+                throw new Error("Text formatting must never invoke an HTML sink");
+            },
+        });
+        let normal;
+        try {
+            normal = api.cleanGameText("<color=#fff>ATK</color>\\n{LINK#123} Bonus &amp; Value");
+        } finally {
+            Object.defineProperty(Element.prototype, "innerHTML", innerHTML);
+        }
         const malformed = [
             payload,
             "<<img src=x onerror=window.injected=true>>",
             "<CoLoR=#fff>Safe</cOlOr>",
+            "<scr<color=red>ipt>payload</scr</color>ipt>",
+            "Trailing <unfinished",
+            "&lt;img src=x onerror=window.injected=true&gt;",
         ].map((value) => api.cleanGameText(value));
         api.renderWeapon({
             weapon: {
@@ -125,6 +142,8 @@ test("showcase inert formatting preserves text and C3/C5 talent rendering", asyn
     await expect(page.locator(".enka-artifact-name").first()).toHaveText("Flower");
     await expect(page.locator(".enka-artifact-set-name")).toHaveText("Gladiator");
     expect(result.malformed[2]).toBe("Safe");
+    expect(result.malformed[4]).toBe("Trailing <unfinished");
+    expect(result.malformed[5]).toBe("&lt;img src=x onerror=window.injected=true&gt;");
     await expect(page.locator(".enka-weapon-name")).toHaveText("Sword");
     await expect(page.locator(".enka-progression-level.is-max")).toHaveCount(3);
     expect(
