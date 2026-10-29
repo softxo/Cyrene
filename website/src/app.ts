@@ -83,14 +83,14 @@ const pageScripts: Record<string, string | string[]> = {
     "/codes": "/static/build/browser/pages/codes.js",
 
     "/events": [
-        "/static/build/browser/pages/events/events-dropdown.js",
-        "/static/build/browser/pages/events/events-tabs.js",
+        "/static/build/browser/pages/events/events-dropdown.js?v=2",
+        "/static/build/browser/pages/events/events-tabs.js?v=2",
         "/static/build/browser/pages/events/events-cards.js",
         "/static/build/browser/pages/events/events-rewards.js?v=3",
         "/static/build/browser/pages/events/events-filters.js?v=6",
         "/static/build/browser/pages/events/events-timers.js?v=6",
         "/static/build/browser/pages/events/events-activity.js?v=9",
-        "/static/build/browser/pages/events/events-refresh.js?v=4",
+        "/static/build/browser/pages/events/events-refresh.js?v=5",
         "/static/build/browser/pages/events/events-custom.js?v=6",
         "/static/build/browser/pages/events/events.js",
     ],
@@ -327,10 +327,37 @@ function updateActiveNavigation(url: string | URL): void {
    8. CLIENT-SIDE NAVIGATION
    ========================================================= */
 
+let navigationController: AbortController | undefined;
+
+function showEventsNavigationLoading(show: boolean): void {
+    document.getElementById("events-navigation-status")?.remove();
+    document.querySelector(".main-content")?.removeAttribute("aria-busy");
+    document
+        .querySelectorAll(".nav-item.is-loading")
+        .forEach((item) => item.classList.remove("is-loading"));
+    if (!show) return;
+
+    document.querySelector(".main-content")?.setAttribute("aria-busy", "true");
+    document.querySelectorAll<HTMLAnchorElement>(".nav-item").forEach((item) => {
+        item.classList.toggle("is-loading", new URL(item.href).pathname === "/events");
+    });
+    const status = document.createElement("div");
+    status.id = "events-navigation-status";
+    status.setAttribute("role", "status");
+    status.innerHTML =
+        '<span class="navigation-loading-spark" aria-hidden="true">&#10022;</span><span>Loading Events&hellip;</span>';
+    document.body.appendChild(status);
+}
+
 async function navigate(url: string | URL, addToHistory = true): Promise<void> {
+    navigationController?.abort();
+    const controller = new AbortController();
+    navigationController = controller;
+    showEventsNavigationLoading(new URL(url, window.location.origin).pathname === "/events");
     try {
         const response = await fetch(url, {
             redirect: "manual",
+            signal: controller.signal,
         });
 
         /*
@@ -352,6 +379,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
         }
 
         const html = await response.text();
+        if (controller.signal.aborted) return;
         const parser = new DOMParser();
 
         const newDocument = parser.parseFromString(html, "text/html");
@@ -373,6 +401,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
         // Keep the current page visible until the destination stylesheet is
         // ready, preventing an unstyled frame during client-side navigation.
         await loadPageStyle(finalPath, newDocument);
+        if (controller.signal.aborted) return;
 
         /*
          * Replace the current page content.
@@ -409,6 +438,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          */
 
         await preparePage(finalPath);
+        if (controller.signal.aborted) return;
 
         /*
          * Update the active sidebar item.
@@ -425,9 +455,14 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
             behavior: "instant",
         });
     } catch (error) {
+        if (controller.signal.aborted) return;
         console.error("Navigation error:", error);
 
         window.location.href = url.toString();
+    } finally {
+        if (navigationController === controller) {
+            showEventsNavigationLoading(false);
+        }
     }
 }
 

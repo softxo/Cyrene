@@ -73,6 +73,7 @@ window.refreshEvents = async function refreshEvents() {
 
         if (
             activityRevision !== (window.eventsActivityRevision || 0) ||
+            !currentPage.isConnected ||
             !refreshedPage ||
             document.querySelector('.event-checkmark[data-saving="true"]')
         ) {
@@ -171,6 +172,9 @@ window.refreshEvents = async function refreshEvents() {
         }
 
         function syncAttributes(current, refreshed) {
+            const isTabPanel = current.matches("[data-account-category], .events-overview-panel");
+            const wasHidden = current.hidden;
+            const wasActive = current.classList.contains("active");
             const isFeaturedCard = current.matches(".event-featured-card");
 
             const wasDetailsOpen = current instanceof HTMLDetailsElement && current.open;
@@ -202,6 +206,11 @@ window.refreshEvents = async function refreshEvents() {
                 for (const className of previousClasses) {
                     current.classList.add(className);
                 }
+            }
+
+            if (isTabPanel) {
+                current.hidden = wasHidden;
+                current.classList.toggle("active", wasActive);
             }
 
             if (current instanceof HTMLDetailsElement) {
@@ -394,6 +403,10 @@ window.refreshEvents = async function refreshEvents() {
             // A refresh can finish after the user changes tabs. Restore the
             // latest client-side choice instead of stale response visibility.
             window.initialiseAccountTabs();
+        }
+
+        if (window.initialiseOverviewTabs) {
+            window.initialiseOverviewTabs();
         }
 
         if (window.initialiseActivityCheckmarks) {

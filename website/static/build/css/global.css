@@ -1581,3 +1581,66 @@ html body .custom-select-option {
         gap: 10px;
     }
 }
+
+/* Immediate feedback while Events fetches account data. */
+#events-navigation-status {
+    position: fixed;
+    z-index: 10000;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+body:has(#events-navigation-status)::before {
+    content: "";
+    position: fixed;
+    z-index: 10001;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    animation: events-navigation-progress 1.4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.navigation-loading-spark,
+.nav-item.is-loading .nav-icon {
+    color: var(--accent);
+    animation: events-navigation-pulse 1.4s ease-in-out infinite;
+}
+
+.nav-item.is-loading {
+    background: var(--surface-hover);
+}
+
+@keyframes events-navigation-progress {
+    from { background-position: -100% 0; }
+    to { background-position: 200% 0; }
+}
+
+@keyframes events-navigation-pulse {
+    50% { opacity: .4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:has(#events-navigation-status)::before,
+    .navigation-loading-spark,
+    .nav-item.is-loading .nav-icon {
+        animation: none;
+    }
+    body:has(#events-navigation-status)::before {
+        background: var(--accent);
+    }
+}

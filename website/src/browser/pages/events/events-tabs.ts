@@ -1,264 +1,86 @@
 // @ts-nocheck -- Legacy global script; types will be tightened incrementally.
-// =========================================================
-// EVENTS — ACCOUNT TABS
-// =========================================================
+// Tab state belongs to this Events visit, carried by its URL across reloads.
+// Fresh navigation to /events starts with the default tabs.
+window.updateEventsTabUrl = function updateEventsTabUrl(key, value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(key, value);
+    window.history.replaceState(window.history.state, "", url);
 
-window.initialiseAccountTabs = function initialiseAccountTabs() {
-
-    const page =
-        document.querySelector(".events-page");
-
-    if (!page) {
-        return;
-    }
-
-    const tabs =
-        page.querySelectorAll(".events-account-tab");
-
-    const sections =
-        page.querySelectorAll("[data-account-category]");
-
-    if (!tabs.length || !sections.length) {
-        return;
-    }
-
-    // -----------------------------------------
-    // Activate Category
-    // -----------------------------------------
-
-    function activateCategory(category) {
-
-        tabs.forEach(tab => {
-
-            tab.classList.toggle(
-                "active",
-                tab.dataset.accountTab === category
-            );
-
-        });
-
-        sections.forEach(section => {
-
-            const sectionCategory =
-                section.dataset.accountCategory;
-
-            const isEmptyState =
-                section.classList.contains(
-                    "events-account-empty"
-                );
-
-            if (category === "all") {
-
-                section.hidden =
-                    isEmptyState ||
-                    sectionCategory === "wishes";
-
-                return;
-            }
-
-            section.hidden =
-                sectionCategory !== category;
-
-        });
-
-        localStorage.setItem(
-            "cyreneAccountEventTab",
-            category
-        );
-
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", category);
-        window.history.replaceState(
-            window.history.state,
-            "",
-            url
-        );
-
-    }
-
-    // -----------------------------------------
-    // Tab Listeners
-    // -----------------------------------------
-
-    tabs.forEach(tab => {
-
-        if (tab.dataset.initialised === "true") {
-            return;
+    const layout = document.querySelector(".events-layout-switch");
+    if (layout) {
+        const target = new URL(layout.href, window.location.origin);
+        for (const name of ["tab", "overview_tab"]) {
+            const selected = url.searchParams.get(name);
+            if (selected) target.searchParams.set(name, selected);
         }
-
-        tab.dataset.initialised = "true";
-
-        tab.addEventListener("click", () => {
-
-            const category =
-                tab.dataset.accountTab;
-
-            if (!category) {
-                return;
-            }
-
-            activateCategory(category);
-
-        });
-
-    });
-
-    // -----------------------------------------
-    // Restore Previously Selected Category
-    // -----------------------------------------
-
-    const urlCategory =
-        new URLSearchParams(
-            window.location.search
-        ).get("tab");
-
-    const savedCategory =
-        localStorage.getItem(
-            "cyreneAccountEventTab"
-        );
-
-    const categoryToRestore =
-        urlCategory ||
-        savedCategory ||
-        "all";
-
-    const categoryExists =
-        Array.from(tabs).some(
-            tab =>
-                tab.dataset.accountTab ===
-                categoryToRestore
-        );
-
-    if (categoryExists) {
-
-        const serverActiveTab =
-            page.querySelector(
-                ".events-account-tab.active"
-            )?.dataset.accountTab;
-
-        if (serverActiveTab !== categoryToRestore) {
-
-            activateCategory(categoryToRestore);
-
-        } else {
-
-            localStorage.setItem(
-                "cyreneAccountEventTab",
-                categoryToRestore
-            );
-
-        }
-
-    } else {
-
-        activateCategory("all");
-
+        layout.href = target.href;
     }
-
 };
 
+window.initialiseAccountTabs = function initialiseAccountTabs() {
+    const page = document.querySelector(".events-page");
+    if (!page) return;
+    const tabs = page.querySelectorAll(".events-account-tab");
+    if (!tabs.length) return;
 
-// =========================================================
-// EVENTS — OVERVIEW TABS
-// =========================================================
-
-window.initialiseOverviewTabs = function initialiseOverviewTabs() {
-
-    const page =
-        document.querySelector(".events-page");
-
-    if (!page) {
-        return;
-    }
-
-    const tabs =
-        page.querySelectorAll(".events-overview-tab");
-
-    const panels =
-        page.querySelectorAll(".events-overview-panel");
-
-    if (!tabs.length || !panels.length) {
-        return;
-    }
-
-    // -----------------------------------------
-    // Activate Overview Tab
-    // -----------------------------------------
-
-    function activateTab(target) {
-
-        document.documentElement.dataset.overviewTab =
-            target;
-
-        tabs.forEach(tab => {
-
-            tab.classList.toggle(
-                "active",
-                tab.dataset.overviewTab === target
-            );
-
+    function activateCategory(category) {
+        tabs.forEach((tab) => {
+            tab.classList.toggle("active", tab.dataset.accountTab === category);
         });
-
-        panels.forEach(panel => {
-
-            panel.classList.toggle(
-                "active",
-                panel.dataset.overviewPanel === target
-            );
-
+        // Query live sections: a refresh may have inserted or replaced one.
+        page.querySelectorAll("[data-account-category]").forEach((section) => {
+            section.hidden =
+                category === "all"
+                    ? section.classList.contains("events-account-empty") ||
+                      section.dataset.accountCategory === "wishes"
+                    : section.dataset.accountCategory !== category;
         });
-
+        window.updateEventsTabUrl("tab", category);
     }
 
-    // -----------------------------------------
-    // Tab Listeners
-    // -----------------------------------------
-
-    tabs.forEach(tab => {
-
-        if (tab.dataset.initialised === "true") {
-            return;
-        }
-
+    tabs.forEach((tab) => {
+        if (tab.dataset.initialised === "true") return;
         tab.dataset.initialised = "true";
-
         tab.addEventListener("click", () => {
-
-            const target =
-                tab.dataset.overviewTab;
-
-            if (!target) {
-                return;
-            }
-
-            localStorage.setItem(
-                "cyreneOverviewTab",
-                target
-            );
-
-            activateTab(target);
-
+            if (tab.dataset.accountTab) activateCategory(tab.dataset.accountTab);
         });
-
     });
 
-    // -----------------------------------------
-    // Restore Previously Selected Tab
-    // -----------------------------------------
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    const category = Array.from(tabs).some((tab) => tab.dataset.accountTab === requested)
+        ? requested
+        : "all";
+    // Always reconcile visibility, even when the active button already matches.
+    activateCategory(category);
+};
 
-    const savedTab =
-        localStorage.getItem("cyreneOverviewTab");
+window.initialiseOverviewTabs = function initialiseOverviewTabs() {
+    const page = document.querySelector(".events-page");
+    if (!page) return;
+    const tabs = page.querySelectorAll(".events-overview-tab");
+    if (!tabs.length) return;
 
-    const savedTabExists =
-        Array.from(tabs).some(
-            tab =>
-                tab.dataset.overviewTab === savedTab
-        );
+    function activateTab(target) {
+        document.documentElement.dataset.overviewTab = target;
+        tabs.forEach((tab) => {
+            tab.classList.toggle("active", tab.dataset.overviewTab === target);
+        });
+        page.querySelectorAll(".events-overview-panel").forEach((panel) => {
+            panel.classList.toggle("active", panel.dataset.overviewPanel === target);
+        });
+        window.updateEventsTabUrl("overview_tab", target);
+    }
 
+    tabs.forEach((tab) => {
+        if (tab.dataset.initialised === "true") return;
+        tab.dataset.initialised = "true";
+        tab.addEventListener("click", () => {
+            if (tab.dataset.overviewTab) activateTab(tab.dataset.overviewTab);
+        });
+    });
+
+    const requested = new URLSearchParams(window.location.search).get("overview_tab");
     activateTab(
-        savedTabExists
-            ? savedTab
-            : "daily"
+        Array.from(tabs).some((tab) => tab.dataset.overviewTab === requested) ? requested : "daily",
     );
-
 };

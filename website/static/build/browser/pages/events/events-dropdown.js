@@ -37,11 +37,10 @@ window.initialiseEventsDropdown = function initialiseEventsDropdown() {
                 return;
             }
             dropdown.classList.remove("open");
-            const currentTab = document.querySelector(".events-account-tab.active")?.dataset.accountTab ||
-                localStorage.getItem("cyreneAccountEventTab") ||
-                "all";
-            window.location.href =
-                `/events?account_id=${accountId}&tab=${encodeURIComponent(currentTab)}`;
+            const target = new URL(window.location.href);
+            target.searchParams.delete("overview");
+            target.searchParams.set("account_id", accountId);
+            window.location.href = target.href;
         });
     });
 };
