@@ -6,7 +6,9 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
         const row = button.closest(".event-list-item, .overview-account-row");
         const completed =
             checked ||
-            (["daily_commissions", "trounce_domains"].includes(button.dataset.activityType) &&
+            (["daily_commissions", "trounce_domains", "limited_event"].includes(
+                button.dataset.activityType,
+            ) &&
                 row?.dataset.automaticComplete === "true");
         row?.classList.toggle("completed", completed);
         if (button.dataset.activityType === "trounce_domains") {
@@ -17,9 +19,9 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
         }
         const status = row?.querySelector("[data-limited-status]");
         if (status) {
-            status.textContent = checked ? "Completed" : status.dataset.baseStatus;
-            status.classList.toggle("event-completion-pill", checked);
-            status.classList.toggle("event-limited-completed", checked);
+            status.textContent = completed ? "Completed" : status.dataset.baseStatus;
+            status.classList.toggle("event-completion-pill", completed);
+            status.classList.toggle("event-limited-completed", completed);
         }
         document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
             const cards = group.querySelectorAll(".events-limited-overview-event:not([hidden])");

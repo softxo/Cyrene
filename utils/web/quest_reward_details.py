@@ -309,7 +309,12 @@ async def get_quest_reward_details(name: str) -> dict | None:
 
 async def enrich_quest_rewards(events: list[dict]) -> None:
     for event in events:
-        if event.get("category") == "Quest" and event.get("progress_available") is False:
+        # Notes can supply completion before enrichment runs. Reward previews are
+        # shared event information, independent of an account's progress source.
+        if event.get("category") == "Quest" and (
+            event.get("progress_available") is False
+            or event.get("completion_source") == "archon_quest_notes"
+        ):
             details = await get_quest_reward_details(event["name"])
             if details:
                 event.update(details)

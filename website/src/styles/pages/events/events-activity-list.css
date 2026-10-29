@@ -873,6 +873,8 @@
 }
 
 .event-manual-completion-trigger {
+    box-sizing: border-box;
+    flex: 0 0 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -889,6 +891,16 @@
     opacity: 0.45;
     cursor: help;
     transition: opacity 160ms ease;
+}
+
+.event-manual-completion-trigger svg {
+    display: block;
+    flex: none;
+}
+
+.event-manual-completion-trigger.event-fully-manual {
+    color: var(--error);
+    opacity: 0.8;
 }
 
 .event-manual-completion-trigger:hover,

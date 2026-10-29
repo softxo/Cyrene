@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
+from utils.web.limited_event_checks import apply_archon_quest_progress
 from utils.web.quest_reward_details import (
     enrich_quest_rewards,
     image_extension,
@@ -65,6 +66,44 @@ class QuestRewardTableTests(unittest.TestCase):
 
 
 class EnrichmentTests(unittest.IsolatedAsyncioTestCase):
+    async def test_automatic_progress_keeps_the_same_reward_preview(self):
+        base = {
+            "name": "Example Quest",
+            "category": "Quest",
+            "quest_type": "archon",
+            "progress_available": False,
+            "start_time": 1,
+            "end_time": 100,
+            "rewards": [{"name": "Primogems", "amount": None}],
+        }
+        manual, automatic = dict(base), dict(base)
+        apply_archon_quest_progress(
+            [automatic],
+            {
+                "retcode": 0,
+                "data": {
+                    "archon_quest_progress": {
+                        "is_open_archon_quest": True,
+                        "list": [{"chapter_title": "Example Quest", "status": "StatusFinished"}],
+                    }
+                },
+            },
+            50,
+        )
+        details = parse_quest_reward_table(table(["Vesna", "Vodyanitsa"]), "Example Quest")
+        with patch(
+            "utils.web.quest_reward_details.get_quest_reward_details",
+            AsyncMock(return_value=details),
+        ) as lookup:
+            await enrich_quest_rewards([manual, automatic])
+        self.assertEqual(lookup.await_count, 2)
+        self.assertEqual(automatic["rewards"], manual["rewards"])
+        self.assertEqual(automatic["rewards"][0]["amount"], 500)
+        self.assertEqual(automatic["insight_rewards"], manual["insight_rewards"])
+        self.assertTrue(automatic["progress_available"])
+        self.assertTrue(automatic["is_finished"])
+        self.assertFalse(manual["progress_available"])
+
     async def test_existing_image_cache_and_bundled_primogem_use_local_urls(self):
         url = "https://static.wikia.nocookie.net/example/Character.png"
         digest = hashlib.sha256(url.encode()).hexdigest()

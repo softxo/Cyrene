@@ -68,12 +68,13 @@
 
 {% macro limited_event_check(event, account) %}
 <button type="button"
-    class="event-checkmark{% if not event.is_finished %} event-checkmark-empty{% endif %}"
+    class="event-checkmark{% if not event.manual_checked %} event-checkmark-empty{% endif %}"
     data-activity-type="limited_event" data-event-key="{{ event.completion_key }}"
     data-event-token="{{ event.completion_token }}"
     data-account-id="{{ account.id }}"
-    aria-label="Mark {{ event.name }} complete for {{ account.nickname }}"
-    aria-pressed="{{ 'true' if event.is_finished else 'false' }}"
+    aria-label="Mark rewards claimed for {{ event.name }} for {{ account.nickname }}"
+    title="Track claimed rewards manually"
+    aria-pressed="{{ 'true' if event.manual_checked else 'false' }}"
 ></button>
 {% endmacro %}
 
@@ -81,6 +82,7 @@
 <article
     class="event-list-item event-limited-item{% if overview_card %} events-limited-overview-event{% endif %}{% if event.is_upcoming %} upcoming{% endif %}{% if event.is_finished %} completed{% endif %}"
     data-limited-event-id="{{ event.id }}"
+    data-automatic-complete="{{ 'true' if event.automatic_finished else 'false' }}"
     data-limited-category="{{ 'TCG' if event.is_tcg else (event.category or 'Other Events') }}"
 >
     <div class="event-limited-main">
@@ -103,18 +105,20 @@
                     {% endif %}
                     <div class="event-limited-name-with-help">
                         <div class="event-list-name">{{ event.name }}</div>
-                        {% if event.category in ['Quest', 'World Exploration'] and event.progress_available is sameas false %}
                         <div class="event-insight event-manual-completion" data-popover-placement="top">
-                            <button type="button" class="event-manual-completion-trigger"
-                                aria-label="Manual completion required" aria-haspopup="dialog" aria-expanded="false">?</button>
-                            <div class="event-insight-popover" popover="manual" role="dialog" aria-label="Manual event completion">
+                            <button type="button" class="event-manual-completion-trigger{% if event.progress_available is sameas false %} event-fully-manual{% endif %}"
+                                aria-label="{{ 'Manual completion and reward tracking' if event.progress_available is sameas false else 'Manual reward tracking' }}" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="12" r=".85" fill="currentColor"/></svg></button>
+                            <div class="event-insight-popover" popover="manual" role="dialog" aria-label="Event completion and rewards">
                                 <div class="event-insight-content">
-                                    <div class="event-insight-heading"><div><span>{{ event.category }} progress</span><strong>Manual completion required</strong></div></div>
-                                    <p>HoYoLAB doesn't automatically update completion for this event. Use the checkmark to mark it complete manually.</p>
+                                    <div class="event-insight-heading"><div><span>Event progress</span><strong>{{ 'Manual tracking required' if event.progress_available is sameas false else 'Track claimed rewards manually' }}</strong></div></div>
+                                    {% if event.progress_available is sameas false %}
+                                    <p>Automatic completion is unavailable for this event on this account. Use the manual checkmark once you've completed it and claimed its rewards.</p>
+                                    {% else %}
+                                    <p>HoYoLAB reports event completion, not whether you've claimed the rewards. Use the manual checkmark to track claimed rewards. Unchecking it keeps automatic completion.</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -2671,7 +2675,7 @@
         >
             <div class="events-list-header events-limited-filter-header"><h2>Limited-Time Events</h2>{{ limited_event_filters() }}</div>
             {% for item in overview_data %}
-            <details open class="events-custom-account-group" data-limited-account-group data-account-id="{{ item.account.id }}">
+            <details open class="events-custom-account-group" data-limited-account-group data-account-id="{{ item.account.id }}" data-account-uid="{{ item.account.genshin_uid }}">
                 <summary class="events-custom-account-heading">
                     <div class="events-custom-account-info overview-account-name">
                         <strong>{{ item.account.nickname }}</strong>

@@ -106,6 +106,7 @@ from utils.web.auth import (
 )
 from utils.web.limited_event_checks import (
     annotate_daily_events,
+    apply_archon_quest_progress,
     apply_completion_checks,
     completion_token,
     valid_completion_token,
@@ -1592,6 +1593,7 @@ async def get_single_account_events(
                 limited_events,
                 announcement_reward_events(announcements, account["genshin_server"], now_timestamp),
             )
+            apply_archon_quest_progress(limited_events, notes, now_timestamp)
             await enrich_quest_rewards(limited_events)
 
             def find_wish_announcement(names):
