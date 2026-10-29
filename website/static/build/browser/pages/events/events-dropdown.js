@@ -15,7 +15,7 @@ window.initialiseEventsDropdown = function initialiseEventsDropdown() {
         return;
     }
     button.dataset.initialised = "true";
-    button.addEventListener("click", event => {
+    button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
         dropdown.classList.toggle("open");
@@ -23,13 +23,12 @@ window.initialiseEventsDropdown = function initialiseEventsDropdown() {
     // -----------------------------------------
     // Account Options
     // -----------------------------------------
-    dropdown.querySelectorAll(".custom-select-option")
-        .forEach(option => {
+    dropdown.querySelectorAll(".custom-select-option").forEach((option) => {
         if (option.dataset.initialised === "true") {
             return;
         }
         option.dataset.initialised = "true";
-        option.addEventListener("click", event => {
+        option.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
             const accountId = option.dataset.accountId;
@@ -52,7 +51,7 @@ window.initialiseDropdownClose = function initialiseDropdownClose() {
         return;
     }
     window.eventsDropdownCloseInitialised = true;
-    document.addEventListener("click", event => {
+    document.addEventListener("click", (event) => {
         const dropdown = document.getElementById("events-account");
         if (!dropdown) {
             return;

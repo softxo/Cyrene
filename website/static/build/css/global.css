@@ -1597,7 +1597,7 @@ html body .custom-select-option {
     border-radius: 999px;
     background: var(--surface);
     color: var(--text);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     font-size: 14px;
     pointer-events: none;
 }
@@ -1626,12 +1626,18 @@ body:has(#events-navigation-status)::before {
 }
 
 @keyframes events-navigation-progress {
-    from { background-position: -100% 0; }
-    to { background-position: 200% 0; }
+    from {
+        background-position: -100% 0;
+    }
+    to {
+        background-position: 200% 0;
+    }
 }
 
 @keyframes events-navigation-pulse {
-    50% { opacity: .4; }
+    50% {
+        opacity: 0.4;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

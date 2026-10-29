@@ -22,7 +22,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
     function positionMenu(menu, trigger) {
         const rect = trigger.getBoundingClientRect();
         const width = Math.min(260, window.innerWidth - 24);
-        const centredLeft = rect.left + (rect.width / 2) - (width / 2);
+        const centredLeft = rect.left + rect.width / 2 - width / 2;
         const left = Math.max(12, Math.min(centredLeft, window.innerWidth - width - 12));
         menu.style.width = `${width}px`;
         menu.style.left = `${left}px`;
@@ -49,8 +49,8 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         grid.className = "planner-choice-grid";
         const isConstellation = select.matches("[data-planner-constellation]");
         Array.from(select.options)
-            .filter(option => !option.disabled && !option.hidden)
-            .forEach(option => {
+            .filter((option) => !option.disabled && !option.hidden)
+            .forEach((option) => {
             const button = document.createElement("button");
             button.type = "button";
             button.className = "planner-choice-option";
@@ -66,13 +66,11 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
                 select.value = option.value;
                 select.dispatchEvent(new Event("change", { bubbles: true }));
                 const selectedOption = select.selectedOptions[0];
-                trigger.querySelector(".planner-choice-value")
-                    .textContent = isConstellation
+                trigger.querySelector(".planner-choice-value").textContent = isConstellation
                     ? `C${select.value}`
                     : select.matches("[data-planner-talent]")
                         ? select.value
-                        : selectedOption?.textContent.trim()
-                            || `Lv. ${select.value}`;
+                        : selectedOption?.textContent.trim() || `Lv. ${select.value}`;
                 close();
                 trigger.focus();
             });
@@ -86,14 +84,13 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         positionMenu(menu, trigger);
     }
     const controls = [];
-    selectors.forEach(select => {
+    selectors.forEach((select) => {
         const trigger = document.createElement("button");
         trigger.type = "button";
         trigger.className = "planner-choice-trigger";
         trigger.setAttribute("aria-haspopup", "true");
         trigger.setAttribute("aria-expanded", "false");
-        const fieldName = select.closest("label")?.querySelector("span")
-            ?.textContent.trim() || "Goal";
+        const fieldName = select.closest("label")?.querySelector("span")?.textContent.trim() || "Goal";
         trigger.setAttribute("aria-label", `Choose ${fieldName.toLowerCase()}`);
         const value = document.createElement("span");
         value.className = "planner-choice-value";
@@ -115,9 +112,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
                 value.textContent = select.value;
             }
             else {
-                value.textContent =
-                    option?.textContent.trim()
-                        || `Lv. ${select.value}`;
+                value.textContent = option?.textContent.trim() || `Lv. ${select.value}`;
             }
         }
         trigger.addEventListener("click", () => {
@@ -127,14 +122,14 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         controls.push(sync);
         sync();
     });
-    document.addEventListener("pointerdown", event => {
+    document.addEventListener("pointerdown", (event) => {
         if (activeMenu &&
             !activeMenu.contains(event.target) &&
             !activeTrigger?.contains(event.target)) {
             close();
         }
     });
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && activeMenu) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -148,8 +143,8 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
     return {
         close,
         sync() {
-            controls.forEach(update => update());
-        }
+            controls.forEach((update) => update());
+        },
     };
 }
 /* =========================================================
@@ -157,8 +152,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
    ========================================================= */
 function initCharacterPlanner() {
     const page = document.querySelector(".characters-page");
-    if (!page ||
-        page.dataset.plannerInitialised === "true") {
+    if (!page || page.dataset.plannerInitialised === "true") {
         return;
     }
     /* =====================================================
@@ -179,14 +173,8 @@ function initCharacterPlanner() {
     const pickerEmpty = picker.querySelector("[data-planner-picker-empty]");
     const editorDialog = editor.querySelector(".planner-editor-dialog");
     const form = editor.querySelector("[data-planner-form]");
-    if (!pickerDialog ||
-        !pickerSearch ||
-        !pickerGrid ||
-        !pickerEmpty ||
-        !editorDialog ||
-        !form) {
-        console.error("Character Planner could not initialise: " +
-            "required modal elements are missing.");
+    if (!pickerDialog || !pickerSearch || !pickerGrid || !pickerEmpty || !editorDialog || !form) {
+        console.error("Character Planner could not initialise: " + "required modal elements are missing.");
         return;
     }
     const notesInput = form.querySelector("[data-planner-notes]");
@@ -206,12 +194,8 @@ function initCharacterPlanner() {
     const currentWeaponLevelElement = editor.querySelector("[data-planner-current-weapon-level]");
     const progressionTabs = Array.from(form.querySelectorAll("[data-planner-tab]"));
     const progressionPanels = Array.from(form.querySelectorAll("[data-planner-panel]"));
-    if (!notesInput ||
-        !constellationInput ||
-        !levelInput ||
-        !weaponLevelInput) {
-        console.error("Character Planner could not initialise: " +
-            "one or more plan fields are missing.");
+    if (!notesInput || !constellationInput || !levelInput || !weaponLevelInput) {
+        console.error("Character Planner could not initialise: " + "one or more plan fields are missing.");
         return;
     }
     page.dataset.plannerInitialised = "true";
@@ -226,8 +210,9 @@ function initCharacterPlanner() {
         : null;
     const pendingKey = STORAGE_KEY ? `${STORAGE_KEY}-pending` : null;
     const pickerButtons = Array.from(pickerGrid.querySelectorAll("[data-planner-character-id]"));
-    pickerButtons.sort((a, b) => (b.dataset.plannerCharacterRelease || "").localeCompare(a.dataset.plannerCharacterRelease || "") ||
-        a.dataset.plannerCharacterName.localeCompare(b.dataset.plannerCharacterName)).forEach(button => pickerGrid.append(button));
+    pickerButtons
+        .sort((a, b) => (b.dataset.plannerCharacterRelease || "").localeCompare(a.dataset.plannerCharacterRelease || "") || a.dataset.plannerCharacterName.localeCompare(b.dataset.plannerCharacterName))
+        .forEach((button) => pickerGrid.append(button));
     const pickerFilters = { element: "all", weapon: "all", rarity: "all" };
     const pickerCount = picker.querySelector("[data-planner-picker-count]");
     let plans = loadPlans();
@@ -247,20 +232,13 @@ function initCharacterPlanner() {
     let loadedInventory = null;
     let craftingUpdaters = [];
     const goalCostCache = new Map();
-    const UNREPORTED_INVENTORY_IDS = new Set([
-        "104001",
-        "104002",
-        "104011",
-        "104012"
-    ]);
+    const UNREPORTED_INVENTORY_IDS = new Set(["104001", "104002", "104011", "104012"]);
     /* =====================================================
        SAVED PLANS
        ===================================================== */
     function loadPlans() {
         try {
-            const stored = STORAGE_KEY
-                ? localStorage.getItem(STORAGE_KEY)
-                : null;
+            const stored = STORAGE_KEY ? localStorage.getItem(STORAGE_KEY) : null;
             const storedPlans = normalisePlans(stored ? JSON.parse(stored) : []);
             if (STORAGE_KEY && stored !== null) {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(storedPlans));
@@ -277,11 +255,8 @@ function initCharacterPlanner() {
             return [];
         }
         return parsed
-            .filter(plan => plan &&
-            plan.id !== undefined &&
-            plan.name &&
-            plan.icon)
-            .map(plan => ({
+            .filter((plan) => plan && plan.id !== undefined && plan.name && plan.icon)
+            .map((plan) => ({
             ...plan,
             constellation: normaliseNumber(plan.constellation, 0, 0, 6),
             currentConstellation: normaliseOptionalNumber(plan.currentConstellation, 0, 6),
@@ -290,13 +265,11 @@ function initCharacterPlanner() {
             weaponLevel: normaliseNumber(plan.weaponLevel, 90, 1, 90),
             currentLevel: normaliseOptionalNumber(plan.currentLevel, 1, 90),
             currentTalents: Array.isArray(plan.currentTalents)
-                ? plan.currentTalents.map(value => normaliseOptionalNumber(value, 1, 15))
+                ? plan.currentTalents.map((value) => normaliseOptionalNumber(value, 1, 15))
                 : null,
             currentWeaponLevel: normaliseOptionalNumber(plan.currentWeaponLevel, 1, 90),
             currentWeaponRarity: normaliseOptionalNumber(plan.currentWeaponRarity, 1, 5),
-            notes: typeof plan.notes === "string"
-                ? plan.notes
-                : ""
+            notes: typeof plan.notes === "string" ? plan.notes : "",
         }));
     }
     function normaliseNumber(value, fallback, min, max) {
@@ -311,12 +284,10 @@ function initCharacterPlanner() {
             return null;
         }
         const number = Number(value);
-        return Number.isFinite(number)
-            ? Math.min(max, Math.max(min, number))
-            : null;
+        return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : null;
     }
     function normaliseTalents(values) {
-        return [0, 1, 2].map(index => normaliseNumber(values?.[index], 1, 1, 13));
+        return [0, 1, 2].map((index) => normaliseNumber(values?.[index], 1, 1, 13));
     }
     function persistPlans() {
         if (!STORAGE_KEY) {
@@ -333,9 +304,10 @@ function initCharacterPlanner() {
             databaseSavePromise = databaseSavePromise
                 .catch(() => undefined)
                 .then(() => savePlansToDatabase(snapshot));
-            databaseSavePromise.catch(error => {
+            databaseSavePromise.catch((error) => {
                 console.error("Could not save Character Planner data.", error);
-                syncStatus.textContent = "Plans are saved in this browser only. Server save failed; they will retry when you reopen Planner.";
+                syncStatus.textContent =
+                    "Plans are saved in this browser only. Server save failed; they will retry when you reopen Planner.";
             });
             return true;
         }
@@ -350,10 +322,10 @@ function initCharacterPlanner() {
             credentials: "same-origin",
             headers: {
                 Accept: "application/json",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({ plans: snapshot }),
-            keepalive: true
+            keepalive: true,
         });
         if (!response.ok) {
             throw new Error("Could not save Character Planner data.");
@@ -373,7 +345,7 @@ function initCharacterPlanner() {
             const response = await fetch(`/api/characters/plans?account_id=${encodeURIComponent(accountId)}`, {
                 method: "GET",
                 credentials: "same-origin",
-                headers: { Accept: "application/json" }
+                headers: { Accept: "application/json" },
             });
             const payload = await response.json();
             if (!response.ok) {
@@ -395,11 +367,12 @@ function initCharacterPlanner() {
         catch (error) {
             console.error("Could not synchronise Character Planner data.", error);
             syncStatus.hidden = false;
-            syncStatus.textContent = "Could not sync Planner. Showing this browser's saved plans; reload to retry.";
+            syncStatus.textContent =
+                "Could not sync Planner. Showing this browser's saved plans; reload to retry.";
         }
     }
     function getPlan(id) {
-        return plans.find(plan => String(plan.id) === String(id));
+        return plans.find((plan) => String(plan.id) === String(id));
     }
     function makeElement(tag, className, text = "") {
         const element = document.createElement(tag);
@@ -434,14 +407,14 @@ function initCharacterPlanner() {
        TARGET TALENT FIELDS
        ===================================================== */
     function getTalentTargets() {
-        return [1, 2, 3].map(index => {
+        return [1, 2, 3].map((index) => {
             const input = form.querySelector(`[data-planner-talent="${index}"]`);
             return Number(input?.value || 10);
         });
     }
     function setTalentTargets(values) {
         const targets = normaliseTalents(values);
-        [1, 2, 3].forEach(index => {
+        [1, 2, 3].forEach((index) => {
             const input = form.querySelector(`[data-planner-talent="${index}"]`);
             if (input) {
                 input.value = String(targets[index - 1]);
@@ -449,28 +422,26 @@ function initCharacterPlanner() {
         });
     }
     function getTalentBonuses(character, talents) {
-        const normaliseText = value => String(value || "")
+        const normaliseText = (value) => String(value || "")
             .replace(/<[^>]*>/g, " ")
             .toLocaleLowerCase()
             .replace(/[^a-z0-9]+/g, " ")
             .trim();
         const activeEffects = (character?.constellations || [])
-            .filter(item => item?.activated && [3, 5].includes(Number(item.pos)))
-            .map(item => normaliseText(item.effect));
+            .filter((item) => item?.activated && [3, 5].includes(Number(item.pos)))
+            .map((item) => normaliseText(item.effect));
         return talents.map((talent, index) => {
             const name = normaliseText(talent?.name);
-            const matched = name && activeEffects.some(effect => effect.includes(name));
-            return (matched || (Number(talent?.level) > 10 && index > 0))
-                ? 3
-                : 0;
+            const matched = name && activeEffects.some((effect) => effect.includes(name));
+            return matched || (Number(talent?.level) > 10 && index > 0) ? 3 : 0;
         });
     }
     function setTalentLimits(minimums, maximums) {
-        [1, 2, 3].forEach(index => {
+        [1, 2, 3].forEach((index) => {
             const select = form.querySelector(`[data-planner-talent="${index}"]`);
             const minimum = minimums[index - 1] || 1;
             const maximum = maximums[index - 1] || 10;
-            Array.from(select?.options || []).forEach(option => {
+            Array.from(select?.options || []).forEach((option) => {
                 const value = Number(option.value);
                 const unavailable = value < minimum || value > maximum;
                 option.disabled = unavailable;
@@ -487,8 +458,8 @@ function initCharacterPlanner() {
     }
     function combinePlanCosts(costs) {
         const items = new Map();
-        ["level", "talents", "weapon"].forEach(group => {
-            (costs?.[group]?.items || []).forEach(item => {
+        ["level", "talents", "weapon"].forEach((group) => {
+            (costs?.[group]?.items || []).forEach((item) => {
                 const id = String(item.id);
                 const existing = items.get(id);
                 if (existing) {
@@ -497,7 +468,7 @@ function initCharacterPlanner() {
                 else {
                     items.set(id, {
                         ...item,
-                        amount: Number(item.amount) || 0
+                        amount: Number(item.amount) || 0,
                     });
                 }
             });
@@ -507,7 +478,7 @@ function initCharacterPlanner() {
             items: Array.from(items.values()),
             message: items.size > 0
                 ? "Combined character, talent, and weapon costs."
-                : "All saved goals are already reached."
+                : "All saved goals are already reached.",
         };
     }
     async function loadPlanTotal(plan, target) {
@@ -516,7 +487,7 @@ function initCharacterPlanner() {
             const accountQuery = `?account_id=${encodeURIComponent(accountId)}`;
             const showcaseResponse = await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase${accountQuery}`, {
                 credentials: "same-origin",
-                headers: { Accept: "application/json" }
+                headers: { Accept: "application/json" },
             });
             const showcasePayload = await showcaseResponse.json();
             if (!showcaseResponse.ok) {
@@ -532,7 +503,7 @@ function initCharacterPlanner() {
             }
             const weapon = character.weapon;
             const talentBonuses = getTalentBonuses(character, talents);
-            const currentTalentLevels = talents.map(skill => Number(skill.level));
+            const currentTalentLevels = talents.map((skill) => Number(skill.level));
             const characterName = [10000005, 10000007].includes(Number(plan.id))
                 ? `Traveler (${character.element || plan.element})`
                 : character.name || plan.name;
@@ -542,7 +513,7 @@ function initCharacterPlanner() {
                 target_level: String(plan.level),
                 current_talents: withoutTalentBonuses(currentTalentLevels, talentBonuses).join(","),
                 target_talents: withoutTalentBonuses(plan.talents, talentBonuses).join(","),
-                target_weapon_level: String(plan.weaponLevel)
+                target_weapon_level: String(plan.weaponLevel),
             });
             if (character.ascension != null) {
                 parameters.set("current_ascension", String(character.ascension));
@@ -561,7 +532,7 @@ function initCharacterPlanner() {
             if (!payload) {
                 const response = await fetch(requestUrl, {
                     credentials: "same-origin",
-                    headers: { Accept: "application/json" }
+                    headers: { Accept: "application/json" },
                 });
                 payload = await response.json();
                 if (!response.ok) {
@@ -585,15 +556,18 @@ function initCharacterPlanner() {
         const hasPlans = plans.length > 0;
         emptyState.hidden = hasPlans;
         plannerGrid.hidden = !hasPlans;
-        const currentLevels = new Map(pickerButtons.map(button => [
+        const currentLevels = new Map(pickerButtons.map((button) => [
             String(button.dataset.plannerCharacterId),
-            Number(button.dataset.plannerCharacterLevel) || null
+            Number(button.dataset.plannerCharacterLevel) || null,
         ]));
         const releaseOrder = new Map(pickerButtons.map((button, index) => [
-            String(button.dataset.plannerCharacterId), index
+            String(button.dataset.plannerCharacterId),
+            index,
         ]));
-        [...plans].sort((a, b) => (releaseOrder.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) -
-            (releaseOrder.get(String(b.id)) ?? Number.MAX_SAFE_INTEGER)).forEach(plan => {
+        [...plans]
+            .sort((a, b) => (releaseOrder.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) -
+            (releaseOrder.get(String(b.id)) ?? Number.MAX_SAFE_INTEGER))
+            .forEach((plan) => {
             const card = makeElement("article", "planner-character-card");
             const image = makeElement("img");
             image.src = plan.icon;
@@ -622,8 +596,7 @@ function initCharacterPlanner() {
             const content = makeElement("div", "planner-card-content");
             const goals = makeElement("div", "planner-card-goals");
             const levelGoal = makeElement("div", "planner-card-goal");
-            const currentLevel = currentLevels.get(String(plan.id)) ||
-                plan.currentLevel;
+            const currentLevel = currentLevels.get(String(plan.id)) || plan.currentLevel;
             const levelValues = makeProgressionValues(currentLevel, plan.level, "Lv. ");
             levelGoal.append(makeElement("span", "", "Character level"), levelValues);
             goals.append(levelGoal);
@@ -631,7 +604,7 @@ function initCharacterPlanner() {
             const talentLabels = [
                 ["N", "Normal Attack"],
                 ["E", "Elemental Skill"],
-                ["Q", "Elemental Burst"]
+                ["Q", "Elemental Burst"],
             ];
             plan.talents.forEach((value, index) => {
                 const talent = makeElement("div", "planner-card-talent");
@@ -647,10 +620,7 @@ function initCharacterPlanner() {
                 talent.append(talentKey, talentValues);
                 talentRow.append(talent);
             });
-            const weaponMaximum = plan.currentWeaponRarity &&
-                plan.currentWeaponRarity < 3
-                ? 70
-                : 90;
+            const weaponMaximum = plan.currentWeaponRarity && plan.currentWeaponRarity < 3 ? 70 : 90;
             const weaponGoal = Math.min(plan.weaponLevel, weaponMaximum);
             const weapon = makeElement("div", "planner-card-weapon");
             const weaponLevels = makeElement("div", "planner-card-goal");
@@ -701,13 +671,13 @@ function initCharacterPlanner() {
        CHARACTER PICKER
        ===================================================== */
     function filterPicker() {
-        const query = pickerSearch.value
-            .trim()
-            .toLocaleLowerCase();
+        const query = pickerSearch.value.trim().toLocaleLowerCase();
         let visibleCount = 0;
-        pickerButtons.forEach(button => {
+        pickerButtons.forEach((button) => {
             const name = (button.dataset.plannerCharacterName || "").toLocaleLowerCase();
-            const matches = name.includes(query) && Object.entries(pickerFilters).every(([key, value]) => value === "all" || (button.dataset[`plannerCharacter${key[0].toUpperCase()}${key.slice(1)}`] || "").toLowerCase() === value);
+            const matches = name.includes(query) &&
+                Object.entries(pickerFilters).every(([key, value]) => value === "all" ||
+                    (button.dataset[`plannerCharacter${key[0].toUpperCase()}${key.slice(1)}`] || "").toLowerCase() === value);
             button.hidden = !matches;
             if (matches) {
                 visibleCount++;
@@ -737,8 +707,7 @@ function initCharacterPlanner() {
         if (!plan) {
             plan = {
                 id,
-                name: button.dataset.plannerCharacterName ||
-                    "Unknown character",
+                name: button.dataset.plannerCharacterName || "Unknown character",
                 element: button.dataset.plannerCharacterElement || "",
                 rarity: Number(button.dataset.plannerCharacterRarity) || 0,
                 icon: button.dataset.plannerCharacterIcon || "",
@@ -748,7 +717,7 @@ function initCharacterPlanner() {
                 currentLevel: normaliseOptionalNumber(button.dataset.plannerCharacterLevel, 1, 90),
                 level: 90,
                 talents: [1, 1, 1],
-                weaponLevel: 90
+                weaponLevel: 90,
             };
             plans.push(plan);
             persistPlans();
@@ -767,7 +736,7 @@ function initCharacterPlanner() {
         if (!confirmed) {
             return;
         }
-        plans = plans.filter(item => String(item.id) !== String(id));
+        plans = plans.filter((item) => String(item.id) !== String(id));
         persistPlans();
         renderPlans();
     }
@@ -828,7 +797,7 @@ function initCharacterPlanner() {
             top: displayedRect.top,
             left: displayedRect.left + currentShift,
             right: displayedRect.right + currentShift,
-            height: displayedRect.height
+            height: displayedRect.height,
         };
         const constellationTrigger = constellationInput
             .closest(".planner-constellation-field")
@@ -846,13 +815,13 @@ function initCharacterPlanner() {
         const maximumShift = Math.max(0, rect.left - 12);
         const shift = Math.min(maximumShift, Math.max(panelWidth / 2, minimumShift));
         const panelHeight = Math.max(280, rect.height - 72);
-        const panelTop = rect.top + ((rect.height - panelHeight) / 2);
+        const panelTop = rect.top + (rect.height - panelHeight) / 2;
         editor.style.setProperty("--planner-total-shift", `${shift}px`);
         editor.style.setProperty("--planner-total-bookmark-x", `${rect.right - shift - bookmarkLeft}px`);
         editor.style.setProperty("--planner-total-width", `${panelWidth}px`);
         editor.style.setProperty("--planner-total-bookmark-y", `${panelTop - bookmarkTop}px`);
         totalPanel.style.left = `${rect.right - shift}px`;
-        totalPanel.style.top = `${rect.top + (rect.height / 2)}px`;
+        totalPanel.style.top = `${rect.top + rect.height / 2}px`;
         totalPanel.style.width = `${panelWidth}px`;
         totalPanel.style.height = `${panelHeight}px`;
     }
@@ -871,7 +840,7 @@ function initCharacterPlanner() {
             ...plan,
             level: Number(levelInput.value),
             talents: getTalentTargets(),
-            weaponLevel: Number(weaponLevelInput.value)
+            weaponLevel: Number(weaponLevelInput.value),
         }, totalContent);
     }
     if (typeof ResizeObserver !== "undefined") {
@@ -886,16 +855,16 @@ function initCharacterPlanner() {
        PROGRESSION TABS
        ===================================================== */
     function activateProgressionTab(name) {
-        progressionTabs.forEach(tab => {
+        progressionTabs.forEach((tab) => {
             const active = tab.dataset.plannerTab === name;
             tab.classList.toggle("is-active", active);
             tab.setAttribute("aria-selected", String(active));
         });
-        progressionPanels.forEach(panel => {
+        progressionPanels.forEach((panel) => {
             panel.hidden = panel.dataset.plannerPanel !== name;
         });
     }
-    progressionTabs.forEach(tab => {
+    progressionTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
             activateProgressionTab(tab.dataset.plannerTab);
         });
@@ -909,13 +878,12 @@ function initCharacterPlanner() {
             currentLevelElement.textContent = "Loading…";
         }
         if (currentWeaponNameElement) {
-            currentWeaponNameElement.textContent =
-                "Loading equipped weapon…";
+            currentWeaponNameElement.textContent = "Loading equipped weapon…";
         }
         if (currentWeaponLevelElement) {
             currentWeaponLevelElement.textContent = "Loading…";
         }
-        [1, 2, 3].forEach(index => {
+        [1, 2, 3].forEach((index) => {
             const element = form.querySelector(`[data-planner-current-talent="${index}"]`);
             if (element) {
                 element.textContent = "Loading…";
@@ -926,8 +894,7 @@ function initCharacterPlanner() {
             currentWeaponIcon.alt = "";
             currentWeaponIcon.hidden = true;
         }
-        currentWeaponIcon?.closest(".planner-weapon-identity")
-            ?.removeAttribute("data-rarity");
+        currentWeaponIcon?.closest(".planner-weapon-identity")?.removeAttribute("data-rarity");
     }
     function setCurrentProgressionUnavailable() {
         currentProgression = null;
@@ -935,13 +902,12 @@ function initCharacterPlanner() {
             currentLevelElement.textContent = "Unavailable";
         }
         if (currentWeaponNameElement) {
-            currentWeaponNameElement.textContent =
-                "Weapon data unavailable";
+            currentWeaponNameElement.textContent = "Weapon data unavailable";
         }
         if (currentWeaponLevelElement) {
             currentWeaponLevelElement.textContent = "Unavailable";
         }
-        [1, 2, 3].forEach(index => {
+        [1, 2, 3].forEach((index) => {
             const element = form.querySelector(`[data-planner-current-talent="${index}"]`);
             if (element) {
                 element.textContent = "Unavailable";
@@ -952,11 +918,10 @@ function initCharacterPlanner() {
             currentWeaponIcon.alt = "";
             currentWeaponIcon.hidden = true;
         }
-        currentWeaponIcon?.closest(".planner-weapon-identity")
-            ?.removeAttribute("data-rarity");
+        currentWeaponIcon?.closest(".planner-weapon-identity")?.removeAttribute("data-rarity");
     }
     function setLevelLimits(select, minimum, maximum) {
-        const availableOptions = Array.from(select.options).filter(option => {
+        const availableOptions = Array.from(select.options).filter((option) => {
             const value = Number(option.value);
             const unavailable = value < minimum || value > maximum;
             option.disabled = unavailable;
@@ -987,8 +952,8 @@ function initCharacterPlanner() {
                 method: "GET",
                 credentials: "same-origin",
                 headers: {
-                    Accept: "application/json"
-                }
+                    Accept: "application/json",
+                },
             });
             let payload;
             try {
@@ -998,8 +963,7 @@ function initCharacterPlanner() {
                 throw new Error("The server returned an invalid response.");
             }
             if (!response.ok) {
-                throw new Error(payload?.error ||
-                    "Couldn't load current progression.");
+                throw new Error(payload?.error || "Couldn't load current progression.");
             }
             const responseData = payload?.data;
             const character = Array.isArray(responseData)
@@ -1009,15 +973,12 @@ function initCharacterPlanner() {
                 throw new Error("No detailed character data was returned.");
             }
             // Ignore old responses after switching characters or closing.
-            if (requestId !== progressionRequestId ||
-                editor.hidden) {
+            if (requestId !== progressionRequestId || editor.hidden) {
                 return;
             }
             if (currentLevelElement) {
                 currentLevelElement.textContent =
-                    character.level != null
-                        ? `Lv. ${character.level}`
-                        : "Unavailable";
+                    character.level != null ? `Lv. ${character.level}` : "Unavailable";
             }
             const weapon = character.weapon;
             const weaponRarity = Number(weapon?.rarity);
@@ -1026,15 +987,12 @@ function initCharacterPlanner() {
                 weaponIdentity.dataset.rarity = String(weaponRarity);
             }
             if (currentWeaponNameElement) {
-                currentWeaponNameElement.textContent =
-                    weapon?.name || "Weapon data unavailable";
+                currentWeaponNameElement.textContent = weapon?.name || "Weapon data unavailable";
             }
             if (currentWeaponIcon) {
                 if (weapon?.icon) {
                     currentWeaponIcon.src = weapon.icon;
-                    currentWeaponIcon.alt = weapon.name
-                        ? `${weapon.name} icon`
-                        : "Equipped weapon";
+                    currentWeaponIcon.alt = weapon.name ? `${weapon.name} icon` : "Equipped weapon";
                     currentWeaponIcon.hidden = false;
                 }
                 else {
@@ -1045,46 +1003,38 @@ function initCharacterPlanner() {
             }
             if (currentWeaponLevelElement) {
                 currentWeaponLevelElement.textContent =
-                    weapon?.level != null
-                        ? `Lv. ${weapon.level}`
-                        : "Unavailable";
+                    weapon?.level != null ? `Lv. ${weapon.level}` : "Unavailable";
             }
             const talents = getCharacterCombatTalents(character);
-            [1, 2, 3].forEach(index => {
+            [1, 2, 3].forEach((index) => {
                 const element = form.querySelector(`[data-planner-current-talent="${index}"]`);
                 const talent = talents[index - 1];
                 if (element) {
                     element.textContent =
-                        talent?.level != null
-                            ? `Lv. ${talent.level}`
-                            : "Unavailable";
+                        talent?.level != null ? `Lv. ${talent.level}` : "Unavailable";
                 }
             });
-            const currentTalentLevels = talents.map(talent => Number(talent.level));
+            const currentTalentLevels = talents.map((talent) => Number(talent.level));
             const talentBonuses = getTalentBonuses(character, talents);
-            const talentMaximums = talentBonuses.map(bonus => 10 + bonus);
-            const talentMinimums = currentTalentLevels.map(level => Number.isFinite(level) ? level : 1);
+            const talentMaximums = talentBonuses.map((bonus) => 10 + bonus);
+            const talentMinimums = currentTalentLevels.map((level) => Number.isFinite(level) ? level : 1);
             setTalentLimits(talentMinimums, talentMaximums);
             plan.talents = plan.talents.map((level, index) => Math.min(talentMaximums[index], Math.max(talentMinimums[index], level)));
             setTalentTargets(plan.talents);
             const currentConstellation = Number(character.constellation);
             const currentCharacterLevel = Number(character.level);
             const currentWeaponLevel = Number(weapon?.level);
-            setLevelLimits(levelInput, Number.isFinite(currentCharacterLevel)
-                ? currentCharacterLevel
-                : 1, 90);
+            setLevelLimits(levelInput, Number.isFinite(currentCharacterLevel) ? currentCharacterLevel : 1, 90);
             setWeaponLevelLimits(weaponRarity, Number.isFinite(currentWeaponLevel) ? currentWeaponLevel : 1);
             plan.currentLevel = Number(character.level) || plan.currentLevel;
-            plan.currentTalents = currentTalentLevels.length === 3 &&
-                currentTalentLevels.every(Number.isFinite)
-                ? currentTalentLevels
-                : plan.currentTalents;
+            plan.currentTalents =
+                currentTalentLevels.length === 3 && currentTalentLevels.every(Number.isFinite)
+                    ? currentTalentLevels
+                    : plan.currentTalents;
             plan.currentWeaponLevel = Number(weapon?.level) || null;
             plan.currentWeaponName = weapon?.name || "";
             plan.currentWeaponIcon = weapon?.icon || "";
-            plan.currentWeaponRarity = Number.isFinite(weaponRarity)
-                ? weaponRarity
-                : null;
+            plan.currentWeaponRarity = Number.isFinite(weaponRarity) ? weaponRarity : null;
             plan.level = Number(levelInput.value);
             plan.weaponLevel = Number(weaponLevelInput.value);
             if (Number.isFinite(currentConstellation)) {
@@ -1115,26 +1065,23 @@ function initCharacterPlanner() {
                             name: weapon.name || "",
                             level: Number(weapon.level),
                             rarity: Number(weapon.rarity),
-                            ascension: weapon.ascension
+                            ascension: weapon.ascension,
                         }
-                        : null
+                        : null,
                 };
                 updateGoalCosts();
             }
             else {
-                setGoalCostsMessage("Current progression is unavailable, so costs " +
-                    "cannot be calculated.");
+                setGoalCostsMessage("Current progression is unavailable, so costs " + "cannot be calculated.");
             }
         }
         catch (error) {
-            if (requestId !== progressionRequestId ||
-                editor.hidden) {
+            if (requestId !== progressionRequestId || editor.hidden) {
                 return;
             }
             console.error("Could not load current character progression.", error);
             setCurrentProgressionUnavailable();
-            setGoalCostsMessage("Current progression is unavailable, so costs " +
-                "cannot be calculated.");
+            setGoalCostsMessage("Current progression is unavailable, so costs " + "cannot be calculated.");
         }
     }
     /* =====================================================
@@ -1143,10 +1090,9 @@ function initCharacterPlanner() {
     function setGoalCostsMessage(message, loading = false) {
         craftingUpdaters = [];
         const costElements = Array.from(form.querySelectorAll("[data-planner-cost]"));
-        costElements.forEach(element => {
+        costElements.forEach((element) => {
             element.setAttribute("aria-busy", String(loading));
-            element.closest(".planner-goal-cost")
-                ?.querySelector(".planner-cost-status")?.remove();
+            element.closest(".planner-goal-cost")?.querySelector(".planner-cost-status")?.remove();
             element.replaceChildren(makeElement("p", "planner-cost-message", message));
         });
     }
@@ -1175,21 +1121,24 @@ function initCharacterPlanner() {
         const grid = makeElement("div", "planner-cost-grid");
         grid.setAttribute("role", "list");
         element.append(grid);
-        const requirements = new Map(cost.items.map(item => [String(item.id), Number(item.amount)]));
+        const requirements = new Map(cost.items.map((item) => [String(item.id), Number(item.amount)]));
         function inventoryAmount(materialId) {
             const inventoryItem = inventory?.get(String(materialId));
             return Number(inventoryItem?.amount) || 0;
         }
         function craftingPlan() {
             const families = new Map();
-            cost.items.forEach(item => {
+            cost.items.forEach((item) => {
                 if (!Array.isArray(item.crafting_lower)) {
                     return;
                 }
-                const family = [...item.crafting_lower, {
+                const family = [
+                    ...item.crafting_lower,
+                    {
                         id: item.id,
-                        name: item.name
-                    }];
+                        name: item.name,
+                    },
+                ];
                 const familyId = String(family[0]?.id ?? item.id);
                 const existing = families.get(familyId);
                 if (!existing || family.length > existing.length) {
@@ -1197,14 +1146,12 @@ function initCharacterPlanner() {
                 }
             });
             const plan = new Map();
-            families.forEach(family => {
+            families.forEach((family) => {
                 const craftAmounts = Array(family.length).fill(0);
                 for (let index = family.length - 1; index > 0; index--) {
                     const materialId = String(family[index].id);
                     const required = requirements.get(materialId) || 0;
-                    const consumedAbove = index < family.length - 1
-                        ? craftAmounts[index + 1] * 3
-                        : 0;
+                    const consumedAbove = index < family.length - 1 ? craftAmounts[index + 1] * 3 : 0;
                     craftAmounts[index] = Math.max(0, required + consumedAbove - inventoryAmount(materialId));
                 }
                 let craftedFromLower = 0;
@@ -1219,19 +1166,19 @@ function initCharacterPlanner() {
                         const craftable = Math.floor(Math.max(0, available - required) / 3);
                         craftedUpward = Math.min(desired, craftable);
                     }
-                    const after = available - (craftedUpward * 3);
+                    const after = available - craftedUpward * 3;
                     plan.set(materialId, {
                         before,
                         after,
                         enough: after >= required,
-                        enoughBeforeCrafting: before >= required
+                        enoughBeforeCrafting: before >= required,
                     });
                     craftedFromLower = craftedUpward;
                 });
             });
             return plan;
         }
-        cost.items.forEach(item => {
+        cost.items.forEach((item) => {
             const wrapper = makeElement("div", "planner-cost-entry");
             wrapper.setAttribute("role", "listitem");
             const tile = makeElement("button", "planner-cost-tile");
@@ -1267,25 +1214,25 @@ function initCharacterPlanner() {
                         ? null
                         : 0;
                 ownedAmount = owned;
-                const ownedExact = owned == null
-                    ? null
-                    : Number(owned).toLocaleString();
+                const ownedExact = owned == null ? null : Number(owned).toLocaleString();
                 const ownedLabel = ownedExact == null
                     ? "Owned amount unavailable from HoYoLAB"
                     : `${ownedExact} owned`;
-                ownedDisplay = owned == null
-                    ? "—"
-                    : new Intl.NumberFormat("en-GB", {
-                        notation: "compact",
-                        maximumFractionDigits: 1
-                    }).format(owned);
+                ownedDisplay =
+                    owned == null
+                        ? "—"
+                        : new Intl.NumberFormat("en-GB", {
+                            notation: "compact",
+                            maximumFractionDigits: 1,
+                        }).format(owned);
                 ownedIndicator = makeElement("span", "planner-cost-owned", ownedDisplay);
                 ownedIndicator.title = ownedLabel;
                 ownedIndicator.setAttribute("aria-label", ownedLabel);
                 label += `, ${ownedLabel}`;
             }
             const compactFormatter = new Intl.NumberFormat("en-GB", {
-                notation: "compact", maximumFractionDigits: 1
+                notation: "compact",
+                maximumFractionDigits: 1,
             });
             const amount = compactFormatter.format(requiredAmount);
             const quantity = makeElement("strong", "planner-cost-quantity", `\u00d7${amount}`);
@@ -1324,37 +1271,28 @@ function initCharacterPlanner() {
                 }
                 const craftingEnabled = craftingInput?.getAttribute("aria-pressed") === "true";
                 const craftResult = craftingPlan().get(String(item.id));
-                const effectiveAmount = craftingEnabled && craftResult
-                    ? craftResult.after
-                    : ownedAmount;
-                const remaining = effectiveAmount == null
-                    ? null
-                    : Math.max(0, requiredAmount - effectiveAmount);
-                const remainingDisplay = remaining == null
-                    ? "\u2014"
-                    : compactFormatter.format(remaining);
+                const effectiveAmount = craftingEnabled && craftResult ? craftResult.after : ownedAmount;
+                const remaining = effectiveAmount == null ? null : Math.max(0, requiredAmount - effectiveAmount);
+                const remainingDisplay = remaining == null ? "\u2014" : compactFormatter.format(remaining);
                 remainingElement.textContent = `(${remainingDisplay})`;
-                remainingElement.title = remaining == null
-                    ? "Amount left unavailable from HoYoLAB"
-                    : craftingEnabled && craftResult
-                        ? `${remaining.toLocaleString()} left after crafting`
-                        : `${remaining.toLocaleString()} left`;
+                remainingElement.title =
+                    remaining == null
+                        ? "Amount left unavailable from HoYoLAB"
+                        : craftingEnabled && craftResult
+                            ? `${remaining.toLocaleString()} left after crafting`
+                            : `${remaining.toLocaleString()} left`;
                 if (remaining != null) {
-                    if (craftResult?.enoughBeforeCrafting ||
-                        (!craftResult && remaining === 0)) {
+                    if (craftResult?.enoughBeforeCrafting || (!craftResult && remaining === 0)) {
                         quantity.classList.add("is-enough");
                     }
-                    else if (craftResult &&
-                        craftResult.enough) {
+                    else if (craftResult && craftResult.enough) {
                         quantity.classList.add("is-craft-enough");
                     }
                     else {
                         quantity.classList.add("is-short");
                     }
                     if (craftResult && craftingEnabled) {
-                        tile.classList.add(craftResult.enough
-                            ? "is-craft-enough"
-                            : "is-craft-short");
+                        tile.classList.add(craftResult.enough ? "is-craft-enough" : "is-craft-short");
                         if (ownedIndicator) {
                             if (craftResult.after !== craftResult.before) {
                                 ownedIndicator.textContent =
@@ -1393,24 +1331,24 @@ function initCharacterPlanner() {
         inventoryPromise = fetch(`/api/inventory?account_id=${encodeURIComponent(accountId)}`, {
             method: "GET",
             credentials: "same-origin",
-            headers: { Accept: "application/json" }
+            headers: { Accept: "application/json" },
         })
             .then(async (response) => {
             const payload = await response.json();
             if (!response.ok) {
                 throw new Error(payload?.error || "Couldn't retrieve inventory.");
             }
-            loadedInventory = new Map((payload?.inventory || []).map(item => [
+            loadedInventory = new Map((payload?.inventory || []).map((item) => [
                 String(item.id),
                 {
                     amount: Number(item.amount) || 0,
                     rarity: Number(item.rarity) || 0,
-                    name: item.name || ""
-                }
+                    name: item.name || "",
+                },
             ]));
             return loadedInventory;
         })
-            .catch(error => {
+            .catch((error) => {
             console.warn("Could not load HoYoLAB inventory for the planner.", error);
             loadedInventory = null;
             return null;
@@ -1430,7 +1368,7 @@ function initCharacterPlanner() {
             target_level: levelInput.value,
             current_talents: withoutTalentBonuses(currentProgression.talents, currentProgression.talentBonuses).join(","),
             target_talents: withoutTalentBonuses(getTalentTargets(), currentProgression.talentBonuses).join(","),
-            target_weapon_level: weaponLevelInput.value
+            target_weapon_level: weaponLevelInput.value,
         });
         if (currentProgression.ascension != null) {
             parameters.set("current_ascension", String(currentProgression.ascension));
@@ -1452,7 +1390,7 @@ function initCharacterPlanner() {
                 const response = await fetch(requestUrl, {
                     method: "GET",
                     credentials: "same-origin",
-                    headers: { Accept: "application/json" }
+                    headers: { Accept: "application/json" },
                 });
                 payload = await response.json();
                 if (!response.ok) {
@@ -1463,14 +1401,12 @@ function initCharacterPlanner() {
                     goalCostCache.delete(goalCostCache.keys().next().value);
                 }
             }
-            if (requestId !== costRequestId ||
-                editor.hidden ||
-                String(plan.id) !== editingId) {
+            if (requestId !== costRequestId || editor.hidden || String(plan.id) !== editingId) {
                 return;
             }
-            const renderCosts = inventory => {
+            const renderCosts = (inventory) => {
                 craftingUpdaters = [];
-                form.querySelectorAll("[data-planner-cost]").forEach(element => {
+                form.querySelectorAll("[data-planner-cost]").forEach((element) => {
                     renderGoalCost(element, payload?.costs?.[element.dataset.plannerCost], inventory);
                 });
             };
@@ -1491,7 +1427,7 @@ function initCharacterPlanner() {
             }
             console.error("Could not calculate planner costs.", error);
             setGoalCostsMessage(error.message || "Couldn't calculate goal costs.");
-            form.querySelectorAll("[data-planner-cost]").forEach(element => {
+            form.querySelectorAll("[data-planner-cost]").forEach((element) => {
                 renderGoalCost(element, { status: "unavailable", message: error.message });
             });
         }
@@ -1508,8 +1444,7 @@ function initCharacterPlanner() {
         costRequestId++;
         editorTitle.textContent = plan.name;
         editorSubtitle.textContent =
-            `${plan.element || "Unknown element"} · ` +
-                `${plan.rarity || "?"}-star character`;
+            `${plan.element || "Unknown element"} · ` + `${plan.rarity || "?"}-star character`;
         if (editorIcon) {
             editorIcon.src = plan.icon;
             editorIcon.alt = plan.name;
@@ -1521,7 +1456,7 @@ function initCharacterPlanner() {
         weaponLevelInput.value = String(plan.weaponLevel ?? 90);
         setLevelLimits(levelInput, plan.currentLevel ?? 1, 90);
         setWeaponLevelLimits(plan.currentWeaponRarity ?? 5, plan.currentWeaponLevel ?? 1);
-        setTalentLimits([1, 1, 1], plan.talents.map(level => level > 10 ? 13 : 10));
+        setTalentLimits([1, 1, 1], plan.talents.map((level) => (level > 10 ? 13 : 10)));
         setTalentTargets(plan.talents);
         plannerSelectors.sync();
         setGoalCostsMessage("Loading current progression…", true);
@@ -1534,20 +1469,20 @@ function initCharacterPlanner() {
     /* =====================================================
        EVENT LISTENERS
        ===================================================== */
-    page.querySelectorAll("[data-planner-add]").forEach(button => {
+    page.querySelectorAll("[data-planner-add]").forEach((button) => {
         button.addEventListener("click", openPicker);
     });
-    pickerButtons.forEach(button => {
+    pickerButtons.forEach((button) => {
         button.addEventListener("click", () => {
             addCharacter(button);
         });
     });
     pickerSearch.addEventListener("input", filterPicker);
-    picker.querySelectorAll("[data-planner-filter]").forEach(group => {
-        group.querySelectorAll("button").forEach(button => {
+    picker.querySelectorAll("[data-planner-filter]").forEach((group) => {
+        group.querySelectorAll("button").forEach((button) => {
             button.addEventListener("click", () => {
                 pickerFilters[group.dataset.plannerFilter] = button.dataset.value;
-                group.querySelectorAll("button").forEach(option => {
+                group.querySelectorAll("button").forEach((option) => {
                     const selected = option === button;
                     option.classList.toggle("selected", selected);
                     option.setAttribute("aria-pressed", String(selected));
@@ -1558,18 +1493,20 @@ function initCharacterPlanner() {
     });
     picker.querySelector("[data-planner-filter-reset]")?.addEventListener("click", () => {
         pickerSearch.value = "";
-        picker.querySelectorAll('[data-planner-filter] [data-value="all"]').forEach(button => button.click());
+        picker
+            .querySelectorAll('[data-planner-filter] [data-value="all"]')
+            .forEach((button) => button.click());
         filterPicker();
     });
     levelInput.addEventListener("change", updateGoalCosts);
     weaponLevelInput.addEventListener("change", updateGoalCosts);
-    form.querySelectorAll("[data-planner-talent]").forEach(input => {
+    form.querySelectorAll("[data-planner-talent]").forEach((input) => {
         input.addEventListener("change", updateGoalCosts);
     });
     craftingInput?.addEventListener("click", () => {
         const enabled = craftingInput.getAttribute("aria-pressed") !== "true";
         craftingInput.setAttribute("aria-pressed", String(enabled));
-        craftingUpdaters.forEach(update => update());
+        craftingUpdaters.forEach((update) => update());
     });
     totalButton?.addEventListener("click", () => {
         if (editor.classList.contains("is-total-open")) {
@@ -1579,10 +1516,10 @@ function initCharacterPlanner() {
             openTotalPanel();
         }
     });
-    picker.querySelectorAll("[data-planner-picker-close]").forEach(button => {
+    picker.querySelectorAll("[data-planner-picker-close]").forEach((button) => {
         button.addEventListener("click", closePicker);
     });
-    editor.querySelectorAll("[data-planner-editor-close]").forEach(button => {
+    editor.querySelectorAll("[data-planner-editor-close]").forEach((button) => {
         button.addEventListener("click", closeEditor);
     });
     form.addEventListener("submit", async (event) => {
@@ -1608,7 +1545,7 @@ function initCharacterPlanner() {
                 "saved to the database. Please try again.");
         }
     });
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") {
             return;
         }
