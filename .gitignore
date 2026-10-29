@@ -41,6 +41,7 @@ coverage/
 
 # Local tools and editor settings
 /tools/
+/openspec/
 .vscode/
 .idea/
 
