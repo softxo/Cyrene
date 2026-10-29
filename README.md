@@ -6,7 +6,7 @@
 
 Track your accounts, plan upgrades, keep up with events, and access game information from one place.
 
-[**Open the website**](https://cyrene.apps.bot-hosting.cloud/) · [**Report a bug**](https://github.com/softxo/Cyrene/issues) · [**View changes**](https://github.com/softxo/Cyrene/pulls)
+[**Open the website**](https://cyrene.apps.bot-hosting.cloud/) · [**Report a bug**](https://github.com/softxo/Cyrene/issues) · [**Pull requests**](https://github.com/softxo/Cyrene/pulls)
 
 ![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -17,7 +17,7 @@ Track your accounts, plan upgrades, keep up with events, and access game informa
 </div>
 
 > [!NOTE]
-> Cyrene is a WiP. Some pages and features are still being developed, and behaviour may change. Cyrene is an independent fan project and is not affiliated with or endorsed by HoYoverse.
+> Cyrene is a work in progress (WiP). Some pages and features are still being developed, and behaviour may change. Cyrene is an independent fan project and is not affiliated with or endorsed by HoYoverse.
 
 ## Overview
 
@@ -36,26 +36,28 @@ Cyrene combines a **Discord bot** with a **web dashboard** for Genshin Impact. T
 
 | Area | What it offers |
 | --- | --- |
-| **Characters** | Browse character rosters and inspect character details, equipment, talents and constellations with a character levelling planner as well. |
-| **Planner** |Reminders for activities you select, such as resin, expeditions, events and others. |
+| **Characters** | Browse character rosters, inspect builds, talents and constellations, and plan character upgrades. |
+| **Planner** | Configure reminders for resin, expeditions and other recurring activities. |
 | **Achievements** | Browse achievements and track completion per linked account. |
-| **Events** | Follow daily and recurring activities, endgame modes and custom events. |
-| **Wishes** | Review wish-related information and available banners. |
-| **Accounts & settings** | Link game accounts, view account-specific data and manage supported account utilities. |
+| **Events** | Track daily activities, endgame modes, limited-time events and custom objectives. |
+| **Wishes** | View available banners and wish-related information. |
+| **Accounts & settings** | Link Genshin Impact accounts and manage account-specific preferences and utilities. |
 
 The Events experience includes tracking for **Spiral Abyss**, **Imaginarium Theatre** and **Stygian Onslaught**, alongside recurring activities such as Daily Commissions and Trounce Domains. Custom events support account-specific progress.
 
 ## Open source
 
-Cyrene is developed in the open to make its source code accessible, encourage transparency and welcome community feedback and contributions.
+Cyrene is developed openly to encourage transparency, collaboration and community contributions.
 
-The official instance is available at **[cyrene.apps.bot-hosting.cloud](https://cyrene.apps.bot-hosting.cloud/)**. This repository contains the source code for Cyrene's Discord bot and web dashboard.
-
-The project is actively maintained, and features may change as development progresses.
+This repository contains the source code for the Discord bot and web dashboard. The official service is available at **[cyrene.apps.bot-hosting.cloud](https://cyrene.apps.bot-hosting.cloud/)**.
 
 ## Issues and feedback
 
 Found a bug or have an idea? [Open an issue](https://github.com/softxo/Cyrene/issues) with a clear description, reproduction steps (when applicable) and screenshots. **Remove any sensitive information before sharing them.**
+
+## Licence
+
+Cyrene's original source code is licensed under the [MIT Licence](LICENSE). Third-party assets and dependencies remain subject to their respective licences and terms.
 
 ## Acknowledgements
 
