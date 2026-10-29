@@ -1,6 +1,7 @@
 {
     "$schema": "./node_modules/knip/schema.json",
     "entry": [
+        "website/src/app.ts",
         "website/src/browser/core/theme.ts",
         "website/src/browser/pages/**/*.ts",
         "tests/unit/**/*.test.mjs"
