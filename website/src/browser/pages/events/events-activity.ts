@@ -27,7 +27,13 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
                 ".events-limited-overview-event.completed:not([hidden])",
             ).length;
             const count = group.querySelector("[data-limited-account-count]");
-            if (count) count.textContent = `${completed}/${cards.length} complete`;
+            if (count) {
+                count.textContent = `${completed}/${cards.length} complete`;
+                count.classList.toggle(
+                    "event-completion-pill",
+                    cards.length > 0 && completed === cards.length,
+                );
+            }
         });
     }
 

@@ -1,4 +1,6 @@
 # Development tooling
+config/
+scripts/
 tools/
 .vscode/
 .idea/
@@ -14,12 +16,8 @@ node_modules/
 package.json
 package-lock.json
 tsconfig*.json
-vite.config.ts
-eslint.config.js
-commitlint.config.mjs
 
 # Development tests
-test_exporter.py
 tests/
 playwright-report/
 test-results/
@@ -32,7 +30,6 @@ __pycache__/
 .pytest_cache/
 
 # Documentation
-CODEX.md
 README.md
 
 # Temporary and sensitive files

@@ -73,10 +73,44 @@ window.refreshEvents = async function refreshEvents() {
 
         if (
             activityRevision !== (window.eventsActivityRevision || 0) ||
+            !currentPage.isConnected ||
             !refreshedPage ||
             document.querySelector('.event-checkmark[data-saving="true"]')
         ) {
             return;
+        }
+
+        // A new server template can arrive while this tab still has older CSS.
+        // Load the matching stylesheet before inserting any new card markup.
+        const refreshedStyle = refreshedDocument.querySelector('link[data-page-style="/events"]');
+        const currentStyles = [...document.querySelectorAll('link[data-page-style="/events"]')];
+        if (refreshedStyle) {
+            const href = new URL(refreshedStyle.getAttribute("href"), window.location.origin).href;
+            if (!currentStyles.some((link) => link.href === href)) {
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.href = href;
+                link.dataset.pageStyle = "/events";
+                try {
+                    await new Promise((resolve, reject) => {
+                        link.addEventListener("load", resolve, { once: true });
+                        link.addEventListener("error", reject, { once: true });
+                        document.head.appendChild(link);
+                    });
+                } catch (error) {
+                    link.remove();
+                    throw error;
+                }
+                // Do not insert stale data if the user navigated or checked an event while CSS loaded.
+                if (
+                    !currentPage.isConnected ||
+                    activityRevision !== (window.eventsActivityRevision || 0)
+                ) {
+                    link.remove();
+                    return;
+                }
+                currentStyles.forEach((old) => old.remove());
+            }
         }
 
         // -------------------------------------------------
@@ -138,6 +172,9 @@ window.refreshEvents = async function refreshEvents() {
         }
 
         function syncAttributes(current, refreshed) {
+            const isTabPanel = current.matches("[data-account-category], .events-overview-panel");
+            const wasHidden = current.hidden;
+            const wasActive = current.classList.contains("active");
             const isFeaturedCard = current.matches(".event-featured-card");
 
             const wasDetailsOpen = current instanceof HTMLDetailsElement && current.open;
@@ -169,6 +206,11 @@ window.refreshEvents = async function refreshEvents() {
                 for (const className of previousClasses) {
                     current.classList.add(className);
                 }
+            }
+
+            if (isTabPanel) {
+                current.hidden = wasHidden;
+                current.classList.toggle("active", wasActive);
             }
 
             if (current instanceof HTMLDetailsElement) {
@@ -361,6 +403,10 @@ window.refreshEvents = async function refreshEvents() {
             // A refresh can finish after the user changes tabs. Restore the
             // latest client-side choice instead of stale response visibility.
             window.initialiseAccountTabs();
+        }
+
+        if (window.initialiseOverviewTabs) {
+            window.initialiseOverviewTabs();
         }
 
         if (window.initialiseActivityCheckmarks) {

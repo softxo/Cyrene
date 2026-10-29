@@ -72,26 +72,26 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
-        "/static/build/browser/pages/characters/characters-showcase.js?v=6",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=8",
         "/static/build/browser/pages/characters/characters-planner.js?v=9",
         "/static/build/browser/pages/characters/characters.js",
     ],
-    "/achievements": "/static/build/browser/pages/achievements.js?v=2",
+    "/achievements": "/static/build/browser/pages/achievements.js?v=3",
     "/inventory": "/static/build/browser/pages/inventory.js",
-    "/planner": "/static/build/browser/pages/planner.js",
+    "/planner": "/static/build/browser/pages/planner.js?v=2",
     "/verify": "/static/build/browser/pages/verification.js",
     "/codes": "/static/build/browser/pages/codes.js",
 
     "/events": [
-        "/static/build/browser/pages/events/events-dropdown.js",
-        "/static/build/browser/pages/events/events-tabs.js",
+        "/static/build/browser/pages/events/events-dropdown.js?v=2",
+        "/static/build/browser/pages/events/events-tabs.js?v=2",
         "/static/build/browser/pages/events/events-cards.js",
-        "/static/build/browser/pages/events/events-rewards.js?v=2",
-        "/static/build/browser/pages/events/events-filters.js?v=5",
-        "/static/build/browser/pages/events/events-timers.js?v=2",
-        "/static/build/browser/pages/events/events-activity.js?v=8",
-        "/static/build/browser/pages/events/events-refresh.js?v=3",
-        "/static/build/browser/pages/events/events-custom.js?v=4",
+        "/static/build/browser/pages/events/events-rewards.js?v=3",
+        "/static/build/browser/pages/events/events-filters.js?v=6",
+        "/static/build/browser/pages/events/events-timers.js?v=6",
+        "/static/build/browser/pages/events/events-activity.js?v=9",
+        "/static/build/browser/pages/events/events-refresh.js?v=5",
+        "/static/build/browser/pages/events/events-custom.js?v=6",
         "/static/build/browser/pages/events/events.js",
     ],
 
@@ -107,7 +107,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=15",
+    "/events": "/static/build/css/events.css?v=30",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 
@@ -164,7 +164,13 @@ async function loadPageScript(path: string): Promise<void> {
    4. PAGE STYLE LOADER
    ========================================================= */
 
-async function loadPageStyle(path: string): Promise<void> {
+async function loadPageStyle(path: string, serverDocument?: Document): Promise<void> {
+    const serverStyle = serverDocument?.querySelector<HTMLLinkElement>(
+        `link[data-page-style="${path}"]`,
+    );
+    if (serverStyle?.getAttribute("href")) {
+        pageStyles[path] = serverStyle.getAttribute("href")!;
+    }
     const styleHref = pageStyles[path];
 
     if (!styleHref) {
@@ -321,10 +327,37 @@ function updateActiveNavigation(url: string | URL): void {
    8. CLIENT-SIDE NAVIGATION
    ========================================================= */
 
+let navigationController: AbortController | undefined;
+
+function showEventsNavigationLoading(show: boolean): void {
+    document.getElementById("events-navigation-status")?.remove();
+    document.querySelector(".main-content")?.removeAttribute("aria-busy");
+    document
+        .querySelectorAll(".nav-item.is-loading")
+        .forEach((item) => item.classList.remove("is-loading"));
+    if (!show) return;
+
+    document.querySelector(".main-content")?.setAttribute("aria-busy", "true");
+    document.querySelectorAll<HTMLAnchorElement>(".nav-item").forEach((item) => {
+        item.classList.toggle("is-loading", new URL(item.href).pathname === "/events");
+    });
+    const status = document.createElement("div");
+    status.id = "events-navigation-status";
+    status.setAttribute("role", "status");
+    status.innerHTML =
+        '<span class="navigation-loading-spark" aria-hidden="true">&#10022;</span><span>Loading Events&hellip;</span>';
+    document.body.appendChild(status);
+}
+
 async function navigate(url: string | URL, addToHistory = true): Promise<void> {
+    navigationController?.abort();
+    const controller = new AbortController();
+    navigationController = controller;
+    showEventsNavigationLoading(new URL(url, window.location.origin).pathname === "/events");
     try {
         const response = await fetch(url, {
             redirect: "manual",
+            signal: controller.signal,
         });
 
         /*
@@ -346,6 +379,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
         }
 
         const html = await response.text();
+        if (controller.signal.aborted) return;
         const parser = new DOMParser();
 
         const newDocument = parser.parseFromString(html, "text/html");
@@ -366,7 +400,8 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
 
         // Keep the current page visible until the destination stylesheet is
         // ready, preventing an unstyled frame during client-side navigation.
-        await loadPageStyle(finalPath);
+        await loadPageStyle(finalPath, newDocument);
+        if (controller.signal.aborted) return;
 
         /*
          * Replace the current page content.
@@ -403,6 +438,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          */
 
         await preparePage(finalPath);
+        if (controller.signal.aborted) return;
 
         /*
          * Update the active sidebar item.
@@ -419,9 +455,14 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
             behavior: "instant",
         });
     } catch (error) {
+        if (controller.signal.aborted) return;
         console.error("Navigation error:", error);
 
         window.location.href = url.toString();
+    } finally {
+        if (navigationController === controller) {
+            showEventsNavigationLoading(false);
+        }
     }
 }
 

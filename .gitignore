@@ -1,11 +1,56 @@
+# Local credentials and environment configuration
 .env
-/website/static/cache/
+.env.*
+!.env.example
+!.env.sample
+cookies.txt
+
+# Python environments, bytecode, and tool caches
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Node dependencies and generated development output
+node_modules/
+.vite/
+*.tsbuildinfo
+coverage/
+/website/static/build/**/*.map
+
+# Browser test output (keep the test source files)
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/blob-report/
+
+# Runtime caches, logs, and local exports
+/website/static/cache/
+*.log
+/cyrene_export.json
+
+# Local tools and editor settings
+/tools/
+/openspec/
 .vscode/
 .idea/
-cookies.txt
-/tools/
-node_modules/
-.ruff_cache/
+
+# Operating system and temporary files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.tmp
+*.temp
+*.swp
+*.swo
+*~

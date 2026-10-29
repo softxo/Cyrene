@@ -1,0 +1,15 @@
+
+title = "Cyrene Gitleaks Configuration"
+
+# Preserve Gitleaks' built-in secret detection rules.
+[extend]
+useDefault = true
+
+# Ignore only the verified browser localStorage identifier.
+[[allowlists]]
+description = "Ignore Cyrene browser preference storage key"
+targetRules = ["generic-api-key"]
+regexTarget = "line"
+regexes = [
+    '''const key = ["']cyrene-limited-hidden-categories-v1["'];''',
+]

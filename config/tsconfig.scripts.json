@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "rootDir": "../website/src/browser",
+        "outDir": "../website/static/build/browser",
+        "sourceMap": false,
+        "removeComments": false,
+        "noEmitOnError": true,
+        "skipLibCheck": true
+    },
+    "include": ["../website/src/browser/**/*.ts"]
+}

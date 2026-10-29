@@ -19,8 +19,8 @@ from fastapi import (
     Request,
     Response,
     UploadFile,
-    logger,
 )
+from fastapi.logger import logger
 from fastapi.responses import (
     HTMLResponse,
     JSONResponse,
@@ -35,11 +35,11 @@ from genshin.models.auth.geetest import (
     SessionMMTv4Result,
 )
 from genshin.models.genshin.constants import CHARACTER_NAMES
+from jinja2.utils import htmlsafe_json_dumps
 
 from utils.achievements.achievements import load_achievements
 from utils.achievements.importer import import_achievements
 from utils.achievements.progress import load_progress
-from utils.changing_variables.config import IT_ELEMENTS
 from utils.genshin_db import GenshinDB, GenshinDBError
 from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.account_limits import get_account_limit
@@ -105,16 +105,18 @@ from utils.web.auth import (
     get_web_session,
 )
 from utils.web.limited_event_checks import (
+    annotate_daily_events,
     apply_completion_checks,
     completion_token,
     valid_completion_token,
 )
-from utils.web.planner_costs import calculate_planner_costs
+from utils.web.planner_costs import PlannerValidationError, calculate_planner_costs
 from utils.web.quest_reward_details import enrich_quest_rewards
 from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
 )
+from utils.web.theater_elements import get_theater_season
 
 app = FastAPI(
     title="Cyrene Authentication",
@@ -1269,7 +1271,11 @@ async def get_single_account_events(
     if cached:
         cache_age = time.monotonic() - cached["timestamp"]
 
-        if cache_age < EVENTS_CACHE_TTL:
+        daily_period_expired = any(
+            event.get("daily_reset_time", float("inf")) <= time.time()
+            for event in cached["data"].get("limited_events", [])
+        )
+        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired:
             return cached["data"]
 
     abyss_data = {
@@ -1286,7 +1292,8 @@ async def get_single_account_events(
         "arcanums": 0,
         "medals": 0,
         "end_time": 0,
-        "elements": IT_ELEMENTS,
+        "elements": [],
+        "opening_cast": [],
     }
 
     stygian_data = {
@@ -1936,12 +1943,12 @@ async def get_single_account_events(
                     )
 
                 difficulty_icons = {
-                    1: "SO_Diff_I.webp",
-                    2: "SO_Diff_II.webp",
-                    3: "SO_Diff_III.webp",
-                    4: "SO_Diff_IV.webp",
-                    5: "SO_Diff_V.webp",
-                    6: "SO_Diff_VI.webp",
+                    1: "SO_Diff_I.png",
+                    2: "SO_Diff_II.png",
+                    3: "SO_Diff_III.png",
+                    4: "SO_Diff_IV.png",
+                    5: "SO_Diff_V.png",
+                    6: "SO_Diff_VI.png",
                 }
 
                 stygian_data = {
@@ -1949,7 +1956,7 @@ async def get_single_account_events(
                     "end_time": int(current_stygian["schedule"]["end_time"]),
                     "difficulty": (record["difficulty"] if record else 0),
                     "difficulty_icon": (
-                        "SO_Diff_VI_180.webp"
+                        "SO_Diff_VI_180.png"
                         if (record and record["difficulty"] == 6 and record["second"] < 180)
                         else (difficulty_icons.get(record["difficulty"], "") if record else "")
                     ),
@@ -1973,13 +1980,16 @@ async def get_single_account_events(
 
                 arcanums = sum(1 for act in acts if act.get("is_tarot") is True)
 
+                season_details = await get_theater_season(
+                    schedule.get("start_time", 0), account["genshin_server"]
+                )
                 theater_data = {
                     "has_data": stat["max_round_id"] > 0,
                     "best_round": stat["max_round_id"],
                     "arcanums": arcanums,
                     "medals": stat["medal_num"],
                     "end_time": schedule["end_time"],
-                    "elements": IT_ELEMENTS,
+                    **season_details,
                 }
 
     except Exception as error:
@@ -1990,6 +2000,7 @@ async def get_single_account_events(
         print("================================")
 
     if limited_events:
+        annotate_daily_events(limited_events, get_daily_reset_timestamp(account["genshin_server"]))
         apply_completion_checks(
             limited_events, await get_limited_event_checks(user_id, account["genshin_uid"])
         )
@@ -1997,6 +2008,8 @@ async def get_single_account_events(
             expires = min(
                 event["end_time"] or int(time.time()) + 7 * 86400, int(time.time()) + 7 * 86400
             )
+            if event.get("daily_reset_time"):
+                expires = min(expires, event["daily_reset_time"])
             event["completion_token"] = completion_token(
                 user_id, account["genshin_uid"], event["completion_key"], expires
             )
@@ -2107,7 +2120,8 @@ async def get_events_data(
             "arcanums": 0,
             "medals": 0,
             "end_time": 0,
-            "elements": IT_ELEMENTS,
+            "elements": [],
+            "opening_cast": [],
         },
         "stygian": {
             "has_data": False,
@@ -2815,10 +2829,10 @@ async def inventory_data(
             session.user_id,
             selected_account,
         )
-    except RuntimeError as error:
+    except RuntimeError:
         return JSONResponse(
             status_code=404,
-            content={"error": str(error)},
+            content={"error": "Unable to load the selected account."},
         )
     except Exception:
         logger.exception(
@@ -3358,10 +3372,15 @@ async def character_planner_costs(
             current_ascension=current_ascension,
             weapon_ascension=weapon_ascension,
         )
-    except ValueError as error:
+    except PlannerValidationError as error:
         return JSONResponse(
             status_code=400,
-            content={"error": str(error)},
+            content={"error": error.public_message},
+        )
+    except ValueError:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Couldn't calculate planner costs. Please try again."},
         )
 
     return {
@@ -4574,6 +4593,8 @@ async def challenge(token: str):
         )
 
     mmt = session.mmt
+    mmt_json = htmlsafe_json_dumps(mmt.model_dump(mode="json"))
+    submission_url_json = htmlsafe_json_dumps(f"/challenge/{session.token}/send-data")
 
     print("===== GEETEST MMT =====")
     print(mmt)
@@ -4587,7 +4608,7 @@ async def challenge(token: str):
         gt_url = "https://static.geetest.com/v4/gt4.js"
 
         captcha_script = f"""
-        const mmt = {mmt.model_dump_json()};
+        const mmt = {mmt_json};
 
         const initParams = {{
             captchaId: mmt.captcha_id ?? mmt.gt,
@@ -4624,7 +4645,7 @@ async def challenge(token: str):
                     console.log("==========================");
 
                     const response = await fetch(
-                        "/challenge/{token}/send-data",
+                        {submission_url_json},
                         {{
                             method: "POST",
 
@@ -4670,7 +4691,7 @@ async def challenge(token: str):
         gt_url = "https://static.geetest.com/static/js/gt.0.5.0.js"
 
         captcha_script = f"""
-        const mmt = {mmt.model_dump_json()};
+        const mmt = {mmt_json};
 
         const initParams = {{
             gt: mmt.gt,
@@ -4704,7 +4725,7 @@ async def challenge(token: str):
                     console.log("==========================");
 
                     const response = await fetch(
-                        "/challenge/{token}/send-data",
+                        {submission_url_json},
                         {{
                             method: "POST",
 

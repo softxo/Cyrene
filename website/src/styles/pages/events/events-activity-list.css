@@ -788,7 +788,7 @@
 
     padding: 4px 10px;
 
-    gap: 0;
+    gap: 4px;
 
     margin-left: 10px;
 
@@ -821,14 +821,18 @@
 }
 
 .event-encounter-points-icon {
-    width: 25px;
-    height: 25px;
+    /* Tint the Encounter Points silhouette purple. */
+    background-color: #a87bfa;
+    mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain
+        no-repeat;
+    -webkit-mask: url("/static/images/events/daily_commissions/encounter_points.png") center /
+        contain no-repeat;
+    width: 18px;
+    height: 18px;
 
     object-fit: contain;
 
     flex-shrink: 0;
-
-    transform: translateX(-3px);
 }
 
 .event-encounter-points-value {
@@ -840,8 +844,6 @@
     line-height: 1;
 
     white-space: nowrap;
-
-    transform: translateX(-2px);
 }
 
 /* =========================================================
@@ -850,4 +852,50 @@
 
 .event-trounce-item {
     margin-top: 10px;
+}
+
+/* Daily bonus reset occupies the status column, before the event expiry timer. */
+.event-limited-item .event-list-right [data-daily-event-reset] {
+    width: 112px;
+    min-width: 112px;
+    max-width: 112px;
+    flex-basis: 112px;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+}
+
+.event-limited-name-with-help {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.event-manual-completion-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 11px;
+    line-height: 1;
+    opacity: 0.45;
+    cursor: help;
+    transition: opacity 160ms ease;
+}
+
+.event-manual-completion-trigger:hover,
+.event-manual-completion-trigger:focus-visible {
+    opacity: 0.9;
+}
+
+.event-manual-completion .event-insight-content > p:last-child {
+    margin-bottom: 0;
 }

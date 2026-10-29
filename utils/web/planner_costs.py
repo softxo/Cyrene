@@ -22,6 +22,27 @@ from utils.resource_calculator.weapon_resource_calculator import (
 
 logger = logging.getLogger(__name__)
 
+
+class PlannerValidationError(ValueError):
+    """A controlled validation failure, separate from provider exceptions."""
+
+    MESSAGES = {
+        "talent_count": "Exactly three talent levels are required.",
+        "current_talents": "Current talent levels must be between 1 and 15.",
+        "target_talents": "Target talent levels must be between 1 and 10.",
+        "levels": "Levels must be between 1 and 90.",
+        "weapon_level": "Weapon levels must be between 1 and 90.",
+        "ascension": "Ascension phases must be between 0 and 6.",
+    }
+
+    def __init__(self, code: str):
+        self.code = code
+        super().__init__(self.public_message)
+
+    @property
+    def public_message(self) -> str:
+        return self.MESSAGES.get(self.code, "Invalid planner goals.")
+
 ASCENSION_LEVELS = (20, 40, 50, 60, 70, 80)
 BOOKS = (
     (104003, "Hero's Wit", "heros_wit", 20000),
@@ -457,24 +478,25 @@ async def calculate_planner_costs(
     character_level_name: str | None = None,
 ) -> dict:
     if len(current_talents) != 3 or len(target_talents) != 3:
-        raise ValueError("Exactly three talent levels are required.")
+        raise PlannerValidationError("talent_count")
     if any(not 1 <= level <= 15 for level in current_talents):
-        raise ValueError("Current talent levels must be between 1 and 15.")
+        raise PlannerValidationError("current_talents")
     if any(not 1 <= level <= 10 for level in target_talents):
-        raise ValueError("Target talent levels must be between 1 and 10.")
+        raise PlannerValidationError("target_talents")
     if any(not 1 <= level <= 90 for level in (current_level, target_level, target_weapon_level)):
-        raise ValueError("Levels must be between 1 and 90.")
+        raise PlannerValidationError("levels")
     if current_weapon_level is not None and not 1 <= current_weapon_level <= 90:
-        raise ValueError("Weapon levels must be between 1 and 90.")
+        raise PlannerValidationError("weapon_level")
     for phase in (current_ascension, weapon_ascension):
         if phase is not None and not 0 <= phase <= 6:
-            raise ValueError("Ascension phases must be between 0 and 6.")
+            raise PlannerValidationError("ascension")
 
     async def available(coroutine):
         try:
             return await coroutine
-        except GenshinDBError as error:
-            return {"status": "unavailable", "items": [], "message": str(error)}
+        except GenshinDBError:
+            return {"status": "unavailable", "items": [],
+                    "message": "Couldn't load material data. Please try again."}
 
     async with aiohttp.ClientSession() as session:
         db = GenshinDB(session)

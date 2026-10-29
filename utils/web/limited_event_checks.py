@@ -7,10 +7,38 @@ import time
 from utils.web.announcement_events import normalise_name
 
 
+def annotate_daily_events(events: list[dict], reset_time: int) -> None:
+    # Explicit recurring reward campaigns, not ordinary events mentioning daily tasks.
+    campaigns = (
+        "overflowing favor",
+        "overflowing favour",
+        "ley line overflow",
+        "overflowing mastery",
+        "overflowing abundance",
+    )
+    for event in events:
+        name = normalise_name(event["name"])
+        if any(name == campaign or name.startswith(campaign + " ") for campaign in campaigns):
+            event["category"] = "Daily"
+            event["daily_reset_time"] = reset_time
+
+    # Keep active ordinary events first, followed by the categories with title pills.
+    # Upcoming entries remain last, and each group keeps chronological order.
+    events.sort(
+        key=lambda event: (
+            bool(event.get("is_upcoming")),
+            bool(event.get("category") or event.get("is_tcg")),
+            event.get("start_time", 0) if event.get("is_upcoming") else event["end_time"],
+        )
+    )
+
+
 def completion_key(event: dict) -> str:
     # Preserve a check when an announcement later appears in HoYoLAB's calendar,
     # while keeping subsequent runs of the same named event independent.
     identity = f"{normalise_name(event['name'])}|{int(event['end_time'])}"
+    if event.get("daily_reset_time"):
+        identity += f"|daily:{int(event['daily_reset_time'])}"
     return "limited:v1:" + hashlib.sha256(identity.encode()).hexdigest()
 
 

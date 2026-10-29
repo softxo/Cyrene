@@ -6,7 +6,7 @@ async function loadPlanner() {
     try {
         const response = await fetch("/api/planner", {
             credentials: "same-origin",
-            signal: plannerAbortController?.signal
+            signal: plannerAbortController?.signal,
         });
         if (response.status === 401) {
             window.location.href = "/";
@@ -34,8 +34,7 @@ async function loadPlanner() {
     }
 }
 function renderPlanner(plannerData) {
-    window.plannerAccounts =
-        plannerData.accounts || [];
+    window.plannerAccounts = plannerData.accounts || [];
     const accounts = document.getElementById("accounts");
     const reminders = document.getElementById("reminders");
     accounts.innerHTML = "";
@@ -46,10 +45,8 @@ function renderPlanner(plannerData) {
     for (const account of plannerData.accounts) {
         const card = document.createElement("div");
         card.className = "planner-card";
-        card.dataset.genshinUid =
-            account.genshin_uid;
-        const name = account.nickname
-            || account.genshin_uid;
+        card.dataset.genshinUid = account.genshin_uid;
+        const name = account.nickname || account.genshin_uid;
         card.innerHTML = `
             <h2>${name}</h2>
 
@@ -93,9 +90,7 @@ function renderPlanner(plannerData) {
                     class="resin-countdown"
                     data-timestamp="${account.replenished_at ?? ""}"
                 >
-                    ${account.replenished_at === null
-            ? "Full"
-            : "Loading..."}
+                    ${account.replenished_at === null ? "Full" : "Loading..."}
                 </span>
             </p>
 
@@ -106,9 +101,7 @@ function renderPlanner(plannerData) {
                     class="resin-full-countdown"
                     data-full-timestamp="${account.full_resin_at ?? ""}"
                 >
-                    ${account.full_resin_at === null
-            ? "Full"
-            : "Loading..."}
+                    ${account.full_resin_at === null ? "Full" : "Loading..."}
                 </span>
             </p>
         `;
@@ -126,29 +119,23 @@ function renderPlanner(plannerData) {
        ================================ */
     for (const reminder of plannerData.reminders) {
         const card = document.createElement("div");
-        card.className =
-            "reminder-card";
+        card.className = "reminder-card";
         const amount = reminder.config?.amount;
-        const type = reminder.type
-            || "Unknown";
-        const mode = reminder.mode
-            || "Unknown";
+        const type = reminder.type || "Unknown";
+        const mode = reminder.mode || "Unknown";
         /*
          * Capitalise the reminder type.
          */
-        const displayType = type.charAt(0).toUpperCase()
-            + type.slice(1);
+        const displayType = type.charAt(0).toUpperCase() + type.slice(1);
         /*
          * Capitalise the reminder mode.
          */
-        const displayMode = mode.charAt(0).toUpperCase()
-            + mode.slice(1);
+        const displayMode = mode.charAt(0).toUpperCase() + mode.slice(1);
         /*
          * Resin amount.
          */
         let amountHTML = "—";
-        if (amount !== undefined
-            && amount !== null) {
+        if (amount !== undefined && amount !== null) {
             if (type.toLowerCase() === "resin") {
                 amountHTML = `
                     <img
@@ -161,8 +148,7 @@ function renderPlanner(plannerData) {
                 `;
             }
             else {
-                amountHTML =
-                    `${amount}`;
+                amountHTML = `${amount}`;
             }
         }
         card.innerHTML = `
@@ -222,7 +208,7 @@ function renderPlanner(plannerData) {
                 title="Delete reminder"
             >
                 <img
-                    src="/static/images/ui/ui_buttons/Delete.webp"
+                    src="/static/images/ui/ui_buttons/Delete.png"
                     alt=""
                 >
             </button>
@@ -240,14 +226,11 @@ function renderPlanner(plannerData) {
     updateTimestamps();
 }
 function updateTimestamps() {
-    document
-        .querySelectorAll(".planner-card")
-        .forEach(card => {
+    document.querySelectorAll(".planner-card").forEach((card) => {
         const resinValue = card.querySelector("[data-resin-current]");
         const replenished = card.querySelector("[data-timestamp]");
         const fullyReplenished = card.querySelector("[data-full-timestamp]");
-        if (!resinValue ||
-            !replenished) {
+        if (!resinValue || !replenished) {
             return;
         }
         let currentResin = Number(resinValue.dataset.resinCurrent);
@@ -257,25 +240,19 @@ function updateTimestamps() {
          */
         const timestamp = Number(replenished.dataset.timestamp);
         if (timestamp) {
-            const seconds = timestamp -
-                Math.floor(Date.now() / 1000);
+            const seconds = timestamp - Math.floor(Date.now() / 1000);
             if (seconds <= 0) {
-                currentResin =
-                    Math.min(currentResin + 1, maxResin);
-                resinValue.dataset.resinCurrent =
-                    currentResin;
-                resinValue.textContent =
-                    `${currentResin} / ${maxResin}`;
+                currentResin = Math.min(currentResin + 1, maxResin);
+                resinValue.dataset.resinCurrent = currentResin;
+                resinValue.textContent = `${currentResin} / ${maxResin}`;
                 /*
                  * Resin is now completely full.
                  */
                 if (currentResin >= maxResin) {
-                    replenished.textContent =
-                        "Full";
+                    replenished.textContent = "Full";
                     replenished.removeAttribute("data-timestamp");
                     if (fullyReplenished) {
-                        fullyReplenished.textContent =
-                            "Full";
+                        fullyReplenished.textContent = "Full";
                         fullyReplenished.removeAttribute("data-full-timestamp");
                     }
                     return;
@@ -284,16 +261,14 @@ function updateTimestamps() {
                  * Start the next Resin timer.
                  */
                 const nextTimestamp = Math.floor(Date.now() / 1000) + 480;
-                replenished.dataset.timestamp =
-                    nextTimestamp;
+                replenished.dataset.timestamp = nextTimestamp;
             }
             updateCountdown(replenished, Number(replenished.dataset.timestamp));
         }
         /*
          * Update Fully Replenished timer.
          */
-        if (fullyReplenished &&
-            fullyReplenished.dataset.fullTimestamp) {
+        if (fullyReplenished && fullyReplenished.dataset.fullTimestamp) {
             updateCountdown(fullyReplenished, Number(fullyReplenished.dataset.fullTimestamp));
         }
     });
@@ -302,7 +277,7 @@ async function refreshResin() {
     try {
         const response = await fetch("/api/planner", {
             credentials: "same-origin",
-            signal: plannerAbortController?.signal
+            signal: plannerAbortController?.signal,
         });
         if (response.status === 401) {
             window.location.href = "/";
@@ -324,12 +299,9 @@ async function refreshResin() {
              */
             const resinValue = card.querySelector("[data-resin-current]");
             if (resinValue) {
-                resinValue.dataset.resinCurrent =
-                    account.current_resin;
-                resinValue.dataset.resinMax =
-                    account.max_resin;
-                resinValue.textContent =
-                    `${account.current_resin} / ${account.max_resin}`;
+                resinValue.dataset.resinCurrent = account.current_resin;
+                resinValue.dataset.resinMax = account.max_resin;
+                resinValue.textContent = `${account.current_resin} / ${account.max_resin}`;
             }
             /*
              * -------------------------------
@@ -339,16 +311,12 @@ async function refreshResin() {
             const replenished = card.querySelector("[data-timestamp]");
             if (replenished) {
                 if (account.replenished_at === null) {
-                    replenished.textContent =
-                        "Full";
-                    replenished.dataset.timestamp =
-                        "";
+                    replenished.textContent = "Full";
+                    replenished.dataset.timestamp = "";
                 }
                 else {
-                    replenished.dataset.timestamp =
-                        account.replenished_at;
-                    replenished.textContent =
-                        "Loading...";
+                    replenished.dataset.timestamp = account.replenished_at;
+                    replenished.textContent = "Loading...";
                 }
             }
             /*
@@ -359,16 +327,12 @@ async function refreshResin() {
             const fullyReplenished = card.querySelector("[data-full-timestamp]");
             if (fullyReplenished) {
                 if (account.full_resin_at === null) {
-                    fullyReplenished.textContent =
-                        "Full";
-                    fullyReplenished.dataset.fullTimestamp =
-                        "";
+                    fullyReplenished.textContent = "Full";
+                    fullyReplenished.dataset.fullTimestamp = "";
                 }
                 else {
-                    fullyReplenished.dataset.fullTimestamp =
-                        account.full_resin_at;
-                    fullyReplenished.textContent =
-                        "Loading...";
+                    fullyReplenished.dataset.fullTimestamp = account.full_resin_at;
+                    fullyReplenished.textContent = "Loading...";
                 }
             }
         }
@@ -390,23 +354,19 @@ async function refreshResin() {
     }
 }
 function updateCountdown(element, timestamp) {
-    const seconds = Math.max(0, timestamp -
-        Math.floor(Date.now() / 1000));
+    const seconds = Math.max(0, timestamp - Math.floor(Date.now() / 1000));
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
     if (hours > 0) {
-        element.textContent =
-            `in ${hours}h ${minutes}m ${remainingSeconds}s`;
+        element.textContent = `in ${hours}h ${minutes}m ${remainingSeconds}s`;
         return;
     }
     if (minutes > 0) {
-        element.textContent =
-            `in ${minutes}m ${remainingSeconds}s`;
+        element.textContent = `in ${minutes}m ${remainingSeconds}s`;
         return;
     }
-    element.textContent =
-        `in ${remainingSeconds}s`;
+    element.textContent = `in ${remainingSeconds}s`;
 }
 function openReminderPanel() {
     const panel = document.getElementById("reminder-panel");
@@ -427,8 +387,7 @@ function openReminderPanel() {
      * Reset the account selector.
      */
     accountInput.value = "";
-    accountValue.textContent =
-        "Select Account";
+    accountValue.textContent = "Select Account";
     accountMenu.innerHTML = "";
     /*
      * Populate the custom account selector.
@@ -436,25 +395,18 @@ function openReminderPanel() {
     for (const account of window.plannerAccounts || []) {
         const option = document.createElement("button");
         option.type = "button";
-        option.className =
-            "custom-select-option";
-        option.dataset.value =
-            account.genshin_uid;
-        option.textContent =
-            account.nickname
-                ? `${account.nickname} (${account.genshin_uid})`
-                : account.genshin_uid;
+        option.className = "custom-select-option";
+        option.dataset.value = account.genshin_uid;
+        option.textContent = account.nickname
+            ? `${account.nickname} (${account.genshin_uid})`
+            : account.genshin_uid;
         option.addEventListener("click", () => {
-            accountInput.value =
-                account.genshin_uid;
-            accountValue.textContent =
-                option.textContent;
+            accountInput.value = account.genshin_uid;
+            accountValue.textContent = option.textContent;
             /*
              * Update selected state.
              */
-            accountMenu
-                .querySelectorAll(".custom-select-option")
-                .forEach(item => {
+            accountMenu.querySelectorAll(".custom-select-option").forEach((item) => {
                 item.classList.remove("selected");
             });
             option.classList.add("selected");
@@ -512,29 +464,23 @@ function initialiseReminderPanel() {
     /*
      * Initialise all custom selects.
      */
-    document
-        .querySelectorAll(".custom-select")
-        .forEach(select => {
+    document.querySelectorAll(".custom-select").forEach((select) => {
         const button = select.querySelector(".custom-select-button");
         const hiddenInput = select.parentElement.querySelector('input[type="hidden"]');
         const valueDisplay = select.querySelector(".custom-select-button span");
         const options = select.querySelectorAll(".custom-select-option:not(:disabled)");
-        if (!button ||
-            !hiddenInput ||
-            !valueDisplay) {
+        if (!button || !hiddenInput || !valueDisplay) {
             return;
         }
         /*
          * Open / close dropdown.
          */
-        button.addEventListener("click", event => {
+        button.addEventListener("click", (event) => {
             event.stopPropagation();
             /*
              * Close every other dropdown.
              */
-            document
-                .querySelectorAll(".custom-select.open")
-                .forEach(otherSelect => {
+            document.querySelectorAll(".custom-select.open").forEach((otherSelect) => {
                 if (otherSelect !== select) {
                     otherSelect.classList.remove("open");
                 }
@@ -544,17 +490,15 @@ function initialiseReminderPanel() {
         /*
          * Select an option.
          */
-        options.forEach(option => {
-            option.addEventListener("click", event => {
+        options.forEach((option) => {
+            option.addEventListener("click", (event) => {
                 event.stopPropagation();
-                hiddenInput.value =
-                    option.dataset.value;
-                valueDisplay.textContent =
-                    option.textContent.trim();
+                hiddenInput.value = option.dataset.value;
+                valueDisplay.textContent = option.textContent.trim();
                 /*
                  * Update selected state.
                  */
-                options.forEach(item => {
+                options.forEach((item) => {
                     item.classList.remove("selected");
                 });
                 option.classList.add("selected");
@@ -573,9 +517,7 @@ function initialiseReminderPanel() {
      * - Press and hold
      * - Rapid repeated changes while held
      */
-    document
-        .querySelectorAll(".number-spinner-button")
-        .forEach(button => {
+    document.querySelectorAll(".number-spinner-button").forEach((button) => {
         let holdInterval = null;
         let holdTimeout = null;
         function changeValue() {
@@ -605,18 +547,17 @@ function initialiseReminderPanel() {
             }
             input.value = value;
             input.dispatchEvent(new Event("input", {
-                bubbles: true
+                bubbles: true,
             }));
             input.dispatchEvent(new Event("change", {
-                bubbles: true
+                bubbles: true,
             }));
         }
         function startHolding(event) {
             /*
              * Only react to the primary mouse button.
              */
-            if (event.type === "mousedown"
-                && event.button !== 0) {
+            if (event.type === "mousedown" && event.button !== 0) {
                 return;
             }
             /*
@@ -632,11 +573,9 @@ function initialiseReminderPanel() {
              * Wait briefly before starting the
              * rapid-repeat behaviour.
              */
-            holdTimeout =
-                setTimeout(() => {
-                    holdInterval =
-                        setInterval(changeValue, 50);
-                }, 350);
+            holdTimeout = setTimeout(() => {
+                holdInterval = setInterval(changeValue, 50);
+            }, 350);
         }
         function stopHolding() {
             if (holdTimeout) {
@@ -656,14 +595,14 @@ function initialiseReminderPanel() {
          * causing a second increment after
          * mouseup.
          */
-        button.addEventListener("click", event => {
+        button.addEventListener("click", (event) => {
             event.preventDefault();
         });
         /*
          * Also support touch devices.
          */
         button.addEventListener("touchstart", startHolding, {
-            passive: false
+            passive: false,
         });
         button.addEventListener("touchend", stopHolding);
         button.addEventListener("touchcancel", stopHolding);
@@ -673,9 +612,7 @@ function initialiseReminderPanel() {
      * elsewhere on the page.
      */
     document.addEventListener("click", () => {
-        document
-            .querySelectorAll(".custom-select.open")
-            .forEach(select => {
+        document.querySelectorAll(".custom-select.open").forEach((select) => {
             select.classList.remove("open");
         });
     });
@@ -684,7 +621,7 @@ function initialiseReminderPanel() {
      */
     const reminders = document.getElementById("reminders");
     if (reminders) {
-        reminders.addEventListener("click", event => {
+        reminders.addEventListener("click", (event) => {
             const button = event.target.closest(".reminder-delete-button");
             if (!button) {
                 return;
@@ -697,8 +634,7 @@ let plannerToastTimeout = null;
 function showPlannerToast(message) {
     const toast = document.getElementById("planner-toast");
     const toastMessage = document.getElementById("planner-toast-message");
-    if (!toast ||
-        !toastMessage) {
+    if (!toast || !toastMessage) {
         return;
     }
     /*
@@ -711,8 +647,7 @@ function showPlannerToast(message) {
     /*
      * Update the message.
      */
-    toastMessage.textContent =
-        message;
+    toastMessage.textContent = message;
     /*
      * Show the toast.
      */
@@ -720,11 +655,10 @@ function showPlannerToast(message) {
     /*
      * Hide it after 3 seconds.
      */
-    plannerToastTimeout =
-        setTimeout(() => {
-            toast.classList.remove("show");
-            plannerToastTimeout = null;
-        }, 3000);
+    plannerToastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+        plannerToastTimeout = null;
+    }, 3000);
 }
 async function saveReminder() {
     const typeInput = document.getElementById("reminder-type");
@@ -747,9 +681,7 @@ async function saveReminder() {
      */
     if (type === "resin") {
         const amount = Number(amountInput?.value);
-        if (!Number.isInteger(amount)
-            || amount < 1
-            || amount > 200) {
+        if (!Number.isInteger(amount) || amount < 1 || amount > 200) {
             alert("Resin must be between 1 and 200.");
             return;
         }
@@ -757,23 +689,22 @@ async function saveReminder() {
     }
     if (saveButton) {
         saveButton.disabled = true;
-        saveButton.textContent =
-            "Saving...";
+        saveButton.textContent = "Saving...";
     }
     try {
         const response = await fetch("/api/planner/reminders", {
             method: "POST",
             credentials: "same-origin",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 type: type,
                 mode: "automatic",
                 genshin_uid: genshinUid,
                 config: config,
-                delivery_type: "dm"
-            })
+                delivery_type: "dm",
+            }),
         });
         if (response.status === 401) {
             window.location.href = "/";
@@ -781,8 +712,7 @@ async function saveReminder() {
         }
         const result = await response.json();
         if (!response.ok) {
-            throw new Error(result.detail
-                || "Failed to save reminder.");
+            throw new Error(result.detail || "Failed to save reminder.");
         }
         closeReminderPanel();
         showPlannerToast("Reminder added successfully.");
@@ -790,14 +720,12 @@ async function saveReminder() {
     }
     catch (exception) {
         console.error(exception);
-        alert(exception.message
-            || "Failed to save reminder.");
+        alert(exception.message || "Failed to save reminder.");
     }
     finally {
         if (saveButton) {
             saveButton.disabled = false;
-            saveButton.textContent =
-                "Add Reminder";
+            saveButton.textContent = "Add Reminder";
         }
     }
 }
@@ -812,7 +740,7 @@ async function deleteReminder(reminderId) {
      */
     const deleteRequest = fetch(`/api/planner/reminders/${reminderId}`, {
         method: "DELETE",
-        credentials: "same-origin"
+        credentials: "same-origin",
     });
     /*
      * Start the visual removal animation.
@@ -828,14 +756,13 @@ async function deleteReminder(reminderId) {
         }
         const result = await response.json();
         if (!response.ok) {
-            throw new Error(result.detail
-                || "Failed to delete reminder.");
+            throw new Error(result.detail || "Failed to delete reminder.");
         }
         /*
          * Wait for the removal animation to finish.
          */
         if (card) {
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 setTimeout(resolve, 180);
             });
             card.remove();
@@ -856,8 +783,7 @@ async function deleteReminder(reminderId) {
          * Restore the planner if deletion failed.
          */
         await loadPlanner();
-        alert(exception.message
-            || "Failed to delete reminder.");
+        alert(exception.message || "Failed to delete reminder.");
     }
 }
 let plannerAbortController = null;
@@ -884,17 +810,14 @@ window.initPlanner = function () {
     /*
      * Start a new API request.
      */
-    plannerAbortController =
-        new AbortController();
+    plannerAbortController = new AbortController();
     loadPlanner();
     /*
      * Start the Resin countdown.
      */
-    window.plannerInterval =
-        setInterval(updateTimestamps, 1_000);
+    window.plannerInterval = setInterval(updateTimestamps, 1_000);
     /*
      * Refresh Resin from HoYoLAB every 30 seconds.
      */
-    window.plannerRefreshInterval =
-        setInterval(refreshResin, 30_000);
+    window.plannerRefreshInterval = setInterval(refreshResin, 30_000);
 };

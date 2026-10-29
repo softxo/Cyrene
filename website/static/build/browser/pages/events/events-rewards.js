@@ -39,7 +39,8 @@
         const desiredHeight = popup.offsetHeight;
         const roomBelow = innerHeight - anchor.bottom - 20;
         const roomAbove = anchor.top - 20;
-        const below = desiredHeight <= roomBelow || (desiredHeight > roomAbove && roomBelow >= roomAbove);
+        const below = wrapper.dataset.popoverPlacement !== "top" &&
+            (desiredHeight <= roomBelow || (desiredHeight > roomAbove && roomBelow >= roomAbove));
         if (content)
             content.style.maxHeight = `${Math.max(72, below ? roomBelow : roomAbove)}px`;
         const width = popup.offsetWidth;

@@ -1594,7 +1594,7 @@ function initCustomEvents() {
         const icon = document.createElement("img");
 
         icon.className = "events-custom-card-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.webp";
+        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
@@ -1602,7 +1602,7 @@ function initCustomEvents() {
         icon.addEventListener(
             "error",
             () => {
-                icon.src = "/static/images/ui/ui_icons/Events.webp";
+                icon.src = "/static/images/ui/ui_icons/Events.png";
             },
             { once: true },
         );
@@ -1844,14 +1844,14 @@ function initCustomEvents() {
         const summary = makeElement("summary", "events-custom-overview-summary");
         const icon = document.createElement("img");
         icon.className = "events-custom-overview-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.webp";
+        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
         icon.addEventListener(
             "error",
             () => {
-                icon.src = "/static/images/ui/ui_icons/Events.webp";
+                icon.src = "/static/images/ui/ui_icons/Events.png";
             },
             { once: true },
         );
@@ -2071,6 +2071,10 @@ function initCustomEvents() {
                     .closest("[data-custom-account-group]")
                     ?.querySelector("[data-custom-account-count]");
                 if (count) {
+                    count.classList.toggle(
+                        "event-completion-pill",
+                        listEvents.length > 0 && completedCount === listEvents.length,
+                    );
                     count.textContent = listEvents.length
                         ? `${completedCount}/${listEvents.length} complete`
                         : "No events";
@@ -2162,6 +2166,7 @@ function initCustomEvents() {
 
             $$("[data-custom-account-count]").forEach((count) => {
                 count.textContent = "Unavailable";
+                count.classList.remove("event-completion-pill");
             });
 
             $$("[data-custom-event-list]").forEach((list) => {
