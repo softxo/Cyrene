@@ -5,10 +5,10 @@
     "type": "module",
     "scripts": {
         "typecheck": "tsc --noEmit",
-        "build": "vite build && npm run build:scripts",
-        "build:scripts": "tsc -p tsconfig.scripts.json",
-        "lint": "eslint website/src",
-        "test:e2e": "playwright test",
+        "build": "vite build --config config/vite.config.ts && npm run build:scripts",
+        "build:scripts": "tsc -p config/tsconfig.scripts.json",
+        "lint": "eslint --config config/eslint.config.js website/src",
+        "test:e2e": "playwright test --config config/playwright.config.ts",
         "prepare": "husky",
         "knip": "knip"
     },
@@ -30,5 +30,60 @@
     },
     "dependencies": {
         "zod": "^4.6.7"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "tabWidth": 4,
+        "useTabs": false,
+        "semi": true,
+        "singleQuote": false,
+        "trailingComma": "all"
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
+    },
+    "lint-staged": {
+        "*.py": [
+            ".venv/Scripts/python.exe -m ruff check --fix",
+            ".venv/Scripts/python.exe -m ruff format"
+        ],
+        "*.{ts,tsx,js,mjs}": [
+            "prettier --write"
+        ],
+        "website/src/**/*.{ts,tsx,js,mjs}": [
+            "eslint --config config/eslint.config.js --fix"
+        ],
+        "*.{css,json,md,yml,yaml}": [
+            "prettier --write"
+        ]
+    },
+    "knip": {
+        "entry": [
+            "website/src/browser/core/theme.ts",
+            "website/src/browser/pages/**/*.ts",
+            "tests/unit/**/*.test.mjs"
+        ],
+        "project": [
+            "website/src/**/*.ts",
+            "tests/**/*.{ts,js,mjs}",
+            "!website/static/build/**"
+        ],
+        "eslint": {
+            "config": [
+                "config/eslint.config.js"
+            ]
+        },
+        "vite": {
+            "config": [
+                "config/vite.config.ts"
+            ]
+        },
+        "playwright": {
+            "config": [
+                "config/playwright.config.ts"
+            ]
+        }
     }
 }

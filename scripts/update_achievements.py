@@ -12,33 +12,30 @@ from pathlib import Path
 # Configuration
 # ============================================================
 
-GENSHIN_DB_API = (
-    "https://genshin-db-api.vercel.app/api/v5/achievements"
-)
+GENSHIN_DB_API = "https://genshin-db-api.vercel.app/api/v5/achievements"
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-ACHIEVEMENTS_DIR = (
-    PROJECT_ROOT
-    / "data"
-    / "achievements"
-)
+ACHIEVEMENTS_DIR = PROJECT_ROOT / "data" / "achievements"
 
 
 # ============================================================
 # Download
 # ============================================================
 
+
 def download_achievements() -> list[dict]:
     """Download the current English GenshinDB achievements."""
 
-    params = urllib.parse.urlencode({
-        "query": "names",
-        "matchCategories": "true",
-        "verboseCategories": "true",
-        "queryLanguages": "english",
-        "resultLanguage": "english",
-    })
+    params = urllib.parse.urlencode(
+        {
+            "query": "names",
+            "matchCategories": "true",
+            "verboseCategories": "true",
+            "queryLanguages": "english",
+            "resultLanguage": "english",
+        }
+    )
 
     url = f"{GENSHIN_DB_API}?{params}"
 
@@ -59,28 +56,20 @@ def download_achievements() -> list[dict]:
             request,
             timeout=60,
         ) as response:
-
             raw_data = response.read()
 
     except urllib.error.HTTPError as error:
         raise RuntimeError(
-            f"HTTP Error {error.code} while downloading "
-            "GenshinDB achievements."
+            f"HTTP Error {error.code} while downloading GenshinDB achievements."
         ) from error
 
     except urllib.error.URLError as error:
-        raise RuntimeError(
-            f"Connection Error: {error.reason}"
-        ) from error
+        raise RuntimeError(f"Connection Error: {error.reason}") from error
 
     except TimeoutError as error:
-        raise RuntimeError(
-            "Download timed out."
-        ) from error
+        raise RuntimeError("Download timed out.") from error
 
-    print(
-        f"Downloaded {len(raw_data):,} bytes."
-    )
+    print(f"Downloaded {len(raw_data):,} bytes.")
     print()
 
     # --------------------------------------------------------
@@ -88,18 +77,13 @@ def download_achievements() -> list[dict]:
     # --------------------------------------------------------
 
     try:
-        data = json.loads(
-            raw_data.decode("utf-8")
-        )
+        data = json.loads(raw_data.decode("utf-8"))
 
     except (
         UnicodeDecodeError,
         json.JSONDecodeError,
     ) as error:
-
-        raise RuntimeError(
-            "GenshinDB returned invalid JSON."
-        ) from error
+        raise RuntimeError("GenshinDB returned invalid JSON.") from error
 
     # --------------------------------------------------------
     # API response
@@ -118,11 +102,9 @@ def download_achievements() -> list[dict]:
     # --------------------------------------------------------
 
     if isinstance(data, list):
-
         achievements = data
 
     elif isinstance(data, dict):
-
         # Standard dumpResult-style response.
         result = data.get("result")
 
@@ -135,7 +117,6 @@ def download_achievements() -> list[dict]:
             achievements = None
 
             for value in data.values():
-
                 if (
                     isinstance(value, list)
                     and value
@@ -152,14 +133,10 @@ def download_achievements() -> list[dict]:
         achievements,
         list,
     ):
-        raise RuntimeError(
-            "Unexpected GenshinDB API response."
-        )
+        raise RuntimeError("Unexpected GenshinDB API response.")
 
     if not achievements:
-        raise RuntimeError(
-            "GenshinDB returned zero achievements."
-        )
+        raise RuntimeError("GenshinDB returned zero achievements.")
 
     return achievements
 
@@ -167,6 +144,7 @@ def download_achievements() -> list[dict]:
 # ============================================================
 # Filename conversion
 # ============================================================
+
 
 def group_to_filename(
     group_name: str,
@@ -203,15 +181,13 @@ def group_to_filename(
         name,
     ).strip()
 
-    return (
-        name.replace(" ", "_")
-        + ".json"
-    )
+    return name.replace(" ", "_") + ".json"
 
 
 # ============================================================
 # Validation
 # ============================================================
+
 
 def validate_achievement(
     achievement: dict,
@@ -228,25 +204,14 @@ def validate_achievement(
         "version",
     }
 
-    missing = (
-        required
-        - achievement.keys()
-    )
+    missing = required - achievement.keys()
 
     if missing:
-        print(
-            "WARNING: Invalid achievement:"
-        )
+        print("WARNING: Invalid achievement:")
 
-        print(
-            f"  Name: "
-            f"{achievement.get('name', '<unknown>')}"
-        )
+        print(f"  Name: {achievement.get('name', '<unknown>')}")
 
-        print(
-            f"  Missing: "
-            f"{', '.join(sorted(missing))}"
-        )
+        print(f"  Missing: {', '.join(sorted(missing))}")
 
         print()
 
@@ -260,13 +225,9 @@ def validate_achievement(
         achievement["id"],
         list,
     ):
-        print(
-            "WARNING: Invalid achievement ID:"
-        )
+        print("WARNING: Invalid achievement ID:")
 
-        print(
-            f"  {achievement.get('name', '<unknown>')}"
-        )
+        print(f"  {achievement.get('name', '<unknown>')}")
 
         return False
 
@@ -276,18 +237,16 @@ def validate_achievement(
 
     stages = achievement["stages"]
 
-    if not isinstance(
-        stages,
-        int,
-    ) or stages < 1:
-
-        print(
-            "WARNING: Invalid stage count:"
+    if (
+        not isinstance(
+            stages,
+            int,
         )
+        or stages < 1
+    ):
+        print("WARNING: Invalid stage count:")
 
-        print(
-            f"  {achievement.get('name', '<unknown>')}"
-        )
+        print(f"  {achievement.get('name', '<unknown>')}")
 
         return False
 
@@ -299,86 +258,52 @@ def validate_achievement(
         1,
         stages + 1,
     ):
+        stage_key = f"stage{stage_number}"
 
-        stage_key = (
-            f"stage{stage_number}"
-        )
-
-        stage = achievement.get(
-            stage_key
-        )
+        stage = achievement.get(stage_key)
 
         if not isinstance(
             stage,
             dict,
         ):
+            print("WARNING: Missing stage:")
 
-            print(
-                "WARNING: Missing stage:"
-            )
+            print(f"  Achievement: {achievement.get('name', '<unknown>')}")
 
-            print(
-                f"  Achievement: "
-                f"{achievement.get('name', '<unknown>')}"
-            )
-
-            print(
-                f"  Missing: {stage_key}"
-            )
+            print(f"  Missing: {stage_key}")
 
             print()
 
             return False
 
         if "description" not in stage:
-            print(
-                "WARNING: Stage has no description:"
-            )
+            print("WARNING: Stage has no description:")
 
-            print(
-                f"  Achievement: "
-                f"{achievement.get('name', '<unknown>')}"
-            )
+            print(f"  Achievement: {achievement.get('name', '<unknown>')}")
 
-            print(
-                f"  Stage: {stage_key}"
-            )
+            print(f"  Stage: {stage_key}")
 
             print()
 
             return False
 
         if "progress" not in stage:
-            print(
-                "WARNING: Stage has no progress:"
-            )
+            print("WARNING: Stage has no progress:")
 
-            print(
-                f"  Achievement: "
-                f"{achievement.get('name', '<unknown>')}"
-            )
+            print(f"  Achievement: {achievement.get('name', '<unknown>')}")
 
-            print(
-                f"  Stage: {stage_key}"
-            )
+            print(f"  Stage: {stage_key}")
 
             print()
 
             return False
 
         if "reward" not in stage:
-            print(
-                "WARNING: Stage has no reward:"
-            )
+            print("WARNING: Stage has no reward:")
 
-            print(
-                f"  Achievement: "
-                f"{achievement.get('name', '<unknown>')}"
-            )
+            print(f"  Achievement: {achievement.get('name', '<unknown>')}")
 
-            print(
-                f"  Stage: {stage_key}"
-            )
+            print(f"  Stage: {stage_key}")
 
             print()
 
@@ -391,6 +316,7 @@ def validate_achievement(
 # Group achievements
 # ============================================================
 
+
 def group_achievements(
     achievements: list[dict],
 ) -> dict[str, list[dict]]:
@@ -399,20 +325,12 @@ def group_achievements(
     groups: dict[str, list[dict]] = {}
 
     for achievement in achievements:
-
-        group_name = achievement.get(
-            "achievementGroupName"
-        )
+        group_name = achievement.get("achievementGroupName")
 
         if not group_name:
-            print(
-                "WARNING: Achievement has no "
-                "'achievementGroupName':"
-            )
+            print("WARNING: Achievement has no 'achievementGroupName':")
 
-            print(
-                f"  {achievement.get('name', '<unknown>')}"
-            )
+            print(f"  {achievement.get('name', '<unknown>')}")
 
             print()
 
@@ -421,16 +339,13 @@ def group_achievements(
         if group_name not in groups:
             groups[group_name] = []
 
-        groups[group_name].append(
-            achievement
-        )
+        groups[group_name].append(achievement)
 
     # --------------------------------------------------------
     # Sort achievements within each group
     # --------------------------------------------------------
 
     for group_name in groups:
-
         groups[group_name].sort(
             key=lambda achievement: achievement.get(
                 "sortOrder",
@@ -440,9 +355,11 @@ def group_achievements(
 
     return groups
 
+
 # ============================================================
 # Write files
 # ============================================================
+
 
 def write_files(
     groups: dict[str, list[dict]],
@@ -469,18 +386,11 @@ def write_files(
     ] = {}
 
     for group_name in sorted(groups):
+        achievements = groups[group_name]
 
-        achievements = groups[
-            group_name
-        ]
+        filename = group_to_filename(group_name)
 
-        filename = group_to_filename(
-            group_name
-        )
-
-        output_data = {
-            "achievements": achievements
-        }
+        output_data = {"achievements": achievements}
 
         contents = json.dumps(
             output_data,
@@ -490,36 +400,24 @@ def write_files(
 
         contents += "\n"
 
-        new_files[
-            filename
-        ] = contents
+        new_files[filename] = contents
 
     # --------------------------------------------------------
     # Remove old achievement JSON files
     # --------------------------------------------------------
 
-    for old_file in ACHIEVEMENTS_DIR.glob(
-        "*.json"
-    ):
+    for old_file in ACHIEVEMENTS_DIR.glob("*.json"):
         old_file.unlink()
 
     # --------------------------------------------------------
     # Write new files
     # --------------------------------------------------------
 
-    print(
-        "Writing achievement files:"
-    )
+    print("Writing achievement files:")
     print()
 
-    for filename, contents in sorted(
-        new_files.items()
-    ):
-
-        output_path = (
-            ACHIEVEMENTS_DIR
-            / filename
-        )
+    for filename, contents in sorted(new_files.items()):
+        output_path = ACHIEVEMENTS_DIR / filename
 
         output_path.write_text(
             contents,
@@ -527,25 +425,16 @@ def write_files(
         )
 
         achievement_count = len(
-            groups[
-                next(
-                    group
-                    for group in groups
-                    if group_to_filename(group)
-                    == filename
-                )
-            ]
+            groups[next(group for group in groups if group_to_filename(group) == filename)]
         )
 
-        print(
-            f"  {filename:<45}"
-            f"{achievement_count:>5} achievements"
-        )
+        print(f"  {filename:<45}{achievement_count:>5} achievements")
 
 
 # ============================================================
 # Main
 # ============================================================
+
 
 def update_achievements() -> None:
 
@@ -558,14 +447,9 @@ def update_achievements() -> None:
     # Download
     # --------------------------------------------------------
 
-    achievements = (
-        download_achievements()
-    )
+    achievements = download_achievements()
 
-    print(
-        f"GenshinDB achievements: "
-        f"{len(achievements):,}"
-    )
+    print(f"GenshinDB achievements: {len(achievements):,}")
 
     print()
 
@@ -573,30 +457,15 @@ def update_achievements() -> None:
     # Debug achievement groups
     # --------------------------------------------------------
 
-    group_names = sorted(
-        {
-            achievement.get(
-                "achievementGroupName"
-            )
-            for achievement in achievements
-        }
-    )
+    group_names = sorted({achievement.get("achievementGroupName") for achievement in achievements})
 
-    print(
-        f"Unique achievement groups found: "
-        f"{len(group_names):,}"
-    )
+    print(f"Unique achievement groups found: {len(group_names):,}")
 
     for group_name in group_names[:20]:
-        print(
-            f"  - {group_name}"
-        )
+        print(f"  - {group_name}")
 
     if len(group_names) > 20:
-        print(
-            f"  ... and "
-            f"{len(group_names) - 20:,} more"
-        )
+        print(f"  ... and {len(group_names) - 20:,} more")
 
     print()
 
@@ -607,24 +476,13 @@ def update_achievements() -> None:
     valid_achievements = []
 
     for achievement in achievements:
-
-        if validate_achievement(
-            achievement
-        ):
-            valid_achievements.append(
-                achievement
-            )
+        if validate_achievement(achievement):
+            valid_achievements.append(achievement)
 
     if not valid_achievements:
+        raise RuntimeError("No valid achievements were found.")
 
-        raise RuntimeError(
-            "No valid achievements were found."
-        )
-
-    print(
-        f"Validated: "
-        f"{len(valid_achievements):,}"
-    )
+    print(f"Validated: {len(valid_achievements):,}")
 
     print()
 
@@ -632,20 +490,12 @@ def update_achievements() -> None:
     # Group
     # --------------------------------------------------------
 
-    groups = group_achievements(
-        valid_achievements
-    )
+    groups = group_achievements(valid_achievements)
 
     if not groups:
+        raise RuntimeError("No achievement groups were found.")
 
-        raise RuntimeError(
-            "No achievement groups were found."
-        )
-
-    print(
-        f"Achievement groups: "
-        f"{len(groups):,}"
-    )
+    print(f"Achievement groups: {len(groups):,}")
 
     print()
 
@@ -653,9 +503,7 @@ def update_achievements() -> None:
     # Write
     # --------------------------------------------------------
 
-    write_files(
-        groups
-    )
+    write_files(groups)
 
     # --------------------------------------------------------
     # Complete
@@ -669,17 +517,11 @@ def update_achievements() -> None:
 
     print()
 
-    print(
-        f"Groups:       {len(groups):,}"
-    )
+    print(f"Groups:       {len(groups):,}")
 
-    print(
-        f"Achievements: {len(valid_achievements):,}"
-    )
+    print(f"Achievements: {len(valid_achievements):,}")
 
-    print(
-        f"Output:       {ACHIEVEMENTS_DIR}"
-    )
+    print(f"Output:       {ACHIEVEMENTS_DIR}")
 
     print()
 
@@ -689,19 +531,16 @@ def update_achievements() -> None:
 # ============================================================
 
 if __name__ == "__main__":
-
     try:
         update_achievements()
 
     except KeyboardInterrupt:
-
         print()
         print("Update cancelled.")
 
         sys.exit(1)
 
     except Exception as error:
-
         print()
         print("=" * 60)
         print("UPDATE FAILED")

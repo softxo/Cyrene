@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import { fileURLToPath } from "url";
 
-const projectRoot = fileURLToPath(new URL(".", import.meta.url));
+const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export default defineConfig({
     // FastAPI serves /static URLs from website; recognize them without copying.

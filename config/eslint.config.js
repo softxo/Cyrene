@@ -4,20 +4,13 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
     {
-        ignores: [
-            "node_modules/**",
-            "website/static/build/**",
-            "dist/**",
-        ],
+        ignores: ["node_modules/**", "website/static/build/**", "dist/**"],
     },
 
     {
         files: ["website/src/**/*.ts"],
 
-        extends: [
-            js.configs.recommended,
-            ...tseslint.configs.recommended,
-        ],
+        extends: [js.configs.recommended, ...tseslint.configs.recommended],
 
         languageOptions: {
             ecmaVersion: "latest",
