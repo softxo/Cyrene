@@ -273,7 +273,13 @@ window.refreshEvents = async function refreshEvents() {
                 return current;
             }
 
+            const limitedAccountOpen =
+                current instanceof HTMLDetailsElement &&
+                current.matches("[data-limited-account-group]")
+                    ? current.open
+                    : null;
             syncAttributes(current, refreshed);
+            if (limitedAccountOpen !== null) current.open = limitedAccountOpen;
 
             // Preserve the contents and live state of form controls.
             if (

@@ -3,6 +3,44 @@
         return;
     document.documentElement.dataset.limitedFiltersInitialised = "true";
     const key = "cyrene-limited-hidden-categories-v1";
+    const collapsedKey = "cyrene-limited-collapsed-accounts-v1";
+    let collapsed = new Set();
+    try {
+        const saved = JSON.parse(localStorage.getItem(collapsedKey) || "[]");
+        if (Array.isArray(saved))
+            collapsed = new Set(saved.filter((value) => typeof value === "string"));
+    }
+    catch {
+        /* Keep account expansion preferences in memory if storage is unavailable. */
+    }
+    const initialisedGroups = new WeakSet();
+    const restoreAccountGroups = () => {
+        document
+            .querySelectorAll("details[data-limited-account-group]")
+            .forEach((group) => {
+            if (initialisedGroups.has(group))
+                return;
+            const uid = group.dataset.accountUid;
+            if (!uid)
+                return;
+            initialisedGroups.add(group);
+            group.open = !collapsed.has(uid);
+            group.addEventListener("toggle", () => {
+                if (!group.isConnected)
+                    return;
+                if (group.open)
+                    collapsed.delete(uid);
+                else
+                    collapsed.add(uid);
+                try {
+                    localStorage.setItem(collapsedKey, JSON.stringify([...collapsed]));
+                }
+                catch {
+                    /* Keep the preference for this visit. */
+                }
+            });
+        });
+    };
     let disabled = new Set();
     try {
         const saved = JSON.parse(localStorage.getItem(key) || "[]");
@@ -13,6 +51,20 @@
         /* Storage can be unavailable; filtering still works for this visit. */
     }
     const apply = () => {
+        // CSS covers incoming cards before the DOM observer runs, including
+        // refreshed markup that has not yet received its hidden attribute.
+        let visibilityStyle = document.querySelector("#limited-event-category-visibility");
+        if (!visibilityStyle) {
+            visibilityStyle = document.createElement("style");
+            visibilityStyle.id = "limited-event-category-visibility";
+            document.head.append(visibilityStyle);
+        }
+        const rules = [...disabled]
+            .map((category) => `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`)
+            .join("\n");
+        if (visibilityStyle.textContent !== rules)
+            visibilityStyle.textContent = rules;
+        restoreAccountGroups();
         document.querySelectorAll("[data-limited-category]").forEach((card) => {
             const hidden = disabled.has(card.dataset.limitedCategory || "Other Events");
             if (card.hidden !== hidden)

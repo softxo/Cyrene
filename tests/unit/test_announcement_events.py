@@ -65,9 +65,11 @@ class AnnouncementEventsTests(unittest.TestCase):
         extracted = self.extract(notice(content=notice().content + chapter))[0]
         self.assertEqual(extracted["quest_type"], "archon")
         self.assertTrue(extracted["quest_is_mainline"])
+        self.assertEqual(extracted["quest_chapter"], "Chapter VII: Act IV")
         prerequisite = chapter.replace('"Example"', '"Another Quest"')
         extracted = self.extract(notice(content=notice().content + prerequisite))[0]
         self.assertFalse(extracted["quest_is_mainline"])
+        self.assertIsNone(extracted["quest_chapter"])
 
     def test_discovers_bonus_window_and_uses_content_dates(self):
         event = self.extract(notice())[0]

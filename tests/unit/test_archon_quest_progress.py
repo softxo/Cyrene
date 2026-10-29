@@ -35,6 +35,24 @@ def notes(quests=None, **changes):
 
 
 class ArchonQuestProgressTests(unittest.TestCase):
+    def test_target_act_completed_without_finishing_all_mainline_quests(self):
+        events = [event()]
+        events[0]["quest_chapter"] = "Chapter VII: Act IV"
+        response = notes(
+            [
+                {
+                    "chapter_title": "A localized title",
+                    "chapter_num": "Chapter VII: Act IV",
+                    "status": "StatusFinished",
+                },
+                {"chapter_title": "Earlier quest", "status": "StatusOngoing"},
+            ]
+        )
+        apply_archon_quest_progress(events, response, 50)
+        self.assertTrue(events[0]["is_finished"])
+        self.assertTrue(events[0]["progress_available"])
+        self.assertFalse(response["data"]["archon_quest_progress"]["is_finish_all_mainline"])
+
     def test_live_completed_account_shape_uses_explicit_mainline_flag(self):
         response = notes()
         response["data"]["archon_quest_progress"].update(
@@ -138,4 +156,4 @@ class ArchonQuestProgressTests(unittest.TestCase):
         self.assertFalse(account_b[0]["automatic_finished"])
         key = account_a[0]["completion_key"]
         apply_completion_checks(account_a, {key: False})
-        self.assertFalse(account_a[0]["is_finished"])
+        self.assertTrue(account_a[0]["is_finished"])

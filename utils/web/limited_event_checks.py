@@ -28,12 +28,20 @@ def apply_archon_quest_progress(events: list[dict], notes: dict, now: int) -> No
         ):
             continue
         name = normalise_name(event["name"])
+        chapter = normalise_name(event.get("quest_chapter") or "")
         matches = [
-            quest for quest in quests
-            if isinstance(quest, dict) and name
-            and normalise_name(str(quest.get("chapter_title", ""))) == name
+            quest
+            for quest in quests
+            if isinstance(quest, dict)
+            and name
+            and (
+                normalise_name(str(quest.get("chapter_title", ""))) == name
+                or (chapter and normalise_name(str(quest.get("chapter_num", ""))) == chapter)
+            )
         ]
-        statuses = {quest.get("status") for quest in matches if isinstance(quest.get("status"), str)}
+        statuses = {
+            quest.get("status") for quest in matches if isinstance(quest.get("status"), str)
+        }
         finished = None
         if len(statuses) == 1:
             status = next(iter(statuses))
@@ -53,8 +61,8 @@ def apply_archon_quest_progress(events: list[dict], notes: dict, now: int) -> No
         event["description"] = (
             "Archon Quest completed according to HoYoLAB Real-Time Notes. "
             "Bonus reward claiming is not reported."
-            if finished else
-            "HoYoLAB Real-Time Notes reports this Archon Quest is not completed."
+            if finished
+            else "HoYoLAB Real-Time Notes reports this Archon Quest is not completed."
         )
 
 
@@ -99,7 +107,7 @@ def apply_completion_checks(events: list[dict], checks: dict[str, bool]) -> None
         event["completion_key"] = key
         event["automatic_finished"] = event["is_finished"]
         event["manual_checked"] = checks.get(key)
-        event["is_finished"] = checks.get(key, event["is_finished"])
+        event["is_finished"] = bool(event["automatic_finished"] or checks.get(key, False))
 
 
 def completion_token(user_id: int, uid: str, key: str, expires: int) -> str:

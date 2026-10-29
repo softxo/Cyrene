@@ -74,7 +74,7 @@ class HoYoLABClient:
 
         url = "https://sg-public-api.hoyolab.com/event/game_record/genshin/api/dailyNote"
 
-        params = {"role_id": genshin_uid, "server": genshin_server}
+        params = {"role_id": genshin_uid, "server": genshin_server, "lang": "en-us"}
 
         async with self.session.get(url, params=params) as response:
             response.raise_for_status()

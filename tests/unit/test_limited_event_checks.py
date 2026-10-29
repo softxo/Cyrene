@@ -20,7 +20,7 @@ class CompletionIdentityTests(unittest.TestCase):
         next_run["end_time"] += 86400
         self.assertNotEqual(completion_key(event()), completion_key(next_run))
 
-    def test_manual_false_and_true_override_automatic_default(self):
+    def test_automatic_completion_wins_over_manual_false(self):
         automatic = event()
         automatic["is_finished"] = True
         events = [automatic]
@@ -29,7 +29,7 @@ class CompletionIdentityTests(unittest.TestCase):
         automatic = event()
         automatic["is_finished"] = True
         apply_completion_checks([automatic], {completion_key(automatic): False})
-        self.assertFalse(automatic["is_finished"])
+        self.assertTrue(automatic["is_finished"])
         manual = event()
         apply_completion_checks([manual], {completion_key(manual): True})
         self.assertTrue(manual["is_finished"])

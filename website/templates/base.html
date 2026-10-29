@@ -21,6 +21,23 @@
         document.documentElement.dataset.theme = savedTheme;
     </script>
 
+    <script id="limited-event-filter-bootstrap">
+        // Install saved category visibility before any Events cards can paint.
+        (() => {
+            try {
+                const saved = JSON.parse(localStorage.getItem("cyrene-limited-hidden-categories-v1") || "[]");
+                if (!Array.isArray(saved)) return;
+                const style = document.createElement("style");
+                style.id = "limited-event-category-visibility";
+                style.textContent = saved.filter(category => typeof category === "string")
+                    .map(category => `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`).join("\n");
+                document.head.append(style);
+            } catch {
+                // Category controls still work when browser storage is unavailable.
+            }
+        })();
+    </script>
+
     <link
         rel="stylesheet"
         href="/static/build/css/global.css?v=14"
@@ -35,7 +52,7 @@
         '/planner': '/static/build/css/planner.css?v=2',
         '/verify': '/static/build/css/verification.css?v=2',
         '/codes': '/static/build/css/codes.css?v=2',
-        '/events': '/static/build/css/events.css?v=30',
+        '/events': '/static/build/css/events.css?v=32',
         '/settings': '/static/build/css/settings.css?v=3'
     } %}
 
@@ -219,7 +236,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=3.53"></script>
+    <script type="module" src="/static/build/js/app.js?v=3.56"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>
