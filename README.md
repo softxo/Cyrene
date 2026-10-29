@@ -1,61 +1,64 @@
-# Cyrene
+<div align="center">
 
-### A bot/site for Genshin Impact.
+# ✦ Cyrene
 
-The bot is a bot for Discord, that allows you to check stuff like:
+**A Genshin Impact companion for Discord and the web.**
 
-- Character info
-- Character materials
-- Character constellations
-- Character talents
-- Character passives
-- Weapon info
-- Weapon materials
-- Calculator for character/weapon materials
-- Artifacts info
-- Banners
-- Resin info
-- Expedition info
-- Enemy info
-- Materials info
-- Reminders
-- Ward (shields) info
-- and way more coming soon
+Track your accounts, plan upgrades, keep up with events, and access game information from one place.
 
-Also some silly stuff like:
+[**Open the website**](https://cyrene.apps.bot-hosting.cloud/) · [**Report a bug**](https://github.com/softxo/Cyrene/issues) · [**View changes**](https://github.com/softxo/Cyrene/pulls)
 
-- AI
-- Music
-- and more coming soon (like moderation)
+![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-Bot-5865F2?logo=discord&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Web-009688?logo=fastapi&logoColor=white)
+![Development](https://img.shields.io/badge/Status-Active%20development-orange)
 
-The site allows you to check/do various things by logging in with HoYoLAB.
-You can check things like:
+</div>
 
-- Resin
-- Trounce Domains
-- Dailies
-- Recurring Events (SA, SO, IT)
-- Banners
-- and a lot more coming soon
+> [!NOTE]
+> Cyrene is a WiP. Some pages and features are still being developed, and behaviour may change. Cyrene is an independent fan project and is not affiliated with or endorsed by HoYoverse.
 
-You can also have things like:
+## Overview
 
-- Automatic "Daily Check-in" claiming
-- Automatic code redemption
-- and more coming soon
+Cyrene combines a **Discord bot** with a **web dashboard** for Genshin Impact. The bot provides in-Discord information and utilities, while the website focuses on account-based progress tracking, planning, and recurring activities.
 
-## *Still a WiP; missing a ton of functionality.
+### Discord bot
 
-## Development
+- **Characters:** information about talents, passives, constellations, and upgrade materials.
+- **Weapons and artifacts:** equipment information and material references.
+- **Progression:** material calculations for characters and weapons.
+- **Game data:** information about enemies, materials, wards/shields and banners.
+- **Account utilities:** resin and expedition information, plus reminders.
+- **Additional commands:** other utilities and experimental functionality.
 
-Install frontend dependencies with `npm ci`. Run `npm run typecheck`,
-`npm run lint`, `npm run knip`, and `npm run build` from the repository root.
-Run browser tests with `npm run test:e2e`.
+### Web dashboard
 
-Tool configuration lives in `config/`; Prettier, commitlint, lint-staged, and
-Knip settings live in `package.json`. The root `tsconfig.json` and `ruff.toml`
-allow editors to discover TypeScript and Python settings automatically.
-Agent guidance is in [.github/CODEX.md](.github/CODEX.md).
+| Area | What it offers |
+| --- | --- |
+| **Characters** | Browse character rosters and inspect character details, equipment, talents and constellations with a character levelling planner as well. |
+| **Planner** |Reminders for activities you select, such as resin, expeditions, events and others. |
+| **Achievements** | Browse achievements and track completion per linked account. |
+| **Events** | Follow daily and recurring activities, endgame modes and custom events. |
+| **Wishes** | Review wish-related information and available banners. |
+| **Accounts & settings** | Link game accounts, view account-specific data and manage supported account utilities. |
 
-Maintenance scripts live in `scripts/`. To refresh achievement data, run
-`python scripts/update_achievements.py` from the repository root.
+The Events experience includes tracking for **Spiral Abyss**, **Imaginarium Theatre** and **Stygian Onslaught**, alongside recurring activities such as Daily Commissions and Trounce Domains. Custom events support account-specific progress.
+
+## Open source
+
+Cyrene is developed in the open to make its source code accessible, encourage transparency and welcome community feedback and contributions.
+
+The official instance is available at **[cyrene.apps.bot-hosting.cloud](https://cyrene.apps.bot-hosting.cloud/)**. This repository contains the source code for Cyrene's Discord bot and web dashboard.
+
+The project is actively maintained, and features may change as development progresses.
+
+## Issues and feedback
+
+Found a bug or have an idea? [Open an issue](https://github.com/softxo/Cyrene/issues) with a clear description, reproduction steps (when applicable) and screenshots. **Remove any sensitive information before sharing them.**
+
+## Acknowledgements
+
+Cyrene makes use of the open-source [genshin.py](https://github.com/seriaati/genshin.py) project for HoYoLAB/Genshin-related integration, alongside other dependencies listed in this repository.
+
+Genshin Impact and related names, characters and artwork are the property of HoYoverse.
