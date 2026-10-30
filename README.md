@@ -6,13 +6,13 @@
 
 Track your accounts, plan upgrades, keep up with events, and access game information from one place.
 
-[**Open the website**](https://cyrene.apps.bot-hosting.cloud/) · [**Report a bug**](https://github.com/softxo/Cyrene/issues) · [**Pull requests**](https://github.com/softxo/Cyrene/pulls)
+[**Open the website**](https://cyrene.apps.bot-hosting.cloud/) · [**Join Discord**](https://discord.gg/KpkggK4UqB) · [**Report a bug**](https://github.com/softxo/Cyrene/issues) · [**Pull requests**](https://github.com/softxo/Cyrene/pulls)
 
-![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![Discord](https://img.shields.io/badge/Discord-Bot-5865F2?logo=discord&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-Web-009688?logo=fastapi&logoColor=white)
-![Development](https://img.shields.io/badge/Status-Active%20development-orange)
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Discord](https://img.shields.io/badge/Discord-Bot-5865F2?logo=discord&logoColor=white)](https://discord.gg/KpkggK4UqB)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Web-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Development](https://img.shields.io/badge/Status-Active%20development-orange)](https://github.com/softxo/Cyrene/commits/main/)
 
 </div>
 
@@ -54,6 +54,10 @@ This repository contains the source code for the Discord bot and web dashboard. 
 ## Issues and feedback
 
 Found a bug or have an idea? [Open an issue](https://github.com/softxo/Cyrene/issues) with a clear description, reproduction steps (when applicable) and screenshots. **Remove any sensitive information before sharing them.**
+
+For questions, troubleshooting and community support, [join the Cyrene Discord server](https://discord.gg/KpkggK4UqB).
+
+You can also DM me privately on Discord, `notinlonesplendor`.
 
 ## Licence
 
