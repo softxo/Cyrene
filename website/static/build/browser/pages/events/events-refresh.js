@@ -201,7 +201,9 @@ window.refreshEvents = async function refreshEvents() {
                 return current;
             }
             const limitedAccountOpen = current instanceof HTMLDetailsElement &&
-                current.matches("[data-limited-account-group]") ? current.open : null;
+                current.matches("[data-limited-account-group]")
+                ? current.open
+                : null;
             syncAttributes(current, refreshed);
             if (limitedAccountOpen !== null)
                 current.open = limitedAccountOpen;

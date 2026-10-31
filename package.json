@@ -18,14 +18,14 @@
         "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.64.1",
         "@types/node": "^26.6.5",
-        "eslint": "^10.12.0",
+        "eslint": "^10.14.0",
         "globals": "^17.13.0",
         "husky": "^9.1.7",
         "knip": "^6.43.0",
         "lint-staged": "^17.6.0",
         "prettier": "^3.9.10",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.71.2",
+        "typescript-eslint": "^8.72.1",
         "vite": "^8.3.4"
     },
     "dependencies": {
@@ -88,5 +88,8 @@
                 "config/playwright.config.ts"
             ]
         }
+    },
+    "overrides": {
+        "minimatch": "^11.0.1"
     }
 }
