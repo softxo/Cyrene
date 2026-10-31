@@ -38,8 +38,22 @@ function initCustomEvents() {
         }
     }
 
-    function renderCustomIconPreview(src = null, filename = "") {
+    function getCustomIconUrl(value) {
+        // Match the server's upload allowlist before using API or DOM-derived values as URLs.
+        return typeof value === "string" &&
+            /^\/static\/uploads\/custom-events\/[a-f0-9-]{36}\.(?:png|jpg|webp)$/.test(value)
+            ? value
+            : null;
+    }
+
+    function renderCustomIconPreview(value = null, filename = "") {
         if (!iconImage) return;
+
+        // Only this form's locally created object URL may bypass the upload allowlist.
+        const src =
+            previewObjectUrl && value === previewObjectUrl
+                ? previewObjectUrl
+                : getCustomIconUrl(value);
 
         if (src) {
             iconImage.src = src;
@@ -1594,7 +1608,7 @@ function initCustomEvents() {
         const icon = document.createElement("img");
 
         icon.className = "events-custom-card-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
+        icon.src = getCustomIconUrl(event.icon_url) || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
@@ -1844,7 +1858,7 @@ function initCustomEvents() {
         const summary = makeElement("summary", "events-custom-overview-summary");
         const icon = document.createElement("img");
         icon.className = "events-custom-overview-icon";
-        icon.src = event.icon_url || "/static/images/ui/ui_icons/Events.png";
+        icon.src = getCustomIconUrl(event.icon_url) || "/static/images/ui/ui_icons/Events.png";
         icon.alt = "";
         icon.loading = "lazy";
         icon.draggable = false;
