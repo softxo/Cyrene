@@ -121,6 +121,18 @@ class EnrichmentTests(unittest.IsolatedAsyncioTestCase):
             f"/static/images/events/quest-rewards/{digest}.webp",
         )
 
+    async def test_canonical_character_portraits_can_use_the_local_image_cache(self):
+        url = "https://enka.network/ui/UI_AvatarIcon_Yelan.png"
+        digest = hashlib.sha256(url.encode()).hexdigest()
+        details = {"rewards": [{"name": "Yelan", "icon": url}]}
+        with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / (digest + ".png")).write_bytes(b"\x89PNG\r\n\x1a\n")
+            with patch("utils.web.quest_reward_details.IMAGE_DIRECTORY", Path(directory)):
+                await localise_reward_images(details)
+        self.assertEqual(
+            details["rewards"][0]["icon"], f"/static/images/events/quest-rewards/{digest}.png"
+        )
+
     async def test_html_error_pages_are_not_cached_as_images(self):
         self.assertIsNone(image_extension(b"<html>Access denied</html>"))
         self.assertEqual(image_extension(b"RIFF1234WEBP"), ".webp")

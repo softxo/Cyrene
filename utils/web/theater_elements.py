@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 
 import aiohttp
+from genshin.models.genshin.constants import CHARACTER_NAMES
 
 from utils.web.announcement_events import SERVER_OFFSETS
 from utils.web.quest_reward_details import TableParser, image_url, localise_reward_images
@@ -67,6 +68,16 @@ def parse_opening_cast(markup: str) -> list[dict]:
         image = next(portrait.walk("img"), None)
         icon = image_url(image) if image else None
         name = label.text().strip()
+        character = next(
+            (
+                char
+                for char in CHARACTER_NAMES.get("en-us", {}).values()
+                if char.name.casefold() == name.casefold()
+            ),
+            None,
+        )
+        if character:
+            icon = f"https://enka.network/ui/UI_AvatarIcon_{character.icon_name}.png"
         classes = portrait.attrs.get("class", "")
         rarity = re.search(r"\bcard-quality-([45])\b", classes)
         element = re.search(r"\bcard-element-([a-z]+)\b", classes)

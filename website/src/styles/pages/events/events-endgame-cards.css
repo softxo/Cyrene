@@ -699,3 +699,15 @@ img[src$="/IT_Stella.png"] {
     margin-top: 0;
     gap: 6px;
 }
+
+/* Balance the empty-record layout around the seasonal elements. */
+.event-featured-card[data-event-type="theater"]
+    .event-featured-panel:has(> .event-no-record)
+    > .event-no-record {
+    margin: auto 0 0;
+}
+.event-featured-card[data-event-type="theater"]
+    .event-featured-panel:has(> .event-no-record)
+    > .it-elements {
+    margin-block: auto;
+}

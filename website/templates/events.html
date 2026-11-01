@@ -853,6 +853,15 @@
                         </div>
 
 
+
+                        {% else %}
+
+                        <div class="event-no-record">
+                            No Record
+                        </div>
+
+                        {% endif %}
+
                         <div class="it-elements">
 
                             <span class="event-stat-label">
@@ -880,14 +889,6 @@
                             </div>
 
                         </div>
-
-                        {% else %}
-
-                        <div class="event-no-record">
-                            No Record
-                        </div>
-
-                        {% endif %}
 
                         {{ theater_opening_cast(theater) }}
 

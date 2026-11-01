@@ -2852,6 +2852,205 @@ async def inventory_data(
     }
 
 
+@app.get("/weapons", response_class=HTMLResponse)
+async def weapons_page(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    session = await get_web_session(cyrene_session)
+    if session is None:
+        return RedirectResponse(url="/verify?next=/weapons", status_code=303)
+    accounts = await get_accounts(session.user_id)
+    selected = next((a for a in accounts if a["id"] == account_id), None)
+    if selected is None and accounts:
+        selected = accounts[0]
+    return templates.TemplateResponse(
+        request=request,
+        name="weapons.html",
+        context={"accounts": accounts, "selected_account": selected},
+    )
+
+
+@app.get("/api/weapons")
+async def weapons_data(
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    from utils.web.weapons import catalogue_weapon_rows, owned_weapon_rows
+
+    session = await get_web_session(cyrene_session)
+    if session is None:
+        raise HTTPException(status_code=401, detail="Sign in to view weapons.")
+    accounts = await get_accounts(session.user_id)
+    selected = next((a for a in accounts if a["id"] == account_id), None)
+    if selected is None:
+        raise HTTPException(status_code=404, detail="Account not found.")
+    client = await get_account_client(session.user_id, selected["genshin_uid"])
+    if client is None:
+        raise HTTPException(status_code=503, detail="Unable to load the selected account.")
+    async with client:
+        owned, catalogue = await asyncio.gather(
+            client.get_genshin_characters(),
+            client.genshin_client.get_calculator_weapons(lang="en-us"),
+            return_exceptions=True,
+        )
+    result = {}
+    for key, value, normalise in (
+        ("owned", owned, owned_weapon_rows),
+        ("catalogue", catalogue, catalogue_weapon_rows),
+    ):
+        if isinstance(value, BaseException):
+            logger.error("Failed to load weapon %s for account %s", key, selected["id"])
+            result[key] = []
+            result[key + "_error"] = "Couldn't load weapons from HoYoLAB. Please try again."
+        else:
+            result[key] = normalise(value)
+    return result
+
+
+async def _manual_weapon_owner(token, account_id):
+    session = await get_web_session(token)
+    if session is None:
+        raise HTTPException(status_code=401, detail="Sign in to manage weapons.")
+    accounts = await get_accounts(session.user_id)
+    if not any(a["id"] == account_id for a in accounts):
+        raise HTTPException(status_code=404, detail="Account not found.")
+    return session.user_id
+
+
+@app.get("/api/weapons/manual")
+async def manual_weapons_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    from utils.hoyolab.database import get_manual_weapons
+    from utils.web.weapons import weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    rows = await get_manual_weapons(user_id, account_id)
+    return {
+        "weapons": [
+            dict(row, tag=weapon_tag(row["id"]), release_version=weapon_release_version(row["id"]))
+            for row in rows
+        ]
+    }
+
+
+@app.post("/api/weapons/manual")
+async def manual_weapon_add(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import add_manual_weapon
+    from utils.web.weapons import validate_manual_weapon, weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    try:
+        weapon = validate_manual_weapon(await request.json())
+    except ValueError, TypeError, KeyError:
+        raise HTTPException(
+            status_code=422, detail="Choose a weapon, a valid level, and refinement 1 to 5."
+        ) from None
+    copy_id = str(uuid.uuid4())
+    await add_manual_weapon(user_id, account_id, copy_id, weapon)
+    return {
+        "weapon": dict(
+            weapon,
+            copy_id=copy_id,
+            tag=weapon_tag(weapon["id"]),
+            release_version=weapon_release_version(weapon["id"]),
+        )
+    }
+
+
+@app.delete("/api/weapons/manual/{copy_id}")
+async def manual_weapon_remove(
+    copy_id: str, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import remove_manual_weapon
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    if not await remove_manual_weapon(user_id, account_id, copy_id):
+        raise HTTPException(status_code=404, detail="Weapon not found.")
+    return {"ok": True}
+
+
+@app.get("/api/weapons/scanned")
+async def scanned_weapons_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    from utils.hoyolab.database import get_weapon_scan
+    from utils.web.weapon_scan import normalise_scan_character
+    from utils.web.weapons import weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    accounts = await get_accounts(user_id)
+    account = next((a for a in accounts if a["id"] == account_id), {})
+    result = await get_weapon_scan(user_id, account_id)
+    result["weapons"] = [
+        dict(
+            normalise_scan_character(row, account.get("nickname") or ""),
+            tag=weapon_tag(row["id"]),
+            release_version=weapon_release_version(row["id"]),
+        )
+        for row in result["weapons"]
+    ]
+    return result
+
+
+@app.delete("/api/weapons/scanned/{copy_id:path}")
+async def scanned_weapon_remove(
+    copy_id: str, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import remove_scanned_weapon
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    if not await remove_scanned_weapon(user_id, account_id, copy_id):
+        raise HTTPException(status_code=404, detail="Imported weapon not found.")
+    return {"ok": True}
+
+
+async def _validated_weapon_import(request, account_id, token):
+    from utils.web.weapon_scan import validate_weapon_scan
+
+    user_id = await _manual_weapon_owner(token, account_id)
+    accounts = await get_accounts(user_id)
+    account = next((a for a in accounts if a["id"] == account_id), None)
+    if account is None:
+        raise HTTPException(status_code=404, detail="Account not found.")
+    body = bytearray()
+    async for chunk in request.stream():
+        body.extend(chunk)
+        if len(body) > 4 * 1024 * 1024:
+            raise HTTPException(
+                status_code=413, detail="Weapon export is too large (maximum 4 MB)."
+            )
+    try:
+        scan = validate_weapon_scan(
+            json.loads(body), account["genshin_uid"], account.get("nickname") or ""
+        )
+    except (ValueError, TypeError, KeyError, UnicodeError) as error:
+        raise HTTPException(
+            status_code=422,
+            detail=str(error) if isinstance(error, ValueError) else "Invalid weapon export.",
+        ) from None
+    return user_id, scan
+
+
+@app.post("/api/weapons/import/preview")
+async def preview_weapon_import(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    _, scan = await _validated_weapon_import(request, account_id, cyrene_session)
+    return {"count": len(scan["weapons"]), "uid": scan["uid"]}
+
+
+@app.post("/api/weapons/import")
+async def import_weapon_scan(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import replace_weapon_scan
+
+    user_id, scan = await _validated_weapon_import(request, account_id, cyrene_session)
+    await replace_weapon_scan(user_id, account_id, scan["scan_id"], scan["weapons"])
+    return scan
+
+
 @app.get("/characters", response_class=HTMLResponse)
 async def characters_page(
     request: Request,

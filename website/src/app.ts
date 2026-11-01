@@ -22,6 +22,8 @@ export {};
 
 declare global {
     interface Window {
+        initWeapons?: () => void;
+        disposeWeapons?: () => void;
         initCharacters?: () => void;
         initInventory?: () => void;
         initPlanner?: () => void;
@@ -68,6 +70,10 @@ initialiseHoverEffects();
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
+    "/weapons": [
+        "/static/build/browser/pages/events/events-rewards.js?v=3",
+        "/static/build/browser/pages/weapons.js?v=16",
+    ],
     "/characters": [
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
         "/static/build/browser/pages/characters/characters-filters.js",
@@ -99,6 +105,7 @@ const pageScripts: Record<string, string | string[]> = {
 };
 
 const pageStyles: Record<string, string> = {
+    "/weapons": "/static/build/css/weapons.css?v=16",
     "/": "/static/build/css/home.css?v=4",
     "/achievements": "/static/build/css/achievements.css?v=3",
     "/wishes": "/static/build/css/wishes.css?v=10",
@@ -107,7 +114,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=2",
     "/verify": "/static/build/css/verification.css?v=2",
     "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=32",
+    "/events": "/static/build/css/events.css?v=33",
     "/settings": "/static/build/css/settings.css?v=3",
 };
 
@@ -212,6 +219,9 @@ async function loadPageStyle(path: string, serverDocument?: Document): Promise<v
 
 function initialisePage(path: string): void {
     switch (path) {
+        case "/weapons":
+            window.initWeapons?.();
+            break;
         case "/characters":
             window.initCharacters?.();
             break;
@@ -407,6 +417,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          * Replace the current page content.
          */
 
+        window.disposeWeapons?.();
         mainContent.innerHTML = newMain.innerHTML;
 
         /*

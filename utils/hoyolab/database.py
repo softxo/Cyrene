@@ -35,6 +35,37 @@ async def initialise_database() -> None:
         await _pool.open()
 
     async with _pool.connection() as connection:
+        await connection.execute(
+            """CREATE TABLE IF NOT EXISTS weapon_scan_snapshots (
+                discord_user_id BIGINT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                scan_id TEXT NOT NULL,
+                weapons JSONB NOT NULL,
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                PRIMARY KEY (discord_user_id, genshin_uid)
+            )"""
+        )
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS manual_weapons (
+                copy_id TEXT PRIMARY KEY,
+                discord_user_id BIGINT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                weapon JSONB NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+            """
+        )
+        await connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_manual_weapons_owner "
+            "ON manual_weapons(discord_user_id, genshin_uid)"
+        )
+
+        await connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_manual_weapons_uid ON manual_weapons(genshin_uid)"
+        )
+        await _initialise_shared_weapon_scans(connection)
+
         # =========================================
         # ACCOUNTS
         # =========================================
@@ -3446,3 +3477,111 @@ async def update_daily_checkin_status(
                 message,
             ),
         )
+
+
+async def _initialise_shared_weapon_scans(connection):
+    """Share scans by UID, retaining legacy snapshots for recovery.
+
+    Only seed missing UIDs: restarting must never undo shared edits or empty scans.
+    The latest complete snapshot wins; combining snapshots would duplicate weapons.
+    """
+    await connection.execute(
+        """CREATE TABLE IF NOT EXISTS weapon_account_scan_snapshots (
+            genshin_uid TEXT PRIMARY KEY,
+            scan_id TEXT NOT NULL,
+            weapons JSONB NOT NULL,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )"""
+    )
+    await connection.execute(
+        """INSERT INTO weapon_account_scan_snapshots (genshin_uid, scan_id, weapons, updated_at)
+        SELECT genshin_uid, scan_id, weapons, updated_at FROM (
+            SELECT genshin_uid, scan_id, weapons, updated_at,
+                ROW_NUMBER() OVER (
+                    PARTITION BY genshin_uid ORDER BY updated_at DESC, discord_user_id DESC
+                ) AS position
+            FROM weapon_scan_snapshots
+        ) legacy WHERE position = 1
+        ON CONFLICT (genshin_uid) DO NOTHING"""
+    )
+
+
+async def get_manual_weapons(user_id: int, account_id: int) -> list[dict]:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """SELECT m.copy_id, m.weapon FROM manual_weapons m
+            JOIN accounts a ON a.genshin_uid::text = m.genshin_uid
+            WHERE a.discord_user_id = %s AND a.id = %s
+            ORDER BY m.created_at, m.copy_id""",
+            (user_id, account_id),
+        )
+        return [dict(row["weapon"], copy_id=row["copy_id"]) for row in await result.fetchall()]
+
+
+async def add_manual_weapon(user_id: int, account_id: int, copy_id: str, weapon: dict):
+    # Keep the creator as provenance only; access is shared through the linked UID.
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """INSERT INTO manual_weapons (copy_id, discord_user_id, genshin_uid, weapon)
+            SELECT %s, discord_user_id, genshin_uid::text, %s FROM accounts
+            WHERE discord_user_id = %s AND id = %s""",
+            (copy_id, Jsonb(weapon), user_id, account_id),
+        )
+        if result.rowcount != 1:
+            raise ValueError("Account no longer linked.")
+
+
+async def remove_manual_weapon(user_id: int, account_id: int, copy_id: str) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """DELETE FROM manual_weapons
+            WHERE EXISTS (SELECT 1 FROM accounts a
+                WHERE a.discord_user_id = %s AND a.id = %s
+                  AND manual_weapons.genshin_uid = a.genshin_uid::text)
+              AND copy_id = %s""",
+            (user_id, account_id, copy_id),
+        )
+        return result.rowcount == 1
+
+
+async def get_weapon_scan(user_id: int, account_id: int):
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """SELECT s.scan_id, s.weapons FROM weapon_account_scan_snapshots s
+            JOIN accounts a ON a.genshin_uid::text = s.genshin_uid
+            WHERE a.discord_user_id = %s AND a.id = %s""",
+            (user_id, account_id),
+        )
+        row = await result.fetchone()
+        return dict(row) if row else {"weapons": [], "scan_id": None}
+
+
+async def replace_weapon_scan(user_id: int, account_id: int, scan_id: str, weapons: list[dict]):
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """INSERT INTO weapon_account_scan_snapshots (genshin_uid, scan_id, weapons)
+            SELECT genshin_uid::text, %s, %s FROM accounts
+            WHERE discord_user_id = %s AND id = %s
+            ON CONFLICT (genshin_uid) DO UPDATE
+              SET scan_id = EXCLUDED.scan_id, weapons = EXCLUDED.weapons, updated_at = NOW()""",
+            (scan_id, Jsonb(weapons), user_id, account_id),
+        )
+        if result.rowcount != 1:
+            raise ValueError("The scan account is no longer linked.")
+
+
+async def remove_scanned_weapon(user_id: int, account_id: int, copy_id: str) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """UPDATE weapon_account_scan_snapshots s
+            SET weapons = COALESCE((SELECT jsonb_agg(item ORDER BY ordinal)
+                FROM jsonb_array_elements(s.weapons) WITH ORDINALITY AS entries(item, ordinal)
+                WHERE item->>'scan_copy_id' IS DISTINCT FROM %s), '[]'::jsonb), updated_at = NOW()
+            WHERE EXISTS (SELECT 1 FROM accounts a WHERE a.id = %s
+                AND a.discord_user_id = %s
+                AND a.genshin_uid::text = s.genshin_uid)
+            AND EXISTS (SELECT 1 FROM jsonb_array_elements(s.weapons) item
+                WHERE item->>'scan_copy_id' = %s)""",
+            (copy_id, account_id, user_id, copy_id),
+        )
+        return result.rowcount == 1
