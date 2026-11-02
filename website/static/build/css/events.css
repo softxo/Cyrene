@@ -2414,7 +2414,8 @@ img[src$="/IT_Stella.png"] {
     color: #72eea2;
 }
 
-.event-list-status.event-completion-pill {
+.event-list-status.event-completion-pill,
+.event-temper-progress-box.event-completion-pill {
     background: rgba(93, 231, 151, 0.16);
     border-color: rgba(93, 231, 151, 0.32);
     color: #72eea2;
@@ -2429,6 +2430,7 @@ img[src$="/IT_Stella.png"] {
 }
 
 .event-limited-item.completed,
+.event-temper-item.completed,
 .event-daily-item.completed,
 .event-trounce-item.completed {
     background: var(--surface);
@@ -2488,8 +2490,8 @@ img[src$="/IT_Stella.png"] {
 .event-encounter-points-icon {
     /* Tint the Encounter Points silhouette purple. */
     background-color: #a87bfa;
-    mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain no-repeat;
-    -webkit-mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain
+    mask: url("/static/images/events/permanent/encounter_points.png") center / contain no-repeat;
+    -webkit-mask: url("/static/images/events/permanent/encounter_points.png") center / contain
         no-repeat;
     width: 18px;
     height: 18px;
@@ -2576,6 +2578,140 @@ img[src$="/IT_Stella.png"] {
     margin-bottom: 0;
 }
 
+/* Permanent recurring activities share the existing account activity layout. */
+.event-temper-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+.event-temper-heading .event-list-name {
+    white-space: normal;
+}
+.event-temper-description,
+.event-temper-permanent {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+.event-temper-item .event-list-icon {
+    flex-shrink: 0;
+}
+.event-temper-item .event-list-right {
+    flex-shrink: 0;
+}
+.events-permanent-overview {
+    margin-top: 28px;
+}
+.events-permanent-overview h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+@media (max-width: 600px) {
+    .event-temper-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .event-temper-item .event-list-right {
+        display: flex;
+        margin-left: 0;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .event-temper-item .event-list-left {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* Training summaries share the completion pill colour without changing progress. */
+.event-temper-item {
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.event-temper-item .event-list-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+}
+.event-temper-progress-box {
+    box-sizing: border-box;
+    min-width: 220px;
+    display: grid;
+    gap: 7px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.event-temper-progress-box strong {
+    color: inherit;
+    font-weight: 700;
+}
+.event-temper-progress-box small {
+    font-size: inherit;
+}
+.event-temper-day-track {
+    display: flex;
+    gap: 4px;
+}
+.event-temper-day-track > span {
+    flex: 1;
+    min-width: 18px;
+    height: 5px;
+    border-radius: 4px;
+    background: var(--border);
+}
+.event-temper-day-track > .filled {
+    background: var(--accent);
+}
+.event-temper-progress-box.event-completion-pill .filled {
+    background: currentColor;
+}
+.event-temper-durations {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.event-temper-durations > span {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+.event-temper-durations .event-time-left {
+    width: auto;
+    min-width: 0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+.events-permanent-overview {
+    margin-top: 0;
+}
+.events-permanent-overview .events-custom-list > .event-list-item {
+    margin: 0;
+}
+@media (max-width: 600px) {
+    .event-temper-item .event-list-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    .event-temper-progress-box {
+        flex: 1 0 auto;
+    }
+}
 /* =========================================================
    EVENTS — WISH BANNER CARDS, BANNER CONTENT AND WISH-RELATED RESPONSIVE RULES
    Extracted from the original events.css.
@@ -3216,9 +3352,9 @@ img[src$="/IT_Stella.png"] {
 .overview-encounter-points-icon {
     /* Tint the Encounter Points silhouette purple. */
     background-color: #a87bfa;
-    mask: url("/static/images/events/daily_commissions/encounter_points.png") center / contain
+    mask: url("/static/images/events/permanent/encounter_points.png") center / contain
         no-repeat;
-    -webkit-mask: url("/static/images/events/daily_commissions/encounter_points.png") center /
+    -webkit-mask: url("/static/images/events/permanent/encounter_points.png") center /
         contain no-repeat;
     width: 18px;
     height: 18px;

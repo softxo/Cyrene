@@ -122,6 +122,7 @@ from utils.web.sessions import (
 )
 from utils.web.site_updates import router as site_updates_router
 from utils.web.site_updates import site_version
+from utils.web.temper_thyself import build_temper_thyself, is_temper_thyself
 from utils.web.theater_elements import get_theater_season
 
 app = FastAPI(
@@ -1302,7 +1303,12 @@ async def get_single_account_events(
             event.get("daily_reset_time", float("inf")) <= time.time()
             for event in cached["data"].get("limited_events", [])
         )
-        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired:
+        temper_cycle_end = cached["data"].get("temper_thyself", {}).get("end_time", 0)
+        temper_week_end = cached["data"].get("temper_thyself", {}).get("weekly_end", 0)
+        temper_cycle_expired = (0 < temper_cycle_end <= time.time()) or (
+            0 < temper_week_end <= time.time()
+        )
+        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired and not temper_cycle_expired:
             return cached["data"]
 
     abyss_data = {
@@ -1368,6 +1374,7 @@ async def get_single_account_events(
 
     wish_banners = []
     limited_events = []
+    temper_thyself = build_temper_thyself()
 
     try:
         client = await get_account_client(
@@ -1532,7 +1539,18 @@ async def get_single_account_events(
                 *event_calendar.challenges,
             )
 
+            temper_thyself = build_temper_thyself(
+                calendar_events,
+                announcements,
+                account["genshin_server"],
+                now_timestamp,
+                notes=notes.get("data", {}),
+                weekly_end=get_weekly_reset_timestamp(account["genshin_server"]),
+            )
+
             for calendar_event in calendar_events:
+                if is_temper_thyself(calendar_event.name):
+                    continue
                 event_key = (
                     calendar_event.id,
                     normalise_event_name(calendar_event.name),
@@ -1619,6 +1637,9 @@ async def get_single_account_events(
                 limited_events,
                 announcement_reward_events(announcements, account["genshin_server"], now_timestamp),
             )
+            limited_events = [
+                event for event in limited_events if not is_temper_thyself(event["name"])
+            ]
             apply_archon_quest_progress(limited_events, notes, now_timestamp)
             await enrich_quest_rewards(limited_events)
 
@@ -1872,6 +1893,8 @@ async def get_single_account_events(
                 weekly_period_key,
             )
 
+            temper_thyself["checked"] = bool(activity_checks.get("temper_thyself"))
+
             daily_data["manual_checked"] = activity_checks["daily_commissions"]
 
             trounce_data["manual_checked"] = activity_checks["trounce_domains"]
@@ -2052,6 +2075,7 @@ async def get_single_account_events(
         "resin": resin_data,
         "wish_banners": wish_banners,
         "limited_events": limited_events,
+        "temper_thyself": temper_thyself,
     }
 
     _events_cache[cache_key] = {
@@ -2125,6 +2149,7 @@ async def get_events_data(
             "trounce": account_events["trounce"],
             "wish_banners": account_events["wish_banners"],
             "limited_events": account_events["limited_events"],
+            "temper_thyself": account_events["temper_thyself"],
         }
 
     # =========================================
@@ -2182,6 +2207,7 @@ async def get_events_data(
         },
         "wish_banners": [],
         "limited_events": [],
+        "temper_thyself": build_temper_thyself(),
     }
 
 
@@ -2339,6 +2365,7 @@ async def update_event_activity_check(
         )
 
     if activity_type not in {
+        "temper_thyself",
         "daily_commissions",
         "trounce_domains",
         "limited_event",

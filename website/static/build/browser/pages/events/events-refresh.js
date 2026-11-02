@@ -300,7 +300,7 @@ window.refreshEvents = async function refreshEvents() {
         // OVERVIEW LAYOUT
         // -------------------------------------------------
         if (isOverview) {
-            for (const panel of ["daily", "resin", "trounce", "endgame", "wishes", "events"]) {
+            for (const panel of ["daily", "resin", "permanent", "endgame", "wishes", "events"]) {
                 refreshInPlace(`.events-overview-panel[data-overview-panel="${panel}"]`);
             }
         }

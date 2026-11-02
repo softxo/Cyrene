@@ -1703,7 +1703,7 @@ async def get_event_activity_checks(
             AND (
                 (activity_type = 'daily_commissions' AND period_key = %s)
                 OR
-                (activity_type = 'trounce_domains' AND period_key = %s)
+                (activity_type IN ('trounce_domains', 'temper_thyself') AND period_key = %s)
             )
             """,
             (
@@ -1719,6 +1719,7 @@ async def get_event_activity_checks(
     checks = {
         "daily_commissions": None,
         "trounce_domains": None,
+        "temper_thyself": None,
     }
 
     for row in rows:

@@ -180,6 +180,44 @@
 {{ limited_event_card(event, account, true) }}
 {% endmacro %}
 
+
+{% macro temper_thyself_card(event, account, show_account=false) %}
+{% if event %}
+<article id="temper-thyself-{{ account.id }}" class="event-list-item event-temper-item{% if event.checked %} completed{% endif %}" data-permanent-event="temper-thyself" data-account-id="{{ account.id }}">
+    <div class="event-list-left">
+        <div class="event-list-check"><button type="button" class="event-checkmark{% if not event.checked %} event-checkmark-empty{% endif %}" data-activity-type="temper_thyself" data-account-id="{{ account.id }}" aria-label="Mark {{ event.name }} complete{% if show_account %} for {{ account.nickname }}{% endif %}" aria-pressed="{{ 'true' if event.checked else 'false' }}"></button></div>
+        <div class="event-list-icon"><img src="{{ event.icon }}" alt="" width="36" height="36"></div>
+        <strong class="event-list-name">{{ event.name }}</strong>
+    </div>
+    <div class="event-list-right">
+        {% if event.has_data and event.days_completed is not none %}
+        <div class="event-temper-progress-box{% if event.weekly_finished %} event-completion-pill{% endif %}">
+            <span><strong>{{ event.days_completed }}/{{ event.days_total }}</strong> Weekly <small>({{ event.days_required }} required)</small></span>
+            <div class="event-temper-day-track" role="meter" aria-label="Completed training days this week" aria-valuemin="0" aria-valuemax="7" aria-valuenow="{{ event.days_completed }}">
+                {% for day in range(7) %}<span class="{% if day < event.days_completed %}filled{% endif %}" aria-hidden="true"></span>{% endfor %}
+            </div>
+        </div>
+        <div class="event-temper-progress-box{% if event.weeks_completed >= event.weeks_required %} event-completion-pill{% endif %}">
+            <span><strong>{{ event.weeks_completed }}/{{ event.weeks_required }}</strong> Cycle <small>(for Stella Fortuna)</small></span>
+            <div class="event-temper-day-track" role="meter" aria-label="Completed weekly goals this cycle" aria-valuemin="0" aria-valuemax="{{ event.weeks_required }}" aria-valuenow="{{ event.weeks_completed }}">
+                {% for week in range(event.weeks_required) %}<span class="{% if week < event.weeks_completed %}filled{% endif %}" aria-hidden="true"></span>{% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <span class="event-list-status{% if event.checked %} event-completion-pill{% endif %}" data-temper-status data-base-status="{% if event.is_locked %}Not unlocked{% elif not event.is_active_period %}Between cycles{% elif event.is_upcoming %}Upcoming{% elif event.has_data %}In progress{% else %}Progress unavailable{% endif %}">{% if event.checked %}Completed{% elif event.is_locked %}Not unlocked{% elif not event.is_active_period %}Between cycles{% elif event.is_upcoming %}Upcoming{% elif event.has_data %}In progress{% else %}Progress unavailable{% endif %}</span>
+        <div class="event-temper-durations">
+        {% if event.weekly_end and event.has_data %}
+            <span><time aria-label="Weekly reset" title="Weekly reset" class="event-time-left" data-daily-event-reset data-end-time="{{ event.weekly_end }}">Calculating...</time></span>
+        {% endif %}
+        {% if event.end_time %}
+            <span><time aria-label="Cycle end" title="Cycle end" class="event-time-left" data-countdown-kind="long-event" data-start-time="{{ event.start_time }}" data-end-time="{{ event.end_time }}">Calculating...</time></span>
+        {% else %}<span class="event-temper-permanent">Cycle duration unavailable</span>{% endif %}
+        </div>
+    </div>
+</article>
+{% endif %}
+{% endmacro %}
+
 {% block title %}Cyrene • Events{% endblock %}
 
 {% block content %}
@@ -291,9 +329,9 @@
                 <button
                     type="button"
                     class="cyrene-button cyrene-button--tab events-overview-tab"
-                    data-overview-tab="trounce"
+                    data-overview-tab="permanent"
                 >
-                    Trounce
+                    Permanent
                 </button>
 
                 <button
@@ -1264,7 +1302,7 @@
         </section>
 
         <!-- =============================
-            DAILY ACTIVITIES
+            PERMANENT EVENTS
             ============================= -->
 
         <section
@@ -1276,7 +1314,7 @@
             <div class="events-list-header">
 
                 <h2>
-                    Daily Activities
+                    Permanent Events
                 </h2>
 
             </div>
@@ -1312,7 +1350,7 @@
                     <div class="event-list-icon">
 
                         <img
-                            src="/static/images/events/daily_commissions/daily_commissions.webp"
+                            src="/static/images/events/permanent/daily_commissions.webp"
                             alt="Daily Commissions"
                         >
 
@@ -1413,7 +1451,7 @@
                     <div class="event-list-icon">
 
                         <img 
-                            src="/static/images/events/trounce_domains/Trounce_Domains.png"
+                            src="/static/images/events/permanent/Trounce_Domains.png"
                             alt="Trounce Domains"
                         >
 
@@ -1457,7 +1495,11 @@
                     
             </div>
 
+            {{ temper_thyself_card(temper_thyself, selected_account) }}
+
         </section>
+
+
 
         <section
             class="events-wishes"
@@ -2188,6 +2230,8 @@
                 </div>
             {% endfor %}
 
+
+
         </div>
 
 
@@ -2285,61 +2329,34 @@
         </div>
 
 
-        <div
-            class="events-overview-panel"
-            data-overview-panel="trounce"
-        >
-
+        <div class="events-overview-panel events-custom-overview events-permanent-overview" data-overview-panel="permanent">
             {% for item in overview_data %}
-
-                <div
-                    class="overview-account-row{% if item.trounce.checked or (item.trounce.has_data and item.trounce.remaining <= 0) %} completed{% endif %}"
-                    data-automatic-complete="{{ 'true' if item.trounce.has_data and item.trounce.remaining <= 0 else 'false' }}"
-                >
-
-                    <div class="overview-account-name">
-
-                        <strong>
-                            {{ item.account.nickname }}
-                        </strong>
-
-                        <span>
-                            {{ item.account.genshin_uid }}
-                        </span>
-
+            {% set trounce_complete = item.trounce.checked or (item.trounce.has_data and item.trounce.remaining <= 0) %}
+            {% set complete_count = (1 if trounce_complete else 0) + (1 if item.temper_thyself.checked else 0) %}
+            <details open id="permanent-account-{{ item.account.id }}" class="events-custom-account-group" data-permanent-account-group data-account-id="{{ item.account.id }}">
+                <summary class="events-custom-account-heading">
+                    <div class="events-custom-account-info overview-account-name">
+                        <strong>{{ item.account.nickname }}</strong>
+                        <span>{{ item.account.genshin_uid }}</span>
                     </div>
-
-                    <div class="overview-account-status">
-
-                        {% if item.trounce.has_data %}
-
-                            <span class="overview-status{% if item.trounce.checked or item.trounce.remaining <= 0 %} event-completion-pill{% endif %}">
-                                {{ item.trounce.total - item.trounce.remaining }}
-                                /
-                                {{ item.trounce.total }}
-                            </span>
-
-                            <button
-                                type="button"
-                                class="event-checkmark{% if not item.trounce.checked %} event-checkmark-empty{% endif %}"
-                                data-activity-type="trounce_domains"
-                                data-account-id="{{ item.account.id }}"
-                                aria-label="Mark Trounce Domains complete for {{ item.account.nickname }}"
-                                aria-pressed="{{ 'true' if item.trounce.checked else 'false' }}"
-                            ></button>
-
-                        {% else %}
-
-                            <span>No Data</span>
-
-                        {% endif %}
-
-                    </div>
-
+                    <span class="events-custom-account-count{% if complete_count == 2 %} event-completion-pill{% endif %}" data-permanent-account-count>{{ complete_count }}/2 complete</span>
+                </summary>
+                <div class="events-custom-list">
+                    <article class="event-list-item event-trounce-item{% if trounce_complete %} completed{% endif %}" data-automatic-complete="{{ 'true' if item.trounce.has_data and item.trounce.remaining <= 0 else 'false' }}">
+                        <div class="event-list-left">
+                            <div class="event-list-check"><button type="button" class="event-checkmark{% if not item.trounce.checked %} event-checkmark-empty{% endif %}" data-activity-type="trounce_domains" data-account-id="{{ item.account.id }}" aria-label="Mark Trounce Domains complete for {{ item.account.nickname }}" aria-pressed="{{ 'true' if item.trounce.checked else 'false' }}"></button></div>
+                            <div class="event-list-icon"><img src="/static/images/events/permanent/Trounce_Domains.png" alt="" width="36" height="36"></div>
+                            <strong class="event-list-name">Trounce Domains</strong>
+                        </div>
+                        <div class="event-list-right">
+                            <span class="event-list-status{% if trounce_complete %} event-completion-pill{% endif %}">{% if item.trounce.has_data %}{{ item.trounce.total - item.trounce.remaining }} / {{ item.trounce.total }}{% else %}No Data{% endif %}</span>
+                            {% if item.trounce.reset_time %}<time class="event-time-left event-trounce-reset" data-end-time="{{ item.trounce.reset_time }}">Calculating...</time>{% endif %}
+                        </div>
+                    </article>
+                    {{ temper_thyself_card(item.temper_thyself, item.account, true) }}
                 </div>
-
+            </details>
             {% endfor %}
-
         </div>
 
 

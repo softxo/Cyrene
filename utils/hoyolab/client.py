@@ -85,7 +85,20 @@ class HoYoLABClient:
         if self.session is None:
             raise RuntimeError("HoYoLABClient must be used with 'async with'.")
 
-        return await self.get_genshin_daily_note(self.genshin_uid, self.genshin_server)
+        # Keep newer official fields (including week_active_progress) that the
+        # pinned SDK's typed Notes model does not yet expose.
+        if self.genshin_client is None:
+            raise RuntimeError("HoYoLABClient must be used with 'async with'.")
+        data = await self.genshin_client.request_game_record(
+            "dailyNote",
+            game=genshin.types.Game.GENSHIN,
+            region=genshin.utility.recognize_region(
+                int(self.genshin_uid), game=genshin.types.Game.GENSHIN
+            ),
+            lang="en-us",
+            params={"role_id": self.genshin_uid, "server": self.genshin_server},
+        )
+        return {"retcode": 0, "data": dict(data)}
 
     async def redeem_genshin_code(self, code: str) -> None:
         """Redeem a Genshin Impact gift code for this account."""
