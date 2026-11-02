@@ -567,7 +567,7 @@ interface Window {
                     const add = text(
                         "button",
                         "Add to Owned",
-                        "characters-reset-filters weapon-card-action",
+                        "cyrene-button characters-reset-filters weapon-card-action",
                     ) as HTMLButtonElement;
                     add.type = "button";
                     add.addEventListener("click", () => {

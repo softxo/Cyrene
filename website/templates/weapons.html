@@ -6,7 +6,7 @@
         <div class="characters-page-heading"><span class="eyebrow">ARMOURY</span><h1>Weapons</h1><p>Your weapon inventory and the complete weapon catalogue.</p></div>
     </header>
     {% if not accounts %}
-    <div class="weapons-message"><h2>No accounts connected</h2><p>Connect your HoYoLAB account to load weapons.</p><a href="/verify?next=/weapons">Connect account</a></div>
+    {% include 'components/no_accounts.html' %}
     {% else %}
     <div class="characters-navigation-row">
         <div class="characters-navigation-primary">
@@ -28,12 +28,12 @@
                 <input type="hidden" name="account_id" value="{{ selected_account.id }}" data-weapons-account>
             </div>
         </form>
-        <button class="characters-reset-filters" type="button" data-weapons-import>Import scan</button>
+        <button class="cyrene-button cyrene-import-button" type="button" data-weapons-import>Import</button>
         <input type="file" accept=".json,application/json" hidden data-weapons-import-file>
         </div>
     </div>
     <div class="characters-toolbar weapons-toolbar">
-        <div class="characters-search"><label for="weapons-search">Search weapons</label><input id="weapons-search" type="search" placeholder="Search by name..." data-weapons-search></div>
+        <div class="characters-search"><label for="weapons-search">Search weapons</label><input id="weapons-search" type="search" placeholder="Search by name..." data-weapons-search class="cyrene-input"></div>
         <div class="characters-filter characters-icon-filter">
             <label id="weapons-type-label">Weapon type</label>
             <div class="characters-icon-buttons" role="group" aria-labelledby="weapons-type-label" data-weapons-icon-filter="type">
@@ -54,7 +54,7 @@
             </div>
             <input type="hidden" data-weapons-rarity value="">
         </div>
-        <button class="characters-reset-filters" type="button" data-weapons-retry>Refresh</button>
+        <button class="cyrene-button characters-reset-filters" type="button" data-weapons-retry>Refresh</button>
     </div>
     <div class="weapons-summary-row">
         <span class="characters-summary" data-weapons-count>Loading weapons...</span>
@@ -82,13 +82,13 @@
                 <div class="weapon-add-field">
                     <span id="weapon-add-{{ field }}-label">{{ label }}</span>
                     <input id="weapon-add-{{ field }}" name="{{ field }}" type="hidden" value="1">
-                    <button class="planner-choice-trigger" type="button" data-weapon-choice="{{ field }}" aria-haspopup="dialog" aria-expanded="false" aria-controls="weapon-choice-popup" aria-labelledby="weapon-add-{{ field }}-label weapon-add-{{ field }}-value"><span class="planner-choice-value" id="weapon-add-{{ field }}-value">{{ prefix }}{{ ' 1' if field == 'level' else '1' }}</span><span class="planner-choice-arrow" aria-hidden="true">&#9662;</span></button>
+                    <button class="planner-choice-trigger" type="button" data-weapon-choice="{{ field }}" aria-haspopup="dialog" aria-expanded="false" aria-controls="weapon-choice-popup" aria-labelledby="weapon-add-{{ field }}-label weapon-add-{{ field }}-value"><span class="planner-choice-value" id="weapon-add-{{ field }}-value">{{ prefix }}{{ ' 1' if field == 'level' else '1' }}</span><span class="planner-choice-arrow" aria-hidden="true"></span></button>
                 </div>
                 {% endfor %}
             </div>
             <div id="weapon-choice-popup" class="planner-choice-menu weapon-choice-menu" role="dialog" aria-label="Choose a value" popover="auto"><div class="planner-choice-grid" data-weapon-choice-grid></div></div>
             <p class="weapons-note" data-weapon-save-status role="status"></p>
-            <div class="weapon-add-actions"><button class="characters-reset-filters" type="button" data-weapon-cancel>Cancel</button><button class="characters-reset-filters weapon-add-submit" type="submit">Add to Owned</button></div>
+            <div class="weapon-add-actions"><button class="cyrene-button characters-reset-filters" type="button" data-weapon-cancel>Cancel</button><button class="cyrene-button characters-reset-filters weapon-add-submit" type="submit">Add to Owned</button></div>
         </form>
     </dialog>
     <dialog class="weapon-add-dialog weapon-import-dialog" data-weapon-import-dialog aria-labelledby="weapon-import-title">
@@ -96,15 +96,15 @@
         <p class="weapons-note" data-weapon-import-summary></p>
         <p class="weapons-note">This replaces the previous scan for this account. Manually added copies stay separate. Equipped weapons are matched with HoYoLAB so they appear once.</p>
         <p class="weapons-note" role="status" data-weapon-import-status></p>
-        <div class="weapon-add-actions"><button class="characters-reset-filters" type="button" data-weapon-import-cancel>Cancel</button><button class="characters-reset-filters weapon-add-submit" type="button" data-weapon-import-confirm>Import weapons</button></div>
+        <div class="weapon-add-actions"><button class="cyrene-button characters-reset-filters" type="button" data-weapon-import-cancel>Cancel</button><button class="cyrene-button weapon-add-submit cyrene-import-button" type="button" data-weapon-import-confirm>Import</button></div>
     </dialog>
     <dialog class="weapon-add-dialog weapon-delete-dialog" data-weapon-delete-dialog aria-labelledby="weapon-delete-title">
         <h2 id="weapon-delete-title">Delete weapon?</h2>
         <p class="weapons-note" data-weapon-delete-name></p>
         <p class="weapons-note" data-weapon-delete-status role="status"></p>
         <div class="weapon-add-actions">
-            <button class="characters-reset-filters" type="button" data-weapon-delete-cancel>Cancel</button>
-            <button class="characters-reset-filters weapon-delete-confirm" type="button" data-weapon-delete-confirm>Delete weapon</button>
+            <button class="cyrene-button characters-reset-filters" type="button" data-weapon-delete-cancel>Cancel</button>
+            <button class="cyrene-button cyrene-button--danger characters-reset-filters weapon-delete-confirm" type="button" data-weapon-delete-confirm>Delete weapon</button>
         </div>
     </dialog>
     {% endif %}

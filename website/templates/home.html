@@ -17,10 +17,8 @@
             </p>
 
             <div class="home-hero-actions">
-                <a href="/characters" class="home-action-primary">
-                    Open your roster <span aria-hidden="true">→</span>
-                </a>
-                <a href="/settings" class="home-action-secondary">
+                <a href="/verify" class="cyrene-button home-action-primary">Login Discord</a>
+                <a href="/settings" class="cyrene-button home-action-secondary">
                     Manage accounts
                 </a>
             </div>
@@ -69,7 +67,7 @@
     <section class="home-changelog" data-changelog aria-labelledby="changelog-title">
         <div class="changelog-heading">
             <h2 id="changelog-title"><img src="/static/images/ui/ui_misc/Changelog.png" alt=""> CHANGELOG</h2>
-            <button type="button" class="changelog-add" data-changelog-add aria-label="Add changelog" hidden><span aria-hidden="true">+</span></button>
+            <button type="button" class="cyrene-button cyrene-button--icon changelog-add" data-changelog-add aria-label="Add changelog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <p data-changelog-status role="status">Loading updates&hellip;</p>
         <div data-changelog-entries></div>
@@ -96,9 +94,9 @@
                             <span>Time</span><input type="text" inputmode="numeric" maxlength="2" data-time-hour aria-label="Hour"><span>:</span><input type="text" inputmode="numeric" maxlength="2" data-time-minute aria-label="Minute">
                         </div>
                         <div class="changelog-calendar-footer">
-                            <button type="button" data-date-today>Today</button>
-                            <button type="button" data-date-cancel>Cancel</button>
-                            <button type="button" data-date-apply>Apply</button>
+                            <button type="button" data-date-today class="cyrene-button cyrene-button--compact">Today</button>
+                            <button type="button" data-date-cancel class="cyrene-button cyrene-button--compact">Cancel</button>
+                            <button type="button" data-date-apply class="cyrene-button cyrene-button--compact">Apply</button>
                         </div>
                     </div>
                 </div>
@@ -113,14 +111,14 @@
                 </div></div>
                 <div class="changelog-writing-label">
                     <label id="changelog-content-label" for="changelog-content">What's new</label>
-                    <button type="button" data-changelog-icons aria-expanded="false" aria-controls="changelog-picker">Insert emoji</button>
+                    <button type="button" data-changelog-icons aria-expanded="false" aria-controls="changelog-picker" class="cyrene-button cyrene-button--compact">Insert emoji</button>
                 </div>
                 <div id="changelog-picker" class="changelog-emoji-disclosure" hidden><div class="changelog-picker" aria-label="Changelog emojis"></div></div>
                 <div class="changelog-format-toolbar"><div class="changelog-text-tools">
                     <span class="changelog-tool-label">Text colour</span><input aria-label="Text colour" id="changelog-text-colour" type="color" data-text-colour value="#8f9cff">
                     <span class="changelog-text-colour-preview" data-text-colour-preview>This is how the text will look.</span>
-                    <button type="button" data-colour-presets aria-expanded="false" aria-controls="changelog-colour-presets">Presets</button>
-                    <button type="button" data-apply-text-colour aria-label="Colour selected text">Apply colour</button>
+                    <button type="button" data-colour-presets aria-expanded="false" aria-controls="changelog-colour-presets" class="cyrene-button cyrene-button--compact">Presets</button>
+                    <button type="button" data-apply-text-colour aria-label="Colour selected text" class="cyrene-button cyrene-button--compact">Apply colour</button>
                 </div>
                 <div id="changelog-colour-presets" class="changelog-colour-presets" hidden>
                     <div class="changelog-preset-list" data-preset-list></div>
@@ -129,7 +127,7 @@
                         <input type="color" data-preset-picker value="#8f9cff" aria-label="Preset colour picker">
                         <label for="changelog-preset-hex">Hex</label>
                         <input id="changelog-preset-hex" type="text" maxlength="7" placeholder="#ec3b83" autocomplete="off" spellcheck="false" aria-label="Preset hex colour">
-                        <button type="button" data-save-preset>Save preset</button>
+                        <button type="button" data-save-preset class="cyrene-button cyrene-button--compact">Save preset</button>
                     </div>
                     <p data-preset-status role="status"></p>
                 </div>
@@ -137,7 +135,7 @@
                     <label for="changelog-opacity">Text opacity</label>
                     <input id="changelog-opacity" type="range" min="10" max="100" step="5" value="70" data-opacity-input>
                     <output for="changelog-opacity" data-opacity-value>70%</output>
-                    <button type="button" data-apply-opacity aria-label="Apply to selected text">Apply opacity</button>
+                    <button type="button" data-apply-opacity aria-label="Apply to selected text" class="cyrene-button cyrene-button--compact">Apply opacity</button>
                 </div>
                 </div>
                 <div id="changelog-content" class="changelog-content-editor" contenteditable="true" role="textbox" aria-labelledby="changelog-content-label" aria-multiline="true" aria-required="true" data-placeholder="One update per line..."></div>
@@ -147,9 +145,9 @@
                 <section class="changelog-preview-panel" aria-label="Preview"><h3>Preview</h3><div class="changelog-preview"></div></section>
                 <p data-changelog-error role="alert"></p>
                 <div class="changelog-editor-actions">
-                    <button type="button" data-changelog-delete hidden>Delete update</button>
-                    <button type="button" data-changelog-cancel>Cancel</button>
-                    <button type="submit" class="changelog-publish">Publish update</button>
+                    <button type="button" data-changelog-delete hidden class="cyrene-button cyrene-button--danger">Delete update</button>
+                    <button type="button" data-changelog-cancel class="cyrene-button cyrene-button--compact">Cancel</button>
+                    <button type="submit" class="cyrene-button changelog-publish">Publish update</button>
                 </div>
             </form>
         </dialog>
@@ -160,8 +158,8 @@
             </div>
             <p id="changelog-delete-description">The changelog for <strong data-delete-date></strong> will be removed for everyone. This cannot be undone.</p>
             <div class="changelog-editor-actions">
-                <button type="button" data-delete-cancel autofocus>Keep update</button>
-                <button type="button" data-delete-confirm>Delete update</button>
+                <button type="button" data-delete-cancel autofocus class="cyrene-button cyrene-button--compact">Keep update</button>
+                <button type="button" data-delete-confirm class="cyrene-button cyrene-button--danger">Delete update</button>
             </div>
         </dialog>
     </section>

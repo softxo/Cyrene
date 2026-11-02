@@ -97,7 +97,6 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         const arrow = document.createElement("span");
         arrow.className = "planner-choice-arrow";
         arrow.setAttribute("aria-hidden", "true");
-        arrow.textContent = "▾";
         trigger.append(value, arrow);
         select.classList.add("planner-native-select");
         select.tabIndex = -1;

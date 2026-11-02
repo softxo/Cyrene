@@ -139,14 +139,30 @@ export function initialiseSiteUpdates(): void {
             actions.className = "site-update-actions";
             const later = document.createElement("button");
             later.type = "button";
+            later.className = "cyrene-button cyrene-button--danger site-update-later";
             later.textContent = "Later";
+            async function settleButton(button: HTMLButtonElement) {
+                button.dataset.settling = "true";
+                later.disabled = true;
+                update.disabled = true;
+                // Flush the release state, then wait for the surface's own transition.
+                void getComputedStyle(button, "::before").inset;
+                await Promise.all(
+                    button
+                        .getAnimations({ subtree: true })
+                        .map((motion) => motion.finished.catch(() => {})),
+                );
+            }
             async function collapsePopup(withAnimation = true) {
                 if (!notification || transitioning) return;
                 transitioning = true;
                 const popup = notification;
                 writeState("cyrene-minimised-update", announced);
-                later.disabled = true;
-                update.disabled = true;
+                if (withAnimation) await settleButton(later);
+                else {
+                    later.disabled = true;
+                    update.disabled = true;
+                }
                 indicator = document.createElement("button");
                 indicator.type = "button";
                 indicator.disabled = true;
@@ -187,6 +203,7 @@ export function initialiseSiteUpdates(): void {
                         { opacity: 0, transform: "translateX(-50%) translateY(-6px) scale(.8)" },
                     ]);
                 popup.hidden = true;
+                delete later.dataset.settling;
                 pill.hidden = false;
                 if (withAnimation)
                     await animate(
@@ -206,14 +223,12 @@ export function initialiseSiteUpdates(): void {
             later.addEventListener("click", () => void collapsePopup());
             const update = document.createElement("button");
             update.type = "button";
-            update.className = "site-update-apply";
+            update.className = "cyrene-button site-update-apply";
             update.textContent = "Update";
             update.addEventListener("click", async () => {
                 if (transitioning) return;
                 transitioning = true;
-                update.disabled = true;
-                later.disabled = true;
-                update.textContent = "Updating...";
+                await settleButton(update);
                 try {
                     sessionStorage.setItem(
                         "cyrene-pending-update",

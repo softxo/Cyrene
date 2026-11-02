@@ -305,7 +305,7 @@ function initCodes() {
                 processing: "Claiming…",
                 failed: "Retry",
             };
-            const claimButton = createElement("button", "codes-claim-button", buttonLabel[savedStatus] || "Claim");
+            const claimButton = createElement("button", "cyrene-button codes-claim-button", buttonLabel[savedStatus] || "Claim");
             claimButton.type = "button";
             claimButton.disabled =
                 !accountSelect?.value || accountSelect.disabled;

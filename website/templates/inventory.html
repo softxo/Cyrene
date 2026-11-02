@@ -64,11 +64,7 @@
     </header>
 
     {% if not accounts %}
-    <section class="inventory-message">
-        <h2>No accounts connected</h2>
-        <p>Connect your HoYoLAB account to view your inventory.</p>
-        <a href="/verify?next=/inventory">Connect account</a>
-    </section>
+    {% include 'components/no_accounts.html' %}
 
     {% else %}
     <section
@@ -91,7 +87,7 @@
                 placeholder="Search by name..."
                 autocomplete="off"
                 data-inventory-search
-            >
+             class="cyrene-input">
         </div>
 
         <p class="inventory-summary" aria-live="polite">

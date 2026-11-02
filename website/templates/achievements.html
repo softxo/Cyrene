@@ -65,11 +65,7 @@
     </section>
 
     {% if not accounts %}
-    <section class="achievement-empty-state">
-        <h2>No accounts connected</h2>
-        <p>Connect a HoYoLAB account before tracking achievements.</p>
-        <a class="button" href="/verify?next=/achievements">Connect account</a>
-    </section>
+    {% include 'components/no_accounts.html' %}
     {% endif %}
 
 
@@ -169,7 +165,7 @@
                     type="search"
                     id="achievement-search"
                     data-achievement-search
-                    class="achievement-search"
+                    class="cyrene-input achievement-search"
                     placeholder="Search achievements..."
                     autocomplete="off"
                 >
@@ -240,11 +236,9 @@
 
                 <button
                     type="button"
-                    class="button achievement-import-button"
+                    class="cyrene-button achievement-import-button cyrene-import-button"
                     id="achievement-import-button"
-                >
-                    Import
-                </button>
+                >Import</button>
 
 
                 <input
@@ -355,7 +349,7 @@
                     </span>
                     <input
                         type="search"
-                        class="achievement-search"
+                        class="cyrene-input achievement-search"
                         data-achievement-search
                         placeholder="Search achievements..."
                         autocomplete="off"
@@ -472,7 +466,7 @@
 
             <button
                 type="button"
-                class="button"
+                class="cyrene-button button"
                 id="achievement-notes-cancel"
             >
                 Cancel
@@ -480,7 +474,7 @@
 
             <button
                 type="button"
-                class="button achievement-notes-add"
+                class="cyrene-button button achievement-notes-add"
                 id="achievement-notes-add"
             >
                 Add Note

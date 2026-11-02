@@ -38,10 +38,80 @@ for (const width of [390, 1280]) {
         await notice.evaluate(async (el) => {
             await Promise.all(el.getAnimations().map((animation) => animation.finished));
         });
+        const later = notice.getByRole("button", { name: "Later", exact: true });
+        await expect(later).toHaveClass(/site-update-later/);
+        const danger = await later.evaluate((el) => {
+            const probe = document.createElement("span");
+            probe.style.color = "var(--error)";
+            el.append(probe);
+            const colour = getComputedStyle(probe).color;
+            probe.remove();
+            return colour;
+        });
+        await expect(later).toHaveCSS("color", danger);
+        await later.focus();
+        await expect
+            .poll(() => later.evaluate((el) => getComputedStyle(el, "::before").borderColor))
+            .toBe(danger);
+        await later.blur();
         const popupBounds = await notice.boundingBox();
         expect(Math.abs(popupBounds!.x + popupBounds!.width / 2 - width / 2)).toBeLessThan(1);
         expect(popupBounds!.y).toBe(16);
 
+        for (const name of ["Later", "Update"]) {
+            const button = notice.getByRole("button", { name, exact: true });
+
+            const bounds = await button.boundingBox();
+            await button.hover();
+            await expect
+                .poll(() =>
+                    button.evaluate((el) => {
+                        const matrix = new DOMMatrixReadOnly(
+                            getComputedStyle(el, "::before").transform,
+                        );
+                        return (
+                            Math.round(
+                                ((1 - matrix.a) * el.getBoundingClientRect().width) / 2 - 1,
+                            ) + "px"
+                        );
+                    }),
+                )
+                .toBe("0px");
+            await expect(button).toHaveClass(/cyrene-button/);
+            await expect(button).toHaveCSS("border-radius", "14px");
+            await page.mouse.down();
+            await expect
+                .poll(() =>
+                    button.evaluate((el) => {
+                        const matrix = new DOMMatrixReadOnly(
+                            getComputedStyle(el, "::before").transform,
+                        );
+                        return (
+                            Math.round(
+                                ((1 - matrix.a) * el.getBoundingClientRect().width) / 2 - 1,
+                            ) + "px"
+                        );
+                    }),
+                )
+                .toBe("1px");
+            await page.mouse.move(0, 0);
+            await page.mouse.up();
+            await expect
+                .poll(() =>
+                    button.evaluate((el) => {
+                        const matrix = new DOMMatrixReadOnly(
+                            getComputedStyle(el, "::before").transform,
+                        );
+                        return (
+                            Math.round(
+                                ((1 - matrix.a) * el.getBoundingClientRect().width) / 2 - 1,
+                            ) + "px"
+                        );
+                    }),
+                )
+                .toBe("-1px");
+            expect(await button.boundingBox()).toEqual(bounds);
+        }
         expect(documents).toBe(1);
         await page.clock.fastForward(61000);
         await expect(notice).toHaveCount(1);

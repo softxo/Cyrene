@@ -55,10 +55,10 @@
 
 {% macro limited_event_filters() %}
 <div class="events-limited-filter">
-    <button type="button" class="events-limited-filter-button" data-limited-filter-button aria-label="Choose Limited event categories" aria-expanded="false">
-        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m9 3-.6 2.4-2 .9-2.2-.7-2 3.4L4 10.7v2.6L2.2 15l2 3.4 2.2-.7 2 .9L9 21h4l.6-2.4 2-.9 2.2.7 2-3.4-1.8-1.7v-2.6L19.8 9l-2-3.4-2.2.7-2-.9L13 3Z"/><circle cx="11" cy="12" r="3.2"/></svg>
+    <button type="button" class="cyrene-button events-limited-filter-button" data-limited-filter-button aria-label="Choose Limited event categories" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M18.86 9.23L21.29 10.02L21.29 13.98L18.86 14.77L17.83 16.56L18.36 19.06L14.94 21.04L13.03 19.33L10.97 19.33L9.06 21.04L5.64 19.06L6.17 16.56L5.14 14.77L2.71 13.98L2.71 10.02L5.14 9.23L6.17 7.44L5.64 4.94L9.06 2.96L10.97 4.67L13.03 4.67L14.94 2.96L18.36 4.94L17.83 7.44Z"/><circle cx="12" cy="12" r="3.2"/></svg>
     </button>
-    <div class="events-limited-filter-popup" popover="auto" role="dialog" aria-label="Limited event categories">
+    <div class="cyrene-popover events-limited-filter-popup" popover="auto" role="dialog" aria-label="Limited event categories">
         <strong>Show events</strong>
         <div data-limited-filter-options></div>
         <small>Applies to Normal and Overview.</small>
@@ -220,7 +220,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'all' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'all' %}active{% endif %}"
                     data-account-tab="all"
                 >
                     All
@@ -228,7 +228,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'permanent' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'permanent' %}active{% endif %}"
                     data-account-tab="permanent"
                 >
                     Permanent
@@ -236,7 +236,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'events' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'events' %}active{% endif %}"
                     data-account-tab="events"
                 >
                     Limited
@@ -244,7 +244,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'endgame' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'endgame' %}active{% endif %}"
                     data-account-tab="endgame"
                 >
                     Endgame
@@ -252,7 +252,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'wishes' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'wishes' %}active{% endif %}"
                     data-account-tab="wishes"
                 >
                     Wishes
@@ -260,7 +260,7 @@
 
                 <button
                     type="button"
-                    class="events-account-tab {% if tab == 'custom' %}active{% endif %}"
+                    class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'custom' %}active{% endif %}"
                     data-account-tab="custom"
                 >
                     Custom
@@ -274,7 +274,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab active"
+                    class="cyrene-button cyrene-button--tab events-overview-tab active"
                     data-overview-tab="daily"
                 >
                     Daily
@@ -282,7 +282,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="resin"
                 >
                     Resin
@@ -290,7 +290,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="trounce"
                 >
                     Trounce
@@ -298,7 +298,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="events"
                 >
                     Limited
@@ -306,7 +306,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="endgame"
                 >
                     Endgame
@@ -314,7 +314,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="wishes"
                 >
                     Wishes
@@ -322,7 +322,7 @@
 
                 <button
                     type="button"
-                    class="events-overview-tab"
+                    class="cyrene-button cyrene-button--tab events-overview-tab"
                     data-overview-tab="custom"
                 >
                     Custom
@@ -350,7 +350,7 @@
                         >
                             <span class="custom-select-value">
                                 {{ selected_account.nickname }}
-                                —
+                                ·
                                 {{ selected_account.genshin_uid }}
                             </span>
 
@@ -371,7 +371,7 @@
                                     data-account-id="{{ account.id }}"
                                 >
                                     {{ account.nickname }}
-                                    —
+                                    ·
                                     {{ account.genshin_uid }}
                                 </button>
 
@@ -387,7 +387,7 @@
 
 
             <a
-                class="events-layout-switch"
+                class="cyrene-button events-layout-switch"
                 href="{% if overview %}/events?account_id={{ selected_account.id }}{% else %}/events?overview=true&account_id={{ selected_account.id }}{% endif %}"
             >
                 Switch Layout
@@ -1645,10 +1645,10 @@
 
                 <button
                     type="button"
-                    class="events-custom-create"
+                    class="cyrene-button events-custom-create"
                     data-custom-create
                 >
-                    <span aria-hidden="true">+</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                     Create Event
                 </button>
             </div>
@@ -1695,12 +1695,10 @@
 
                     <button
                         type="button"
-                        class="events-custom-close"
+                        class="cyrene-button events-custom-close"
                         data-custom-close
                         aria-label="Close"
-                    >
-                        ×
-                    </button>
+                    ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
                 </div>
 
                 <form data-custom-form>
@@ -1749,7 +1747,7 @@
 
                                 <button
                                     type="button"
-                                    class="events-custom-icon-remove"
+                                    class="cyrene-button events-custom-icon-remove"
                                     data-custom-icon-remove
                                     hidden
                                 >
@@ -2073,10 +2071,10 @@
                             <span>Progress objectives</span>
                             <button
                                 type="button"
-                                class="events-custom-add-objective"
+                                class="cyrene-button events-custom-add-objective"
                                 data-custom-add-objective
                             >
-                                <span aria-hidden="true">+</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                                 Add Objective
                             </button>
                         </div>
@@ -2094,7 +2092,7 @@
                     <div class="events-custom-form-actions">
                         <button
                             type="button"
-                            class="events-custom-cancel"
+                            class="cyrene-button events-custom-cancel"
                             data-custom-close
                         >
                             Cancel
@@ -2102,7 +2100,7 @@
 
                         <button
                             type="submit"
-                            class="events-custom-save"
+                            class="cyrene-button events-custom-save"
                         >
                             Save Event
                         </button>
@@ -2714,10 +2712,10 @@
 
                     <button
                         type="button"
-                        class="events-custom-create"
+                        class="cyrene-button events-custom-create"
                         data-custom-create
                     >
-                        <span aria-hidden="true">+</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                         Create Event
                     </button>
                 </div>

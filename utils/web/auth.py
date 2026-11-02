@@ -1,3 +1,4 @@
+import re
 import secrets
 import time
 from dataclasses import dataclass
@@ -15,6 +16,9 @@ class VerificationRequest:
     code: str
     created_at: float
     user_id: int | None = None
+    username: str | None = None
+    display_name: str | None = None
+    avatar_hash: str | None = None
 
 
 @dataclass
@@ -76,19 +80,24 @@ def get_verification(
 def claim_verification(
     code: str,
     user_id: int,
+    username: str | None = None,
+    display_name: str | None = None,
+    avatar_hash: str | None = None,
 ) -> bool:
     _cleanup()
 
     code = code.strip().upper()
 
     for verification in _verifications.values():
-
         if verification.code != code:
             continue
 
         if verification.user_id is not None:
             return False
 
+        verification.username = username
+        verification.display_name = display_name
+        verification.avatar_hash = avatar_hash
         verification.user_id = user_id
 
         return True
@@ -103,9 +112,7 @@ async def create_web_session(
     token = secrets.token_urlsafe(48)
 
     now = datetime.now(timezone.utc)
-    expires_at = now + timedelta(
-        seconds=WEB_SESSION_TIMEOUT
-    )
+    expires_at = now + timedelta(seconds=WEB_SESSION_TIMEOUT)
 
     async with get_pool().connection() as connection:
         await connection.execute(
@@ -120,12 +127,7 @@ async def create_web_session(
                 %s, %s, %s, %s
             )
             """,
-            (
-                token,
-                user_id,
-                now,
-                expires_at
-            )
+            (token, user_id, now, expires_at),
         )
 
     return WebSession(
@@ -155,7 +157,7 @@ async def get_web_session(
             AND expires_at > NOW()
             LIMIT 1
             """,
-            (token,)
+            (token,),
         )
 
         row = await result.fetchone()
@@ -180,5 +182,50 @@ async def delete_web_session(
             DELETE FROM web_sessions
             WHERE token = %s
             """,
-            (token,)
+            (token,),
         )
+
+
+async def save_discord_profile(verification: VerificationRequest):
+    if not verification.username:
+        return
+    async with get_pool().connection() as connection:
+        await connection.execute(
+            """INSERT INTO web_discord_profiles (discord_user_id, username, display_name, avatar_hash)
+            VALUES (%s, %s, %s, %s) ON CONFLICT (discord_user_id) DO UPDATE
+            SET username=EXCLUDED.username, display_name=EXCLUDED.display_name,
+                avatar_hash=EXCLUDED.avatar_hash, updated_at=NOW()""",
+            (
+                verification.user_id,
+                verification.username,
+                verification.display_name,
+                verification.avatar_hash,
+            ),
+        )
+
+
+async def get_discord_profile(user_id: int):
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            "SELECT username, display_name, avatar_hash FROM web_discord_profiles WHERE discord_user_id=%s",
+            (user_id,),
+        )
+        row = await result.fetchone()
+        if row is None:
+            result = await connection.execute(
+                """SELECT discord_username AS username, discord_display_name AS display_name
+                FROM accounts WHERE discord_user_id=%s ORDER BY updated_at DESC LIMIT 1""",
+                (user_id,),
+            )
+            row = await result.fetchone()
+    profile = dict(row) if row else {}
+    avatar_hash = profile.get("avatar_hash")
+    avatar_url = "/static/images/ui/ui_icons/Discord.png"
+    if isinstance(avatar_hash, str) and re.fullmatch(r"(?:a_)?[a-f0-9]{16,64}", avatar_hash):
+        avatar_url = f"https://cdn.discordapp.com/avatars/{int(user_id)}/{avatar_hash}.png?size=128"
+    return {
+        "id": str(user_id),
+        "username": profile.get("username") or "",
+        "display_name": profile.get("display_name") or profile.get("username") or "Discord account",
+        "avatar_url": avatar_url,
+    }

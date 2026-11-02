@@ -1,4 +1,7 @@
 import { initialiseSiteUpdates } from "./site-updates";
+import { initialiseButtonMotion } from "./browser/core/button-motion";
+import { initialiseSearchControls } from "./browser/core/search-controls";
+import { initialiseSelectControls } from "./browser/core/select-controls";
 
 /**
  * Cyrene frontend entry point.
@@ -32,6 +35,7 @@ declare global {
         initInventory?: () => void;
         initPlanner?: () => void;
         initVerify?: () => void;
+        disposeVerify?: () => void;
         initAchievements?: () => void;
         initCodes?: () => void;
         initSettings?: () => void;
@@ -68,6 +72,9 @@ function initialiseHoverEffects(): void {
 }
 
 initialiseHoverEffects();
+initialiseButtonMotion();
+initialiseSearchControls();
+initialiseSelectControls();
 initialiseSiteUpdates();
 
 /* =========================================================
@@ -75,53 +82,53 @@ initialiseSiteUpdates();
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
-    "/": "/static/build/browser/pages/home.js?v=18",
+    "/": "/static/build/browser/pages/home.js?v=20",
     "/weapons": [
-        "/static/build/browser/pages/events/events-rewards.js?v=3",
-        "/static/build/browser/pages/weapons.js?v=16",
+        "/static/build/browser/pages/events/events-rewards.js?v=4",
+        "/static/build/browser/pages/weapons.js?v=17",
     ],
     "/characters": [
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
         "/static/build/browser/pages/characters/characters-showcase.js?v=8",
-        "/static/build/browser/pages/characters/characters-planner.js?v=9",
+        "/static/build/browser/pages/characters/characters-planner.js?v=10",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js?v=3",
     "/inventory": "/static/build/browser/pages/inventory.js",
-    "/planner": "/static/build/browser/pages/planner.js?v=2",
-    "/verify": "/static/build/browser/pages/verification.js",
-    "/codes": "/static/build/browser/pages/codes.js",
+    "/planner": "/static/build/browser/pages/planner.js?v=3",
+    "/verify": "/static/build/browser/pages/verification.js?v=3",
+    "/codes": "/static/build/browser/pages/codes.js?v=1",
 
     "/events": [
         "/static/build/browser/pages/events/events-dropdown.js?v=2",
         "/static/build/browser/pages/events/events-tabs.js?v=2",
         "/static/build/browser/pages/events/events-cards.js",
-        "/static/build/browser/pages/events/events-rewards.js?v=3",
+        "/static/build/browser/pages/events/events-rewards.js?v=4",
         "/static/build/browser/pages/events/events-filters.js?v=8",
         "/static/build/browser/pages/events/events-timers.js?v=6",
         "/static/build/browser/pages/events/events-activity.js?v=10",
-        "/static/build/browser/pages/events/events-refresh.js?v=6",
-        "/static/build/browser/pages/events/events-custom.js?v=6",
+        "/static/build/browser/pages/events/events-refresh.js?v=8",
+        "/static/build/browser/pages/events/events-custom.js?v=8",
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js?v=3",
+    "/settings": "/static/build/browser/pages/settings.js?v=4",
 };
 
 const pageStyles: Record<string, string> = {
-    "/weapons": "/static/build/css/weapons.css?v=16",
-    "/": "/static/build/css/home.css?v=30",
-    "/achievements": "/static/build/css/achievements.css?v=3",
-    "/wishes": "/static/build/css/wishes.css?v=10",
-    "/characters": "/static/build/css/characters.css?v=37",
-    "/inventory": "/static/build/css/inventory.css?v=3",
-    "/planner": "/static/build/css/planner.css?v=2",
-    "/verify": "/static/build/css/verification.css?v=2",
-    "/codes": "/static/build/css/codes.css?v=2",
-    "/events": "/static/build/css/events.css?v=33",
-    "/settings": "/static/build/css/settings.css?v=3",
+    "/weapons": "/static/build/css/weapons.css?v=23",
+    "/": "/static/build/css/home.css?v=35",
+    "/achievements": "/static/build/css/achievements.css?v=7",
+    "/wishes": "/static/build/css/wishes.css?v=14",
+    "/characters": "/static/build/css/characters.css?v=41",
+    "/inventory": "/static/build/css/inventory.css?v=7",
+    "/planner": "/static/build/css/planner.css?v=7",
+    "/verify": "/static/build/css/verification.css?v=14",
+    "/codes": "/static/build/css/codes.css?v=7",
+    "/events": "/static/build/css/events.css?v=47",
+    "/settings": "/static/build/css/settings.css?v=7",
 };
 
 /* =========================================================
@@ -224,6 +231,7 @@ async function loadPageStyle(path: string, serverDocument?: Document): Promise<v
    ========================================================= */
 
 function initialisePage(path: string): void {
+    if (document.querySelector("[data-no-accounts]")) return;
     switch (path) {
         case "/":
             window.initHome?.();
@@ -268,6 +276,8 @@ function initialisePage(path: string): void {
 async function preparePage(path: string): Promise<void> {
     await loadPageStyle(path);
 
+    if (document.querySelector("[data-no-accounts]")) return;
+
     await loadPageScript(path);
 
     initialisePage(path);
@@ -276,57 +286,6 @@ async function preparePage(path: string): Promise<void> {
 /* =========================================================
    6. CUSTOM SELECT SAFETY NET
    ========================================================= */
-
-function initialiseCustomSelectFallback(): void {
-    document.addEventListener(
-        "click",
-        (event) => {
-            if (!(event.target instanceof Element)) {
-                return;
-            }
-
-            const button = event.target.closest<HTMLButtonElement>(".custom-select-button");
-
-            const select = button?.closest<HTMLElement>(".custom-select");
-
-            if (!button || !select || button.disabled) {
-                return;
-            }
-
-            const wasOpen = select.classList.contains("open");
-            const previousExpanded = button.getAttribute("aria-expanded");
-
-            // Page-specific handlers run first. Only step in when a freshly
-            // inserted SPA control has not been initialised by its page module.
-            window.setTimeout(() => {
-                const handled =
-                    select.classList.contains("open") !== wasOpen ||
-                    button.getAttribute("aria-expanded") !== previousExpanded;
-
-                if (handled || !select.isConnected) {
-                    return;
-                }
-
-                document
-                    .querySelectorAll<HTMLElement>(".custom-select.open")
-                    .forEach((otherSelect) => {
-                        if (otherSelect === select) {
-                            return;
-                        }
-
-                        otherSelect.classList.remove("open");
-                        otherSelect
-                            .querySelector(".custom-select-button")
-                            ?.setAttribute("aria-expanded", "false");
-                    });
-
-                select.classList.toggle("open", !wasOpen);
-                button.setAttribute("aria-expanded", String(!wasOpen));
-            }, 0);
-        },
-        true,
-    );
-}
 
 /* =========================================================
    7. ACTIVE SIDEBAR NAVIGATION
@@ -426,6 +385,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          * Replace the current page content.
          */
 
+        window.disposeVerify?.();
         window.disposeHome?.();
         window.disposeWeapons?.();
         mainContent.innerHTML = newMain.innerHTML;
@@ -497,8 +457,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!mainContent) {
         return;
     }
-
-    initialiseCustomSelectFallback();
 
     /*
      * Intercept internal navigation links.

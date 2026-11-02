@@ -81,6 +81,11 @@ test("level choices follow ascension caps and clicking the trigger again closes 
     page,
 }) => {
     await page.locator('[data-weapons-tab="catalogue"]').click();
+    const addAction = page.getByRole("button", { name: "Add to Owned", exact: true }).first();
+    await expect(addAction).toHaveClass(/cyrene-button/);
+    expect(await addAction.evaluate((el) => getComputedStyle(el, "::before").borderStyle)).toBe(
+        "solid",
+    );
     await page
         .locator(".weapon-card")
         .filter({ has: page.getByRole("heading", { name: "Weapon 0", exact: true }) })

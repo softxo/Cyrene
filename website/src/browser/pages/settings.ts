@@ -115,7 +115,7 @@ function initialiseAccountManagement() {
 
             const manage = document.createElement("button");
             manage.type = "button";
-            manage.className = "linked-account-manage";
+            manage.className = "cyrene-button linked-account-manage";
             manage.textContent = "Manage";
             manage.addEventListener("click", () => openModal(account));
 
@@ -396,7 +396,7 @@ function initialiseAccountLinking() {
                 result.appendChild(message);
 
                 const link = document.createElement("a");
-                link.className = "account-link-action";
+                link.className = "cyrene-button account-link-action";
                 link.href = data.challenge_url;
                 link.target = "_blank";
                 link.rel = "noopener";

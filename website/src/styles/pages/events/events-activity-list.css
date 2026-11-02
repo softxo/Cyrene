@@ -165,8 +165,8 @@
 
 .event-insight-trigger:hover,
 .event-insight-trigger:focus-visible {
-    border-color: var(--accent);
-    outline: 2px solid var(--accent-soft);
+    border-color: var(--control-focus-border);
+    outline: 1px solid var(--control-focus-border);
     transform: translateY(-1px);
 }
 
@@ -381,7 +381,7 @@
 }
 
 .event-checkmark:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 

@@ -896,6 +896,7 @@ interface Window {
                 if (data.can_edit) {
                     const edit = document.createElement("button");
                     edit.type = "button";
+                    edit.className = "cyrene-button cyrene-button--compact";
                     edit.textContent = "Edit";
                     edit.setAttribute("aria-label", `Edit changelog for ${entry.date_label}`);
                     edit.addEventListener("click", () => open(entry), { signal });

@@ -132,7 +132,7 @@ function renderPlanner(plannerData) {
     if (plannerData.accounts.length === 0) {
         accounts.innerHTML = `
             <div class="planner-empty">
-                No Genshin accounts are linked.
+                Account data is currently unavailable.
             </div>
         `;
     }
@@ -237,7 +237,7 @@ function renderPlanner(plannerData) {
 
             <button
                 type="button"
-                class="reminder-delete-button"
+                class="cyrene-button cyrene-button--icon cyrene-button--danger reminder-delete-button"
                 data-reminder-id="${reminder.id}"
                 aria-label="Delete reminder"
                 title="Delete reminder"

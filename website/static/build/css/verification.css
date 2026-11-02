@@ -283,3 +283,140 @@
         padding: 18px 12px;
     }
 }
+
+.verification-page [hidden] {
+    display: none !important;
+}
+.discord-connected-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 11px;
+    margin-bottom: 18px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+}
+.discord-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    padding: 20px;
+    margin: 26px 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-inset);
+}
+.discord-profile-avatar {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.discord-profile-copy {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.discord-profile-copy strong {
+    color: var(--text);
+    font-size: 19px;
+}
+.discord-profile-copy span {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+.discord-profile-copy .discord-profile-id {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+.verification-panel .discord-connect-another {
+    width: 100%;
+}
+.discord-manage-accounts {
+    display: inline-block;
+    margin-top: 17px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+.discord-switch-note {
+    margin: 18px 0 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+.verification-panel.is-verified .discord-switch-note,
+.verification-panel.is-verified .discord-switch-cancel {
+    display: none;
+}
+.discord-verification-retry {
+    margin-top: 16px;
+}
+@media (max-width: 480px) {
+    .discord-profile-card {
+        padding: 16px;
+        gap: 12px;
+    }
+    .discord-profile-avatar {
+        width: 48px;
+        height: 48px;
+    }
+    .discord-profile-copy strong {
+        font-size: 17px;
+    }
+}
+
+.discord-connection-actions {
+    display: grid;
+    gap: 10px;
+}
+.verification-panel .discord-disconnect {
+    --button-surface: var(--control-surface);
+    --button-hover: color-mix(in srgb, var(--error) 3%, var(--surface-inset));
+    --button-border: color-mix(in srgb, var(--error) 25%, transparent);
+    --button-hover-border: color-mix(in srgb, var(--error) 40%, transparent);
+    color: var(--error);
+}
+.verification-panel button:disabled {
+    opacity: 0.65;
+    cursor: pointer;
+}
+.discord-manage-accounts {
+    transition: color 160ms ease;
+    text-underline-offset: 3px;
+}
+.discord-manage-accounts:hover {
+    color: var(--accent);
+}
+.discord-disconnect-error {
+    color: var(--error);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 12px 0 0;
+}
+.discord-disconnect-error:empty {
+    display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .verification-panel button::before,
+    .discord-manage-accounts {
+        transition: none;
+    }
+}
+
+.verification-panel.has-back-button {
+    position: relative;
+    padding-top: 76px;
+}
+.verification-panel .discord-switch-cancel {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    display: inline-flex;
+    align-items: center;
+}

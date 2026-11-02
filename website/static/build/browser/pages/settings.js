@@ -88,7 +88,7 @@ function initialiseAccountManagement() {
             meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
             const manage = document.createElement("button");
             manage.type = "button";
-            manage.className = "linked-account-manage";
+            manage.className = "cyrene-button linked-account-manage";
             manage.textContent = "Manage";
             manage.addEventListener("click", () => openModal(account));
             info.append(name, meta);
@@ -318,7 +318,7 @@ function initialiseAccountLinking() {
                     "HoYoLAB needs a CAPTCHA before continuing. Complete it in the new page, then return here.";
                 result.appendChild(message);
                 const link = document.createElement("a");
-                link.className = "account-link-action";
+                link.className = "cyrene-button account-link-action";
                 link.href = data.challenge_url;
                 link.target = "_blank";
                 link.rel = "noopener";

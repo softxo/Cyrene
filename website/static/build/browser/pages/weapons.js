@@ -497,7 +497,7 @@
                     }
                 }
                 else {
-                    const add = text("button", "Add to Owned", "characters-reset-filters weapon-card-action");
+                    const add = text("button", "Add to Owned", "cyrene-button characters-reset-filters weapon-card-action");
                     add.type = "button";
                     add.addEventListener("click", () => {
                         selectedWeapon = weapon;

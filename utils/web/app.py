@@ -101,8 +101,10 @@ from utils.web.auth import (
     create_verification,
     create_web_session,
     delete_web_session,
+    get_discord_profile,
     get_verification,
     get_web_session,
+    save_discord_profile,
 )
 from utils.web.changelog import router as changelog_router
 from utils.web.limited_event_checks import (
@@ -185,9 +187,13 @@ async def settings(request: Request):
 async def verify_page(
     request: Request,
     next: str | None = None,
+    cyrene_session: str | None = Cookie(default=None),
 ):
     if next and (not next.startswith("/") or next.startswith("//")):
         next = None
+
+    session = await get_web_session(cyrene_session)
+    discord_profile = await get_discord_profile(session.user_id) if session else None
 
     return templates.TemplateResponse(
         request=request,
@@ -195,6 +201,7 @@ async def verify_page(
         context={
             "request": request,
             "next": next,
+            "discord_profile": discord_profile,
         },
     )
 
@@ -227,6 +234,7 @@ async def verification_status(token: str):
             "verified": False,
         }
 
+    await save_discord_profile(verification)
     session = await create_web_session(verification.user_id)
 
     response = JSONResponse(
@@ -569,6 +577,7 @@ async def planner(request: Request, cyrene_session: str | None = Cookie(default=
         name="planner.html",
         context={
             "request": request,
+            "accounts": await get_accounts(session.user_id),
         },
     )
 
