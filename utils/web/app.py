@@ -101,12 +101,15 @@ from utils.web.auth import (
     create_verification,
     create_web_session,
     delete_web_session,
+    get_account_discord_access,
     get_discord_profile,
     get_verification,
     get_web_session,
     save_discord_profile,
 )
 from utils.web.changelog import router as changelog_router
+from utils.web.discord_oauth import refresh_profile as refresh_discord_profile
+from utils.web.discord_oauth import router as discord_oauth_router
 from utils.web.limited_event_checks import (
     annotate_daily_events,
     apply_archon_quest_progress,
@@ -132,6 +135,7 @@ app = FastAPI(
 )
 
 app.include_router(changelog_router)
+app.include_router(discord_oauth_router)
 app.include_router(site_updates_router)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -194,6 +198,8 @@ async def verify_page(
         next = None
 
     session = await get_web_session(cyrene_session)
+    if session:
+        await refresh_discord_profile(session.user_id)
     discord_profile = await get_discord_profile(session.user_id) if session else None
 
     return templates.TemplateResponse(
@@ -203,6 +209,9 @@ async def verify_page(
             "request": request,
             "next": next,
             "discord_profile": discord_profile,
+            "discord_oauth_error": request.query_params.get("discord_error")
+            if request.query_params.get("discord_error") in {"failed", "unavailable"}
+            else None,
         },
     )
 
@@ -412,6 +421,7 @@ async def web_hoyolab_accounts(
 ):
     user_id = await get_authenticated_user(cyrene_session)
     accounts = await get_accounts(user_id)
+    discord_access = await get_account_discord_access(user_id) if accounts else {}
 
     return {
         "accounts": [
@@ -421,6 +431,9 @@ async def web_hoyolab_accounts(
                 "cyrene_nickname": account["cyrene_nickname"],
                 "level": account["level"],
                 "server": account["genshin_server"],
+                "discord_access": discord_access.get(
+                    (str(account["genshin_uid"]), account["genshin_server"]), []
+                ),
             }
             for account in accounts
         ],

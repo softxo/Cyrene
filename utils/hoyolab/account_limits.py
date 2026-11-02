@@ -9,6 +9,14 @@ SPECIAL_USER_IDS = {
 }
 
 
+def get_account_type(user_id: int) -> str:
+    if user_id in SPECIAL_USER_IDS:
+        return "special"
+    if user_id in PREMIUM_USER_IDS:
+        return "premium"
+    return "normal"
+
+
 def get_account_limit(user_id: int) -> int | None:
     if user_id in SPECIAL_USER_IDS:
         return None

@@ -4,6 +4,10 @@
 
 {% block content %}
 
+{% macro oauth_error() %}
+    {% if discord_oauth_error %}<p class="discord-oauth-error" role="alert">{% if discord_oauth_error == 'unavailable' %}Discord authorisation is not available yet. Please use the verification code instead.{% else %}Discord authorisation did not complete. Please try again or use a verification code.{% endif %}</p>{% endif %}
+{% endmacro %}
+
 <div class="page verification-page" data-discord-connected="{{ 'true' if discord_profile else 'false' }}">
 
     {% if discord_profile %}
@@ -14,15 +18,21 @@
         <div class="discord-profile-card">
             <img class="discord-profile-avatar" src="{{ discord_profile.avatar_url }}" alt="" width="64" height="64">
             <div class="discord-profile-copy">
-                <strong>{{ discord_profile.display_name }}</strong>
+                <div class="discord-profile-name-row">
+                    <strong>{{ discord_profile.display_name }}</strong>
+                    <span class="discord-profile-name-divider" aria-hidden="true"></span>
+                    <span class="discord-account-type">{% if discord_profile.account_type == 'special' %}<b class="discord-account-special">Special</b>{% elif discord_profile.account_type == 'premium' %}<b class="discord-account-premium">Premium</b>{% else %}Normal{% endif %}</span>
+                </div>
                 {% if discord_profile.username %}<span>@{{ discord_profile.username }}</span>{% endif %}
                 <span class="discord-profile-id">Discord ID: {{ discord_profile.id }}</span>
             </div>
         </div>
         <div class="discord-connection-actions">
+            <a class="cyrene-button cyrene-button--large discord-oauth-button" href="/auth/discord?{{ {'next': next or '/verify'} | urlencode }}" data-discord-oauth><span>Authorise a different account with Discord</span><span class="discord-oauth-pill">OAuth2</span></a>
         <button type="button" class="cyrene-button cyrene-button--large discord-connect-another" data-connect-another>Connect to a different Discord account</button>
             <button type="button" class="cyrene-button cyrene-button--large discord-disconnect" data-disconnect-discord>Disconnect Discord account</button>
         </div>
+        {{ oauth_error() }}
         <p class="discord-disconnect-error" data-disconnect-error role="alert"></p>
         <a href="/settings" class="discord-manage-accounts">Manage Genshin accounts</a>
     </section>
@@ -59,6 +69,11 @@
         </p>
 
         <button type="button" class="cyrene-button cyrene-button--large discord-verification-retry" data-verification-retry hidden>Generate a new code</button>
+        <div class="discord-oauth-alternative">
+            <div class="discord-oauth-divider" aria-hidden="true">or</div>
+            <a class="cyrene-button cyrene-button--large discord-oauth-button" href="/auth/discord?{{ {'next': next or '/verify'} | urlencode }}" data-discord-oauth><span>{{ 'Authorise a different account with Discord' if discord_profile else 'Authorise with Discord' }}</span><span class="discord-oauth-pill">OAuth2</span></a>
+            {{ oauth_error() }}
+        </div>
         <div
             id="verification-success"
             class="verification-success"

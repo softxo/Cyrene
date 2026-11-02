@@ -127,11 +127,64 @@
 }
 
 .linked-account-info {
+    flex: 1;
     min-width: 0;
 
     display: flex;
     flex-direction: column;
     gap: 4px;
+}
+
+.linked-account-heading {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    align-items: center;
+    gap: 64px;
+    min-width: 0;
+}
+
+.linked-account-discord-access {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+@media (max-width: 600px) {
+    .linked-account-heading {
+        column-gap: 24px;
+    }
+}
+
+.linked-account-info .linked-discord-profile {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 5px;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+}
+
+.linked-discord-profile img {
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.linked-account-info .linked-discord-name {
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.linked-account-info .linked-discord-username {
+    color: var(--text);
+    opacity: 0.55;
+    overflow-wrap: anywhere;
 }
 
 .linked-account-info strong {

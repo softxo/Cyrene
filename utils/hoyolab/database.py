@@ -36,6 +36,14 @@ async def initialise_database() -> None:
 
     async with _pool.connection() as connection:
         await connection.execute(
+            """CREATE TABLE IF NOT EXISTS web_discord_oauth (
+                discord_user_id BIGINT PRIMARY KEY,
+                access_token TEXT NOT NULL,
+                refresh_token TEXT NOT NULL,
+                expires_at TIMESTAMPTZ NOT NULL
+            )"""
+        )
+        await connection.execute(
             """CREATE TABLE IF NOT EXISTS web_discord_profiles (
                 discord_user_id BIGINT PRIMARY KEY,
                 username TEXT,

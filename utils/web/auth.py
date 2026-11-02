@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
+from utils.hoyolab.account_limits import get_account_type
 from utils.hoyolab.database import get_pool
 
 VERIFICATION_TIMEOUT = 5 * 60
@@ -218,7 +219,10 @@ async def get_discord_profile(user_id: int):
                 (user_id,),
             )
             row = await result.fetchone()
-    profile = dict(row) if row else {}
+    return discord_profile_payload(user_id, dict(row) if row else {})
+
+
+def discord_profile_payload(user_id: int, profile: dict):
     avatar_hash = profile.get("avatar_hash")
     avatar_url = "/static/images/ui/ui_icons/Discord.png"
     if isinstance(avatar_hash, str) and re.fullmatch(r"(?:a_)?[a-f0-9]{16,64}", avatar_hash):
@@ -228,4 +232,37 @@ async def get_discord_profile(user_id: int):
         "username": profile.get("username") or "",
         "display_name": profile.get("display_name") or profile.get("username") or "Discord account",
         "avatar_url": avatar_url,
+        "account_type": get_account_type(int(user_id)),
     }
+
+
+async def get_account_discord_access(user_id: int):
+    """List public profiles linked to accounts the requesting user can access."""
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """SELECT DISTINCT ON (linked.genshin_uid, linked.genshin_server, linked.discord_user_id)
+                linked.genshin_uid, linked.genshin_server, linked.discord_user_id,
+                COALESCE(profile.username, linked.discord_username) AS username,
+                COALESCE(profile.display_name, linked.discord_display_name) AS display_name,
+                profile.avatar_hash
+            FROM accounts AS linked
+            LEFT JOIN web_discord_profiles AS profile
+                ON profile.discord_user_id = linked.discord_user_id
+            WHERE EXISTS (
+                SELECT 1 FROM accounts AS owned
+                WHERE owned.discord_user_id = %s
+                AND owned.genshin_uid = linked.genshin_uid
+                AND owned.genshin_server = linked.genshin_server
+            )
+            ORDER BY linked.genshin_uid, linked.genshin_server, linked.discord_user_id,
+                linked.updated_at DESC""",
+            (user_id,),
+        )
+        rows = await result.fetchall()
+    access = {}
+    for row in rows:
+        key = (str(row["genshin_uid"]), row["genshin_server"])
+        access.setdefault(key, []).append(
+            discord_profile_payload(row["discord_user_id"], dict(row))
+        )
+    return access

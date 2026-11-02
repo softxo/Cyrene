@@ -114,7 +114,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js?v=4",
+    "/settings": "/static/build/browser/pages/settings.js?v=5",
 };
 
 const pageStyles: Record<string, string> = {
@@ -128,7 +128,7 @@ const pageStyles: Record<string, string> = {
     "/verify": "/static/build/css/verification.css?v=14",
     "/codes": "/static/build/css/codes.css?v=7",
     "/events": "/static/build/css/events.css?v=47",
-    "/settings": "/static/build/css/settings.css?v=7",
+    "/settings": "/static/build/css/settings.css?v=8",
 };
 
 /* =========================================================
@@ -474,6 +474,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         if (link.origin !== window.location.origin) {
+            return;
+        }
+
+        if (link.hasAttribute("data-discord-oauth")) {
             return;
         }
 

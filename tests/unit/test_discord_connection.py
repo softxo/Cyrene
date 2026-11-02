@@ -11,6 +11,9 @@ from utils.web import auth
 class DiscordConnectionTests(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(web.app)
+        refresh = patch.object(web, "refresh_discord_profile", AsyncMock())
+        refresh.start()
+        self.addCleanup(refresh.stop)
 
     def test_signed_out_keeps_verification_screen(self):
         with (
@@ -99,6 +102,37 @@ class DiscordConnectionTests(unittest.TestCase):
 
 
 class DiscordProfileTests(unittest.IsolatedAsyncioTestCase):
+    def test_account_type_uses_special_then_premium_then_normal_rules(self):
+        from utils.hoyolab import account_limits
+
+        with (
+            patch.object(account_limits, "SPECIAL_USER_IDS", {7}),
+            patch.object(account_limits, "PREMIUM_USER_IDS", {7, 8}),
+        ):
+            for user_id, expected in [(7, "special"), (8, "premium"), (9, "normal")]:
+                self.assertEqual(
+                    auth.discord_profile_payload(user_id, {})["account_type"], expected
+                )
+
+    def test_account_type_labels_are_rendered_beside_name(self):
+        from starlette.requests import Request
+
+        request = Request({"type": "http", "method": "GET", "path": "/verify", "headers": []})
+        for tier, label in [
+            ("normal", "Normal"),
+            ("premium", "Premium"),
+            ("special", "Special"),
+        ]:
+            profile = auth.discord_profile_payload(9, {})
+            profile["account_type"] = tier
+            html = web.templates.env.get_template("verification.html").render(
+                request=request, discord_profile=profile
+            )
+            self.assertIn(label, html)
+            self.assertIn('class="discord-account-type"', html)
+            if tier != "normal":
+                self.assertIn(f'class="discord-account-{tier}"', html)
+
     async def test_existing_account_profile_fallback_and_avatar_validation(self):
         for saved, expected_avatar in [
             (None, "/static/images/ui/ui_icons/Discord.png"),

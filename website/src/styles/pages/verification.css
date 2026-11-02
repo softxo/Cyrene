@@ -5,11 +5,67 @@
    ================================================== */
 
 .verification-page {
+    flex-direction: column;
+    gap: 16px;
     min-height: calc(100vh - 40px);
 
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.verification-panel .discord-oauth-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.discord-oauth-pill {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border: 1px solid #660000;
+    border-radius: 999px;
+    background: #200000;
+    color: #a83232;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.discord-oauth-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 24px 0 18px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.discord-oauth-divider::before,
+.discord-oauth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.discord-oauth-error {
+    margin: 14px 0 0;
+    color: var(--error);
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.verification-panel.is-verified .discord-oauth-button,
+.verification-panel.is-verified .discord-oauth-alternative {
+    display: none;
 }
 
 .verification-panel {
@@ -190,6 +246,77 @@
 .discord-profile-copy .discord-profile-id {
     font-size: 11px;
     font-variant-numeric: tabular-nums;
+}
+
+.discord-profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.discord-profile-name-divider {
+    width: 1px;
+    height: 16px;
+    flex-shrink: 0;
+    background: var(--text);
+    opacity: 0.2;
+}
+
+.discord-profile-copy .discord-account-type {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--background);
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.discord-account-premium {
+    color: #d4af37;
+}
+
+.discord-account-special {
+    color: #410270;
+    background-color: #410270;
+    background-image:
+        radial-gradient(circle, #fff 0 0.5px, #e3b2ff 0.7px, transparent 1.3px),
+        radial-gradient(ellipse 0.7px 1.7px, #fff 40%, transparent 100%),
+        radial-gradient(circle, #c580ee 0 0.5px, transparent 1px);
+    background-size:
+        13px 11px,
+        23px 17px,
+        9px 19px;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: discord-special-glimmer 3s linear infinite;
+}
+
+@keyframes discord-special-glimmer {
+    from {
+        background-position:
+            0 0,
+            7px 3px,
+            3px 8px;
+    }
+    to {
+        background-position:
+            26px -22px,
+            -16px 20px,
+            21px -11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .discord-account-special {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: currentColor;
+    }
 }
 .verification-panel .discord-connect-another {
     width: 100%;
