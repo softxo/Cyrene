@@ -66,6 +66,105 @@
             {% endfor %}
         </div>
     </section>
+    <section class="home-changelog" data-changelog aria-labelledby="changelog-title">
+        <div class="changelog-heading">
+            <h2 id="changelog-title"><img src="/static/images/ui/ui_misc/Changelog.png" alt=""> CHANGELOG</h2>
+            <button type="button" class="changelog-add" data-changelog-add aria-label="Add changelog" hidden><span aria-hidden="true">+</span></button>
+        </div>
+        <p data-changelog-status role="status">Loading updates&hellip;</p>
+        <div data-changelog-entries></div>
+        <dialog class="changelog-dialog" aria-labelledby="changelog-editor-title">
+            <form data-changelog-form>
+                <div class="changelog-heading">
+                    <h2 id="changelog-editor-title" tabindex="-1">Add Changelog</h2>
+                    <button type="button" data-changelog-close aria-label="Close editor">&times;</button>
+                </div>
+                <div class="changelog-meta-grid"><div class="changelog-date-field">
+                <label for="changelog-date">Date &amp; time</label>
+                <input id="changelog-date" name="date" type="date" hidden><input name="time" type="hidden">
+                <div class="changelog-date-control">
+                    <button type="button" data-date-trigger aria-label="Choose date" aria-haspopup="dialog" aria-expanded="false"></button>
+                    <div class="changelog-calendar" data-date-calendar role="dialog" aria-label="Choose date" hidden>
+                        <div class="changelog-calendar-header">
+                            <button type="button" data-date-prev aria-label="Previous month">&lsaquo;</button>
+                            <strong data-date-month></strong>
+                            <button type="button" data-date-next aria-label="Next month">&rsaquo;</button>
+                        </div>
+                        <div class="changelog-calendar-weekdays" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                        <div class="changelog-calendar-grid" role="grid" aria-label="Calendar dates"></div>
+                        <div class="changelog-calendar-time">
+                            <span>Time</span><input type="text" inputmode="numeric" maxlength="2" data-time-hour aria-label="Hour"><span>:</span><input type="text" inputmode="numeric" maxlength="2" data-time-minute aria-label="Minute">
+                        </div>
+                        <div class="changelog-calendar-footer">
+                            <button type="button" data-date-today>Today</button>
+                            <button type="button" data-date-cancel>Cancel</button>
+                            <button type="button" data-date-apply>Apply</button>
+                        </div>
+                    </div>
+                </div>
+                </div><div class="changelog-pill-field">
+                    <label for="changelog-colour">Date pill colour</label>
+                    <div class="changelog-colour-label">
+                        <input id="changelog-colour" name="pill_colour" type="color" value="#8f9cff">
+                        <label class="changelog-gradient-toggle"><input type="checkbox" data-pill-gradient><span>Gradient</span></label>
+                        <input id="changelog-colour-end" type="color" data-pill-colour-end value="#56b987" aria-label="Gradient end colour" hidden>
+                        <time data-pill-preview></time>
+                    </div>
+                </div></div>
+                <div class="changelog-writing-label">
+                    <label id="changelog-content-label" for="changelog-content">What's new</label>
+                    <button type="button" data-changelog-icons aria-expanded="false" aria-controls="changelog-picker">Insert emoji</button>
+                </div>
+                <div id="changelog-picker" class="changelog-emoji-disclosure" hidden><div class="changelog-picker" aria-label="Changelog emojis"></div></div>
+                <div class="changelog-format-toolbar"><div class="changelog-text-tools">
+                    <span class="changelog-tool-label">Text colour</span><input aria-label="Text colour" id="changelog-text-colour" type="color" data-text-colour value="#8f9cff">
+                    <span class="changelog-text-colour-preview" data-text-colour-preview>This is how the text will look.</span>
+                    <button type="button" data-colour-presets aria-expanded="false" aria-controls="changelog-colour-presets">Presets</button>
+                    <button type="button" data-apply-text-colour aria-label="Colour selected text">Apply colour</button>
+                </div>
+                <div id="changelog-colour-presets" class="changelog-colour-presets" hidden>
+                    <div class="changelog-preset-list" data-preset-list></div>
+                    <div class="changelog-preset-add">
+                        <span class="changelog-tool-label">Colour</span>
+                        <input type="color" data-preset-picker value="#8f9cff" aria-label="Preset colour picker">
+                        <label for="changelog-preset-hex">Hex</label>
+                        <input id="changelog-preset-hex" type="text" maxlength="7" placeholder="#ec3b83" autocomplete="off" spellcheck="false" aria-label="Preset hex colour">
+                        <button type="button" data-save-preset>Save preset</button>
+                    </div>
+                    <p data-preset-status role="status"></p>
+                </div>
+                <div class="changelog-opacity-tools">
+                    <label for="changelog-opacity">Text opacity</label>
+                    <input id="changelog-opacity" type="range" min="10" max="100" step="5" value="70" data-opacity-input>
+                    <output for="changelog-opacity" data-opacity-value>70%</output>
+                    <button type="button" data-apply-opacity aria-label="Apply to selected text">Apply opacity</button>
+                </div>
+                </div>
+                <div id="changelog-content" class="changelog-content-editor" contenteditable="true" role="textbox" aria-labelledby="changelog-content-label" aria-multiline="true" aria-required="true" data-placeholder="One update per line..."></div>
+                <details class="changelog-format-help"><summary aria-expanded="false">Formatting help</summary><div class="changelog-help-content" hidden>
+                <p class="changelog-hint">Supports **bold**, _italic_, ~~strikethrough~~, `code`, and [links](https://...). Select text and choose "Colour selected text", or use [text]{&#35;ff88aa}. Use "Insert emoji" for icons. Each line becomes a separate update.</p>
+                </div></details>
+                <section class="changelog-preview-panel" aria-label="Preview"><h3>Preview</h3><div class="changelog-preview"></div></section>
+                <p data-changelog-error role="alert"></p>
+                <div class="changelog-editor-actions">
+                    <button type="button" data-changelog-delete hidden>Delete update</button>
+                    <button type="button" data-changelog-cancel>Cancel</button>
+                    <button type="submit" class="changelog-publish">Publish update</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog class="changelog-delete-dialog" aria-labelledby="changelog-delete-title" aria-describedby="changelog-delete-description">
+            <div class="changelog-delete-heading">
+                <div class="changelog-delete-icon" aria-hidden="true"><img src="/static/images/ui/ui_misc/Deletion.png" alt=""></div>
+                <h2 id="changelog-delete-title">Delete this update?</h2>
+            </div>
+            <p id="changelog-delete-description">The changelog for <strong data-delete-date></strong> will be removed for everyone. This cannot be undone.</p>
+            <div class="changelog-editor-actions">
+                <button type="button" data-delete-cancel autofocus>Keep update</button>
+                <button type="button" data-delete-confirm>Delete update</button>
+            </div>
+        </dialog>
+    </section>
 </div>
 
 {% endblock %}

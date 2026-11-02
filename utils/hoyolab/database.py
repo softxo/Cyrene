@@ -36,6 +36,28 @@ async def initialise_database() -> None:
 
     async with _pool.connection() as connection:
         await connection.execute(
+            """CREATE TABLE IF NOT EXISTS site_changelog (
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                entry_date DATE NOT NULL,
+                content TEXT NOT NULL,
+                author_id BIGINT NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )"""
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS pill_colour TEXT NOT NULL DEFAULT '#8f9cff'"
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS pill_colour_end TEXT"
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS entry_time TIME"
+        )
+        await connection.execute(
+            "UPDATE site_changelog SET entry_time = (created_at AT TIME ZONE 'Europe/London')::time WHERE entry_time IS NULL"
+        )
+        await connection.execute(
             """CREATE TABLE IF NOT EXISTS weapon_scan_snapshots (
                 discord_user_id BIGINT NOT NULL,
                 genshin_uid TEXT NOT NULL,

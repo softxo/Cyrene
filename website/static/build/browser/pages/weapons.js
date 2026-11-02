@@ -25,7 +25,10 @@
             const inventory = scanned.map((weapon) => ({ ...weapon }));
             const unmatched = [];
             const matched = new Set();
-            const normalise = (name) => name.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+            const normalise = (name) => name
+                .normalize("NFKC")
+                .toLowerCase()
+                .replace(/[^\p{L}\p{N}]/gu, "");
             const nickname = normalise(page.dataset.accountNickname || "");
             const liveWeapons = (data?.owned || []).map((weapon) => ({ ...weapon }));
             for (const weapon of [...inventory, ...liveWeapons]) {
@@ -33,7 +36,7 @@
                     weapon.equipped = "Traveler";
                 }
             }
-            const liveByCharacter = new Map(liveWeapons.filter(w => w.equipped).map(w => [normalise(w.equipped), w]));
+            const liveByCharacter = new Map(liveWeapons.filter((w) => w.equipped).map((w) => [normalise(w.equipped), w]));
             for (const weapon of inventory) {
                 const equipped = weapon.equipped && liveByCharacter.get(normalise(weapon.equipped));
                 if (equipped && equipped.id !== weapon.id) {
@@ -55,7 +58,9 @@
                         weapon.refinement === live.refinement &&
                         (!weapon.equipped || !weapon.character_icon));
                 if (index < 0)
-                    index = inventory.findIndex((weapon, i) => !matched.has(i) && weapon.id === live.id && (!weapon.equipped || !weapon.character_icon));
+                    index = inventory.findIndex((weapon, i) => !matched.has(i) &&
+                        weapon.id === live.id &&
+                        (!weapon.equipped || !weapon.character_icon));
                 if (index < 0)
                     unmatched.push(live);
                 else {
@@ -436,7 +441,9 @@
                         const control = document.createElement("div");
                         control.className = "weapon-manual-control";
                         control.dataset.origin = weapon.scan_copy_id ? "imported" : "manual";
-                        const optionsLabel = weapon.scan_copy_id ? "Imported weapon options" : "Manually added weapon options";
+                        const optionsLabel = weapon.scan_copy_id
+                            ? "Imported weapon options"
+                            : "Manually added weapon options";
                         const marker = document.createElement("button");
                         marker.className = "weapon-manual-trigger";
                         marker.type = "button";

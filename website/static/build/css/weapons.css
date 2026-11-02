@@ -1394,9 +1394,17 @@
     min-width: 0;
 }
 @media (max-width: 700px) {
-    .weapons-account-actions { width: 100%; flex-wrap: wrap; }
-    .weapons-account-actions .characters-account-form { flex: 1; min-width: 0; }
-    .weapons-account-actions .characters-account-select { min-width: 0; }
+    .weapons-account-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .weapons-account-actions .characters-account-form {
+        flex: 1;
+        min-width: 0;
+    }
+    .weapons-account-actions .characters-account-select {
+        min-width: 0;
+    }
 }
 
 .weapon-import-dialog h2 {

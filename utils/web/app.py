@@ -104,6 +104,7 @@ from utils.web.auth import (
     get_verification,
     get_web_session,
 )
+from utils.web.changelog import router as changelog_router
 from utils.web.limited_event_checks import (
     annotate_daily_events,
     apply_archon_quest_progress,
@@ -117,6 +118,8 @@ from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
 )
+from utils.web.site_updates import router as site_updates_router
+from utils.web.site_updates import site_version
 from utils.web.theater_elements import get_theater_season
 
 app = FastAPI(
@@ -125,15 +128,29 @@ app = FastAPI(
     redoc_url=None,
 )
 
+app.include_router(changelog_router)
+app.include_router(site_updates_router)
+
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 templates = Jinja2Templates(directory=BASE_DIR / "website" / "templates")
+templates.env.globals["site_version"] = site_version
 
 app.mount(
     "/static",
     StaticFiles(directory=BASE_DIR / "website" / "static"),
     name="static",
 )
+
+
+@app.middleware("http")
+async def revalidate_site_assets(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/static/build/") or "text/html" in response.headers.get(
+        "content-type", ""
+    ):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
 
 
 GT_V3_URL = "https://static.geetest.com/static/js/gt.0.5.0.js"

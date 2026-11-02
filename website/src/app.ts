@@ -1,3 +1,5 @@
+import { initialiseSiteUpdates } from "./site-updates";
+
 /**
  * Cyrene frontend entry point.
  *
@@ -22,6 +24,8 @@ export {};
 
 declare global {
     interface Window {
+        initHome?: () => void;
+        disposeHome?: () => void;
         initWeapons?: () => void;
         disposeWeapons?: () => void;
         initCharacters?: () => void;
@@ -64,12 +68,14 @@ function initialiseHoverEffects(): void {
 }
 
 initialiseHoverEffects();
+initialiseSiteUpdates();
 
 /* =========================================================
    2. PAGE CONFIGURATION
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
+    "/": "/static/build/browser/pages/home.js?v=18",
     "/weapons": [
         "/static/build/browser/pages/events/events-rewards.js?v=3",
         "/static/build/browser/pages/weapons.js?v=16",
@@ -106,7 +112,7 @@ const pageScripts: Record<string, string | string[]> = {
 
 const pageStyles: Record<string, string> = {
     "/weapons": "/static/build/css/weapons.css?v=16",
-    "/": "/static/build/css/home.css?v=4",
+    "/": "/static/build/css/home.css?v=30",
     "/achievements": "/static/build/css/achievements.css?v=3",
     "/wishes": "/static/build/css/wishes.css?v=10",
     "/characters": "/static/build/css/characters.css?v=37",
@@ -219,6 +225,9 @@ async function loadPageStyle(path: string, serverDocument?: Document): Promise<v
 
 function initialisePage(path: string): void {
     switch (path) {
+        case "/":
+            window.initHome?.();
+            break;
         case "/weapons":
             window.initWeapons?.();
             break;
@@ -417,6 +426,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          * Replace the current page content.
          */
 
+        window.disposeHome?.();
         window.disposeWeapons?.();
         mainContent.innerHTML = newMain.innerHTML;
 

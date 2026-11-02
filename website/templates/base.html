@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="cyrene-site-version" content="{{ site_version() }}">
 
     <meta
         name="viewport"
@@ -40,12 +41,12 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=14"
+        href="/static/build/css/global.css?v=20"
     >
 
     {% set page_styles = {
         '/weapons': '/static/build/css/weapons.css?v=18',
-        '/': '/static/build/css/home.css?v=4',
+        '/': '/static/build/css/home.css?v=30',
         '/achievements': '/static/build/css/achievements.css?v=3',
         '/wishes': '/static/build/css/wishes.css?v=10',
         '/characters': '/static/build/css/characters.css?v=37',
@@ -237,7 +238,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=3.76"></script>
+    <script type="module" src="/static/build/js/app.js?v=4.10"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

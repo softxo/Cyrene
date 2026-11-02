@@ -1812,10 +1812,14 @@ img[src$="/IT_Stella.png"] {
 }
 
 /* Balance the empty-record layout around the seasonal elements. */
-.event-featured-card[data-event-type="theater"] .event-featured-panel:has(> .event-no-record) > .event-no-record {
+.event-featured-card[data-event-type="theater"]
+    .event-featured-panel:has(> .event-no-record)
+    > .event-no-record {
     margin: auto 0 0;
 }
-.event-featured-card[data-event-type="theater"] .event-featured-panel:has(> .event-no-record) > .it-elements {
+.event-featured-card[data-event-type="theater"]
+    .event-featured-panel:has(> .event-no-record)
+    > .it-elements {
     margin-block: auto;
 }
 .event-insight-popover {
