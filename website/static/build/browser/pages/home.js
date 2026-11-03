@@ -314,49 +314,9 @@
                 presetPicker.value = value;
         }, { signal });
         const presetStatus = form.querySelector("[data-preset-status]");
-        function positionPresets() {
-            const tools = form.querySelector(".changelog-text-tools");
-            presetsPanel.style.top = `${tools.offsetTop + tools.offsetHeight + 8}px`;
-        }
-        window.addEventListener("resize", () => {
-            if (!presetsPanel.hidden)
-                positionPresets();
-        }, { signal });
         function revealPresets(show) {
-            if (show)
-                positionPresets();
-            const wasHidden = presetsPanel.hidden;
-            const style = getComputedStyle(presetsPanel);
-            const opacity = wasHidden ? 0 : Number(style.opacity);
-            const transform = wasHidden ? "translateY(-6px)" : style.transform;
-            animations.get(presetsPanel)?.cancel();
-            animations.delete(presetsPanel);
             presetsButton.setAttribute("aria-expanded", String(show));
-            presetsPanel.inert = !show;
-            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                presetsPanel.hidden = !show;
-                return;
-            }
-            presetsPanel.hidden = false;
-            const motion = presetsPanel.animate([
-                { opacity, transform },
-                {
-                    opacity: show ? 1 : 0,
-                    transform: show ? "translateY(0)" : "translateY(-6px)",
-                },
-            ], { duration: show ? 180 : 140, easing: "cubic-bezier(.2,.7,.2,1)", fill: "both" });
-            animations.set(presetsPanel, motion);
-            void motion.finished
-                .then(() => {
-                if (animations.get(presetsPanel) !== motion)
-                    return;
-                presetsPanel.hidden = !show;
-                motion.cancel();
-                animations.delete(presetsPanel);
-            })
-                .catch(() => {
-                /* A newer toggle replaced this transition. */
-            });
+            presetsPanel.hidden = !show;
         }
         const presetKey = "cyrene-changelog-colour-presets-v1";
         let presets = [];
@@ -473,6 +433,7 @@
             img.width = 22;
             img.height = 22;
             img.draggable = false;
+            img.dataset.changelogIcon = icon.name;
             return img;
         }
         function appendMarkdown(target, source) {
@@ -517,7 +478,7 @@
                     appendText(parent, value, offset);
                     return;
                 }
-                const tokens = /\\([\\`*_~[\]():])|`([^`]+)`|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(\*\*\*|___|\*\*|__|~~|\*|_)(?=\S)(.+?\S|\S)\5|:[A-Za-z0-9_]+:/g;
+                const tokens = /\\([\\`*_~[\]():])|`([^`]+)`|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(\*\*\*|___|\*\*|__|~~|\+\+|\*|_)(?=\S)(.+?\S|\S)\5|:[A-Za-z0-9_]+:/g;
                 let cursor = 0;
                 for (const match of value.matchAll(tokens)) {
                     appendText(parent, value.slice(cursor, match.index), offset + cursor);
@@ -544,7 +505,13 @@
                         if (intraword)
                             appendText(parent, token, position);
                         else {
-                            const node = document.createElement(delimiter === "~~" ? "s" : delimiter.length >= 2 ? "strong" : "em");
+                            const node = document.createElement(delimiter === "++"
+                                ? "u"
+                                : delimiter === "~~"
+                                    ? "s"
+                                    : delimiter.length >= 2
+                                        ? "strong"
+                                        : "em");
                             if (delimiter.length === 3) {
                                 const em = document.createElement("em");
                                 render(em, inner, position + 3, depth + 1);
@@ -577,12 +544,102 @@
             }
             render(target, text);
         }
+        // Filled paths drawn for a native 16px grid, rather than scaled strokes.
+        const calloutPaths = {
+            note: "M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11ZM7.25 7h1.5v5h-1.5V7ZM8 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z",
+            tip: "M8 0a5.5 5.5 0 0 0-3.8 9.5c.7.7 1.1 1.5 1.1 2.5h5.4c0-1 .4-1.8 1.1-2.5A5.5 5.5 0 0 0 8 0Zm0 1.5a4 4 0 0 1 2.8 6.9c-.7.6-1.2 1.3-1.5 2.1H6.7c-.3-.8-.8-1.5-1.5-2.1A4 4 0 0 1 8 1.5ZM5.5 13h5v1.5h-5V13ZM6.5 15h3v1h-3v-1Z",
+            important: "M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11ZM7.25 4h1.5v5.5h-1.5V4ZM7 11h2v2H7v-2Z",
+            caution: "M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11ZM5 4l3 3 3-3 1 1-3 3 3 3-1 1-3-3-3 3-1-1 3-3-3-3 1-1Z",
+            warning: "M6.7 1.8a1.5 1.5 0 0 1 2.6 0l6.3 11a1.5 1.5 0 0 1-1.3 2.2H1.7a1.5 1.5 0 0 1-1.3-2.2l6.3-11ZM8 3 2 13.5h12L8 3ZM7.25 6h1.5v4.5h-1.5V6Zm0 5.5h1.5V13h-1.5v-1.5Z",
+        };
+        function callout(kind, message, editable = false) {
+            const block = document.createElement("aside");
+            block.className = `changelog-callout changelog-callout--${kind}`;
+            block.dataset.callout = kind;
+            const heading = document.createElement("div");
+            heading.className = "changelog-callout-heading";
+            if (editable)
+                heading.contentEditable = "false";
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewBox", "0 0 16 16");
+            svg.setAttribute("fill", "currentColor");
+            svg.setAttribute("width", "16");
+            svg.setAttribute("height", "16");
+            svg.setAttribute("aria-hidden", "true");
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", calloutPaths[kind]);
+            path.setAttribute("fill-rule", "evenodd");
+            svg.append(path);
+            const title = document.createElement("strong");
+            title.textContent = kind[0].toUpperCase() + kind.slice(1);
+            heading.append(svg, title);
+            const body = document.createElement("div");
+            body.dataset.calloutBody = "true";
+            for (const line of message.split("\n")) {
+                const paragraph = document.createElement("p");
+                appendMarkdown(paragraph, line);
+                body.append(paragraph);
+            }
+            block.append(heading, body);
+            return block;
+        }
+        function codeBlock(source, language = "", editable = false) {
+            const pre = document.createElement("pre");
+            pre.className = "changelog-code-block";
+            pre.dataset.codeBlock = "true";
+            if (language)
+                pre.dataset.language = language;
+            pre.setAttribute("aria-label", language ? `${language} code block` : "Code block");
+            if (editable)
+                pre.contentEditable = "false";
+            const code = document.createElement("code");
+            code.textContent = source;
+            pre.append(code);
+            return pre;
+        }
+        function contentBlocks(source) {
+            const result = [];
+            const lines = source.split(/\r?\n/);
+            for (let index = 0; index < lines.length; index++) {
+                const fence = lines[index].match(/^\s*(`{3,}|~{3,})([A-Za-z0-9_+#.-]{0,32})\s*$/);
+                if (fence) {
+                    const body = [];
+                    const closing = new RegExp(`^\\s*${fence[1][0]}{${fence[1].length},}\\s*$`);
+                    while (++index < lines.length && !closing.test(lines[index]))
+                        body.push(lines[index]);
+                    result.push({ code: true, language: fence[2], text: body.join("\n") });
+                    continue;
+                }
+                const header = lines[index].match(/^>\s*\[!(NOTE|TIP|IMPORTANT|CAUTION|WARNING)\]\s*$/i);
+                if (!header) {
+                    result.push({ text: lines[index] });
+                    continue;
+                }
+                const body = [];
+                while (index + 1 < lines.length &&
+                    /^>/.test(lines[index + 1]) &&
+                    !/^>\s*\[!(NOTE|TIP|IMPORTANT|CAUTION|WARNING)\]/i.test(lines[index + 1])) {
+                    body.push(lines[++index].replace(/^> ?/, ""));
+                }
+                result.push({
+                    kind: header[1].toLowerCase(),
+                    text: body.join("\n"),
+                });
+            }
+            return result;
+        }
         function renderContent(target, text) {
             target.replaceChildren();
-            for (const line of text.split(/\r?\n/).filter((line) => line.trim())) {
-                const item = document.createElement("p");
-                appendMarkdown(item, line);
-                target.append(item);
+            for (const block of contentBlocks(text)) {
+                if (block.code)
+                    target.append(codeBlock(block.text, block.language));
+                else if (block.kind)
+                    target.append(callout(block.kind, block.text));
+                else if (block.text.trim()) {
+                    const item = document.createElement("p");
+                    appendMarkdown(item, block.text);
+                    target.append(item);
+                }
             }
         }
         let savedSelection = null;
@@ -600,7 +657,7 @@
         }
         function editorSource(node = content, inherited = {}) {
             if (node.nodeType === Node.TEXT_NODE) {
-                const text = node.textContent ?? "";
+                const text = (node.textContent ?? "").replace(/\u200b/g, "");
                 const attributes = [
                     inherited.colour,
                     inherited.opacity !== undefined ? `opacity:${inherited.opacity}` : "",
@@ -610,7 +667,12 @@
                 return attributes
                     ? text
                         .split("\n")
-                        .map((line) => (line ? `[${line}]{${attributes}}` : ""))
+                        .map((line) => {
+                        const parts = line.match(/^(\s*)(.*?)(\s*)$/);
+                        return parts[2]
+                            ? `${parts[1]}[${parts[2]}]{${attributes}}${parts[3]}`
+                            : line;
+                    })
                         .join("\n")
                     : text;
             }
@@ -618,36 +680,90 @@
                 return "";
             if (node.tagName === "BR")
                 return "\n";
+            if (node.dataset.changelogIcon)
+                return `:${node.dataset.changelogIcon}:`;
+            if (node.tagName === "CODE")
+                return "`" + (node.textContent ?? "") + "`";
+            if (node.dataset.codeBlock) {
+                const source = node.querySelector("code")?.textContent ?? "";
+                const runs = Array.from(source.matchAll(/`+/g), (match) => match[0].length);
+                const fence = "`".repeat(Math.max(3, ...runs.map((length) => length + 1)));
+                return `${fence}${node.dataset.language ?? ""}\n${source}\n${fence}`;
+            }
+            if (node.dataset.callout) {
+                const body = node.querySelector("[data-callout-body]");
+                const message = body ? editorSource(body).trim() : "";
+                return `> [!${node.dataset.callout.toUpperCase()}]\n${message
+                    .split("\n")
+                    .map((line) => `> ${line}`)
+                    .join("\n")}`;
+            }
             const styles = { ...inherited };
             if (node.dataset.textColour)
                 styles.colour = node.dataset.textColour;
             if (node.dataset.textOpacity !== undefined)
                 styles.opacity = node.dataset.textOpacity;
-            const text = Array.from(node.childNodes, (child) => editorSource(child, styles)).join("");
+            let text = "";
+            let afterBlock = false;
+            for (const child of node.childNodes) {
+                const part = editorSource(child, styles);
+                const block = child instanceof HTMLElement &&
+                    (!!child.dataset.callout || !!child.dataset.codeBlock);
+                if (block && text && !text.endsWith("\n"))
+                    text += "\n";
+                else if (afterBlock && part && !part.startsWith("\n"))
+                    text += "\n";
+                text += part;
+                if (part)
+                    afterBlock = block;
+            }
+            const marked = (delimiter) => text
+                .split("\n")
+                .map((line) => {
+                const parts = line.match(/^(\s*)(.*?)(\s*)$/);
+                return parts[2]
+                    ? `${parts[1]}${delimiter}${parts[2]}${delimiter}${parts[3]}`
+                    : line;
+            })
+                .join("\n");
             if (/^(B|STRONG)$/.test(node.tagName))
-                return `**${text}**`;
+                return marked("**");
             if (/^(I|EM)$/.test(node.tagName))
-                return `_${text}_`;
+                return marked("_");
+            if (node.tagName === "U")
+                return marked("++");
+            if (node.tagName === "A") {
+                const url = safeLink(node.getAttribute("href") ?? "");
+                return url ? `[${text}](${url})` : text;
+            }
             if (/^(S|STRIKE)$/.test(node.tagName))
-                return `~~${text}~~`;
+                return marked("~~");
             return text + (node !== content && /^(DIV|P)$/.test(node.tagName) ? "\n" : "");
         }
         function loadEditor(source) {
             content.replaceChildren();
             savedSelection = null;
-            const colours = /\[([^\]\n]+)\]\{(#[a-f0-9]{6}(?:;opacity:(?:100|[1-9]?\d))?|opacity:(?:100|[1-9]?\d))\}/gi;
-            let cursor = 0;
-            for (const match of source.matchAll(colours)) {
-                content.append(document.createTextNode(source.slice(cursor, match.index)));
-                const span = document.createElement("span");
-                styleText(span, match[2]);
-                span.textContent = match[1];
-                content.append(span);
-                cursor = match.index + match[0].length;
-            }
-            content.append(document.createTextNode(source.slice(cursor)));
+            const blocks = contentBlocks(source);
+            blocks.forEach((block, index) => {
+                if (index &&
+                    !block.kind &&
+                    !block.code &&
+                    !blocks[index - 1].kind &&
+                    !blocks[index - 1].code)
+                    content.append(document.createTextNode("\n"));
+                if (block.code)
+                    content.append(codeBlock(block.text, block.language, true));
+                else if (block.kind)
+                    content.append(callout(block.kind, block.text, true));
+                else
+                    appendMarkdown(content, block.text);
+            });
         }
         function selectionRange() {
+            const current = window.getSelection();
+            if (current?.rangeCount &&
+                content.contains(current.getRangeAt(0).commonAncestorContainer))
+                return current.getRangeAt(0).cloneRange();
             if (savedSelection && content.contains(savedSelection.commonAncestorContainer))
                 return savedSelection.cloneRange();
             const range = document.createRange();
@@ -655,6 +771,365 @@
             range.collapse(false);
             return range;
         }
+        function marksAt(range) {
+            const marks = {};
+            let start = range.startContainer;
+            if (!range.collapsed && start instanceof HTMLElement) {
+                const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT);
+                let fallback = null;
+                for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+                    if (!range.intersectsNode(text))
+                        continue;
+                    const from = text === range.startContainer ? range.startOffset : 0;
+                    const to = text === range.endContainer
+                        ? range.endOffset
+                        : (text.textContent?.length ?? 0);
+                    const selected = (text.textContent ?? "").slice(from, to);
+                    if (selected && !fallback)
+                        fallback = text;
+                    if (selected.replace(/\u200b/g, "")) {
+                        start = text;
+                        break;
+                    }
+                }
+                if (start === range.startContainer && fallback)
+                    start = fallback;
+            }
+            let node = start instanceof HTMLElement ? start : start.parentElement;
+            while (node && node !== content) {
+                if (/^(B|STRONG)$/.test(node.tagName))
+                    marks.bold = true;
+                if (/^(I|EM)$/.test(node.tagName))
+                    marks.italic = true;
+                if (node.tagName === "U")
+                    marks.underline = true;
+                if (node.dataset.textColour && !marks.colour)
+                    marks.colour = node.dataset.textColour;
+                if (node.dataset.textOpacity && !marks.opacity)
+                    marks.opacity = node.dataset.textOpacity;
+                if (node.tagName === "A" && !marks.link)
+                    marks.link = safeLink(node.getAttribute("href") ?? "") ?? undefined;
+                node = node.parentElement;
+            }
+            return marks;
+        }
+        function focusRange(range) {
+            content.focus();
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+            savedSelection = range.cloneRange();
+            updateInlineButtons();
+        }
+        function splitTail(range, scope = content) {
+            const tail = document.createRange();
+            tail.setStart(range.startContainer, range.startOffset);
+            tail.setEnd(scope, scope.childNodes.length);
+            return tail.extractContents();
+        }
+        function placeFormatted(fragment, marks, range) {
+            const common = range.commonAncestorContainer instanceof HTMLElement
+                ? range.commonAncestorContainer
+                : range.commonAncestorContainer.parentElement;
+            const paragraph = common?.closest("[data-callout-body] p");
+            const scope = paragraph ?? common?.closest("[data-callout-body]") ?? content;
+            const tail = splitTail(range, scope);
+            // Extracting a whole formatted selection may include its wrappers.
+            // Reapply each inherited mark once, avoiding nested Markdown markers
+            // and multiplied opacity when another tool formats that selection.
+            for (const [enabled, selector] of [
+                [marks.bold, "b,strong"],
+                [marks.italic, "i,em"],
+                [marks.underline, "u"],
+                [marks.link, "a"],
+            ]) {
+                if (enabled)
+                    for (const node of fragment.querySelectorAll(selector))
+                        node.replaceWith(...node.childNodes);
+            }
+            for (const node of fragment.querySelectorAll("[data-text-opacity]")) {
+                if (node.dataset.textOpacity === marks.opacity) {
+                    delete node.dataset.textOpacity;
+                    node.style.removeProperty("opacity");
+                }
+            }
+            const empty = !fragment.textContent && !fragment.querySelector("img");
+            const anchor = document.createTextNode("\u200b");
+            if (empty)
+                fragment.append(anchor);
+            const wrapper = document.createElement("span");
+            let parent = wrapper;
+            for (const [enabled, tag] of [
+                [marks.bold, "strong"],
+                [marks.italic, "em"],
+                [marks.underline, "u"],
+            ]) {
+                if (enabled) {
+                    const node = document.createElement(tag);
+                    parent.append(node);
+                    parent = node;
+                }
+            }
+            if (marks.link) {
+                const link = document.createElement("a");
+                link.href = marks.link;
+                link.rel = "noopener noreferrer";
+                parent.append(link);
+                parent = link;
+            }
+            styleText(wrapper, [marks.colour, marks.opacity ? `opacity:${marks.opacity}` : ""]
+                .filter(Boolean)
+                .join(";"));
+            parent.append(fragment);
+            scope.append(wrapper, tail);
+            const selected = document.createRange();
+            if (empty) {
+                selected.setStart(anchor, 1);
+                selected.collapse(true);
+            }
+            else
+                selected.selectNodeContents(wrapper);
+            focusRange(selected);
+            renderContent(preview, editorSource());
+        }
+        function insertNewLine() {
+            const range = selectionRange();
+            range.deleteContents();
+            const tail = splitTail(range);
+            const anchor = document.createTextNode("\u200b");
+            content.append(document.createTextNode("\n"), anchor, tail);
+            const caret = document.createRange();
+            caret.setStart(anchor, 1);
+            caret.collapse(true);
+            focusRange(caret);
+            renderContent(preview, editorSource());
+        }
+        function updateInlineButtons() {
+            const marks = savedSelection && content.contains(savedSelection.commonAncestorContainer)
+                ? marksAt(savedSelection)
+                : {};
+            for (const button of form.querySelectorAll("[data-inline-format]")) {
+                button.setAttribute("aria-pressed", String(!!marks[button.dataset.inlineFormat]));
+            }
+        }
+        function toggleInline(kind) {
+            const range = selectionRange();
+            const marks = marksAt(range);
+            marks[kind] = !marks[kind];
+            const fragment = range.extractContents();
+            const selector = kind === "bold" ? "b,strong" : kind === "italic" ? "i,em" : "u";
+            for (const node of fragment.querySelectorAll(selector))
+                node.replaceWith(...node.childNodes);
+            placeFormatted(fragment, marks, range);
+        }
+        const toolbar = form.querySelector(".changelog-format-toolbar");
+        const formatPanels = Array.from(form.querySelectorAll("[data-format-panel]"));
+        const formatButtons = Array.from(form.querySelectorAll("[data-format-popup]"));
+        function showFormatPreview(kind) {
+            form.querySelector(".changelog-format-live-preview").hidden =
+                kind === "markdown" || kind === "code";
+            for (const sample of form.querySelectorAll("[data-preview-kind]")) {
+                sample.hidden = sample.dataset.previewKind !== kind;
+            }
+        }
+        function closeFormatPanels() {
+            for (const panel of formatPanels)
+                panel.hidden = true;
+            for (const button of formatButtons)
+                button.setAttribute("aria-expanded", "false");
+            revealPresets(false);
+        }
+        function positionFormatPanel() {
+            const button = formatButtons.find((button) => button.getAttribute("aria-expanded") === "true");
+            const panel = formatPanels.find((panel) => !panel.hidden);
+            if (!button || !panel)
+                return;
+            panel.style.left = `${Math.max(0, Math.min(button.offsetLeft, toolbar.clientWidth - panel.offsetWidth))}px`;
+            panel.style.top = `${toolbar.clientHeight + 6}px`;
+        }
+        for (const button of formatButtons) {
+            button.addEventListener("click", () => {
+                const show = button.getAttribute("aria-expanded") !== "true";
+                closeFormatPanels();
+                if (!show)
+                    return;
+                const panel = formatPanels.find((panel) => panel.dataset.formatPanel === button.dataset.formatPopup);
+                panel.hidden = false;
+                showFormatPreview(button.dataset.formatPopup);
+                button.setAttribute("aria-expanded", "true");
+                if (button.dataset.formatPopup === "link") {
+                    linkText.value = selectionRange()
+                        .toString()
+                        .replace(/\u200b/g, "");
+                    updateLinkPreview();
+                }
+                if (button.dataset.formatPopup === "code") {
+                    const range = selectionRange();
+                    const start = range.startContainer instanceof HTMLElement
+                        ? range.startContainer
+                        : range.startContainer.parentElement;
+                    const existing = start?.closest("[data-code-block]");
+                    codeText.value =
+                        existing?.querySelector("code")?.textContent ??
+                            range.toString().replace(/\u200b/g, "");
+                    codeLanguage.value = existing?.dataset.language ?? "";
+                    if (existing) {
+                        range.selectNode(existing);
+                        savedSelection = range.cloneRange();
+                        window.getSelection()?.removeAllRanges();
+                    }
+                    codeError.textContent = "";
+                    updateCodePreview();
+                }
+                if (button.dataset.formatPopup === "markdown") {
+                    blockMessage.value = selectionRange()
+                        .toString()
+                        .replace(/\u200b/g, "");
+                    updateBlockPreview();
+                }
+                positionFormatPanel();
+            }, { signal });
+        }
+        window.addEventListener("resize", positionFormatPanel, { signal });
+        document.addEventListener("pointerdown", (event) => {
+            if (event.target instanceof Node && !toolbar.contains(event.target))
+                closeFormatPanels();
+        }, { signal });
+        toolbar.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                const trigger = formatButtons.find((button) => button.getAttribute("aria-expanded") === "true");
+                closeFormatPanels();
+                trigger?.focus();
+            }
+        }, { signal });
+        for (const button of form.querySelectorAll("[data-inline-format]")) {
+            button.addEventListener("pointerdown", (event) => event.preventDefault(), { signal });
+            button.addEventListener("click", () => toggleInline(button.dataset.inlineFormat), { signal });
+        }
+        content.addEventListener("keydown", (event) => {
+            if ((event.ctrlKey || event.metaKey) &&
+                !event.altKey &&
+                ["b", "i", "u"].includes(event.key.toLowerCase())) {
+                event.preventDefault();
+                toggleInline({ b: "bold", i: "italic", u: "underline" }[event.key.toLowerCase()]);
+            }
+        }, { signal });
+        function safeLink(value) {
+            try {
+                const url = new URL(value.trim());
+                return ["https:", "http:"].includes(url.protocol) && !/[\s()]/.test(value.trim())
+                    ? url.href
+                    : null;
+            }
+            catch {
+                return null;
+            }
+        }
+        const linkText = form.querySelector("[data-link-text]");
+        const linkUrl = form.querySelector("[data-link-url]");
+        const linkPreview = form.querySelector("[data-link-preview]");
+        const linkError = form.querySelector("[data-link-error]");
+        function updateLinkPreview() {
+            linkPreview.textContent = linkText.value.trim() || "This is how the text will look.";
+            const url = safeLink(linkUrl.value);
+            if (url)
+                linkPreview.href = url;
+            else
+                linkPreview.removeAttribute("href");
+            linkPreview.rel = "noopener noreferrer";
+            linkError.textContent =
+                linkUrl.value && !url ? "Use a complete http:// or https:// link." : "";
+        }
+        linkText.addEventListener("input", updateLinkPreview, { signal });
+        linkUrl.addEventListener("input", updateLinkPreview, { signal });
+        form.querySelector("[data-apply-link]").addEventListener("click", () => {
+            const url = safeLink(linkUrl.value);
+            if (!url || !linkText.value.trim()) {
+                linkError.textContent = "Enter a message and a valid http:// or https:// link.";
+                return;
+            }
+            const range = selectionRange();
+            const marks = marksAt(range);
+            range.deleteContents();
+            const fragment = document.createDocumentFragment();
+            fragment.append(document.createTextNode(linkText.value.trim()));
+            placeFormatted(fragment, { ...marks, link: url }, range);
+            closeFormatPanels();
+        }, { signal });
+        let blockKind = "note";
+        const blockMessage = form.querySelector("[data-block-message]");
+        const blockPreview = form.querySelector("[data-block-preview]");
+        function updateBlockPreview() {
+            blockPreview.replaceChildren(callout(blockKind, blockMessage.value || "This is how the text will look."));
+        }
+        for (const button of form.querySelectorAll("[data-callout-kind]")) {
+            button.addEventListener("click", () => {
+                blockKind = button.dataset.calloutKind;
+                for (const option of form.querySelectorAll("[data-callout-kind]"))
+                    option.setAttribute("aria-pressed", String(option === button));
+                updateBlockPreview();
+            }, { signal });
+        }
+        blockMessage.addEventListener("input", updateBlockPreview, { signal });
+        form.querySelector("[data-apply-block]").addEventListener("click", () => {
+            if (!blockMessage.value.trim()) {
+                blockMessage.focus();
+                return;
+            }
+            insertStandaloneBlock(callout(blockKind, blockMessage.value.trim(), true));
+        }, { signal });
+        function insertStandaloneBlock(node) {
+            const range = selectionRange();
+            range.deleteContents();
+            const tail = splitTail(range);
+            for (const child of Array.from(content.childNodes)) {
+                const blank = !(child.textContent ?? "").replace(/\u200b/g, "");
+                if (blank &&
+                    (child.nodeType === Node.TEXT_NODE ||
+                        (child instanceof HTMLElement &&
+                            child.matches("span,b,strong,i,em,u") &&
+                            !child.querySelector("img"))))
+                    child.remove();
+            }
+            const anchor = document.createTextNode("\u200b");
+            content.append(node, anchor, tail);
+            const caret = document.createRange();
+            caret.setStart(anchor, 1);
+            caret.collapse(true);
+            focusRange(caret);
+            renderContent(preview, editorSource());
+            closeFormatPanels();
+        }
+        const codeText = form.querySelector("[data-code-text]");
+        const codeLanguage = form.querySelector("[data-code-language]");
+        const codePreview = form.querySelector("[data-code-preview]");
+        const codeError = form.querySelector("[data-code-error]");
+        function updateCodePreview() {
+            codePreview.textContent = codeText.value || "This is how the code will look.";
+        }
+        codeText.addEventListener("input", updateCodePreview, { signal });
+        codeText.addEventListener("keydown", (event) => {
+            if (event.key === "Tab" && !event.shiftKey && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                codeText.setRangeText("\t", codeText.selectionStart, codeText.selectionEnd, "end");
+                updateCodePreview();
+            }
+        }, { signal });
+        form.querySelector("[data-apply-code]").addEventListener("click", () => {
+            const language = codeLanguage.value.trim();
+            if (!/^[A-Za-z0-9_+#.-]{0,32}$/.test(language)) {
+                codeError.textContent =
+                    "Use a language name such as python, javascript or c++.";
+                return;
+            }
+            if (!codeText.value.trim()) {
+                codeText.focus();
+                return;
+            }
+            insertStandaloneBlock(codeBlock(codeText.value.replace(/\r\n?/g, "\n"), language, true));
+        }, { signal });
         function insertEditor(node, range = selectionRange()) {
             range.deleteContents();
             range.insertNode(node);
@@ -670,18 +1145,31 @@
         document.addEventListener("selectionchange", () => {
             const selection = window.getSelection();
             if (selection?.rangeCount &&
-                content.contains(selection.getRangeAt(0).commonAncestorContainer))
+                content.contains(selection.getRangeAt(0).commonAncestorContainer)) {
                 savedSelection = selection.getRangeAt(0).cloneRange();
+                updateInlineButtons();
+            }
         }, { signal });
         content.addEventListener("paste", (event) => {
             event.preventDefault();
-            insertEditor(document.createTextNode(event.clipboardData?.getData("text/plain") ?? ""));
+            const lines = (event.clipboardData?.getData("text/plain") ?? "")
+                .replace(/\r\n?/g, "\n")
+                .split("\n");
+            lines.forEach((line, index) => {
+                if (index)
+                    insertNewLine();
+                insertEditor(document.createTextNode(line));
+            });
         }, { signal });
+        let deletionMarks = null;
         content.addEventListener("beforeinput", (event) => {
+            deletionMarks = event.inputType.startsWith("delete")
+                ? marksAt(selectionRange())
+                : null;
             if (event.inputType === "insertParagraph" ||
                 event.inputType === "insertLineBreak") {
                 event.preventDefault();
-                insertEditor(document.createTextNode("\n"));
+                insertNewLine();
             }
         }, { signal });
         function open(entry) {
@@ -711,6 +1199,8 @@
             gradient.checked = /^#[a-f0-9]{6}$/i.test(entry?.pill_colour_end ?? "");
             colourEnd.value = gradient.checked ? entry.pill_colour_end : "#56b987";
             closeCalendar();
+            closeFormatPanels();
+            showFormatPreview("default");
             updateDate();
             loadEditor(entry?.content ?? "");
             error.textContent = "";
@@ -797,7 +1287,7 @@
         async function save(deleting = false) {
             if (busy)
                 return;
-            if (!deleting && (!content.textContent?.trim() || editorSource().length > 8000)) {
+            if (!deleting && (!editorSource().trim() || editorSource().length > 8000)) {
                 error.textContent = "Write an update of up to 8,000 characters.";
                 return;
             }
@@ -853,10 +1343,7 @@
         }, { signal });
         function applyTextStyle(kind, value) {
             const range = selectionRange();
-            if (range.collapsed) {
-                error.textContent = "Select the text you want to format first.";
-                return;
-            }
+            const marks = marksAt(range);
             const fragment = range.extractContents();
             const selector = kind === "colour" ? "[data-text-colour]" : "[data-text-opacity]";
             for (const previous of fragment.querySelectorAll(selector)) {
@@ -869,21 +1356,10 @@
                     previous.style.removeProperty("opacity");
                 }
             }
-            const span = document.createElement("span");
-            styleText(span, kind === "colour" ? value : `opacity:${value}`);
-            span.append(fragment);
-            insertEditor(span, range);
-            // Flatten overlapping styles so repeated opacity changes replace, rather than multiply.
-            const source = editorSource();
-            loadEditor(source);
-            const caret = document.createRange();
-            caret.selectNodeContents(content);
-            caret.collapse(false);
-            const selection = window.getSelection();
-            selection?.removeAllRanges();
-            selection?.addRange(caret);
-            savedSelection = caret.cloneRange();
+            marks[kind] = value;
+            placeFormatted(fragment, marks, range);
             error.textContent = "";
+            closeFormatPanels();
         }
         form.querySelector("[data-apply-text-colour]").addEventListener("click", () => {
             applyTextStyle("colour", form.querySelector("input[data-text-colour]").value);
@@ -892,13 +1368,29 @@
         const opacityLabel = form.querySelector("[data-opacity-value]");
         function updateOpacity() {
             opacityLabel.value = `${opacity.value}%`;
+            form.querySelector("[data-opacity-preview]").style.opacity = String(Number(opacity.value) / 100);
             opacity.style.setProperty("--opacity-fill", `${((Number(opacity.value) - 10) / 90) * 100}%`);
         }
         opacity.addEventListener("input", updateOpacity, { signal });
         form.querySelector("[data-apply-opacity]").addEventListener("click", () => {
             applyTextStyle("opacity", opacity.value);
         }, { signal });
-        content.addEventListener("input", () => renderContent(preview, editorSource()), { signal });
+        content.addEventListener("input", () => {
+            const range = selectionRange();
+            if (deletionMarks && range.collapsed) {
+                const current = marksAt(range);
+                const lostMark = Object.keys(deletionMarks).some((key) => !!deletionMarks?.[key] && !current[key]);
+                // Browsers can remove an empty formatting element while retaining
+                // an invisible native typing style. Restore an explicit caret run
+                // so the toolbar and the next typed character agree.
+                if (lostMark)
+                    placeFormatted(document.createDocumentFragment(), { ...current, ...deletionMarks }, range);
+            }
+            deletionMarks = null;
+            savedSelection = selectionRange();
+            updateInlineButtons();
+            renderContent(preview, editorSource());
+        }, { signal });
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             void save();

@@ -7,6 +7,7 @@ from unittest.mock import AsyncMock, patch
 
 from fastapi import HTTPException
 
+from tests.integration.legacy_uid_fixtures import migrate_weapon_scans
 from utils.hoyolab import database
 from utils.web import app as web
 from utils.web.weapon_scan import validate_weapon_scan
@@ -219,10 +220,10 @@ class SharedWeaponMigrationTests(unittest.IsolatedAsyncioTestCase):
 
         class Connection:
             async def execute(self, query):
-                # Exercise the real migration selection and conflict handling locally.
+                # Exercise historical migration selection and conflict handling locally.
                 db.execute(query.replace("NOW()", "CURRENT_TIMESTAMP"))
 
-        await database._initialise_shared_weapon_scans(Connection())
+        await migrate_weapon_scans(Connection())
         self.assertEqual(
             db.execute(
                 "SELECT genshin_uid, scan_id FROM weapon_account_scan_snapshots ORDER BY genshin_uid"
@@ -233,7 +234,7 @@ class SharedWeaponMigrationTests(unittest.IsolatedAsyncioTestCase):
         db.execute(
             "UPDATE weapon_account_scan_snapshots SET scan_id='edited', weapons='[]' WHERE genshin_uid='7001'"
         )
-        await database._initialise_shared_weapon_scans(Connection())
+        await migrate_weapon_scans(Connection())
         self.assertEqual(
             db.execute(
                 "SELECT scan_id, weapons FROM weapon_account_scan_snapshots WHERE genshin_uid='7001'"

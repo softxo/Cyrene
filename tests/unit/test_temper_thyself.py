@@ -131,6 +131,11 @@ class TemperThyselfTests(unittest.TestCase):
 
 
 class TemperThyselfIntegrationTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        saved = patch.object(web, "get_event_activity_checks", AsyncMock(return_value={}))
+        saved.start()
+        self.addCleanup(saved.stop)
+
     async def test_account_and_overview_keep_the_entry_during_upstream_unavailability(self):
         account = {
             "id": 91,
@@ -151,8 +156,36 @@ class TemperThyselfIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(normal["limited_events"], [])
         web._events_cache.clear()
 
+    async def test_saved_checks_survive_unavailable_hoyolab(self):
+        account = {"id": 94, "genshin_uid": "777000094", "genshin_server": "os_euro"}
+        web._events_cache.clear()
+        with (
+            patch.object(web, "get_account_client", AsyncMock(return_value=None)),
+            patch.object(
+                web,
+                "get_event_activity_checks",
+                AsyncMock(
+                    return_value={
+                        "daily_commissions": True,
+                        "trounce_domains": True,
+                        "temper_thyself": True,
+                    }
+                ),
+            ),
+        ):
+            result = await web.get_single_account_events(10, account)
+        self.assertTrue(result["daily"]["checked"])
+        self.assertTrue(result["trounce"]["checked"])
+        self.assertTrue(result["temper_thyself"]["checked"])
+        web._events_cache.clear()
+
 
 class TemperCacheTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        saved = patch.object(web, "get_event_activity_checks", AsyncMock(return_value={}))
+        saved.start()
+        self.addCleanup(saved.stop)
+
     async def test_finished_cycle_does_not_survive_inside_cache_ttl(self):
         account = {"id": 92, "genshin_uid": "777000092", "genshin_server": "os_euro"}
         web._events_cache.clear()

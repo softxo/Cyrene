@@ -21,7 +21,7 @@ NOW=1793620800
 accounts=[dict(id=1,nickname='Evernight',genshin_uid='777527709',genshin_server='os_euro'),dict(id=2,nickname='Moon',genshin_uid='777527710',genshin_server='os_euro')]
 async def fixtures():
  web._events_cache.clear()
- with patch.object(web,'get_accounts',AsyncMock(return_value=accounts)),patch.object(web,'get_account_client',AsyncMock(return_value=None)):
+ with patch.object(web,'get_accounts',AsyncMock(return_value=accounts)),patch.object(web,'get_account_client',AsyncMock(return_value=None)),patch.object(web,'get_event_activity_checks',AsyncMock(return_value={})):
   normal=await web.get_events_data(10,1)
   overview=await web.get_events_data(10,1,True)
  result={}

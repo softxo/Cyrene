@@ -27,6 +27,9 @@ class Result:
         if row is None:
             return None
         result = dict(row)
+        for key in ("progress", "recurrence"):
+            if key in result and isinstance(result[key], str):
+                result[key] = json.loads(result[key])
         if "expires_at" in result:
             result["created_at"] = datetime.fromisoformat(result["created_at"])
             result["expires_at"] = datetime.fromisoformat(result["expires_at"])
@@ -55,6 +58,16 @@ class Connection:
                 completed_at TEXT, note TEXT, updated_at TEXT);
             CREATE UNIQUE INDEX progress_unique ON achievement_progress
                 (discord_user_id, account_id, achievement_id, tier) WHERE account_id IS NOT NULL;
+            CREATE TABLE achievement_uid_progress (
+                genshin_uid TEXT, achievement_id TEXT, tier INTEGER,
+                completed BOOLEAN DEFAULT FALSE,current INTEGER DEFAULT 0,
+                completed_at TEXT,note TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(genshin_uid,achievement_id,tier));
+            CREATE TABLE wish_uid_history (
+                genshin_uid TEXT,wish_id TEXT,gacha_type TEXT,item_name TEXT,item_type TEXT,
+                rank_type INTEGER,icon_url TEXT,pulled_at TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(genshin_uid,wish_id));
             CREATE TABLE wish_history (
                 account_id INTEGER REFERENCES game_data_accounts(id), wish_id TEXT,
                 genshin_uid TEXT, gacha_type TEXT, item_name TEXT, item_type TEXT,
@@ -66,11 +79,17 @@ class Connection:
 
     async def execute(self, query, params=()):
         query = query.replace("%s", "?").replace("NOW()", "CURRENT_TIMESTAMP")
+        query = query.replace("DISTINCT ON (e.id)", "DISTINCT").replace("::bigint", "")
+        query = query.replace("FOR UPDATE OF e", "").replace("FOR UPDATE", "")
         params = tuple(
             json.dumps(value.obj) if isinstance(value, database.Jsonb) else value
             for value in params
         )
-        query = query.replace("(xmax = 0) AS inserted", "1 AS inserted").replace("::integer", "")
+        query = (
+            query.replace("(xmax = 0) AS inserted", "1 AS inserted")
+            .replace("(xmax=0) AS inserted", "1 AS inserted")
+            .replace("::integer", "")
+        )
         return Result(self.db.execute(query, params))
 
     async def __aenter__(self):
@@ -80,6 +99,9 @@ class Connection:
         pass
 
     def connection(self):
+        return self
+
+    def transaction(self):
         return self
 
 
@@ -118,9 +140,13 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(progress[0]["current"], 5)
             self.assertEqual(progress[0]["note"], "Saved note")
             self.assertEqual(len(await database.get_wish_history(4)), 1)
-            for user, account in [(10, 2), (20, 3)]:
-                self.assertEqual(await database.get_achievement_progress(user, account), [])
-                self.assertEqual(await database.get_wish_history(account), [])
+            self.assertEqual(await database.get_achievement_progress(10, 2), [])
+            shared = await database.get_achievement_progress(20, 3)
+            self.assertEqual(shared[0]["current"], 5)
+            self.assertEqual(shared[0]["note"], "Saved note")
+            self.assertEqual(await database.get_achievement_progress(20, 4), [])
+            self.assertEqual(await database.get_wish_history(2), [])
+            self.assertEqual(len(await database.get_wish_history(3)), 1)
             await database.update_achievement_tier(10, 4, "100", 1, current=6)
             await database.update_achievement_tier_note(10, 4, "101", 1, "New note")
             self.assertEqual(
@@ -180,6 +206,10 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
                 discord_user_id INTEGER, account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
                 event_id INTEGER REFERENCES custom_events(id) ON DELETE CASCADE, sort_order INTEGER,
                 PRIMARY KEY(discord_user_id, account_id, event_id));
+            CREATE TABLE custom_event_accounts (
+                event_id INTEGER REFERENCES custom_events(id) ON DELETE CASCADE,
+                genshin_uid TEXT,genshin_server TEXT,sort_order INTEGER,updated_at TEXT,
+                PRIMARY KEY(event_id,genshin_uid,genshin_server));
             CREATE TABLE custom_event_progress (
                 event_id INTEGER REFERENCES custom_events(id) ON DELETE CASCADE,
                 discord_user_id INTEGER, account_id INTEGER, objective_index INTEGER,

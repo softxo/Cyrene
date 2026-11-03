@@ -568,11 +568,11 @@ function initialiseReminderPanel() {
         return;
     }
 
-    if (panel.dataset.initialized === "true") {
+    if (panel.dataset.initialised === "true") {
         return;
     }
 
-    panel.dataset.initialized = "true";
+    panel.dataset.initialised = "true";
 
     const addButton = document.getElementById("add-reminder-button");
 

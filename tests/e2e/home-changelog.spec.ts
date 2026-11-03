@@ -102,8 +102,8 @@ for (const width of [390, 1280]) {
         const dialog = page.locator(".changelog-dialog");
         await expect(dialog).toBeVisible();
         await expect(dialog.locator("h2")).toHaveText("Add Changelog");
-        await expect(dialog.locator("[data-opacity-input]")).toHaveValue("70");
-        await expect(dialog.locator("[data-opacity-value]")).toHaveText("70%");
+        await expect(dialog.locator("[data-opacity-input]")).toHaveValue("60");
+        await expect(dialog.locator("[data-opacity-value]")).toHaveText("60%");
 
         await dialog.locator("h2").click();
         await expect(dialog).toBeVisible();
@@ -152,9 +152,7 @@ for (const width of [390, 1280]) {
         });
         expect(Math.abs((await dialog.boundingBox())!.y - stableModalTop)).toBeLessThan(1);
 
-        await expect(dialog.locator(".changelog-hint")).toContainText(
-            'choose "Colour selected text"',
-        );
+        await expect(dialog.locator(".changelog-hint")).toContainText("Select text or use B");
         await expect(dialog.locator(".changelog-hint")).toContainText('Use "Insert emoji"');
         await dialog.locator(".changelog-format-help summary").click();
         await expect(dialog.locator(".changelog-help-content")).toBeHidden();
@@ -228,6 +226,7 @@ for (const width of [390, 1280]) {
             selection.removeAllRanges();
             selection.addRange(range);
         });
+        await dialog.getByRole("button", { name: "Text colour", exact: true }).click();
         await dialog.getByRole("button", { name: "Presets", exact: true }).click();
         await dialog.getByLabel("Preset hex colour", { exact: true }).fill("bad");
         await dialog.getByRole("button", { name: "Save preset", exact: true }).click();
@@ -270,6 +269,7 @@ for (const width of [390, 1280]) {
             selection.removeAllRanges();
             selection.addRange(range);
         });
+        await dialog.getByRole("button", { name: "Text opacity", exact: true }).click();
         await dialog.locator("[data-opacity-input]").fill("50");
         await dialog.getByRole("button", { name: "Apply to selected text", exact: true }).click();
         await expect(textBox.locator("span[data-text-opacity]")).toHaveCSS("opacity", "0.5");
@@ -295,6 +295,7 @@ for (const width of [390, 1280]) {
         );
 
         await expect(textBox.locator("span[data-text-colour]")).toHaveText("Bold");
+        await dialog.getByRole("button", { name: "Text colour", exact: true }).click();
         await dialog.getByRole("button", { name: "Presets", exact: true }).click();
         await expect(
             dialog.getByRole("button", { name: "Use colour #ff88aa", exact: true }),

@@ -8,6 +8,7 @@ from utils.hoyolab.client import RedemptionAuthenticationError
 from utils.hoyolab.database import (
     get_gift_code_auto_claim_accounts,
     get_gift_code_redemptions,
+    reserve_gift_code_redemption,
     update_gift_code_redemption,
 )
 
@@ -135,13 +136,10 @@ async def process_account(
         if should_skip_automatic_attempt(previous):
             continue
 
-        # Save before making the request, preventing another worker cycle from immediately attempting the same code.
-        await update_gift_code_redemption(
-            account_id,
-            code,
-            "processing",
-            "Automatic redemption is in progress.",
-        )
+        # A shared UID/code reservation prevents simultaneous submissions from
+        # another linked account, web request or worker process.
+        if not await reserve_gift_code_redemption(account_id, code):
+            continue
 
         try:
             client = await get_account_client(
@@ -165,6 +163,7 @@ async def process_account(
                 code,
                 "submitted",
                 message,
+                genshin_uid=genshin_uid,
             )
 
             redemptions[code] = {
@@ -224,6 +223,7 @@ async def process_account(
                     code,
                     status,
                     message,
+                    genshin_uid=genshin_uid,
                 )
             except Exception:
                 print(

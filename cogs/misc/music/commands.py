@@ -27,18 +27,9 @@ ytdl_format_options = {
     "noplaylist": True,
     "quiet": True,
     "default_search": "auto",
-
-    "js_runtimes": {
-        "deno": {}
-    },
-
+    "js_runtimes": {"deno": {}},
     "cookiefile": "/home/container/cookies.txt",
-
-    "extractor_args": {
-        "youtube": {
-            "player_client": ["android_vr"]
-        }
-    },
+    "extractor_args": {"youtube": {"player_client": ["android_vr"]}},
 }
 
 search_ytdl_options: dict[str, Any] = {
@@ -46,24 +37,14 @@ search_ytdl_options: dict[str, Any] = {
     "extract_flat": "in_playlist",
     "noplaylist": True,
     "default_search": "auto",
-
-    "js_runtimes": {
-        "deno": {}
-    },
-
+    "js_runtimes": {"deno": {}},
     "cookiefile": "/home/container/cookies.txt",
 }
 
-search_ytdl = youtube_dl.YoutubeDL(
-    cast(Any, search_ytdl_options)
-)
+search_ytdl = youtube_dl.YoutubeDL(cast(Any, search_ytdl_options))
 
 ffmpeg_options = {
-    "before_options": (
-        "-reconnect 1 "
-        "-reconnect_streamed 1 "
-        "-reconnect_delay_max 5"
-    ),
+    "before_options": ("-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"),
     "options": "-vn",
 }
 
@@ -75,6 +56,7 @@ spotify_track_url_re = re.compile(
 
 spotify_client_id = os.getenv("SPOTIFY_CLIENT_ID")
 spotify_client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+
 
 class GuildMusicState:
     def __init__(self):
@@ -98,6 +80,7 @@ class GuildMusicState:
         self.preload_task = None
         self.now_playing_view = None
         self.autoplay_history = []
+
 
 class MusicControls(discord.ui.View):
     def __init__(self, cog, guild_id: int):
@@ -158,17 +141,16 @@ class MusicControls(discord.ui.View):
         if not vc or not vc.channel:
             await interaction.response.send_message(
                 embed=self.cog.warning_embed("I'm not in a voice channel.", title="Not Connected"),
-                ephemeral=True
+                ephemeral=True,
             )
             return False
 
         if not interaction.user.voice or interaction.user.voice.channel != vc.channel:
             await interaction.response.send_message(
                 embed=self.cog.warning_embed(
-                    "You must be in my voice channel to use these controls.",
-                    title="Access Denied"
+                    "You must be in my voice channel to use these controls.", title="Access Denied"
                 ),
-                ephemeral=True
+                ephemeral=True,
             )
             return False
 
@@ -186,13 +168,22 @@ class MusicControls(discord.ui.View):
             except Exception:
                 pass
 
-    @discord.ui.button(label="Pause", emoji=f"{EMOJIS['musicpauseresume']}", style=discord.ButtonStyle.secondary, row=0)
-    async def pause_resume_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(
+        label="Pause",
+        emoji=f"{EMOJIS['musicpauseresume']}",
+        style=discord.ButtonStyle.secondary,
+        row=0,
+    )
+    async def pause_resume_button(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         state = self.get_state()
         vc = interaction.guild.voice_client
 
         if not vc:
-            return await interaction.response.send_message("I'm not in a voice channel.", ephemeral=True)
+            return await interaction.response.send_message(
+                "I'm not in a voice channel.", ephemeral=True
+            )
 
         await interaction.response.defer(thinking=False)
 
@@ -210,11 +201,12 @@ class MusicControls(discord.ui.View):
 
         self.refresh_button_labels()
         await interaction.message.edit(
-            embed=await self.cog.build_now_playing_embed(state),
-            view=self
+            embed=await self.cog.build_now_playing_embed(state), view=self
         )
 
-    @discord.ui.button(label="Skip", emoji=f"{EMOJIS['musicskip']}", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(
+        label="Skip", emoji=f"{EMOJIS['musicskip']}", style=discord.ButtonStyle.secondary, row=0
+    )
     async def skip_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         state = self.get_state()
         vc = interaction.guild.voice_client
@@ -222,7 +214,7 @@ class MusicControls(discord.ui.View):
         if not vc or not (vc.is_playing() or vc.is_paused()):
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed("Nothing is playing.", title="Nothing Playing"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await interaction.response.defer(thinking=False)
@@ -231,7 +223,12 @@ class MusicControls(discord.ui.View):
             state.skip_once = True
             vc.stop()
 
-    @discord.ui.button(label="Mode: Normal", emoji=f"{EMOJIS['musicmode']}", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(
+        label="Mode: Normal",
+        emoji=f"{EMOJIS['musicmode']}",
+        style=discord.ButtonStyle.secondary,
+        row=0,
+    )
     async def mode_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         state = self.get_state()
         vc = interaction.guild.voice_client
@@ -239,7 +236,7 @@ class MusicControls(discord.ui.View):
         if vc is None or state.current_song is None:
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed("Nothing is playing.", title="Nothing Playing"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await interaction.response.defer(thinking=False)
@@ -259,19 +256,22 @@ class MusicControls(discord.ui.View):
         if not ok:
             return await interaction.followup.send(
                 embed=self.cog.error_embed(
-                    error or "Couldn't change mode.",
-                    title="Mode Change Failed"
+                    error or "Couldn't change mode.", title="Mode Change Failed"
                 ),
-                ephemeral=True
+                ephemeral=True,
             )
 
         self.refresh_button_labels()
         await interaction.message.edit(
-            embed=await self.cog.build_now_playing_embed(state),
-            view=self
+            embed=await self.cog.build_now_playing_embed(state), view=self
         )
 
-    @discord.ui.button(label="Loop: OFF", emoji=f"{EMOJIS['musicloop']}", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(
+        label="Loop: OFF",
+        emoji=f"{EMOJIS['musicloop']}",
+        style=discord.ButtonStyle.secondary,
+        row=0,
+    )
     async def loop_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer(thinking=False)
         state = self.get_state()
@@ -279,18 +279,19 @@ class MusicControls(discord.ui.View):
 
         self.refresh_button_labels()
         await interaction.message.edit(
-            embed=await self.cog.build_now_playing_embed(state),
-            view=self
+            embed=await self.cog.build_now_playing_embed(state), view=self
         )
 
-    @discord.ui.button(label="Stop", emoji=f"{EMOJIS['musicstop']}", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(
+        label="Stop", emoji=f"{EMOJIS['musicstop']}", style=discord.ButtonStyle.secondary, row=0
+    )
     async def stop_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         vc = interaction.guild.voice_client
 
         if not vc:
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed("Nothing is playing.", title="Nothing Playing"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await interaction.response.defer(thinking=False)
@@ -300,8 +301,7 @@ class MusicControls(discord.ui.View):
 
         try:
             await interaction.message.edit(
-                embed=self.cog.info_embed("Playback stopped.", title="Stopped"),
-                view=self
+                embed=self.cog.info_embed("Playback stopped.", title="Stopped"), view=self
             )
         except Exception:
             pass
@@ -318,7 +318,12 @@ class MusicControls(discord.ui.View):
         except Exception:
             pass
 
-    @discord.ui.button(label="Autoplay: OFF", emoji=f"{EMOJIS['musicautoplay']}", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(
+        label="Autoplay: OFF",
+        emoji=f"{EMOJIS['musicautoplay']}",
+        style=discord.ButtonStyle.secondary,
+        row=1,
+    )
     async def autoplay_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer(thinking=False)
         state = self.get_state()
@@ -334,11 +339,15 @@ class MusicControls(discord.ui.View):
 
         self.refresh_button_labels()
         await interaction.message.edit(
-            embed=await self.cog.build_now_playing_embed(state),
-            view=self
+            embed=await self.cog.build_now_playing_embed(state), view=self
         )
 
-    @discord.ui.button(label="Bassboost: OFF", emoji=f"{EMOJIS['musicbassboost']}", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(
+        label="Bassboost: OFF",
+        emoji=f"{EMOJIS['musicbassboost']}",
+        style=discord.ButtonStyle.secondary,
+        row=1,
+    )
     async def bassboost_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         state = self.get_state()
         vc = interaction.guild.voice_client
@@ -346,7 +355,7 @@ class MusicControls(discord.ui.View):
         if vc is None or state.current_song is None:
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed("Nothing is playing.", title="Nothing Playing"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await interaction.response.defer(thinking=False)
@@ -358,26 +367,25 @@ class MusicControls(discord.ui.View):
         if not ok:
             return await interaction.followup.send(
                 embed=self.cog.error_embed(
-                    error or "Couldn't change bassboost mode.",
-                    title="Mode Change Failed"
+                    error or "Couldn't change bassboost mode.", title="Mode Change Failed"
                 ),
-                ephemeral=True
+                ephemeral=True,
             )
 
         self.refresh_button_labels()
         await interaction.message.edit(
-            embed=await self.cog.build_now_playing_embed(state),
-            view=self
+            embed=await self.cog.build_now_playing_embed(state), view=self
         )
 
-    @discord.ui.button(label="Queue", emoji=f"{EMOJIS['musicqueue']}", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(
+        label="Queue", emoji=f"{EMOJIS['musicqueue']}", style=discord.ButtonStyle.secondary, row=1
+    )
     async def queue_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         state = self.get_state()
 
         if not state.current_song and not state.song_queue:
             return await interaction.response.send_message(
-                embed=self.cog.warning_embed("Queue is empty!", title="Empty Queue"),
-                ephemeral=True
+                embed=self.cog.warning_embed("Queue is empty!", title="Empty Queue"), ephemeral=True
             )
 
         lines = []
@@ -399,9 +407,7 @@ class MusicControls(discord.ui.View):
             lines.append("**Up Next:**\nNo songs queued.")
 
         embed = discord.Embed(
-            title="Music Queue",
-            description="\n\n".join(lines),
-            colour=discord.Color.blurple()
+            title="Music Queue", description="\n\n".join(lines), colour=discord.Colour.blurple()
         )
         embed.set_footer(
             text=(
@@ -413,30 +419,31 @@ class MusicControls(discord.ui.View):
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="Lyrics", emoji=f"{EMOJIS['musiclyrics']}", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(
+        label="Lyrics", emoji=f"{EMOJIS['musiclyrics']}", style=discord.ButtonStyle.secondary, row=1
+    )
     async def lyrics_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         state = self.get_state()
 
         if state.current_song is None:
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed("Nothing is playing!", title="Lyrics Unavailable"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         data = await self.cog.fetch_lyrics_data(state.current_song)
         if data is None:
             return await interaction.response.send_message(
                 embed=self.cog.warning_embed(
-                    "Couldn't find lyrics for the current track.",
-                    title="Lyrics Not Found"
+                    "Couldn't find lyrics for the current track.", title="Lyrics Not Found"
                 ),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await interaction.response.send_message(
-            embed=self.cog.build_lyrics_embed(data),
-            ephemeral=True
+            embed=self.cog.build_lyrics_embed(data), ephemeral=True
         )
+
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -444,17 +451,12 @@ class Music(commands.Cog):
         self.guild_states = {}
 
     def get_autoplay_search_terms(
-            self,
-            song: dict[str, Any],
+        self,
+        song: dict[str, Any],
     ) -> tuple[str, str]:
         raw_title = (song.get("title") or "").strip()
 
-        artist = (
-                song.get("artist")
-                or song.get("creator")
-                or song.get("channel")
-                or ""
-        ).strip()
+        artist = (song.get("artist") or song.get("creator") or song.get("channel") or "").strip()
 
         cleaned_title = self.clean_lyrics_title(raw_title)
 
@@ -472,7 +474,9 @@ class Music(commands.Cog):
 
         return "", cleaned_title
 
-    def remember_autoplay_track(self, state: GuildMusicState, song: dict[str, Any], max_items: int = 20):
+    def remember_autoplay_track(
+        self, state: GuildMusicState, song: dict[str, Any], max_items: int = 20
+    ):
         signature = self.build_track_signature(song)
         if not signature[0]:
             return
@@ -491,12 +495,34 @@ class Music(commands.Cog):
         text = re.sub(r"\(.*?\)|\[.*?\]|\{.*?\}", " ", text)
 
         junk_words = [
-            "official video", "official audio", "official music video",
-            "lyrics", "lyric video", "audio", "video", "visualizer",
-            "sped up", "slowed", "reverb", "nightcore", "remastered",
-            "hd", "hq", "mv", "topic", "vevo", "radio edit",
-            "extended", "version", "live", "performance",
-            "feat", "ft", "featuring", "prod", "produced by"
+            "official video",
+            "official audio",
+            "official music video",
+            "lyrics",
+            "lyric video",
+            "audio",
+            "video",
+            "visualizer",
+            "sped up",
+            "slowed",
+            "reverb",
+            "nightcore",
+            "remastered",
+            "hd",
+            "hq",
+            "mv",
+            "topic",
+            "vevo",
+            "radio edit",
+            "extended",
+            "version",
+            "live",
+            "performance",
+            "feat",
+            "ft",
+            "featuring",
+            "prod",
+            "produced by",
         ]
 
         for word in junk_words:
@@ -537,9 +563,7 @@ class Music(commands.Cog):
         state.preload_task = asyncio.create_task(self.preload_next(guild_id))
 
     async def _apply_current_mode_to_voice_client(
-        self,
-        guild_id: int,
-        vc: discord.VoiceClient | None
+        self, guild_id: int, vc: discord.VoiceClient | None
     ) -> tuple[bool, str | None]:
         state = self.get_state(guild_id)
 
@@ -577,7 +601,7 @@ class Music(commands.Cog):
             slowed=state.slowed_mode,
             sped=state.sped_mode,
             bassboost=state.bassboost_mode,
-            volume=state.current_volume
+            volume=state.current_volume,
         )
 
         vc.source = new_source
@@ -591,7 +615,9 @@ class Music(commands.Cog):
 
         return True, None
 
-    async def resolve_query_to_queue_song(self, ctx: commands.Context, query: str) -> dict[str, Any]:
+    async def resolve_query_to_queue_song(
+        self, ctx: commands.Context, query: str
+    ) -> dict[str, Any]:
         if self.is_spotify_track_url(query):
             song = await self.resolve_spotify_to_youtube(query)
         else:
@@ -674,9 +700,7 @@ class Music(commands.Cog):
             if isinstance(candidate, tuple) and candidate[0] == "autoplay":
                 seed_song = candidate[1]
                 candidate = await self.get_autoplay_song(
-                    state,
-                    seed_song,
-                    requester=seed_song.get("requester")
+                    state, seed_song, requester=seed_song.get("requester")
                 )
 
             if candidate is None:
@@ -702,7 +726,7 @@ class Music(commands.Cog):
                 "track_url": track_url,
                 "queued_song": candidate,
                 "fresh_song": fresh_song,
-                "audio_url": audio_url
+                "audio_url": audio_url,
             }
 
             async with state.lock:
@@ -720,7 +744,7 @@ class Music(commands.Cog):
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
                     if resp.status != 200:
-                        return discord.Color.red()
+                        return discord.Colour.red()
 
                     data = await resp.read()
 
@@ -729,7 +753,7 @@ class Music(commands.Cog):
 
                 colours = img.getcolors(64 * 64)
                 if not colours:
-                    return discord.Color.red()
+                    return discord.Colour.red()
 
                 colours.sort(key=lambda x: x[0], reverse=True)
 
@@ -741,41 +765,41 @@ class Music(commands.Cog):
                     if abs(r - g) < 10 and abs(g - b) < 10:
                         continue
 
-                    return discord.Color.from_rgb(r, g, b)
+                    return discord.Colour.from_rgb(r, g, b)
 
                 _, (r, g, b) = colours[0]
-                return discord.Color.from_rgb(r, g, b)
+                return discord.Colour.from_rgb(r, g, b)
 
         except Exception:
-            return discord.Color.red()
+            return discord.Colour.red()
 
-    def make_embed(self, description: str, colour: discord.Color, *, title: str | None = None) -> discord.Embed:
-        embed = discord.Embed(
-            title=title,
-            description=description,
-            colour=colour
-        )
+    def make_embed(
+        self, description: str, colour: discord.Colour, *, title: str | None = None
+    ) -> discord.Embed:
+        embed = discord.Embed(title=title, description=description, colour=colour)
         embed.timestamp = discord.utils.utcnow()
         return embed
 
     def success_embed(self, description: str, *, title: str = "Success") -> discord.Embed:
-        return self.make_embed(f"{description}", discord.Color.green(), title=title)
+        return self.make_embed(f"{description}", discord.Colour.green(), title=title)
 
     def error_embed(self, description: str, *, title: str = "Error") -> discord.Embed:
-        return self.make_embed(f"{description}", discord.Color.red(), title=title)
+        return self.make_embed(f"{description}", discord.Colour.red(), title=title)
 
     def warning_embed(self, description: str, *, title: str = "Warning") -> discord.Embed:
-        return self.make_embed(f"{description}", discord.Color.orange(), title=title)
+        return self.make_embed(f"{description}", discord.Colour.orange(), title=title)
 
     def info_embed(self, description: str, *, title: str = "Info") -> discord.Embed:
-        return self.make_embed(f"{description}", discord.Color.blurple(), title=title)
+        return self.make_embed(f"{description}", discord.Colour.blurple(), title=title)
 
     def get_state(self, guild_id: int) -> GuildMusicState:
         if guild_id not in self.guild_states:
             self.guild_states[guild_id] = GuildMusicState()
         return self.guild_states[guild_id]
 
-    async def apply_current_mode_from_interaction(self, interaction: discord.Interaction) -> tuple[bool, str | None]:
+    async def apply_current_mode_from_interaction(
+        self, interaction: discord.Interaction
+    ) -> tuple[bool, str | None]:
         vc = interaction.guild.voice_client if interaction.guild else None
         return await self._apply_current_mode_to_voice_client(interaction.guild.id, vc)
 
@@ -799,18 +823,14 @@ class Music(commands.Cog):
 
         headers = {
             "Authorization": f"Basic {encoded_auth}",
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/x-www-form-urlencoded",
         }
 
-        data = {
-            "grant_type": "client_credentials"
-        }
+        data = {"grant_type": "client_credentials"}
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                "https://accounts.spotify.com/api/token",
-                headers=headers,
-                data=data
+                "https://accounts.spotify.com/api/token", headers=headers, data=data
             ) as resp:
                 if resp.status != 200:
                     error_text = await resp.text()
@@ -830,9 +850,7 @@ class Music(commands.Cog):
 
         access_token = await self.get_spotify_access_token()
 
-        headers = {
-            "Authorization": f"Bearer {access_token}"
-        }
+        headers = {"Authorization": f"Bearer {access_token}"}
 
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.get(f"https://api.spotify.com/v1/tracks/{track_id}") as resp:
@@ -923,7 +941,7 @@ class Music(commands.Cog):
                 q,
                 download=False,
                 process=True,
-            )
+            ),
         )
 
         info = cast(dict[str, Any], info)
@@ -936,11 +954,7 @@ class Music(commands.Cog):
             if isinstance(first, dict):
                 info = cast(dict[str, Any], first)
 
-        webpage_url = (
-                info.get("webpage_url")
-                or info.get("original_url")
-                or query
-        )
+        webpage_url = info.get("webpage_url") or info.get("original_url") or query
 
         audio_url = info.get("url")
 
@@ -952,15 +966,8 @@ class Music(commands.Cog):
             "audio_url": audio_url,
             "http_headers": info.get("http_headers", {}),
             "duration": info.get("duration") or 0,
-            "thumbnail": (
-                    self.get_youtube_thumbnail(webpage_url)
-                    or info.get("thumbnail")
-            ),
-            "uploader": (
-                    info.get("uploader")
-                    or info.get("channel")
-                    or "Unknown"
-            ),
+            "thumbnail": (self.get_youtube_thumbnail(webpage_url) or info.get("thumbnail")),
+            "uploader": (info.get("uploader") or info.get("channel") or "Unknown"),
             "artist": info.get("artist"),
             "creator": info.get("creator"),
             "views": info.get("view_count"),
@@ -968,10 +975,7 @@ class Music(commands.Cog):
         }
 
     async def get_autoplay_song(
-            self,
-            state: GuildMusicState,
-            seed_song: dict[str, Any],
-            requester=None
+        self, state: GuildMusicState, seed_song: dict[str, Any], requester=None
     ) -> dict[str, Any] | None:
         artist, track = self.get_autoplay_search_terms(seed_song)
 
@@ -983,7 +987,7 @@ class Music(commands.Cog):
                     f"ytsearch15:{artist}",
                     f"ytsearch15:{artist} songs",
                     f"ytsearch15:{artist} music",
-                    f"ytsearch15:{artist} - {track}"
+                    f"ytsearch15:{artist} - {track}",
                 ]
             )
         elif artist:
@@ -1018,9 +1022,7 @@ class Music(commands.Cog):
         }
 
         queued_signatures = {
-            self.build_track_signature(song)
-            for song in state.song_queue
-            if isinstance(song, dict)
+            self.build_track_signature(song) for song in state.song_queue if isinstance(song, dict)
         }
 
         recent_signatures = set(state.autoplay_history)
@@ -1032,10 +1034,7 @@ class Music(commands.Cog):
             preloaded_song = state.preloaded.get("queued_song")
 
             if isinstance(preloaded_song, dict):
-                preloaded_url = (
-                        preloaded_song.get("webpage_url")
-                        or preloaded_song.get("url")
-                )
+                preloaded_url = preloaded_song.get("webpage_url") or preloaded_song.get("url")
                 preloaded_signature = self.build_track_signature(preloaded_song)
 
         loop = asyncio.get_running_loop()
@@ -1049,7 +1048,7 @@ class Music(commands.Cog):
                         lambda q=query: search_ytdl.extract_info(
                             q,
                             download=False,
-                        )
+                        ),
                     ),
                     timeout=8,
                 )
@@ -1061,16 +1060,10 @@ class Music(commands.Cog):
                 continue
 
             if not isinstance(info, dict):
-                print(
-                    f"Autoplay query returned invalid data for {query}: "
-                    f"{type(info).__name__}"
-                )
+                print(f"Autoplay query returned invalid data for {query}: {type(info).__name__}")
                 continue
 
-            print(
-                f"Autoplay search: {query} | "
-                f"entries={len(info.get('entries') or [])}"
-            )
+            print(f"Autoplay search: {query} | entries={len(info.get('entries') or [])}")
 
             entries = info.get("entries")
 
@@ -1078,11 +1071,7 @@ class Music(commands.Cog):
                 print(f"Autoplay search returned no entries for: {query}")
                 continue
 
-            entries = [
-                entry
-                for entry in entries
-                if isinstance(entry, dict)
-            ]
+            entries = [entry for entry in entries if isinstance(entry, dict)]
 
             if not entries:
                 print(f"Autoplay search contained no valid entries for: {query}")
@@ -1095,9 +1084,7 @@ class Music(commands.Cog):
                     continue
 
                 webpage_url = (
-                        entry.get("webpage_url")
-                        or entry.get("original_url")
-                        or entry.get("url")
+                    entry.get("webpage_url") or entry.get("original_url") or entry.get("url")
                 )
 
                 if webpage_url and not webpage_url.startswith("http"):
@@ -1111,15 +1098,10 @@ class Music(commands.Cog):
                     "title": entry.get("title") or "Unknown",
                     "webpage_url": webpage_url,
                     "thumbnail": (
-                            self.get_youtube_thumbnail(webpage_url)
-                            or entry.get("thumbnail")
+                        self.get_youtube_thumbnail(webpage_url) or entry.get("thumbnail")
                     ),
                     "duration": entry.get("duration") or 0,
-                    "uploader": (
-                            entry.get("uploader")
-                            or entry.get("channel")
-                            or "Unknown"
-                    ),
+                    "uploader": (entry.get("uploader") or entry.get("channel") or "Unknown"),
                     "artist": entry.get("artist"),
                     "creator": entry.get("creator"),
                     "views": entry.get("view_count"),
@@ -1146,19 +1128,15 @@ class Music(commands.Cog):
                     continue
 
                 if any(
-                        isinstance(song, dict)
-                        and self.is_same_track(candidate, song)
-                                for song in state.song_queue
+                    isinstance(song, dict) and self.is_same_track(candidate, song)
+                    for song in state.song_queue
                 ):
                     continue
 
                 if (
-                        candidate_signature not in queued_signatures
-                        and candidate_signature not in recent_signatures
-                        and (
-                        not preloaded_signature
-                        or candidate_signature != preloaded_signature
-                )
+                    candidate_signature not in queued_signatures
+                    and candidate_signature not in recent_signatures
+                    and (not preloaded_signature or candidate_signature != preloaded_signature)
                 ):
                     return candidate
 
@@ -1214,15 +1192,15 @@ class Music(commands.Cog):
         return max(0.0, elapsed)
 
     def make_audio_source(
-            self,
-            audio_url,
-            *,
-            http_headers=None,
-            start_at=0.0,
-            slowed=False,
-            sped=False,
-            bassboost=False,
-            volume=1.0
+        self,
+        audio_url,
+        *,
+        http_headers=None,
+        start_at=0.0,
+        slowed=False,
+        sped=False,
+        bassboost=False,
+        volume=1.0,
     ):
         before = ffmpeg_options["before_options"]
         if start_at and start_at > 0:
@@ -1231,43 +1209,37 @@ class Music(commands.Cog):
         filters = []
 
         if slowed:
-            filters.extend([
-                "atempo=0.94",
-                "asetrate=48000*0.94",
-                "aresample=48000",
-                "aecho=0.8:0.88:45:0.035",
-            ])
+            filters.extend(
+                [
+                    "atempo=0.94",
+                    "asetrate=48000*0.94",
+                    "aresample=48000",
+                    "aecho=0.8:0.88:45:0.035",
+                ]
+            )
         elif sped:
-            filters.extend([
-                "atempo=1.08",
-                "asetrate=48000*1.08",
-                "aresample=48000",
-                "treble=g=1.0:f=4500:width_type=o:width=1.0:m=0.30",
-            ])
+            filters.extend(
+                [
+                    "atempo=1.08",
+                    "asetrate=48000*1.08",
+                    "aresample=48000",
+                    "treble=g=1.0:f=4500:width_type=o:width=1.0:m=0.30",
+                ]
+            )
         else:
             filters.append("aresample=48000")
 
         if bassboost:
-            filters.extend([
-                "bass=g=2.0:f=85:width_type=o:width=1.1:m=0.30",
-                "volume=0.95"
-            ])
+            filters.extend(["bass=g=2.0:f=85:width_type=o:width=1.1:m=0.30", "volume=0.95"])
 
         options = f'-vn -filter:a "{",".join(filters)}"' if filters else "-vn"
 
         if http_headers:
-            header_string = "".join(
-                f"{key}: {value}\r\n"
-                for key, value in http_headers.items()
-            )
+            header_string = "".join(f"{key}: {value}\r\n" for key, value in http_headers.items())
 
             before = f'{before} -headers "{header_string}"'
 
-        source = discord.FFmpegPCMAudio(
-            audio_url,
-            before_options=before,
-            options=options
-        )
+        source = discord.FFmpegPCMAudio(audio_url, before_options=before, options=options)
 
         return discord.PCMVolumeTransformer(source, volume=volume)
 
@@ -1297,21 +1269,29 @@ class Music(commands.Cog):
         status_text = "Paused" if state.paused_at is not None else "Playing"
         mode_text = self.get_mode_text(state)
 
-        embed_colour = song.get("embed_colour", discord.Color.red())
+        embed_colour = song.get("embed_colour", discord.Colour.red())
 
         embed = discord.Embed(
             title="Now Playing",
             description=f"**[{title}]({webpage_url})**" if webpage_url else f"**{title}**",
-            colour=embed_colour
+            colour=embed_colour,
         )
 
-        embed.add_field(name=f"{EMOJIS['musicduration']} Duration", value=duration_text, inline=True)
+        embed.add_field(
+            name=f"{EMOJIS['musicduration']} Duration", value=duration_text, inline=True
+        )
         embed.add_field(name=f"{EMOJIS['musicuploader']} Uploader", value=uploader, inline=True)
         embed.add_field(name=f"{EMOJIS['musicstatus']} Status", value=status_text, inline=True)
 
-        embed.add_field(name=f"{EMOJIS['musicloop']} Loop", value="ON" if state.loop_song else "OFF", inline=True)
+        embed.add_field(
+            name=f"{EMOJIS['musicloop']} Loop",
+            value="ON" if state.loop_song else "OFF",
+            inline=True,
+        )
         embed.add_field(name=f"{EMOJIS['musicmode']} Mode", value=mode_text, inline=True)
-        embed.add_field(name=f"{EMOJIS['musicqueue']} Queue", value=str(len(state.song_queue)), inline=True)
+        embed.add_field(
+            name=f"{EMOJIS['musicqueue']} Queue", value=str(len(state.song_queue)), inline=True
+        )
 
         if views is not None:
             embed.add_field(name=f"{EMOJIS['musicviews']} Views", value=f"{views:,}", inline=True)
@@ -1320,18 +1300,26 @@ class Music(commands.Cog):
             embed.add_field(name=f"{EMOJIS['musiclikes']} Likes", value=f"{likes:,}", inline=True)
 
         if requester is not None:
-            embed.add_field(name=f"{EMOJIS['musicrequester']} Requester", value=requester.mention, inline=True)
+            embed.add_field(
+                name=f"{EMOJIS['musicrequester']} Requester", value=requester.mention, inline=True
+            )
 
         embed.add_field(
             name=f"{EMOJIS['musicprogress']} Progress",
             value=f"`{elapsed_text} / {duration_text}`\n`{progress_bar}`",
-            inline=True
+            inline=True,
         )
 
-        embed.add_field(name=f"{EMOJIS['musicautoplay']} Autoplay", value="ON" if state.autoplay_mode else "OFF",
-                        inline=True)
-        embed.add_field(name=f"{EMOJIS['musicbassboost']} Bassboost", value="ON" if state.bassboost_mode else "OFF",
-                        inline=True)
+        embed.add_field(
+            name=f"{EMOJIS['musicautoplay']} Autoplay",
+            value="ON" if state.autoplay_mode else "OFF",
+            inline=True,
+        )
+        embed.add_field(
+            name=f"{EMOJIS['musicbassboost']} Bassboost",
+            value="ON" if state.bassboost_mode else "OFF",
+            inline=True,
+        )
 
         if thumbnail:
             embed.set_image(url=thumbnail)
@@ -1354,8 +1342,7 @@ class Music(commands.Cog):
                 state.now_playing_view.refresh_button_labels()
 
             await state.now_playing_message.edit(
-                embed=await self.build_now_playing_embed(state),
-                view=state.now_playing_view
+                embed=await self.build_now_playing_embed(state), view=state.now_playing_view
             )
         except Exception as e:
             print(f"Failed to update now playing embed: {e}")
@@ -1448,7 +1435,9 @@ class Music(commands.Cog):
                             if lyrics:
                                 return {
                                     "artist": item.get("artistName") or artist or "Unknown",
-                                    "track": item.get("trackName") or track or song.get("title", "Unknown"),
+                                    "track": item.get("trackName")
+                                    or track
+                                    or song.get("title", "Unknown"),
                                     "lyrics": lyrics.strip(),
                                 }
 
@@ -1466,7 +1455,7 @@ class Music(commands.Cog):
         embed = discord.Embed(
             title=f"🎤 Lyrics — {data['track']}",
             description=lyrics_text,
-            colour=discord.Color.purple(),
+            colour=discord.Colour.purple(),
         )
         embed.add_field(name="Artist", value=data["artist"], inline=True)
 
@@ -1475,9 +1464,9 @@ class Music(commands.Cog):
 
         return embed
 
-########################################################################################################################
-# AUTOPLAY
-########################################################################################################################
+    ########################################################################################################################
+    # AUTOPLAY
+    ########################################################################################################################
 
     @commands.hybrid_command(name="autoplay", description="Toggles autoplay mode.")
     async def autoplay(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -1492,12 +1481,17 @@ class Music(commands.Cog):
             elif mode in ("off", "false", "no", "0"):
                 state.autoplay_mode = False
             else:
-                return await ctx.send(embed=self.warning_embed("Use `?autoplay`, `?autoplay on`, or `?autoplay off`.", title="Invalid Usage"))
+                return await ctx.send(
+                    embed=self.warning_embed(
+                        "Use `?autoplay`, `?autoplay on`, or `?autoplay off`.",
+                        title="Invalid Usage",
+                    )
+                )
 
         await ctx.send(
             embed=self.info_embed(
                 f"Autoplay is now **{'ON' if state.autoplay_mode else 'OFF'}**.",
-                title="Autoplay Updated"
+                title="Autoplay Updated",
             )
         )
 
@@ -1511,11 +1505,13 @@ class Music(commands.Cog):
 
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# PLAY
-########################################################################################################################
+    ########################################################################################################################
+    # PLAY
+    ########################################################################################################################
 
-    @commands.hybrid_command(name="play", description="Adds a song to the queue or starts playback.")
+    @commands.hybrid_command(
+        name="play", description="Adds a song to the queue or starts playback."
+    )
     async def play(self, ctx: commands.Context, *, query: str):
         if ctx.interaction:
             await ctx.defer()
@@ -1531,7 +1527,7 @@ class Music(commands.Cog):
             return await ctx.send(
                 embed=self.warning_embed(
                     f"I'm already being used in **{ctx.voice_client.channel}**.",
-                    title="Bot Is Busy"
+                    title="Bot Is Busy",
                 )
             )
 
@@ -1544,8 +1540,7 @@ class Music(commands.Cog):
         except Exception as e:
             return await ctx.send(
                 embed=self.error_embed(
-                    f"Couldn't load this track:\n```py\n{e}\n```",
-                    title="Track Load Failed"
+                    f"Couldn't load this track:\n```py\n{e}\n```", title="Track Load Failed"
                 )
             )
 
@@ -1556,7 +1551,7 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=self.success_embed(
                     f"Added to queue: **[{queue_song['title']}]({queue_song['webpage_url']})**",
-                    title="Queued"
+                    title="Queued",
                 )
             )
         else:
@@ -1609,9 +1604,7 @@ class Music(commands.Cog):
                 for attempt in range(3):
                     try:
                         auto_song = await self.get_autoplay_song(
-                            state,
-                            previous_song,
-                            requester=previous_song.get("requester")
+                            state, previous_song, requester=previous_song.get("requester")
                         )
                         if auto_song is not None:
                             queued_song = auto_song
@@ -1641,8 +1634,7 @@ class Music(commands.Cog):
 
             await ctx.channel.send(
                 embed=self.info_embed(
-                    "Queue finished. Disconnected from the voice channel.",
-                    title="Disconnected"
+                    "Queue finished. Disconnected from the voice channel.", title="Disconnected"
                 )
             )
             return
@@ -1657,7 +1649,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=self.error_embed(
                         "This queued track has no playable URL. Skipping it.",
-                        title="Playback Failed"
+                        title="Playback Failed",
                     )
                 )
                 return await self.play_next(ctx)
@@ -1666,7 +1658,7 @@ class Music(commands.Cog):
                 await ctx.send(
                     embed=self.error_embed(
                         "A Spotify link reached the playback stage instead of a resolved YouTube link. Skipping it.",
-                        title="Playback Failed"
+                        title="Playback Failed",
                     )
                 )
                 return await self.play_next(ctx)
@@ -1679,7 +1671,7 @@ class Music(commands.Cog):
                 webpage_url = fresh_song.get("webpage_url") or track_url
 
                 if audio_url == webpage_url or audio_url.startswith(
-                        "https://www.youtube.com/watch?"
+                    "https://www.youtube.com/watch?"
                 ):
                     fresh_song = await self.get_song_info(track_url)
                     audio_url = fresh_song.get("audio_url")
@@ -1688,7 +1680,7 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=self.error_embed(
                     f"Couldn't load this track, so it was skipped:\n```py\n{e}\n```",
-                    title="Track Load Failed"
+                    title="Track Load Failed",
                 )
             )
             return await self.play_next(ctx)
@@ -1697,7 +1689,7 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=self.error_embed(
                     "Couldn't get a playable stream for this track. Skipping it.",
-                    title="Playback Failed"
+                    title="Playback Failed",
                 )
             )
             return await self.play_next(ctx)
@@ -1726,7 +1718,7 @@ class Music(commands.Cog):
                 colour = await self.get_dominant_colour_from_url(thumbnail)
                 state.current_song["embed_colour"] = colour
             else:
-                state.current_song["embed_colour"] = discord.Color.red()
+                state.current_song["embed_colour"] = discord.Colour.red()
 
         source = self.make_audio_source(
             audio_url,
@@ -1734,7 +1726,7 @@ class Music(commands.Cog):
             slowed=state.slowed_mode,
             sped=state.sped_mode,
             bassboost=state.bassboost_mode,
-            volume=state.current_volume
+            volume=state.current_volume,
         )
 
         def after_playback(error):
@@ -1779,8 +1771,7 @@ class Music(commands.Cog):
         state.now_playing_view = view
 
         state.now_playing_message = await ctx.channel.send(
-            embed=await self.build_now_playing_embed(state),
-            view=view
+            embed=await self.build_now_playing_embed(state), view=view
         )
         view.message = state.now_playing_message
 
@@ -1788,9 +1779,9 @@ class Music(commands.Cog):
             self.now_playing_progress_loop(ctx.guild.id, state.current_song["url"])
         )
 
-########################################################################################################################
-# PAUSE
-########################################################################################################################
+    ########################################################################################################################
+    # PAUSE
+    ########################################################################################################################
 
     @commands.hybrid_command(name="pause", description="Pauses the current song.")
     async def pause(self, ctx: commands.Context):
@@ -1804,9 +1795,9 @@ class Music(commands.Cog):
         else:
             await ctx.send(embed=self.warning_embed("No song is playing!", title="Nothing Playing"))
 
-########################################################################################################################
-# RESUME
-########################################################################################################################
+    ########################################################################################################################
+    # RESUME
+    ########################################################################################################################
 
     @commands.hybrid_command(name="resume", description="Resumes the paused song.")
     async def resume(self, ctx: commands.Context):
@@ -1822,9 +1813,9 @@ class Music(commands.Cog):
         else:
             await ctx.send(embed=self.warning_embed("No song is paused!", title="Nothing Paused"))
 
-########################################################################################################################
-# SKIP
-########################################################################################################################
+    ########################################################################################################################
+    # SKIP
+    ########################################################################################################################
 
     @commands.hybrid_command(name="skip", description="Skips the current song.")
     async def skip(self, ctx: commands.Context):
@@ -1841,22 +1832,18 @@ class Music(commands.Cog):
             state.skip_once = True
             vc.stop()
 
-########################################################################################################################
-# QUEUE
-########################################################################################################################
+    ########################################################################################################################
+    # QUEUE
+    ########################################################################################################################
 
     @commands.hybrid_group(
-        name="queue",
-        description="Shows the queue and queue settings.",
-        fallback="show"
+        name="queue", description="Shows the queue and queue settings.", fallback="show"
     )
     async def queue(self, ctx: commands.Context):
         state = self.get_state(ctx.guild.id)
 
         if not state.current_song and not state.song_queue:
-            return await ctx.send(
-                embed=self.warning_embed("Queue is empty!", title="Empty Queue")
-            )
+            return await ctx.send(embed=self.warning_embed("Queue is empty!", title="Empty Queue"))
 
         lines = []
 
@@ -1880,9 +1867,7 @@ class Music(commands.Cog):
             lines.append("**Up Next:**\nNo songs queued.")
 
         embed = discord.Embed(
-            title="🎼 Music Queue",
-            description="\n\n".join(lines),
-            colour=discord.Color.blurple()
+            title="🎼 Music Queue", description="\n\n".join(lines), colour=discord.Colour.blurple()
         )
         embed.add_field(
             name="Settings",
@@ -1890,15 +1875,15 @@ class Music(commands.Cog):
                 f"**Song Loop:** {'ON' if state.loop_song else 'OFF'}\n"
                 f"**Queue Loop:** {'ON' if state.queue_loop else 'OFF'}"
             ),
-            inline=False
+            inline=False,
         )
         embed.set_footer(text=f"Total queued: {len(state.song_queue)}")
 
         await ctx.send(embed=embed)
 
-########################################################################################################################
-# QUEUE LOOP
-########################################################################################################################
+    ########################################################################################################################
+    # QUEUE LOOP
+    ########################################################################################################################
 
     @queue.command(name="loop", description="Toggles queue looping.")
     async def queue_loop(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -1916,21 +1901,21 @@ class Music(commands.Cog):
                 return await ctx.send(
                     embed=self.warning_embed(
                         "Use `?queue loop`, `?queue loop on`, or `?queue loop off`.",
-                        title="Invalid Usage"
+                        title="Invalid Usage",
                     )
                 )
 
         await ctx.send(
             embed=self.info_embed(
                 f"Queue loop is now **{'ON' if state.queue_loop else 'OFF'}**.",
-                title="Queue Loop Updated"
+                title="Queue Loop Updated",
             )
         )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# SHUFFLE
-########################################################################################################################
+    ########################################################################################################################
+    # SHUFFLE
+    ########################################################################################################################
 
     @commands.hybrid_command(name="shuffle", description="Shuffles the current queue.")
     async def shuffle(self, ctx: commands.Context):
@@ -1938,8 +1923,10 @@ class Music(commands.Cog):
 
         if len(state.song_queue) < 2:
             return await ctx.send(
-                embed=self.warning_embed("You need at least 2 songs in the queue to shuffle it.",
-                                         title="Not Enough Songs")
+                embed=self.warning_embed(
+                    "You need at least 2 songs in the queue to shuffle it.",
+                    title="Not Enough Songs",
+                )
             )
 
         random.shuffle(state.song_queue)
@@ -1949,9 +1936,9 @@ class Music(commands.Cog):
         )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# JOIN
-########################################################################################################################
+    ########################################################################################################################
+    # JOIN
+    ########################################################################################################################
 
     @commands.hybrid_command(name="join", description="Joins your current voice channel.")
     async def join(self, ctx: commands.Context):
@@ -1963,22 +1950,28 @@ class Music(commands.Cog):
         if ctx.voice_client:
             if ctx.voice_client.channel == ctx.author.voice.channel:
                 return await ctx.send(
-                    embed=self.info_embed("I'm already in your voice channel.", title="Already Connected")
+                    embed=self.info_embed(
+                        "I'm already in your voice channel.", title="Already Connected"
+                    )
                 )
 
             await ctx.voice_client.move_to(ctx.author.voice.channel)
             return await ctx.send(
-                embed=self.success_embed(f"Moved to **{ctx.author.voice.channel}**.", title="Voice Connected")
+                embed=self.success_embed(
+                    f"Moved to **{ctx.author.voice.channel}**.", title="Voice Connected"
+                )
             )
 
         await ctx.author.voice.channel.connect()
         await ctx.send(
-            embed=self.success_embed(f"Joined **{ctx.author.voice.channel}**.", title="Voice Connected")
+            embed=self.success_embed(
+                f"Joined **{ctx.author.voice.channel}**.", title="Voice Connected"
+            )
         )
 
-########################################################################################################################
-# LEAVE
-########################################################################################################################
+    ########################################################################################################################
+    # LEAVE
+    ########################################################################################################################
 
     @commands.hybrid_command(name="leave", description="Stops playback and disconnects from voice.")
     async def leave(self, ctx: commands.Context):
@@ -1994,11 +1987,13 @@ class Music(commands.Cog):
 
         await self.reset_state(ctx.guild.id, clear_queue=True)
         await ctx.voice_client.disconnect()
-        await ctx.send(embed=self.info_embed("Disconnected from the voice channel.", title="Disconnected"))
+        await ctx.send(
+            embed=self.info_embed("Disconnected from the voice channel.", title="Disconnected")
+        )
 
-########################################################################################################################
-# LOOP
-########################################################################################################################
+    ########################################################################################################################
+    # LOOP
+    ########################################################################################################################
 
     @commands.hybrid_command(name="loop", description="Toggles looping for the current song.")
     async def loop(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -2013,21 +2008,33 @@ class Music(commands.Cog):
             elif mode in ("off", "false", "no", "0"):
                 state.loop_song = False
             else:
-                return await ctx.send(embed=self.warning_embed("Use `?loop`, `?loop on`, or `?loop off`.", title="Invalid Usage"))
+                return await ctx.send(
+                    embed=self.warning_embed(
+                        "Use `?loop`, `?loop on`, or `?loop off`.", title="Invalid Usage"
+                    )
+                )
 
-        await ctx.send(embed=self.info_embed(f"Loop is now **{'ON' if state.loop_song else 'OFF'}**.", title="Loop Updated"))
+        await ctx.send(
+            embed=self.info_embed(
+                f"Loop is now **{'ON' if state.loop_song else 'OFF'}**.", title="Loop Updated"
+            )
+        )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# VOLUME
-########################################################################################################################
+    ########################################################################################################################
+    # VOLUME
+    ########################################################################################################################
 
     @commands.hybrid_command(name="volume", description="Sets playback volume.")
     async def volume(self, ctx: commands.Context, volume: int):
         state = self.get_state(ctx.guild.id)
 
         if volume < 0 or volume > 200:
-            return await ctx.send(embed=self.warning_embed("Volume must be between `0` and `200`.", title="Invalid Volume"))
+            return await ctx.send(
+                embed=self.warning_embed(
+                    "Volume must be between `0` and `200`.", title="Invalid Volume"
+                )
+            )
 
         state.current_volume = volume / 100
 
@@ -2036,18 +2043,19 @@ class Music(commands.Cog):
                 ctx.voice_client.source.volume = state.current_volume
             else:
                 ctx.voice_client.source = discord.PCMVolumeTransformer(
-                    ctx.voice_client.source,
-                    volume=state.current_volume
+                    ctx.voice_client.source, volume=state.current_volume
                 )
 
-            await ctx.send(embed=self.success_embed(f"Volume set to {volume}%.", title="Volume Updated"))
+            await ctx.send(
+                embed=self.success_embed(f"Volume set to {volume}%.", title="Volume Updated")
+            )
             await self.update_now_playing_embed(ctx.guild.id)
         else:
             await ctx.send(embed=self.warning_embed("No song is playing!", title="Nothing Playing"))
 
-########################################################################################################################
-# SLOWED
-########################################################################################################################
+    ########################################################################################################################
+    # SLOWED
+    ########################################################################################################################
 
     @commands.hybrid_command(name="slowed", description="Toggles slowed mode.")
     async def slowed(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -2064,8 +2072,7 @@ class Music(commands.Cog):
             else:
                 return await ctx.send(
                     embed=self.warning_embed(
-                        "Use `?slowed`, `?slowed on`, or `?slowed off`.",
-                        title="Invalid Usage"
+                        "Use `?slowed`, `?slowed on`, or `?slowed off`.", title="Invalid Usage"
                     )
                 )
 
@@ -2077,22 +2084,21 @@ class Music(commands.Cog):
             if not ok:
                 return await ctx.send(
                     embed=self.error_embed(
-                        error or "Couldn't apply slowed mode.",
-                        title="Mode Change Failed"
+                        error or "Couldn't apply slowed mode.", title="Mode Change Failed"
                     )
                 )
 
         await ctx.send(
             embed=self.info_embed(
                 f"Slowed mode is now **{'ON' if state.slowed_mode else 'OFF'}**.",
-                title="Mode Updated"
+                title="Mode Updated",
             )
         )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# SPED
-########################################################################################################################
+    ########################################################################################################################
+    # SPED
+    ########################################################################################################################
 
     @commands.hybrid_command(name="sped", description="Toggles sped mode.")
     async def sped(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -2109,8 +2115,7 @@ class Music(commands.Cog):
             else:
                 return await ctx.send(
                     embed=self.warning_embed(
-                        "Use `?sped`, `?sped on`, or `?sped off`.",
-                        title="Invalid Usage"
+                        "Use `?sped`, `?sped on`, or `?sped off`.", title="Invalid Usage"
                     )
                 )
 
@@ -2122,22 +2127,20 @@ class Music(commands.Cog):
             if not ok:
                 return await ctx.send(
                     embed=self.error_embed(
-                        error or "Couldn't apply sped mode.",
-                        title="Mode Change Failed"
+                        error or "Couldn't apply sped mode.", title="Mode Change Failed"
                     )
                 )
 
         await ctx.send(
             embed=self.info_embed(
-                f"Sped mode is now **{'ON' if state.sped_mode else 'OFF'}**.",
-                title="Mode Updated"
+                f"Sped mode is now **{'ON' if state.sped_mode else 'OFF'}**.", title="Mode Updated"
             )
         )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# BASSBOOST
-########################################################################################################################
+    ########################################################################################################################
+    # BASSBOOST
+    ########################################################################################################################
 
     @commands.hybrid_command(name="bassboost", description="Toggles bassboost mode.")
     async def bassboost(self, ctx: commands.Context, mode: Optional[str] = None):
@@ -2155,7 +2158,7 @@ class Music(commands.Cog):
                 return await ctx.send(
                     embed=self.warning_embed(
                         "Use `?bassboost`, `?bassboost on`, or `?bassboost off`.",
-                        title="Invalid Usage"
+                        title="Invalid Usage",
                     )
                 )
 
@@ -2164,38 +2167,43 @@ class Music(commands.Cog):
             if not ok:
                 return await ctx.send(
                     embed=self.error_embed(
-                        error or "Couldn't apply bassboost mode.",
-                        title="Mode Change Failed"
+                        error or "Couldn't apply bassboost mode.", title="Mode Change Failed"
                     )
                 )
 
         await ctx.send(
             embed=self.info_embed(
                 f"BassBoost mode is now **{'ON' if state.bassboost_mode else 'OFF'}**.",
-                title="Mode Updated"
+                title="Mode Updated",
             )
         )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# CLEAR
-########################################################################################################################
+    ########################################################################################################################
+    # CLEAR
+    ########################################################################################################################
 
     @commands.hybrid_command(name="clear", description="Clears the queue.")
     async def clear(self, ctx: commands.Context):
         state = self.get_state(ctx.guild.id)
 
         if not state.song_queue:
-            return await ctx.send(embed=self.warning_embed("Queue is already empty!", title="Empty Queue"))
+            return await ctx.send(
+                embed=self.warning_embed("Queue is already empty!", title="Empty Queue")
+            )
 
         cleared = len(state.song_queue)
         state.song_queue.clear()
-        await ctx.send(embed=self.info_embed(f"Cleared **{cleared}** song(s) from the queue.", title="Queue Cleared"))
+        await ctx.send(
+            embed=self.info_embed(
+                f"Cleared **{cleared}** song(s) from the queue.", title="Queue Cleared"
+            )
+        )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# REMOVE
-########################################################################################################################
+    ########################################################################################################################
+    # REMOVE
+    ########################################################################################################################
 
     @commands.hybrid_command(name="remove", description="Removes a song from the queue.")
     async def remove(self, ctx: commands.Context, position: int):
@@ -2205,15 +2213,24 @@ class Music(commands.Cog):
             return await ctx.send(embed=self.warning_embed("Queue is empty!", title="Empty Queue"))
 
         if position < 1 or position > len(state.song_queue):
-            return await ctx.send(embed=self.warning_embed(f"Choose a number between `1` and `{len(state.song_queue)}`.", title="Invalid Queue Position"))
+            return await ctx.send(
+                embed=self.warning_embed(
+                    f"Choose a number between `1` and `{len(state.song_queue)}`.",
+                    title="Invalid Queue Position",
+                )
+            )
 
         removed_song = state.song_queue.pop(position - 1)
-        await ctx.send(embed=self.info_embed(f"Removed **{removed_song['title']}** from the queue.", title="Removed"))
+        await ctx.send(
+            embed=self.info_embed(
+                f"Removed **{removed_song['title']}** from the queue.", title="Removed"
+            )
+        )
         await self.update_now_playing_embed(ctx.guild.id)
 
-########################################################################################################################
-# LYRICS
-########################################################################################################################
+    ########################################################################################################################
+    # LYRICS
+    ########################################################################################################################
 
     @commands.hybrid_command(name="lyrics", description="Shows lyrics for the current track.")
     async def lyrics(self, ctx: commands.Context):
@@ -2225,26 +2242,27 @@ class Music(commands.Cog):
         if state.current_song is None:
             return await ctx.send(
                 embed=self.warning_embed("Nothing is playing!", title="Lyrics Unavailable"),
-                ephemeral=True
+                ephemeral=True,
             )
 
         data = await self.fetch_lyrics_data(state.current_song)
         if data is None:
             return await ctx.send(
                 embed=self.warning_embed(
-                    "Couldn't find lyrics for the current track.",
-                    title="Lyrics Not Found"
+                    "Couldn't find lyrics for the current track.", title="Lyrics Not Found"
                 ),
-                ephemeral=True
+                ephemeral=True,
             )
 
         await ctx.send(embed=self.build_lyrics_embed(data), ephemeral=True)
 
-########################################################################################################################
-# ADD
-########################################################################################################################
+    ########################################################################################################################
+    # ADD
+    ########################################################################################################################
 
-    @commands.hybrid_command(name="add", description="Adds a song to the queue without replacing /play.")
+    @commands.hybrid_command(
+        name="add", description="Adds a song to the queue without replacing /play."
+    )
     async def add(self, ctx: commands.Context, *, query: str):
         if ctx.interaction:
             await ctx.defer()
@@ -2260,7 +2278,7 @@ class Music(commands.Cog):
             return await ctx.send(
                 embed=self.warning_embed(
                     f"I'm already being used in **{ctx.voice_client.channel}**.",
-                    title="Bot Is Busy"
+                    title="Bot Is Busy",
                 )
             )
 
@@ -2273,8 +2291,7 @@ class Music(commands.Cog):
         except Exception as e:
             return await ctx.send(
                 embed=self.error_embed(
-                    f"Couldn't load this track:\n```py\n{e}\n```",
-                    title="Track Load Failed"
+                    f"Couldn't load this track:\n```py\n{e}\n```", title="Track Load Failed"
                 )
             )
 
@@ -2286,7 +2303,7 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=self.success_embed(
                     f"Added to queue and starting playback: **[{queue_song['title']}]({queue_song['webpage_url']})**",
-                    title="Queued"
+                    title="Queued",
                 )
             )
             await self.play_next(ctx)
@@ -2294,10 +2311,11 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=self.success_embed(
                     f"Added to queue: **[{queue_song['title']}]({queue_song['webpage_url']})**",
-                    title="Queued"
+                    title="Queued",
                 )
             )
             await self.update_now_playing_embed(ctx.guild.id)
+
 
 async def setup(bot):
     await bot.add_cog(Music(bot))

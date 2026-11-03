@@ -56,7 +56,7 @@ from utils.hoyolab.database import (
     get_account,
     get_account_count,
     get_accounts,
-    get_character_plans,
+    get_character_plan_snapshot,
     get_custom_event,
     get_custom_event_account_progress,
     get_custom_event_completions,
@@ -71,8 +71,10 @@ from utils.hoyolab.database import (
     get_visible_custom_event,
     get_wish_history,
     import_wish_history,
+    recover_character_plans,
     reorder_custom_events,
     replace_character_plans,
+    reserve_gift_code_redemption,
     save_account,
     set_custom_event_completion,
     set_daily_checkin_enabled,
@@ -1052,13 +1054,15 @@ async def redeem_genshin_code(
 
     normalised_code = code.strip().upper()
 
-    # Save the attempt before contacting HoYoLAB.
-    await update_gift_code_redemption(
-        account_id=account_id,
-        code=normalised_code,
-        status="processing",
-        message="Redemption request in progress.",
-    )
+    if not await reserve_gift_code_redemption(account_id, normalised_code, automatic=False):
+        return JSONResponse(
+            status_code=409,
+            content={
+                "success": False,
+                "code": normalised_code,
+                "message": "This code has already been submitted or a redemption is in progress for this UID.",
+            },
+        )
 
     try:
         async with client:
@@ -1066,6 +1070,7 @@ async def redeem_genshin_code(
 
         await update_gift_code_redemption(
             account_id=account_id,
+            genshin_uid=account["genshin_uid"],
             code=normalised_code,
             status="submitted",
             message="The redemption request completed successfully.",
@@ -1093,6 +1098,7 @@ async def redeem_genshin_code(
 
         await update_gift_code_redemption(
             account_id=account_id,
+            genshin_uid=account["genshin_uid"],
             code=normalised_code,
             status="failed",
             message=message,
@@ -1895,41 +1901,6 @@ async def get_single_account_events(
             # ACTIVITY CHECKMARKS
             # =========================================
 
-            daily_period_key, weekly_period_key = get_event_activity_period_keys(
-                account["genshin_server"]
-            )
-
-            activity_checks = await get_event_activity_checks(
-                user_id,
-                account["genshin_uid"],
-                daily_period_key,
-                weekly_period_key,
-            )
-
-            temper_thyself["checked"] = bool(activity_checks.get("temper_thyself"))
-
-            daily_data["manual_checked"] = activity_checks["daily_commissions"]
-
-            trounce_data["manual_checked"] = activity_checks["trounce_domains"]
-
-            daily_automatic_checked = (
-                daily_data["completed"] >= daily_data["total"] and daily_data["claimed_reward"]
-            )
-
-            trounce_automatic_checked = trounce_data["remaining"] <= 0
-
-            daily_data["checked"] = (
-                daily_automatic_checked
-                if daily_data["manual_checked"] is None
-                else daily_data["manual_checked"]
-            )
-
-            trounce_data["checked"] = (
-                trounce_automatic_checked
-                if trounce_data["manual_checked"] is None
-                else trounce_data["manual_checked"]
-            )
-
             # =========================================
             # SPIRAL ABYSS
             # =========================================
@@ -2062,6 +2033,27 @@ async def get_single_account_events(
         print(f"Type: {type(error).__name__}")
         print(f"Error: {error}")
         print("================================")
+
+    # Saved checks remain available even when HoYoLAB is unavailable.
+    daily_key, weekly_key = get_event_activity_period_keys(account["genshin_server"])
+    checks = await get_event_activity_checks(user_id, account["genshin_uid"], daily_key, weekly_key)
+    temper_thyself["checked"] = bool(checks.get("temper_thyself"))
+    for activity, state, automatic in (
+        (
+            "daily_commissions",
+            daily_data,
+            daily_data["has_data"]
+            and daily_data["completed"] >= daily_data["total"]
+            and daily_data["claimed_reward"],
+        ),
+        (
+            "trounce_domains",
+            trounce_data,
+            trounce_data["has_data"] and trounce_data["remaining"] <= 0,
+        ),
+    ):
+        state["manual_checked"] = checks.get(activity)
+        state["checked"] = automatic if state["manual_checked"] is None else state["manual_checked"]
 
     if limited_events:
         annotate_daily_events(limited_events, get_daily_reset_timestamp(account["genshin_server"]))
@@ -2464,16 +2456,9 @@ async def update_event_activity_check(
     # INVALIDATE EVENTS CACHE
     # =========================================
 
-    for include_featured in (True, False):
-        _events_cache.pop(
-            (
-                user_id,
-                account["id"],
-                account["genshin_uid"],
-                include_featured,
-            ),
-            None,
-        )
+    for key in list(_events_cache):
+        if key[2] == account["genshin_uid"]:
+            _events_cache.pop(key, None)
 
     return JSONResponse(
         {
@@ -3421,7 +3406,7 @@ async def character_plans_data(
     if account_id is None or await _get_planner_account(session.user_id, account_id) is None:
         return JSONResponse(status_code=404, content={"error": "Account not found."})
 
-    return {"plans": await get_character_plans(session.user_id, account_id)}
+    return await get_character_plan_snapshot(session.user_id, account_id)
 
 
 @app.put("/api/characters/plans")
@@ -3454,6 +3439,8 @@ async def save_character_plans(
     if len(character_ids) != len(set(character_ids)):
         return JSONResponse(status_code=400, content={"error": "Duplicate planner entry."})
 
+    if payload.get("recover_if_missing") is True:
+        return await recover_character_plans(session.user_id, account_id, plans)
     await replace_character_plans(session.user_id, account_id, plans)
     return {"saved": len(plans)}
 
@@ -3693,7 +3680,13 @@ async def api_get_custom_events(
             objectives = event.get("progress") or []
 
             for index, objective in enumerate(objectives):
-                objective["current"] = account_progress.get(index, 0)
+                objective["current"] = max(
+                    0,
+                    min(
+                        int(objective["target"]),
+                        int(account_progress.get(index, objective.get("current", 0))),
+                    ),
+                )
 
         event["completions"] = await get_custom_event_completions(
             discord_user_id=user_id,

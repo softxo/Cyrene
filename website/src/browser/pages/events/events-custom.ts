@@ -106,7 +106,8 @@ function initCustomEvents() {
     });
 
     let events = [];
-    let eventsByAccount = new Map();
+    const accountLoadErrors = new Map();
+    const eventsByAccount = new Map();
     let loading = false;
     let draggingEventId = null;
     let savingOrder = false;
@@ -2113,6 +2114,21 @@ function initCustomEvents() {
             const listEvents = isOverview ? eventsByAccount.get(String(accountId)) || [] : events;
 
             if (isOverview) {
+                if (accountLoadErrors.has(String(accountId))) {
+                    const count = list
+                        .closest("[data-custom-account-group]")
+                        ?.querySelector("[data-custom-account-count]");
+                    if (count) {
+                        count.textContent = "Unavailable";
+                        count.classList.remove("event-completion-pill");
+                    }
+                    renderEmpty(
+                        list,
+                        "Couldn't Load Custom Events",
+                        accountLoadErrors.get(String(accountId)),
+                    );
+                    return;
+                }
                 const completedCount = listEvents.filter(isEventCompleted).length;
                 const count = list
                     .closest("[data-custom-account-group]")
@@ -2169,7 +2185,7 @@ function initCustomEvents() {
                     (list) => list.dataset.accountId,
                 );
 
-                const accountResults = await Promise.all(
+                const accountResults = await Promise.allSettled(
                     lists.map(async (list) => {
                         const accountId = list.dataset.accountId;
 
@@ -2187,7 +2203,23 @@ function initCustomEvents() {
                     }),
                 );
 
-                eventsByAccount = new Map(accountResults);
+                accountLoadErrors.clear();
+                accountResults.forEach((result, index) => {
+                    const accountId = String(lists[index].dataset.accountId);
+                    if (result.status === "fulfilled") {
+                        eventsByAccount.set(...result.value);
+                    } else {
+                        accountLoadErrors.set(
+                            accountId,
+                            result.reason?.message || "Unable to load this account's events.",
+                        );
+                        console.error(
+                            "Failed to load Custom Events for account",
+                            accountId,
+                            result.reason,
+                        );
+                    }
+                });
             } else {
                 const params = new URLSearchParams();
                 const accountId = page.dataset.accountId;

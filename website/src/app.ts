@@ -82,7 +82,7 @@ initialiseSiteUpdates();
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
-    "/": "/static/build/browser/pages/home.js?v=20",
+    "/": "/static/build/browser/pages/home.js?v=25",
     "/weapons": [
         "/static/build/browser/pages/events/events-rewards.js?v=4",
         "/static/build/browser/pages/weapons.js?v=17",
@@ -92,7 +92,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-filters.js",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
         "/static/build/browser/pages/characters/characters-showcase.js?v=8",
-        "/static/build/browser/pages/characters/characters-planner.js?v=10",
+        "/static/build/browser/pages/characters/characters-planner.js?v=12",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js?v=3",
@@ -110,7 +110,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-timers.js?v=6",
         "/static/build/browser/pages/events/events-activity.js?v=10",
         "/static/build/browser/pages/events/events-refresh.js?v=8",
-        "/static/build/browser/pages/events/events-custom.js?v=8",
+        "/static/build/browser/pages/events/events-custom.js?v=9",
         "/static/build/browser/pages/events/events.js",
     ],
 
@@ -119,7 +119,7 @@ const pageScripts: Record<string, string | string[]> = {
 
 const pageStyles: Record<string, string> = {
     "/weapons": "/static/build/css/weapons.css?v=23",
-    "/": "/static/build/css/home.css?v=35",
+    "/": "/static/build/css/home.css?v=40",
     "/achievements": "/static/build/css/achievements.css?v=7",
     "/wishes": "/static/build/css/wishes.css?v=14",
     "/characters": "/static/build/css/characters.css?v=41",
@@ -127,7 +127,7 @@ const pageStyles: Record<string, string> = {
     "/planner": "/static/build/css/planner.css?v=7",
     "/verify": "/static/build/css/verification.css?v=14",
     "/codes": "/static/build/css/codes.css?v=7",
-    "/events": "/static/build/css/events.css?v=47",
+    "/events": "/static/build/css/events.css?v=48",
     "/settings": "/static/build/css/settings.css?v=8",
 };
 

@@ -11,9 +11,7 @@ from utils.constants.colours import RARITY_COLOURS
 
 artifacts = load_artifacts()
 
-artifact_autocomplete = create_artifact_autocomplete(
-    artifacts
-)
+artifact_autocomplete = create_artifact_autocomplete(artifacts)
 
 
 class Artifact(commands.Cog):
@@ -21,18 +19,12 @@ class Artifact(commands.Cog):
         self.bot = bot
         self.artifacts = artifacts
 
-        self.artifact_data_path = Path(
-            "data/artifacts"
-        )
+        self.artifact_data_path = Path("data/artifacts")
 
         self.artifact_rarities = {}
 
         for rarity in (3, 4, 5):
-            path = (
-
-                self.artifact_data_path
-                / f"{rarity}_star.json"
-            )
+            path = self.artifact_data_path / f"{rarity}_star.json"
 
             with path.open("r", encoding="utf-8") as file:
                 data = json.load(file)
@@ -43,13 +35,9 @@ class Artifact(commands.Cog):
                 if icon:
                     self.artifact_rarities[icon] = rarity
 
-        self.set_images = Path(
-            "assets/artifacts/sets"
-        )
+        self.set_images = Path("assets/artifacts/sets")
 
-        self.artifact_images = Path(
-            "assets/artifacts"
-        )
+        self.artifact_images = Path("assets/artifacts")
 
     async def create_embed(self, artifact_name: str):
         selected = next(
@@ -58,11 +46,10 @@ class Artifact(commands.Cog):
                 for artifact_id, artifact in self.artifacts.items()
                 if (
                     artifact.get("type") == "artifact_set"
-                    and artifact.get("name", "").lower()
-                    == artifact_name.lower()
+                    and artifact.get("name", "").lower() == artifact_name.lower()
                 )
             ),
-            None
+            None,
         )
 
         if selected is None:
@@ -77,155 +64,79 @@ class Artifact(commands.Cog):
         thumbnail_path = None
 
         if rarity is not None:
-            thumbnail_path = (
-                    self.artifact_images
-                    / f"{rarity}_star"
-                    / f"{icon_name}.webp"
-            )
+            thumbnail_path = self.artifact_images / f"{rarity}_star" / f"{icon_name}.webp"
 
-        embed = discord.Embed(
-            title=artifact["name"],
-            color=RARITY_COLOURS.get(rarity, 0x000000)
-        )
+        embed = discord.Embed(title=artifact["name"], colour=RARITY_COLOURS.get(rarity, 0x000000))
+
+        embed.add_field(name="Rarity", value="★" * rarity + "\n\u200b", inline=True)
 
         embed.add_field(
-            name="Rarity",
-            value="★" * rarity + "\n\u200b",
-            inline=True
+            name="Abbreviations", value=", ".join(artifact.get("alias", [])) or "None", inline=True
         )
 
-        embed.add_field(
-            name="Abbreviations",
-            value=", ".join(artifact.get("alias", [])) or "None",
-            inline=True
-        )
+        embed.add_field(name="2-Piece", value=artifact["bonus_2pc"] + "\n\u200b", inline=False)
 
-        embed.add_field(
-            name="2-Piece",
-            value=artifact["bonus_2pc"] + "\n\u200b",
-            inline=False
-        )
+        embed.add_field(name="4-Piece", value=artifact["bonus_4pc"], inline=False)
 
-        embed.add_field(
-            name="4-Piece",
-            value=artifact["bonus_4pc"],
-            inline=False
-        )
-
-        image_path = (
-                self.set_images
-                / f"{icon_name}_Set.png"
-        )
+        image_path = self.set_images / f"{icon_name}_Set.png"
 
         return embed, thumbnail_path, image_path
 
-    @app_commands.command(
-        name="artifact",
-        description="Shows an artifact set and its bonuses."
-    )
-    @app_commands.describe(
-        artifact="The artifact set to display."
-    )
-    @app_commands.autocomplete(
-        artifact=artifact_autocomplete
-    )
-    async def artifact(
-        self,
-        interaction: discord.Interaction,
-        artifact: str
-    ):
-        embed, thumbnail_path, image_path = (
-            await self.create_embed(artifact)
-        )
+    @app_commands.command(name="artifact", description="Shows an artifact set and its bonuses.")
+    @app_commands.describe(artifact="The artifact set to display.")
+    @app_commands.autocomplete(artifact=artifact_autocomplete)
+    async def artifact(self, interaction: discord.Interaction, artifact: str):
+        embed, thumbnail_path, image_path = await self.create_embed(artifact)
 
         if embed is None:
             await interaction.response.send_message(
-                f"Artifact set `{artifact}` was not found.",
-                ephemeral=True
+                f"Artifact set `{artifact}` was not found.", ephemeral=True
             )
             return
 
         files = []
 
         if thumbnail_path and thumbnail_path.exists():
-            thumbnail_file = discord.File(
-                thumbnail_path,
-                filename=thumbnail_path.name
-            )
+            thumbnail_file = discord.File(thumbnail_path, filename=thumbnail_path.name)
 
-            embed.set_thumbnail(
-                url=f"attachment://{thumbnail_path.name}"
-            )
+            embed.set_thumbnail(url=f"attachment://{thumbnail_path.name}")
 
             files.append(thumbnail_file)
 
         if image_path.exists():
-            image_file = discord.File(
-                image_path,
-                filename=image_path.name
-            )
+            image_file = discord.File(image_path, filename=image_path.name)
 
-            embed.set_image(
-                url=f"attachment://{image_path.name}"
-            )
+            embed.set_image(url=f"attachment://{image_path.name}")
 
             files.append(image_file)
 
-        await interaction.response.send_message(
-            embed=embed,
-            files=files
-        )
+        await interaction.response.send_message(embed=embed, files=files)
 
-    @commands.command(
-        name="artifact",
-        aliases=["a"]
-    )
-    async def artifact_prefix(
-        self,
-        ctx: commands.Context,
-        *,
-        artifact: str
-    ):
-        embed, thumbnail_path, image_path = (
-            await self.create_embed(artifact)
-        )
+    @commands.command(name="artifact", aliases=["a"])
+    async def artifact_prefix(self, ctx: commands.Context, *, artifact: str):
+        embed, thumbnail_path, image_path = await self.create_embed(artifact)
 
         if embed is None:
-            await ctx.send(
-                f"Artifact set `{artifact}` was not found."
-            )
+            await ctx.send(f"Artifact set `{artifact}` was not found.")
             return
 
         files = []
 
         if thumbnail_path and thumbnail_path.exists():
-            thumbnail_file = discord.File(
-                thumbnail_path,
-                filename=thumbnail_path.name
-            )
+            thumbnail_file = discord.File(thumbnail_path, filename=thumbnail_path.name)
 
-            embed.set_thumbnail(
-                url=f"attachment://{thumbnail_path.name}"
-            )
+            embed.set_thumbnail(url=f"attachment://{thumbnail_path.name}")
 
             files.append(thumbnail_file)
 
         if image_path.exists():
-            image_file = discord.File(
-                image_path,
-                filename=image_path.name
-            )
+            image_file = discord.File(image_path, filename=image_path.name)
 
-            embed.set_image(
-                url=f"attachment://{image_path.name}"
-            )
+            embed.set_image(url=f"attachment://{image_path.name}")
 
             files.append(image_file)
 
-        await ctx.send(
-            embed=embed,
-            files=files
-        )
+        await ctx.send(embed=embed, files=files)
 
 
 async def setup(bot):

@@ -45,11 +45,11 @@ function initCodes() {
             const isOpen = accountDropdown.classList.toggle("open");
             accountButton.setAttribute("aria-expanded", String(isOpen));
         });
-        accountMenu.querySelectorAll(".custom-select-option").forEach(option => {
+        accountMenu.querySelectorAll(".custom-select-option").forEach((option) => {
             option.addEventListener("click", () => {
                 accountSelect.value = option.dataset.value;
                 accountLabel.textContent = option.dataset.label;
-                accountMenu.querySelectorAll(".custom-select-option").forEach(item => {
+                accountMenu.querySelectorAll(".custom-select-option").forEach((item) => {
                     const selected = item === option;
                     item.classList.toggle("selected", selected);
                     item.setAttribute("aria-selected", String(selected));
@@ -60,13 +60,13 @@ function initCodes() {
                 fetchCodes();
             });
         });
-        document.addEventListener("click", event => {
+        document.addEventListener("click", (event) => {
             if (!accountDropdown.contains(event.target)) {
                 accountDropdown.classList.remove("open");
                 accountButton.setAttribute("aria-expanded", "false");
             }
         });
-        document.addEventListener("keydown", event => {
+        document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 accountDropdown.classList.remove("open");
                 accountButton.setAttribute("aria-expanded", "false");
@@ -119,9 +119,7 @@ function initCodes() {
             if (!response.ok) {
                 throw new Error(data.detail || "Unable to load gift codes.");
             }
-            availableCodes = Array.isArray(data.codes)
-                ? data.codes
-                : [];
+            availableCodes = Array.isArray(data.codes) ? data.codes : [];
             autoClaimEnabled = data.auto_claim_enabled === true;
             autoCheckinEnabled = data.auto_checkin_enabled === true;
             if (autoCheckinToggle) {
@@ -150,13 +148,11 @@ function initCodes() {
             return;
         }
         if (autoClaimEnabled) {
-            autoClaimStatus.textContent =
-                "Automatic claiming is enabled for this account.";
+            autoClaimStatus.textContent = "Automatic claiming is enabled for this account.";
             autoClaimStatus.dataset.state = "enabled";
         }
         else {
-            autoClaimStatus.textContent =
-                "Automatic claiming is disabled for this account.";
+            autoClaimStatus.textContent = "Automatic claiming is disabled for this account.";
             autoClaimStatus.dataset.state = "disabled";
         }
     }
@@ -165,11 +161,10 @@ function initCodes() {
             return;
         }
         if (autoCheckinEnabled) {
-            if (data.checkin_last_status === "claimed"
-                || data.checkin_last_status === "already_claimed") {
+            if (data.checkin_last_status === "claimed" ||
+                data.checkin_last_status === "already_claimed") {
                 autoCheckinStatus.textContent =
-                    data.checkin_last_message
-                        || "Today's daily check-in has been completed.";
+                    data.checkin_last_message || "Today's daily check-in has been completed.";
             }
             else {
                 autoCheckinStatus.textContent =
@@ -241,8 +236,7 @@ function initCodes() {
         }
         autoCheckinToggle.disabled = true;
         if (autoCheckinStatus) {
-            autoCheckinStatus.textContent =
-                "Saving daily check-in setting…";
+            autoCheckinStatus.textContent = "Saving daily check-in setting…";
             autoCheckinStatus.dataset.state = "saving";
         }
         try {
@@ -273,12 +267,10 @@ function initCodes() {
                 autoCheckinToggle.checked = autoCheckinEnabled;
                 if (autoCheckinStatus) {
                     autoCheckinStatus.textContent =
-                        error.message
-                            || "Unable to save daily check-in setting.";
+                        error.message || "Unable to save daily check-in setting.";
                     autoCheckinStatus.dataset.state = "error";
                 }
-                showStatus(error.message
-                    || "Unable to save daily check-in setting.", "error");
+                showStatus(error.message || "Unable to save daily check-in setting.", "error");
             }
         }
         finally {
@@ -307,10 +299,8 @@ function initCodes() {
             };
             const claimButton = createElement("button", "cyrene-button codes-claim-button", buttonLabel[savedStatus] || "Claim");
             claimButton.type = "button";
-            claimButton.disabled =
-                !accountSelect?.value || accountSelect.disabled;
-            if (savedStatus === "submitted"
-                || savedStatus === "processing") {
+            claimButton.disabled = !accountSelect?.value || accountSelect.disabled;
+            if (savedStatus === "submitted" || savedStatus === "processing") {
                 claimButton.disabled = true;
             }
             claimButton.addEventListener("click", () => {
@@ -350,7 +340,7 @@ function initCodes() {
             showStatus(`${code}: ${data.message || "Redemption request completed."}`, "success");
             button.textContent = "Submitted";
             button.disabled = true;
-            const item = availableCodes.find(entry => entry.code === code);
+            const item = availableCodes.find((entry) => entry.code === code);
             if (item) {
                 item.redemption_status = "submitted";
                 item.redemption_message = data.message;

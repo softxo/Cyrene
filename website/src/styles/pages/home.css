@@ -609,7 +609,7 @@
     left: 0;
     z-index: 5;
     width: min(320px, calc(100vw - 72px));
-    padding: 14px;
+    padding: 10px;
     border: 1px solid var(--accent-border);
     border-radius: 15px;
     background: var(--surface-raised);
@@ -1423,4 +1423,402 @@
 }
 .changelog-format-toolbar button {
     padding: 7px 10px;
+}
+
+/* Compact formatting controls and anchored editor pop-ups. */
+.changelog-format-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    margin-top: 10px;
+    overflow: visible;
+}
+.changelog-format-buttons {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.changelog-format-toolbar .changelog-format-button {
+    --button-padding: 0;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    padding: 0;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 1;
+    color: var(--text);
+}
+.changelog-format-button strong {
+    font-weight: 800;
+}
+.changelog-format-button em {
+    font-family: Georgia, serif;
+    font-style: italic;
+}
+.changelog-format-button u {
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1.5px;
+}
+.changelog-format-button svg {
+    width: 20px;
+    height: 20px;
+}
+.changelog-format-button[aria-pressed="true"],
+.changelog-format-button[aria-expanded="true"] {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+.changelog-colour-letter {
+    font-weight: 750;
+    background: conic-gradient(from 20deg, #a89aff, #ff8fac, #ffd38b, #7cd8b4, #8ac9ff, #a89aff);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.changelog-opacity-letter {
+    opacity: 0.6;
+}
+.changelog-format-popover {
+    position: absolute;
+    z-index: 12;
+    width: min(360px, 100%);
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+    box-shadow: 0 12px 35px rgb(0 0 0 / 0.35);
+    display: grid;
+    gap: 6px;
+    max-height: min(380px, 65vh);
+    overflow-y: auto;
+}
+.changelog-format-popover[hidden] {
+    display: none;
+}
+.changelog-format-popover > label,
+.changelog-format-popover .changelog-text-tools > label,
+.changelog-format-popover .changelog-opacity-tools > label {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.changelog-format-toolbar .changelog-format-popover button {
+    min-width: 0;
+    justify-self: start;
+}
+.changelog-format-toolbar .changelog-format-popover .changelog-text-tools {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+}
+.changelog-format-toolbar .changelog-format-popover .changelog-opacity-tools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 46px;
+    gap: 10px;
+    margin: 0;
+}
+.changelog-format-popover .changelog-opacity-tools label {
+    grid-column: 1 / -1;
+}
+.changelog-format-toolbar .changelog-tool-preview {
+    display: block;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-inset);
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.changelog-format-popover .changelog-colour-presets {
+    position: static;
+    max-height: 200px;
+    margin: 0;
+    padding: 10px;
+    overflow-y: auto;
+}
+.changelog-format-popover .changelog-preset-add {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.changelog-format-popover .changelog-preset-add input[type="text"] {
+    width: 92px;
+}
+.changelog-format-popover .changelog-tool-error {
+    margin: 0;
+    color: var(--error);
+    font-size: 12px;
+}
+.changelog-tool-error:empty {
+    display: none;
+}
+.changelog-format-popover input[type="text"],
+.changelog-format-popover input[type="url"],
+.changelog-format-popover textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+.changelog-callout-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.changelog-callout-options [aria-pressed="true"] {
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+}
+.changelog-callout {
+    --callout-rgb: 163 139 250;
+    display: block;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid rgb(var(--callout-rgb) / 0.28);
+    border-left: 3px solid rgb(var(--callout-rgb) / 0.85);
+    background: rgb(var(--callout-rgb) / 0.14);
+    color: var(--text);
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+.changelog-callout--tip {
+    --callout-rgb: 72 199 119;
+}
+.changelog-callout--important {
+    --callout-rgb: 66 169 245;
+}
+.changelog-callout--caution {
+    --callout-rgb: 245 90 102;
+}
+.changelog-callout--warning {
+    --callout-rgb: 232 180 67;
+}
+.changelog-callout-heading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    color: rgb(var(--callout-rgb));
+    font-size: 13px;
+}
+.changelog-callout-heading svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+}
+.changelog-callout-heading strong {
+    font-weight: 750;
+}
+.changelog-callout [data-callout-body] {
+    font-size: 13px;
+    line-height: 1.65;
+}
+.changelog-callout [data-callout-body] p {
+    margin: 0 0 6px;
+}
+.changelog-callout [data-callout-body] p:last-child {
+    margin-bottom: 0;
+}
+.changelog-format-popover .changelog-callout {
+    margin: 0;
+}
+.changelog-content-editor u,
+.changelog-preview u,
+.changelog-entry-content u {
+    text-underline-offset: 3px;
+}
+.changelog-content-editor a,
+.changelog-tool-preview a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+}
+
+.changelog-format-live-preview {
+    flex: 1 1 180px;
+    min-width: 0;
+    height: 32px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+.changelog-format-live-preview > :not([hidden]) {
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.changelog-format-live-preview a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+}
+.changelog-format-live-preview .changelog-callout {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 30px;
+    padding: 2px 7px;
+    border-left-width: 2px;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+.changelog-format-live-preview .changelog-callout-heading {
+    flex: none;
+    gap: 4px;
+    margin: 0;
+    font-size: 11px;
+}
+.changelog-format-live-preview .changelog-callout-heading svg {
+    width: 16px;
+    height: 16px;
+}
+.changelog-format-live-preview [data-callout-body] {
+    min-width: 0;
+    font-size: 12px;
+    overflow: hidden;
+}
+.changelog-format-live-preview [data-callout-body] p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.changelog-format-live-preview [data-callout-body] p:not(:first-child) {
+    display: none;
+}
+.changelog-dialog .changelog-format-popover input:not([type="color"]):not([type="range"]),
+.changelog-dialog .changelog-format-popover textarea {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 7px 9px;
+    min-height: 0;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.changelog-dialog .changelog-format-popover textarea {
+    height: 64px;
+    min-height: 64px;
+    max-height: 180px;
+}
+.changelog-dialog .changelog-format-popover input[type="range"] {
+    max-width: none;
+    margin: 0;
+}
+.changelog-format-popover .cyrene-button--compact {
+    min-height: 28px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+.changelog-callout-options {
+    gap: 4px;
+}
+
+.changelog-entry-content :not(pre) > code,
+.changelog-preview :not(pre) > code,
+.changelog-content-editor > code {
+    padding: 1px 4px;
+    border: 1px solid #2b2d31;
+    border-radius: 3px;
+    background: #111214;
+    color: #dbdee1;
+    font:
+        12px/1.4 Consolas,
+        "Cascadia Code",
+        monospace;
+}
+.changelog-code-block {
+    display: block;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    margin: 4px 0;
+    padding: 2px 4px;
+    overflow-x: auto;
+    border: 1px solid #2b2d31;
+    border-radius: 3px;
+    background: #111214;
+    color: #dbdee1;
+    white-space: pre;
+    font:
+        12px/1.4 Consolas,
+        "Cascadia Code",
+        monospace;
+    tab-size: 4;
+}
+.changelog-code-block code,
+.changelog-preview .changelog-code-block code,
+.changelog-entry-content .changelog-code-block code {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    white-space: pre;
+}
+.changelog-format-live-preview > code {
+    padding: 0;
+    background: none;
+    border: 0;
+    font-family: Consolas, "Cascadia Code", monospace;
+}
+.changelog-dialog .changelog-format-popover .changelog-code-input {
+    height: 96px;
+    min-height: 96px;
+    white-space: pre;
+    font-family: Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+}
+.changelog-format-live-preview {
+    font-size: 14px;
+    font-weight: 550;
+    color: var(--text);
+}
+.changelog-format-popover [data-block-preview] .changelog-callout {
+    margin: 0;
+    padding: 10px 12px;
+}
+.changelog-format-popover [data-block-preview] .changelog-callout-heading {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.changelog-format-popover [data-block-preview] [data-callout-body] {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.changelog-format-popover .changelog-code-preview {
+    width: 100%;
+    min-width: 0;
+    max-height: 180px;
+    margin: 2px 0;
+    overflow: auto;
+    white-space: pre;
+}
+.changelog-code-preview code {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    white-space: pre;
+    overflow-wrap: normal;
+    word-break: normal;
 }

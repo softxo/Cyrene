@@ -97,7 +97,7 @@ class DiscordOAuthTests(unittest.TestCase):
         ]:
             self.assertEqual(oauth.safe_next(destination), "/verify")
 
-    def test_unconfigured_authorization_keeps_button_and_code_visible(self):
+    def test_unconfigured_authorisation_keeps_button_and_code_visible(self):
         with (
             patch.object(oauth, "configuration", return_value=None),
             patch("utils.web.app.get_web_session", AsyncMock(return_value=None)),

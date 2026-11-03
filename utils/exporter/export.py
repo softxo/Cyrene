@@ -8,38 +8,26 @@ from typing import Any
 from utils.exporter.engine import ExportResult
 
 
-def _serialize_value(
+def _serialise_value(
     value: Any,
 ) -> Any:
 
     if is_dataclass(value):
-        return {
-            key: _serialize_value(item)
-            for key, item in asdict(value).items()
-        }
+        return {key: _serialise_value(item) for key, item in asdict(value).items()}
 
     if isinstance(value, list):
-        return [
-            _serialize_value(item)
-            for item in value
-        ]
+        return [_serialise_value(item) for item in value]
 
     if isinstance(value, tuple):
-        return [
-            _serialize_value(item)
-            for item in value
-        ]
+        return [_serialise_value(item) for item in value]
 
     if isinstance(value, dict):
-        return {
-            key: _serialize_value(item)
-            for key, item in value.items()
-        }
+        return {key: _serialise_value(item) for key, item in value.items()}
 
     return value
 
 
-def serialize_export(
+def serialise_export(
     result: ExportResult,
 ) -> dict[str, Any]:
     """
@@ -47,23 +35,17 @@ def serialize_export(
     export JSON structure.
     """
 
-    data = _serialize_value(
-        result.data
-    )
+    data = _serialise_value(result.data)
 
     return {
         "format": "cyrene",
-
         "version": 1,
-
         "exporter": {
             "version": result.exporter_version,
             "game_version": result.game_version,
             "captured_at": result.captured_at,
         },
-
         "data": data,
-
         "errors": result.errors,
     }
 
@@ -73,27 +55,22 @@ def write_export(
     output_file: str | Path,
 ) -> Path:
     """
-    Serialize an export and write it to disk.
+    Serialise an export and write it to disk.
     """
 
-    output_path = Path(
-        output_file
-    )
+    output_path = Path(output_file)
 
     output_path.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    export_data = serialize_export(
-        result
-    )
+    export_data = serialise_export(result)
 
     with output_path.open(
         "w",
         encoding="utf-8",
     ) as file:
-
         json.dump(
             export_data,
             file,

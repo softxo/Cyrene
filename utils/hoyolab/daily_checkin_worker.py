@@ -8,6 +8,7 @@ from .account_client import get_account_client
 from .database import (
     get_daily_checkin_accounts,
     get_daily_checkin_settings,
+    reserve_daily_checkin,
     update_daily_checkin_status,
 )
 
@@ -42,6 +43,9 @@ async def process_daily_checkin_account(
     if settings["last_claimed_date"] == today_key:
         return
 
+    if not await reserve_daily_checkin(account_id, today):
+        return
+
     client = await get_account_client(
         account["discord_user_id"],
         account["genshin_uid"],
@@ -50,6 +54,7 @@ async def process_daily_checkin_account(
     if client is None:
         await update_daily_checkin_status(
             account_id,
+            genshin_uid=account["genshin_uid"],
             status="error",
             message="Could not load the account. Reconnect it and try again.",
         )
@@ -58,9 +63,7 @@ async def process_daily_checkin_account(
     try:
         async with client:
             if client.genshin_client is None:
-                raise RuntimeError(
-                    "The Genshin client was not initialised."
-                )
+                raise RuntimeError("The Genshin client was not initialised.")
 
             reward = await client.genshin_client.claim_daily_reward()
 
@@ -68,48 +71,40 @@ async def process_daily_checkin_account(
         reward_amount = getattr(reward, "amount", None)
 
         if reward_amount is not None:
-            message = (
-                f"Claimed {reward_amount}x {reward_name}."
-            )
+            message = f"Claimed {reward_amount}x {reward_name}."
         else:
             message = f"Daily reward claimed: {reward_name}."
 
         await update_daily_checkin_status(
             account_id,
+            genshin_uid=account["genshin_uid"],
             status="claimed",
             message=message,
             claimed_date=today,
         )
 
-        print(
-            f"[Daily Check-In] Account {account_id}: {message}"
-        )
+        print(f"[Daily Check-In] Account {account_id}: {message}")
 
     except genshin.AlreadyClaimed:
         await update_daily_checkin_status(
             account_id,
+            genshin_uid=account["genshin_uid"],
             status="already_claimed",
             message="Today's HoYoLAB daily reward was already claimed.",
             claimed_date=today,
         )
 
-        print(
-            f"[Daily Check-In] Account {account_id}: "
-            "Today's reward was already claimed."
-        )
+        print(f"[Daily Check-In] Account {account_id}: Today's reward was already claimed.")
 
     except Exception as exc:
-        print(
-            f"[Daily Check-In] Failed for account {account_id}: "
-            f"{type(exc).__name__}: {exc}"
-        )
+        print(f"[Daily Check-In] Failed for account {account_id}: {type(exc).__name__}: {exc}")
 
         await update_daily_checkin_status(
             account_id,
+            genshin_uid=account["genshin_uid"],
             status="error",
             message=(
-                "Unable to claim the daily reward. "
-                "Check the account connection and try again."
+                "Unable to claim the daily reward. Check the account connection and try again."
             ),
         )
 

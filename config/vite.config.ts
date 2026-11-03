@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export default defineConfig({
-    // FastAPI serves /static URLs from website; recognize them without copying.
+    // FastAPI serves /static URLs from website; recognise them without copying.
     publicDir: `${projectRoot}/website`,
     build: {
         copyPublicDir: false,

@@ -1,4 +1,4 @@
-"""Discord identity authorization. Tokens never leave the server."""
+"""Discord identity authorisation. Tokens never leave the server."""
 
 import json
 import os
@@ -107,7 +107,7 @@ async def refresh_profile(user_id):
         return
     try:
         async with get_pool().connection() as connection:
-            # Serialize refresh-token rotation for concurrent visits.
+            # Serialise refresh-token rotation for concurrent visits.
             result = await connection.execute(
                 "SELECT * FROM web_discord_oauth WHERE discord_user_id=%s FOR UPDATE", (user_id,)
             )
