@@ -11,18 +11,14 @@ from utils.exporter.protocol import (
 class AchievementParser:
     """
     Converts achievement data into the exporter's
-    normalized achievement format.
+    normalised achievement format.
     """
 
     def __init__(
         self,
         mapper: AchievementMapper | None = None,
     ):
-        self.mapper = (
-            mapper
-            if mapper is not None
-            else AchievementMapper()
-        )
+        self.mapper = mapper if mapper is not None else AchievementMapper()
 
     def parse(
         self,
@@ -32,16 +28,9 @@ class AchievementParser:
         snapshots = []
 
         for achievement in achievements:
+            genshin_ids = achievement.get("genshin_ids", [])
 
-            genshin_ids = achievement.get(
-                "genshin_ids",
-                []
-            )
-
-            tiers = achievement.get(
-                "tiers",
-                []
-            )
+            tiers = achievement.get("tiers", [])
 
             if not isinstance(
                 genshin_ids,
@@ -55,10 +44,7 @@ class AchievementParser:
             ):
                 continue
 
-            for index, genshin_id in enumerate(
-                genshin_ids
-            ):
-
+            for index, genshin_id in enumerate(genshin_ids):
                 if index >= len(tiers):
                     break
 
@@ -71,9 +57,7 @@ class AchievementParser:
                     continue
 
                 try:
-                    genshin_id = int(
-                        genshin_id
-                    )
+                    genshin_id = int(genshin_id)
 
                 except (
                     TypeError,
@@ -89,9 +73,7 @@ class AchievementParser:
                         genshin_id=genshin_id,
                         status=0,
                         current=0,
-                        total=tier.get(
-                            "progress"
-                        ),
+                        total=tier.get("progress"),
                         timestamp=None,
                         raw_fields={},
                     )

@@ -7,11 +7,16 @@
     let openTimer: ReturnType<typeof setTimeout> | undefined;
     let nextId = 0;
 
+    const resize = new ResizeObserver(() => {
+        if (active?.isConnected) position(active);
+    });
+
     const close = (immediate = false) => {
         clearTimeout(closeTimer);
         clearTimeout(openTimer);
         if (!active) return;
         const popup = active.querySelector<HTMLElement>(".event-insight-popover");
+        if (popup) resize.unobserve(popup);
         popup?.classList.remove("is-visible");
         const finish = () => {
             if (
@@ -53,7 +58,7 @@
         popup.dataset.side = below ? "bottom" : "top";
         popup.style.setProperty(
             "--insight-arrow-x",
-            `${Math.max(18, Math.min(width - 18, anchor.left + anchor.width / 2 - left))}px`,
+            `${Math.max(18, Math.min(width - 18, anchor.left + anchor.width / 2 - left - popup.clientLeft))}px`,
         );
     };
 
@@ -72,6 +77,7 @@
         if (!popup.matches(":popover-open")) popup.showPopover();
         position(wrapper);
         active = wrapper;
+        resize.observe(popup);
         requestAnimationFrame(() => {
             if (active === wrapper) popup.classList.add("is-visible");
         });

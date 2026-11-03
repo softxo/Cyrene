@@ -8,7 +8,12 @@ import discord
 from utils.constants.emojis import HOYOLAB_EMOJIS
 from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.daily_note import get_resin
-from utils.hoyolab.database import get_accounts, get_due_reminders, update_reminder
+from utils.hoyolab.database import (
+    get_accounts,
+    get_due_reminders,
+    get_reminder_recipients,
+    update_reminder,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +22,7 @@ CHECK_INTERVAL = 10
 RESIN_REGEN_SECONDS = 480
 RESIN_TRIGGERED_CHECK_SECONDS = 300
 
-RESIN_IMAGE = Path(
-        "assets/hoyolab/daily/Original_Resin.webp"
-    )
+RESIN_IMAGE = Path("assets/hoyolab/daily/Original_Resin.webp")
 
 
 class ReminderScheduler:
@@ -29,11 +32,7 @@ class ReminderScheduler:
         self.running = False
 
     def is_running(self) -> bool:
-        return (
-            self.running
-            and self.task is not None
-            and not self.task.done()
-        )
+        return self.running and self.task is not None and not self.task.done()
 
     def start(self):
         if self.task is not None and not self.task.done():
@@ -41,10 +40,7 @@ class ReminderScheduler:
 
         self.running = True
 
-        self.task = asyncio.create_task(
-            self._run(),
-            name="reminder_scheduler"
-        )
+        self.task = asyncio.create_task(self._run(), name="reminder_scheduler")
 
         logger.info("Reminder scheduler started.")
 
@@ -72,10 +68,7 @@ class ReminderScheduler:
                 raise
 
             except Exception as error:
-                logger.exception(
-                    "[ReminderScheduler] ERROR: %r",
-                    error
-                )
+                logger.exception("[ReminderScheduler] ERROR: %r", error)
 
             await asyncio.sleep(CHECK_INTERVAL)
 
@@ -87,29 +80,26 @@ class ReminderScheduler:
 
         for reminder in reminders:
             try:
-                await self.process_reminder(
-                    reminder
-                )
+                await self.process_reminder(reminder)
 
             except Exception as error:
                 logger.exception(
-                    "[ReminderScheduler] REMINDER ERROR: %s: %r",
-                    reminder["id"],
-                    error
+                    "[ReminderScheduler] REMINDER ERROR: %s: %r", reminder["id"], error
                 )
 
-    async def process_reminder(
-            self,
-            reminder: dict
-    ) -> bool:
+    async def process_reminder(self, reminder: dict) -> bool:
+
+        if reminder.get("genshin_uid"):
+            linked_users = await get_reminder_recipients(reminder["genshin_uid"])
+            if not linked_users:
+                return False
+            # Use a currently linked identity for authenticated scheduler updates.
+            reminder = {**reminder, "discord_user_id": linked_users[0]}
 
         reminder_type = reminder["reminder_type"]
         reminder_mode = reminder.get("reminder_mode")
 
-        if (
-                reminder_mode == "manual"
-                and reminder_type == "custom"
-        ):
+        if reminder_mode == "manual" and reminder_type == "custom":
             return await self.handle_manual(reminder)
 
         handler = {
@@ -122,31 +112,18 @@ class ReminderScheduler:
 
         if handler is None:
             logger.warning(
-                "Unknown reminder type '%s' for reminder %s.",
-                reminder_type,
-                reminder["id"]
+                "Unknown reminder type '%s' for reminder %s.", reminder_type, reminder["id"]
             )
             return False
 
         return await handler(reminder)
 
-
-    async def handle_manual(
-        self,
-        reminder: dict
-    ):
+    async def handle_manual(self, reminder: dict):
         config = reminder.get("config") or {}
 
-        message = config.get(
-            "message",
-            "Your reminder is due."
-        )
+        message = config.get("message", "Your reminder is due.")
 
-        sent = await self.send_reminder(
-            reminder,
-            title="Reminder",
-            message=message
-        )
+        sent = await self.send_reminder(reminder, title="Reminder", message=message)
 
         if not sent:
             return False
@@ -156,15 +133,12 @@ class ReminderScheduler:
             reminder["id"],
             enabled=False,
             last_triggered_at=datetime.now(timezone.utc),
-            next_trigger_at=None
+            next_trigger_at=None,
         )
 
         return True
 
-    async def handle_resin(
-            self,
-            reminder: dict
-    ):
+    async def handle_resin(self, reminder: dict):
         reminder_id = reminder["id"]
         user_id = reminder["discord_user_id"]
         genshin_uid = reminder.get("genshin_uid")
@@ -175,128 +149,63 @@ class ReminderScheduler:
         amount = config.get("amount")
 
         if amount is None:
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
+            await self.retry_reminder(reminder, seconds=60)
 
             return False
 
         try:
             amount = int(amount)
 
-        except (TypeError, ValueError):
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
+        except TypeError, ValueError:
+            await self.retry_reminder(reminder, seconds=60)
 
             return False
 
         if not genshin_uid:
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
+            await self.retry_reminder(reminder, seconds=60)
 
             return False
 
-        try:
-            client = await get_account_client(
-                user_id,
-                genshin_uid
-            )
-
-        except Exception:
-            logger.exception(
-                "Failed to get account client for Resin reminder %s.",
-                reminder_id
-            )
-
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
-
-            return False
-
-        if client is None:
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
-
-            return False
-
-        try:
-            async with client:
-                response = await client.get_genshin_daily_note(
-                    client.genshin_uid,
-                    client.genshin_server
+        response = None
+        for candidate in await get_reminder_recipients(genshin_uid):
+            try:
+                client = await get_account_client(candidate, genshin_uid)
+                if client is None:
+                    continue
+                async with client:
+                    response = await client.get_genshin_daily_note(
+                        client.genshin_uid, client.genshin_server
+                    )
+                current_resin, max_resin, recovery = get_resin(response)
+                user_id = candidate
+                reminder = {**reminder, "discord_user_id": candidate}
+                break
+            except Exception:
+                response = None
+                logger.exception(
+                    "Failed to fetch Resin for reminder %s using linked user %s.",
+                    reminder_id,
+                    candidate,
                 )
-
-        except Exception:
-            logger.exception(
-                "Failed to fetch Resin for reminder %s.",
-                reminder_id
-            )
-
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
-
+        if response is None:
+            await self.retry_reminder(reminder, seconds=60)
             return False
 
-        try:
-            current_resin, max_resin, recovery = get_resin(
-                response
-            )
-
-        except Exception:
-            logger.exception(
-                "Failed to parse Resin response for reminder %s.",
-                reminder_id
-            )
-
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
-
-            return False
-
-        triggered = bool(
-            config.get("triggered", False)
-        )
+        triggered = bool(config.get("triggered", False))
 
         if current_resin >= amount:
             if triggered:
-                await self.retry_reminder(
-                    reminder,
-                    seconds=60
-                )
+                await self.retry_reminder(reminder, seconds=60)
 
                 return False
 
-            accounts = await get_accounts(
-                user_id
-            )
+            accounts = await get_accounts(user_id)
 
             account = next(
-                (
-                    account
-                    for account in accounts
-                    if account["genshin_uid"] == genshin_uid
-                ),
-                None
+                (account for account in accounts if account["genshin_uid"] == genshin_uid), None
             )
 
-            account_name = (
-                account.get("nickname", "Unknown")
-                if account is not None
-                else "Unknown"
-            )
+            account_name = account.get("nickname", "Unknown") if account is not None else "Unknown"
 
             if reminder_mode == "manual":
                 title = "Resin Replenished"
@@ -310,19 +219,15 @@ class ReminderScheduler:
                 reminder,
                 title=title,
                 message=(
-                    f"Hey <@{user_id}>!\n\n"
+                    "Hey {recipient_mention}!\n\n"
                     f"Your account **{account_name}** has reached {HOYOLAB_EMOJIS['original_resin']}**{current_resin}** Resin.\n\u200b"
                 ),
                 footer=footer,
-                thumbnail=RESIN_IMAGE
+                thumbnail=RESIN_IMAGE,
             )
 
-
             if not sent:
-                await self.retry_reminder(
-                    reminder,
-                    seconds=60
-                )
+                await self.retry_reminder(reminder, seconds=60)
 
                 return False
 
@@ -330,11 +235,7 @@ class ReminderScheduler:
 
             if reminder_mode == "manual":
                 await update_reminder(
-                    user_id,
-                    reminder_id,
-                    enabled=False,
-                    last_triggered_at=now,
-                    next_trigger_at=None
+                    user_id, reminder_id, enabled=False, last_triggered_at=now, next_trigger_at=None
                 )
 
                 return True
@@ -347,9 +248,7 @@ class ReminderScheduler:
                 enabled=True,
                 config=config,
                 last_triggered_at=now,
-                next_trigger_at=now + timedelta(
-                    seconds=RESIN_TRIGGERED_CHECK_SECONDS
-                )
+                next_trigger_at=now + timedelta(seconds=RESIN_TRIGGERED_CHECK_SECONDS),
             )
 
             return False
@@ -357,157 +256,84 @@ class ReminderScheduler:
         if triggered:
             config["triggered"] = False
 
-            await update_reminder(
-                user_id,
-                reminder_id,
-                enabled=True,
-                config=config
-            )
+            await update_reminder(user_id, reminder_id, enabled=True, config=config)
 
-        await self.schedule_resin_reminder(
-            reminder,
-            current_resin,
-            amount,
-            recovery
-        )
+        await self.schedule_resin_reminder(reminder, current_resin, amount, recovery)
 
         return False
 
     async def schedule_resin_reminder(
-            self,
-            reminder: dict,
-            current_resin: int,
-            target_resin: int,
-            recovery: int
+        self, reminder: dict, current_resin: int, target_resin: int, recovery: int
     ):
         resin_needed = target_resin - current_resin
 
         if resin_needed <= 0:
-            await self.retry_reminder(
-                reminder,
-                seconds=60
-            )
+            await self.retry_reminder(reminder, seconds=60)
 
             return
 
-        seconds_until_target = (
-                recovery
-                + ((resin_needed - 1) * RESIN_REGEN_SECONDS)
-        )
+        seconds_until_target = recovery + ((resin_needed - 1) * RESIN_REGEN_SECONDS)
 
-        next_trigger_at = (
-                datetime.now(timezone.utc)
-                + timedelta(seconds=seconds_until_target)
-        )
+        next_trigger_at = datetime.now(timezone.utc) + timedelta(seconds=seconds_until_target)
 
         logger.info(
-            "Resin reminder %s scheduled for %s "
-            "(current=%s target=%s).",
+            "Resin reminder %s scheduled for %s (current=%s target=%s).",
             reminder["id"],
             next_trigger_at,
             current_resin,
-            target_resin
+            target_resin,
         )
 
         await update_reminder(
             reminder["discord_user_id"],
             reminder["id"],
             enabled=True,
-            next_trigger_at=next_trigger_at
+            next_trigger_at=next_trigger_at,
         )
 
-    async def retry_reminder(
-        self,
-        reminder: dict,
-        seconds: int
-    ):
-        next_trigger_at = (
-            datetime.now(timezone.utc)
-            + timedelta(seconds=seconds)
-        )
+    async def retry_reminder(self, reminder: dict, seconds: int):
+        next_trigger_at = datetime.now(timezone.utc) + timedelta(seconds=seconds)
 
         await update_reminder(
-            reminder["discord_user_id"],
-            reminder["id"],
-            next_trigger_at=next_trigger_at
+            reminder["discord_user_id"], reminder["id"], next_trigger_at=next_trigger_at
         )
 
-    async def handle_expedition(
-            self,
-            reminder: dict
-    ):
-        logger.debug(
-            "Expedition reminder %s is not implemented yet.",
-            reminder["id"]
-        )
+    async def handle_expedition(self, reminder: dict):
+        logger.debug("Expedition reminder %s is not implemented yet.", reminder["id"])
 
-        await self.retry_reminder(
-            reminder,
-            seconds=60
-        )
+        await self.retry_reminder(reminder, seconds=60)
 
         return False
 
-    async def handle_teapot(
-            self,
-            reminder: dict
-    ):
-        logger.debug(
-            "Teapot reminder %s is not implemented yet.",
-            reminder["id"]
-        )
+    async def handle_teapot(self, reminder: dict):
+        logger.debug("Teapot reminder %s is not implemented yet.", reminder["id"])
 
-        await self.retry_reminder(
-            reminder,
-            seconds=60
-        )
+        await self.retry_reminder(reminder, seconds=60)
 
         return False
 
-    async def handle_transformer(
-            self,
-            reminder: dict
-    ):
-        logger.debug(
-            "Transformer reminder %s is not implemented yet.",
-            reminder["id"]
-        )
+    async def handle_transformer(self, reminder: dict):
+        logger.debug("Transformer reminder %s is not implemented yet.", reminder["id"])
 
-        await self.retry_reminder(
-            reminder,
-            seconds=60
-        )
+        await self.retry_reminder(reminder, seconds=60)
 
         return False
 
-    async def handle_custom(
-            self,
-            reminder: dict
-    ) -> bool:
+    async def handle_custom(self, reminder: dict) -> bool:
         config = reminder.get("config") or {}
 
         message = config.get("message")
 
         if not message:
-            logger.warning(
-                "Custom reminder %s has no message.",
-                reminder["id"]
-            )
+            logger.warning("Custom reminder %s has no message.", reminder["id"])
 
             await update_reminder(
-                reminder["discord_user_id"],
-                reminder["id"],
-                enabled=False,
-                next_trigger_at=None
+                reminder["discord_user_id"], reminder["id"], enabled=False, next_trigger_at=None
             )
 
             return True
 
-        sent = await self.send_reminder(
-            reminder,
-            title="Reminder",
-            message=message
-        )
+        sent = await self.send_reminder(reminder, title="Reminder", message=message)
 
         if not sent:
             return False
@@ -517,22 +343,41 @@ class ReminderScheduler:
             reminder["id"],
             enabled=False,
             last_triggered_at=datetime.now(timezone.utc),
-            next_trigger_at=None
+            next_trigger_at=None,
         )
 
         return True
 
+    async def send_reminder(self, reminder, *, title, message, footer=None, thumbnail=None) -> bool:
+        if reminder.get("genshin_uid"):
+            recipients = await get_reminder_recipients(reminder["genshin_uid"])
+        else:
+            recipients = [reminder["discord_user_id"]]
+        sent = False
+        for recipient in dict.fromkeys(recipients):
+            # Each DM receives a fresh Embed/File, so attachments are not reused
+            # after discord.py closes them. A blocked DM never blocks other users.
+            delivered = await self._send_reminder_to_user(
+                reminder,
+                user_id=recipient,
+                title=title,
+                message=message,
+                footer=footer,
+                thumbnail=thumbnail,
+            )
+            sent = delivered or sent
+        return sent
 
-    async def send_reminder(
-            self,
-            reminder: dict,
-            *,
-            title: str,
-            message: str,
-            footer: str | None = None,
-            thumbnail: Path | None = None
+    async def _send_reminder_to_user(
+        self,
+        reminder: dict,
+        *,
+        user_id: int,
+        title: str,
+        message: str,
+        footer: str | None = None,
+        thumbnail: Path | None = None,
     ) -> bool:
-        user_id = reminder["discord_user_id"]
 
         user = self.bot.get_user(user_id)
 
@@ -544,72 +389,44 @@ class ReminderScheduler:
                 return False
 
             except discord.HTTPException:
-                logger.exception(
-                    "Failed to fetch Discord user %s.",
-                    user_id
-                )
+                logger.exception("Failed to fetch Discord user %s.", user_id)
                 return False
 
         embed = discord.Embed(
             title=title,
-            description=message,
-            colour=discord.Colour.blurple()
+            description=str(message).replace("{recipient_mention}", f"<@{user_id}>"),
+            colour=discord.Colour.blurple(),
         )
 
         if footer is not None:
-            embed.set_footer(
-                text=footer
-            )
+            embed.set_footer(text=footer)
 
         file = None
 
         if thumbnail is not None:
-            file = discord.File(
-                thumbnail,
-                filename=thumbnail.name
-            )
+            file = discord.File(thumbnail, filename=thumbnail.name)
 
-            embed.set_thumbnail(
-                url=f"attachment://{thumbnail.name}"
-            )
+            embed.set_thumbnail(url=f"attachment://{thumbnail.name}")
 
-        delivery_type = reminder.get(
-            "delivery_type",
-            "dm"
-        )
+        delivery_type = reminder.get("delivery_type", "dm")
 
         if delivery_type != "dm":
             logger.warning(
-                "Unsupported delivery type %r for reminder %s.",
-                delivery_type,
-                reminder["id"]
+                "Unsupported delivery type %r for reminder %s.", delivery_type, reminder["id"]
             )
             return False
 
         try:
-            await user.send(
-                embed=embed,
-                file=file
-            )
+            await user.send(embed=embed, file=file)
 
         except discord.Forbidden:
-            logger.warning(
-                "Discord user %s has DMs disabled or blocked the bot.",
-                user_id
-            )
+            logger.warning("Discord user %s has DMs disabled or blocked the bot.", user_id)
             return False
 
         except discord.HTTPException:
-            logger.exception(
-                "Discord HTTP error while sending DM to %s.",
-                user_id
-            )
+            logger.exception("Discord HTTP error while sending DM to %s.", user_id)
             return False
 
-        logger.info(
-            "Reminder %s sent to Discord user %s.",
-            reminder["id"],
-            user_id
-        )
+        logger.info("Reminder %s sent to Discord user %s.", reminder["id"], user_id)
 
         return True

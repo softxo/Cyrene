@@ -1,0 +1,149 @@
+.cyrene-button {
+    --button-shrink: 0;
+    --button-surface: var(--control-surface);
+    --button-hover: var(--control-hover-surface);
+    --button-border: var(--control-border);
+    --button-hover-border: var(--control-hover-border);
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: var(--button-padding-block, 8px) var(--button-padding-inline, 12px);
+    border: 1px solid transparent;
+    border-radius: var(--control-radius, 14px);
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: var(--button-font-size, var(--control-font-size));
+    font-weight: 600;
+    line-height: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.cyrene-button::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border: 1px solid var(--button-border);
+    border-radius: inherit;
+    background: var(--button-surface);
+    transform-origin: center;
+    transform: scale(
+        calc(1 - var(--button-shrink) * 2 / var(--button-width, 160)),
+        calc(1 - var(--button-shrink) * 2 / var(--button-height, 38))
+    );
+    will-change: transform;
+    transition:
+        transform var(--control-motion),
+        background-color var(--control-motion),
+        border-color var(--control-motion);
+}
+.cyrene-button:hover:not(:disabled),
+.cyrene-button[data-settling] {
+    --button-shrink: 1;
+}
+.cyrene-button:hover:not(:disabled)::before,
+.cyrene-button[data-settling]::before {
+    background: var(--button-hover);
+    border-color: var(--button-hover-border);
+}
+.cyrene-button:active:not(:disabled) {
+    --button-shrink: 2;
+}
+.cyrene-button:disabled {
+    cursor: not-allowed;
+}
+.cyrene-button > svg {
+    display: block;
+    flex: none;
+    width: 20px;
+    height: 20px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .cyrene-button::before {
+        transition: none;
+    }
+}
+
+/* Intent and size are independent of the shared appearance and motion. */
+.cyrene-button--danger {
+    --button-surface: var(--control-surface);
+    --button-hover: color-mix(in srgb, var(--error) 3%, var(--surface-inset));
+    --button-border: color-mix(in srgb, var(--error) 30%, transparent);
+    --button-hover-border: color-mix(in srgb, var(--error) 50%, transparent);
+    color: var(--error);
+}
+.cyrene-button:focus-visible {
+    outline: none;
+}
+.cyrene-button:focus-visible::before {
+    border-color: var(--button-hover-border);
+    background: var(--button-hover);
+}
+.cyrene-button:disabled {
+    opacity: 0.55;
+}
+.cyrene-button[hidden] {
+    display: none;
+}
+[data-hover-effects="off"] .cyrene-button:hover:not(:active) {
+    --button-shrink: 0;
+}
+
+.cyrene-button--compact {
+    --button-padding-block: 6px;
+    --button-padding-inline: 10px;
+    --button-font-size: 13px;
+}
+.cyrene-button--large {
+    --button-padding-block: 11px;
+    --button-padding-inline: 16px;
+}
+
+.cyrene-button--icon {
+    width: 36px;
+    height: 36px;
+    padding: 7px;
+    gap: 0;
+}
+
+.cyrene-button:is(.active, [aria-pressed="true"], [aria-expanded="true"])::before {
+    background: var(--control-selected-surface);
+    border-color: var(--control-hover-border);
+}
+
+/* The current tab stays dark, with a distinct accent border and underline. */
+.cyrene-button--tab.active {
+    color: var(--text);
+    font-weight: 700;
+}
+.cyrene-button--tab.active::before {
+    border-color: var(--accent);
+    background: var(--control-selected-surface);
+}
+.cyrene-button--tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    inset-inline: 12px;
+    height: 1px;
+    border-radius: 999px;
+    background: var(--accent);
+    pointer-events: none;
+}
+
+/* Matches the Weapons import action, independent of the surrounding page. */
+.cyrene-import-button {
+    min-height: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    line-height: 20px;
+}

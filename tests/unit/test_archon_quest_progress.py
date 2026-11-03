@@ -41,7 +41,7 @@ class ArchonQuestProgressTests(unittest.TestCase):
         response = notes(
             [
                 {
-                    "chapter_title": "A localized title",
+                    "chapter_title": "A localised title",
                     "chapter_num": "Chapter VII: Act IV",
                     "status": "StatusFinished",
                 },

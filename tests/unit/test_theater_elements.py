@@ -44,6 +44,16 @@ class ElementParsingTests(unittest.TestCase):
         self.assertEqual(cast[0]["element"], "Hydro")
         self.assertTrue(cast[0]["icon"].startswith("https://static.wikia.nocookie.net/"))
 
+    def test_known_characters_use_canonical_portraits_instead_of_wiki_placeholders(self):
+        names = ("Yelan", "Aino", "Flins", "Fischl", "Zhongli", "Kachina")
+        markup = cast_markup()
+        for index, name in enumerate(names):
+            markup = markup.replace(f"Character {index}", name)
+        cast = source.parse_opening_cast(markup)
+        self.assertEqual([row["name"] for row in cast], list(names))
+        for row, name in zip(cast, names):
+            self.assertEqual(row["icon"], f"https://enka.network/ui/UI_AvatarIcon_{name}.png")
+
     def test_incomplete_cast_and_untrusted_images_are_rejected(self):
         for markup in [
             cast_markup(5),

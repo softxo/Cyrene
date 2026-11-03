@@ -110,16 +110,58 @@ function initialiseAccountManagement() {
             const name = document.createElement("strong");
             name.textContent = account.cyrene_nickname || account.nickname || "Unnamed account";
 
+            const heading = document.createElement("div");
+            heading.className = "linked-account-heading";
+            heading.append(name);
+            const access = document.createElement("div");
+            access.className = "linked-account-discord-access";
+            access.setAttribute("aria-label", "Discord accounts with access");
+            for (const profile of account.discord_access || []) {
+                const badge = document.createElement("span");
+                badge.className = "linked-discord-profile";
+                const avatar = document.createElement("img");
+                avatar.alt = "";
+                avatar.width = 22;
+                avatar.height = 22;
+                const fallback = "/static/images/ui/ui_icons/Discord.png";
+                const avatarUrl = typeof profile.avatar_url === "string" ? profile.avatar_url : "";
+                avatar.src =
+                    /^https:\/\/cdn\.discordapp\.com\/avatars\/\d+\/(?:a_)?[a-f0-9]{16,64}\.png\?size=128$/.test(
+                        avatarUrl,
+                    )
+                        ? avatarUrl
+                        : fallback;
+                avatar.addEventListener(
+                    "error",
+                    () => {
+                        avatar.src = fallback;
+                    },
+                    { once: true },
+                );
+                const displayName = document.createElement("span");
+                displayName.className = "linked-discord-name";
+                displayName.textContent = profile.display_name || "Discord account";
+                badge.append(avatar, displayName);
+                if (profile.username) {
+                    const username = document.createElement("span");
+                    username.className = "linked-discord-username";
+                    username.textContent = `(@${profile.username})`;
+                    badge.append(username);
+                }
+                access.append(badge);
+            }
+            heading.append(access);
+
             const meta = document.createElement("span");
             meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
 
             const manage = document.createElement("button");
             manage.type = "button";
-            manage.className = "linked-account-manage";
+            manage.className = "cyrene-button linked-account-manage";
             manage.textContent = "Manage";
             manage.addEventListener("click", () => openModal(account));
 
-            info.append(name, meta);
+            info.append(heading, meta);
             row.append(info, manage);
             list.appendChild(row);
         });
@@ -396,7 +438,7 @@ function initialiseAccountLinking() {
                 result.appendChild(message);
 
                 const link = document.createElement("a");
-                link.className = "account-link-action";
+                link.className = "cyrene-button account-link-action";
                 link.href = data.challenge_url;
                 link.target = "_blank";
                 link.rel = "noopener";

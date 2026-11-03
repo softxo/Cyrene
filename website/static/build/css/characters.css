@@ -64,12 +64,6 @@
     max-width: 100%;
 }
 
-.characters-account-select .custom-select-button {
-    min-height: 44px;
-    padding-inline: 15px;
-    background: var(--surface-inset);
-}
-
 .characters-account-select .custom-select-value {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -633,24 +627,9 @@
     min-width: 0;
     min-height: 40px;
     padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--control-radius);
-    background: var(--surface-inset);
-    color: var(--text);
     font: inherit;
     font-size: 0.85rem;
-    outline: none;
     box-sizing: border-box;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.characters-search input:focus {
-    border-color: var(--accent);
-    background: var(--background);
-    box-shadow: 0 0 0 3px
-        color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 /* Match the filter dropdowns to the account selector. */
@@ -663,9 +642,6 @@
 /* Consistent button height across every filter. */
 .characters-filter .custom-select-button {
     width: 100%;
-    min-height: 40px;
-    padding-inline: 12px;
-    background: var(--surface-inset);
 }
 
 /* Prevent long option labels from breaking the toolbar. */
@@ -682,26 +658,6 @@
 }
 
 /* Reset button. */
-.characters-reset-filters {
-    min-height: 40px;
-    padding: 8px 12px;
-    border: 1px solid var(--accent-border);
-    border-radius: var(--control-radius);
-    background: var(--accent-soft);
-    color: var(--accent);
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-}
-
-.characters-reset-filters:hover {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 18%, var(--surface));
-}
 
 .character-card[hidden] {
     display: none !important;
@@ -722,7 +678,6 @@
     .characters-search {
         grid-column: span 2;
     }
-
 }
 
 @media (max-width: 700px) {
@@ -827,11 +782,7 @@
 
 .characters-icon-button.selected {
     border-color: var(--accent);
-    background: color-mix(
-        in srgb,
-        var(--accent) 16%,
-        var(--surface-raised)
-    );
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-raised));
     color: var(--accent);
     box-shadow:
         inset 0 0 0 1px var(--accent),
@@ -839,7 +790,7 @@
 }
 
 .characters-icon-button:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 
@@ -857,6 +808,12 @@
         width: 23px;
         height: 23px;
     }
+}
+
+.characters-reset-filters {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
 }
 
 /* =========================================================
@@ -896,11 +853,7 @@
     width: min(1160px, calc(100vw - 32px));
     max-height: calc(100dvh - 50px);
     overflow: auto;
-    border: 1px solid color-mix(
-        in srgb,
-        var(--showcase-element-colour) 40%,
-        var(--border)
-    );
+    border: 1px solid color-mix(in srgb, var(--showcase-element-colour) 40%, var(--border));
     border-radius: 12px;
     background: var(--background);
     color: var(--text);
@@ -934,8 +887,8 @@
 }
 
 .character-showcase-close:focus-visible {
-    outline: 2px solid var(--showcase-element-colour);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 body.character-showcase-open {
@@ -1017,11 +970,7 @@ body.character-showcase-open {
 
     pointer-events: none;
 
-    background: radial-gradient(
-        ellipse at center,
-        transparent 35%,
-        rgb(0 0 0 / 30%) 100%
-    );
+    background: radial-gradient(ellipse at center, transparent 35%, rgb(0 0 0 / 30%) 100%);
 }
 
 /* Keep all actual build content above the video and vignette. */
@@ -1103,7 +1052,6 @@ body.character-showcase-open {
     object-position: center center;
 }
 
-
 /* =========================================================
    TALENTS — INDIVIDUAL GLASS CIRCLES
    ========================================================= */
@@ -1142,11 +1090,7 @@ body.character-showcase-open {
     border: 1px solid rgb(255 255 255 / 22%);
     border-radius: 50%;
 
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 14%),
-        rgb(255 255 255 / 5%)
-    );
+    background: linear-gradient(145deg, rgb(255 255 255 / 14%), rgb(255 255 255 / 5%));
 
     box-shadow:
         inset 0 1px 2px rgb(255 255 255 / 18%),
@@ -1161,11 +1105,7 @@ body.character-showcase-open {
     height: 46px;
     padding: 6px;
 
-    border-color: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 65%,
-        rgb(255 255 255 / 45%)
-    );
+    border-color: color-mix(in srgb, var(--showcase-element-colour) 65%, rgb(255 255 255 / 45%));
 }
 
 .enka-progression-icon {
@@ -1243,39 +1183,17 @@ body.character-showcase-open {
 
 /* Unlocked constellations inherit the character's element colour. */
 .enka-progression-item.enka-constellation:not(.is-locked) {
-    border-color: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 70%,
-        rgb(255 255 255 / 35%)
-    );
+    border-color: color-mix(in srgb, var(--showcase-element-colour) 70%, rgb(255 255 255 / 35%));
 
     background: linear-gradient(
         145deg,
-        color-mix(
-            in srgb,
-            var(--showcase-element-colour) 30%,
-            transparent
-        ),
-        color-mix(
-            in srgb,
-            var(--showcase-element-colour) 12%,
-            rgb(15 18 28 / 65%)
-        )
+        color-mix(in srgb, var(--showcase-element-colour) 30%, transparent),
+        color-mix(in srgb, var(--showcase-element-colour) 12%, rgb(15 18 28 / 65%))
     );
 
     box-shadow:
-        inset 0 1px 3px
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 25%,
-                transparent
-            ),
-        0 0 8px
-            color-mix(
-                in srgb,
-                var(--showcase-element-colour) 18%,
-                transparent
-            );
+        inset 0 1px 3px color-mix(in srgb, var(--showcase-element-colour) 25%, transparent),
+        0 0 8px color-mix(in srgb, var(--showcase-element-colour) 18%, transparent);
 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -1396,7 +1314,6 @@ body.character-showcase-open {
     font-weight: 800;
 }
 
-
 /* =========================================================
    CHARACTER SHOWCASE — CHARACTER STATS
    ========================================================= */
@@ -1508,11 +1425,21 @@ body.character-showcase-open {
     color: #171923;
 }
 
-.enka-weapon-image.rarity-1 { --weapon-rarity-colour: #a8a8a8; }
-.enka-weapon-image.rarity-2 { --weapon-rarity-colour: #83b496; }
-.enka-weapon-image.rarity-3 { --weapon-rarity-colour: #80b4ed; }
-.enka-weapon-image.rarity-4 { --weapon-rarity-colour: #bc93ed; }
-.enka-weapon-image.rarity-5 { --weapon-rarity-colour: #e4ad57; }
+.enka-weapon-image.rarity-1 {
+    --weapon-rarity-colour: #a8a8a8;
+}
+.enka-weapon-image.rarity-2 {
+    --weapon-rarity-colour: #83b496;
+}
+.enka-weapon-image.rarity-3 {
+    --weapon-rarity-colour: #80b4ed;
+}
+.enka-weapon-image.rarity-4 {
+    --weapon-rarity-colour: #bc93ed;
+}
+.enka-weapon-image.rarity-5 {
+    --weapon-rarity-colour: #e4ad57;
+}
 
 .enka-weapon-card {
     display: grid;
@@ -1711,11 +1638,7 @@ body.character-showcase-open {
     padding: 2px;
     overflow: hidden;
     border-radius: 5px;
-    background: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 12%,
-        var(--surface)
-    );
+    background: color-mix(in srgb, var(--showcase-element-colour) 12%, var(--surface));
 }
 
 .enka-artifact-icon {
@@ -1881,17 +1804,9 @@ body.character-showcase-open {
     gap: 5px;
     max-width: 100%;
     padding: 5px 7px;
-    border: 1px solid color-mix(
-        in srgb,
-        var(--showcase-element-colour) 28%,
-        var(--border)
-    );
+    border: 1px solid color-mix(in srgb, var(--showcase-element-colour) 28%, var(--border));
     border-radius: 5px;
-    background: color-mix(
-        in srgb,
-        var(--showcase-element-colour) 7%,
-        var(--surface)
-    );
+    background: color-mix(in srgb, var(--showcase-element-colour) 7%, var(--surface));
 }
 
 .enka-artifact-set-count {
@@ -2187,11 +2102,7 @@ body.character-showcase-open {
 .enka-stats-panel,
 .enka-weapon-panel,
 .enka-artifacts-panel {
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 7%),
-        rgb(8 10 16 / 30%)
-    );
+    background: linear-gradient(145deg, rgb(255 255 255 / 7%), rgb(8 10 16 / 30%));
     border-color: rgb(255 255 255 / 16%);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%);
 
@@ -2201,11 +2112,7 @@ body.character-showcase-open {
 
 /* Individual artefact cards */
 .enka-artifact-card {
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 5%),
-        rgb(8 10 16 / 21%)
-    );
+    background: linear-gradient(145deg, rgb(255 255 255 / 5%), rgb(8 10 16 / 21%));
     border-color: rgb(255 255 255 / 14%);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
 
@@ -2241,11 +2148,7 @@ body.character-showcase-open {
 
 /* Neutral glass for unlocked constellation icons */
 .enka-progression-item.enka-constellation:not(.is-locked) {
-    background: linear-gradient(
-        145deg,
-        rgb(255 255 255 / 16%),
-        rgb(15 18 28 / 38%)
-    );
+    background: linear-gradient(145deg, rgb(255 255 255 / 16%), rgb(15 18 28 / 38%));
 
     border-color: rgb(255 255 255 / 30%);
 
@@ -2304,16 +2207,12 @@ body.character-showcase-open {
         color-mix(in srgb, var(--showcase-element-colour) 10%, rgb(12 15 24 / 82%))
     ) !important;
 
-    border: 1px solid
-        color-mix(in srgb, var(--showcase-element-colour) 75%, white 25%) !important;
+    border: 1px solid color-mix(in srgb, var(--showcase-element-colour) 75%, white 25%) !important;
 
     box-shadow:
-        inset 0 0 8px
-            color-mix(in srgb, var(--showcase-element-colour) 18%, transparent),
-        0 0 6px
-            color-mix(in srgb, var(--showcase-element-colour) 32%, transparent),
-        0 0 12px
-            color-mix(in srgb, var(--showcase-element-colour) 16%, transparent);
+        inset 0 0 8px color-mix(in srgb, var(--showcase-element-colour) 18%, transparent),
+        0 0 6px color-mix(in srgb, var(--showcase-element-colour) 32%, transparent),
+        0 0 12px color-mix(in srgb, var(--showcase-element-colour) 16%, transparent);
 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -2330,12 +2229,9 @@ body.character-showcase-open {
     border-color: var(--showcase-element-colour) !important;
 
     box-shadow:
-        inset 0 0 10px
-            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent),
-        0 0 9px
-            color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
-        0 0 16px
-            color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
+        inset 0 0 10px color-mix(in srgb, var(--showcase-element-colour) 24%, transparent),
+        0 0 9px color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
+        0 0 16px color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
 
     transform: translateY(-2px);
 }
@@ -2399,41 +2295,6 @@ body.character-showcase-open {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
-    padding: 0.7rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-        filter 160ms ease,
-        border-color 160ms ease,
-        color 160ms ease,
-        background 160ms ease;
-}
-
-.planner-add-button,
-.planner-save-button {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: white;
-}
-
-.planner-secondary-button {
-    border-color: var(--border);
-    background: var(--surface);
-    color: var(--text-secondary);
-}
-
-.planner-add-button:hover,
-.planner-save-button:hover {
-    filter: brightness(1.08);
-}
-
-.planner-secondary-button:hover {
-    border-color: var(--accent-border);
-    color: var(--text);
 }
 
 .planner-empty-state {
@@ -2918,10 +2779,10 @@ body.character-showcase-open {
 
 .planner-picker-dialog input:focus,
 .planner-picker-dialog input:focus-visible {
-    border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+    border-color: var(--control-focus-border);
     outline: none;
     background: var(--surface-inset);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 10%, transparent);
+    box-shadow: none;
 }
 
 .planner-picker-dialog select option {
@@ -2974,8 +2835,8 @@ body.character-showcase-open {
 }
 
 .planner-picker-character:focus-visible {
-    outline: 2px solid var(--picker-rarity);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 .planner-picker-portrait {
@@ -3288,8 +3149,8 @@ body.character-showcase-open {
 }
 
 .planner-editor-close:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -3357,9 +3218,9 @@ body.character-showcase-open {
 
 .planner-editor-meta textarea:focus,
 .planner-editor-meta select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -3404,7 +3265,7 @@ body.character-showcase-open {
 }
 
 .planner-tab:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 
@@ -3438,7 +3299,7 @@ body.character-showcase-open {
 }
 
 .planner-crafting-toggle:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 
@@ -3520,9 +3381,9 @@ body.character-showcase-open {
 }
 
 .planner-level-value select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 .planner-level-arrow {
@@ -3608,9 +3469,9 @@ body.character-showcase-open {
 }
 
 .planner-talent-levels select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -3785,8 +3646,8 @@ body.character-showcase-open {
 }
 
 .planner-cost-tile:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 .planner-cost-artwork {
@@ -4119,35 +3980,10 @@ body.character-showcase-open {
 
     width: 100%;
     min-width: 0;
-    height: 39px;
-    padding: 7px 10px;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--surface);
-    color: var(--text);
-
-    font: inherit;
-    font-size: 0.88rem;
-    font-weight: 600;
-
-    cursor: pointer;
 
     transition:
         border-color 160ms ease,
         background 160ms ease;
-}
-
-.planner-choice-trigger:hover,
-.planner-choice-trigger[aria-expanded="true"] {
-    border-color: var(--accent-border);
-    background: var(--surface-hover);
-}
-
-.planner-choice-trigger:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
 }
 
 .planner-choice-value {
@@ -4155,17 +3991,6 @@ body.character-showcase-open {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-.planner-choice-arrow {
-    flex: 0 0 auto;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    transition: transform 160ms ease;
-}
-
-.planner-choice-trigger[aria-expanded="true"] .planner-choice-arrow {
-    transform: rotate(180deg);
 }
 
 /* =========================================================
@@ -4181,12 +4006,6 @@ body.character-showcase-open {
     overflow-y: auto;
 
     padding: 10px;
-
-    border: 1px solid var(--border);
-    border-radius: 12px;
-
-    background: var(--background);
-    box-shadow: 0 16px 45px rgb(0 0 0 / 35%);
 }
 
 .planner-choice-grid {
@@ -4205,46 +4024,12 @@ body.character-showcase-open {
     min-height: 39px;
     padding: 7px 4px;
 
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: var(--surface);
-    color: var(--text);
-
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 650;
-
-    cursor: pointer;
-
     transition:
         background 160ms ease,
         border-color 160ms ease;
 }
 
-.planner-choice-option:hover {
-    background: var(--surface-hover);
-    border-color: var(--accent-border);
-}
-
-.planner-choice-option.is-selected {
-    background: color-mix(in srgb, var(--accent) 20%, var(--surface));
-
-    border-color: var(--accent);
-    color: var(--text);
-}
-
-.planner-choice-option:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
 /* Compact talent selectors */
-
-.planner-talent-levels .planner-choice-trigger {
-    padding-inline: 7px;
-    font-size: 0.82rem;
-}
 
 @media (max-width: 560px) {
     .planner-choice-menu {
@@ -4257,48 +4042,14 @@ body.character-showcase-open {
 
     .planner-choice-option {
         min-height: 36px;
-        font-size: 0.78rem;
     }
 
     .planner-talent-levels .planner-choice-trigger {
-        padding-inline: 5px;
         gap: 3px;
     }
 }
 
 /* Character selection uses the same compact icon controls as the roster. */
-.planner-add-button {
-    padding: 10px 16px;
-    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-    border-radius: 12px;
-    background-color: var(--surface);
-    background-image: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--accent) 22%, transparent),
-        transparent
-    );
-    color: var(--text);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
-}
-.planner-add-button > span {
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 7px;
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    color: var(--accent);
-    font-size: 1.2rem;
-}
-.planner-add-button:hover {
-    border-color: var(--accent);
-    background-color: var(--surface-raised);
-    filter: none;
-}
-.planner-add-button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-}
 .planner-picker-heading {
     display: flex;
     align-items: center;
@@ -4408,4 +4159,13 @@ body.character-showcase-open {
         padding: 12px;
         gap: 12px;
     }
+}
+.planner-add-button,
+.planner-save-button,
+.planner-secondary-button {
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+}
+.planner-add-button {
+    padding: 10px 16px;
 }

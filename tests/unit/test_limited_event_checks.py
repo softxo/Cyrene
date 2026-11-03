@@ -65,6 +65,19 @@ class CompletionEndpointTests(unittest.IsolatedAsyncioTestCase):
             )
             return response, save.await_args
 
+    async def test_temper_manual_check_uses_account_and_weekly_period(self):
+        response, args = await self.post(
+            {
+                "account_id": 1,
+                "activity_type": "temper_thyself",
+                "event_key": "unused",
+                "checked": True,
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        weekly_key = web.get_event_activity_period_keys("os_euro")[1]
+        self.assertEqual(args.args, (10, "700000001", "temper_thyself", weekly_key, True))
+
     async def test_save_targets_authenticated_user_uid_and_event(self):
         key = completion_key(event())
         response, args = await self.post(

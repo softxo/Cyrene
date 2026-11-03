@@ -26,41 +26,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
-    padding: 0.7rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-        filter 160ms ease,
-        border-color 160ms ease,
-        color 160ms ease,
-        background 160ms ease;
-}
-
-.planner-add-button,
-.planner-save-button {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: white;
-}
-
-.planner-secondary-button {
-    border-color: var(--border);
-    background: var(--surface);
-    color: var(--text-secondary);
-}
-
-.planner-add-button:hover,
-.planner-save-button:hover {
-    filter: brightness(1.08);
-}
-
-.planner-secondary-button:hover {
-    border-color: var(--accent-border);
-    color: var(--text);
 }
 
 .planner-empty-state {
@@ -545,10 +510,10 @@
 
 .planner-picker-dialog input:focus,
 .planner-picker-dialog input:focus-visible {
-    border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+    border-color: var(--control-focus-border);
     outline: none;
     background: var(--surface-inset);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 10%, transparent);
+    box-shadow: none;
 }
 
 .planner-picker-dialog select option {
@@ -601,8 +566,8 @@
 }
 
 .planner-picker-character:focus-visible {
-    outline: 2px solid var(--picker-rarity);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 .planner-picker-portrait {
@@ -915,8 +880,8 @@
 }
 
 .planner-editor-close:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -984,9 +949,9 @@
 
 .planner-editor-meta textarea:focus,
 .planner-editor-meta select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -1031,7 +996,7 @@
 }
 
 .planner-tab:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 
@@ -1065,7 +1030,7 @@
 }
 
 .planner-crafting-toggle:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 1px solid var(--control-focus-border);
     outline-offset: 2px;
 }
 
@@ -1147,9 +1112,9 @@
 }
 
 .planner-level-value select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 .planner-level-arrow {
@@ -1235,9 +1200,9 @@
 }
 
 .planner-talent-levels select:focus {
-    border-color: var(--accent);
-    outline: 2px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    outline-offset: 1px;
+    border-color: var(--control-focus-border);
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -1412,8 +1377,8 @@
 }
 
 .planner-cost-tile:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 .planner-cost-artwork {
@@ -1746,35 +1711,10 @@
 
     width: 100%;
     min-width: 0;
-    height: 39px;
-    padding: 7px 10px;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--surface);
-    color: var(--text);
-
-    font: inherit;
-    font-size: 0.88rem;
-    font-weight: 600;
-
-    cursor: pointer;
 
     transition:
         border-color 160ms ease,
         background 160ms ease;
-}
-
-.planner-choice-trigger:hover,
-.planner-choice-trigger[aria-expanded="true"] {
-    border-color: var(--accent-border);
-    background: var(--surface-hover);
-}
-
-.planner-choice-trigger:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
 }
 
 .planner-choice-value {
@@ -1782,17 +1722,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-.planner-choice-arrow {
-    flex: 0 0 auto;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    transition: transform 160ms ease;
-}
-
-.planner-choice-trigger[aria-expanded="true"] .planner-choice-arrow {
-    transform: rotate(180deg);
 }
 
 /* =========================================================
@@ -1808,12 +1737,6 @@
     overflow-y: auto;
 
     padding: 10px;
-
-    border: 1px solid var(--border);
-    border-radius: 12px;
-
-    background: var(--background);
-    box-shadow: 0 16px 45px rgb(0 0 0 / 35%);
 }
 
 .planner-choice-grid {
@@ -1832,46 +1755,12 @@
     min-height: 39px;
     padding: 7px 4px;
 
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: var(--surface);
-    color: var(--text);
-
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 650;
-
-    cursor: pointer;
-
     transition:
         background 160ms ease,
         border-color 160ms ease;
 }
 
-.planner-choice-option:hover {
-    background: var(--surface-hover);
-    border-color: var(--accent-border);
-}
-
-.planner-choice-option.is-selected {
-    background: color-mix(in srgb, var(--accent) 20%, var(--surface));
-
-    border-color: var(--accent);
-    color: var(--text);
-}
-
-.planner-choice-option:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
 /* Compact talent selectors */
-
-.planner-talent-levels .planner-choice-trigger {
-    padding-inline: 7px;
-    font-size: 0.82rem;
-}
 
 @media (max-width: 560px) {
     .planner-choice-menu {
@@ -1884,48 +1773,14 @@
 
     .planner-choice-option {
         min-height: 36px;
-        font-size: 0.78rem;
     }
 
     .planner-talent-levels .planner-choice-trigger {
-        padding-inline: 5px;
         gap: 3px;
     }
 }
 
 /* Character selection uses the same compact icon controls as the roster. */
-.planner-add-button {
-    padding: 10px 16px;
-    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-    border-radius: 12px;
-    background-color: var(--surface);
-    background-image: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--accent) 22%, transparent),
-        transparent
-    );
-    color: var(--text);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
-}
-.planner-add-button > span {
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 7px;
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    color: var(--accent);
-    font-size: 1.2rem;
-}
-.planner-add-button:hover {
-    border-color: var(--accent);
-    background-color: var(--surface-raised);
-    filter: none;
-}
-.planner-add-button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-}
 .planner-picker-heading {
     display: flex;
     align-items: center;
@@ -2035,4 +1890,13 @@
         padding: 12px;
         gap: 12px;
     }
+}
+.planner-add-button,
+.planner-save-button,
+.planner-secondary-button {
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+}
+.planner-add-button {
+    padding: 10px 16px;
 }

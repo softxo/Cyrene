@@ -56,7 +56,7 @@ from utils.hoyolab.database import (
     get_account,
     get_account_count,
     get_accounts,
-    get_character_plans,
+    get_character_plan_snapshot,
     get_custom_event,
     get_custom_event_account_progress,
     get_custom_event_completions,
@@ -71,8 +71,10 @@ from utils.hoyolab.database import (
     get_visible_custom_event,
     get_wish_history,
     import_wish_history,
+    recover_character_plans,
     reorder_custom_events,
     replace_character_plans,
+    reserve_gift_code_redemption,
     save_account,
     set_custom_event_completion,
     set_daily_checkin_enabled,
@@ -101,9 +103,15 @@ from utils.web.auth import (
     create_verification,
     create_web_session,
     delete_web_session,
+    get_account_discord_access,
+    get_discord_profile,
     get_verification,
     get_web_session,
+    save_discord_profile,
 )
+from utils.web.changelog import router as changelog_router
+from utils.web.discord_oauth import refresh_profile as refresh_discord_profile
+from utils.web.discord_oauth import router as discord_oauth_router
 from utils.web.limited_event_checks import (
     annotate_daily_events,
     apply_archon_quest_progress,
@@ -117,6 +125,9 @@ from utils.web.sessions import (
     complete_challenge,
     get_challenge_session,
 )
+from utils.web.site_updates import router as site_updates_router
+from utils.web.site_updates import site_version
+from utils.web.temper_thyself import build_temper_thyself, is_temper_thyself
 from utils.web.theater_elements import get_theater_season
 
 app = FastAPI(
@@ -125,15 +136,30 @@ app = FastAPI(
     redoc_url=None,
 )
 
+app.include_router(changelog_router)
+app.include_router(discord_oauth_router)
+app.include_router(site_updates_router)
+
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 templates = Jinja2Templates(directory=BASE_DIR / "website" / "templates")
+templates.env.globals["site_version"] = site_version
 
 app.mount(
     "/static",
     StaticFiles(directory=BASE_DIR / "website" / "static"),
     name="static",
 )
+
+
+@app.middleware("http")
+async def revalidate_site_assets(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/static/build/") or "text/html" in response.headers.get(
+        "content-type", ""
+    ):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
 
 
 GT_V3_URL = "https://static.geetest.com/static/js/gt.0.5.0.js"
@@ -168,9 +194,15 @@ async def settings(request: Request):
 async def verify_page(
     request: Request,
     next: str | None = None,
+    cyrene_session: str | None = Cookie(default=None),
 ):
     if next and (not next.startswith("/") or next.startswith("//")):
         next = None
+
+    session = await get_web_session(cyrene_session)
+    if session:
+        await refresh_discord_profile(session.user_id)
+    discord_profile = await get_discord_profile(session.user_id) if session else None
 
     return templates.TemplateResponse(
         request=request,
@@ -178,6 +210,10 @@ async def verify_page(
         context={
             "request": request,
             "next": next,
+            "discord_profile": discord_profile,
+            "discord_oauth_error": request.query_params.get("discord_error")
+            if request.query_params.get("discord_error") in {"failed", "unavailable"}
+            else None,
         },
     )
 
@@ -210,6 +246,7 @@ async def verification_status(token: str):
             "verified": False,
         }
 
+    await save_discord_profile(verification)
     session = await create_web_session(verification.user_id)
 
     response = JSONResponse(
@@ -386,6 +423,7 @@ async def web_hoyolab_accounts(
 ):
     user_id = await get_authenticated_user(cyrene_session)
     accounts = await get_accounts(user_id)
+    discord_access = await get_account_discord_access(user_id) if accounts else {}
 
     return {
         "accounts": [
@@ -395,6 +433,9 @@ async def web_hoyolab_accounts(
                 "cyrene_nickname": account["cyrene_nickname"],
                 "level": account["level"],
                 "server": account["genshin_server"],
+                "discord_access": discord_access.get(
+                    (str(account["genshin_uid"]), account["genshin_server"]), []
+                ),
             }
             for account in accounts
         ],
@@ -552,6 +593,7 @@ async def planner(request: Request, cyrene_session: str | None = Cookie(default=
         name="planner.html",
         context={
             "request": request,
+            "accounts": await get_accounts(session.user_id),
         },
     )
 
@@ -1012,13 +1054,15 @@ async def redeem_genshin_code(
 
     normalised_code = code.strip().upper()
 
-    # Save the attempt before contacting HoYoLAB.
-    await update_gift_code_redemption(
-        account_id=account_id,
-        code=normalised_code,
-        status="processing",
-        message="Redemption request in progress.",
-    )
+    if not await reserve_gift_code_redemption(account_id, normalised_code, automatic=False):
+        return JSONResponse(
+            status_code=409,
+            content={
+                "success": False,
+                "code": normalised_code,
+                "message": "This code has already been submitted or a redemption is in progress for this UID.",
+            },
+        )
 
     try:
         async with client:
@@ -1026,6 +1070,7 @@ async def redeem_genshin_code(
 
         await update_gift_code_redemption(
             account_id=account_id,
+            genshin_uid=account["genshin_uid"],
             code=normalised_code,
             status="submitted",
             message="The redemption request completed successfully.",
@@ -1053,6 +1098,7 @@ async def redeem_genshin_code(
 
         await update_gift_code_redemption(
             account_id=account_id,
+            genshin_uid=account["genshin_uid"],
             code=normalised_code,
             status="failed",
             message=message,
@@ -1276,7 +1322,12 @@ async def get_single_account_events(
             event.get("daily_reset_time", float("inf")) <= time.time()
             for event in cached["data"].get("limited_events", [])
         )
-        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired:
+        temper_cycle_end = cached["data"].get("temper_thyself", {}).get("end_time", 0)
+        temper_week_end = cached["data"].get("temper_thyself", {}).get("weekly_end", 0)
+        temper_cycle_expired = (0 < temper_cycle_end <= time.time()) or (
+            0 < temper_week_end <= time.time()
+        )
+        if cache_age < EVENTS_CACHE_TTL and not daily_period_expired and not temper_cycle_expired:
             return cached["data"]
 
     abyss_data = {
@@ -1342,6 +1393,7 @@ async def get_single_account_events(
 
     wish_banners = []
     limited_events = []
+    temper_thyself = build_temper_thyself()
 
     try:
         client = await get_account_client(
@@ -1506,7 +1558,18 @@ async def get_single_account_events(
                 *event_calendar.challenges,
             )
 
+            temper_thyself = build_temper_thyself(
+                calendar_events,
+                announcements,
+                account["genshin_server"],
+                now_timestamp,
+                notes=notes.get("data", {}),
+                weekly_end=get_weekly_reset_timestamp(account["genshin_server"]),
+            )
+
             for calendar_event in calendar_events:
+                if is_temper_thyself(calendar_event.name):
+                    continue
                 event_key = (
                     calendar_event.id,
                     normalise_event_name(calendar_event.name),
@@ -1593,6 +1656,9 @@ async def get_single_account_events(
                 limited_events,
                 announcement_reward_events(announcements, account["genshin_server"], now_timestamp),
             )
+            limited_events = [
+                event for event in limited_events if not is_temper_thyself(event["name"])
+            ]
             apply_archon_quest_progress(limited_events, notes, now_timestamp)
             await enrich_quest_rewards(limited_events)
 
@@ -1835,39 +1901,6 @@ async def get_single_account_events(
             # ACTIVITY CHECKMARKS
             # =========================================
 
-            daily_period_key, weekly_period_key = get_event_activity_period_keys(
-                account["genshin_server"]
-            )
-
-            activity_checks = await get_event_activity_checks(
-                user_id,
-                account["genshin_uid"],
-                daily_period_key,
-                weekly_period_key,
-            )
-
-            daily_data["manual_checked"] = activity_checks["daily_commissions"]
-
-            trounce_data["manual_checked"] = activity_checks["trounce_domains"]
-
-            daily_automatic_checked = (
-                daily_data["completed"] >= daily_data["total"] and daily_data["claimed_reward"]
-            )
-
-            trounce_automatic_checked = trounce_data["remaining"] <= 0
-
-            daily_data["checked"] = (
-                daily_automatic_checked
-                if daily_data["manual_checked"] is None
-                else daily_data["manual_checked"]
-            )
-
-            trounce_data["checked"] = (
-                trounce_automatic_checked
-                if trounce_data["manual_checked"] is None
-                else trounce_data["manual_checked"]
-            )
-
             # =========================================
             # SPIRAL ABYSS
             # =========================================
@@ -2001,6 +2034,27 @@ async def get_single_account_events(
         print(f"Error: {error}")
         print("================================")
 
+    # Saved checks remain available even when HoYoLAB is unavailable.
+    daily_key, weekly_key = get_event_activity_period_keys(account["genshin_server"])
+    checks = await get_event_activity_checks(user_id, account["genshin_uid"], daily_key, weekly_key)
+    temper_thyself["checked"] = bool(checks.get("temper_thyself"))
+    for activity, state, automatic in (
+        (
+            "daily_commissions",
+            daily_data,
+            daily_data["has_data"]
+            and daily_data["completed"] >= daily_data["total"]
+            and daily_data["claimed_reward"],
+        ),
+        (
+            "trounce_domains",
+            trounce_data,
+            trounce_data["has_data"] and trounce_data["remaining"] <= 0,
+        ),
+    ):
+        state["manual_checked"] = checks.get(activity)
+        state["checked"] = automatic if state["manual_checked"] is None else state["manual_checked"]
+
     if limited_events:
         annotate_daily_events(limited_events, get_daily_reset_timestamp(account["genshin_server"]))
         apply_completion_checks(
@@ -2026,6 +2080,7 @@ async def get_single_account_events(
         "resin": resin_data,
         "wish_banners": wish_banners,
         "limited_events": limited_events,
+        "temper_thyself": temper_thyself,
     }
 
     _events_cache[cache_key] = {
@@ -2099,6 +2154,7 @@ async def get_events_data(
             "trounce": account_events["trounce"],
             "wish_banners": account_events["wish_banners"],
             "limited_events": account_events["limited_events"],
+            "temper_thyself": account_events["temper_thyself"],
         }
 
     # =========================================
@@ -2156,6 +2212,7 @@ async def get_events_data(
         },
         "wish_banners": [],
         "limited_events": [],
+        "temper_thyself": build_temper_thyself(),
     }
 
 
@@ -2313,6 +2370,7 @@ async def update_event_activity_check(
         )
 
     if activity_type not in {
+        "temper_thyself",
         "daily_commissions",
         "trounce_domains",
         "limited_event",
@@ -2398,16 +2456,9 @@ async def update_event_activity_check(
     # INVALIDATE EVENTS CACHE
     # =========================================
 
-    for include_featured in (True, False):
-        _events_cache.pop(
-            (
-                user_id,
-                account["id"],
-                account["genshin_uid"],
-                include_featured,
-            ),
-            None,
-        )
+    for key in list(_events_cache):
+        if key[2] == account["genshin_uid"]:
+            _events_cache.pop(key, None)
 
     return JSONResponse(
         {
@@ -2852,6 +2903,205 @@ async def inventory_data(
     }
 
 
+@app.get("/weapons", response_class=HTMLResponse)
+async def weapons_page(
+    request: Request,
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    session = await get_web_session(cyrene_session)
+    if session is None:
+        return RedirectResponse(url="/verify?next=/weapons", status_code=303)
+    accounts = await get_accounts(session.user_id)
+    selected = next((a for a in accounts if a["id"] == account_id), None)
+    if selected is None and accounts:
+        selected = accounts[0]
+    return templates.TemplateResponse(
+        request=request,
+        name="weapons.html",
+        context={"accounts": accounts, "selected_account": selected},
+    )
+
+
+@app.get("/api/weapons")
+async def weapons_data(
+    cyrene_session: str | None = Cookie(default=None),
+    account_id: int | None = None,
+):
+    from utils.web.weapons import catalogue_weapon_rows, owned_weapon_rows
+
+    session = await get_web_session(cyrene_session)
+    if session is None:
+        raise HTTPException(status_code=401, detail="Sign in to view weapons.")
+    accounts = await get_accounts(session.user_id)
+    selected = next((a for a in accounts if a["id"] == account_id), None)
+    if selected is None:
+        raise HTTPException(status_code=404, detail="Account not found.")
+    client = await get_account_client(session.user_id, selected["genshin_uid"])
+    if client is None:
+        raise HTTPException(status_code=503, detail="Unable to load the selected account.")
+    async with client:
+        owned, catalogue = await asyncio.gather(
+            client.get_genshin_characters(),
+            client.genshin_client.get_calculator_weapons(lang="en-us"),
+            return_exceptions=True,
+        )
+    result = {}
+    for key, value, normalise in (
+        ("owned", owned, owned_weapon_rows),
+        ("catalogue", catalogue, catalogue_weapon_rows),
+    ):
+        if isinstance(value, BaseException):
+            logger.error("Failed to load weapon %s for account %s", key, selected["id"])
+            result[key] = []
+            result[key + "_error"] = "Couldn't load weapons from HoYoLAB. Please try again."
+        else:
+            result[key] = normalise(value)
+    return result
+
+
+async def _manual_weapon_owner(token, account_id):
+    session = await get_web_session(token)
+    if session is None:
+        raise HTTPException(status_code=401, detail="Sign in to manage weapons.")
+    accounts = await get_accounts(session.user_id)
+    if not any(a["id"] == account_id for a in accounts):
+        raise HTTPException(status_code=404, detail="Account not found.")
+    return session.user_id
+
+
+@app.get("/api/weapons/manual")
+async def manual_weapons_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    from utils.hoyolab.database import get_manual_weapons
+    from utils.web.weapons import weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    rows = await get_manual_weapons(user_id, account_id)
+    return {
+        "weapons": [
+            dict(row, tag=weapon_tag(row["id"]), release_version=weapon_release_version(row["id"]))
+            for row in rows
+        ]
+    }
+
+
+@app.post("/api/weapons/manual")
+async def manual_weapon_add(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import add_manual_weapon
+    from utils.web.weapons import validate_manual_weapon, weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    try:
+        weapon = validate_manual_weapon(await request.json())
+    except ValueError, TypeError, KeyError:
+        raise HTTPException(
+            status_code=422, detail="Choose a weapon, a valid level, and refinement 1 to 5."
+        ) from None
+    copy_id = str(uuid.uuid4())
+    await add_manual_weapon(user_id, account_id, copy_id, weapon)
+    return {
+        "weapon": dict(
+            weapon,
+            copy_id=copy_id,
+            tag=weapon_tag(weapon["id"]),
+            release_version=weapon_release_version(weapon["id"]),
+        )
+    }
+
+
+@app.delete("/api/weapons/manual/{copy_id}")
+async def manual_weapon_remove(
+    copy_id: str, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import remove_manual_weapon
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    if not await remove_manual_weapon(user_id, account_id, copy_id):
+        raise HTTPException(status_code=404, detail="Weapon not found.")
+    return {"ok": True}
+
+
+@app.get("/api/weapons/scanned")
+async def scanned_weapons_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    from utils.hoyolab.database import get_weapon_scan
+    from utils.web.weapon_scan import normalise_scan_character
+    from utils.web.weapons import weapon_release_version, weapon_tag
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    accounts = await get_accounts(user_id)
+    account = next((a for a in accounts if a["id"] == account_id), {})
+    result = await get_weapon_scan(user_id, account_id)
+    result["weapons"] = [
+        dict(
+            normalise_scan_character(row, account.get("nickname") or ""),
+            tag=weapon_tag(row["id"]),
+            release_version=weapon_release_version(row["id"]),
+        )
+        for row in result["weapons"]
+    ]
+    return result
+
+
+@app.delete("/api/weapons/scanned/{copy_id:path}")
+async def scanned_weapon_remove(
+    copy_id: str, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import remove_scanned_weapon
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    if not await remove_scanned_weapon(user_id, account_id, copy_id):
+        raise HTTPException(status_code=404, detail="Imported weapon not found.")
+    return {"ok": True}
+
+
+async def _validated_weapon_import(request, account_id, token):
+    from utils.web.weapon_scan import validate_weapon_scan
+
+    user_id = await _manual_weapon_owner(token, account_id)
+    accounts = await get_accounts(user_id)
+    account = next((a for a in accounts if a["id"] == account_id), None)
+    if account is None:
+        raise HTTPException(status_code=404, detail="Account not found.")
+    body = bytearray()
+    async for chunk in request.stream():
+        body.extend(chunk)
+        if len(body) > 4 * 1024 * 1024:
+            raise HTTPException(
+                status_code=413, detail="Weapon export is too large (maximum 4 MB)."
+            )
+    try:
+        scan = validate_weapon_scan(
+            json.loads(body), account["genshin_uid"], account.get("nickname") or ""
+        )
+    except (ValueError, TypeError, KeyError, UnicodeError) as error:
+        raise HTTPException(
+            status_code=422,
+            detail=str(error) if isinstance(error, ValueError) else "Invalid weapon export.",
+        ) from None
+    return user_id, scan
+
+
+@app.post("/api/weapons/import/preview")
+async def preview_weapon_import(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    _, scan = await _validated_weapon_import(request, account_id, cyrene_session)
+    return {"count": len(scan["weapons"]), "uid": scan["uid"]}
+
+
+@app.post("/api/weapons/import")
+async def import_weapon_scan(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab.database import replace_weapon_scan
+
+    user_id, scan = await _validated_weapon_import(request, account_id, cyrene_session)
+    await replace_weapon_scan(user_id, account_id, scan["scan_id"], scan["weapons"])
+    return scan
+
+
 @app.get("/characters", response_class=HTMLResponse)
 async def characters_page(
     request: Request,
@@ -3156,7 +3406,7 @@ async def character_plans_data(
     if account_id is None or await _get_planner_account(session.user_id, account_id) is None:
         return JSONResponse(status_code=404, content={"error": "Account not found."})
 
-    return {"plans": await get_character_plans(session.user_id, account_id)}
+    return await get_character_plan_snapshot(session.user_id, account_id)
 
 
 @app.put("/api/characters/plans")
@@ -3189,6 +3439,8 @@ async def save_character_plans(
     if len(character_ids) != len(set(character_ids)):
         return JSONResponse(status_code=400, content={"error": "Duplicate planner entry."})
 
+    if payload.get("recover_if_missing") is True:
+        return await recover_character_plans(session.user_id, account_id, plans)
     await replace_character_plans(session.user_id, account_id, plans)
     return {"saved": len(plans)}
 
@@ -3428,7 +3680,13 @@ async def api_get_custom_events(
             objectives = event.get("progress") or []
 
             for index, objective in enumerate(objectives):
-                objective["current"] = account_progress.get(index, 0)
+                objective["current"] = max(
+                    0,
+                    min(
+                        int(objective["target"]),
+                        int(account_progress.get(index, objective.get("current", 0))),
+                    ),
+                )
 
         event["completions"] = await get_custom_event_completions(
             discord_user_id=user_id,

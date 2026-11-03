@@ -62,12 +62,6 @@
     max-width: 100%;
 }
 
-.characters-account-select .custom-select-button {
-    min-height: 44px;
-    padding-inline: 15px;
-    background: var(--surface-inset);
-}
-
 .characters-account-select .custom-select-value {
     overflow: hidden;
     text-overflow: ellipsis;

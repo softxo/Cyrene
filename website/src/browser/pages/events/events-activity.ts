@@ -17,12 +17,24 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
                 completed,
             );
         }
-        const status = row?.querySelector("[data-limited-status]");
+        const status = row?.querySelector("[data-limited-status], [data-temper-status]");
         if (status) {
             status.textContent = completed ? "Completed" : status.dataset.baseStatus;
             status.classList.toggle("event-completion-pill", completed);
             status.classList.toggle("event-limited-completed", completed);
         }
+        document.querySelectorAll("[data-permanent-account-group]").forEach((group) => {
+            const cards = group.querySelectorAll(".event-list-item");
+            const complete = group.querySelectorAll(".event-list-item.completed").length;
+            const count = group.querySelector("[data-permanent-account-count]");
+            if (count) {
+                count.textContent = `${complete}/${cards.length} complete`;
+                count.classList.toggle(
+                    "event-completion-pill",
+                    cards.length > 0 && complete === cards.length,
+                );
+            }
+        });
         document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
             const cards = group.querySelectorAll(".events-limited-overview-event:not([hidden])");
             const completed = group.querySelectorAll(

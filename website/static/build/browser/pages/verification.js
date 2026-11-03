@@ -1,174 +1,214 @@
-// @ts-nocheck -- Legacy global script; types will be tightened incrementally.
-window.initVerify = function () {
-    const verificationData = document.getElementById("verification-data");
-    const verificationCode = document.getElementById("verification-code");
-    const verificationStatus = document.getElementById("verification-status");
-    const verificationPanel = document.querySelector(".verification-panel");
-    const verificationSuccess = document.getElementById("verification-success");
-    if (!verificationData ||
-        !verificationCode ||
-        !verificationStatus ||
-        !verificationPanel ||
-        !verificationSuccess) {
-        console.error("Verification page elements not found.");
+window.initVerify = () => {
+    const page = document.querySelector(".verification-page");
+    if (!page || page.dataset.initialised)
+        return;
+    window.disposeVerify?.();
+    page.dataset.initialised = "true";
+    const lifecycle = new AbortController();
+    const { signal } = lifecycle;
+    const connected = page.querySelector("[data-discord-connected-panel]");
+    const flow = page.querySelector("[data-verification-flow]");
+    const code = page.querySelector("#verification-code");
+    const status = page.querySelector("#verification-status");
+    const success = page.querySelector("#verification-success");
+    const retry = page.querySelector("[data-verification-retry]");
+    const next = document.querySelector("#verification-data")?.dataset.next || "/verify";
+    const TOKEN = "cyrene_verification_token";
+    const CODE = "cyrene_verification_code";
+    let token = null;
+    let polling;
+    let redirect;
+    let request = null;
+    let active = false;
+    let checking = false;
+    let generation = 0;
+    function clearStored() {
+        try {
+            sessionStorage.removeItem(TOKEN);
+            sessionStorage.removeItem(CODE);
+        }
+        catch {
+            /* Verification also works without storage. */
+        }
+    }
+    function stop() {
+        active = false;
+        generation++;
+        token = null;
+        window.clearInterval(polling);
+        polling = undefined;
+        request?.abort();
+        request = null;
+        checking = false;
+    }
+    async function check() {
+        if (!active || !token || checking)
+            return;
+        checking = true;
+        const run = generation;
+        const pending = new AbortController();
+        request = pending;
+        try {
+            const response = await fetch(`/api/verify/status?token=${encodeURIComponent(token)}`, {
+                cache: "no-store",
+                signal: pending.signal,
+            });
+            if (!active || signal.aborted || run !== generation)
+                return;
+            if (response.status === 404) {
+                stop();
+                clearStored();
+                retry.hidden = false;
+                status.textContent =
+                    "This verification code has expired. Generate a new code to continue.";
+                return;
+            }
+            if (!response.ok) {
+                status.textContent = "Connection interrupted. Retrying verification...";
+                return;
+            }
+            const data = await response.json();
+            if (!active || signal.aborted || run !== generation)
+                return;
+            if (!data.verified) {
+                status.textContent = "Awaiting Verification";
+                return;
+            }
+            stop();
+            clearStored();
+            flow.classList.add("is-verified");
+            success.setAttribute("aria-hidden", "false");
+            redirect = window.setTimeout(() => window.location.assign(next), 2200);
+        }
+        catch {
+            if (!pending.signal.aborted && !signal.aborted && run === generation)
+                status.textContent = "Connection interrupted. Retrying verification...";
+        }
+        finally {
+            if (run === generation) {
+                checking = false;
+                request = null;
+            }
+        }
+    }
+    function poll() {
+        active = true;
+        polling = window.setInterval(() => void check(), 2000);
+        void check();
+    }
+    async function create() {
+        stop();
+        clearStored();
+        active = true;
+        const run = generation;
+        retry.hidden = true;
+        code.textContent = "Generating...";
+        status.textContent = "Generating verification code...";
+        const pending = new AbortController();
+        request = pending;
+        try {
+            const response = await fetch("/api/verify/create", {
+                method: "POST",
+                signal: pending.signal,
+            });
+            if (!response.ok)
+                throw new Error("Verification unavailable");
+            const data = await response.json();
+            if (!active || signal.aborted || run !== generation)
+                return;
+            token = data.token;
+            code.textContent = data.code;
+            try {
+                sessionStorage.setItem(TOKEN, data.token);
+                sessionStorage.setItem(CODE, data.code);
+            }
+            catch {
+                /* Poll without a stored request. */
+            }
+            status.textContent = "Awaiting Verification";
+            poll();
+        }
+        catch {
+            if (!pending.signal.aborted && !signal.aborted && run === generation) {
+                status.textContent = "Unable to start verification. Please try again.";
+                retry.hidden = false;
+            }
+        }
+    }
+    page.querySelector("[data-connect-another]")?.addEventListener("click", () => {
+        if (connected)
+            connected.hidden = true;
+        flow.hidden = false;
+        void create();
+    }, { signal });
+    page.querySelector("[data-cancel-switch]")?.addEventListener("click", () => {
+        stop();
+        clearStored();
+        flow.hidden = true;
+        if (connected)
+            connected.hidden = false;
+        page.querySelector("[data-connect-another]")?.focus();
+    }, { signal });
+    const disconnect = page.querySelector("[data-disconnect-discord]");
+    const disconnectError = page.querySelector("[data-disconnect-error]");
+    disconnect?.addEventListener("click", async () => {
+        if (disconnect.disabled)
+            return;
+        const connect = page.querySelector("[data-connect-another]");
+        disconnect.disabled = true;
+        if (connect)
+            connect.disabled = true;
+        disconnect.textContent = "Disconnecting...";
+        if (disconnectError)
+            disconnectError.textContent = "";
+        try {
+            const response = await fetch("/api/auth/logout", { method: "POST", signal });
+            if (!response.ok)
+                throw new Error("Disconnect failed");
+            if (signal.aborted)
+                return;
+            stop();
+            clearStored();
+            window.location.assign("/verify");
+        }
+        catch {
+            if (signal.aborted)
+                return;
+            if (disconnectError)
+                disconnectError.textContent = "Couldn't disconnect. Please try again.";
+            disconnect.disabled = false;
+            if (connect)
+                connect.disabled = false;
+            disconnect.textContent = "Disconnect Discord account";
+        }
+    }, { signal });
+    retry.addEventListener("click", () => void create(), { signal });
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden)
+            void check();
+    }, { signal });
+    window.addEventListener("pageshow", () => void check(), { signal });
+    window.disposeVerify = () => {
+        stop();
+        window.clearTimeout(redirect);
+        lifecycle.abort();
+        delete page.dataset.initialised;
+    };
+    if (connected) {
+        clearStored();
         return;
     }
-    const nextUrl = verificationData.dataset.next;
-    let verificationToken = null;
-    let polling = null;
-    // =========================================================
-    // Storage
-    // Keep the current verification request when the mobile
-    // browser reloads or restores the page.
-    // =========================================================
-    const STORAGE_TOKEN = "cyrene_verification_token";
-    const STORAGE_CODE = "cyrene_verification_code";
-    // =========================================================
-    // Create Verification
-    // =========================================================
-    async function createVerification() {
-        try {
-            verificationStatus.textContent =
-                "Generating verification code...";
-            const response = await fetch("/api/verify/create", {
-                method: "POST"
-            });
-            if (!response.ok) {
-                throw new Error(`Failed to create verification request: ${response.status}`);
-            }
-            const data = await response.json();
-            verificationToken =
-                data.token;
-            verificationCode.textContent =
-                data.code;
-            // Save the request so a mobile browser reload does
-            // not generate a completely new verification request.
-            sessionStorage.setItem(STORAGE_TOKEN, verificationToken);
-            sessionStorage.setItem(STORAGE_CODE, data.code);
-            verificationStatus.textContent =
-                "Awaiting Verification";
-            startPolling();
-        }
-        catch (error) {
-            console.error("Verification creation failed:", error);
-            verificationStatus.textContent =
-                "Unable to start verification.";
-        }
-    }
-    // =========================================================
-    // Restore Existing Verification
-    // =========================================================
-    function restoreVerification() {
-        const savedToken = sessionStorage.getItem(STORAGE_TOKEN);
-        const savedCode = sessionStorage.getItem(STORAGE_CODE);
-        if (!savedToken ||
-            !savedCode) {
-            return false;
-        }
-        verificationToken =
-            savedToken;
-        verificationCode.textContent =
-            savedCode;
-        verificationStatus.textContent =
-            "Awaiting Verification";
-        startPolling();
-        return true;
-    }
-    // =========================================================
-    // Polling
-    // =========================================================
-    function startPolling() {
-        if (polling) {
-            clearInterval(polling);
-        }
-        polling =
-            setInterval(checkVerification, 2000);
-        // Check immediately instead of waiting 2 seconds.
-        checkVerification();
-    }
-    async function checkVerification() {
-        if (!verificationToken) {
+    try {
+        token = sessionStorage.getItem(TOKEN);
+        const savedCode = sessionStorage.getItem(CODE);
+        if (token && savedCode) {
+            code.textContent = savedCode;
+            poll();
             return;
         }
-        try {
-            const response = await fetch(`/api/verify/status?token=${encodeURIComponent(verificationToken)}`, {
-                cache: "no-store"
-            });
-            // The verification request no longer exists.
-            if (response.status === 404) {
-                clearInterval(polling);
-                polling = null;
-                sessionStorage.removeItem(STORAGE_TOKEN);
-                sessionStorage.removeItem(STORAGE_CODE);
-                verificationStatus.textContent =
-                    "This verification request has expired. Please refresh the page.";
-                return;
-            }
-            if (!response.ok) {
-                return;
-            }
-            const data = await response.json();
-            if (!data.verified) {
-                return;
-            }
-            // =================================================
-            // Verification succeeded
-            // =================================================
-            clearInterval(polling);
-            polling = null;
-            // The request has been completed, so don't restore
-            // this verification request if the page is revisited.
-            sessionStorage.removeItem(STORAGE_TOKEN);
-            sessionStorage.removeItem(STORAGE_CODE);
-            verificationPanel.classList.add("is-verified");
-            verificationSuccess.setAttribute("aria-hidden", "false");
-            setTimeout(() => {
-                window.location.href =
-                    nextUrl;
-            }, 2200);
-        }
-        catch (error) {
-            console.error("Verification polling failed:", error);
-        }
     }
-    // =========================================================
-    // Mobile Browser Handling
-    // =========================================================
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState !== "visible") {
-            return;
-        }
-        // The browser may have suspended the polling while
-        // Discord was open. Immediately check again when
-        // the user returns to the page.
-        if (verificationToken &&
-            !polling) {
-            startPolling();
-        }
-        else if (verificationToken) {
-            checkVerification();
-        }
-    });
-    // =========================================================
-    // Page Restoration / Back-Forward Cache
-    // =========================================================
-    window.addEventListener("pageshow", () => {
-        if (verificationToken) {
-            checkVerification();
-        }
-    });
-    // =========================================================
-    // Initialisation
-    // =========================================================
-    // IMPORTANT:
-    //
-    // Do NOT automatically create a new verification request
-    // if one already exists in this browser session.
-    //
-    // This is what prevents the mobile "code changes after
-    // returning from Discord" problem.
-    const restored = restoreVerification();
-    if (!restored) {
-        createVerification();
+    catch {
+        /* Start a fresh request if browser storage is unavailable. */
     }
+    void create();
 };

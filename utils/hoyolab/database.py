@@ -5,6 +5,14 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from psycopg_pool import AsyncConnectionPool
 
+from . import (
+    achievement_store,
+    automation_store,
+    character_store,
+    events_store,
+    reminder_store,
+    wish_store,
+)
 from .auth import HoYoLABCredentials
 from .crypto import HoYoLABCrypto
 
@@ -35,6 +43,66 @@ async def initialise_database() -> None:
         await _pool.open()
 
     async with _pool.connection() as connection:
+        await connection.execute(
+            """CREATE TABLE IF NOT EXISTS web_discord_oauth (
+                discord_user_id BIGINT PRIMARY KEY,
+                access_token TEXT NOT NULL,
+                refresh_token TEXT NOT NULL,
+                expires_at TIMESTAMPTZ NOT NULL
+            )"""
+        )
+        await connection.execute(
+            """CREATE TABLE IF NOT EXISTS web_discord_profiles (
+                discord_user_id BIGINT PRIMARY KEY,
+                username TEXT,
+                display_name TEXT,
+                avatar_hash TEXT,
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )"""
+        )
+        await connection.execute(
+            """CREATE TABLE IF NOT EXISTS site_changelog (
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                entry_date DATE NOT NULL,
+                content TEXT NOT NULL,
+                author_id BIGINT NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )"""
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS pill_colour TEXT NOT NULL DEFAULT '#8f9cff'"
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS pill_colour_end TEXT"
+        )
+        await connection.execute(
+            "ALTER TABLE site_changelog ADD COLUMN IF NOT EXISTS entry_time TIME"
+        )
+        await connection.execute(
+            "UPDATE site_changelog SET entry_time = (created_at AT TIME ZONE 'Europe/London')::time WHERE entry_time IS NULL"
+        )
+        await connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS manual_weapons (
+                copy_id TEXT PRIMARY KEY,
+                discord_user_id BIGINT NOT NULL,
+                genshin_uid TEXT NOT NULL,
+                weapon JSONB NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+            """
+        )
+        await connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_manual_weapons_owner "
+            "ON manual_weapons(discord_user_id, genshin_uid)"
+        )
+
+        await connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_manual_weapons_uid ON manual_weapons(genshin_uid)"
+        )
+        await _initialise_shared_weapon_scans(connection)
+
         # =========================================
         # ACCOUNTS
         # =========================================
@@ -93,82 +161,6 @@ async def initialise_database() -> None:
             """
         )
 
-        # Progress survives credential unlinking. Identity remains private to
-        # the Cyrene user and follows the game UID across new account rows.
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS game_data_accounts (
-                id INTEGER PRIMARY KEY,
-                discord_user_id BIGINT NOT NULL,
-                genshin_uid TEXT NOT NULL,
-                UNIQUE (discord_user_id, genshin_uid)
-            )
-            """
-        )
-        await connection.execute(
-            """
-            INSERT INTO game_data_accounts (id, discord_user_id, genshin_uid)
-            SELECT id, discord_user_id, genshin_uid FROM accounts
-            ON CONFLICT (discord_user_id, genshin_uid) DO NOTHING
-            """
-        )
-
-        # =========================================
-        # CHARACTER PLANNER
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS character_plans (
-                discord_user_id BIGINT NOT NULL,
-                account_id INTEGER NOT NULL REFERENCES accounts(id)
-                    ON DELETE CASCADE,
-                character_id BIGINT NOT NULL,
-                plan JSONB NOT NULL,
-                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                PRIMARY KEY (
-                    discord_user_id,
-                    account_id,
-                    character_id
-                )
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_character_plans_account
-            ON character_plans(discord_user_id, account_id)
-            """
-        )
-
-        # UID-based snapshots deliberately survive unlinking an account.
-        # An empty snapshot records deletions and prevents legacy resurrection.
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS character_plan_snapshots (
-                discord_user_id BIGINT NOT NULL,
-                genshin_uid TEXT NOT NULL,
-                plans JSONB NOT NULL,
-                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                PRIMARY KEY (discord_user_id, genshin_uid)
-            )
-            """
-        )
-        await connection.execute(
-            """
-            INSERT INTO character_plan_snapshots
-                (discord_user_id, genshin_uid, plans)
-            SELECT p.discord_user_id, a.genshin_uid::text,
-                   jsonb_agg(p.plan ORDER BY p.updated_at, p.character_id)
-            FROM character_plans p
-            JOIN accounts a ON a.id = p.account_id
-            GROUP BY p.discord_user_id, a.genshin_uid
-            ON CONFLICT (discord_user_id, genshin_uid) DO NOTHING
-            """
-        )
-
         # =========================================
         # REMINDERS
         # =========================================
@@ -224,200 +216,6 @@ async def initialise_database() -> None:
             """
             CREATE INDEX IF NOT EXISTS idx_reminders_account
             ON reminders(discord_user_id, genshin_uid)
-            """
-        )
-
-        # =========================================
-        # ACHIEVEMENTS
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS achievement_progress (
-                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-                discord_user_id BIGINT NOT NULL,
-                account_id INTEGER REFERENCES game_data_accounts(id)
-                    ON DELETE RESTRICT,
-                achievement_id TEXT NOT NULL,
-                tier INTEGER NOT NULL,
-
-                completed BOOLEAN NOT NULL DEFAULT FALSE,
-                current INTEGER NOT NULL DEFAULT 0,
-                completed_at TIMESTAMPTZ,
-
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                UNIQUE(discord_user_id, achievement_id, tier)
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            ALTER TABLE achievement_progress
-            ADD COLUMN IF NOT EXISTS account_id INTEGER
-                REFERENCES game_data_accounts(id) ON DELETE RESTRICT
-            """
-        )
-
-        await connection.execute(
-            """
-            ALTER TABLE achievement_progress
-            DROP CONSTRAINT IF EXISTS
-                achievement_progress_discord_user_id_achievement_id_tier_key
-            """
-        )
-
-        await connection.execute(
-            """
-            ALTER TABLE achievement_progress
-            ADD COLUMN IF NOT EXISTS note TEXT
-            """
-        )
-
-        await _migrate_game_data_foreign_key(connection, "achievement_progress")
-
-        # Existing user-wide progress belongs to the user's first linked
-        # account. Rows without a linked account remain available for a later
-        # migration instead of being discarded.
-        await connection.execute(
-            """
-            UPDATE achievement_progress AS progress
-            SET account_id = (
-                SELECT saved.id
-                FROM accounts AS linked
-                JOIN game_data_accounts AS saved
-                  ON saved.discord_user_id = linked.discord_user_id
-                 AND saved.genshin_uid = linked.genshin_uid
-                WHERE linked.discord_user_id = progress.discord_user_id
-                ORDER BY linked.id
-                LIMIT 1
-            )
-            WHERE progress.account_id IS NULL
-              AND EXISTS (
-                  SELECT 1
-                  FROM accounts
-                  WHERE discord_user_id = progress.discord_user_id
-              )
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE UNIQUE INDEX IF NOT EXISTS
-                idx_achievement_progress_account_unique
-            ON achievement_progress (
-                discord_user_id,
-                account_id,
-                achievement_id,
-                tier
-            )
-            WHERE account_id IS NOT NULL
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_achievement_progress_user
-            ON achievement_progress(discord_user_id)
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_achievement_progress_user_completed
-            ON achievement_progress(discord_user_id, completed)
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_achievement_progress_achievement
-            ON achievement_progress(discord_user_id, achievement_id)
-            """
-        )
-
-        # =========================================
-        # WISH HISTORY
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS wish_history (
-                account_id INTEGER NOT NULL REFERENCES game_data_accounts(id)
-                    ON DELETE RESTRICT,
-                wish_id TEXT NOT NULL,
-                genshin_uid TEXT NOT NULL,
-                gacha_type TEXT NOT NULL,
-                item_name TEXT NOT NULL,
-                item_type TEXT NOT NULL,
-                rank_type INTEGER NOT NULL,
-                icon_url TEXT,
-                pulled_at TIMESTAMP NOT NULL,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                PRIMARY KEY (account_id, wish_id)
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            ALTER TABLE wish_history
-            ADD COLUMN IF NOT EXISTS icon_url TEXT
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_wish_history_account_time
-            ON wish_history(account_id, pulled_at DESC, wish_id DESC)
-            """
-        )
-
-        await _migrate_game_data_foreign_key(connection, "wish_history")
-
-        # =========================================
-        # EVENT ACTIVITY CHECKS
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS event_activity_checks (
-                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-                discord_user_id BIGINT NOT NULL,
-                genshin_uid TEXT NOT NULL,
-                activity_type TEXT NOT NULL,
-                period_key TEXT NOT NULL,
-
-                checked BOOLEAN NOT NULL DEFAULT FALSE,
-
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                UNIQUE(
-                    discord_user_id,
-                    genshin_uid,
-                    activity_type,
-                    period_key
-                )
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_event_activity_checks_user
-            ON event_activity_checks(discord_user_id)
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_event_activity_checks_account
-            ON event_activity_checks(discord_user_id, genshin_uid)
             """
         )
 
@@ -622,69 +420,6 @@ async def initialise_database() -> None:
         # CUSTOM EVENTS — ACCOUNT-SPECIFIC ORDER
         # =========================================
 
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS custom_event_account_order (
-                discord_user_id BIGINT NOT NULL,
-
-                account_id INTEGER NOT NULL
-                    REFERENCES accounts(id) ON DELETE CASCADE,
-
-                event_id BIGINT NOT NULL
-                    REFERENCES custom_events(id) ON DELETE CASCADE,
-
-                sort_order BIGINT NOT NULL DEFAULT 0,
-
-                PRIMARY KEY (
-                    discord_user_id,
-                    account_id,
-                    event_id
-                )
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            CREATE INDEX IF NOT EXISTS
-                idx_custom_event_account_order_order
-            ON custom_event_account_order (
-                discord_user_id,
-                account_id,
-                sort_order
-            )
-            """
-        )
-
-        await connection.execute(
-            """
-            INSERT INTO custom_event_account_order (
-                discord_user_id,
-                account_id,
-                event_id,
-                sort_order
-            )
-            SELECT
-                e.discord_user_id,
-                a.id,
-                e.id,
-                e.sort_order
-            FROM custom_events AS e
-            INNER JOIN accounts AS a
-                ON a.discord_user_id = e.discord_user_id
-            WHERE
-                e.account_scope = 'all'
-                OR (e.genshin_uid = a.genshin_uid
-                      AND e.genshin_server = a.genshin_server)
-            ON CONFLICT (
-                discord_user_id,
-                account_id,
-                event_id
-            )
-            DO NOTHING
-            """
-        )
-
         # =========================================
         # CUSTOM EVENT COMPLETIONS
         # =========================================
@@ -756,24 +491,6 @@ async def initialise_database() -> None:
             """
             CREATE INDEX IF NOT EXISTS idx_custom_event_completions_user
             ON custom_event_completions(discord_user_id)
-            """
-        )
-
-        # =========================================
-        # GIFT CODE SETTINGS
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS gift_code_settings (
-                account_id INTEGER PRIMARY KEY
-                    REFERENCES accounts(id) ON DELETE CASCADE,
-
-                auto_claim_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-
-                updated_at TIMESTAMPTZ NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
-            )
             """
         )
 
@@ -952,51 +669,12 @@ async def initialise_database() -> None:
             """
         )
 
-        # =========================================
-        # GIFT CODE REDEMPTIONS
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS gift_code_redemptions (
-                id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-                account_id INTEGER NOT NULL
-                    REFERENCES accounts(id) ON DELETE CASCADE,
-
-                code TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'failed',
-                message TEXT,
-
-                attempted_at TIMESTAMPTZ NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP,
-
-                UNIQUE (account_id, code)
-            )
-            """
-        )
-
-        # =========================================
-        # DAILY HOYOLAB CHECK-IN SETTINGS
-        # =========================================
-
-        await connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS daily_checkin_settings (
-                account_id INTEGER PRIMARY KEY
-                    REFERENCES accounts(id) ON DELETE CASCADE,
-
-                auto_checkin_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-
-                last_claimed_date DATE,
-                last_status TEXT,
-                last_message TEXT,
-
-                updated_at TIMESTAMPTZ NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-            """
-        )
+        await events_store.migrate(connection)
+        await achievement_store.migrate(connection)
+        await wish_store.migrate(connection)
+        await reminder_store.migrate(connection)
+        await character_store.migrate(connection)
+        await automation_store.migrate(connection)
 
 
 def get_pool() -> AsyncConnectionPool:
@@ -1154,73 +832,16 @@ async def save_account(
             ),
         )
 
-        # Retrieve the account ID, whether it was newly inserted or updated by the upsert.
-        account_result = await connection.execute(
-            """
-            SELECT id
-            FROM accounts
-            WHERE discord_user_id = %s
-              AND genshin_uid = %s
-            """,
-            (discord_user_id, genshin_uid),
-        )
-
-        account_row = await account_result.fetchone()
-        saved_account_id = int(account_row["id"])
-
-        # Initialise missing order entries for events visible to this account. Existing custom ordering is preserved.
+        # Attach existing all-account events directly to the newly linked UID.
+        # Existing associations and ordering survive reconnects and are left intact.
         await connection.execute(
-            """
-            INSERT INTO custom_event_account_order (
-                discord_user_id,
-                account_id,
-                event_id,
-                sort_order
-            )
-            SELECT
-                e.discord_user_id,
-                %s,
-                e.id,
-                COALESCE(
-                    (
-                        SELECT MAX(o.sort_order)
-                        FROM custom_event_account_order o
-                        WHERE o.discord_user_id = e.discord_user_id
-                          AND o.account_id = %s
-                    ),
-                    0
-                ) + ROW_NUMBER() OVER (
-                    ORDER BY e.sort_order ASC, e.start_at ASC, e.id ASC
-                )
-            FROM custom_events e
-            WHERE e.discord_user_id = %s
-              AND (
-                  e.account_scope = 'all'
-                  OR (e.genshin_uid, e.genshin_server) = (
-                      SELECT genshin_uid, genshin_server FROM accounts WHERE id = %s
-                  )
-              )
-              AND NOT EXISTS (
-                  SELECT 1
-                  FROM custom_event_account_order existing
-                  WHERE existing.discord_user_id = e.discord_user_id
-                    AND existing.account_id = %s
-                    AND existing.event_id = e.id
-              )
-            ON CONFLICT (
-                discord_user_id,
-                account_id,
-                event_id
-            )
-            DO NOTHING
-            """,
-            (
-                saved_account_id,
-                saved_account_id,
-                discord_user_id,
-                saved_account_id,
-                saved_account_id,
-            ),
+            """INSERT INTO custom_event_accounts(event_id,genshin_uid,genshin_server,sort_order)
+            SELECT e.id,%s,%s,COALESCE((SELECT MAX(sort_order) FROM custom_event_accounts
+                WHERE genshin_uid=%s AND genshin_server=%s),0)
+                + ROW_NUMBER() OVER(ORDER BY e.sort_order,e.start_at,e.id)
+            FROM custom_events e WHERE e.discord_user_id=%s AND e.account_scope='all'
+            ON CONFLICT DO NOTHING""",
+            (genshin_uid, genshin_server, genshin_uid, genshin_server, discord_user_id),
         )
 
 
@@ -1284,48 +905,20 @@ async def account_exists(discord_user_id: int, genshin_uid: str) -> bool:
     return row is not None
 
 
-async def get_character_plans(
-    discord_user_id: int,
-    account_id: int,
-) -> list[dict]:
-    """Load a snapshot through an account owned by this user."""
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT s.plans
-            FROM accounts a
-            JOIN character_plan_snapshots s
-              ON s.discord_user_id = a.discord_user_id
-             AND s.genshin_uid = a.genshin_uid::text
-            WHERE a.discord_user_id = %s AND a.id = %s
-            """,
-            (discord_user_id, account_id),
-        )
-        row = await result.fetchone()
-    return row["plans"] if row else []
+async def get_character_plans(discord_user_id: int, account_id: int) -> list[dict]:
+    return await character_store.get_plans(get_pool(), discord_user_id, account_id)
 
 
-async def replace_character_plans(
-    discord_user_id: int,
-    account_id: int,
-    plans: list[dict],
-) -> None:
-    """Atomically save one UID snapshot, including an intentionally empty plan."""
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            INSERT INTO character_plan_snapshots
-                (discord_user_id, genshin_uid, plans, updated_at)
-            SELECT discord_user_id, genshin_uid::text, %s, NOW()
-            FROM accounts
-            WHERE discord_user_id = %s AND id = %s
-            ON CONFLICT (discord_user_id, genshin_uid)
-            DO UPDATE SET plans = EXCLUDED.plans, updated_at = NOW()
-            """,
-            (Jsonb(plans), discord_user_id, account_id),
-        )
-        if result.rowcount != 1:
-            raise ValueError("Planner account is no longer linked.")
+async def get_character_plan_snapshot(discord_user_id: int, account_id: int) -> dict:
+    return await character_store.get_snapshot(get_pool(), discord_user_id, account_id)
+
+
+async def recover_character_plans(discord_user_id: int, account_id: int, plans: list[dict]) -> dict:
+    return await character_store.recover_plans(get_pool(), discord_user_id, account_id, plans)
+
+
+async def replace_character_plans(discord_user_id: int, account_id: int, plans: list[dict]) -> None:
+    await character_store.replace_plans(get_pool(), discord_user_id, account_id, plans)
 
 
 async def delete_account(discord_user_id: int, genshin_uid: str) -> bool:
@@ -1539,31 +1132,9 @@ async def get_event_activity_check(
     period_key: str,
 ) -> bool | None:
 
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT checked
-            FROM event_activity_checks
-            WHERE discord_user_id = %s
-            AND genshin_uid = %s
-            AND activity_type = %s
-            AND period_key = %s
-            LIMIT 1
-            """,
-            (
-                discord_user_id,
-                genshin_uid,
-                activity_type,
-                period_key,
-            ),
-        )
-
-        row = await result.fetchone()
-
-    if row is None:
-        return None
-
-    return bool(row["checked"])
+    return await events_store.get_event_activity_check(
+        get_pool(), discord_user_id, genshin_uid, activity_type, period_key
+    )
 
 
 async def set_event_activity_check(
@@ -1574,54 +1145,13 @@ async def set_event_activity_check(
     checked: bool,
 ) -> bool:
 
-    async with get_pool().connection() as connection:
-        await connection.execute(
-            """
-            INSERT INTO event_activity_checks (
-                discord_user_id,
-                genshin_uid,
-                activity_type,
-                period_key,
-                checked
-            )
-            VALUES (
-                %s, %s, %s, %s, %s
-            )
-
-            ON CONFLICT (
-                discord_user_id,
-                genshin_uid,
-                activity_type,
-                period_key
-            )
-
-            DO UPDATE SET
-                checked = EXCLUDED.checked,
-                updated_at = NOW()
-            """,
-            (
-                discord_user_id,
-                genshin_uid,
-                activity_type,
-                period_key,
-                checked,
-            ),
-        )
-
-    return True
+    return await events_store.set_event_activity_check(
+        get_pool(), discord_user_id, genshin_uid, activity_type, period_key, checked
+    )
 
 
 async def get_limited_event_checks(discord_user_id: int, genshin_uid: str) -> dict[str, bool]:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT period_key, checked FROM event_activity_checks
-            WHERE discord_user_id = %s AND genshin_uid = %s
-            AND activity_type = 'limited_event'
-            """,
-            (discord_user_id, genshin_uid),
-        )
-        return {row["period_key"]: bool(row["checked"]) for row in await result.fetchall()}
+    return await events_store.get_limited_event_checks(get_pool(), discord_user_id, genshin_uid)
 
 
 async def get_event_activity_checks(
@@ -1631,38 +1161,9 @@ async def get_event_activity_checks(
     trounce_period_key: str,
 ) -> dict[str, bool | None]:
 
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT activity_type, checked
-            FROM event_activity_checks
-            WHERE discord_user_id = %s
-            AND genshin_uid = %s
-            AND (
-                (activity_type = 'daily_commissions' AND period_key = %s)
-                OR
-                (activity_type = 'trounce_domains' AND period_key = %s)
-            )
-            """,
-            (
-                discord_user_id,
-                genshin_uid,
-                daily_period_key,
-                trounce_period_key,
-            ),
-        )
-
-        rows = await result.fetchall()
-
-    checks = {
-        "daily_commissions": None,
-        "trounce_domains": None,
-    }
-
-    for row in rows:
-        checks[row["activity_type"]] = bool(row["checked"])
-
-    return checks
+    return await events_store.get_event_activity_checks(
+        get_pool(), discord_user_id, genshin_uid, daily_period_key, trounce_period_key
+    )
 
 
 async def create_reminder(
@@ -1676,139 +1177,29 @@ async def create_reminder(
     next_trigger_at: datetime | None = None,
 ) -> int:
 
-    if reminder_mode not in {"automatic", "manual"}:
-        raise ValueError("Invalid reminder mode.")
-
-    if reminder_mode == "automatic" and next_trigger_at is None:
-        next_trigger_at = datetime.now(timezone.utc)
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT id
-            FROM reminders
-            WHERE discord_user_id = %s
-            AND reminder_type = %s
-            AND reminder_mode = %s
-            AND genshin_uid IS NOT DISTINCT FROM %s
-            LIMIT 1
-            """,
-            (discord_user_id, reminder_type, reminder_mode, genshin_uid),
-        )
-
-        existing = await result.fetchone()
-
-        if existing is not None:
-            reminder_id = existing["id"]
-
-            await connection.execute(
-                """
-                UPDATE reminders
-                SET
-                    enabled = TRUE,
-                    delivery_type = %s,
-                    config = %s,
-                    next_trigger_at = %s,
-                    last_triggered_at = NULL,
-                    updated_at = NOW()
-                WHERE discord_user_id = %s
-                AND id = %s
-                """,
-                (delivery_type, Jsonb(config or {}), next_trigger_at, discord_user_id, reminder_id),
-            )
-
-            return reminder_id
-
-        result = await connection.execute(
-            """
-            INSERT INTO reminders (
-                discord_user_id,
-                reminder_type,
-                reminder_mode,
-                genshin_uid,
-                enabled,
-                delivery_type,
-                config,
-                next_trigger_at
-            )
-            VALUES (
-                %s, %s, %s, %s,
-                TRUE,
-                %s,
-                %s,
-                %s
-            )
-            RETURNING id
-            """,
-            (
-                discord_user_id,
-                reminder_type,
-                reminder_mode,
-                genshin_uid,
-                delivery_type,
-                Jsonb(config or {}),
-                next_trigger_at,
-            ),
-        )
-
-        row = await result.fetchone()
-
-    return row["id"]
+    return await reminder_store.create_reminder(
+        get_pool(),
+        discord_user_id,
+        reminder_type,
+        genshin_uid=genshin_uid,
+        config=config,
+        delivery_type=delivery_type,
+        reminder_mode=reminder_mode,
+        next_trigger_at=next_trigger_at,
+    )
 
 
 async def get_reminders(discord_user_id: int, *, enabled_only: bool = False) -> list[dict]:
-    async with get_pool().connection() as connection:
-        query = """
-            SELECT
-                r.*,
-
-                a.nickname AS account_nickname,
-                a.cyrene_nickname AS account_cyrene_nickname,
-                a.level AS account_level,
-                a.genshin_server AS account_server
-
-            FROM reminders r
-
-            LEFT JOIN accounts a
-                ON a.discord_user_id = r.discord_user_id
-                AND a.genshin_uid = r.genshin_uid
-
-            WHERE r.discord_user_id = %s
-        """
-
-        params = [discord_user_id]
-
-        if enabled_only:
-            query += """
-                AND r.enabled = TRUE
-            """
-
-        query += """
-            ORDER BY r.created_at ASC
-        """
-
-        result = await connection.execute(query, tuple(params))
-
-        return await result.fetchall()
+    return await reminder_store.get_reminders(
+        get_pool(), discord_user_id, enabled_only=enabled_only
+    )
 
 
 async def get_reminder(discord_user_id: int, reminder_id: int) -> dict | None:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT *
-            FROM reminders
-            WHERE discord_user_id = %s
-            AND id = %s
-            LIMIT 1
-            """,
-            (discord_user_id, reminder_id),
-        )
-
-        return await result.fetchone()
+    return await reminder_store.get_reminder(get_pool(), discord_user_id, reminder_id)
 
 
-_UNSET = object()
+_UNSET = achievement_store.UNSET
 
 
 async def update_reminder(
@@ -1820,165 +1211,39 @@ async def update_reminder(
     next_trigger_at: datetime | None | object = _UNSET,
     last_triggered_at: datetime | None = None,
 ) -> bool:
-    updates = []
-    values = []
-
-    if enabled is not None:
-        updates.append("enabled = %s")
-        values.append(enabled)
-
-    if config is not None:
-        updates.append("config = %s")
-        values.append(Jsonb(config))
-
-    if next_trigger_at is not _UNSET:
-        updates.append("next_trigger_at = %s")
-        values.append(next_trigger_at)
-
-    if last_triggered_at is not None:
-        updates.append("last_triggered_at = %s")
-        values.append(last_triggered_at)
-
-    if not updates:
-        return False
-
-    updates.append("updated_at = NOW()")
-
-    values.extend([discord_user_id, reminder_id])
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            f"""
-            UPDATE reminders
-            SET {", ".join(updates)}
-            WHERE discord_user_id = %s
-            AND id = %s
-            """,
-            tuple(values),
-        )
-
-    return result.rowcount > 0
+    return await reminder_store.update_reminder(
+        get_pool(),
+        discord_user_id,
+        reminder_id,
+        enabled=enabled,
+        config=config,
+        next_trigger_at=next_trigger_at,
+        last_triggered_at=last_triggered_at,
+    )
 
 
 async def delete_reminder(discord_user_id: int, reminder_id: int) -> bool:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            DELETE FROM reminders
-            WHERE discord_user_id = %s
-            AND id = %s
-            """,
-            (discord_user_id, reminder_id),
-        )
-
-    return result.rowcount > 0
+    return await reminder_store.delete_reminder(get_pool(), discord_user_id, reminder_id)
 
 
 async def get_due_reminders() -> list[dict]:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT *
-            FROM reminders
-            WHERE enabled = TRUE
-            AND next_trigger_at IS NOT NULL
-            AND next_trigger_at <= NOW()
-            ORDER BY next_trigger_at ASC
-            """
-        )
-
-        return await result.fetchall()
-
-
-async def _migrate_game_data_foreign_key(connection, table: str) -> None:
-    # Both identifiers are internal constants, never request input.
-    result = await connection.execute(
-        """
-        SELECT conname FROM pg_constraint
-        WHERE conrelid = %s::regclass AND contype = 'f'
-          AND confrelid = 'accounts'::regclass
-        """,
-        (table,),
-    )
-    for row in await result.fetchall():
-        constraint = row["conname"].replace('"', '""')
-        await connection.execute(f'ALTER TABLE {table} DROP CONSTRAINT "{constraint}"')
-        await connection.execute(
-            f"ALTER TABLE {table} ADD FOREIGN KEY (account_id) "
-            "REFERENCES game_data_accounts(id) ON DELETE RESTRICT"
-        )
-
-
-async def _get_game_data_account_id(account_id: int) -> int:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            INSERT INTO game_data_accounts (id, discord_user_id, genshin_uid)
-            SELECT id, discord_user_id, genshin_uid FROM accounts WHERE id = %s
-            ON CONFLICT (discord_user_id, genshin_uid) DO UPDATE
-                SET genshin_uid = EXCLUDED.genshin_uid
-            RETURNING id
-            """,
-            (account_id,),
-        )
-        row = await result.fetchone()
-        if row is None:
-            raise ValueError("Genshin account not found.")
-        return row["id"]
+    return await reminder_store.get_due_reminders(get_pool())
 
 
 async def get_achievement_progress(
     discord_user_id: int,
     account_id: int,
 ) -> list[dict]:
-    account_id = await _get_game_data_account_id(account_id)
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                achievement_id,
-                tier,
-                completed,
-                current,
-                completed_at,
-                note
-            FROM achievement_progress
-            WHERE discord_user_id = %s
-            AND account_id = %s
-            ORDER BY achievement_id, tier
-            """,
-            (discord_user_id, account_id),
-        )
-
-        return await result.fetchall()
+    return await achievement_store.get_progress(get_pool(), discord_user_id, account_id)
 
 
 async def get_achievement_tier_progress(
     discord_user_id: int, account_id: int, achievement_id: str, tier: int
 ) -> dict | None:
 
-    account_id = await _get_game_data_account_id(account_id)
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                achievement_id,
-                tier,
-                completed,
-                current,
-                completed_at,
-                note
-            FROM achievement_progress
-            WHERE discord_user_id = %s
-            AND account_id = %s
-            AND achievement_id = %s
-            AND tier = %s
-            LIMIT 1
-            """,
-            (discord_user_id, account_id, achievement_id, tier),
-        )
-
-        return await result.fetchone()
+    return await achievement_store.get_tier(
+        get_pool(), discord_user_id, account_id, achievement_id, tier
+    )
 
 
 async def update_achievement_tier(
@@ -1993,122 +1258,17 @@ async def update_achievement_tier(
     note: str | None | object = _UNSET,
 ) -> bool:
 
-    existing = await get_achievement_tier_progress(
-        discord_user_id, account_id, achievement_id, tier
+    return await achievement_store.update_tier(
+        get_pool(),
+        discord_user_id,
+        account_id,
+        achievement_id,
+        tier,
+        completed=completed,
+        current=current,
+        completed_at=completed_at,
+        note=note,
     )
-
-    account_id = await _get_game_data_account_id(account_id)
-
-    # --------------------------------
-    # CREATE NEW PROGRESS ROW
-    # --------------------------------
-
-    if existing is None:
-        if completed is None:
-            completed = False
-
-        if current is None:
-            current = 0
-
-        if completed_at is _UNSET:
-            completed_at = datetime.now(timezone.utc) if completed else None
-
-        if note is _UNSET:
-            note = None
-
-        if not (completed_at is None or isinstance(completed_at, datetime)):
-            completed_at = datetime.now(timezone.utc) if completed else None
-
-        if not (note is None or isinstance(note, str)):
-            note = None
-
-        async with get_pool().connection() as connection:
-            await connection.execute(
-                """
-                INSERT INTO achievement_progress (
-                    discord_user_id,
-                    account_id,
-                    achievement_id,
-                    tier,
-                    completed,
-                    current,
-                    completed_at,
-                    note
-                )
-                VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s
-                )
-                """,
-                (
-                    discord_user_id,
-                    account_id,
-                    achievement_id,
-                    tier,
-                    completed,
-                    current,
-                    completed_at,
-                    note,
-                ),
-            )
-
-        return True
-
-    # --------------------------------
-    # UPDATE EXISTING PROGRESS
-    # --------------------------------
-
-    updates = []
-    values = []
-
-    if completed is not None:
-        updates.append("completed = %s")
-
-        values.append(completed)
-
-        if completed:
-            completed_at = datetime.now(timezone.utc)
-
-        else:
-            completed_at = None
-
-    if current is not None:
-        updates.append("current = %s")
-
-        values.append(current)
-
-    if completed_at is not _UNSET:
-        if completed_at is None or isinstance(completed_at, datetime):
-            updates.append("completed_at = %s")
-
-            values.append(completed_at)
-
-    if note is not _UNSET:
-        if note is None or isinstance(note, str):
-            updates.append("note = %s")
-
-            values.append(note)
-
-    if not updates:
-        return False
-
-    updates.append("updated_at = NOW()")
-
-    values.extend([discord_user_id, account_id, achievement_id, tier])
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            f"""
-            UPDATE achievement_progress
-            SET {", ".join(updates)}
-            WHERE discord_user_id = %s
-            AND account_id = %s
-            AND achievement_id = %s
-            AND tier = %s
-            """,
-            tuple(values),
-        )
-
-    return result.rowcount > 0
 
 
 async def update_achievement_tier_note(
@@ -2119,192 +1279,30 @@ async def update_achievement_tier_note(
     note: str | None,
 ) -> bool:
 
-    existing = await get_achievement_tier_progress(
-        discord_user_id, account_id, achievement_id, tier
+    return await achievement_store.update_tier(
+        get_pool(), discord_user_id, account_id, achievement_id, tier, note=note
     )
-
-    if existing is None:
-        await update_achievement_tier(
-            discord_user_id=discord_user_id,
-            account_id=account_id,
-            achievement_id=achievement_id,
-            tier=tier,
-            completed=False,
-            current=0,
-        )
-
-    account_id = await _get_game_data_account_id(account_id)
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            UPDATE achievement_progress
-            SET
-                note = %s,
-                updated_at = NOW()
-            WHERE discord_user_id = %s
-            AND account_id = %s
-            AND achievement_id = %s
-            AND tier = %s
-            """,
-            (note, discord_user_id, account_id, achievement_id, tier),
-        )
-
-    return result.rowcount > 0
 
 
 async def import_achievement_progress(
     discord_user_id: int, account_id: int, progress_data: dict
 ) -> None:
-    account_id = await _get_game_data_account_id(account_id)
-    async with get_pool().connection() as connection:
-        for achievement_id, achievement_data in progress_data.items():
-            tiers = achievement_data.get("tiers", {})
-
-            for tier_number, tier_data in tiers.items():
-                tier = int(tier_number)
-
-                completed = bool(tier_data.get("completed", False))
-
-                current = int(tier_data.get("current", 0))
-
-                timestamp = tier_data.get("timestamp")
-
-                completed_at = None
-
-                if timestamp:
-                    completed_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
-
-                await connection.execute(
-                    """
-                    INSERT INTO achievement_progress (
-                        discord_user_id,
-                        account_id,
-                        achievement_id,
-                        tier,
-                        completed,
-                        current,
-                        completed_at
-                    )
-                    VALUES (
-                        %s, %s, %s, %s, %s, %s, %s
-                    )
-
-                    ON CONFLICT (
-                        discord_user_id,
-                        account_id,
-                        achievement_id,
-                        tier
-                    )
-                    WHERE account_id IS NOT NULL
-                    DO UPDATE SET
-                        completed = EXCLUDED.completed,
-                        current = EXCLUDED.current,
-                        completed_at = EXCLUDED.completed_at,
-                        updated_at = NOW()
-                    """,
-                    (
-                        discord_user_id,
-                        account_id,
-                        achievement_id,
-                        tier,
-                        completed,
-                        current,
-                        completed_at,
-                    ),
-                )
+    return await achievement_store.import_progress(
+        get_pool(), discord_user_id, account_id, progress_data
+    )
 
 
 async def get_wish_history(
     account_id: int,
 ) -> list[dict]:
-    account_id = await _get_game_data_account_id(account_id)
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                wish_id,
-                genshin_uid,
-                gacha_type,
-                item_name,
-                item_type,
-                rank_type,
-                icon_url,
-                pulled_at
-            FROM wish_history
-            WHERE account_id = %s
-            ORDER BY pulled_at DESC, wish_id DESC
-            """,
-            (account_id,),
-        )
-        return await result.fetchall()
+    return await wish_store.get_history(get_pool(), account_id)
 
 
 async def import_wish_history(
     account_id: int,
     wishes: list[dict],
 ) -> int:
-    if not wishes:
-        return 0
-
-    imported = 0
-    account_id = await _get_game_data_account_id(account_id)
-    async with get_pool().connection() as connection:
-        for wish in wishes:
-            result = await connection.execute(
-                """
-                INSERT INTO wish_history (
-                    account_id,
-                    wish_id,
-                    genshin_uid,
-                    gacha_type,
-                    item_name,
-                    item_type,
-                    rank_type,
-                    icon_url,
-                    pulled_at
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (account_id, wish_id) DO UPDATE SET
-                    icon_url = COALESCE(EXCLUDED.icon_url, wish_history.icon_url)
-                RETURNING (xmax = 0) AS inserted
-                """,
-                (
-                    account_id,
-                    wish["id"],
-                    wish["uid"],
-                    wish["gacha_type"],
-                    wish["name"],
-                    wish["item_type"],
-                    wish["rank_type"],
-                    wish.get("icon_url"),
-                    wish["pulled_at"],
-                ),
-            )
-            saved = await result.fetchone()
-            imported += int(bool(saved and saved["inserted"]))
-
-    return imported
-
-
-async def _custom_event_identity(
-    connection,
-    discord_user_id: int,
-    account_scope: str,
-    account_id: int | None,
-) -> tuple[str | None, str | None]:
-    if account_scope == "all":
-        return None, None
-    if account_scope != "account" or account_id is None:
-        raise ValueError("An account must be selected for an account-specific event.")
-    result = await connection.execute(
-        "SELECT genshin_uid, genshin_server FROM accounts WHERE id = %s AND discord_user_id = %s",
-        (account_id, discord_user_id),
-    )
-    account = await result.fetchone()
-    if account is None:
-        raise ValueError("The selected account does not belong to this user.")
-    return account["genshin_uid"], account["genshin_server"]
+    return await wish_store.import_history(get_pool(), account_id, wishes)
 
 
 async def create_custom_event(
@@ -2321,203 +1319,28 @@ async def create_custom_event(
     progress: list,
     icon_url: str | None = None,
 ) -> dict:
-    async with get_pool().connection() as connection:
-        genshin_uid, genshin_server = await _custom_event_identity(
-            connection,
-            discord_user_id,
-            account_scope,
-            account_id,
-        )
-        if account_scope == "all":
-            account_id = None
-
-        # Create the event, preserving the existing global order for compatibility with other callers.
-        result = await connection.execute(
-            """
-            INSERT INTO custom_events (
-                discord_user_id,
-                sort_order,
-                title,
-                description,
-                account_scope,
-                account_id,
-                genshin_uid,
-                genshin_server,
-                start_at,
-                end_at,
-                recurrence,
-                colour,
-                reminder_minutes,
-                progress,
-                icon_url
-            )
-            VALUES (
-                %s,
-                COALESCE(
-                    (
-                        SELECT MAX(sort_order) + 1
-                        FROM custom_events
-                        WHERE discord_user_id = %s
-                    ),
-                    1
-                ),
-                %s, %s, %s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s
-            )
-            RETURNING *
-            """,
-            (
-                discord_user_id,
-                discord_user_id,
-                title,
-                description,
-                account_scope,
-                account_id,
-                genshin_uid,
-                genshin_server,
-                start_at,
-                end_at,
-                Jsonb(recurrence),
-                colour,
-                reminder_minutes,
-                Jsonb(progress),
-                icon_url,
-            ),
-        )
-
-        event = await result.fetchone()
-        event_id = event["id"]
-
-        # Give the new event its own position in each applicable account.
-        # Shared events are inserted into every account's order.
-        await connection.execute(
-            """
-            INSERT INTO custom_event_account_order (
-                discord_user_id,
-                account_id,
-                event_id,
-                sort_order
-            )
-            SELECT
-                e.discord_user_id,
-                a.id,
-                e.id,
-                COALESCE(
-                    (
-                        SELECT MAX(o.sort_order) + 1
-                        FROM custom_event_account_order o
-                        WHERE o.discord_user_id = e.discord_user_id
-                          AND o.account_id = a.id
-                    ),
-                    1
-                )
-            FROM custom_events e
-            INNER JOIN accounts a
-                ON a.discord_user_id = e.discord_user_id
-            WHERE e.id = %s
-              AND (
-                  e.account_scope = 'all'
-                  OR (e.genshin_uid = a.genshin_uid
-                      AND e.genshin_server = a.genshin_server)
-              )
-            ON CONFLICT (
-                discord_user_id,
-                account_id,
-                event_id
-            )
-            DO NOTHING
-            """,
-            (event_id,),
-        )
-
-        return event
-
-
-async def _custom_events_with_linked_accounts(connection, events: list[dict]) -> list[dict]:
-    for event in events:
-        if event["account_scope"] != "account":
-            continue
-        result = await connection.execute(
-            "SELECT id FROM accounts WHERE discord_user_id = %s "
-            "AND genshin_uid = %s AND genshin_server = %s",
-            (event["discord_user_id"], event["genshin_uid"], event["genshin_server"]),
-        )
-        account = await result.fetchone()
-        event["account_id"] = account["id"] if account else None
-    return events
+    return await events_store.create_custom_event(
+        get_pool(),
+        discord_user_id,
+        title,
+        description,
+        account_scope,
+        account_id,
+        start_at,
+        end_at,
+        recurrence,
+        colour,
+        reminder_minutes,
+        progress,
+        icon_url,
+    )
 
 
 async def get_custom_events(
     discord_user_id: int,
     account_id: int | None = None,
 ) -> list[dict]:
-    async with get_pool().connection() as connection:
-        if account_id is not None:
-            account_result = await connection.execute(
-                """
-                SELECT genshin_uid, genshin_server
-                FROM accounts
-                WHERE id = %s
-                  AND discord_user_id = %s
-                """,
-                (account_id, discord_user_id),
-            )
-
-            account = await account_result.fetchone()
-
-            if account is None:
-                return []
-
-            result = await connection.execute(
-                """
-                SELECT
-                    e.*,
-                    COALESCE(o.sort_order, e.sort_order)
-                        AS account_sort_order
-                FROM custom_events AS e
-
-
-                LEFT JOIN custom_event_account_order AS o
-                    ON o.event_id = e.id
-                   AND o.discord_user_id = %s
-                   AND o.account_id = %s
-
-                WHERE
-                    e.account_scope = 'all'
-                    OR (
-                        e.account_scope = 'account'
-                        AND e.genshin_uid = %s
-                        AND e.genshin_server = %s
-                    )
-
-                ORDER BY
-                    COALESCE(o.sort_order, e.sort_order) ASC,
-                    e.start_at ASC,
-                    e.id ASC
-                """,
-                (
-                    discord_user_id,
-                    account_id,
-                    account["genshin_uid"],
-                    account["genshin_server"],
-                ),
-            )
-
-            return await _custom_events_with_linked_accounts(connection, await result.fetchall())
-
-        # Without a selected Genshin account, retain the original
-        # owner-only behaviour for compatibility with existing callers.
-        result = await connection.execute(
-            """
-            SELECT *
-            FROM custom_events
-            WHERE discord_user_id = %s
-            ORDER BY sort_order ASC, start_at ASC, id ASC
-            """,
-            (discord_user_id,),
-        )
-
-        return await _custom_events_with_linked_accounts(connection, await result.fetchall())
+    return await events_store.get_custom_events(get_pool(), discord_user_id, account_id)
 
 
 async def get_visible_custom_event(
@@ -2525,36 +1348,9 @@ async def get_visible_custom_event(
     event_id: int,
     account_id: int,
 ) -> dict | None:
-    """Return an event visible to this user's selected Genshin account."""
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT e.*
-            FROM custom_events AS e
-
-            INNER JOIN accounts AS viewer_account
-                ON viewer_account.id = %s
-               AND viewer_account.discord_user_id = %s
-
-
-            WHERE e.id = %s
-              AND (
-                  e.account_scope = 'all'
-                  OR (
-                      e.account_scope = 'account'
-                      AND e.genshin_uid =
-                          viewer_account.genshin_uid
-                      AND e.genshin_server =
-                          viewer_account.genshin_server
-                  )
-              )
-            LIMIT 1
-            """,
-            (account_id, discord_user_id, event_id),
-        )
-
-        return await result.fetchone()
+    return await events_store.get_visible_custom_event(
+        get_pool(), discord_user_id, event_id, account_id
+    )
 
 
 async def reorder_custom_events(
@@ -2562,215 +1358,16 @@ async def reorder_custom_events(
     account_id: int,
     ordered_event_ids: list[int],
 ) -> bool:
-    """
-    Save the event order for one Discord user's selected account.
-
-    Shared account-scoped events are identified by Genshin UID + server.
-    Each Discord user retains an independent ordering.
-    """
-    if not ordered_event_ids:
-        return False
-
-    if len(ordered_event_ids) != len(set(ordered_event_ids)):
-        return False
-
-    async with get_pool().connection() as connection:
-        async with connection.transaction():
-            # Verify that the selected account belongs to this user
-            # and retrieve its shared Genshin identity.
-            account_result = await connection.execute(
-                """
-                SELECT
-                    genshin_uid,
-                    genshin_server
-                FROM accounts
-                WHERE id = %s
-                  AND discord_user_id = %s
-                FOR UPDATE
-                """,
-                (account_id, discord_user_id),
-            )
-
-            account = await account_result.fetchone()
-
-            if account is None:
-                return False
-
-            genshin_uid = account["genshin_uid"]
-            genshin_server = account["genshin_server"]
-
-            # Add missing order rows for every event visible to this
-            # Discord user's selected Genshin account.
-            #
-            # Existing order rows are preserved. Newly visible events
-            # are appended after the user's current order.
-            await connection.execute(
-                """
-                WITH visible_events AS (
-                    SELECT
-                        e.id,
-                        e.sort_order,
-                        e.start_at
-                    FROM custom_events e
-                    WHERE
-                        e.account_scope = 'all'
-                        OR (
-                            e.account_scope = 'account'
-                            AND e.genshin_uid = %s
-                            AND e.genshin_server = %s
-                        )
-                ),
-                current_max AS (
-                    SELECT COALESCE(MAX(sort_order), 0) AS max_order
-                    FROM custom_event_account_order
-                    WHERE discord_user_id = %s
-                      AND account_id = %s
-                )
-                INSERT INTO custom_event_account_order (
-                    discord_user_id,
-                    account_id,
-                    event_id,
-                    sort_order
-                )
-                SELECT
-                    %s,
-                    %s,
-                    visible_events.id,
-                    current_max.max_order
-                        + (
-                            ROW_NUMBER() OVER (
-                                ORDER BY
-                                    visible_events.sort_order ASC,
-                                    visible_events.start_at ASC,
-                                    visible_events.id ASC
-                            )
-                        )::INTEGER
-                FROM visible_events
-                CROSS JOIN current_max
-                WHERE NOT EXISTS (
-                    SELECT 1
-                    FROM custom_event_account_order existing_order
-                    WHERE existing_order.discord_user_id = %s
-                      AND existing_order.account_id = %s
-                      AND existing_order.event_id = visible_events.id
-                )
-                ON CONFLICT DO NOTHING
-                """,
-                (
-                    genshin_uid,
-                    genshin_server,
-                    discord_user_id,
-                    account_id,
-                    discord_user_id,
-                    account_id,
-                    discord_user_id,
-                    account_id,
-                ),
-            )
-
-            # Lock this user's order rows for events currently visible
-            # to their selected Genshin account.
-            result = await connection.execute(
-                """
-                SELECT
-                    o.event_id,
-                    o.sort_order
-                FROM custom_event_account_order o
-                INNER JOIN custom_events e
-                    ON e.id = o.event_id
-                WHERE o.discord_user_id = %s
-                  AND o.account_id = %s
-                  AND (
-                      e.account_scope = 'all'
-                      OR (
-                          e.account_scope = 'account'
-                          AND e.genshin_uid = %s
-                          AND e.genshin_server = %s
-                      )
-                  )
-                ORDER BY
-                    o.sort_order ASC,
-                    e.start_at ASC,
-                    e.id ASC
-                FOR UPDATE OF o
-                """,
-                (
-                    discord_user_id,
-                    account_id,
-                    genshin_uid,
-                    genshin_server,
-                ),
-            )
-
-            existing_ids = [int(row["event_id"]) for row in await result.fetchall()]
-
-            existing_id_set = set(existing_ids)
-            requested_ids = [int(event_id) for event_id in ordered_event_ids]
-
-            # Reject any event that is not visible to this account.
-            if any(event_id not in existing_id_set for event_id in requested_ids):
-                return False
-
-            # Preserve the positions of events omitted from a partial
-            # reorder request.
-            requested_id_set = set(requested_ids)
-
-            visible_positions = [
-                index for index, event_id in enumerate(existing_ids) if event_id in requested_id_set
-            ]
-
-            if len(visible_positions) != len(requested_ids):
-                return False
-
-            reordered_ids = existing_ids.copy()
-
-            for position, event_id in zip(
-                visible_positions,
-                requested_ids,
-            ):
-                reordered_ids[position] = event_id
-
-            # Update only this Discord user's selected account order.
-            for sort_order, event_id in enumerate(
-                reordered_ids,
-                start=1,
-            ):
-                await connection.execute(
-                    """
-                    UPDATE custom_event_account_order
-                    SET sort_order = %s
-                    WHERE discord_user_id = %s
-                      AND account_id = %s
-                      AND event_id = %s
-                    """,
-                    (
-                        sort_order,
-                        discord_user_id,
-                        account_id,
-                        event_id,
-                    ),
-                )
-
-    return True
+    return await events_store.reorder_custom_events(
+        get_pool(), discord_user_id, account_id, ordered_event_ids
+    )
 
 
 async def get_custom_event(
     discord_user_id: int,
     event_id: int,
 ) -> dict | None:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT *
-            FROM custom_events
-            WHERE id = %s
-              AND discord_user_id = %s
-            LIMIT 1
-            """,
-            (event_id, discord_user_id),
-        )
-
-        return await result.fetchone()
+    return await events_store.get_custom_event(get_pool(), discord_user_id, event_id)
 
 
 async def get_custom_event_account_progress(
@@ -2778,48 +1375,9 @@ async def get_custom_event_account_progress(
     event_id: int,
     account_id: int,
 ) -> dict[int, int]:
-    """Return objective progress for the selected Genshin account."""
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                p.objective_index,
-                p.current
-            FROM custom_event_progress AS p
-
-            INNER JOIN custom_events AS e
-                ON e.id = p.event_id
-
-            INNER JOIN accounts AS viewer_account
-                ON viewer_account.id = %s
-               AND viewer_account.discord_user_id = %s
-
-
-            WHERE p.event_id = %s
-              AND p.genshin_uid = viewer_account.genshin_uid
-              AND p.genshin_server = viewer_account.genshin_server
-              AND (
-                  e.account_scope = 'all'
-                  OR (
-                      e.account_scope = 'account'
-                      AND e.genshin_uid =
-                          viewer_account.genshin_uid
-                      AND e.genshin_server =
-                          viewer_account.genshin_server
-                  )
-              )
-            """,
-            (
-                account_id,
-                discord_user_id,
-                event_id,
-            ),
-        )
-
-        rows = await result.fetchall()
-
-    return {int(row["objective_index"]): int(row["current"]) for row in rows}
+    return await events_store.get_custom_event_account_progress(
+        get_pool(), discord_user_id, event_id, account_id
+    )
 
 
 async def change_custom_event_account_progress(
@@ -2830,98 +1388,9 @@ async def change_custom_event_account_progress(
     amount: int,
     target: int,
 ) -> int | None:
-    """Change objective progress for a visible Genshin account."""
-
-    if amount not in (-1, 1):
-        raise ValueError("Progress amount must be -1 or 1.")
-
-    if objective_index < 0 or target < 1:
-        raise ValueError("Invalid objective index or target.")
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            INSERT INTO custom_event_progress (
-                event_id,
-                discord_user_id,
-                account_id,
-                genshin_uid,
-                genshin_server,
-                objective_index,
-                current
-            )
-            SELECT
-                e.id,
-                %s,
-                NULL,
-                viewer_account.genshin_uid,
-                viewer_account.genshin_server,
-                %s,
-                GREATEST(0, LEAST(%s, %s))
-
-            FROM custom_events AS e
-
-            INNER JOIN accounts AS viewer_account
-                ON viewer_account.id = %s
-               AND viewer_account.discord_user_id = %s
-
-
-            WHERE e.id = %s
-              AND (
-                  e.account_scope = 'all'
-                  OR (
-                      e.account_scope = 'account'
-                      AND e.genshin_uid =
-                          viewer_account.genshin_uid
-                      AND e.genshin_server =
-                          viewer_account.genshin_server
-                  )
-              )
-              AND %s < jsonb_array_length(e.progress)
-              AND %s = (
-                  e.progress -> %s ->> 'target'
-              )::integer
-
-            ON CONFLICT (
-                event_id,
-                genshin_uid,
-                genshin_server,
-                objective_index
-            )
-            WHERE genshin_uid IS NOT NULL
-              AND genshin_server IS NOT NULL
-
-            DO UPDATE SET
-                current = GREATEST(
-                    0,
-                    LEAST(
-                        %s,
-                        custom_event_progress.current + %s
-                    )
-                ),
-                updated_at = NOW()
-
-            RETURNING current
-            """,
-            (
-                discord_user_id,
-                objective_index,
-                target,
-                amount,
-                account_id,
-                discord_user_id,
-                event_id,
-                objective_index,
-                target,
-                objective_index,
-                target,
-                amount,
-            ),
-        )
-
-        row = await result.fetchone()
-
-    return int(row["current"]) if row else None
+    return await events_store.change_custom_event_account_progress(
+        get_pool(), discord_user_id, event_id, account_id, objective_index, amount, target
+    )
 
 
 async def update_custom_event(
@@ -2939,75 +1408,29 @@ async def update_custom_event(
     progress: list,
     icon_url: str | None = None,
 ) -> dict | None:
-    async with get_pool().connection() as connection:
-        genshin_uid, genshin_server = await _custom_event_identity(
-            connection,
-            discord_user_id,
-            account_scope,
-            account_id,
-        )
-        if account_scope == "all":
-            account_id = None
-        result = await connection.execute(
-            """
-            UPDATE custom_events
-            SET
-                title = %s,
-                description = %s,
-                account_scope = %s,
-                account_id = %s,
-                genshin_uid = %s,
-                genshin_server = %s,
-                start_at = %s,
-                end_at = %s,
-                recurrence = %s,
-                colour = %s,
-                reminder_minutes = %s,
-                progress = %s,
-                icon_url = %s,
-                updated_at = NOW()
-            WHERE id = %s
-              AND discord_user_id = %s
-            RETURNING *
-            """,
-            (
-                title,
-                description,
-                account_scope,
-                account_id,
-                genshin_uid,
-                genshin_server,
-                start_at,
-                end_at,
-                Jsonb(recurrence),
-                colour,
-                reminder_minutes,
-                Jsonb(progress),
-                icon_url,
-                event_id,
-                discord_user_id,
-            ),
-        )
-
-        return await result.fetchone()
+    return await events_store.update_custom_event(
+        get_pool(),
+        discord_user_id,
+        event_id,
+        title,
+        description,
+        account_scope,
+        account_id,
+        start_at,
+        end_at,
+        recurrence,
+        colour,
+        reminder_minutes,
+        progress,
+        icon_url,
+    )
 
 
 async def delete_custom_event(
     discord_user_id: int,
     event_id: int,
 ) -> bool:
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            DELETE FROM custom_events
-            WHERE id = %s
-              AND discord_user_id = %s
-            RETURNING id
-            """,
-            (event_id, discord_user_id),
-        )
-
-        return await result.fetchone() is not None
+    return await events_store.delete_custom_event(get_pool(), discord_user_id, event_id)
 
 
 async def set_custom_event_completion(
@@ -3017,129 +1440,9 @@ async def set_custom_event_completion(
     completed: bool,
     account_id: int | None = None,
 ) -> bool:
-    """Set completion for a visible event occurrence."""
-
-    async with get_pool().connection() as connection:
-        if account_id is None:
-            # Preserve the existing owner-level Overview behaviour.
-            result = await connection.execute(
-                """
-                INSERT INTO custom_event_completions (
-                    event_id,
-                    discord_user_id,
-                    account_id,
-                    genshin_uid,
-                    genshin_server,
-                    occurrence_start,
-                    completed,
-                    completed_at
-                )
-                SELECT
-                    e.id,
-                    %s,
-                    NULL,
-                    NULL,
-                    NULL,
-                    %s,
-                    %s,
-                    NOW()
-                FROM custom_events AS e
-                WHERE e.id = %s
-                  AND e.discord_user_id = %s
-
-                ON CONFLICT (
-                    event_id,
-                    occurrence_start
-                )
-                WHERE account_id IS NULL
-                  AND genshin_uid IS NULL
-                  AND genshin_server IS NULL
-
-                DO UPDATE SET
-                    completed = EXCLUDED.completed,
-                    completed_at = NOW()
-
-                RETURNING id
-                """,
-                (
-                    discord_user_id,
-                    occurrence_start,
-                    completed,
-                    event_id,
-                    discord_user_id,
-                ),
-            )
-        else:
-            # Save completion against the actual Genshin identity.
-            result = await connection.execute(
-                """
-                INSERT INTO custom_event_completions (
-                    event_id,
-                    discord_user_id,
-                    account_id,
-                    genshin_uid,
-                    genshin_server,
-                    occurrence_start,
-                    completed,
-                    completed_at
-                )
-                SELECT
-                    e.id,
-                    %s,
-                    NULL,
-                    viewer_account.genshin_uid,
-                    viewer_account.genshin_server,
-                    %s,
-                    %s,
-                    NOW()
-
-                FROM custom_events AS e
-
-                INNER JOIN accounts AS viewer_account
-                    ON viewer_account.id = %s
-                   AND viewer_account.discord_user_id = %s
-
-
-                WHERE e.id = %s
-                  AND (
-                      e.account_scope = 'all'
-                      OR (
-                          e.account_scope = 'account'
-                          AND e.genshin_uid =
-                              viewer_account.genshin_uid
-                          AND e.genshin_server =
-                              viewer_account.genshin_server
-                      )
-                  )
-
-                ON CONFLICT (
-                    event_id,
-                    genshin_uid,
-                    genshin_server,
-                    occurrence_start
-                )
-                WHERE genshin_uid IS NOT NULL
-                  AND genshin_server IS NOT NULL
-
-                DO UPDATE SET
-                    completed = EXCLUDED.completed,
-                    completed_at = NOW()
-
-                RETURNING id
-                """,
-                (
-                    discord_user_id,
-                    occurrence_start,
-                    completed,
-                    account_id,
-                    discord_user_id,
-                    event_id,
-                ),
-            )
-
-        row = await result.fetchone()
-
-    return row is not None
+    return await events_store.set_custom_event_completion(
+        get_pool(), discord_user_id, event_id, occurrence_start, completed, account_id
+    )
 
 
 async def get_custom_event_completions(
@@ -3147,130 +1450,25 @@ async def get_custom_event_completions(
     event_id: int,
     account_id: int | None = None,
 ) -> list[dict]:
-    """Get completion records for an event occurrence scope."""
-
-    async with get_pool().connection() as connection:
-        if account_id is None:
-            # Retain owner-level Overview completion records.
-            result = await connection.execute(
-                """
-                SELECT
-                    occurrence_start,
-                    completed,
-                    completed_at
-                FROM custom_event_completions
-                WHERE event_id = %s
-                  AND discord_user_id = %s
-                  AND account_id IS NULL
-                  AND genshin_uid IS NULL
-                  AND genshin_server IS NULL
-                ORDER BY occurrence_start ASC
-                """,
-                (
-                    event_id,
-                    discord_user_id,
-                ),
-            )
-        else:
-            result = await connection.execute(
-                """
-                SELECT
-                    c.occurrence_start,
-                    c.completed,
-                    c.completed_at
-                FROM custom_event_completions AS c
-
-                INNER JOIN accounts AS viewer_account
-                    ON viewer_account.id = %s
-                   AND viewer_account.discord_user_id = %s
-
-                WHERE c.event_id = %s
-                  AND c.genshin_uid = viewer_account.genshin_uid
-                  AND c.genshin_server = viewer_account.genshin_server
-
-                ORDER BY c.occurrence_start ASC
-                """,
-                (
-                    account_id,
-                    discord_user_id,
-                    event_id,
-                ),
-            )
-
-        rows = await result.fetchall()
-
-    return [dict(row) for row in rows]
+    return await events_store.get_custom_event_completions(
+        get_pool(), discord_user_id, event_id, account_id
+    )
 
 
 async def get_gift_code_settings(account_id: int) -> dict:
-    """Return gift-code settings for an account."""
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT auto_claim_enabled
-            FROM gift_code_settings
-            WHERE account_id = %s
-            """,
-            (account_id,),
-        )
-
-        row = await result.fetchone()
-
-    return {
-        "auto_claim_enabled": (row["auto_claim_enabled"] if row else False),
-    }
+    return await automation_store.get_gift_settings(get_pool(), account_id)
 
 
-async def set_gift_code_auto_claim(
-    account_id: int,
-    enabled: bool,
-) -> None:
-    """Persist the automatic gift-code claiming setting."""
-
-    async with get_pool().connection() as connection:
-        await connection.execute(
-            """
-            INSERT INTO gift_code_settings (
-                account_id,
-                auto_claim_enabled,
-                updated_at
-            )
-            VALUES (%s, %s, CURRENT_TIMESTAMP)
-            ON CONFLICT (account_id)
-            DO UPDATE SET
-                auto_claim_enabled = EXCLUDED.auto_claim_enabled,
-                updated_at = CURRENT_TIMESTAMP
-            """,
-            (account_id, enabled),
-        )
+async def set_gift_code_auto_claim(account_id: int, enabled: bool) -> None:
+    await automation_store.set_enabled(get_pool(), account_id, enabled)
 
 
-async def get_gift_code_redemptions(
-    account_id: int,
-) -> dict[str, dict]:
-    """Return saved redemption statuses keyed by normalised code."""
+async def get_gift_code_redemptions(account_id: int) -> dict[str, dict]:
+    return await automation_store.get_redemptions(get_pool(), account_id)
 
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT code, status, message, attempted_at
-            FROM gift_code_redemptions
-            WHERE account_id = %s
-            """,
-            (account_id,),
-        )
 
-        rows = await result.fetchall()
-
-    return {
-        row["code"]: {
-            "status": row["status"],
-            "message": row["message"],
-            "attempted_at": (row["attempted_at"].isoformat() if row["attempted_at"] else None),
-        }
-        for row in rows
-    }
+async def reserve_gift_code_redemption(account_id: int, code: str, *, automatic=True) -> bool:
+    return await automation_store.reserve_code(get_pool(), account_id, code, automatic=automatic)
 
 
 async def update_gift_code_redemption(
@@ -3278,135 +1476,37 @@ async def update_gift_code_redemption(
     code: str,
     status: str,
     message: str | None = None,
+    *,
+    genshin_uid: str | None = None,
 ) -> None:
-    """Insert or update the saved status for a code and account."""
-
-    normalised_code = code.strip().upper()
-
-    async with get_pool().connection() as connection:
-        await connection.execute(
-            """
-            INSERT INTO gift_code_redemptions (
-                account_id,
-                code,
-                status,
-                message,
-                attempted_at
-            )
-            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
-            ON CONFLICT (account_id, code)
-            DO UPDATE SET
-                status = EXCLUDED.status,
-                message = EXCLUDED.message,
-                attempted_at = CURRENT_TIMESTAMP
-            """,
-            (
-                account_id,
-                normalised_code,
-                status,
-                message,
-            ),
-        )
+    await automation_store.update_redemption(
+        get_pool(),
+        account_id,
+        code,
+        status,
+        message,
+        genshin_uid=genshin_uid,
+    )
 
 
 async def get_gift_code_auto_claim_accounts() -> list[dict]:
-    """Return accounts that have enabled automatic gift-code claiming."""
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                a.id AS account_id,
-                a.discord_user_id,
-                a.genshin_uid,
-                a.nickname,
-                a.cyrene_nickname
-            FROM accounts a
-            INNER JOIN gift_code_settings s
-                ON s.account_id = a.id
-            WHERE s.auto_claim_enabled = TRUE
-            ORDER BY a.id ASC
-            """
-        )
-
-        return await result.fetchall()
+    return await automation_store.get_enabled_accounts(get_pool())
 
 
-async def get_daily_checkin_settings(
-    account_id: int,
-) -> dict:
-    """Return daily check-in settings for an account."""
-
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                auto_checkin_enabled,
-                last_claimed_date,
-                last_status,
-                last_message
-            FROM daily_checkin_settings
-            WHERE account_id = %s
-            """,
-            (account_id,),
-        )
-
-        row = await result.fetchone()
-
-    return {
-        "auto_checkin_enabled": (row["auto_checkin_enabled"] if row else False),
-        "last_claimed_date": (
-            row["last_claimed_date"].isoformat() if row and row["last_claimed_date"] else None
-        ),
-        "last_status": row["last_status"] if row else None,
-        "last_message": row["last_message"] if row else None,
-    }
+async def get_daily_checkin_settings(account_id: int) -> dict:
+    return await automation_store.get_checkin_settings(get_pool(), account_id)
 
 
-async def set_daily_checkin_enabled(
-    account_id: int,
-    enabled: bool,
-) -> None:
-    """Save the automatic daily check-in setting."""
-
-    async with get_pool().connection() as connection:
-        await connection.execute(
-            """
-            INSERT INTO daily_checkin_settings (
-                account_id,
-                auto_checkin_enabled,
-                updated_at
-            )
-            VALUES (%s, %s, CURRENT_TIMESTAMP)
-            ON CONFLICT (account_id)
-            DO UPDATE SET
-                auto_checkin_enabled = EXCLUDED.auto_checkin_enabled,
-                updated_at = CURRENT_TIMESTAMP
-            """,
-            (account_id, enabled),
-        )
+async def set_daily_checkin_enabled(account_id: int, enabled: bool) -> None:
+    await automation_store.set_enabled(get_pool(), account_id, enabled, daily=True)
 
 
 async def get_daily_checkin_accounts() -> list[dict]:
-    """Return accounts with automatic daily check-in enabled."""
+    return await automation_store.get_enabled_accounts(get_pool(), daily=True)
 
-    async with get_pool().connection() as connection:
-        result = await connection.execute(
-            """
-            SELECT
-                a.id AS account_id,
-                a.discord_user_id,
-                a.genshin_uid,
-                a.genshin_server
-            FROM accounts a
-            INNER JOIN daily_checkin_settings s
-                ON s.account_id = a.id
-            WHERE s.auto_checkin_enabled = TRUE
-            ORDER BY a.id ASC
-            """
-        )
 
-        return await result.fetchall()
+async def reserve_daily_checkin(account_id: int, today) -> bool:
+    return await automation_store.reserve_checkin(get_pool(), account_id, today)
 
 
 async def update_daily_checkin_status(
@@ -3415,34 +1515,110 @@ async def update_daily_checkin_status(
     status: str,
     message: str,
     claimed_date=None,
+    genshin_uid: str | None = None,
 ) -> None:
-    """Save the latest daily check-in result."""
+    await automation_store.update_checkin(
+        get_pool(),
+        account_id,
+        status,
+        message,
+        claimed_date,
+        genshin_uid=genshin_uid,
+    )
 
+
+async def _initialise_shared_weapon_scans(connection):
+    """Ensure UID-owned scanner storage exists."""
+    await connection.execute(
+        """CREATE TABLE IF NOT EXISTS weapon_account_scan_snapshots (
+                genshin_uid TEXT PRIMARY KEY,
+                scan_id TEXT NOT NULL,
+                weapons JSONB NOT NULL,
+                updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )"""
+    )
+
+
+async def get_manual_weapons(user_id: int, account_id: int) -> list[dict]:
     async with get_pool().connection() as connection:
-        await connection.execute(
-            """
-            INSERT INTO daily_checkin_settings (
-                account_id,
-                last_claimed_date,
-                last_status,
-                last_message,
-                updated_at
-            )
-            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
-            ON CONFLICT (account_id)
-            DO UPDATE SET
-                last_claimed_date = COALESCE(
-                    EXCLUDED.last_claimed_date,
-                    daily_checkin_settings.last_claimed_date
-                ),
-                last_status = EXCLUDED.last_status,
-                last_message = EXCLUDED.last_message,
-                updated_at = CURRENT_TIMESTAMP
-            """,
-            (
-                account_id,
-                claimed_date,
-                status,
-                message,
-            ),
+        result = await connection.execute(
+            """SELECT m.copy_id, m.weapon FROM manual_weapons m
+            JOIN accounts a ON a.genshin_uid::text = m.genshin_uid
+            WHERE a.discord_user_id = %s AND a.id = %s
+            ORDER BY m.created_at, m.copy_id""",
+            (user_id, account_id),
         )
+        return [dict(row["weapon"], copy_id=row["copy_id"]) for row in await result.fetchall()]
+
+
+async def add_manual_weapon(user_id: int, account_id: int, copy_id: str, weapon: dict):
+    # Keep the creator as provenance only; access is shared through the linked UID.
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """INSERT INTO manual_weapons (copy_id, discord_user_id, genshin_uid, weapon)
+            SELECT %s, discord_user_id, genshin_uid::text, %s FROM accounts
+            WHERE discord_user_id = %s AND id = %s""",
+            (copy_id, Jsonb(weapon), user_id, account_id),
+        )
+        if result.rowcount != 1:
+            raise ValueError("Account no longer linked.")
+
+
+async def remove_manual_weapon(user_id: int, account_id: int, copy_id: str) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """DELETE FROM manual_weapons
+            WHERE EXISTS (SELECT 1 FROM accounts a
+                WHERE a.discord_user_id = %s AND a.id = %s
+                  AND manual_weapons.genshin_uid = a.genshin_uid::text)
+              AND copy_id = %s""",
+            (user_id, account_id, copy_id),
+        )
+        return result.rowcount == 1
+
+
+async def get_weapon_scan(user_id: int, account_id: int):
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """SELECT s.scan_id, s.weapons FROM weapon_account_scan_snapshots s
+            JOIN accounts a ON a.genshin_uid::text = s.genshin_uid
+            WHERE a.discord_user_id = %s AND a.id = %s""",
+            (user_id, account_id),
+        )
+        row = await result.fetchone()
+        return dict(row) if row else {"weapons": [], "scan_id": None}
+
+
+async def replace_weapon_scan(user_id: int, account_id: int, scan_id: str, weapons: list[dict]):
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """INSERT INTO weapon_account_scan_snapshots (genshin_uid, scan_id, weapons)
+            SELECT genshin_uid::text, %s, %s FROM accounts
+            WHERE discord_user_id = %s AND id = %s
+            ON CONFLICT (genshin_uid) DO UPDATE
+              SET scan_id = EXCLUDED.scan_id, weapons = EXCLUDED.weapons, updated_at = NOW()""",
+            (scan_id, Jsonb(weapons), user_id, account_id),
+        )
+        if result.rowcount != 1:
+            raise ValueError("The scan account is no longer linked.")
+
+
+async def remove_scanned_weapon(user_id: int, account_id: int, copy_id: str) -> bool:
+    async with get_pool().connection() as connection:
+        result = await connection.execute(
+            """UPDATE weapon_account_scan_snapshots s
+            SET weapons = COALESCE((SELECT jsonb_agg(item ORDER BY ordinal)
+                FROM jsonb_array_elements(s.weapons) WITH ORDINALITY AS entries(item, ordinal)
+                WHERE item->>'scan_copy_id' IS DISTINCT FROM %s), '[]'::jsonb), updated_at = NOW()
+            WHERE EXISTS (SELECT 1 FROM accounts a WHERE a.id = %s
+                AND a.discord_user_id = %s
+                AND a.genshin_uid::text = s.genshin_uid)
+            AND EXISTS (SELECT 1 FROM jsonb_array_elements(s.weapons) item
+                WHERE item->>'scan_copy_id' = %s)""",
+            (copy_id, account_id, user_id, copy_id),
+        )
+        return result.rowcount == 1
+
+
+async def get_reminder_recipients(genshin_uid: str) -> list[int]:
+    return await reminder_store.get_reminder_recipients(get_pool(), genshin_uid)

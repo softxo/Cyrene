@@ -69,7 +69,12 @@ async def localise_reward_images(details: dict) -> None:
                 continue
             url = entry.get("source_icon", "")
         parsed = urlsplit(url)
-        if parsed.scheme == "https" and parsed.hostname == "static.wikia.nocookie.net":
+        trusted_avatar = re.fullmatch(
+            r"https://enka\.network/ui/UI_AvatarIcon_[A-Za-z0-9_]+\.png", url
+        )
+        if parsed.scheme == "https" and (
+            parsed.hostname == "static.wikia.nocookie.net" or trusted_avatar
+        ):
             entry["source_icon"] = url
             remote.setdefault(url, []).append(entry)
     if not remote:

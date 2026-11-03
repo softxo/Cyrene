@@ -27,12 +27,8 @@ function initCodes() {
     const autoClaimToggle = document.getElementById("codes-auto-claim-toggle");
     const autoClaimStatus = document.getElementById("codes-automatic-status");
 
-    const autoCheckinToggle = document.getElementById(
-        "codes-auto-checkin-toggle"
-    );
-    const autoCheckinStatus = document.getElementById(
-        "codes-auto-checkin-status"
-    );
+    const autoCheckinToggle = document.getElementById("codes-auto-checkin-toggle");
+    const autoCheckinStatus = document.getElementById("codes-auto-checkin-status");
 
     let autoClaimEnabled = false;
     let autoCheckinEnabled = false;
@@ -66,12 +62,12 @@ function initCodes() {
             accountButton.setAttribute("aria-expanded", String(isOpen));
         });
 
-        accountMenu.querySelectorAll(".custom-select-option").forEach(option => {
+        accountMenu.querySelectorAll(".custom-select-option").forEach((option) => {
             option.addEventListener("click", () => {
                 accountSelect.value = option.dataset.value;
                 accountLabel.textContent = option.dataset.label;
 
-                accountMenu.querySelectorAll(".custom-select-option").forEach(item => {
+                accountMenu.querySelectorAll(".custom-select-option").forEach((item) => {
                     const selected = item === option;
 
                     item.classList.toggle("selected", selected);
@@ -86,14 +82,14 @@ function initCodes() {
             });
         });
 
-        document.addEventListener("click", event => {
+        document.addEventListener("click", (event) => {
             if (!accountDropdown.contains(event.target)) {
                 accountDropdown.classList.remove("open");
                 accountButton.setAttribute("aria-expanded", "false");
             }
         });
 
-        document.addEventListener("keydown", event => {
+        document.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 accountDropdown.classList.remove("open");
                 accountButton.setAttribute("aria-expanded", "false");
@@ -142,35 +138,26 @@ function initCodes() {
         refreshButton.disabled = true;
         refreshButton.textContent = "Refreshing…";
 
-        list.replaceChildren(
-            createElement("div", "codes-loading", "Loading available codes…")
-        );
+        list.replaceChildren(createElement("div", "codes-loading", "Loading available codes…"));
 
         clearStatus();
 
         try {
-            const response = await fetch(
-                `/api/codes?account_id=${encodeURIComponent(accountId)}`,
-                {
-                    method: "GET",
-                    credentials: "same-origin",
-                    headers: {
-                        Accept: "application/json",
-                    },
-                }
-            );
+            const response = await fetch(`/api/codes?account_id=${encodeURIComponent(accountId)}`, {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    Accept: "application/json",
+                },
+            });
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(
-                    data.detail || "Unable to load gift codes."
-                );
+                throw new Error(data.detail || "Unable to load gift codes.");
             }
 
-            availableCodes = Array.isArray(data.codes)
-                ? data.codes
-                : [];
+            availableCodes = Array.isArray(data.codes) ? data.codes : [];
 
             autoClaimEnabled = data.auto_claim_enabled === true;
 
@@ -192,11 +179,7 @@ function initCodes() {
             renderCodes();
         } catch (error) {
             list.replaceChildren(
-                createElement(
-                    "div",
-                    "codes-error",
-                    error.message || "Unable to load gift codes."
-                )
+                createElement("div", "codes-error", error.message || "Unable to load gift codes."),
             );
 
             count.textContent = "Unavailable";
@@ -212,12 +195,10 @@ function initCodes() {
         }
 
         if (autoClaimEnabled) {
-            autoClaimStatus.textContent =
-                "Automatic claiming is enabled for this account.";
+            autoClaimStatus.textContent = "Automatic claiming is enabled for this account.";
             autoClaimStatus.dataset.state = "enabled";
         } else {
-            autoClaimStatus.textContent =
-                "Automatic claiming is disabled for this account.";
+            autoClaimStatus.textContent = "Automatic claiming is disabled for this account.";
             autoClaimStatus.dataset.state = "disabled";
         }
     }
@@ -229,12 +210,11 @@ function initCodes() {
 
         if (autoCheckinEnabled) {
             if (
-                data.checkin_last_status === "claimed"
-                || data.checkin_last_status === "already_claimed"
+                data.checkin_last_status === "claimed" ||
+                data.checkin_last_status === "already_claimed"
             ) {
                 autoCheckinStatus.textContent =
-                    data.checkin_last_message
-                    || "Today's daily check-in has been completed.";
+                    data.checkin_last_message || "Today's daily check-in has been completed.";
             } else {
                 autoCheckinStatus.textContent =
                     "Automatic daily check-in is enabled for this account.";
@@ -279,9 +259,7 @@ function initCodes() {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(
-                    data.detail || "Unable to save automatic claiming."
-                );
+                throw new Error(data.detail || "Unable to save automatic claiming.");
             }
 
             // Only update the visible setting if the same account is selected.
@@ -300,10 +278,7 @@ function initCodes() {
                     autoClaimStatus.dataset.state = "error";
                 }
 
-                showStatus(
-                    error.message || "Unable to save automatic claiming.",
-                    "error"
-                );
+                showStatus(error.message || "Unable to save automatic claiming.", "error");
             }
         } finally {
             if (accountSelect?.value === accountId) {
@@ -322,8 +297,7 @@ function initCodes() {
         autoCheckinToggle.disabled = true;
 
         if (autoCheckinStatus) {
-            autoCheckinStatus.textContent =
-                "Saving daily check-in setting…";
+            autoCheckinStatus.textContent = "Saving daily check-in setting…";
             autoCheckinStatus.dataset.state = "saving";
         }
 
@@ -344,9 +318,7 @@ function initCodes() {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(
-                    data.detail || "Unable to save daily check-in setting."
-                );
+                throw new Error(data.detail || "Unable to save daily check-in setting.");
             }
 
             if (accountSelect?.value === accountId) {
@@ -360,16 +332,11 @@ function initCodes() {
 
                 if (autoCheckinStatus) {
                     autoCheckinStatus.textContent =
-                        error.message
-                        || "Unable to save daily check-in setting.";
+                        error.message || "Unable to save daily check-in setting.";
                     autoCheckinStatus.dataset.state = "error";
                 }
 
-                showStatus(
-                    error.message
-                    || "Unable to save daily check-in setting.",
-                    "error"
-                );
+                showStatus(error.message || "Unable to save daily check-in setting.", "error");
             }
         } finally {
             if (accountSelect?.value === accountId) {
@@ -377,7 +344,6 @@ function initCodes() {
             }
         }
     }
-
 
     function renderCodes() {
         list.replaceChildren();
@@ -387,11 +353,7 @@ function initCodes() {
 
         if (availableCodes.length === 0) {
             list.append(
-                createElement(
-                    "div",
-                    "codes-empty",
-                    "No currently available codes were found."
-                )
+                createElement("div", "codes-empty", "No currently available codes were found."),
             );
             return;
         }
@@ -399,15 +361,11 @@ function initCodes() {
         for (const item of availableCodes) {
             const card = createElement("article", "codes-item", "");
             const details = createElement("div", "codes-item-details", "");
-            const code = createElement(
-                "h3",
-                "codes-item-code",
-                item.code
-            );
+            const code = createElement("h3", "codes-item-code", item.code);
             const rewards = createElement(
                 "p",
                 "codes-item-rewards",
-                item.rewards || "Rewards not listed"
+                item.rewards || "Rewards not listed",
             );
 
             const savedStatus = item.redemption_status;
@@ -420,18 +378,14 @@ function initCodes() {
 
             const claimButton = createElement(
                 "button",
-                "codes-claim-button",
-                buttonLabel[savedStatus] || "Claim"
+                "cyrene-button codes-claim-button",
+                buttonLabel[savedStatus] || "Claim",
             );
 
             claimButton.type = "button";
-            claimButton.disabled =
-                !accountSelect?.value || accountSelect.disabled;
+            claimButton.disabled = !accountSelect?.value || accountSelect.disabled;
 
-            if (
-                savedStatus === "submitted"
-                || savedStatus === "processing"
-            ) {
+            if (savedStatus === "submitted" || savedStatus === "processing") {
                 claimButton.disabled = true;
             }
 
@@ -474,32 +428,22 @@ function initCodes() {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(
-                    data.message || data.detail || "Redemption failed."
-                );
+                throw new Error(data.message || data.detail || "Redemption failed.");
             }
 
-            showStatus(
-                `${code}: ${data.message || "Redemption request completed."}`,
-                "success"
-            );
+            showStatus(`${code}: ${data.message || "Redemption request completed."}`, "success");
 
             button.textContent = "Submitted";
             button.disabled = true;
 
-            const item = availableCodes.find(
-                entry => entry.code === code
-            );
+            const item = availableCodes.find((entry) => entry.code === code);
 
             if (item) {
                 item.redemption_status = "submitted";
                 item.redemption_message = data.message;
             }
         } catch (error) {
-            showStatus(
-                `${code}: ${error.message || "Redemption failed."}`,
-                "error"
-            );
+            showStatus(`${code}: ${error.message || "Redemption failed."}`, "error");
 
             button.textContent = "Retry";
             button.disabled = false;
