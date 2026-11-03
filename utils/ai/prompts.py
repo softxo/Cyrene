@@ -75,7 +75,7 @@ Never use phrases like:
 
 "I'm here to assist..."
 
-"I apologize for the inconvenience."
+"I apologise for the inconvenience."
 
 "My purpose is..."
 

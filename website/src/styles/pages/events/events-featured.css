@@ -336,9 +336,9 @@
 .event-featured-toggle:focus-visible {
     outline: none;
 
-    border-color: var(--event-accent);
+    border-color: var(--control-focus-border);
 
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--event-accent) 25%, transparent);
+    box-shadow: none;
 }
 
 /* ---------------------------------------------------------

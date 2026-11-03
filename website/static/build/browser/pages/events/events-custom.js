@@ -83,7 +83,8 @@ function initCustomEvents() {
         renderCustomIconPreview();
     });
     let events = [];
-    let eventsByAccount = new Map();
+    const accountLoadErrors = new Map();
+    const eventsByAccount = new Map();
     let loading = false;
     let draggingEventId = null;
     let savingOrder = false;
@@ -179,7 +180,7 @@ function initCustomEvents() {
             wrapper.className = "events-custom-datetime";
             const trigger = document.createElement("button");
             trigger.type = "button";
-            trigger.className = "events-custom-datetime-trigger";
+            trigger.className = "cyrene-select-trigger events-custom-datetime-trigger";
             trigger.setAttribute("aria-haspopup", "dialog");
             trigger.setAttribute("aria-expanded", "false");
             trigger.setAttribute("aria-required", String(isRequired));
@@ -190,7 +191,7 @@ function initCustomEvents() {
             triggerIcon.setAttribute("aria-hidden", "true");
             trigger.append(triggerValue, triggerIcon);
             const popover = document.createElement("div");
-            popover.className = "events-custom-calendar";
+            popover.className = "cyrene-popover events-custom-calendar";
             popover.setAttribute("role", "dialog");
             popover.setAttribute("aria-label", "Choose date and time");
             popover.hidden = true;
@@ -198,15 +199,15 @@ function initCustomEvents() {
             header.className = "events-custom-calendar-header";
             const previous = document.createElement("button");
             previous.type = "button";
-            previous.className = "events-custom-calendar-nav";
-            previous.textContent = "‹";
+            previous.className = "cyrene-button events-custom-calendar-nav";
+            setButtonIcon(previous, "M14 6l-6 6 6 6");
             previous.setAttribute("aria-label", "Previous month");
             const monthLabel = document.createElement("strong");
             monthLabel.className = "events-custom-calendar-month";
             const next = document.createElement("button");
             next.type = "button";
-            next.className = "events-custom-calendar-nav";
-            next.textContent = "›";
+            next.className = "cyrene-button events-custom-calendar-nav";
+            setButtonIcon(next, "M10 6l6 6-6 6");
             next.setAttribute("aria-label", "Next month");
             header.append(previous, monthLabel, next);
             const weekdays = document.createElement("div");
@@ -238,7 +239,7 @@ function initCustomEvents() {
             footer.className = "events-custom-calendar-footer";
             const today = document.createElement("button");
             today.type = "button";
-            today.className = "events-custom-calendar-secondary";
+            today.className = "cyrene-button events-custom-calendar-secondary";
             today.textContent = "Today";
             const footerEnd = document.createElement("div");
             footerEnd.className = "events-custom-calendar-footer-end";
@@ -246,17 +247,17 @@ function initCustomEvents() {
             if (!isRequired) {
                 clear = document.createElement("button");
                 clear.type = "button";
-                clear.className = "events-custom-calendar-secondary";
+                clear.className = "cyrene-button events-custom-calendar-secondary";
                 clear.textContent = "Clear";
                 footerEnd.append(clear);
             }
             const cancel = document.createElement("button");
             cancel.type = "button";
-            cancel.className = "events-custom-calendar-secondary";
+            cancel.className = "cyrene-button events-custom-calendar-secondary";
             cancel.textContent = "Cancel";
             const apply = document.createElement("button");
             apply.type = "button";
-            apply.className = "events-custom-calendar-apply";
+            apply.className = "cyrene-button events-custom-calendar-apply";
             apply.textContent = "Apply";
             footerEnd.append(cancel, apply);
             footer.append(today, footerEnd);
@@ -685,8 +686,8 @@ function initCustomEvents() {
         targetInput.dataset.objectiveTarget = "";
         const removeButton = document.createElement("button");
         removeButton.type = "button";
-        removeButton.className = "events-custom-objective-remove";
-        removeButton.textContent = "×";
+        removeButton.className = "cyrene-button events-custom-objective-remove";
+        setButtonIcon(removeButton, "M6 6l12 12M18 6L6 18");
         removeButton.setAttribute("aria-label", "Remove objective");
         removeButton.addEventListener("click", () => row.remove());
         row.append(titleInput, currentInput, targetInput, removeButton);
@@ -967,18 +968,47 @@ function initCustomEvents() {
             await saveEventOrder(list, previousEvents);
         });
     }
+    function setButtonIcon(button, pathData) {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+        svg.setAttribute("stroke-width", "1.8");
+        svg.setAttribute("stroke-linecap", "round");
+        svg.setAttribute("stroke-linejoin", "round");
+        svg.setAttribute("aria-hidden", "true");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathData);
+        svg.append(path);
+        button.replaceChildren(svg);
+    }
     function makeElement(tag, className, text = "") {
         const element = document.createElement(tag);
         if (className) {
             element.className = className;
         }
-        if (text !== "") {
+        if (tag === "button" &&
+            /events-custom-(?:progress|overview-objective)-button/.test(className || "") &&
+            ["+", "-", "\u2212"].includes(text)) {
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("fill", "none");
+            svg.setAttribute("stroke", "currentColor");
+            svg.setAttribute("stroke-width", "1.8");
+            svg.setAttribute("stroke-linecap", "round");
+            svg.setAttribute("aria-hidden", "true");
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", text === "+" ? "M12 5v14M5 12h14" : "M5 12h14");
+            svg.append(path);
+            element.append(svg);
+        }
+        else if (text !== "") {
             element.textContent = text;
         }
         return element;
     }
     function makeButton(label, className, callback) {
-        const button = makeElement("button", `events-custom-action ${className || ""}`, label);
+        const button = makeElement("button", `cyrene-button events-custom-action ${className || ""}`, label);
         button.type = "button";
         button.addEventListener("click", callback);
         return button;
@@ -1090,7 +1120,7 @@ function initCustomEvents() {
             track.setAttribute("aria-valuemax", String(target));
             track.setAttribute("aria-valuenow", String(current));
             track.append(fill);
-            const decreaseButton = makeElement("button", "events-custom-progress-button", "−");
+            const decreaseButton = makeElement("button", "cyrene-button events-custom-progress-button", "−");
             decreaseButton.type = "button";
             decreaseButton.setAttribute("aria-label", `Decrease ${objective.title || "objective"} progress`);
             decreaseButton.disabled = current <= 0;
@@ -1103,7 +1133,7 @@ function initCustomEvents() {
                     track,
                 });
             });
-            const increaseButton = makeElement("button", "events-custom-progress-button", "+");
+            const increaseButton = makeElement("button", "cyrene-button events-custom-progress-button", "+");
             increaseButton.type = "button";
             increaseButton.setAttribute("aria-label", `Increase ${objective.title || "objective"} progress`);
             increaseButton.disabled = current >= target;
@@ -1234,7 +1264,7 @@ function initCustomEvents() {
         }
         renderProgress(event, content);
         const actions = makeElement("div", "events-custom-card-actions");
-        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, occurrenceStart)), makeButton("Edit", "", () => openModal(event)), makeButton("Delete", "events-custom-action-danger", () => removeEvent(event)));
+        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, occurrenceStart)), makeButton("Edit", "", () => openModal(event)), makeButton("Delete", "events-custom-action-danger cyrene-button--danger", () => removeEvent(event)));
         content.append(actions);
         card.append(accent, content);
         initialiseEventDragAndDrop(card, list);
@@ -1404,7 +1434,7 @@ function initCustomEvents() {
             body.append(makeElement("p", "events-custom-card-description", event.description));
         }
         const actions = makeElement("div", "events-custom-card-actions events-custom-overview-actions");
-        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, getCompletionOccurrenceStart(event), accountId)), makeButton("Edit", "", () => openModal(event)), makeButton("Delete", "events-custom-action-danger", () => removeEvent(event)));
+        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, getCompletionOccurrenceStart(event), accountId)), makeButton("Edit", "", () => openModal(event)), makeButton("Delete", "events-custom-action-danger cyrene-button--danger", () => removeEvent(event)));
         const manage = makeElement("a", "events-custom-overview-manage events-custom-action", "Manage in account");
         manage.href = `/events?account_id=${encodeURIComponent(accountId)}&tab=custom`;
         actions.append(manage);
@@ -1425,8 +1455,8 @@ function initCustomEvents() {
             progress.setAttribute("aria-valuemax", String(target));
             progress.setAttribute("aria-valuenow", String(current));
             const controls = makeElement("div", "events-custom-overview-objective-controls");
-            const decrease = makeElement("button", "events-custom-overview-objective-button events-custom-progress-button", "−");
-            const increase = makeElement("button", "events-custom-overview-objective-button events-custom-progress-button", "+");
+            const decrease = makeElement("button", "cyrene-button events-custom-overview-objective-button events-custom-progress-button", "−");
+            const increase = makeElement("button", "cyrene-button events-custom-overview-objective-button events-custom-progress-button", "+");
             decrease.type = increase.type = "button";
             decrease.setAttribute("aria-label", `Decrease ${label} progress for this account`);
             increase.setAttribute("aria-label", `Increase ${label} progress for this account`);
@@ -1490,6 +1520,17 @@ function initCustomEvents() {
             const accountId = list.dataset.accountId || page.dataset.accountId;
             const listEvents = isOverview ? eventsByAccount.get(String(accountId)) || [] : events;
             if (isOverview) {
+                if (accountLoadErrors.has(String(accountId))) {
+                    const count = list
+                        .closest("[data-custom-account-group]")
+                        ?.querySelector("[data-custom-account-count]");
+                    if (count) {
+                        count.textContent = "Unavailable";
+                        count.classList.remove("event-completion-pill");
+                    }
+                    renderEmpty(list, "Couldn't Load Custom Events", accountLoadErrors.get(String(accountId)));
+                    return;
+                }
                 const completedCount = listEvents.filter(isEventCompleted).length;
                 const count = list
                     .closest("[data-custom-account-group]")
@@ -1528,7 +1569,7 @@ function initCustomEvents() {
             const isOverview = page.dataset.overview === "true";
             if (isOverview) {
                 const lists = $$("[data-custom-event-list]").filter((list) => list.dataset.accountId);
-                const accountResults = await Promise.all(lists.map(async (list) => {
+                const accountResults = await Promise.allSettled(lists.map(async (list) => {
                     const accountId = list.dataset.accountId;
                     const params = new URLSearchParams({
                         account_id: accountId,
@@ -1536,7 +1577,17 @@ function initCustomEvents() {
                     const data = await apiRequest(`/api/custom-events?${params.toString()}`, {}, window.CyreneSchemas.customEventsListResponseSchema);
                     return [String(accountId), data.events || []];
                 }));
-                eventsByAccount = new Map(accountResults);
+                accountLoadErrors.clear();
+                accountResults.forEach((result, index) => {
+                    const accountId = String(lists[index].dataset.accountId);
+                    if (result.status === "fulfilled") {
+                        eventsByAccount.set(...result.value);
+                    }
+                    else {
+                        accountLoadErrors.set(accountId, result.reason?.message || "Unable to load this account's events.");
+                        console.error("Failed to load Custom Events for account", accountId, result.reason);
+                    }
+                });
             }
             else {
                 const params = new URLSearchParams();

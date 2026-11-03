@@ -4,10 +4,43 @@
 
 {% block content %}
 
-<div class="page verification-page">
+{% macro oauth_error() %}
+    {% if discord_oauth_error %}<p class="discord-oauth-error" role="alert">{% if discord_oauth_error == 'unavailable' %}Discord authorisation is not available yet. Please use the verification code instead.{% else %}Discord authorisation did not complete. Please try again or use a verification code.{% endif %}</p>{% endif %}
+{% endmacro %}
 
-    <section class="verification-panel">
+<div class="page verification-page" data-discord-connected="{{ 'true' if discord_profile else 'false' }}">
 
+    {% if discord_profile %}
+    <section class="verification-panel discord-connected-panel" data-discord-connected-panel>
+        <span class="discord-connected-badge"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Connected</span>
+        <h1>Your Discord account</h1>
+        <p class="verification-description">You're connected to Cyrene with this Discord account.</p>
+        <div class="discord-profile-card">
+            <img class="discord-profile-avatar" src="{{ discord_profile.avatar_url }}" alt="" width="64" height="64">
+            <div class="discord-profile-copy">
+                <div class="discord-profile-name-row">
+                    <strong>{{ discord_profile.display_name }}</strong>
+                    <span class="discord-profile-name-divider" aria-hidden="true"></span>
+                    <span class="discord-account-type">{% if discord_profile.account_type == 'special' %}<b class="discord-account-special">Special</b>{% elif discord_profile.account_type == 'premium' %}<b class="discord-account-premium">Premium</b>{% else %}Normal{% endif %}</span>
+                </div>
+                {% if discord_profile.username %}<span>@{{ discord_profile.username }}</span>{% endif %}
+                <span class="discord-profile-id">Discord ID: {{ discord_profile.id }}</span>
+            </div>
+        </div>
+        <div class="discord-connection-actions">
+            <a class="cyrene-button cyrene-button--large discord-oauth-button" href="/auth/discord?{{ {'next': next or '/verify'} | urlencode }}" data-discord-oauth><span>Authorise a different account with Discord</span><span class="discord-oauth-pill">OAuth2</span></a>
+        <button type="button" class="cyrene-button cyrene-button--large discord-connect-another" data-connect-another>Connect to a different Discord account</button>
+            <button type="button" class="cyrene-button cyrene-button--large discord-disconnect" data-disconnect-discord>Disconnect Discord account</button>
+        </div>
+        {{ oauth_error() }}
+        <p class="discord-disconnect-error" data-disconnect-error role="alert"></p>
+        <a href="/settings" class="discord-manage-accounts">Manage Genshin accounts</a>
+    </section>
+    {% endif %}
+    <section class="verification-panel{% if discord_profile %} has-back-button{% endif %}" data-verification-flow {% if discord_profile %}hidden{% endif %}>
+        {% if discord_profile %}
+        <button type="button" class="cyrene-button cyrene-button--large discord-switch-cancel" data-cancel-switch><svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</button>
+        {% endif %}
         <h1>
             Verify your account
         </h1>
@@ -18,6 +51,9 @@
             command in Discord.
         </p>
 
+        {% if discord_profile %}
+        <p class="discord-switch-note">Your current account stays connected until the new verification succeeds.</p>
+        {% endif %}
         <div class="verification-code">
             <span id="verification-code">
                 Generating...
@@ -32,6 +68,12 @@
             Awaiting Verification
         </p>
 
+        <button type="button" class="cyrene-button cyrene-button--large discord-verification-retry" data-verification-retry hidden>Generate a new code</button>
+        <div class="discord-oauth-alternative">
+            <div class="discord-oauth-divider" aria-hidden="true">or</div>
+            <a class="cyrene-button cyrene-button--large discord-oauth-button" href="/auth/discord?{{ {'next': next or '/verify'} | urlencode }}" data-discord-oauth><span>{{ 'Authorise a different account with Discord' if discord_profile else 'Authorise with Discord' }}</span><span class="discord-oauth-pill">OAuth2</span></a>
+            {{ oauth_error() }}
+        </div>
         <div
             id="verification-success"
             class="verification-success"
@@ -60,7 +102,7 @@
 
 <div
     id="verification-data"
-    data-next="{{ next or '/planner' }}"
+    data-next="{{ next or '/verify' }}"
 ></div>
 
 {% endblock %}

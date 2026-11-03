@@ -622,11 +622,6 @@ html[data-hover-effects="off"] .event-featured-toggle:active {
     transform: none;
 }
 
-html[data-hover-effects="off"] .events-layout-switch:hover,
-html[data-hover-effects="off"] .events-layout-switch:active {
-    transform: none;
-}
-
 html[data-hover-effects="off"] .overview-account-row:hover {
     transform: none;
 }

@@ -209,28 +209,6 @@
     font-size: 12px;
 }
 
-.account-link-form input {
-    width: 100%;
-    box-sizing: border-box;
-
-    padding: 12px 14px;
-
-    border: 1px solid var(--border);
-    border-radius: 10px;
-
-    background: var(--background);
-    color: var(--text);
-
-    font: inherit;
-    font-size: 14px;
-}
-
-.account-link-form input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
-}
-
 .account-link-privacy {
     grid-column: 1 / -1;
 
@@ -244,7 +222,10 @@
 
 #account-link-submit,
 .account-link-open,
-.account-link-action,
+.account-link-action {
+    width: fit-content;
+}
+
 .account-choice {
     width: fit-content;
 
@@ -262,7 +243,6 @@
 
 #account-link-submit:disabled {
     opacity: 0.6;
-    cursor: wait;
 }
 
 .account-link-open {
@@ -291,11 +271,64 @@
 }
 
 .linked-account-info {
+    flex: 1;
     min-width: 0;
 
     display: flex;
     flex-direction: column;
     gap: 4px;
+}
+
+.linked-account-heading {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    align-items: center;
+    gap: 64px;
+    min-width: 0;
+}
+
+.linked-account-discord-access {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+@media (max-width: 600px) {
+    .linked-account-heading {
+        column-gap: 24px;
+    }
+}
+
+.linked-account-info .linked-discord-profile {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 5px;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+}
+
+.linked-discord-profile img {
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.linked-account-info .linked-discord-name {
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.linked-account-info .linked-discord-username {
+    color: var(--text);
+    opacity: 0.55;
+    overflow-wrap: anywhere;
 }
 
 .linked-account-info strong {
@@ -317,20 +350,6 @@
 
 .linked-account-empty {
     margin: 0;
-}
-
-.linked-account-manage,
-#account-rename-form button {
-    padding: 9px 13px;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--surface-hover);
-    color: var(--text);
-
-    font-weight: 600;
-    cursor: pointer;
 }
 
 .account-danger-zone {
@@ -361,19 +380,6 @@
     color: var(--text-muted);
 
     font-size: 11px;
-}
-
-#account-delete-button {
-    padding: 9px 13px;
-
-    border: 1px solid #d65f68;
-    border-radius: 9px;
-
-    background: color-mix(in srgb, #d65f68 12%, var(--background));
-    color: #ef8a91;
-
-    font-weight: 700;
-    cursor: pointer;
 }
 
 #account-manage-status:not(:empty) {
@@ -516,8 +522,6 @@
     display: inline-block;
 
     margin-top: 12px;
-
-    text-decoration: none;
 }
 
 .account-choices {
@@ -870,7 +874,7 @@
 .settings-toggle-switch:focus-visible {
     outline: none;
 
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
+    box-shadow: none;
 }
 
 /* ---------------------------------------------------------
@@ -899,4 +903,10 @@
     .settings-toggle-switch.active::after {
         transform: translateX(19px);
     }
+}
+
+#account-link-submit,
+.account-link-open,
+.account-link-action {
+    padding: 11px 16px;
 }

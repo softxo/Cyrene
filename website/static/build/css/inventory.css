@@ -45,14 +45,13 @@
     max-width: 100%;
 }
 
-.inventory-account-select .custom-select-button {
-    min-height: 44px;
-    padding-inline: 15px;
-    background: var(--surface-inset);
+.inventory-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.inventory-account-select .custom-select-value,
-.inventory-account-select .custom-select-option {
+.inventory-account-select .custom-select-value {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -89,17 +88,7 @@
 .inventory-search input {
     min-height: 42px;
     padding: 0 13px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    outline: none;
-    background: var(--background);
-    color: var(--text);
     font: inherit;
-}
-
-.inventory-search input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
 .inventory-summary,
@@ -125,7 +114,9 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     background: var(--panel-background);
-    transition: border-color 0.16s ease, transform 0.16s ease;
+    transition:
+        border-color 0.16s ease,
+        transform 0.16s ease;
 }
 
 .inventory-card[hidden] {
@@ -242,7 +233,9 @@
 }
 
 @keyframes inventory-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .inventory-note {

@@ -1,0 +1,2042 @@
+[
+    {
+        "id": 11515,
+        "name": "Absolution",
+        "key": "Absolution",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Estoc.png"
+    },
+    {
+        "id": 12416,
+        "name": "Akuoumaru",
+        "key": "Akuoumaru",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Maria.png"
+    },
+    {
+        "id": 15410,
+        "name": "Alley Hunter",
+        "key": "AlleyHunter",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Outlaw.png"
+    },
+    {
+        "id": 11414,
+        "name": "Amenoma Kageuchi",
+        "key": "AmenomaKageuchi",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Bakufu.png"
+    },
+    {
+        "id": 15502,
+        "name": "Amos' Bow",
+        "key": "AmosBow",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Amos.png"
+    },
+    {
+        "id": 14523,
+        "name": "Angelos' Heptades",
+        "key": "AngelosHeptades",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_FairyGarden.png"
+    },
+    {
+        "id": 14101,
+        "name": "Apprentice's Notes",
+        "key": "ApprenticesNotes",
+        "rarity": 1,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Apprentice.png"
+    },
+    {
+        "id": 15508,
+        "name": "Aqua Simulacra",
+        "key": "AquaSimulacra",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Kirin.png"
+    },
+    {
+        "id": 11501,
+        "name": "Aquila Favonia",
+        "key": "AquilaFavonia",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Falcon.png"
+    },
+    {
+        "id": 14427,
+        "name": "Ash-Graven Drinking Horn",
+        "key": "AshGravenDrinkingHorn",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_ConchSprayer.png"
+    },
+    {
+        "id": 15514,
+        "name": "Astral Vulture's Crimson Plumage",
+        "key": "AstralVulturesCrimsonPlumage",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Qoyllorsnova.png"
+    },
+    {
+        "id": 12516,
+        "name": "A Teaspoon of Transcendence",
+        "key": "ATeaspoonOfTranscendence",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_CrystallineSword.png"
+    },
+    {
+        "id": 11518,
+        "name": "Athame Artis",
+        "key": "AthameArtis",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Motsognir.png"
+    },
+    {
+        "id": 12514,
+        "name": "A Thousand Blazing Suns",
+        "key": "AThousandBlazingSuns",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_RadianceSword.png"
+    },
+    {
+        "id": 14511,
+        "name": "A Thousand Floating Dreams",
+        "key": "AThousandFloatingDreams",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Ayus.png"
+    },
+    {
+        "id": 11517,
+        "name": "Azurelight",
+        "key": "Azurelight",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_OuterSword.png"
+    },
+    {
+        "id": 14426,
+        "name": "Ballad of the Boundless Blue",
+        "key": "BalladOfTheBoundlessBlue",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_DandelionPoem.png"
+    },
+    {
+        "id": 13424,
+        "name": "Ballad of the Fjords",
+        "key": "BalladOfTheFjords",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Shanty.png"
+    },
+    {
+        "id": 12511,
+        "name": "Beacon of the Reed Sea",
+        "key": "BeaconOfTheReedSea",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Deshret.png"
+    },
+    {
+        "id": 13101,
+        "name": "Beginner's Protector",
+        "key": "BeginnersProtector",
+        "rarity": 1,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Gewalt.png"
+    },
+    {
+        "id": 11522,
+        "name": "Beyond the Chrysalis",
+        "key": "BeyondTheChrysalis",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Samosvist.png"
+    },
+    {
+        "id": 14408,
+        "name": "Blackcliff Agate",
+        "key": "BlackcliffAgate",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Blackrock.png"
+    },
+    {
+        "id": 11408,
+        "name": "Blackcliff Longsword",
+        "key": "BlackcliffLongsword",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Blackrock.png"
+    },
+    {
+        "id": 13404,
+        "name": "Blackcliff Pole",
+        "key": "BlackcliffPole",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Blackrock.png"
+    },
+    {
+        "id": 12408,
+        "name": "Blackcliff Slasher",
+        "key": "BlackcliffSlasher",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Blackrock.png"
+    },
+    {
+        "id": 15408,
+        "name": "Blackcliff Warbow",
+        "key": "BlackcliffWarbow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Blackrock.png"
+    },
+    {
+        "id": 14433,
+        "name": "Blackmarrow Lantern",
+        "key": "BlackmarrowLantern",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Ilmarinen.png"
+    },
+    {
+        "id": 13303,
+        "name": "Black Tassel",
+        "key": "BlackTassel",
+        "rarity": 3,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Noire.png"
+    },
+    {
+        "id": 12436,
+        "name": "Blade of Atonement",
+        "key": "BladeOfAtonement",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_GlintstoneClaymore.png"
+    },
+    {
+        "id": 13516,
+        "name": "Bloodsoaked Ruins",
+        "key": "BloodsoakedRuins",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_TummaLyhty.png"
+    },
+    {
+        "id": 12302,
+        "name": "Bloodtainted Greatsword",
+        "key": "BloodtaintedGreatsword",
+        "rarity": 3,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Siegfry.png"
+    },
+    {
+        "id": 15437,
+        "name": "Breezeborne Refrain",
+        "key": "BreezeborneRefrain",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Windtalker.png"
+    },
+    {
+        "id": 11432,
+        "name": "Calamity of Eshu",
+        "key": "CalamityOfEshu",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_SacrificialNgombe.png"
+    },
+    {
+        "id": 13507,
+        "name": "Calamity Queller",
+        "key": "CalamityQueller",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Santika.png"
+    },
+    {
+        "id": 14513,
+        "name": "Cashflow Supervision",
+        "key": "CashflowSupervision",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Wheatley.png"
+    },
+    {
+        "id": 15431,
+        "name": "Chain Breaker",
+        "key": "ChainBreaker",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Isikhulu.png"
+    },
+    {
+        "id": 11415,
+        "name": "Cinnabar Spindle",
+        "key": "CinnabarSpindle",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Opus.png"
+    },
+    {
+        "id": 14435,
+        "name": "Clash of Kings",
+        "key": "ClashOfKings",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_SandMemoria.png"
+    },
+    {
+        "id": 15426,
+        "name": "Cloudforged",
+        "key": "Cloudforged",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Ultimatum.png"
+    },
+    {
+        "id": 15407,
+        "name": "Compound Bow",
+        "key": "CompoundBow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Exotic.png"
+    },
+    {
+        "id": 11301,
+        "name": "Cool Steel",
+        "key": "CoolSteel",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Steel.png"
+    },
+    {
+        "id": 15436,
+        "name": "Covenant of Frost and Snow",
+        "key": "CovenantOfFrostAndSnow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_GlintstoneBow.png"
+    },
+    {
+        "id": 14515,
+        "name": "Crane's Echoing Call",
+        "key": "CranesEchoingCall",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_MountainGale.png"
+    },
+    {
+        "id": 13403,
+        "name": "Crescent Pike",
+        "key": "CrescentPike",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Exotic.png"
+    },
+    {
+        "id": 13512,
+        "name": "Crimson Moon's Semblance",
+        "key": "CrimsonMoonsSemblance",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_BloodMoon.png"
+    },
+    {
+        "id": 11304,
+        "name": "Dark Iron Sword",
+        "key": "DarkIronSword",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Darker.png"
+    },
+    {
+        "id": 14434,
+        "name": "Dawning Frost",
+        "key": "DawningFrost",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Ziedas.png"
+    },
+    {
+        "id": 13405,
+        "name": "Deathmatch",
+        "key": "Deathmatch",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Gladiator.png"
+    },
+    {
+        "id": 12305,
+        "name": "Debate Club",
+        "key": "DebateClub",
+        "rarity": 3,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Reasoning.png"
+    },
+    {
+        "id": 13426,
+        "name": "Dialogues of the Desert Sages",
+        "key": "DialoguesOfTheDesertSages",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Caduceus.png"
+    },
+    {
+        "id": 13517,
+        "name": "Disaster and Remorse",
+        "key": "DisasterAndRemorse",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Carbine.png"
+    },
+    {
+        "id": 14413,
+        "name": "Dodoco Tales",
+        "key": "DodocoTales",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Ludiharpastum.png"
+    },
+    {
+        "id": 13401,
+        "name": "Dragon's Bane",
+        "key": "DragonsBane",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Stardust.png"
+    },
+    {
+        "id": 13409,
+        "name": "Dragonspine Spear",
+        "key": "DragonspineSpear",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Everfrost.png"
+    },
+    {
+        "id": 11101,
+        "name": "Dull Blade",
+        "key": "DullBlade",
+        "rarity": 1,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Blunt.png"
+    },
+    {
+        "id": 12431,
+        "name": "Earth Shaker",
+        "key": "EarthShaker",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Isikhulu.png"
+    },
+    {
+        "id": 14436,
+        "name": "Echoes of the Heart",
+        "key": "EchoesOfTheHeart",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_GlintstoneCatalyst.png"
+    },
+    {
+        "id": 15503,
+        "name": "Elegy for the End",
+        "key": "ElegyForTheEnd",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Widsith.png"
+    },
+    {
+        "id": 11436,
+        "name": "Emberwell",
+        "key": "Emberwell",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_GlintstoneSword.png"
+    },
+    {
+        "id": 14304,
+        "name": "Emerald Orb",
+        "key": "EmeraldOrb",
+        "rarity": 3,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Jade.png"
+    },
+    {
+        "id": 15418,
+        "name": "End of the Line",
+        "key": "EndOfTheLine",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Fin.png"
+    },
+    {
+        "id": 13509,
+        "name": "Engulfing Lightning",
+        "key": "EngulfingLightning",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Narukami.png"
+    },
+    {
+        "id": 14432,
+        "name": "Etherlight Spindlelute",
+        "key": "EtherlightSpindlelute",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_SeeliesLute.png"
+    },
+    {
+        "id": 14506,
+        "name": "Everlasting Moonglow",
+        "key": "EverlastingMoonglow",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Kaleido.png"
+    },
+    {
+        "id": 11521,
+        "name": "Exaiphanes Blade",
+        "key": "ExaiphanesBlade",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_WeaponQuestSnezhnaya.png"
+    },
+    {
+        "id": 14409,
+        "name": "Eye of Perception",
+        "key": "EyeOfPerception",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Truelens.png"
+    },
+    {
+        "id": 15411,
+        "name": "Fading Twilight",
+        "key": "FadingTwilight",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Fallensun.png"
+    },
+    {
+        "id": 12513,
+        "name": "Fang of the Mountain King",
+        "key": "FangOfTheMountainKing",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_EmeraldSword.png"
+    },
+    {
+        "id": 14401,
+        "name": "Favonius Codex",
+        "key": "FavoniusCodex",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Zephyrus.png"
+    },
+    {
+        "id": 12401,
+        "name": "Favonius Greatsword",
+        "key": "FavoniusGreatsword",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Zephyrus.png"
+    },
+    {
+        "id": 13407,
+        "name": "Favonius Lance",
+        "key": "FavoniusLance",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Zephyrus.png"
+    },
+    {
+        "id": 11401,
+        "name": "Favonius Sword",
+        "key": "FavoniusSword",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Zephyrus.png"
+    },
+    {
+        "id": 15401,
+        "name": "Favonius Warbow",
+        "key": "FavoniusWarbow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Zephyrus.png"
+    },
+    {
+        "id": 12301,
+        "name": "Ferrous Shadow",
+        "key": "FerrousShadow",
+        "rarity": 3,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Glaive.png"
+    },
+    {
+        "id": 11413,
+        "name": "Festering Desire",
+        "key": "FesteringDesire",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Magnum.png"
+    },
+    {
+        "id": 11305,
+        "name": "Fillet Blade",
+        "key": "FilletBlade",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Sashimi.png"
+    },
+    {
+        "id": 11425,
+        "name": "Finale of the Deep",
+        "key": "FinaleOfTheDeep",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Vorpal.png"
+    },
+    {
+        "id": 12432,
+        "name": "Flame-Forged Insight",
+        "key": "FlameForgedInsight",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Polilith.png"
+    },
+    {
+        "id": 11426,
+        "name": "Fleuve Cendre Ferryman",
+        "key": "FleuveCendreFerryman",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Machination.png"
+    },
+    {
+        "id": 15430,
+        "name": "Flower-Wreathed Feathers",
+        "key": "FlowerWreathedFeathers",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Umpakati.png"
+    },
+    {
+        "id": 14425,
+        "name": "Flowing Purity",
+        "key": "FlowingPurity",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Vorpal.png"
+    },
+    {
+        "id": 11431,
+        "name": "Flute of Ezpitzal",
+        "key": "FluteOfEzpitzal",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Isikhulu.png"
+    },
+    {
+        "id": 13431,
+        "name": "Footprint of the Rainbow",
+        "key": "FootprintOfTheRainbow",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Isikhulu.png"
+    },
+    {
+        "id": 12417,
+        "name": "Forest Regalia",
+        "key": "ForestRegalia",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Arakalari.png"
+    },
+    {
+        "id": 12435,
+        "name": "Forged by the Golden Melody",
+        "key": "ForgedByTheGoldenMelody",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_EscapeWheel.png"
+    },
+    {
+        "id": 13515,
+        "name": "Fractured Halo",
+        "key": "FracturedHalo",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Perdix.png"
+    },
+    {
+        "id": 11503,
+        "name": "Freedom-Sworn",
+        "key": "FreedomSworn",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Widsith.png"
+    },
+    {
+        "id": 14412,
+        "name": "Frostbearer",
+        "key": "Frostbearer",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Everfrost.png"
+    },
+    {
+        "id": 13435,
+        "name": "Frostbreath",
+        "key": "Frostbreath",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_FaesCrystalle.png"
+    },
+    {
+        "id": 12430,
+        "name": "Fruitful Hook",
+        "key": "FruitfulHook",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Umpakati.png"
+    },
+    {
+        "id": 14417,
+        "name": "Fruit of Fulfillment",
+        "key": "FruitOfFulfillment",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Arakalari.png"
+    },
+    {
+        "id": 12515,
+        "name": "Gest of the Mighty Wolf",
+        "key": "GestOfTheMightyWolf",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_EnsisAquilonis.png"
+    },
+    {
+        "id": 15516,
+        "name": "Golden Frostbound Oath",
+        "key": "GoldenFrostboundOath",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Alkonost.png"
+    },
+    {
+        "id": 14414,
+        "name": "Hakushin Ring",
+        "key": "HakushinRing",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Bakufu.png"
+    },
+    {
+        "id": 13302,
+        "name": "Halberd",
+        "key": "Halberd",
+        "rarity": 3,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Halberd.png"
+    },
+    {
+        "id": 15414,
+        "name": "Hamayumi",
+        "key": "Hamayumi",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Bakufu.png"
+    },
+    {
+        "id": 11510,
+        "name": "Haran Geppaku Futsu",
+        "key": "HaranGeppakuFutsu",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Amenoma.png"
+    },
+    {
+        "id": 11302,
+        "name": "Harbinger of Dawn",
+        "key": "HarbingerOfDawn",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Dawn.png"
+    },
+    {
+        "id": 11435,
+        "name": "Heretic's Molten Blade",
+        "key": "HereticsMoltenBlade",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_SerpentTooth.png"
+    },
+    {
+        "id": 15101,
+        "name": "Hunter's Bow",
+        "key": "HuntersBow",
+        "rarity": 1,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Hunters.png"
+    },
+    {
+        "id": 15511,
+        "name": "Hunter's Path",
+        "key": "HuntersPath",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Ayus.png"
+    },
+    {
+        "id": 14524,
+        "name": "Hymn of the Maelstrom",
+        "key": "HymnOfTheMaelstrom",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Bludnye.png"
+    },
+    {
+        "id": 15419,
+        "name": "Ibis Piercer",
+        "key": "IbisPiercer",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Ibis.png"
+    },
+    {
+        "id": 13201,
+        "name": "Iron Point",
+        "key": "IronPoint",
+        "rarity": 2,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Rod.png"
+    },
+    {
+        "id": 11407,
+        "name": "Iron Sting",
+        "key": "IronSting",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Exotic.png"
+    },
+    {
+        "id": 14505,
+        "name": "Jadefall's Splendor",
+        "key": "JadefallsSplendor",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Morax.png"
+    },
+    {
+        "id": 15435,
+        "name": "Jade Vista",
+        "key": "JadeVista",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_ShatteredMirror.png"
+    },
+    {
+        "id": 11416,
+        "name": "Kagotsurube Isshin",
+        "key": "KagotsurubeIsshin",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Youtou.png"
+    },
+    {
+        "id": 14509,
+        "name": "Kagura's Verity",
+        "key": "KagurasVerity",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Narukami.png"
+    },
+    {
+        "id": 12414,
+        "name": "Katsuragikiri Nagamasa",
+        "key": "KatsuragikiriNagamasa",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Bakufu.png"
+    },
+    {
+        "id": 11511,
+        "name": "Key of Khaj-Nisut",
+        "key": "KeyOfKhajNisut",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Deshret.png"
+    },
+    {
+        "id": 15417,
+        "name": "King's Squire",
+        "key": "KingsSquire",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Arakalari.png"
+    },
+    {
+        "id": 13414,
+        "name": "Kitain Cross Spear",
+        "key": "KitainCrossSpear",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Bakufu.png"
+    },
+    {
+        "id": 11519,
+        "name": "Lightbearing Moonshard",
+        "key": "LightbearingMoonshard",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_SilverwareSaw.png"
+    },
+    {
+        "id": 11512,
+        "name": "Light of Foliar Incision",
+        "key": "LightOfFoliarIncision",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Ayus.png"
+    },
+    {
+        "id": 11405,
+        "name": "Lion's Roar",
+        "key": "LionsRoar",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Rockkiller.png"
+    },
+    {
+        "id": 12410,
+        "name": "Lithic Blade",
+        "key": "LithicBlade",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Lapis.png"
+    },
+    {
+        "id": 13406,
+        "name": "Lithic Spear",
+        "key": "LithicSpear",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Lapis.png"
+    },
+    {
+        "id": 14502,
+        "name": "Lost Prayer to the Sacred Winds",
+        "key": "LostPrayerToTheSacredWinds",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Fourwinds.png"
+    },
+    {
+        "id": 13513,
+        "name": "Lumidouce Elegy",
+        "key": "LumidouceElegy",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Muguet.png"
+    },
+    {
+        "id": 12412,
+        "name": "Luxurious Sea-Lord",
+        "key": "LuxuriousSeaLord",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_MillenniaTuna.png"
+    },
+    {
+        "id": 14301,
+        "name": "Magic Guide",
+        "key": "MagicGuide",
+        "rarity": 3,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Intro.png"
+    },
+    {
+        "id": 12418,
+        "name": "Mailed Flower",
+        "key": "MailedFlower",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Fleurfair.png"
+    },
+    {
+        "id": 12415,
+        "name": "Makhaira Aquamarine",
+        "key": "MakhairaAquamarine",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Pleroma.png"
+    },
+    {
+        "id": 14407,
+        "name": "Mappa Mare",
+        "key": "MappaMare",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Exotic.png"
+    },
+    {
+        "id": 12433,
+        "name": "Master Key",
+        "key": "MasterKey",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Ilmarinen.png"
+    },
+    {
+        "id": 14504,
+        "name": "Memory of Dust",
+        "key": "MemoryOfDust",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Kunwu.png"
+    },
+    {
+        "id": 15305,
+        "name": "Messenger",
+        "key": "Messenger",
+        "rarity": 3,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Msg.png"
+    },
+    {
+        "id": 13419,
+        "name": "Missive Windspear",
+        "key": "MissiveWindspear",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Windvane.png"
+    },
+    {
+        "id": 11509,
+        "name": "Mistsplitter Reforged",
+        "key": "MistsplitterReforged",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Narukami.png"
+    },
+    {
+        "id": 15412,
+        "name": "Mitternachts Waltz",
+        "key": "MitternachtsWaltz",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Nachtblind.png"
+    },
+    {
+        "id": 13417,
+        "name": "Moonpiercer",
+        "key": "Moonpiercer",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Arakalari.png"
+    },
+    {
+        "id": 11434,
+        "name": "Moonweaver's Dawn",
+        "key": "MoonweaversDawn",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Miekka.png"
+    },
+    {
+        "id": 13430,
+        "name": "Mountain-Bracing Bolt",
+        "key": "MountainBracingBolt",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Umpakati.png"
+    },
+    {
+        "id": 15416,
+        "name": "Mouun's Moon",
+        "key": "MouunsMoon",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Maria.png"
+    },
+    {
+        "id": 11437,
+        "name": "New Bough",
+        "key": "NewBough",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_SpikedStake.png"
+    },
+    {
+        "id": 14520,
+        "name": "Nightweaver's Looking Glass",
+        "key": "NightweaversLookingGlass",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_MenulisRing.png"
+    },
+    {
+        "id": 14522,
+        "name": "Nocturne's Curtain Call",
+        "key": "NocturnesCurtainCall",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Brisingamen.png"
+    },
+    {
+        "id": 14415,
+        "name": "Oathsworn Eye",
+        "key": "OathswornEye",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Jyanome.png"
+    },
+    {
+        "id": 12201,
+        "name": "Old Merc's Pal",
+        "key": "OldMercsPal",
+        "rarity": 2,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Oyaji.png"
+    },
+    {
+        "id": 14303,
+        "name": "Otherworldly Story",
+        "key": "OtherworldlyStory",
+        "rarity": 3,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Lightnov.png"
+    },
+    {
+        "id": 11516,
+        "name": "Peak Patrol Song",
+        "key": "PeakPatrolSong",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_XochitlsTube.png"
+    },
+    {
+        "id": 14201,
+        "name": "Pocket Grimoire",
+        "key": "PocketGrimoire",
+        "rarity": 2,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Pocket.png"
+    },
+    {
+        "id": 15507,
+        "name": "Polar Star",
+        "key": "PolarStar",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Worldbane.png"
+    },
+    {
+        "id": 12427,
+        "name": "Portable Power Saw",
+        "key": "PortablePowerSaw",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Mechanic.png"
+    },
+    {
+        "id": 15415,
+        "name": "Predator",
+        "key": "Predator",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Predator.png"
+    },
+    {
+        "id": 11505,
+        "name": "Primordial Jade Cutter",
+        "key": "PrimordialJadeCutter",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Morax.png"
+    },
+    {
+        "id": 13505,
+        "name": "Primordial Jade Winged-Spear",
+        "key": "PrimordialJadeWingedSpear",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Morax.png"
+    },
+    {
+        "id": 11419,
+        "name": "Prized Isshin Blade",
+        "key": "PrizedIsshinBlade",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_YoutouEnchanted.png"
+    },
+    {
+        "id": 11420,
+        "name": "Prized Isshin Blade",
+        "key": "PrizedIsshinBlade",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_YoutouShattered.png"
+    },
+    {
+        "id": 11421,
+        "name": "Prized Isshin Blade",
+        "key": "PrizedIsshinBlade",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_YoutouEnchanted.png"
+    },
+    {
+        "id": 13427,
+        "name": "Prospector's Drill",
+        "key": "ProspectorsDrill",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Mechanic.png"
+    },
+    {
+        "id": 13433,
+        "name": "Prospector's Shovel",
+        "key": "ProspectorsShovel",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Ilmarinen.png"
+    },
+    {
+        "id": 14406,
+        "name": "Prototype Amber",
+        "key": "PrototypeAmber",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Proto.png"
+    },
+    {
+        "id": 12406,
+        "name": "Prototype Archaic",
+        "key": "PrototypeArchaic",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Proto.png"
+    },
+    {
+        "id": 15406,
+        "name": "Prototype Crescent",
+        "key": "PrototypeCrescent",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Proto.png"
+    },
+    {
+        "id": 11406,
+        "name": "Prototype Rancour",
+        "key": "PrototypeRancour",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Proto.png"
+    },
+    {
+        "id": 13402,
+        "name": "Prototype Starglitter",
+        "key": "PrototypeStarglitter",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Proto.png"
+    },
+    {
+        "id": 15434,
+        "name": "Rainbow Serpent's Rain Bow",
+        "key": "RainbowSerpentsRainBow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_ElegguaBow.png"
+    },
+    {
+        "id": 12405,
+        "name": "Rainslasher",
+        "key": "Rainslasher",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Perdue.png"
+    },
+    {
+        "id": 15427,
+        "name": "Range Gauge",
+        "key": "RangeGauge",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Mechanic.png"
+    },
+    {
+        "id": 15301,
+        "name": "Raven Bow",
+        "key": "RavenBow",
+        "rarity": 3,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Crowfeather.png"
+    },
+    {
+        "id": 15303,
+        "name": "Recurve Bow",
+        "key": "RecurveBow",
+        "rarity": 3,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Curve.png"
+    },
+    {
+        "id": 12510,
+        "name": "Redhorn Stonethresher",
+        "key": "RedhornStonethresher",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Itadorimaru.png"
+    },
+    {
+        "id": 14521,
+        "name": "Reliquary of Truth",
+        "key": "ReliquaryOfTruth",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Sistrum.png"
+    },
+    {
+        "id": 13425,
+        "name": "Rightful Reward",
+        "key": "RightfulReward",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Vorpal.png"
+    },
+    {
+        "id": 14431,
+        "name": "Ring of Yaxche",
+        "key": "RingOfYaxche",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Isikhulu.png"
+    },
+    {
+        "id": 15404,
+        "name": "Royal Bow",
+        "key": "RoyalBow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Theocrat.png"
+    },
+    {
+        "id": 12404,
+        "name": "Royal Greatsword",
+        "key": "RoyalGreatsword",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Theocrat.png"
+    },
+    {
+        "id": 14404,
+        "name": "Royal Grimoire",
+        "key": "RoyalGrimoire",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Theocrat.png"
+    },
+    {
+        "id": 11404,
+        "name": "Royal Longsword",
+        "key": "RoyalLongsword",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Theocrat.png"
+    },
+    {
+        "id": 13408,
+        "name": "Royal Spear",
+        "key": "RoyalSpear",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Theocrat.png"
+    },
+    {
+        "id": 15405,
+        "name": "Rust",
+        "key": "Rust",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Recluse.png"
+    },
+    {
+        "id": 13434,
+        "name": "Sacrificer's Staff",
+        "key": "SacrificersStaff",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Krivule.png"
+    },
+    {
+        "id": 15403,
+        "name": "Sacrificial Bow",
+        "key": "SacrificialBow",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Fossil.png"
+    },
+    {
+        "id": 14403,
+        "name": "Sacrificial Fragments",
+        "key": "SacrificialFragments",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Fossil.png"
+    },
+    {
+        "id": 12403,
+        "name": "Sacrificial Greatsword",
+        "key": "SacrificialGreatsword",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Fossil.png"
+    },
+    {
+        "id": 14424,
+        "name": "Sacrificial Jade",
+        "key": "SacrificialJade",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Yue.png"
+    },
+    {
+        "id": 11403,
+        "name": "Sacrificial Sword",
+        "key": "SacrificialSword",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Fossil.png"
+    },
+    {
+        "id": 11417,
+        "name": "Sapwood Blade",
+        "key": "SapwoodBlade",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Arakalari.png"
+    },
+    {
+        "id": 15424,
+        "name": "Scion of the Blazing Sun",
+        "key": "ScionOfTheBlazingSun",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Gurabad.png"
+    },
+    {
+        "id": 15201,
+        "name": "Seasoned Hunter's Bow",
+        "key": "SeasonedHuntersBow",
+        "rarity": 2,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Old.png"
+    },
+    {
+        "id": 15432,
+        "name": "Sequence of Solitude",
+        "key": "SequenceOfSolitude",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Stinger.png"
+    },
+    {
+        "id": 11433,
+        "name": "Serenity's Call",
+        "key": "SerenitysCall",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Ilmarinen.png"
+    },
+    {
+        "id": 12409,
+        "name": "Serpent Spine",
+        "key": "SerpentSpine",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Kione.png"
+    },
+    {
+        "id": 15302,
+        "name": "Sharpshooter's Oath",
+        "key": "SharpshootersOath",
+        "rarity": 3,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Arjuna.png"
+    },
+    {
+        "id": 11438,
+        "name": "Silver Light",
+        "key": "SilverLight",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Fajian.png"
+    },
+    {
+        "id": 15513,
+        "name": "Silvershower Heartstrings",
+        "key": "SilvershowerHeartstrings",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Arcdange.png"
+    },
+    {
+        "id": 11201,
+        "name": "Silver Sword",
+        "key": "SilverSword",
+        "rarity": 2,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Silver.png"
+    },
+    {
+        "id": 12306,
+        "name": "Skyrider Greatsword",
+        "key": "SkyriderGreatsword",
+        "rarity": 3,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Mitsurugi.png"
+    },
+    {
+        "id": 11306,
+        "name": "Skyrider Sword",
+        "key": "SkyriderSword",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Mitsurugi.png"
+    },
+    {
+        "id": 14501,
+        "name": "Skyward Atlas",
+        "key": "SkywardAtlas",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Dvalin.png"
+    },
+    {
+        "id": 11502,
+        "name": "Skyward Blade",
+        "key": "SkywardBlade",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Dvalin.png"
+    },
+    {
+        "id": 15501,
+        "name": "Skyward Harp",
+        "key": "SkywardHarp",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Dvalin.png"
+    },
+    {
+        "id": 12501,
+        "name": "Skyward Pride",
+        "key": "SkywardPride",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Dvalin.png"
+    },
+    {
+        "id": 13502,
+        "name": "Skyward Spine",
+        "key": "SkywardSpine",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Dvalin.png"
+    },
+    {
+        "id": 15304,
+        "name": "Slingshot",
+        "key": "Slingshot",
+        "rarity": 3,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Sling.png"
+    },
+    {
+        "id": 15433,
+        "name": "Snare Hook",
+        "key": "SnareHook",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Ilmarinen.png"
+    },
+    {
+        "id": 12411,
+        "name": "Snow-Tombed Starsilver",
+        "key": "SnowTombedStarsilver",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Dragonfell.png"
+    },
+    {
+        "id": 14405,
+        "name": "Solar Pearl",
+        "key": "SolarPearl",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Resurrection.png"
+    },
+    {
+        "id": 12503,
+        "name": "Song of Broken Pines",
+        "key": "SongOfBrokenPines",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Widsith.png"
+    },
+    {
+        "id": 15425,
+        "name": "Song of Stillness",
+        "key": "SongOfStillness",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Vorpal.png"
+    },
+    {
+        "id": 13436,
+        "name": "Song of the Vigil",
+        "key": "SongOfTheVigil",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_GlintstonePolearm.png"
+    },
+    {
+        "id": 11513,
+        "name": "Splendor of Tranquil Waters",
+        "key": "SplendorOfTranquilWaters",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Regalis.png"
+    },
+    {
+        "id": 13501,
+        "name": "Staff of Homa",
+        "key": "StaffOfHoma",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Homa.png"
+    },
+    {
+        "id": 13511,
+        "name": "Staff of the Scarlet Sands",
+        "key": "StaffOfTheScarletSands",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Deshret.png"
+    },
+    {
+        "id": 14517,
+        "name": "Starcaller's Watch",
+        "key": "StarcallersWatch",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Figurines.png"
+    },
+    {
+        "id": 11430,
+        "name": "Sturdy Bone",
+        "key": "SturdyBone",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Umpakati.png"
+    },
+    {
+        "id": 11504,
+        "name": "Summit Shaper",
+        "key": "SummitShaper",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Kunwu.png"
+    },
+    {
+        "id": 14518,
+        "name": "Sunny Morning Sleep-In",
+        "key": "SunnyMorningSleepIn",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_SakuraFan.png"
+    },
+    {
+        "id": 14516,
+        "name": "Surf's Up",
+        "key": "SurfsUp",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_MechaPufferfish.png"
+    },
+    {
+        "id": 11412,
+        "name": "Sword of Descension",
+        "key": "SwordOfDescension",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Psalmus.png"
+    },
+    {
+        "id": 11428,
+        "name": "Sword of Narzissenkreuz",
+        "key": "SwordOfNarzissenkreuz",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Purewill.png"
+    },
+    {
+        "id": 13514,
+        "name": "Symphonist of Scents",
+        "key": "SymphonistOfScents",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Trident.png"
+    },
+    {
+        "id": 12424,
+        "name": "Talking Stick",
+        "key": "TalkingStick",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_BeastTamer.png"
+    },
+    {
+        "id": 13432,
+        "name": "Tamayuratei no Ohanashi",
+        "key": "TamayurateiNoOhanashi",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Aoandon.png"
+    },
+    {
+        "id": 11410,
+        "name": "The Alley Flash",
+        "key": "TheAlleyFlash",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Outlaw.png"
+    },
+    {
+        "id": 12402,
+        "name": "The Bell",
+        "key": "TheBell",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Troupe.png"
+    },
+    {
+        "id": 11409,
+        "name": "The Black Sword",
+        "key": "TheBlackSword",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Bloodstained.png"
+    },
+    {
+        "id": 13415,
+        "name": "\"The Catch\"",
+        "key": "TheCatch",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Mori.png"
+    },
+    {
+        "id": 15515,
+        "name": "The Daybreak Chronicles",
+        "key": "TheDaybreakChronicles",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Arianna.png"
+    },
+    {
+        "id": 11427,
+        "name": "The Dockhand's Assistant",
+        "key": "TheDockhandsAssistant",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Mechanic.png"
+    },
+    {
+        "id": 15512,
+        "name": "The First Great Magic",
+        "key": "TheFirstGreatMagic",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Pledge.png"
+    },
+    {
+        "id": 11402,
+        "name": "The Flute",
+        "key": "TheFlute",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Troupe.png"
+    },
+    {
+        "id": 15402,
+        "name": "The Stringless",
+        "key": "TheStringless",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Troupe.png"
+    },
+    {
+        "id": 12504,
+        "name": "The Unforged",
+        "key": "TheUnforged",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Kunwu.png"
+    },
+    {
+        "id": 15409,
+        "name": "The Viridescent Hunt",
+        "key": "TheViridescentHunt",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Viridescent.png"
+    },
+    {
+        "id": 14402,
+        "name": "The Widsith",
+        "key": "TheWidsith",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Troupe.png"
+    },
+    {
+        "id": 14302,
+        "name": "Thrilling Tales of Dragon Slayers",
+        "key": "ThrillingTalesOfDragonSlayers",
+        "rarity": 3,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Pulpfic.png"
+    },
+    {
+        "id": 15509,
+        "name": "Thundering Pulse",
+        "key": "ThunderingPulse",
+        "rarity": 5,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Narukami.png"
+    },
+    {
+        "id": 12425,
+        "name": "Tidal Shadow",
+        "key": "TidalShadow",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Vorpal.png"
+    },
+    {
+        "id": 14514,
+        "name": "Tome of the Eternal Flow",
+        "key": "TomeOfTheEternalFlow",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Iudex.png"
+    },
+    {
+        "id": 11422,
+        "name": "Toukabou Shigure",
+        "key": "ToukabouShigure",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Kasabouzu.png"
+    },
+    {
+        "id": 11303,
+        "name": "Traveler's Handy Sword",
+        "key": "TravelersHandySword",
+        "rarity": 3,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Traveler.png"
+    },
+    {
+        "id": 14512,
+        "name": "Tulaytullah's Remembrance",
+        "key": "TulaytullahsRemembrance",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Alaya.png"
+    },
+    {
+        "id": 14305,
+        "name": "Twin Nephrite",
+        "key": "TwinNephrite",
+        "rarity": 3,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Phoney.png"
+    },
+    {
+        "id": 12426,
+        "name": "\"Ultimate Overlord's Mega Magic Sword\"",
+        "key": "UltimateOverlordsMegaMagicSword",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Champion.png"
+    },
+    {
+        "id": 11514,
+        "name": "Uraku Misugiri",
+        "key": "UrakuMisugiri",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Needle.png"
+    },
+    {
+        "id": 12512,
+        "name": "Verdict",
+        "key": "Verdict",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_GoldenVerdict.png"
+    },
+    {
+        "id": 14519,
+        "name": "Vivid Notions",
+        "key": "VividNotions",
+        "rarity": 5,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_VaresaTransformer.png"
+    },
+    {
+        "id": 13504,
+        "name": "Vortex Vanquisher",
+        "key": "VortexVanquisher",
+        "rarity": 5,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Kunwu.png"
+    },
+    {
+        "id": 14416,
+        "name": "Wandering Evenstar",
+        "key": "WanderingEvenstar",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Pleroma.png"
+    },
+    {
+        "id": 12101,
+        "name": "Waster Greatsword",
+        "key": "WasterGreatsword",
+        "rarity": 1,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Aniki.png"
+    },
+    {
+        "id": 13416,
+        "name": "Wavebreaker's Fin",
+        "key": "WavebreakersFin",
+        "rarity": 4,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Maria.png"
+    },
+    {
+        "id": 14430,
+        "name": "Waveriding Whirl",
+        "key": "WaveridingWhirl",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Umpakati.png"
+    },
+    {
+        "id": 12407,
+        "name": "Whiteblind",
+        "key": "Whiteblind",
+        "rarity": 4,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Exotic.png"
+    },
+    {
+        "id": 12303,
+        "name": "White Iron Greatsword",
+        "key": "WhiteIronGreatsword",
+        "rarity": 3,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Tin.png"
+    },
+    {
+        "id": 11520,
+        "name": "Whitelake Frostfeather",
+        "key": "WhitelakeFrostfeather",
+        "rarity": 5,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Swanlake.png"
+    },
+    {
+        "id": 13301,
+        "name": "White Tassel",
+        "key": "WhiteTassel",
+        "rarity": 3,
+        "type": "Polearm",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Pole_Ruby.png"
+    },
+    {
+        "id": 15413,
+        "name": "Windblume Ode",
+        "key": "WindblumeOde",
+        "rarity": 4,
+        "type": "Bow",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Bow_Fleurfair.png"
+    },
+    {
+        "id": 14410,
+        "name": "Wine and Song",
+        "key": "WineAndSong",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_Outlaw.png"
+    },
+    {
+        "id": 14437,
+        "name": "Winter's Heavy Heart",
+        "key": "WintersHeavyHeart",
+        "rarity": 4,
+        "type": "Catalyst",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Catalyst_FrostScepter.png"
+    },
+    {
+        "id": 11424,
+        "name": "Wolf-Fang",
+        "key": "WolfFang",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Boreas.png"
+    },
+    {
+        "id": 12502,
+        "name": "Wolf's Gravestone",
+        "key": "WolfsGravestone",
+        "rarity": 5,
+        "type": "Claymore",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Claymore_Wolfmound.png"
+    },
+    {
+        "id": 11418,
+        "name": "Xiphos' Moonlight",
+        "key": "XiphosMoonlight",
+        "rarity": 4,
+        "type": "Sword",
+        "icon": "https://enka.network/ui/UI_EquipIcon_Sword_Pleroma.png"
+    }
+]

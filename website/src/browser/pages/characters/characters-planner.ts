@@ -132,7 +132,6 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         const arrow = document.createElement("span");
         arrow.className = "planner-choice-arrow";
         arrow.setAttribute("aria-hidden", "true");
-        arrow.textContent = "▾";
 
         trigger.append(value, arrow);
 
@@ -280,7 +279,8 @@ function initCharacterPlanner() {
     const accountId = picker.dataset.accountId || "";
     const accountUid = picker.dataset.plannerAccountUid || "";
     const plannerUserId = picker.dataset.plannerUserId || "";
-    const STORAGE_KEY =
+    const STORAGE_KEY = accountUid ? `cyrene-character-plans-v3-${accountUid}` : null;
+    const legacyStorageKey =
         accountUid && plannerUserId
             ? `cyrene-character-plans-v2-${plannerUserId}-${accountUid}`
             : null;
@@ -324,6 +324,23 @@ function initCharacterPlanner() {
 
     function loadPlans() {
         try {
+            // Recover this user's unsynced v2 edits once. Clean legacy caches must
+            // never overwrite the shared server snapshot or resurrect deletions.
+            if (
+                STORAGE_KEY &&
+                legacyStorageKey &&
+                localStorage.getItem(`${legacyStorageKey}-pending`) === "true"
+            ) {
+                const legacy = localStorage.getItem(legacyStorageKey);
+                if (legacy !== null && localStorage.getItem(pendingKey) !== "true") {
+                    localStorage.setItem(
+                        STORAGE_KEY,
+                        JSON.stringify(normalisePlans(JSON.parse(legacy))),
+                    );
+                    localStorage.setItem(pendingKey, "true");
+                }
+                localStorage.removeItem(`${legacyStorageKey}-pending`);
+            }
             const stored = STORAGE_KEY ? localStorage.getItem(STORAGE_KEY) : null;
             const storedPlans = normalisePlans(stored ? JSON.parse(stored) : []);
             if (STORAGE_KEY && stored !== null) {
@@ -415,7 +432,7 @@ function initCharacterPlanner() {
         }
     }
 
-    async function savePlansToDatabase(snapshot) {
+    async function savePlansToDatabase(snapshot, recoverIfMissing = false) {
         const response = await fetch(
             `/api/characters/plans?account_id=${encodeURIComponent(accountId)}`,
             {
@@ -425,7 +442,7 @@ function initCharacterPlanner() {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ plans: snapshot }),
+                body: JSON.stringify({ plans: snapshot, recover_if_missing: recoverIfMissing }),
                 keepalive: true,
             },
         );
@@ -434,8 +451,14 @@ function initCharacterPlanner() {
             throw new Error("Could not save Character Planner data.");
         }
 
+        const recovered = recoverIfMissing ? await response.json() : null;
         // A queued older save must not acknowledge newer edits.
         if (localStorage.getItem(STORAGE_KEY) === JSON.stringify(snapshot)) {
+            if (recovered?.snapshot_exists === true) {
+                plans = normalisePlans(recovered.plans);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+                renderPlans();
+            }
             localStorage.removeItem(pendingKey);
             syncStatus.hidden = true;
         }
@@ -470,6 +493,20 @@ function initCharacterPlanner() {
             if (localStorage.getItem(pendingKey) === "true") {
                 // Include []: a failed deletion must never resurrect old plans.
                 await savePlansToDatabase(JSON.parse(JSON.stringify(plans)));
+            } else if (payload?.snapshot_exists === false) {
+                // A missing snapshot is different from an intentional [] deletion.
+                // Older browser-only plans may have no pending marker at all.
+                const legacy = legacyStorageKey ? localStorage.getItem(legacyStorageKey) : null;
+                const recovered = plans.length
+                    ? plans
+                    : normalisePlans(legacy !== null ? JSON.parse(legacy) : []);
+                if (recovered.length) {
+                    plans = recovered;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+                    localStorage.setItem(pendingKey, "true");
+                    renderPlans();
+                    await savePlansToDatabase(JSON.parse(JSON.stringify(plans)), true);
+                }
             } else {
                 plans = normalisePlans(payload?.plans);
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));

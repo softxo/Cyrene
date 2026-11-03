@@ -1,8 +1,6 @@
-
 /* ============================================================
    CODES PAGE
    ============================================================ */
-
 
 /* ============================================================
    PAGE LAYOUT
@@ -34,7 +32,6 @@
     font-size: 14px;
     line-height: 1.6;
 }
-
 
 /* ============================================================
    PANELS
@@ -73,65 +70,22 @@
     line-height: 1.6;
 }
 
-
 /* ============================================================
    HEADER BUTTON
    ============================================================ */
 
 .codes-refresh-button {
-    height: 42px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
 
     flex-shrink: 0;
-
-    padding: 0 16px;
-
-    border: 1px solid var(--border);
-    border-radius: 10px;
-
-    background: var(--surface);
-    color: var(--text);
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
     white-space: nowrap;
-
-    transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        color 0.15s ease,
-        transform 0.15s ease;
-}
-
-.codes-refresh-button:hover {
-    background: var(--surface-hover);
-    border-color: var(--accent-border);
-    color: var(--accent);
-    transform: translateY(-1px);
-}
-
-.codes-refresh-button:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.codes-refresh-button:active {
-    transform: translateY(0);
 }
 
 .codes-refresh-button:disabled {
     opacity: 0.55;
-    cursor: wait;
-    transform: none;
 }
-
 
 /* ============================================================
    CODE COUNT / STATUS LABELS
@@ -164,7 +118,6 @@
     background: var(--accent-soft);
 }
 
-
 /* ============================================================
    ACCOUNT SELECTOR
    ============================================================ */
@@ -189,31 +142,12 @@
     min-width: 260px;
 }
 
-.codes-account-selector .custom-select-button {
-    min-height: 42px;
-    font-size: 13px;
-}
-
-.codes-account-selector .custom-select-button:focus,
-.codes-account-selector .custom-select.open .custom-select-button {
-    border-color: var(--accent);
-
-    box-shadow:
-        0 0 0 1px color-mix(
-            in srgb,
-            var(--accent) 15%,
-            transparent
-        );
-}
-
 .codes-account-selector .custom-select-button:disabled {
     opacity: 0.55;
-    cursor: not-allowed;
 }
 
 .codes-account-selector .custom-select.disabled .custom-select-button {
     opacity: 0.55;
-    cursor: not-allowed;
 }
 
 .codes-account-selector .custom-select-menu {
@@ -232,7 +166,6 @@
     font-size: 13px;
     line-height: 1.6;
 }
-
 
 /* ============================================================
    CODE LIST
@@ -269,7 +202,6 @@
     border-color: var(--error);
     color: var(--error);
 }
-
 
 /* ============================================================
    INDIVIDUAL CODE
@@ -327,65 +259,24 @@
     overflow-wrap: anywhere;
 }
 
-
 /* ============================================================
    CLAIM BUTTON
    ============================================================ */
 
 .codes-claim-button {
     min-width: 94px;
-    height: 38px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
     flex-shrink: 0;
-
-    padding: 0 14px;
-
-    border: 1px solid var(--accent-border);
-    border-radius: 9px;
-
-    background: var(--accent-soft);
-    color: var(--accent);
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 650;
-
-    cursor: pointer;
     white-space: nowrap;
-
-    transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        color 0.15s ease,
-        transform 0.15s ease;
-}
-
-.codes-claim-button:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--background);
-    transform: translateY(-1px);
-}
-
-.codes-claim-button:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.codes-claim-button:active {
-    transform: translateY(0);
 }
 
 .codes-claim-button:disabled {
     opacity: 0.55;
-    cursor: wait;
-    transform: none;
 }
-
 
 /* ============================================================
    REDEMPTION FEEDBACK
@@ -419,7 +310,6 @@
 .codes-status[data-state="info"] {
     border-color: var(--accent-border);
 }
-
 
 /* ============================================================
    AUTOMATIC CLAIMING
@@ -475,18 +365,11 @@
 
 /* Highlight the settings row when enabled. */
 
-.codes-automatic-panel:has(
-    .codes-toggle input:checked
-) .codes-automatic-settings {
+.codes-automatic-panel:has(.codes-toggle input:checked) .codes-automatic-settings {
     border-color: var(--accent-border);
 
-    background: color-mix(
-        in srgb,
-        var(--accent) 4%,
-        var(--background)
-    );
+    background: color-mix(in srgb, var(--accent) 4%, var(--background));
 }
-
 
 /* ------------------------------------------------------------
    CUSTOM TOGGLE
@@ -580,7 +463,7 @@
 
 .codes-toggle input:focus-visible + .codes-toggle-slider {
     outline: none;
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    box-shadow: none;
 }
 
 /* Disabled state. */
@@ -593,7 +476,6 @@
 .codes-toggle:has(input:disabled) {
     cursor: not-allowed;
 }
-
 
 /* ------------------------------------------------------------
    AUTOMATIC CLAIMING STATUS
@@ -639,11 +521,7 @@
 .codes-automatic-status[data-state="enabled"] {
     border-color: var(--accent-border);
 
-    background: color-mix(
-        in srgb,
-        var(--accent) 5%,
-        var(--background)
-    );
+    background: color-mix(in srgb, var(--accent) 5%, var(--background));
 
     color: var(--text);
 }
@@ -665,11 +543,7 @@
 .codes-automatic-status[data-state="error"] {
     border-color: var(--error);
 
-    background: color-mix(
-        in srgb,
-        var(--error) 6%,
-        var(--background)
-    );
+    background: color-mix(in srgb, var(--error) 6%, var(--background));
 
     color: var(--error);
 }
@@ -677,7 +551,6 @@
 .codes-automatic-status[data-state="error"]::before {
     background: var(--error);
 }
-
 
 /* ------------------------------------------------------------
    RESPONSIVE AUTOMATIC CLAIMING
@@ -705,7 +578,6 @@
         transform: translateX(22px);
     }
 }
-
 
 /* ============================================================
    RESPONSIVE LAYOUT
@@ -756,4 +628,23 @@
     .codes-claim-button {
         width: 100%;
     }
+}
+
+.codes-refresh-button {
+    height: 42px;
+    gap: 8px;
+
+    padding: 0 16px;
+    font-size: 13px;
+}
+
+.codes-claim-button {
+    height: 38px;
+
+    padding: 0 14px;
+    font-size: 13px;
+}
+
+.codes-account-selector {
+    --dropdown-height: 42px;
 }

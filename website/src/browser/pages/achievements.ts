@@ -1341,7 +1341,7 @@ window.initAchievements = function () {
             updateOverallAchievementProgress();
             return true;
         } catch (error) {
-            console.error("[Achievements] INITIALIZATION ERROR:", error);
+            console.error("[Achievements] INITIALISATION ERROR:", error);
             const loadError = document.getElementById("achievement-load-error");
             const message = document.getElementById("achievement-load-error-message");
             if (message) {

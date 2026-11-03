@@ -38,47 +38,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    min-height: 42px;
-    padding: 10px 16px;
-    border: 1px solid var(--accent, #7c83ff);
-    border-radius: 10px;
-    background: var(--accent, #7c83ff);
-    color: #fff;
-    font: inherit;
-    font-weight: 650;
-    cursor: pointer;
-    transition:
-        filter 160ms ease,
-        transform 160ms ease;
-}
-
-.events-custom-create:hover,
-.events-custom-save:hover {
-    filter: brightness(1.08);
-}
-
-.events-custom-create:active,
-.events-custom-save:active {
-    transform: translateY(1px);
 }
 
 /* Match the Character Planner's Add Character control. */
-.events-custom-create {
-    gap: 0.45rem;
-    padding: 10px 16px;
-    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-    border-radius: 12px;
-    background-color: var(--surface);
-    background-image: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--accent) 22%, transparent),
-        transparent
-    );
-    color: var(--text);
-    font-weight: 600;
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
-}
 
 .events-custom-create > span {
     display: grid;
@@ -89,17 +51,6 @@
     background: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--accent);
     font-size: 1.2rem;
-}
-
-.events-custom-create:hover {
-    border-color: var(--accent);
-    background-color: var(--surface-raised);
-    filter: none;
-}
-
-.events-custom-create:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
 }
 
 .events-custom-list {
@@ -214,21 +165,9 @@
 .events-custom-action {
     min-height: 34px;
     padding: 7px 11px;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-primary, inherit);
     font: inherit;
     font-size: 0.82rem;
     cursor: pointer;
-}
-
-.events-custom-action:hover {
-    background: rgba(128, 128, 150, 0.1);
-}
-
-.events-custom-action-danger {
-    color: #ef7777;
 }
 
 .events-custom-card.is-completed {
@@ -318,31 +257,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     padding: 0;
-    border: 1px solid var(--border-color, rgba(150, 150, 170, 0.3));
-    border-radius: 8px;
-    background: rgba(128, 128, 150, 0.08);
-    color: var(--text-primary, inherit);
     font: inherit;
     font-size: 1.1rem;
     line-height: 1;
     cursor: pointer;
-    transition:
-        background 150ms ease,
-        border-color 150ms ease,
-        opacity 150ms ease;
-}
-
-.events-custom-progress-button:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--custom-event-colour, #7c83ff) 12%, transparent);
-    border-color: color-mix(
-        in srgb,
-        var(--custom-event-colour, #7c83ff) 45%,
-        var(--border-color, #808096)
-    );
-    color: var(--text-primary, inherit);
 }
 
 .events-custom-progress-button:disabled {
@@ -476,33 +397,11 @@
     height: 36px;
     padding: 0;
 
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--background);
-    color: var(--text-muted);
-
     font: inherit;
     font-size: 1.4rem;
     line-height: 1;
 
     cursor: pointer;
-
-    transition:
-        color 160ms ease,
-        background 160ms ease,
-        border-color 160ms ease;
-}
-
-.events-custom-close:hover {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
-    color: var(--accent);
-}
-
-.events-custom-close:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
 }
 
 /* =============================
@@ -592,9 +491,9 @@
 .events-custom-field input:not([type="radio"]):not([type="checkbox"]):not([type="color"]):focus,
 .events-custom-field textarea:focus,
 .events-custom-field select:focus {
-    border-color: var(--accent);
+    border-color: var(--control-focus-border);
 
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    box-shadow: none;
 }
 
 .events-custom-field input::placeholder,
@@ -623,8 +522,8 @@
 }
 
 .events-custom-field input[type="color"]:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =============================
@@ -724,8 +623,8 @@
 }
 
 .events-custom-scope input[type="radio"]:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: 2px;
 }
 
 .events-custom-weekdays input {
@@ -744,26 +643,6 @@
     gap: 12px;
 }
 
-.events-custom-add-objective {
-    padding: 6px 0;
-
-    border: 0;
-    background: transparent;
-
-    color: var(--accent);
-
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 650;
-
-    cursor: pointer;
-}
-
-.events-custom-add-objective:hover {
-    filter: brightness(1.12);
-    text-decoration: underline;
-}
-
 .events-custom-objective {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 76px 76px 36px;
@@ -780,11 +659,11 @@
     box-sizing: border-box;
     padding: 9px;
 
-    border: 1px solid var(--border);
+    border: 1px solid var(--control-border);
     border-radius: 8px;
 
-    background: var(--background);
-    color: var(--text);
+    background: var(--control-surface);
+    color: var(--control-text);
 
     font: inherit;
     font-size: 0.82rem;
@@ -792,8 +671,8 @@
 
 .events-custom-objective input:focus {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    border-color: var(--control-focus-border);
+    box-shadow: none;
 }
 
 .events-custom-objective-remove {
@@ -804,18 +683,7 @@
     min-height: 38px;
     padding: 0;
 
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: transparent;
-    color: #e87979;
-
     cursor: pointer;
-    transition: background 160ms ease;
-}
-
-.events-custom-objective-remove:hover {
-    background: rgba(232, 121, 121, 0.1);
 }
 
 /* =============================
@@ -857,67 +725,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    min-height: 42px;
-    padding: 10px 16px;
-
-    border-radius: 9px;
-
-    font: inherit;
-    font-size: 0.86rem;
-    font-weight: 650;
-
-    cursor: pointer;
-
-    transition:
-        background 160ms ease,
-        border-color 160ms ease,
-        color 160ms ease,
-        box-shadow 160ms ease,
-        transform 160ms ease;
-}
-
-.events-custom-cancel {
-    border: 1px solid var(--border);
-
-    background: transparent;
-    color: var(--text-muted);
-}
-
-.events-custom-cancel:hover {
-    border-color: var(--accent-border);
-    background: var(--accent-soft);
-    color: var(--text);
-}
-
-.events-custom-save {
-    border: 1px solid var(--accent);
-    background: var(--accent);
-    color: var(--background);
-
-    box-shadow: 0 3px 12px var(--accent-glow);
-}
-
-.events-custom-save:hover {
-    filter: brightness(1.06);
-    box-shadow: 0 4px 18px var(--accent-glow);
-}
-
-.events-custom-save:active,
-.events-custom-cancel:active {
-    transform: translateY(1px);
 }
 
 .events-custom-save:disabled {
     opacity: 0.6;
-    cursor: wait;
-    box-shadow: none;
-}
-
-.events-custom-save:focus-visible,
-.events-custom-cancel:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
 }
 
 @media (max-width: 640px) {
@@ -1019,11 +830,9 @@
 .events-custom-dialog input[type="time"] {
     min-height: 42px;
     padding-right: 12px;
-    border-color: var(--border);
-    background:
-        linear-gradient(var(--background), var(--background)) padding-box,
-        linear-gradient(135deg, var(--accent-soft), transparent) border-box;
-    color: var(--text);
+    border-color: var(--control-focus-border);
+    background: var(--control-surface);
+    color: var(--control-text);
     color-scheme: inherit;
     accent-color: var(--accent);
     caret-color: var(--accent);
@@ -1033,19 +842,15 @@
 .events-custom-dialog input[type="date"]:hover,
 .events-custom-dialog input[type="datetime-local"]:hover,
 .events-custom-dialog input[type="time"]:hover {
-    background:
-        linear-gradient(var(--surface-hover), var(--surface-hover)) padding-box,
-        linear-gradient(135deg, var(--accent), var(--accent-border)) border-box;
+    background: var(--control-hover-surface);
 }
 
 .events-custom-dialog input[type="date"]:focus,
 .events-custom-dialog input[type="datetime-local"]:focus,
 .events-custom-dialog input[type="time"]:focus {
-    border-color: var(--accent);
-    background: var(--background);
-    box-shadow:
-        0 0 0 3px var(--accent-soft),
-        inset 0 0 0 1px var(--accent-border);
+    border-color: var(--control-focus-border);
+    background: var(--control-surface);
+    box-shadow: none;
 }
 
 .events-custom-dialog input[type="date"]::-webkit-datetime-edit,
@@ -1082,34 +887,13 @@
     justify-content: space-between;
     gap: 12px;
     width: 100%;
-    min-height: 42px;
-    padding: 10px 12px;
     box-sizing: border-box;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background);
-    color: var(--text);
-    font: inherit;
-    font-size: 0.88rem;
-    font-weight: 400;
     text-align: left;
     cursor: pointer;
     transition:
         border-color 160ms ease,
         box-shadow 160ms ease,
         background 160ms ease;
-}
-
-.events-custom-datetime-trigger:hover {
-    border-color: var(--accent-border);
-    background: var(--surface-hover);
-}
-
-.events-custom-datetime-trigger:focus-visible,
-.events-custom-datetime-trigger[aria-expanded="true"] {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .events-custom-datetime-trigger.is-placeholder .events-custom-datetime-value {
@@ -1135,13 +919,6 @@
     width: min(340px, calc(100vw - 56px));
     padding: 16px;
     box-sizing: border-box;
-    border: 1px solid var(--accent-border);
-    border-radius: 14px;
-    background: var(--surface);
-    color: var(--text);
-    box-shadow:
-        0 18px 48px rgba(0, 0, 0, 0.38),
-        0 0 0 1px var(--accent-soft);
     font-weight: 400;
 }
 
@@ -1172,20 +949,9 @@
     width: 36px;
     height: 36px;
     padding: 0;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background);
-    color: var(--text);
     font: inherit;
     font-size: 1.35rem;
     cursor: pointer;
-}
-
-.events-custom-calendar-nav:hover,
-.events-custom-calendar-secondary:hover {
-    border-color: var(--accent-border);
-    background: var(--accent-soft);
-    color: var(--accent);
 }
 
 .events-custom-calendar-weekdays,
@@ -1269,10 +1035,10 @@
     height: 36px;
     min-height: 36px;
     padding: 7px 8px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--control-border);
     border-radius: 8px;
-    background: var(--background);
-    color: var(--text);
+    background: var(--control-surface);
+    color: var(--control-text);
     font: inherit;
     text-align: center;
 }
@@ -1293,25 +1059,15 @@
 .events-custom-calendar-apply {
     min-height: 34px;
     padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-muted);
     font: inherit;
     font-size: 0.76rem;
     font-weight: 650;
     cursor: pointer;
 }
 
-.events-custom-calendar-apply {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--background);
-}
-
 .events-custom-calendar button:focus-visible,
 .events-custom-calendar input:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: none;
     outline-offset: 2px;
 }
 
@@ -1371,8 +1127,8 @@
 /* Consistent focus indicators for keyboard navigation. */
 .events-custom-dialog input[type="radio"]:focus-visible,
 .events-custom-dialog input[type="checkbox"]:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -1391,15 +1147,15 @@
 
     padding: 10px 40px 10px 12px;
 
-    border: 1px solid var(--border);
+    border: 1px solid var(--control-border);
     border-radius: 9px;
 
-    background-color: var(--background);
+    background-color: var(--control-surface);
     background-repeat: no-repeat;
     background-position: right 13px center;
     background-size: 15px;
 
-    color: var(--text);
+    color: var(--control-text);
     font-family: inherit;
     font-size: 0.88rem;
     font-weight: 400;
@@ -1435,14 +1191,14 @@
 
 /* Hover and keyboard focus */
 .events-custom-dialog select:hover {
-    border-color: var(--accent);
+    border-color: var(--control-focus-border);
 }
 
 .events-custom-dialog select:focus,
 .events-custom-dialog select:focus-visible {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    border-color: var(--control-focus-border);
+    box-shadow: none;
 }
 
 /* Option colours */
@@ -1495,13 +1251,13 @@
     padding: 0 6px 0 9px !important;
     box-sizing: border-box !important;
 
-    border: 0 !important;
+    border: 1px solid var(--control-border) !important;
     border-radius: 0 !important;
     outline: none !important;
     box-shadow: none !important;
 
-    background: transparent !important;
-    color: var(--text) !important;
+    background: var(--control-surface) !important;
+    color: var(--control-text) !important;
 
     font-family: "Inter", sans-serif !important;
     font-size: 0.82rem !important;
@@ -1635,7 +1391,7 @@
     .spinner-arrow {
     outline: none !important;
     box-shadow: none !important;
-    border-color: transparent !important;
+    border-color: var(--control-focus-border) !important;
 }
 
 /* Prevent global button focus styles from affecting spinner buttons */
@@ -1665,34 +1421,11 @@
 
     width: 100%;
     min-width: 0;
-    min-height: 42px;
     box-sizing: border-box;
-
-    padding: 10px 12px;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--background);
-    color: var(--text);
-
-    font-family: "Inter", sans-serif;
-    font-size: 0.88rem;
-    font-weight: 400;
     text-align: left;
-
-    cursor: pointer;
 }
 
 /* Hover and focus */
-.events-custom-dialog [data-custom-dropdown] > button:hover {
-    border-color: var(--accent);
-}
-
-.events-custom-dialog [data-custom-dropdown] > button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
 
 /* Dropdown options menu */
 .events-custom-dialog [data-custom-dropdown] [role="listbox"],
@@ -1707,12 +1440,6 @@
     min-width: 0;
     box-sizing: border-box;
 
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background: var(--surface);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-
     overflow: hidden;
 }
 
@@ -1723,23 +1450,7 @@
 
     width: 100%;
     box-sizing: border-box;
-    padding: 10px 12px;
-
-    border: 0;
-    border-radius: 0;
-
-    background: transparent;
-    color: var(--text);
-
-    font: inherit;
     text-align: left;
-
-    cursor: pointer;
-}
-
-.events-custom-dialog [data-custom-dropdown] [data-value]:hover {
-    background: var(--accent-soft);
-    color: var(--text);
 }
 
 /* =========================================================
@@ -1833,8 +1544,8 @@
 
 /* Keyboard accessibility */
 .events-custom-dialog .events-custom-day input:focus-visible + span {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: 2px;
 }
 
 /* =========================================================
@@ -1845,45 +1556,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-
-    min-height: 40px;
-    padding: 0 15px;
-
-    border: 1px solid var(--accent-border);
-    border-radius: 10px;
-
-    background: var(--accent-soft);
-    color: var(--accent);
-
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 650;
-
-    cursor: pointer;
-
-    transition:
-        background 160ms ease,
-        border-color 160ms ease,
-        box-shadow 160ms ease,
-        transform 160ms ease;
-}
-
-.events-custom-dialog .events-custom-add-objective:hover {
-    background: var(--accent-soft);
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-soft);
-    text-decoration: none;
-}
-
-.events-custom-dialog .events-custom-add-objective:active {
-    transform: translateY(1px);
-}
-
-.events-custom-dialog .events-custom-add-objective:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
 }
 
 .events-custom-dialog .events-custom-add-objective span {
@@ -1931,8 +1603,6 @@
 /* Account selector */
 .events-custom-dialog [data-custom-account-dropdown] .custom-select-button,
 .events-custom-dialog .events-custom-account-select .custom-select-button {
-    height: var(--custom-control-height);
-    min-height: var(--custom-control-height);
     box-sizing: border-box;
 }
 
@@ -2164,29 +1834,21 @@
     flex-wrap: wrap;
 }
 
-.events-custom-icon-button,
 .events-custom-icon-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.events-custom-icon-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 34px;
     padding: 7px 12px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: var(--background);
-    color: var(--text);
     font: inherit;
     font-size: 12px;
     cursor: pointer;
-    transition:
-        background 160ms ease,
-        border-color 160ms ease;
-}
-
-.events-custom-icon-button:hover,
-.events-custom-icon-remove:hover {
-    background: var(--accent-soft);
-    border-color: var(--accent-border);
 }
 
 .events-custom-field-hint {
@@ -2276,9 +1938,9 @@
     height: 34px;
     flex: 0 0 26px;
     padding: 0;
-    border: 1px solid var(--border);
+    border: 0;
     border-radius: 8px;
-    background: var(--surface);
+    background: transparent;
     color: var(--text-muted);
     cursor: grab;
     opacity: 0.8;
@@ -2298,15 +1960,10 @@
 
 .events-custom-drag-handle:hover,
 .events-custom-drag-handle:focus-visible {
-    opacity: 0.9;
+    opacity: 1;
     color: var(--accent);
-    border-color: var(--accent-border);
-    background-color: var(--accent-soft);
-}
-
-.events-custom-drag-handle:focus-visible {
-    outline: 1px solid currentColor;
-    outline-offset: 2px;
+    background: transparent;
+    outline: none;
 }
 
 .events-custom-drag-handle:disabled {
@@ -2352,8 +2009,8 @@
 }
 .events-custom-overview summary:focus-visible,
 .events-custom-overview-manage:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -3px;
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
 }
 
 .events-custom-overview .events-custom-account-info {
@@ -2592,46 +2249,23 @@
 }
 
 .events-custom-overview-objective-button {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     padding: 0;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: rgba(128, 128, 150, 0.08);
-    color: var(--text-primary);
     font: inherit;
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    transition:
-        background 160ms ease,
-        border-color 160ms ease,
-        transform 160ms ease;
-}
-
-.events-custom-overview-objective-button:hover:not(:disabled) {
-    border-color: var(--custom-event-colour);
-    background: rgba(128, 128, 150, 0.18);
-    transform: translateY(-1px);
-}
-
-.events-custom-overview-objective-button:active:not(:disabled) {
-    transform: scale(0.94);
 }
 .events-custom-overview-objective-button:disabled {
     opacity: 0.35;
     cursor: not-allowed;
 }
-.events-custom-overview-objective-button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
 
 @media (prefers-reduced-motion: reduce) {
-    .events-custom-overview-objective-fill,
-    .events-custom-overview-objective-button {
+    .events-custom-overview-objective-fill {
         transition: none;
     }
 }
@@ -2762,24 +2396,8 @@
     place-items: center;
     width: 34px;
     height: 34px;
-    padding: 7px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface);
-    color: var(--text-muted);
+    padding: 0;
     cursor: pointer;
-    transition:
-        color 0.15s,
-        background 0.15s;
-}
-.events-limited-filter-button:hover,
-.events-limited-filter-button[aria-expanded="true"] {
-    color: var(--accent);
-    background: var(--accent-soft);
-}
-.events-limited-filter-button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
 }
 .events-limited-filter-popup {
     position: fixed;
@@ -2791,13 +2409,6 @@
     overflow-y: auto;
     box-sizing: border-box;
     padding: 18px;
-    border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
-    border-radius: 16px;
-    color: var(--text);
-    background: color-mix(in srgb, var(--surface) 96%, var(--text));
-    box-shadow:
-        0 16px 48px #0006,
-        0 3px 12px #0003;
     font-family: inherit;
 }
 .events-limited-filter-popup:popover-open {
@@ -2839,9 +2450,9 @@
     width: 32px;
     height: 19px;
     margin: 0;
-    border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+    border: 1px solid var(--control-border);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--text) 10%, transparent);
+    background: var(--control-surface);
     cursor: pointer;
     transition:
         background 150ms ease,
@@ -2861,16 +2472,16 @@
         background 150ms ease;
 }
 .events-limited-filter-popup input:checked {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--control-surface);
+    border-color: var(--control-focus-border);
 }
 .events-limited-filter-popup input:checked::before {
     transform: translateX(13px);
     background: #fff;
 }
 .events-limited-filter-popup input:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: 2px;
 }
 .events-limited-filter-popup small {
     display: block;
@@ -2906,4 +2517,46 @@
     text-align: center;
     color: var(--text-muted);
     padding: 16px;
+}
+.events-custom-create,
+.events-custom-save {
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+}
+.events-custom-create {
+    gap: 0.45rem;
+    padding: 10px 16px;
+}
+.events-custom-add-objective {
+    padding: 6px 0;
+    font-size: 0.82rem;
+}
+.events-custom-cancel,
+.events-custom-save {
+    min-height: 42px;
+    padding: 10px 16px;
+    font-size: 0.86rem;
+}
+.events-custom-dialog .events-custom-add-objective {
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 0 15px;
+    font-size: 0.82rem;
+}
+.events-custom-icon-remove {
+    min-height: 34px;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+.events-custom-dialog {
+    --dropdown-height: 42px;
+}
+
+.events-custom-progress-button > svg,
+.events-custom-overview-objective-button > svg {
+    width: 16px;
+    height: 16px;
 }

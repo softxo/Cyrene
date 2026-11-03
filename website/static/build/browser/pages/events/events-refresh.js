@@ -48,6 +48,13 @@ window.refreshEvents = async function refreshEvents() {
         const html = await response.text();
         const parser = new DOMParser();
         const refreshedDocument = parser.parseFromString(html, "text/html");
+        const empty = refreshedDocument.querySelector("[data-no-accounts]");
+        if (empty &&
+            currentPage.isConnected &&
+            activityRevision === (window.eventsActivityRevision || 0)) {
+            currentPage.replaceWith(empty.cloneNode(true));
+            return;
+        }
         const refreshedPage = refreshedDocument.querySelector(".events-page");
         if (activityRevision !== (window.eventsActivityRevision || 0) ||
             !currentPage.isConnected ||
@@ -293,7 +300,7 @@ window.refreshEvents = async function refreshEvents() {
         // OVERVIEW LAYOUT
         // -------------------------------------------------
         if (isOverview) {
-            for (const panel of ["daily", "resin", "trounce", "endgame", "wishes", "events"]) {
+            for (const panel of ["daily", "resin", "permanent", "endgame", "wishes", "events"]) {
                 refreshInPlace(`.events-overview-panel[data-overview-panel="${panel}"]`);
             }
         }

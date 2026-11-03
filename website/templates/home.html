@@ -17,10 +17,8 @@
             </p>
 
             <div class="home-hero-actions">
-                <a href="/characters" class="home-action-primary">
-                    Open your roster <span aria-hidden="true">→</span>
-                </a>
-                <a href="/settings" class="home-action-secondary">
+                <a href="/verify" class="cyrene-button home-action-primary">Login Discord</a>
+                <a href="/settings" class="cyrene-button home-action-secondary">
                     Manage accounts
                 </a>
             </div>
@@ -65,6 +63,145 @@
             </a>
             {% endfor %}
         </div>
+    </section>
+    <section class="home-changelog" data-changelog aria-labelledby="changelog-title">
+        <div class="changelog-heading">
+            <h2 id="changelog-title"><img src="/static/images/ui/ui_misc/Changelog.png" alt=""> CHANGELOG</h2>
+            <button type="button" class="cyrene-button cyrene-button--icon changelog-add" data-changelog-add aria-label="Add changelog" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <p data-changelog-status role="status">Loading updates&hellip;</p>
+        <div data-changelog-entries></div>
+        <dialog class="changelog-dialog" aria-labelledby="changelog-editor-title">
+            <form data-changelog-form>
+                <div class="changelog-heading">
+                    <h2 id="changelog-editor-title" tabindex="-1">Add Changelog</h2>
+                    <button type="button" data-changelog-close aria-label="Close editor">&times;</button>
+                </div>
+                <div class="changelog-meta-grid"><div class="changelog-date-field">
+                <label for="changelog-date">Date &amp; time</label>
+                <input id="changelog-date" name="date" type="date" hidden><input name="time" type="hidden">
+                <div class="changelog-date-control">
+                    <button type="button" data-date-trigger aria-label="Choose date" aria-haspopup="dialog" aria-expanded="false"></button>
+                    <div class="changelog-calendar" data-date-calendar role="dialog" aria-label="Choose date" hidden>
+                        <div class="changelog-calendar-header">
+                            <button type="button" data-date-prev aria-label="Previous month">&lsaquo;</button>
+                            <strong data-date-month></strong>
+                            <button type="button" data-date-next aria-label="Next month">&rsaquo;</button>
+                        </div>
+                        <div class="changelog-calendar-weekdays" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                        <div class="changelog-calendar-grid" role="grid" aria-label="Calendar dates"></div>
+                        <div class="changelog-calendar-time">
+                            <span>Time</span><input type="text" inputmode="numeric" maxlength="2" data-time-hour aria-label="Hour"><span>:</span><input type="text" inputmode="numeric" maxlength="2" data-time-minute aria-label="Minute">
+                        </div>
+                        <div class="changelog-calendar-footer">
+                            <button type="button" data-date-today class="cyrene-button cyrene-button--compact">Today</button>
+                            <button type="button" data-date-cancel class="cyrene-button cyrene-button--compact">Cancel</button>
+                            <button type="button" data-date-apply class="cyrene-button cyrene-button--compact">Apply</button>
+                        </div>
+                    </div>
+                </div>
+                </div><div class="changelog-pill-field">
+                    <label for="changelog-colour">Date pill colour</label>
+                    <div class="changelog-colour-label">
+                        <input id="changelog-colour" name="pill_colour" type="color" value="#8f9cff">
+                        <label class="changelog-gradient-toggle"><input type="checkbox" data-pill-gradient><span>Gradient</span></label>
+                        <input id="changelog-colour-end" type="color" data-pill-colour-end value="#56b987" aria-label="Gradient end colour" hidden>
+                        <time data-pill-preview></time>
+                    </div>
+                </div></div>
+                <div class="changelog-writing-label">
+                    <label id="changelog-content-label" for="changelog-content">What's new</label>
+                    <button type="button" data-changelog-icons aria-expanded="false" aria-controls="changelog-picker" class="cyrene-button cyrene-button--compact">Insert emoji</button>
+                </div>
+                <div id="changelog-picker" class="changelog-emoji-disclosure" hidden><div class="changelog-picker" aria-label="Changelog emojis"></div></div>
+                <div class="changelog-format-toolbar">
+                    <div class="changelog-format-buttons" role="toolbar" aria-label="Text formatting">
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-inline-format="bold" aria-label="Bold" aria-pressed="false" title="Bold (Ctrl+B)"><strong aria-hidden="true">B</strong></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-inline-format="italic" aria-label="Italic" aria-pressed="false" title="Italic (Ctrl+I)"><em aria-hidden="true">I</em></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-inline-format="underline" aria-label="Underline" aria-pressed="false" title="Underline (Ctrl+U)"><u aria-hidden="true">U</u></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-format-popup="colour" aria-label="Text colour" aria-haspopup="dialog" aria-expanded="false" aria-controls="changelog-colour-popover" title="Text colour"><span class="changelog-colour-letter" aria-hidden="true">C</span></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-format-popup="opacity" aria-label="Text opacity" aria-haspopup="dialog" aria-expanded="false" aria-controls="changelog-opacity-popover" title="Text opacity"><span class="changelog-opacity-letter" aria-hidden="true">O</span></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-format-popup="link" aria-label="Insert link" aria-haspopup="dialog" aria-expanded="false" aria-controls="changelog-link-popover" title="Insert link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-format-popup="markdown" aria-label="Markdown blocks" aria-haspopup="dialog" aria-expanded="false" aria-controls="changelog-markdown-popover" title="Markdown blocks"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7l5 6 5-6v11M19 6v12m-3-3 3 3 3-3"/></svg></button>
+                        <button type="button" class="cyrene-button cyrene-button--icon changelog-format-button" data-format-popup="code" aria-label="Insert code block" aria-haspopup="dialog" aria-expanded="false" aria-controls="changelog-code-popover" title="Code block"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg></button>
+                    </div>
+                    <div class="changelog-format-live-preview" aria-label="Formatting preview" aria-live="polite">
+                        <span data-preview-kind="default">This is how the text will look.</span>
+                        <p data-preview-kind="colour" data-text-colour-preview hidden>This is how the text will look.</p>
+                        <p data-preview-kind="opacity" data-opacity-preview hidden>This is how the text will look.</p>
+                        <p data-preview-kind="link" hidden><a data-link-preview>This is how the text will look.</a></p>
+                    </div>
+                    <div id="changelog-colour-popover" class="changelog-format-popover" data-format-panel="colour" role="dialog" aria-label="Text colour" hidden>
+                        <div class="changelog-text-tools">
+                            <label for="changelog-text-colour">Colour</label><input aria-label="Text colour" id="changelog-text-colour" type="color" data-text-colour value="#8f9cff">
+                            <button type="button" data-colour-presets aria-expanded="false" aria-controls="changelog-colour-presets" class="cyrene-button cyrene-button--compact">Presets</button>
+                        </div>
+                        <div id="changelog-colour-presets" class="changelog-colour-presets" hidden>
+                            <div class="changelog-preset-list" data-preset-list></div>
+                            <div class="changelog-preset-add">
+                                <input type="color" data-preset-picker value="#8f9cff" aria-label="Preset colour picker">
+                                <label for="changelog-preset-hex">Hex</label><input id="changelog-preset-hex" type="text" maxlength="7" placeholder="#ec3b83" autocomplete="off" spellcheck="false" aria-label="Preset hex colour">
+                                <button type="button" data-save-preset class="cyrene-button cyrene-button--compact">Save preset</button>
+                            </div>
+                            <p data-preset-status role="status"></p>
+                        </div>
+                        <button type="button" data-apply-text-colour aria-label="Colour selected text" class="cyrene-button cyrene-button--compact">Apply colour</button>
+                    </div>
+                    <div id="changelog-opacity-popover" class="changelog-format-popover" data-format-panel="opacity" role="dialog" aria-label="Text opacity" hidden>
+                        <div class="changelog-opacity-tools"><label for="changelog-opacity">Opacity</label><input id="changelog-opacity" type="range" min="10" max="100" step="5" value="60" data-opacity-input><output for="changelog-opacity" data-opacity-value>60%</output></div>
+                        <button type="button" data-apply-opacity aria-label="Apply to selected text" class="cyrene-button cyrene-button--compact">Apply opacity</button>
+                    </div>
+                    <div id="changelog-link-popover" class="changelog-format-popover" data-format-panel="link" role="dialog" aria-label="Insert link" hidden>
+                        <label for="changelog-link-text">Message</label><input id="changelog-link-text" class="cyrene-input" type="text" data-link-text autocomplete="off">
+                        <label for="changelog-link-url">Link</label><input id="changelog-link-url" class="cyrene-input" type="text" inputmode="url" data-link-url placeholder="https://..." autocomplete="off">
+                        <p class="changelog-tool-error" data-link-error role="status"></p>
+                        <button type="button" data-apply-link class="cyrene-button cyrene-button--compact">Insert link</button>
+                    </div>
+                    <div id="changelog-code-popover" class="changelog-format-popover" data-format-panel="code" role="dialog" aria-label="Code block" hidden>
+                        <label for="changelog-code-language">Language (optional)</label><input id="changelog-code-language" class="cyrene-input" type="text" data-code-language maxlength="32" placeholder="e.g. python, javascript" autocomplete="off" spellcheck="false">
+                        <label for="changelog-code-text">Code</label><textarea id="changelog-code-text" class="cyrene-input changelog-code-input" rows="4" data-code-text spellcheck="false" autocapitalize="off"></textarea>
+                        <pre class="changelog-code-block changelog-code-preview" aria-label="Code preview"><code data-code-preview>This is how the code will look.</code></pre>
+                        <p class="changelog-tool-error" data-code-error role="status"></p>
+                        <button type="button" data-apply-code class="cyrene-button cyrene-button--compact">Insert code block</button>
+                    </div>
+                    <div id="changelog-markdown-popover" class="changelog-format-popover" data-format-panel="markdown" role="dialog" aria-label="Markdown blocks" hidden>
+                        <span class="changelog-tool-label">Block style</span>
+                        <div class="changelog-callout-options" role="group" aria-label="Block style">
+                            <button type="button" class="cyrene-button cyrene-button--compact" data-callout-kind="note" aria-pressed="true">Note</button>
+                            <button type="button" class="cyrene-button cyrene-button--compact" data-callout-kind="tip" aria-pressed="false">Tip</button>
+                            <button type="button" class="cyrene-button cyrene-button--compact" data-callout-kind="important" aria-pressed="false">Important</button>
+                            <button type="button" class="cyrene-button cyrene-button--compact" data-callout-kind="caution" aria-pressed="false">Caution</button>
+                            <button type="button" class="cyrene-button cyrene-button--compact" data-callout-kind="warning" aria-pressed="false">Warning</button>
+                        </div>
+                        <label for="changelog-block-message">Message</label><textarea id="changelog-block-message" class="cyrene-input" rows="2" data-block-message></textarea>
+                        <div data-block-preview></div>
+                        <button type="button" data-apply-block class="cyrene-button cyrene-button--compact">Insert block</button>
+                    </div>
+                </div>
+                <div id="changelog-content" class="changelog-content-editor" contenteditable="true" role="textbox" aria-labelledby="changelog-content-label" aria-multiline="true" aria-required="true" data-placeholder="One update per line..."></div>
+                <details class="changelog-format-help"><summary aria-expanded="false">Formatting help</summary><div class="changelog-help-content" hidden>
+                <p class="changelog-hint">Select text or use B, I and U before typing. Supports **bold**, _italic_, ++underline++, ~~strikethrough~~, `code`, [links](https://...), and [text]{&#35;ff88aa}. Use M for Note, Tip, Important, Caution and Warning blocks. Use the code icon or fenced Markdown (three backticks) for code blocks. Enter starts a fresh line without the previous formatting. Use "Insert emoji" for icons.</p>
+                </div></details>
+                <section class="changelog-preview-panel" aria-label="Preview"><h3>Preview</h3><div class="changelog-preview"></div></section>
+                <p data-changelog-error role="alert"></p>
+                <div class="changelog-editor-actions">
+                    <button type="button" data-changelog-delete hidden class="cyrene-button cyrene-button--danger">Delete update</button>
+                    <button type="button" data-changelog-cancel class="cyrene-button cyrene-button--compact">Cancel</button>
+                    <button type="submit" class="cyrene-button changelog-publish">Publish update</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog class="changelog-delete-dialog" aria-labelledby="changelog-delete-title" aria-describedby="changelog-delete-description">
+            <div class="changelog-delete-heading">
+                <div class="changelog-delete-icon" aria-hidden="true"><img src="/static/images/ui/ui_misc/Deletion.png" alt=""></div>
+                <h2 id="changelog-delete-title">Delete this update?</h2>
+            </div>
+            <p id="changelog-delete-description">The changelog for <strong data-delete-date></strong> will be removed for everyone. This cannot be undone.</p>
+            <div class="changelog-editor-actions">
+                <button type="button" data-delete-cancel autofocus class="cyrene-button cyrene-button--compact">Keep update</button>
+                <button type="button" data-delete-confirm class="cyrene-button cyrene-button--danger">Delete update</button>
+            </div>
+        </dialog>
     </section>
 </div>
 

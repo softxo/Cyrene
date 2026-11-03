@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export default defineConfig({
-    // FastAPI serves /static URLs from website; recognize them without copying.
+    // FastAPI serves /static URLs from website; recognise them without copying.
     publicDir: `${projectRoot}/website`,
     build: {
         copyPublicDir: false,
@@ -17,6 +17,7 @@ export default defineConfig({
             input: {
                 app: `${projectRoot}/website/src/app.ts`,
                 "css/global": `${projectRoot}/website/src/styles/core/global.css`,
+                "css/weapons": `${projectRoot}/website/src/styles/pages/weapons.css`,
                 "css/home": `${projectRoot}/website/src/styles/pages/home.css`,
                 "css/achievements": `${projectRoot}/website/src/styles/pages/achievements.css`,
                 "css/wishes": `${projectRoot}/website/src/styles/pages/wishes.css`,

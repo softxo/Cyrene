@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="cyrene-site-version" content="{{ site_version() }}">
 
     <meta
         name="viewport"
@@ -40,20 +41,21 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=14"
+        href="/static/build/css/global.css?v=38"
     >
 
     {% set page_styles = {
-        '/': '/static/build/css/home.css?v=4',
-        '/achievements': '/static/build/css/achievements.css?v=3',
-        '/wishes': '/static/build/css/wishes.css?v=10',
-        '/characters': '/static/build/css/characters.css?v=37',
-        '/inventory': '/static/build/css/inventory.css?v=3',
-        '/planner': '/static/build/css/planner.css?v=2',
-        '/verify': '/static/build/css/verification.css?v=2',
-        '/codes': '/static/build/css/codes.css?v=2',
-        '/events': '/static/build/css/events.css?v=32',
-        '/settings': '/static/build/css/settings.css?v=3'
+        '/weapons': '/static/build/css/weapons.css?v=23',
+        '/': '/static/build/css/home.css?v=40',
+        '/achievements': '/static/build/css/achievements.css?v=7',
+        '/wishes': '/static/build/css/wishes.css?v=14',
+        '/characters': '/static/build/css/characters.css?v=41',
+        '/inventory': '/static/build/css/inventory.css?v=7',
+        '/planner': '/static/build/css/planner.css?v=7',
+        '/verify': '/static/build/css/verification.css?v=14',
+        '/codes': '/static/build/css/codes.css?v=7',
+        '/events': '/static/build/css/events.css?v=48',
+        '/settings': '/static/build/css/settings.css?v=8'
     } %}
 
     {% set page_path = '/events' if request.url.path == '/events/refresh' else request.url.path %}
@@ -230,13 +232,17 @@
 
     <main class="main-content">
 
-        {% block content %}
-        {% endblock %}
+        {% if accounts is defined and not accounts and page_path not in ['/settings', '/', '/verify'] %}
+            {% include 'components/no_accounts.html' %}
+        {% else %}
+            {% block content %}
+            {% endblock %}
+        {% endif %}
 
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=3.56"></script>
+    <script type="module" src="/static/build/js/app.js?v=4.50"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

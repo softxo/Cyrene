@@ -27,7 +27,7 @@
             </p>
         </div>
 
-        <button id="open-account-link" class="account-link-open" type="button">
+        <button id="open-account-link" class="cyrene-button account-link-open" type="button">
             Add HoYoLAB account
         </button>
 
@@ -195,7 +195,7 @@
                 <form id="account-link-form" class="account-link-form">
             <label>
                 <span>Email or username</span>
-                <input
+                <input class="cyrene-input"
                     id="hoyolab-account"
                     name="account"
                     type="text"
@@ -207,7 +207,7 @@
 
             <label>
                 <span>Password</span>
-                <input
+                <input class="cyrene-input"
                     id="hoyolab-password"
                     name="password"
                     type="password"
@@ -222,7 +222,7 @@
                 and is never stored by Cyrene.
             </p>
 
-            <button id="account-link-submit" type="submit">
+            <button id="account-link-submit" type="submit" class="cyrene-button">
                 Continue
             </button>
 
@@ -259,7 +259,7 @@
             <form id="account-rename-form" class="account-link-form">
                 <label>
                     <span>Cyrene nickname</span>
-                    <input
+                    <input class="cyrene-input"
                         id="account-manage-nickname"
                         type="text"
                         maxlength="50"
@@ -267,7 +267,7 @@
                     >
                 </label>
 
-                <button type="submit">Save nickname</button>
+                <button type="submit" class="cyrene-button account-save-nickname">Save nickname</button>
             </form>
 
             <div class="account-danger-zone">
@@ -276,7 +276,7 @@
                     <span>This unlinks it from both the site and Discord.</span>
                 </div>
 
-                <button id="account-delete-button" type="button">
+                <button id="account-delete-button" type="button" class="cyrene-button cyrene-button--danger">
                     Remove
                 </button>
             </div>

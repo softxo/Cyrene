@@ -6,21 +6,11 @@ from utils.web.auth import claim_verification
 
 
 class Verify(commands.Cog):
-
-    def __init__(
-        self,
-        bot: commands.Bot
-    ):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
-    @app_commands.command(
-        name="verify",
-        description="Connect your Discord account to Cyrene."
-    )
-    @app_commands.describe(
-        code="The verification code shown on the Cyrene website."
-    )
+    @app_commands.command(name="verify", description="Connect your Discord account to Cyrene.")
+    @app_commands.describe(code="The verification code shown on the Cyrene website.")
     async def verify(
         self,
         interaction: discord.Interaction,
@@ -30,26 +20,23 @@ class Verify(commands.Cog):
         success = claim_verification(
             code=code,
             user_id=interaction.user.id,
+            username=interaction.user.name,
+            display_name=interaction.user.display_name,
+            avatar_hash=interaction.user.avatar.key if interaction.user.avatar else None,
         )
 
         if not success:
             await interaction.response.send_message(
-                "That verification code is invalid, expired, "
-                "or has already been used.",
+                "That verification code is invalid, expired, or has already been used.",
                 ephemeral=True,
             )
             return
 
         await interaction.response.send_message(
-            "Your Discord account has been successfully connected "
-            "to Cyrene.",
+            "Your Discord account has been successfully connected to Cyrene.",
             ephemeral=True,
         )
 
 
-async def setup(
-    bot: commands.Bot
-):
-    await bot.add_cog(
-        Verify(bot)
-    )
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Verify(bot))

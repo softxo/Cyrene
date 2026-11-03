@@ -1,0 +1,1286 @@
+.event-insight-popover {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    width: 360px;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100dvh - 32px);
+    overflow: visible;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--surface) 96%, var(--text));
+    color: var(--text);
+    box-shadow:
+        0 16px 48px rgb(0 0 0 / 32%),
+        0 3px 12px rgb(0 0 0 / 15%);
+    font-size: 13px;
+    opacity: 0;
+    transform: none;
+    pointer-events: none;
+    transition: opacity 140ms ease;
+}
+
+.event-insight-popover.is-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+.event-insight-popover[data-side="bottom"] {
+    /* Keep the arrow anchored while the popup fades. */
+    transform-origin: var(--insight-arrow-x) top;
+}
+.event-insight-popover[data-side="top"] {
+    transform-origin: var(--insight-arrow-x) bottom;
+}
+.event-insight-popover::before {
+    content: "";
+    position: absolute;
+    left: var(--insight-arrow-x);
+    width: 8px;
+    height: 8px;
+    background: inherit;
+    border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+    transform: translateX(-50%) rotate(45deg);
+    z-index: 0;
+}
+.event-insight-popover[data-side="bottom"]::before {
+    top: -5px;
+    border-right: 0;
+    border-bottom: 0;
+}
+.event-insight-popover[data-side="top"]::before {
+    bottom: -5px;
+    border-left: 0;
+    border-top: 0;
+}
+.event-insight-content {
+    padding: 18px;
+    box-sizing: border-box;
+    max-height: calc(100dvh - 34px);
+    overflow-y: auto;
+    border-radius: inherit;
+}
+.event-insight-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.event-insight-heading > img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgb(128 128 128 / 10%);
+}
+.event-insight-heading > div {
+    display: grid;
+    gap: 3px;
+}
+.event-insight-heading span {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.event-insight-heading strong {
+    font-size: 15px;
+}
+
+.event-insight-popover p {
+    margin: 12px 0 14px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.event-insight-items {
+    display: grid;
+    gap: 8px;
+}
+
+.event-insight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.45;
+}
+
+.event-insight-content > a {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--accent);
+    font-size: 11px;
+    text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .event-insight-popover {
+        transition: none;
+        transform: none;
+    }
+    .event-insight-trigger {
+        transition: none;
+    }
+}
+
+/* =========================================================
+   CHARACTERS PAGE
+   ========================================================= */
+
+.characters-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    min-width: 0;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.characters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.characters-header h1 {
+    margin: 5px 0 0;
+    font-size: clamp(32px, 4vw, 44px);
+    letter-spacing: -1.4px;
+}
+
+.characters-header p {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.characters-page-heading .eyebrow {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   CHARACTER ACCOUNT SELECTOR
+   ========================================================= */
+
+.characters-account-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.characters-account-form > label {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.characters-account-select {
+    width: 260px;
+    max-width: 100%;
+}
+
+.characters-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-account-select .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.characters-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-navigation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.characters-navigation-primary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* =========================================================
+   ROSTER SUMMARY
+   ========================================================= */
+
+.characters-summary {
+    width: max-content;
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* =========================================================
+   CHARACTERS — PAGE TABS
+   ========================================================= */
+
+.characters-page-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface-inset);
+
+    box-shadow: inset 0 1px 0 var(--surface-sheen);
+}
+
+.characters-page-tab {
+    min-height: 38px;
+    padding: 0.55rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.characters-page-tab:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.characters-page-tab.active {
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 92%, white),
+        var(--accent)
+    );
+    border-color: var(--accent-border);
+    color: var(--background);
+
+    box-shadow: 0 7px 18px var(--accent-glow);
+}
+
+.characters-panel[hidden],
+.planner-picker[hidden],
+.planner-editor[hidden],
+.planner-character-grid[hidden],
+.planner-empty-state[hidden],
+.planner-picker-character[hidden],
+.planner-picker-empty[hidden] {
+    display: none !important;
+}
+
+.characters-panel.active {
+    margin-top: -6px;
+}
+
+/* =========================================================
+   RESPONSIVE HEADER AND ACCOUNT SELECTOR
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .characters-header {
+        align-items: stretch;
+    }
+
+    .characters-page {
+        gap: 22px;
+    }
+
+    .characters-page-tabs {
+        width: 100%;
+    }
+
+    .characters-navigation-primary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-page-tab {
+        flex: 1;
+    }
+
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-navigation-row {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .characters-account-select {
+        width: 100%;
+    }
+
+    .character-card-info {
+        padding: 7px;
+    }
+
+    .character-card-info h2 {
+        font-size: 0.82rem;
+    }
+
+    .character-card-meta,
+    .character-card-footer {
+        font-size: 0.68rem;
+    }
+}
+
+/* =========================================================
+   CHARACTERS — FILTER TOOLBAR LAYOUT
+   ========================================================= */
+
+.characters-toolbar {
+    display: grid;
+    grid-template-columns:
+        minmax(150px, 1fr)
+        minmax(160px, 1fr)
+        auto
+        auto
+        auto
+        minmax(150px, 0.95fr)
+        auto;
+    align-items: end;
+    gap: 8px;
+    min-width: 0;
+
+    padding: 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 22px;
+
+    background: var(--panel-background);
+
+    box-shadow: var(--shadow-soft);
+}
+
+/* Search, sort, and ownership controls share consistent sizing. */
+.characters-toolbar > .characters-search,
+.characters-toolbar > .characters-filter:not(.characters-icon-filter) {
+    min-width: 0;
+    margin: 0;
+}
+
+/* Icon filters only take up the space their buttons need. */
+.characters-toolbar > .characters-icon-filter {
+    width: auto;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Keep icon buttons together on one line. */
+.characters-toolbar .characters-icon-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    min-height: 40px;
+}
+
+/* Prevent toolbar children from overflowing their available space. */
+.characters-toolbar > * {
+    min-width: 0;
+}
+
+.characters-search,
+.characters-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.characters-search label,
+.characters-filter label {
+    padding-left: 2px;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.65px;
+    text-transform: uppercase;
+}
+
+.characters-search input {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+/* Match the filter dropdowns to the account selector. */
+.characters-filter > .custom-select {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Consistent button height across every filter. */
+.characters-filter .custom-select-button {
+    width: 100%;
+}
+
+/* Prevent long option labels from breaking the toolbar. */
+.characters-filter .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Keep long option lists within the viewport area. */
+.characters-filter .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Reset button. */
+
+.character-card[hidden] {
+    display: none !important;
+}
+
+/* =========================================================
+   CHARACTERS — RESPONSIVE FILTERS
+   ========================================================= */
+
+@media (max-width: 1250px) {
+    .characters-toolbar {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: end;
+        padding: 16px;
+    }
+
+    .characters-search {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 700px) {
+    .characters-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    .characters-search {
+        grid-column: 1 / -1;
+    }
+
+    .characters-toolbar > .characters-icon-filter {
+        grid-column: 1 / -1;
+    }
+
+    .characters-toolbar .characters-icon-buttons {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .characters-reset-filters {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .characters-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .characters-search {
+        grid-column: auto;
+    }
+}
+
+/* =========================================================
+   CHARACTERS — ELEMENT AND WEAPON ICON FILTERS
+   ========================================================= */
+
+.characters-icon-filter {
+    min-width: 0;
+}
+
+.characters-icon-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    min-height: 40px;
+    padding: 3px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--surface-inset);
+}
+
+.characters-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+.characters-icon-button img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* Smaller rarity star icons */
+.characters-icon-buttons[data-character-rarity] img {
+    width: 19px;
+    height: 19px;
+}
+
+.characters-icon-button span {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.characters-icon-button:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.characters-icon-button.selected {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-raised));
+    color: var(--accent);
+    box-shadow:
+        inset 0 0 0 1px var(--accent),
+        0 5px 14px var(--accent-glow);
+}
+
+.characters-icon-button:focus-visible {
+    outline: 1px solid var(--control-focus-border);
+    outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+    .characters-icon-buttons {
+        gap: 4px;
+    }
+
+    .characters-icon-button {
+        width: 33px;
+        height: 33px;
+    }
+
+    .characters-icon-button img {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+.characters-reset-filters {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+}
+
+.weapons-page .weapons-toolbar {
+    grid-template-columns: minmax(150px, 1fr) auto auto auto;
+}
+.weapons-page .weapons-toolbar .characters-search {
+    grid-column: auto;
+}
+.weapon-rarity-star {
+    display: block;
+    width: 19px;
+    height: 19px;
+    mask: url("/static/images/characters/Rarity_5.webp") center / contain no-repeat;
+    background: var(--rarity-color);
+}
+.weapon-rarity-star[data-rarity="5"] {
+    --rarity-color: #e7b65b;
+}
+.weapon-rarity-star[data-rarity="4"] {
+    --rarity-color: #b788e2;
+}
+.weapon-rarity-star[data-rarity="3"] {
+    --rarity-color: #70b9e9;
+}
+.weapon-rarity-star[data-rarity="2"] {
+    --rarity-color: #79c995;
+}
+.weapon-rarity-star[data-rarity="1"] {
+    --rarity-color: #adb5c2;
+}
+.weapons-summary-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: -16px;
+}
+.weapons-help {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.weapons-help[hidden] {
+    display: none;
+}
+.weapons-help .event-insight-popover {
+    width: 300px;
+}
+.weapons-help .event-insight-content {
+    padding: 12px 14px;
+}
+.weapons-help .event-insight-content > p {
+    margin: 8px 0 0;
+    line-height: 1.45;
+}
+.weapons-help .event-insight-content > p strong {
+    font-weight: 650;
+}
+.weapons-help-trigger {
+    box-sizing: border-box;
+    flex: 0 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 11px;
+    line-height: 1;
+    opacity: 0.45;
+    cursor: help;
+    transition: opacity 160ms ease;
+}
+.weapons-help-trigger svg {
+    display: block;
+    flex: none;
+}
+.weapons-help-trigger:hover,
+.weapons-help-trigger:focus-visible {
+    opacity: 0.9;
+}
+[data-weapons-status][hidden],
+[data-weapons-manual-status]:empty {
+    display: none;
+}
+
+@media (min-width: 701px) and (max-width: 1150px) {
+    .weapons-page .weapons-toolbar {
+        grid-template-columns: auto auto 1fr;
+    }
+    .weapons-page .weapons-toolbar .characters-search {
+        grid-column: 1 / -1;
+    }
+}
+.weapons-note,
+[data-weapons-status] {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.weapons-page button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+.weapons-page :is(button, input):focus-visible {
+    outline: none;
+    outline-offset: 2px;
+}
+.weapons-page .characters-search input:focus {
+    outline: none;
+    outline-offset: 2px;
+    border-color: var(--control-focus-border);
+    box-shadow: none;
+}
+.weapon-card:hover {
+    border-color: color-mix(in srgb, var(--weapon-rarity-colour) 45%, var(--border));
+}
+.weapons-grid {
+    display: grid;
+    align-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+}
+.weapon-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 18%, var(--border));
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(160deg, var(--surface-raised), var(--surface-inset));
+    box-shadow:
+        0 3px 12px rgb(0 0 0 / 10%),
+        inset 0 1px 0 var(--surface-sheen);
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+.weapon-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 150px;
+    flex-shrink: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 25%, transparent);
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            color-mix(in srgb, var(--weapon-rarity-colour) 24%, transparent),
+            transparent 75%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--weapon-rarity-colour) 10%, var(--surface-raised)),
+            var(--surface-inset)
+        );
+}
+/* All five rarities share the same vertical gradient and subdued saturation. */
+.weapon-card[data-rarity="1"] {
+    --weapon-art-top: #88878a;
+    --weapon-art-bottom: #4d4b50;
+}
+.weapon-card[data-rarity="2"] {
+    --weapon-art-top: #6e9b79;
+    --weapon-art-bottom: #3e614b;
+}
+.weapon-card[data-rarity="3"] {
+    --weapon-art-top: #598ab6;
+    --weapon-art-bottom: #355677;
+}
+.weapon-card[data-rarity="4"] {
+    --weapon-art-top: #9568b4;
+    --weapon-art-bottom: #54386d;
+}
+.weapon-card[data-rarity="5"] {
+    --weapon-art-top: #c18e49;
+    --weapon-art-bottom: #7a4f33;
+}
+.weapon-card .weapon-art {
+    background: linear-gradient(180deg, var(--weapon-art-top), var(--weapon-art-bottom));
+}
+.weapon-character[data-rarity="5"] {
+    background: linear-gradient(180deg, #d99a43, #87502e);
+}
+.weapon-character[data-rarity="4"] {
+    background: linear-gradient(180deg, #a16acb, #573777);
+}
+.weapon-art > img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+}
+.weapon-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 10px 8px;
+}
+.weapon-body p {
+    margin: 0;
+}
+.weapon-body h2 {
+    margin: 0;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+    min-height: 2.8em;
+}
+.weapon-tag {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    align-self: center;
+    margin: auto 0 0;
+    padding: 4px 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface-raised) 75%, transparent);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 550;
+    line-height: 1.4;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
+    text-wrap: balance;
+    vertical-align: top;
+}
+.weapon-tag[data-source="Gacha"] {
+    --weapon-tag-colour: var(--weapon-rarity-colour);
+}
+.weapon-tag[data-source="BP"] {
+    --weapon-tag-colour: #bc93ed;
+}
+.weapon-tag[data-source="Event"] {
+    --weapon-tag-colour: #e889b5;
+}
+.weapon-tag[data-kind="signature"] {
+    --weapon-tag-colour: #70002f;
+    color: color-mix(in srgb, #70002f 40%, white);
+}
+.weapon-tag {
+    border-color: color-mix(in srgb, var(--weapon-tag-colour, var(--border)) 45%, var(--border));
+    background: color-mix(
+        in srgb,
+        var(--weapon-tag-colour, var(--surface-raised)) 12%,
+        var(--surface-inset)
+    );
+    color: var(--weapon-tag-colour, var(--text-secondary));
+}
+.weapon-type {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.weapon-stars {
+    color: var(--weapon-rarity-colour);
+    letter-spacing: 2px;
+    font-size: 13px;
+    bottom: 3px;
+    left: 6px;
+}
+.weapon-badge {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    box-sizing: border-box;
+    padding: 4px 7px;
+    border: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 22%, var(--border));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--surface-raised) 86%, transparent);
+    box-shadow:
+        0 2px 6px rgb(0 0 0 / 14%),
+        inset 0 1px 0 var(--surface-sheen);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.weapon-refinement {
+    top: 6px;
+    left: 6px;
+}
+.weapon-level {
+    bottom: 3px;
+    right: 6px;
+}
+.weapon-character {
+    top: 6px;
+    right: 6px;
+    max-width: 70%;
+    padding: 0;
+    min-height: 38px;
+    overflow: hidden;
+}
+.weapon-character img {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+.weapon-character:not(:has(img)) {
+    padding: 6px 8px;
+}
+.weapon-card-action {
+    width: 100%;
+    margin-top: 2px;
+}
+.weapon-manual-control {
+    position: absolute;
+    z-index: 3;
+    top: 6px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+.weapons-page .weapon-manual-trigger {
+    position: relative;
+    display: block;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 7px;
+    background: rgb(20 16 26 / 28%);
+    color: rgb(255 255 255 / 65%);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 650;
+    cursor: pointer;
+    pointer-events: auto;
+    transition:
+        width 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+.weapon-manual-trigger span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition:
+        opacity 140ms ease,
+        transform 180ms ease;
+}
+.weapon-manual-delete-label {
+    opacity: 0;
+    transform: translateY(5px);
+}
+.weapon-manual-control.is-open .weapon-manual-trigger {
+    width: 64px;
+    background: #80364a;
+    border-color: #b76b7e;
+    color: #fff0f4;
+}
+.weapon-manual-control.is-open .weapon-manual-letter {
+    opacity: 0;
+    transform: translateY(-5px);
+}
+.weapon-manual-control.is-open .weapon-manual-delete-label {
+    opacity: 1;
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .weapons-page .weapon-manual-trigger,
+    .weapon-manual-trigger span {
+        transition: none;
+    }
+}
+.weapon-delete-dialog {
+    max-width: 380px;
+}
+.weapon-delete-dialog h2 {
+    color: var(--text);
+    font-size: 24px;
+    letter-spacing: -0.4px;
+}
+[data-weapon-import-status]:empty,
+[data-weapon-delete-status]:empty {
+    display: none;
+}
+.weapon-add-dialog {
+    --weapon-rarity-colour: var(--accent);
+    width: min(480px, calc(100vw - 32px));
+    box-sizing: border-box;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: var(--shadow-soft);
+}
+.weapon-add-dialog::backdrop {
+    background: #0009;
+    backdrop-filter: blur(5px);
+}
+.weapon-add-dialog h2 {
+    margin-top: 0;
+}
+.weapon-add-fields,
+.weapon-add-actions {
+    display: flex;
+    gap: 12px;
+}
+.weapon-add-field {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.weapon-add-actions {
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.weapon-art > img[hidden] {
+    display: none;
+}
+.weapon-badge.weapon-stars {
+    font-size: 11px;
+    letter-spacing: 0;
+}
+.weapon-card[hidden] {
+    display: none;
+}
+@media (max-width: 700px) {
+    .weapons-page .weapons-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .weapons-page .weapons-toolbar .characters-search,
+    .weapons-page .weapons-toolbar > button {
+        grid-column: 1 / -1;
+    }
+    .weapons-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.planner-choice-trigger {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    width: 100%;
+    min-width: 0;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.planner-choice-value {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* =========================================================
+   SELECTOR POPUP
+   ========================================================= */
+
+.planner-choice-menu {
+    position: fixed;
+    z-index: 10;
+
+    box-sizing: border-box;
+    max-height: min(300px, calc(100dvh - 24px));
+    overflow-y: auto;
+
+    padding: 10px;
+}
+
+.planner-choice-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.planner-choice-option {
+    display: grid;
+    place-items: center;
+
+    min-width: 0;
+    flex: 0 0 calc((100% - 18px) / 4);
+    min-height: 39px;
+    padding: 7px 4px;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.weapon-choice-menu {
+    margin: 0;
+    inset: auto;
+}
+.weapon-card[data-rarity="1"],
+.weapon-add-dialog[data-rarity="1"] {
+    --weapon-rarity-colour: #a8a8a8;
+}
+.weapon-card[data-rarity="2"],
+.weapon-add-dialog[data-rarity="2"] {
+    --weapon-rarity-colour: #83b496;
+}
+.weapon-card[data-rarity="3"],
+.weapon-add-dialog[data-rarity="3"] {
+    --weapon-rarity-colour: #80b4ed;
+}
+.weapon-card[data-rarity="4"],
+.weapon-add-dialog[data-rarity="4"] {
+    --weapon-rarity-colour: #bc93ed;
+}
+.weapon-card[data-rarity="5"],
+.weapon-add-dialog[data-rarity="5"] {
+    --weapon-rarity-colour: #e4ad57;
+}
+.weapon-refinement.is-max {
+    background: var(--weapon-rarity-colour);
+    border-color: var(--weapon-rarity-colour);
+    color: #171923;
+}
+.weapon-card[data-rarity="4"] .weapon-refinement.is-max {
+    background: #e3c3ff;
+    border-color: #f2deff;
+    color: #382047;
+}
+.weapon-add-dialog {
+    border-color: color-mix(in srgb, var(--weapon-rarity-colour) 40%, var(--border));
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--weapon-rarity-colour) 7%, var(--background)),
+        var(--background) 60%
+    );
+}
+.weapon-add-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.weapon-add-art {
+    display: grid;
+    place-items: center;
+    flex: 0 0 96px;
+    height: 96px;
+    border: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 45%, var(--border));
+    border-radius: 16px;
+    background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--weapon-rarity-colour) 25%, transparent),
+        var(--surface-inset)
+    );
+}
+.weapon-add-art img {
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 8px #0003);
+}
+.weapon-add-header h2 {
+    margin: 6px 0;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+}
+.weapon-add-header p {
+    margin: 0;
+    color: var(--weapon-rarity-colour);
+    font-size: 14px;
+    font-weight: 650;
+}
+.weapon-add-fields {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-inset);
+}
+.weapon-add-field > span {
+    font-weight: 650;
+}
+.weapon-add-dialog .weapons-note {
+    margin-block: 20px;
+}
+.weapon-add-dialog [data-weapon-save-status]:empty {
+    display: none;
+}
+.weapon-add-actions {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+}
+@media (max-width: 400px) {
+    .weapon-add-dialog {
+        padding: 20px;
+    }
+    .weapon-add-art {
+        flex-basis: 76px;
+        height: 76px;
+    }
+    .weapon-add-art img {
+        width: 72px;
+        height: 72px;
+    }
+    .weapon-add-header {
+        gap: 12px;
+    }
+}
+
+.weapons-account-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+@media (max-width: 700px) {
+    .weapons-account-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .weapons-account-actions .characters-account-form {
+        flex: 1;
+        min-width: 0;
+    }
+    .weapons-account-actions .characters-account-select {
+        min-width: 0;
+    }
+}
+
+.weapon-import-dialog h2 {
+    margin-bottom: 18px;
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+}
+.weapon-import-dialog [data-weapon-import-summary] {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-inset);
+    color: var(--text);
+    font-weight: 650;
+}
