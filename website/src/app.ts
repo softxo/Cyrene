@@ -87,15 +87,18 @@ initialiseSiteUpdates();
 const pageScripts: Record<string, string | string[]> = {
     "/": "/static/build/browser/pages/home.js?v=26",
     "/weapons": [
+        "/static/build/browser/core/planner-materials.js?v=1",
         "/static/build/browser/pages/events/events-rewards.js?v=4",
-        "/static/build/browser/pages/weapons.js?v=17",
+        "/static/build/browser/pages/weapon-planner.js?v=10",
+        "/static/build/browser/pages/weapons.js?v=23",
     ],
     "/characters": [
+        "/static/build/browser/core/planner-materials.js?v=1",
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
         "/static/build/browser/pages/characters/characters-filters.js?v=4",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
-        "/static/build/browser/pages/characters/characters-showcase.js?v=10",
-        "/static/build/browser/pages/characters/characters-planner.js?v=24",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=11",
+        "/static/build/browser/pages/characters/characters-planner.js?v=34",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js?v=4",
@@ -121,11 +124,11 @@ const pageScripts: Record<string, string | string[]> = {
 };
 
 const pageStyles: Record<string, string> = {
-    "/weapons": "/static/build/css/weapons.css?v=23",
+    "/weapons": "/static/build/css/weapons.css?v=37",
     "/": "/static/build/css/home.css?v=41",
     "/achievements": "/static/build/css/achievements.css?v=8",
     "/wishes": "/static/build/css/wishes.css?v=15",
-    "/characters": "/static/build/css/characters.css?v=54",
+    "/characters": "/static/build/css/characters.css?v=65",
     "/inventory": "/static/build/css/inventory.css?v=7",
     "/planner": "/static/build/css/planner.css?v=8",
     "/verify": "/static/build/css/verification.css?v=15",

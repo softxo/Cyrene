@@ -14,8 +14,11 @@ const labels = {
     "/verify": "Verification",
 };
 function renderLoading() {
-    const path = navigation?.path ??
-        [...requests.values()].find((request) => request.visible && request.path === window.location.pathname)?.path;
+    const activity = [...requests.values()]
+        .reverse()
+        .filter((request) => request.visible && request.path === window.location.pathname);
+    const current = activity.find((request) => request.message) ?? activity[0];
+    const path = navigation?.path ?? current?.path;
     const show = path !== undefined && path !== "/inventory";
     document.querySelector(".main-content")?.toggleAttribute("aria-busy", show);
     if (show)
@@ -28,13 +31,14 @@ function renderLoading() {
         existing?.remove();
         return;
     }
-    const message = `Loading ${labels[path] || "page"}\u2026`;
-    if (existing?.dataset.path === path)
+    const message = (!navigation && current?.message) || `Loading ${labels[path] || "page"}\u2026`;
+    if (existing?.dataset.path === path && existing?.dataset.message === message)
         return;
     existing?.remove();
     const status = document.createElement("div");
     status.id = "navigation-loading-status";
     status.dataset.path = path;
+    status.dataset.message = message;
     status.setAttribute("role", "status");
     const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     icon.setAttribute("viewBox", "0 0 24 24");
@@ -83,7 +87,15 @@ export function initialiseFetchLoading() {
             return fetchRequest(input, init);
         }
         const id = Symbol();
-        const activity = { path, visible: false };
+        const message = headers.get("X-Cyrene-Loading") === "syncing"
+            ? "Syncing\u2026"
+            : headers.get("X-Cyrene-Loading") === "materials" ||
+                url.pathname.endsWith("/planner-costs")
+                ? "Loading Materials\u2026"
+                : path === "/characters" && url.pathname === "/api/weapons"
+                    ? "Loading Weapons\u2026"
+                    : undefined;
+        const activity = { path, message, visible: false };
         requests.set(id, activity);
         activity.timer = setTimeout(() => {
             if (!requests.has(id))

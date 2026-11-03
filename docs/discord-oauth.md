@@ -2,7 +2,7 @@
 
 In the Discord Developer Portal, open Cyrene's application and add this OAuth2 redirect:
 
-`https://cyrene.apps.bot-hosting.cloud/auth/discord/callback`
+`https://cyrene-teyvat.xyz/auth/discord/callback`
 
 Set these server environment variables:
 

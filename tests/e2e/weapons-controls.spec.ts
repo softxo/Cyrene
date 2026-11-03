@@ -20,6 +20,8 @@ print(templates.get_template('weapons.html').render(request=r,accounts=[{'id':1,
 );
 
 test.beforeEach(async ({ page }) => {
+    await page.route("**/api/weapons/plans?*", (route) => route.fulfill({ json: { plans: [] } }));
+    await page.route("**/api/inventory?*", (route) => route.fulfill({ json: { inventory: [] } }));
     const weapons = Array.from({ length: 255 }, (_, i) => ({
         id: i + 1,
         name: i === 1 ? "Absolution" : `Weapon ${i}`,
@@ -44,9 +46,11 @@ test.beforeEach(async ({ page }) => {
             body: readFileSync(`website${path}`),
             contentType: path.endsWith(".css")
                 ? "text/css"
-                : path.endsWith(".webp")
-                  ? "image/webp"
-                  : "text/javascript",
+                : path.endsWith(".svg")
+                  ? "image/svg+xml"
+                  : path.endsWith(".webp")
+                    ? "image/webp"
+                    : "text/javascript",
         });
     });
     await page.route("https://assets.test/**", (route) =>
@@ -76,6 +80,751 @@ test.beforeEach(async ({ page }) => {
     await page.goto("/weapons");
     await expect(page.locator(".weapon-card")).toHaveCount(255);
 });
+
+for (const width of [390, 1440]) {
+    test(`Planner aligns pills, locks live levels and crafts compact materials at ${width}px`, async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width, height: 1000 });
+        const base = {
+            type: "Sword",
+            rarity: 5,
+            icon: "https://assets.test/icon.svg",
+            tag: { kind: "source", label: "Gacha", source: "Gacha" },
+        };
+        const live = {
+            ...base,
+            id: 11501,
+            name: "Live sword with a long name",
+            level: 90,
+            refinement: 1,
+            equipped: "Jean",
+            character_icon: "https://assets.test/icon.svg",
+        };
+        const imports = [
+            {
+                ...base,
+                id: 11502,
+                name: "Imported",
+                level: 20,
+                refinement: 1,
+                scan_copy_id: "scan:0",
+            },
+            {
+                ...base,
+                id: 11503,
+                name: "Another very long sword name",
+                level: 20,
+                refinement: 1,
+                scan_copy_id: "scan:1",
+            },
+        ];
+        await page.route("**/api/weapons?*", (route) =>
+            route.fulfill({ json: { owned: [live], catalogue: [live, ...imports] } }),
+        );
+        await page.route("**/api/weapons/scanned?*", (route) =>
+            route.fulfill({ json: { weapons: imports } }),
+        );
+        await page.route("**/api/inventory?*", (route) =>
+            route.fulfill({
+                json: {
+                    inventory: [
+                        { id: 101, amount: 30 },
+                        { id: 102, amount: 1 },
+                        { id: 103, amount: 0 },
+                    ],
+                },
+            }),
+        );
+        await page.route("**/api/weapons/planner-costs?*", (route) =>
+            route.fulfill({
+                json: {
+                    costs: {
+                        level: {
+                            status: "ok",
+                            items: [
+                                { id: 202, name: "Mora", amount: 18_814_814, rarity: 3 },
+                                { id: 101, name: "Lower material", amount: 3, rarity: 2 },
+                                {
+                                    id: 102,
+                                    name: "Middle material",
+                                    amount: 2,
+                                    rarity: 3,
+                                    crafting_lower: [{ id: 101 }],
+                                },
+                                {
+                                    id: 103,
+                                    name: "Higher material",
+                                    amount: 2,
+                                    rarity: 4,
+                                    crafting_lower: [{ id: 101 }, { id: 102 }],
+                                },
+                            ],
+                        },
+                        refinements: { status: "complete", items: [] },
+                    },
+                },
+            }),
+        );
+        await page.reload();
+        await expect(page.locator("[data-weapons-count] strong")).toHaveText(["1", "2"]);
+        await page.getByRole("tab", { name: "Catalogue", exact: true }).click();
+        await expect(page.locator("[data-weapons-count] strong")).toHaveText(["3"]);
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        await expect(page.getByRole("heading", { name: "No weapons planned yet" })).toBeVisible();
+        await expect(page.locator("[data-wp-saved-total]")).toHaveCount(0);
+        await page
+            .locator("#weapons-planner")
+            .screenshot({ path: `test-results/weapon-planner-empty-${width}.png` });
+        await page.getByRole("button", { name: "Add your first weapon", exact: true }).click();
+        const picker = page.locator("[data-wp-picker]");
+        const aligned = await picker.locator(".weapon-plan-picker-card").evaluateAll((cards) =>
+            cards.map((card) => ({
+                top: card.getBoundingClientRect().top,
+                pill: card.querySelector(".weapon-progression-pill")!.getBoundingClientRect().top,
+                tag: card.querySelector(".weapon-tag")!.getBoundingClientRect().top,
+            })),
+        );
+        for (const row of aligned)
+            for (const other of aligned.filter((item) => Math.abs(item.top - row.top) < 1)) {
+                expect(Math.abs(row.pill - other.pill)).toBeLessThan(1);
+                expect(Math.abs(row.tag - other.tag)).toBeLessThan(1);
+            }
+        await picker.screenshot({ path: `test-results/weapon-picker-aligned-${width}.png` });
+        await picker
+            .getByRole("button")
+            .filter({ has: page.getByRole("heading", { name: live.name, exact: true }) })
+            .click();
+        const editor = page.locator("[data-wp-editor]");
+        for (const field of ["currentLevel", "targetLevel", "currentRefinement"])
+            await expect(editor.locator(`[data-wp-choice="${field}"]`)).toBeHidden();
+        await expect(editor.locator('[data-wp-readonly="currentLevel"]')).toHaveText("Lv. 90");
+        await expect(editor.locator('[data-wp-readonly="targetLevel"]')).toHaveText("Lv. 90");
+        const mora = editor.locator('[data-wp-cost="level"] .planner-cost-entry').filter({
+            has: page.getByRole("button", { name: "Mora. Required: 18,814,814", exact: true }),
+        });
+        await expect(mora.locator(".planner-cost-quantity")).toContainText("×18.8m");
+        const high = editor.locator('[data-wp-cost="level"] .planner-cost-entry').filter({
+            has: page.getByRole("button", {
+                name: "Higher material. Required: 2",
+                exact: true,
+            }),
+        });
+        await expect(high.locator(".planner-cost-quantity")).toHaveClass(/is-short/);
+        await editor.getByRole("button", { name: "Toggle Crafting", exact: true }).click();
+        await expect(high.locator(".planner-cost-tile")).toHaveClass(/is-craft-enough/);
+        await expect(high.locator(".planner-cost-owned")).toHaveText("0 → 2");
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        const total = editor.locator("[data-wp-editor-total]");
+        await expect(total).toHaveCSS("overflow-y", "visible");
+        const required = total.locator(".planner-cost-required").first();
+        await expect(required).toHaveText("×18.8m");
+        const requiredBounds = await required.boundingBox();
+        const tileBounds = await total.locator(".planner-cost-tile").first().boundingBox();
+        expect(requiredBounds!.x).toBeGreaterThanOrEqual(tileBounds!.x);
+        expect(await total.evaluate((node) => node.scrollHeight <= node.clientHeight + 1)).toBe(
+            true,
+        );
+        await editor.evaluate(async (node) => {
+            await Promise.all(
+                node
+                    .getAnimations({ subtree: true })
+                    .map((animation) => animation.finished.catch(() => {})),
+            );
+        });
+        await editor.screenshot({ path: `test-results/weapon-planner-crafting-${width}.png` });
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        await editor.getByRole("button", { name: "Cancel", exact: true }).click();
+        await page.locator("[data-wp-add]").click();
+        await picker
+            .getByRole("button")
+            .filter({ has: page.getByRole("heading", { name: "Imported", exact: true }) })
+            .click();
+        await editor.locator('[data-wp-choice="currentLevel"]').click();
+        await expect(page.locator("#wp-choice-popup .planner-choice-option")).toHaveText([
+            "Lv. 20",
+            "Lv. 40",
+            "Lv. 50",
+            "Lv. 60",
+            "Lv. 70",
+            "Lv. 80",
+            "Lv. 90",
+        ]);
+        await page
+            .locator("#wp-choice-popup")
+            .getByRole("button", { name: "Lv. 40", exact: true })
+            .click();
+        await editor.locator('[data-wp-choice="targetLevel"]').click();
+        await expect(page.locator("#wp-choice-popup .planner-choice-option")).toHaveText([
+            "Lv. 40",
+            "Lv. 50",
+            "Lv. 60",
+            "Lv. 70",
+            "Lv. 80",
+            "Lv. 90",
+        ]);
+    });
+}
+
+for (const width of [390, 1440]) {
+    test(`Plan card actions, hold-to-drag order, editor layout and toasts at ${width}px`, async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width, height: 1100 });
+        const errors: string[] = [];
+        page.on("pageerror", (error) => errors.push(error.message));
+        const weapon = {
+            id: 14525,
+            name: "First weapon",
+            type: "Catalyst",
+            rarity: 5,
+            icon: "https://assets.test/icon.svg",
+            level: 1,
+            refinement: 1,
+        };
+        let plans = [
+            {
+                key: "first",
+                weapon,
+                source: "unowned",
+                currentLevel: 1,
+                targetLevel: 90,
+                currentRefinement: 1,
+                targetRefinement: 5,
+                ascension: null,
+            },
+            {
+                key: "second",
+                weapon: { ...weapon, id: 11501, name: "Second weapon", type: "Sword" },
+                source: "unowned",
+                currentLevel: 1,
+                targetLevel: 90,
+                currentRefinement: 1,
+                targetRefinement: 5,
+                ascension: null,
+            },
+        ];
+        let writes = 0;
+        let fail = false;
+        await page.route("**/api/weapons/plans?*", (route) => {
+            if (route.request().method() === "PUT") {
+                if (fail)
+                    return route.fulfill({
+                        status: 503,
+                        json: { detail: "Save unavailable. Retry." },
+                    });
+                writes++;
+                plans = route.request().postDataJSON().plans;
+            }
+            return route.fulfill({ json: { plans } });
+        });
+        await page.route("**/api/weapons/planner-costs?*", (route) =>
+            route.fulfill({
+                json: {
+                    costs: {
+                        level: {
+                            status: "ok",
+                            preview: true,
+                            items: Array.from({ length: 12 }, (_, index) => ({
+                                id: 101 + index,
+                                name: `Material ${index}`,
+                                amount: index ? 41 : 1_131_520,
+                                rarity: 4,
+                                icon: "https://assets.test/icon.svg",
+                            })),
+                        },
+                        refinements: { status: "complete", items: [] },
+                    },
+                },
+            }),
+        );
+        await page.reload();
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        const cards = page.locator("[data-wp-plans] .weapon-plan-card");
+        await expect(cards).toHaveCount(2);
+        await expect(cards.first().getByRole("button")).toHaveCount(2);
+        await expect(cards.first().locator(".weapon-plan-card-heading > span")).toHaveText(
+            "Catalyst",
+        );
+        const sizes = await cards.first().evaluate((node) => ({
+            heading: node.querySelector(".weapon-plan-card-heading")!.getBoundingClientRect()
+                .height,
+            rows: [...node.querySelectorAll(".planner-card-goals")].map(
+                (row) => row.getBoundingClientRect().height,
+            ),
+        }));
+        for (const row of sizes.rows) expect(row).toBeGreaterThan(sizes.heading);
+        await page
+            .locator("#weapons-planner")
+            .screenshot({ path: `test-results/weapon-plan-card-actions-${width}.png` });
+        const source = await cards.first().locator(".planner-card-identity").boundingBox();
+        const target = await cards.last().locator(".planner-card-identity").boundingBox();
+        await page.mouse.move(source!.x + source!.width / 2, source!.y + source!.height / 2);
+        await page.mouse.down();
+        await expect(cards.first()).toHaveClass(/is-dragging/);
+        await page.mouse.move(target!.x + target!.width / 2, target!.y + target!.height / 2, {
+            steps: 8,
+        });
+        await page.mouse.up();
+        await expect(cards.locator("h3")).toHaveText(["Second weapon", "First weapon"]);
+        await expect(page.locator(".cyrene-toast-message").last()).toHaveText(
+            "Weapon plans reordered.",
+        );
+        expect(plans.map((plan) => plan.key)).toEqual(["second", "first"]);
+        await page.reload();
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        await expect(cards.locator("h3")).toHaveText(["Second weapon", "First weapon"]);
+        await cards.first().focus();
+        await page.keyboard.press("Alt+ArrowDown");
+        await expect(cards.locator("h3")).toHaveText(["First weapon", "Second weapon"]);
+        if (width === 390) {
+            const touch = await page.context().newCDPSession(page);
+            const from = await cards.first().locator(".planner-card-identity").boundingBox();
+            const to = await cards.last().locator(".planner-card-identity").boundingBox();
+            await touch.send("Input.dispatchTouchEvent", {
+                type: "touchStart",
+                touchPoints: [{ x: from!.x + 20, y: from!.y + 10 }],
+            });
+            await expect(cards.first()).toHaveClass(/is-dragging/);
+            await touch.send("Input.dispatchTouchEvent", {
+                type: "touchMove",
+                touchPoints: [{ x: to!.x + 20, y: to!.y + 10 }],
+            });
+            await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+            await expect(cards.locator("h3")).toHaveText(["Second weapon", "First weapon"]);
+            await cards.first().focus();
+            await page.keyboard.press("Alt+ArrowDown");
+            await expect(cards.locator("h3")).toHaveText(["First weapon", "Second weapon"]);
+            await touch.detach();
+        }
+        const written = writes;
+        const first = await cards.first().locator(".planner-card-identity").boundingBox();
+        const second = await cards.last().locator(".planner-card-identity").boundingBox();
+        await page.mouse.move(first!.x + 10, first!.y + 10);
+        await page.mouse.down();
+        await expect(cards.first()).toHaveClass(/is-dragging/);
+        await page.mouse.move(second!.x + 10, second!.y + 10, { steps: 8 });
+        await page.keyboard.press("Escape");
+        await page.mouse.up();
+        await expect(cards.locator("h3")).toHaveText(["First weapon", "Second weapon"]);
+        expect(writes).toBe(written);
+        await cards
+            .first()
+            .getByRole("button", { name: "Edit First weapon's plan", exact: true })
+            .click();
+        const editor = page.locator("[data-wp-editor]");
+        await expect(editor.locator("[data-wp-delete]")).toHaveCount(0);
+        for (const field of ["currentLevel", "targetLevel"]) {
+            const trigger = editor.locator(`[data-wp-choice="${field}"]`);
+            await trigger.click();
+            await expect(trigger).toHaveAttribute("aria-expanded", "true");
+            await trigger.click();
+            await expect(page.locator("#wp-choice-popup")).not.toBeVisible();
+            await expect(trigger).toHaveAttribute("aria-expanded", "false");
+            await trigger.click();
+            await expect(
+                page.locator("#wp-choice-popup .planner-choice-option").first(),
+            ).toHaveText("Lv. 1");
+            await page
+                .locator("#wp-choice-popup")
+                .getByRole("button", { name: "Lv. 1", exact: true })
+                .click();
+        }
+        const panel = editor.locator("[data-wp-editor-panel]");
+        await expect(panel).toHaveCSS("overflow-x", "visible");
+        await editor.locator('[data-wp-cost="level"] .planner-cost-tile').last().hover();
+        expect(await panel.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+        await editor.locator(".planner-editor-header").hover();
+        const message = await editor
+            .locator('[data-wp-cost="level"] .planner-cost-message')
+            .boundingBox();
+        const grid = await editor
+            .locator('[data-wp-cost="level"] .planner-cost-grid')
+            .boundingBox();
+        expect(grid!.y - message!.y - message!.height).toBeGreaterThanOrEqual(10);
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        await editor.evaluate(async (node) => {
+            await Promise.all(
+                node
+                    .getAnimations({ subtree: true })
+                    .map((animation) => animation.finished.catch(() => {})),
+            );
+        });
+        const mainBounds = await panel.boundingBox();
+        const totalBounds = await editor.locator("[data-wp-total-panel]").boundingBox();
+        expect(Math.abs(totalBounds!.height - Math.max(280, mainBounds!.height - 72))).toBeLessThan(
+            1,
+        );
+        expect(Math.abs(totalBounds!.width - Math.min(390, width - 24))).toBeLessThan(1);
+        await editor.screenshot({ path: `test-results/weapon-editor-layout-${width}.png` });
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        await editor.getByRole("button", { name: "Save Plan", exact: true }).click();
+        await expect(page.locator(".cyrene-toast-message").last()).toHaveText("Weapon plan saved.");
+        expect(plans.map((plan) => plan.key)).toEqual(["first", "second"]);
+        await cards
+            .first()
+            .getByRole("button", { name: "Delete First weapon's plan", exact: true })
+            .click();
+        const confirmation = page.locator("[data-wp-delete-dialog]");
+        await confirmation.getByRole("button", { name: "Keep plan", exact: true }).click();
+        await expect(cards).toHaveCount(2);
+        await cards
+            .first()
+            .getByRole("button", { name: "Delete First weapon's plan", exact: true })
+            .click();
+        fail = true;
+        await confirmation.getByRole("button", { name: "Delete plan", exact: true }).click();
+        await expect(page.locator('.cyrene-toast[data-kind="error"]')).toBeVisible();
+        await expect(page.locator("[data-cyrene-toasts]")).toHaveAttribute("popover", "manual");
+        await page.locator('.cyrene-toast[data-kind="error"] .cyrene-toast-close').click();
+        await expect(cards).toHaveCount(2);
+        fail = false;
+        await confirmation.getByRole("button", { name: "Delete plan", exact: true }).click();
+        await expect(cards).toHaveCount(1);
+        await expect(page.locator(".cyrene-toast-message").last()).toHaveText(
+            "Weapon plan deleted.",
+        );
+        expect(errors).toEqual([]);
+    });
+}
+
+test("Import opens instructions before choosing a file", async ({ page }) => {
+    await page.getByRole("button", { name: "Import", exact: true }).click();
+    const modal = page.getByRole("dialog", { name: "Import weapon inventory" });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByRole("link", { name: "Cyrene Releases on GitHub" })).toHaveAttribute(
+        "href",
+        "https://github.com/softxo/Cyrene/releases",
+    );
+    await expect(modal.getByRole("button", { name: "Import", exact: true })).toBeDisabled();
+    await expect(modal.getByRole("button", { name: "Choose JSON file" })).toBeVisible();
+    await page.locator("[data-weapons-import-file]").setInputFiles({
+        name: "bad.json",
+        mimeType: "application/json",
+        buffer: Buffer.from("not JSON"),
+    });
+    await expect(modal.locator("[data-weapon-import-status]")).not.toBeEmpty();
+    await expect(modal.getByRole("button", { name: "Import", exact: true })).toBeDisabled();
+    await page.keyboard.press("Escape");
+    await expect(modal).toBeHidden();
+});
+
+test("inventory actions only appear on Owned and Other is absent from Tags", async ({ page }) => {
+    await expect(page.locator('.weapons-tag-filter [role=option][data-value="Other"]')).toHaveCount(
+        0,
+    );
+    for (const name of ["Catalogue", "Planner", "Owned"]) {
+        await page.getByRole("tab", { name, exact: true }).click();
+        for (const selector of ["[data-weapons-import]", "[data-weapons-reset]"]) {
+            if (name === "Owned") await expect(page.locator(selector)).toBeVisible();
+            else await expect(page.locator(selector)).toBeHidden();
+        }
+    }
+});
+
+for (const width of [390, 1440]) {
+    test(`Add Weapon filters include unowned weapons and owned copies have portrait pills at ${width}px`, async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width, height: 1000 });
+        const base = { type: "Sword", rarity: 4, icon: "https://assets.test/icon.svg" };
+        const owned = {
+            ...base,
+            id: 11401,
+            name: "Favonius Sword",
+            level: 70,
+            refinement: 2,
+            equipped: "Jean",
+            character_icon: "https://assets.test/icon.svg",
+            tag: { kind: "source", label: "Gacha", source: "Gacha" },
+        };
+        const unowned = {
+            ...base,
+            id: 11413,
+            name: "Festering Desire",
+            tag: { kind: "source", label: "Event", source: "Event" },
+        };
+        await page.route("**/api/weapons?*", (route) =>
+            route.fulfill({ json: { owned: [owned], catalogue: [owned, unowned] } }),
+        );
+        await page.route("**/api/weapons/planner-costs?*", (route) =>
+            route.fulfill({
+                json: {
+                    costs: {
+                        level: { status: "complete", items: [] },
+                        refinements: { status: "complete", items: [] },
+                    },
+                },
+            }),
+        );
+        await page.reload();
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        await page.locator("[data-wp-add]").click();
+        const picker = page.locator("[data-wp-picker]");
+        await expect(picker).toHaveClass(/planner-picker-dialog/);
+        await expect(picker.locator(".weapon-plan-picker-card")).toHaveCount(2);
+        const pill = picker.locator(".weapon-progression-pill");
+        await expect(pill).toContainText("Lv. 70");
+        await expect(pill).toContainText("R2");
+        await expect(pill).toContainText("Jean");
+        await expect(pill.locator(".weapon-progression-character img")).toHaveAttribute(
+            "src",
+            "https://assets.test/icon.svg",
+        );
+        const ownership = picker.locator('[data-wp-select="ownership"]');
+        await ownership.locator(".custom-select-button").click();
+        await ownership.getByRole("option", { name: "Not owned", exact: true }).click();
+        await expect(picker.locator(".weapon-plan-picker-card h3")).toHaveText([
+            "Festering Desire",
+        ]);
+        const tag = picker.locator('[data-wp-select="tag"]');
+        await tag.locator(".custom-select-button").click();
+        await tag.getByRole("option", { name: "Event", exact: true }).click();
+        await picker.getByRole("button", { name: "Sword", exact: true }).click();
+        await picker.getByRole("button", { name: "4-star", exact: true }).click();
+        await picker.getByRole("searchbox", { name: "Search weapons" }).fill("Festering");
+        await expect(picker.locator(".weapon-plan-picker-card")).toHaveCount(1);
+        await picker.screenshot({ path: `test-results/weapon-picker-filters-${width}.png` });
+        await picker.locator("[data-wp-filter-reset]").click();
+        await expect(picker.locator(".weapon-plan-picker-card")).toHaveCount(2);
+        await picker.screenshot({ path: `test-results/weapon-picker-copies-${width}.png` });
+        await picker
+            .getByRole("button")
+            .filter({ has: page.getByRole("heading", { name: "Festering Desire", exact: true }) })
+            .click();
+        const editor = page.locator("[data-wp-editor]");
+        await expect(editor.locator("[data-wp-editor-panel]")).toHaveClass(/planner-editor-dialog/);
+        await expect(editor.locator('[data-wp-choice="currentLevel"]')).toHaveText("Lv. 1");
+        await expect(editor.locator('[data-wp-choice="currentRefinement"]')).toHaveText("R1");
+        await expect(editor.locator('[data-wp-tab="level"]')).toHaveClass(/planner-tab/);
+        await editor
+            .locator("[data-wp-editor-panel]")
+            .screenshot({ path: `test-results/weapon-editor-unowned-${width}.png` });
+        const panel = await editor.locator("[data-wp-editor-panel]").boundingBox();
+        expect(panel!.x).toBeGreaterThanOrEqual(0);
+        expect(panel!.x + panel!.width).toBeLessThanOrEqual(width);
+        await editor.getByRole("button", { name: "Cancel", exact: true }).click();
+        await expect(editor).toBeHidden();
+    });
+}
+
+test("Tags filter combines with search, type and rarity on both collection tabs", async ({
+    page,
+}) => {
+    const base = {
+        type: "Sword",
+        rarity: 4,
+        icon: "https://assets.test/icon.svg",
+        level: 70,
+        refinement: 1,
+    };
+    const weapons = [
+        {
+            ...base,
+            id: 1,
+            name: "Signature sword",
+            tag: { kind: "signature", label: "Owner's Signature", source: "Gacha" },
+        },
+        {
+            ...base,
+            id: 2,
+            name: "Event sword",
+            tag: { kind: "source", label: "Event", source: "Event" },
+        },
+        {
+            ...base,
+            id: 3,
+            name: "Gacha sword",
+            tag: { kind: "source", label: "Gacha", source: "Gacha" },
+        },
+    ];
+    await page.route("**/api/weapons?*", (route) =>
+        route.fulfill({ json: { owned: weapons, catalogue: weapons } }),
+    );
+    await page.locator("[data-weapons-retry]").click();
+    const filter = page.locator(".weapons-tag-filter");
+    await filter.getByRole("button", { name: "Tags All tags" }).click();
+    await filter.getByRole("option", { name: "Gacha", exact: true }).click();
+    await expect(page.locator("#weapons-results .weapon-card:visible h2")).toHaveText([
+        "Gacha sword",
+        "Signature sword",
+    ]);
+    await page.locator('[data-weapons-tab="catalogue"]').click();
+    await page.locator("[data-weapons-search]").fill("Owner");
+    await page.getByRole("button", { name: "Sword", exact: true }).click();
+    await page.getByRole("button", { name: "4-star weapons", exact: true }).click();
+    await expect(page.locator("#weapons-results .weapon-card:visible h2")).toHaveText([
+        "Signature sword",
+    ]);
+    await filter.locator(".custom-select-button").click();
+    await filter.getByRole("option", { name: "Event", exact: true }).click();
+    await expect(page.locator("#weapons-results .weapon-card:visible")).toHaveCount(0);
+});
+
+for (const width of [390, 1440]) {
+    test(`Weapon Planner saves goals, combines costs, reloads and survives inventory reset at ${width}px`, async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width, height: 1000 });
+        const errors: string[] = [];
+        page.on("pageerror", (error) => errors.push(error.message));
+        let plans: any[] = [];
+        let resets = 0;
+        let failReset = false;
+        const base = {
+            id: 11401,
+            name: "Favonius Sword",
+            type: "Sword",
+            rarity: 4,
+            icon: "https://assets.test/icon.svg",
+            level: 70,
+            refinement: 2,
+        };
+        let manual = [{ ...base, copy_id: "manual", name: "Manual sword" }];
+        let scanned = [{ ...base, scan_copy_id: "scan:0", name: "Imported sword", id: 11402 }];
+        await page.route("**/api/weapons?*", (route) =>
+            route.fulfill({ json: { owned: [{ ...base, equipped: "Jean" }], catalogue: [base] } }),
+        );
+        await page.route("**/api/weapons/manual?*", (route) =>
+            route.fulfill({ json: { weapons: manual } }),
+        );
+        await page.route("**/api/weapons/scanned?*", (route) =>
+            route.fulfill({ json: { weapons: scanned } }),
+        );
+        await page.route("**/api/weapons/plans?*", (route) => {
+            if (route.request().method() === "PUT") plans = route.request().postDataJSON().plans;
+            return route.fulfill({ json: { plans } });
+        });
+        await page.route("**/api/weapons/inventory?*", (route) => {
+            if (failReset) return route.fulfill({ status: 503, json: { detail: "Retry" } });
+            resets++;
+            manual = [];
+            scanned = [];
+            return route.fulfill({ json: { ok: true } });
+        });
+        await page.route("**/api/weapons/planner-costs?*", (route) => {
+            const plan = route.request().postDataJSON();
+            const mora = (amount: number) => ({ id: 202, name: "Mora", amount });
+            const copies = plan.targetRefinement - plan.currentRefinement;
+            return route.fulfill({
+                json: {
+                    costs: {
+                        level: {
+                            status: "ok",
+                            items: [mora((plan.targetLevel - plan.currentLevel) * 100)],
+                        },
+                        refinements: {
+                            status: "ok",
+                            items: [
+                                mora(copies * 1000),
+                                ...(copies
+                                    ? [
+                                          {
+                                              id: "weapon:11401",
+                                              name: "Favonius Sword (R1 copy)",
+                                              amount: copies,
+                                          },
+                                      ]
+                                    : []),
+                            ],
+                        },
+                    },
+                },
+            });
+        });
+        await page.reload();
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        const planner = page.locator("#weapons-planner");
+        await expect(page.locator(".weapons-toolbar")).toBeHidden();
+        await planner.getByRole("button", { name: "Add Weapon", exact: true }).click();
+        const picker = page.locator("[data-wp-picker]");
+        await picker
+            .getByRole("button")
+            .filter({ has: page.getByRole("heading", { name: "Favonius Sword", exact: true }) })
+            .first()
+            .click();
+        const editor = page.locator("[data-wp-editor]");
+        await expect(editor.locator('[data-wp-choice="currentLevel"]')).toHaveText("Lv. 70");
+        await editor.locator('[data-wp-choice="targetLevel"]').click();
+        await page
+            .locator("#wp-choice-popup")
+            .getByRole("button", { name: "Lv. 80", exact: true })
+            .click();
+        await editor.getByRole("tab", { name: "Refinements", exact: true }).click();
+        await editor.locator('[data-wp-choice="targetRefinement"]').click();
+        await page
+            .locator("#wp-choice-popup")
+            .getByRole("button", { name: "R4", exact: true })
+            .click();
+        await expect(editor.locator('[data-wp-cost="refinements"]')).toContainText(
+            "Required: 2,000",
+        );
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        await expect(editor.locator("[data-wp-editor-total]")).toContainText("Required: 3,000");
+        await editor.screenshot({ path: `test-results/weapon-planner-editor-${width}.png` });
+        await editor.getByRole("button", { name: "Total", exact: true }).click();
+        await editor.getByRole("button", { name: "Save Plan", exact: true }).click();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(1);
+        expect(plans[0].targetRefinement).toBe(4);
+        await planner.getByRole("button", { name: "Add Weapon", exact: true }).click();
+        await picker
+            .getByRole("button")
+            .filter({ has: page.getByRole("heading", { name: "Favonius Sword", exact: true }) })
+            .first()
+            .click();
+        await editor.locator('[data-wp-choice="targetLevel"]').click();
+        await page
+            .locator("#wp-choice-popup")
+            .getByRole("button", { name: "Lv. 80", exact: true })
+            .click();
+        await editor.getByRole("button", { name: "Save Plan", exact: true }).click();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(2);
+        await expect(planner.getByRole("button", { name: "Total", exact: true })).toHaveCount(0);
+        await expect(page.locator("[data-wp-saved-total]")).toHaveCount(0);
+        await expect(planner.locator(".weapon-plan-card").first()).toHaveClass(
+            /planner-character-card/,
+        );
+        await page.reload();
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(2);
+        await page.getByRole("tab", { name: "Owned", exact: true }).click();
+        await page.getByRole("button", { name: "Reset", exact: true }).click();
+        const reset = page.locator("[data-weapons-reset-dialog]");
+        await expect(reset).toContainText("saved plans are kept");
+        await reset.getByRole("button", { name: "Cancel", exact: true }).click();
+        expect(resets).toBe(0);
+        await page.getByRole("button", { name: "Reset", exact: true }).click();
+        failReset = true;
+        await reset.getByRole("button", { name: "Reset inventory", exact: true }).click();
+        await expect(reset.locator("[data-weapons-reset-status]")).toContainText("Couldn't reset");
+        expect(manual).toHaveLength(1);
+        failReset = false;
+        await reset.getByRole("button", { name: "Reset inventory", exact: true }).click();
+        await expect(reset).toBeHidden();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(2);
+        await page.getByRole("tab", { name: "Owned", exact: true }).click();
+        await expect(page.locator("#weapons-results .weapon-card")).toHaveCount(1);
+        await expect(page.getByLabel("Equipped by Jean")).toBeVisible();
+        await page.reload();
+        await expect(page.locator("#weapons-results .weapon-card")).toHaveCount(1);
+        await page.getByRole("tab", { name: "Planner", exact: true }).click();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(2);
+        await planner
+            .locator(".weapon-plan-card")
+            .first()
+            .getByRole("button", { name: "Delete Favonius Sword's plan", exact: true })
+            .click();
+        await page
+            .locator("[data-wp-delete-dialog]")
+            .getByRole("button", { name: "Delete plan", exact: true })
+            .click();
+        await expect(planner.locator(".weapon-plan-card")).toHaveCount(1);
+        expect(errors).toEqual([]);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+            true,
+        );
+    });
+}
 
 test("level choices follow ascension caps and clicking the trigger again closes the popup", async ({
     page,
@@ -430,7 +1179,7 @@ test("weapon scan import preserves manual copies and matches equipped copies onc
     await expect(page.locator("[data-weapons-count]")).toContainText("1 equipped weapons");
     await expect(page.locator("[data-weapons-count]")).toContainText("1 unequipped");
     await expect(page.locator('.weapon-manual-control[data-origin="manual"]')).toHaveCount(1);
-    await expect(page.locator('.weapon-manual-control[data-origin="imported"]')).toHaveCount(2);
+    await expect(page.locator('.weapon-manual-control[data-origin="imported"]')).toHaveCount(1);
 });
 
 test("complete scan replaces displayed inventory, resolves Traveler and supports imported deletion", async ({
@@ -468,9 +1217,9 @@ test("complete scan replaces displayed inventory, resolves Traveler and supports
         route.fulfill({ json: { scan_id: "scan", weapons: stored } }),
     );
     let deletions = 0;
-    await page.route("**/api/weapons/scanned/scan%3A0?*", (route) => {
+    await page.route("**/api/weapons/scanned/scan%3A1?*", (route) => {
         deletions++;
-        stored = stored.filter((row) => row.scan_copy_id !== "scan:0");
+        stored = stored.filter((row) => row.scan_copy_id !== "scan:1");
         return route.fulfill({ json: { ok: true } });
     });
     await page.locator("[data-weapons-retry]").click();
@@ -480,7 +1229,10 @@ test("complete scan replaces displayed inventory, resolves Traveler and supports
     await expect(page.getByLabel("Equipped by Test")).toHaveCount(0);
     const imported = page
         .locator(".weapon-card")
-        .filter({ has: page.getByLabel("Equipped by Traveler") });
+        .filter({ has: page.locator('.weapon-manual-control[data-origin="imported"]') });
+    await expect(
+        page.getByLabel("Equipped by Traveler").locator("..").locator(".weapon-manual-letter"),
+    ).toHaveCount(0);
     await expect(imported.locator(".weapon-manual-letter")).toHaveText("I");
     await imported.getByRole("button", { name: "Imported weapon options" }).hover();
     await imported.getByRole("button", { name: "Delete", exact: true }).click();
@@ -559,7 +1311,7 @@ test("HoYoLAB overrides stale imported progression and equipment while preservin
         .filter({ has: page.getByLabel("Equipped by Traveler") });
     await expect(traveler).toContainText("Lv. 90");
     await expect(traveler).toContainText("R5");
-    await expect(traveler.locator(".weapon-manual-letter")).toHaveText("I");
+    await expect(traveler.locator(".weapon-manual-letter")).toHaveCount(0);
     const old = page
         .locator(".weapon-card")
         .filter({ has: page.getByRole("heading", { name: "Old sword", exact: true }) });
@@ -580,6 +1332,9 @@ test("HoYoLAB overrides stale imported progression and equipment while preservin
 test("import action follows account dropdown across screen sizes", async ({ page }) => {
     for (const width of [390, 900, 1440]) {
         await page.setViewportSize({ width, height: 1000 });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+            true,
+        );
         const account = await page.locator(".characters-account-form").boundingBox();
         const action = await page.locator("[data-weapons-import]").boundingBox();
         expect(
@@ -587,5 +1342,44 @@ test("import action follows account dropdown across screen sizes", async ({ page
                 action!.y >= account!.y + account!.height - 1,
         ).toBeTruthy();
         expect(action!.x + action!.width).toBeLessThanOrEqual(width);
+    }
+});
+
+test("7.2 weapon appears in Catalogue with Mitya's signature tag and respects preview preference", async ({
+    page,
+}) => {
+    const catalogue = JSON.parse(
+        execFileSync(
+            python,
+            [
+                "-c",
+                "import json; from utils.web.weapons import catalogue_weapon_rows; print(json.dumps(catalogue_weapon_rows([])))",
+            ],
+            { encoding: "utf8" },
+        ),
+    );
+    await page.route("**/api/weapons?*", (route) =>
+        route.fulfill({ json: { owned: [], catalogue } }),
+    );
+    await page.goto("/weapons");
+    await page.evaluate(() => (document.documentElement.dataset.showUnreleased = "true"));
+    await page.locator('[data-weapons-tab="catalogue"]').click();
+    await expect(page.locator(".weapon-card:visible")).toHaveCount(1);
+    await expect(page.locator(".weapon-card h2")).toHaveText("Starsealed Edict");
+    await expect(page.locator(".weapon-tag")).toHaveText("Mitya's Signature");
+    await page.locator("[data-weapons-search]").fill("Mitya");
+    await expect(page.locator(".weapon-card:visible")).toHaveCount(1);
+    if (catalogue[0].unreleased) {
+        const badge = page.locator(".weapon-unreleased");
+        await expect(badge).toHaveText("Unreleased");
+        const badgeBox = await badge.boundingBox();
+        const artBox = await page.locator(".weapon-art").boundingBox();
+        expect(
+            Math.abs(badgeBox!.x + badgeBox!.width / 2 - artBox!.x - artBox!.width / 2),
+        ).toBeLessThan(1);
+        expect(badgeBox!.y - artBox!.y).toBeLessThan(10);
+        await page.evaluate(() => (document.documentElement.dataset.showUnreleased = "false"));
+        await page.locator("[data-weapons-search]").fill("Starsealed");
+        await expect(page.locator(".weapon-card:visible")).toHaveCount(0);
     }
 });

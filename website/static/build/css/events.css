@@ -2142,11 +2142,9 @@ img[src$="/IT_Stella.png"] {
 
     background-color: currentColor;
 
-    -webkit-mask: url("/static/images/ui/check.svg")
-        center / 18px 18px no-repeat;
+    -webkit-mask: url("/static/images/ui/check.svg") center / 18px 18px no-repeat;
 
-    mask: url("/static/images/ui/check.svg")
-        center / 18px 18px no-repeat;
+    mask: url("/static/images/ui/check.svg") center / 18px 18px no-repeat;
 }
 
 .event-checkmark:hover {

@@ -60,7 +60,8 @@
 .cyrene-button:disabled {
     cursor: not-allowed;
 }
-.cyrene-button > svg {
+.cyrene-button > svg,
+.cyrene-button > .cyrene-plus {
     display: block;
     flex: none;
     width: 20px;

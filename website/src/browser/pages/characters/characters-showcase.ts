@@ -335,7 +335,7 @@ function initCharacterShowcase() {
         container.setAttribute("aria-label", `${count}-star character`);
 
         for (let index = 0; index < count; index++) {
-            container.append(createElement("span", "enka-rarity-star", "★"));
+            container.append(createElement("span", "enka-rarity-star cyrene-rarity-star"));
         }
     }
 

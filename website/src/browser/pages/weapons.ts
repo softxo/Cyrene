@@ -15,6 +15,7 @@ interface Window {
         equipped?: string;
         max_level?: number;
         release_version?: string;
+        unreleased?: boolean;
         copy_id?: string;
         scan_copy_id?: string;
         character_icon?: string;
@@ -32,6 +33,9 @@ interface Window {
         if (!page || page.dataset.initialised) return;
         window.disposeWeapons?.();
         const lifecycle = new AbortController();
+        const notify = (message: string, kind: "success" | "error" = "success") => {
+            if (!lifecycle.signal.aborted) window.showCyreneToast?.(message, kind);
+        };
         page.dataset.initialised = "true";
         const grid = page.querySelector<HTMLElement>("[data-weapons-grid]");
         if (!grid) return;
@@ -40,8 +44,10 @@ interface Window {
         const search = page.querySelector<HTMLInputElement>("[data-weapons-search]")!;
         const type = page.querySelector<HTMLSelectElement>("[data-weapons-type]")!;
         const rarity = page.querySelector<HTMLSelectElement>("[data-weapons-rarity]")!;
+        const tagFilter = page.querySelector<HTMLInputElement>("[data-weapons-tag]")!;
         const refresh = page.querySelector<HTMLButtonElement>("[data-weapons-retry]")!;
-        let tab: "owned" | "catalogue" = "owned";
+        let tab: "owned" | "catalogue" | "planner" = "owned";
+        window.initWeaponPlanner?.(page, lifecycle.signal);
         let data: WeaponData | null = null;
         let manual: Weapon[] = [];
         let scanned: Weapon[] = [];
@@ -102,10 +108,21 @@ interface Window {
                 if (index < 0) unmatched.push(live);
                 else {
                     matched.add(index);
-                    inventory[index] = { ...inventory[index], ...live };
+                    inventory[index] = { ...live };
                 }
             }
             combinedOwned = [...inventory, ...unmatched];
+            publishWeapons();
+        }
+        function publishWeapons() {
+            page!.dispatchEvent(
+                new CustomEvent("weapons-data", {
+                    detail: {
+                        catalogue: data?.catalogue || [],
+                        owned: [...combinedOwned, ...manual],
+                    },
+                }),
+            );
         }
         let manualError = "";
         let selectedWeapon: Weapon | null = null;
@@ -129,7 +146,15 @@ interface Window {
         const importStatus = page.querySelector<HTMLElement>("[data-weapon-import-status]")!;
         let importPayload: unknown = null;
         let importing = false;
-        importButton.addEventListener("click", () => importFile.click());
+        importButton.addEventListener("click", () => {
+            importPayload = null;
+            importConfirm.disabled = true;
+            importStatus.textContent = "";
+            page.querySelector<HTMLElement>("[data-weapon-import-summary]")!.hidden = true;
+            importDialog.showModal();
+        });
+        const importChoose = page.querySelector<HTMLButtonElement>("[data-weapon-import-choose]")!;
+        importChoose.addEventListener("click", () => importFile.click());
         importCancel.addEventListener("click", () => importDialog.close());
         importDialog.addEventListener("cancel", (event) => {
             if (importing) event.preventDefault();
@@ -138,8 +163,12 @@ interface Window {
             const file = importFile.files?.[0];
             importFile.value = "";
             if (!file) return;
+            importPayload = null;
+            importConfirm.disabled = true;
+            importChoose.disabled = true;
+            page.querySelector<HTMLElement>("[data-weapon-import-summary]")!.hidden = true;
             importButton.disabled = true;
-            manualStatus.textContent = "Reading weapon export...";
+            importStatus.textContent = "Reading weapon export...";
             try {
                 if (file.size > 4 * 1024 * 1024) throw new Error("The weapon export exceeds 4 MB.");
                 importPayload = JSON.parse(await file.text());
@@ -157,15 +186,20 @@ interface Window {
                     throw new Error(result.detail || "Couldn't read this weapon export.");
                 page.querySelector("[data-weapon-import-summary]")!.textContent =
                     `Import ${result.count} weapons for UID ${result.uid}?`;
+                page.querySelector<HTMLElement>("[data-weapon-import-summary]")!.hidden = false;
+                importConfirm.disabled = false;
                 importStatus.textContent = "";
                 manualStatus.textContent = "";
-                importDialog.showModal();
+                if (!importDialog.open) importDialog.showModal();
                 importCancel.focus();
             } catch (error) {
-                manualStatus.textContent =
+                importPayload = null;
+                importStatus.textContent =
                     error instanceof Error ? error.message : "Couldn't read this weapon export.";
+                notify(importStatus.textContent, "error");
             } finally {
                 importButton.disabled = false;
+                importChoose.disabled = false;
             }
         });
         importConfirm.addEventListener("click", async () => {
@@ -173,6 +207,7 @@ interface Window {
             importing = true;
             importConfirm.disabled = true;
             importCancel.disabled = true;
+            importChoose.disabled = true;
             importStatus.textContent = "Saving inventory...";
             try {
                 const response = await fetch(`/api/weapons/import?${accountQuery}`, {
@@ -189,16 +224,19 @@ interface Window {
                 cardCaches.owned.clear();
                 renderedTab = "";
                 importDialog.close();
+                notify("Weapon inventory imported.");
                 importPayload = null;
                 search.value = "";
                 page.querySelector<HTMLButtonElement>('[data-weapons-tab="owned"]')!.click();
             } catch (error) {
                 importStatus.textContent =
                     error instanceof Error ? error.message : "Couldn't save the weapon inventory.";
+                notify(importStatus.textContent, "error");
             } finally {
                 importing = false;
                 importConfirm.disabled = false;
                 importCancel.disabled = false;
+                importChoose.disabled = false;
             }
         });
         deleteCancel.addEventListener("click", () => deleteDialog.close());
@@ -231,10 +269,13 @@ interface Window {
                 } else
                     manual = manual.filter((weapon) => weapon.copy_id !== pendingDelete!.copy_id);
                 manualError = "";
+                publishWeapons();
                 deleteDialog.close();
+                notify("Weapon deleted.");
                 render();
             } catch {
                 message.textContent = "Couldn't delete this weapon. Please try again.";
+                notify(message.textContent, "error");
             } finally {
                 deleting = false;
                 deleteConfirm.disabled = false;
@@ -243,6 +284,70 @@ interface Window {
         });
         const manualStatus = page.querySelector<HTMLElement>("[data-weapons-manual-status]")!;
         const accountQuery = `account_id=${encodeURIComponent(page.dataset.accountId!)}`;
+        const resetDialog = page.querySelector<HTMLDialogElement>("[data-weapons-reset-dialog]")!;
+        const resetButton = page.querySelector<HTMLButtonElement>("[data-weapons-reset]")!;
+        const resetConfirm = page.querySelector<HTMLButtonElement>("[data-weapons-reset-confirm]")!;
+        const resetCancel = page.querySelector<HTMLButtonElement>("[data-weapons-reset-cancel]")!;
+        const resetStatus = page.querySelector<HTMLElement>("[data-weapons-reset-status]")!;
+        let resetting = false;
+        page.querySelector("[data-weapons-reset]")!.addEventListener("click", () => {
+            resetStatus.textContent = "";
+            resetDialog.showModal();
+            resetCancel.focus();
+        });
+        resetCancel.addEventListener("click", () => {
+            if (!resetting) resetDialog.close();
+        });
+        resetDialog.addEventListener("cancel", (event) => {
+            if (resetting) event.preventDefault();
+        });
+        resetConfirm.addEventListener("click", async () => {
+            if (resetting) return;
+            resetting = true;
+            resetConfirm.disabled = resetCancel.disabled = true;
+            resetStatus.textContent = "Resetting inventory...";
+            try {
+                const response = await fetch(`/api/weapons/inventory?${accountQuery}`, {
+                    method: "DELETE",
+                    signal: lifecycle.signal,
+                });
+                if (!response.ok) throw new Error("Couldn't reset your inventory. Please retry.");
+                manual = [];
+                scanned = [];
+                manualError = scanError = "";
+                mergeOwned();
+                cardCaches.owned.clear();
+                renderedTab = "";
+                search.value = type.value = rarity.value = tagFilter.value = "";
+                page.querySelector("#weapons-tag-value")!.textContent = "All tags";
+                for (const option of page.querySelectorAll<HTMLElement>(
+                    ".weapons-tag-filter [role=option]",
+                )) {
+                    const active = option.dataset.value === "";
+                    option.classList.toggle("selected", active);
+                    option.setAttribute("aria-selected", String(active));
+                }
+                for (const button of page.querySelectorAll<HTMLElement>(
+                    "[data-weapons-icon-filter] button",
+                )) {
+                    const active = button.dataset.value === "";
+                    button.classList.toggle("selected", active);
+                    button.setAttribute("aria-pressed", String(active));
+                }
+                render();
+                resetDialog.close();
+                notify("Weapon inventory reset. HoYoLAB weapons and plans were kept.");
+            } catch (error) {
+                if (!lifecycle.signal.aborted)
+                    resetStatus.textContent =
+                        error instanceof Error ? error.message : "Couldn't reset inventory.";
+                if (!lifecycle.signal.aborted)
+                    notify(resetStatus.textContent || "Couldn't reset inventory.", "error");
+            } finally {
+                resetting = false;
+                resetConfirm.disabled = resetCancel.disabled = false;
+            }
+        });
         const choicePopup = page.querySelector<HTMLElement>("#weapon-choice-popup")!;
         const choiceGrid = page.querySelector<HTMLElement>("[data-weapon-choice-grid]")!;
         let choiceTrigger: HTMLButtonElement | null = null;
@@ -318,7 +423,7 @@ interface Window {
             }
         });
         dialog.addEventListener("close", closeChoices);
-        for (const modal of [dialog, deleteDialog, importDialog]) {
+        for (const modal of [dialog, deleteDialog, importDialog, resetDialog]) {
             let backdropPress = false;
             const outside = (event: PointerEvent | MouseEvent) => {
                 const rect = modal.getBoundingClientRect();
@@ -338,7 +443,8 @@ interface Window {
                     event.target === modal &&
                     outside(event) &&
                     !(modal === deleteDialog && deleting) &&
-                    !(modal === importDialog && importing)
+                    !(modal === importDialog && importing) &&
+                    !(modal === resetDialog && resetting)
                 )
                     modal.close();
                 backdropPress = false;
@@ -354,6 +460,7 @@ interface Window {
         window.disposeWeapons = () => {
             lifecycle.abort();
             closeChoices();
+            for (const modal of [dialog, deleteDialog, importDialog, resetDialog]) modal.close();
             cardCaches.owned.clear();
             cardCaches.catalogue.clear();
             window.disposeWeapons = undefined;
@@ -367,6 +474,13 @@ interface Window {
             return el;
         };
         function render() {
+            importButton.hidden = resetButton.hidden = tab !== "owned";
+            const planning = tab === "planner";
+            page!.querySelector<HTMLElement>("#weapons-results")!.hidden = planning;
+            page!.querySelector<HTMLElement>("#weapons-planner")!.hidden = !planning;
+            page!.querySelector<HTMLElement>(".weapons-toolbar")!.hidden = planning;
+            page!.querySelector<HTMLElement>(".weapons-summary-row")!.hidden = planning;
+            if (tab === "planner") return;
             const help = page!.querySelector<HTMLElement>(".weapons-help")!;
             help.hidden = tab !== "owned";
             if (help.hidden) {
@@ -395,10 +509,15 @@ interface Window {
             const query = search.value.trim().toLocaleLowerCase();
             const rows = source.filter(
                 (w) =>
+                    (!w.unreleased || document.documentElement.dataset.showUnreleased === "true") &&
                     (w.name.toLocaleLowerCase().includes(query) ||
                         (w.tag?.kind === "signature" &&
                             w.tag.label.toLocaleLowerCase().includes(query))) &&
                     (!type.value || w.type === type.value) &&
+                    (!tagFilter.value ||
+                        (tagFilter.value === "signature"
+                            ? w.tag?.kind === "signature"
+                            : w.tag?.source === tagFilter.value)) &&
                     (!rarity.value || w.rarity === Number(rarity.value)),
             );
             const syncError = error || data?.[`${tab}_error`];
@@ -407,10 +526,31 @@ interface Window {
             const inventoryCount = rows.filter(
                 (w) => Boolean(w.scan_copy_id) && !w.equipped,
             ).length;
-            count.textContent =
-                tab === "owned"
-                    ? `${equippedCount} equipped weapons${inventoryCount ? ` \u00b7 ${inventoryCount} unequipped` : ""}${manualCount ? ` \u00b7 ${manualCount} added manually` : ""}`
-                    : `${rows.length} weapons`;
+            count.replaceChildren();
+            const divider = () => {
+                const marker = text("span", "|", "characters-count-divider");
+                marker.setAttribute("aria-hidden", "true");
+                return marker;
+            };
+            if (tab === "owned") {
+                count.append(text("strong", String(equippedCount)), " equipped weapons");
+                if (inventoryCount)
+                    count.append(
+                        " ",
+                        divider(),
+                        " ",
+                        text("strong", String(inventoryCount)),
+                        " unequipped",
+                    );
+                if (manualCount)
+                    count.append(
+                        " ",
+                        divider(),
+                        " ",
+                        text("strong", String(manualCount)),
+                        " added manually",
+                    );
+            } else count.append(text("strong", String(rows.length)), " weapons");
             status.hidden = !syncError && rows.length > 0;
             status.textContent = syncError
                 ? `${syncError}${tab === "owned" && rows.length ? " Saved inventory is shown below." : ""}`
@@ -460,6 +600,11 @@ interface Window {
                 );
                 img.loading = "lazy";
                 art.append(img);
+                if (weapon.unreleased) {
+                    art.append(
+                        text("span", "Unreleased", "cyrene-unreleased-badge weapon-unreleased"),
+                    );
+                }
                 const body = document.createElement("div");
                 body.className = "weapon-body";
                 body.append(text("p", weapon.type, "weapon-type"), text("h2", weapon.name));
@@ -599,11 +744,13 @@ interface Window {
             renderedTab = tab;
             renderedSource = source;
         }
-        async function load() {
+        async function load(notifyResult = false) {
             if (loading) return;
             loading = true;
             error = "";
             refresh.disabled = true;
+            resetButton.disabled = true;
+            importButton.disabled = true;
             render();
             try {
                 const [synced, saved, scan] = await Promise.allSettled([
@@ -654,9 +801,25 @@ interface Window {
                     scanError =
                         "Couldn't load saved scanned inventory. Please refresh to try again.";
                 mergeOwned();
+                if (notifyResult) {
+                    const problem =
+                        error ||
+                        manualError ||
+                        scanError ||
+                        data?.owned_error ||
+                        data?.catalogue_error;
+                    notify(
+                        problem
+                            ? "Some weapon data couldn't be refreshed. Please try again."
+                            : "Weapons refreshed.",
+                        problem ? "error" : "success",
+                    );
+                }
             } finally {
                 loading = false;
                 refresh.disabled = false;
+                resetButton.disabled = false;
+                importButton.disabled = false;
                 if (!lifecycle.signal.aborted) render();
             }
         }
@@ -685,11 +848,15 @@ interface Window {
                 if (!response.ok) throw new Error();
                 const saved = (await response.json()) as { weapon: Weapon };
                 manual.push(saved.weapon);
+                notify("Weapon added to Owned.");
+                publishWeapons();
                 dialog.close();
                 page.querySelector<HTMLButtonElement>('[data-weapons-tab="owned"]')!.click();
                 search.value = "";
                 type.value = "";
                 rarity.value = "";
+                tagFilter.value = "";
+                page.querySelector("#weapons-tag-value")!.textContent = "All tags";
                 for (const group of page.querySelectorAll<HTMLElement>(
                     "[data-weapons-icon-filter]",
                 )) {
@@ -702,6 +869,7 @@ interface Window {
                 render();
             } catch {
                 saveStatus.textContent = "Couldn't save this weapon. Please try again.";
+                notify(saveStatus.textContent, "error");
             } finally {
                 submit.disabled = false;
             }
@@ -715,7 +883,11 @@ interface Window {
                     item.classList.toggle("active", item === button);
                     item.tabIndex = item === button ? 0 : -1;
                 }
-                page.querySelector("[role=tabpanel]")!.setAttribute("aria-labelledby", button.id);
+                if (tab !== "planner")
+                    page.querySelector("#weapons-results")!.setAttribute(
+                        "aria-labelledby",
+                        button.id,
+                    );
                 render();
             });
             button.addEventListener("keydown", (event) => {
@@ -725,8 +897,12 @@ interface Window {
                     event.key === "Home"
                         ? tabs[0]
                         : event.key === "End"
-                          ? tabs[1]
-                          : tabs.find((item) => item !== button)!;
+                          ? tabs[tabs.length - 1]
+                          : tabs[
+                                (tabs.indexOf(button) +
+                                    (event.key === "ArrowRight" ? 1 : tabs.length - 1)) %
+                                    tabs.length
+                            ];
                 next.focus();
                 next.click();
             });
@@ -815,9 +991,12 @@ interface Window {
             }
         }
         search.addEventListener("input", render);
+        window.addEventListener("cyrene-content-preferences-changed", render, {
+            signal: lifecycle.signal,
+        });
         type.addEventListener("change", render);
         rarity.addEventListener("change", render);
-        refresh.addEventListener("click", () => void load());
+        refresh.addEventListener("click", () => void load(true));
         void load();
     };
 })();

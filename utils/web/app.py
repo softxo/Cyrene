@@ -110,7 +110,7 @@ from utils.web.auth import (
     save_discord_profile,
 )
 from utils.web.changelog import router as changelog_router
-from utils.web.content_metadata import character_content_metadata
+from utils.web.content_metadata import character_content_metadata, character_weapon_type
 from utils.web.discord_oauth import refresh_profile as refresh_discord_profile
 from utils.web.discord_oauth import router as discord_oauth_router
 from utils.web.limited_event_checks import (
@@ -2971,6 +2971,68 @@ async def _manual_weapon_owner(token, account_id):
     return session.user_id
 
 
+@app.get("/api/weapons/plans")
+async def weapon_plans_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
+    from utils.hoyolab import weapon_plan_store
+    from utils.hoyolab.database import get_pool
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    return {"plans": await weapon_plan_store.get_plans(get_pool(), user_id, account_id)}
+
+
+@app.put("/api/weapons/plans")
+async def save_weapon_plans(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab import weapon_plan_store
+    from utils.hoyolab.database import get_pool
+    from utils.web.weapon_planner import normalise_weapon_plan
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    try:
+        payload = await request.json()
+        plans = payload.get("plans")
+        if not isinstance(plans, list) or len(plans) > 100:
+            raise ValueError("A maximum of 100 weapon plans is supported.")
+        plans = [normalise_weapon_plan(plan) for plan in plans]
+        if len({plan["key"] for plan in plans}) != len(plans):
+            raise ValueError("Duplicate plan identifiers.")
+    except ValueError, TypeError, AttributeError:
+        raise HTTPException(
+            status_code=422, detail="Choose valid weapon plans and goals."
+        ) from None
+    await weapon_plan_store.replace_plans(get_pool(), user_id, account_id, plans)
+    return {"plans": plans}
+
+
+@app.post("/api/weapons/planner-costs")
+async def weapon_planner_costs(
+    request: Request, account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.web.weapon_planner import calculate_weapon_plan, normalise_weapon_plan
+
+    await _manual_weapon_owner(cyrene_session, account_id)
+    try:
+        plan = normalise_weapon_plan(await request.json())
+    except ValueError, TypeError, AttributeError:
+        raise HTTPException(
+            status_code=422, detail="Choose valid weapon levels and refinements."
+        ) from None
+    return {"costs": await calculate_weapon_plan(plan)}
+
+
+@app.delete("/api/weapons/inventory")
+async def reset_weapon_inventory(
+    account_id: int, cyrene_session: str | None = Cookie(default=None)
+):
+    from utils.hoyolab import weapon_plan_store
+    from utils.hoyolab.database import get_pool
+
+    user_id = await _manual_weapon_owner(cyrene_session, account_id)
+    await weapon_plan_store.reset_inventory(get_pool(), user_id, account_id)
+    return {"ok": True}
+
+
 @app.get("/api/weapons/manual")
 async def manual_weapons_data(account_id: int, cyrene_session: str | None = Cookie(default=None)):
     from utils.hoyolab.database import get_manual_weapons
@@ -3140,9 +3202,12 @@ async def characters_page(
         )
     )["dates"]
     release_dates.update({"Aether": "2020-09-28", "Lumine": "2020-09-28"})
+    local_weapon_types = {}
     # Local entries include custom characters absent from the public catalogue.
     for entry in (Path(__file__).resolve().parents[2] / "data" / "characters").glob("*.json"):
         local_character = json.loads(entry.read_text(encoding="utf-8"))
+        if local_character.get("name") and local_character.get("weapon"):
+            local_weapon_types[local_character["name"]] = local_character["weapon"].title()
         if local_character.get("release") and local_character.get("name"):
             release_dates[local_character["name"]] = (
                 datetime.strptime(local_character["release"], "%d-%m-%Y").date().isoformat()
@@ -3266,7 +3331,9 @@ async def characters_page(
                                 owned.name if owned is not None else name,
                                 release_dates.get(name, ""),
                             ),
-                            "weapon": get_weapon_type(owned, data),
+                            "weapon": get_weapon_type(owned, data)
+                            or character_weapon_type(character_id, name)
+                            or local_weapon_types.get(name, ""),
                             "owned": owned is not None,
                         }
                     )
@@ -3368,11 +3435,20 @@ def _normalise_character_plan(plan: object) -> dict | None:
             planned_weapon = validate_manual_weapon(
                 {
                     **plan["plannedWeapon"],
-                    "level": 1,
-                    "refinement": 1,
+                    "level": plan["plannedWeapon"].get("level", 1),
+                    "refinement": plan["plannedWeapon"].get("refinement", 1),
                 }
             )
-        except TypeError, ValueError:
+            ascension = plan["plannedWeapon"].get("ascension")
+            if ascension is not None:
+                if (
+                    isinstance(ascension, bool)
+                    or not isinstance(ascension, int)
+                    or not 0 <= ascension <= 6
+                ):
+                    return None
+                planned_weapon["ascension"] = ascension
+        except AttributeError, TypeError, ValueError:
             return None
 
     target_talents = bounded_list(talents, 1, 13) or [1, 1, 1]
@@ -3397,6 +3473,9 @@ def _normalise_character_plan(plan: object) -> dict | None:
         "currentTalents": current_talents,
         "weaponLevel": weapon_level,
         "plannedWeapon": planned_weapon,
+        "weaponSource": "manual"
+        if plan.get("weaponSource") == "manual" or (planned_weapon and not plan.get("weaponSource"))
+        else "hoyolab",
         "currentWeaponName": str(plan.get("currentWeaponName") or "")[:100],
         "currentWeaponIcon": str(plan.get("currentWeaponIcon") or "")[:1000],
         "currentWeaponLevel": optional_int(

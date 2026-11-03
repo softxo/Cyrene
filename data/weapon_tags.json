@@ -2,7 +2,8 @@
     "sources": [
         "https://github.com/genshindev/api/tree/mistress/assets/data/weapons",
         "https://github.com/theBowja/genshin-db/tree/main/src/data/English/weapons",
-        "https://wiki.hoyolab.com/pc/genshin/aggregate/4?lang=en-us"
+        "https://wiki.hoyolab.com/pc/genshin/aggregate/4?lang=en-us",
+        "https://www.hoyolab.com/article/47230963"
     ],
     "notes": "Acquisition categories include reviewed corrections and additions to the upstream dataset. Signature associations are explicit; standard-banner weapons such as Wolf's Gravestone retain their acquisition tag. Unknown future IDs must not be guessed.",
     "weapons": {
@@ -1342,6 +1343,12 @@
             "source": "Gacha",
             "signature": "Linnea",
             "release_version": "6.5"
+        },
+        "14525": {
+            "name": "Starsealed Edict",
+            "source": "Gacha",
+            "signature": "Mitya",
+            "release_version": "7.2"
         }
     }
 }

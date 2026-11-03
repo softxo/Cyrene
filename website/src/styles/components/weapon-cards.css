@@ -1,0 +1,236 @@
+.weapon-card:hover {
+    border-color: color-mix(in srgb, var(--weapon-rarity-colour) 45%, var(--border));
+}
+.weapons-grid {
+    display: grid;
+    align-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+}
+.weapon-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 28%, var(--border));
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(
+        155deg,
+        var(
+            --weapon-card-rarity-soft,
+            color-mix(in srgb, var(--weapon-rarity-colour) 18%, transparent)
+        ),
+        var(--surface-inset) 58%
+    );
+    box-shadow:
+        0 3px 12px rgb(0 0 0 / 10%),
+        inset 0 1px 0 var(--surface-sheen);
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+.weapon-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 150px;
+    flex-shrink: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 25%, transparent);
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            color-mix(in srgb, var(--weapon-rarity-colour) 24%, transparent),
+            transparent 75%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--weapon-rarity-colour) 10%, var(--surface-raised)),
+            var(--surface-inset)
+        );
+}
+/* All five rarities share the same vertical gradient and subdued saturation. */
+.weapon-card[data-rarity="1"] {
+    --weapon-art-top: #88878a;
+    --weapon-art-bottom: #4d4b50;
+}
+.weapon-card[data-rarity="2"] {
+    --weapon-art-top: #6e9b79;
+    --weapon-art-bottom: #3e614b;
+}
+.weapon-card[data-rarity="3"] {
+    --weapon-art-top: #598ab6;
+    --weapon-art-bottom: #355677;
+}
+.weapon-card[data-rarity="4"] {
+    --weapon-art-top: #a16acb;
+    --weapon-art-bottom: #573777;
+    --weapon-card-rarity-soft: rgb(143 92 184 / 24%);
+    border-color: color-mix(in srgb, var(--weapon-rarity-colour) 42%, var(--border));
+}
+.weapon-card[data-rarity="5"] {
+    --weapon-art-top: #d99a43;
+    --weapon-art-bottom: #87502e;
+    --weapon-card-rarity-soft: rgb(181 119 45 / 28%);
+    border-color: color-mix(in srgb, var(--weapon-rarity-colour) 42%, var(--border));
+}
+.weapon-card .weapon-art {
+    background: linear-gradient(180deg, var(--weapon-art-top), var(--weapon-art-bottom));
+}
+.weapon-character[data-rarity="5"] {
+    background: linear-gradient(180deg, #d99a43, #87502e);
+}
+.weapon-character[data-rarity="4"] {
+    background: linear-gradient(180deg, #a16acb, #573777);
+}
+.weapon-art > img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+}
+.weapon-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 10px 8px;
+}
+.weapon-body p {
+    margin: 0;
+}
+.weapon-body h2 {
+    margin: 0;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: left;
+    word-spacing: normal;
+    letter-spacing: normal;
+}
+.weapon-tag {
+    display: inline-block;
+    box-sizing: border-box;
+    max-width: 100%;
+    align-self: center;
+    margin: auto 0 0;
+    padding: 4px 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface-raised) 75%, transparent);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 550;
+    line-height: 1.4;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
+    text-wrap: balance;
+    vertical-align: top;
+}
+.weapon-tag[data-source="Gacha"] {
+    --weapon-tag-colour: var(--weapon-rarity-colour);
+}
+.weapon-tag[data-source="BP"] {
+    --weapon-tag-colour: #bc93ed;
+}
+.weapon-tag[data-source="Event"] {
+    --weapon-tag-colour: #e889b5;
+}
+.weapon-tag[data-kind="signature"] {
+    --weapon-tag-colour: #70002f;
+    color: color-mix(in srgb, #70002f 40%, white);
+}
+.weapon-tag {
+    border-color: color-mix(in srgb, var(--weapon-tag-colour, var(--border)) 45%, var(--border));
+    background: color-mix(
+        in srgb,
+        var(--weapon-tag-colour, var(--surface-raised)) 12%,
+        var(--surface-inset)
+    );
+    color: var(--weapon-tag-colour, var(--text-secondary));
+}
+.weapon-type {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.weapon-stars {
+    color: var(--weapon-rarity-colour);
+    letter-spacing: 2px;
+    font-size: 13px;
+    bottom: 3px;
+    left: 6px;
+}
+.weapon-badge {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    box-sizing: border-box;
+    padding: 4px 7px;
+    border: 1px solid color-mix(in srgb, var(--weapon-rarity-colour) 22%, var(--border));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--surface-raised) 86%, transparent);
+    box-shadow:
+        0 2px 6px rgb(0 0 0 / 14%),
+        inset 0 1px 0 var(--surface-sheen);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.weapon-refinement {
+    top: 6px;
+    left: 6px;
+}
+.weapon-level {
+    bottom: 3px;
+    right: 6px;
+}
+.weapon-character {
+    top: 6px;
+    right: 6px;
+    max-width: 70%;
+    padding: 0;
+    min-height: 38px;
+    overflow: hidden;
+    border-color: rgb(255 255 255 / 82%);
+}
+.weapon-character[data-rarity="4"] {
+    border-color: #e2c9fa;
+}
+.weapon-character[data-rarity="5"] {
+    border-color: #f4d18e;
+}
+.weapon-character img {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+.weapon-character:not(:has(img)) {
+    padding: 6px 8px;
+}
+.weapon-card-action {
+    width: 100%;
+    margin-top: 2px;
+}
+
+.weapon-card[data-rarity="1"] {
+    --weapon-rarity-colour: #a8a8a8;
+}
+.weapon-card[data-rarity="2"] {
+    --weapon-rarity-colour: #83b496;
+}
+.weapon-card[data-rarity="3"] {
+    --weapon-rarity-colour: #80b4ed;
+}
+.weapon-card[data-rarity="4"] {
+    --weapon-rarity-colour: #bc93ed;
+}
+.weapon-card[data-rarity="5"] {
+    --weapon-rarity-colour: #e4ad57;
+}

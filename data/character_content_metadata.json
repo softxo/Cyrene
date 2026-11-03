@@ -1,4 +1,12 @@
 {
-    "Mitya": { "unreleased": true, "release_date": "2026-11-04" },
-    "Valeriy": { "unreleased": true, "release_date": "2026-11-04" }
+    "Mitya": {
+        "unreleased": true,
+        "release_date": "2026-11-04",
+        "weapon_type": "Catalyst"
+    },
+    "Valeriy": {
+        "unreleased": true,
+        "release_date": "2026-11-04",
+        "weapon_type": "Sword"
+    }
 }

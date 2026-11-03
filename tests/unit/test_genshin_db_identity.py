@@ -99,7 +99,11 @@ class CatalogueIdentityTests(unittest.IsolatedAsyncioTestCase):
                 ]
                 self.assertTrue(unknown)
                 self.assertTrue(
-                    all(item["inventory_unavailable"] and item["icon"] is None for item in unknown)
+                    all(
+                        item["inventory_unavailable"]
+                        and item["icon"].startswith("/static/images/materials/preview/")
+                        for item in unknown
+                    )
                 )
                 talents = await _talent_cost(db, name, [1, 1, 1], [10, 10, 10])
                 self.assertTrue(talents["preview"])
@@ -130,3 +134,53 @@ class CatalogueIdentityTests(unittest.IsolatedAsyncioTestCase):
                 ).get(folder, name)
                 self.assertTrue(result["preview"])
                 self.assertNotIn("Old Handguard", str(result))
+
+    async def test_starsealed_edict_costs_work_when_the_provider_has_no_record(self):
+        from utils.web.planner_costs import _weapon_cost
+
+        result = await _weapon_cost(self.provider({}), "Starsealed Edict", 1, 90, 0)
+        self.assertEqual(result["status"], "ok")
+        self.assertTrue(result["preview"])
+        amounts = {item["name"]: item["amount"] for item in result["items"]}
+        for name, count in {
+            "The Frost Emperor's Revival": 5,
+            "The Frost Emperor's Ceremony": 14,
+            "The Frost Emperor's Lament": 14,
+            "The Frost Emperor's Farewell": 6,
+            "Snowborn Heartshard": 23,
+            "Snowborn Mirrorheart": 27,
+            "Snowborn Heart of Ignorance": 41,
+            "Ethereal Glimmershard": 15,
+            "Ethereal Crystal": 23,
+            "Ethereal Crystalscale Stone": 27,
+        }.items():
+            self.assertEqual(amounts[name], count)
+        self.assertTrue(all(item["icon"] for item in result["items"]))
+        self.assertEqual(
+            [item["id"] for item in result["items"]],
+            [
+                202,
+                104013,
+                114096,
+                114095,
+                114094,
+                114093,
+                112160,
+                112159,
+                112158,
+                112148,
+                112147,
+                112146,
+            ],
+        )
+        partial = await _weapon_cost(self.provider({}), "Starsealed Edict", 80, 90, 5)
+        partial_amounts = {item["name"]: item["amount"] for item in partial["items"]}
+        self.assertEqual(partial_amounts["The Frost Emperor's Farewell"], 6)
+        self.assertNotIn("The Frost Emperor's Revival", partial_amounts)
+
+    async def test_published_weapon_costs_replace_the_fallback(self):
+        from utils.web.preview_materials import preview_entry
+
+        record = preview_entry("weapons", "Starsealed Edict")
+        record.pop("preview")
+        self.assertEqual(await self.provider(record).get("weapons", "Starsealed Edict"), record)

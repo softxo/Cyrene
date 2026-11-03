@@ -22,3 +22,17 @@ def character_content_metadata(
     except ValueError:
         unreleased = bool(metadata.get("unreleased", False))
     return {"unreleased": unreleased, "release_date": release_date}
+
+
+CHARACTER_WEAPON_TYPES = json.loads(
+    (Path(__file__).resolve().parents[2] / "data" / "character_weapon_types.json").read_text(
+        encoding="utf-8"
+    )
+)["types"]
+
+
+def character_weapon_type(character_id: int, name: str) -> str:
+    """Weapon types for unowned catalogue entries without HoYoLAB equipment."""
+    return CHARACTER_CONTENT_METADATA.get(name, {}).get(
+        "weapon_type"
+    ) or CHARACTER_WEAPON_TYPES.get(str(character_id), "")

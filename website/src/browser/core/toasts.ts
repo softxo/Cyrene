@@ -6,12 +6,37 @@ declare global {
     }
 }
 
-/** Shared notifications live outside SPA panels so navigation cannot remove them. */
+const toastModalHosts = new WeakSet<HTMLDialogElement>();
+
+function positionToastRegion(region: HTMLElement): void {
+    const modal =
+        document.activeElement?.closest<HTMLDialogElement>("dialog[open]") ||
+        Array.from(document.querySelectorAll<HTMLDialogElement>("dialog[open]")).at(-1);
+    const host = modal || document.body;
+    if (region.parentElement !== host) {
+        if (region.matches(":popover-open")) region.hidePopover();
+        host.append(region);
+    }
+    if (modal && !toastModalHosts.has(modal)) {
+        toastModalHosts.add(modal);
+        modal.addEventListener("close", () => {
+            const notifications = modal.querySelector<HTMLElement>("[data-cyrene-toasts]");
+            if (notifications) positionToastRegion(notifications);
+        });
+    }
+    if (typeof region.showPopover === "function" && region.childElementCount) {
+        if (region.matches(":popover-open")) region.hidePopover();
+        region.showPopover();
+    }
+}
+
+/** Shared notifications survive navigation and stay interactive above native modals. */
 export function showCyreneToast(message: string, kind: ToastKind = "success"): void {
     let region = document.querySelector<HTMLElement>("[data-cyrene-toasts]");
     if (!region) {
         region = document.createElement("div");
         region.className = "cyrene-toasts";
+        region.setAttribute("popover", "manual");
         region.dataset.cyreneToasts = "";
         region.setAttribute("aria-label", "Notifications");
         region.setAttribute("aria-live", "polite");
@@ -81,6 +106,7 @@ export function showCyreneToast(message: string, kind: ToastKind = "success"): v
         visible[0].querySelector<HTMLButtonElement>("button")?.click();
     }
     region.append(toast);
+    positionToastRegion(region);
     resume();
 }
 

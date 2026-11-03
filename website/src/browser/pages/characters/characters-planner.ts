@@ -8,8 +8,8 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         "[data-planner-constellation], " +
             "[data-planner-level], " +
             "[data-planner-weapon-level], " +
-            "[data-planner-talent], " +
-            "[data-planner-weapon-choice]",
+            "[data-planner-current-weapon-level-input], " +
+            "[data-planner-talent]",
     );
 
     let activeMenu = null;
@@ -29,10 +29,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
     function positionMenu(menu, trigger) {
         const rect = trigger.getBoundingClientRect();
-        const width = Math.min(
-            trigger.closest(".planner-weapon-choice") ? rect.width : 260,
-            window.innerWidth - 24,
-        );
+        const width = Math.min(260, window.innerWidth - 24);
         const centredLeft = rect.left + rect.width / 2 - width / 2;
         const left = Math.max(12, Math.min(centredLeft, window.innerWidth - width - 12));
 
@@ -64,10 +61,9 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
         const grid = document.createElement("div");
         grid.className = "planner-choice-grid";
-        if (select.matches("[data-planner-weapon-choice]"))
-            grid.classList.add("planner-weapon-choice-list");
 
         const isConstellation = select.matches("[data-planner-constellation]");
+        const isCurrentWeaponLevel = select.matches("[data-planner-current-weapon-level-input]");
 
         Array.from(select.options)
             .filter((option) => !option.disabled && !option.hidden)
@@ -80,9 +76,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
                     ? `C${option.value}`
                     : select.matches("[data-planner-talent]")
                       ? option.value
-                      : select.matches("[data-planner-weapon-choice]")
-                        ? option.textContent
-                        : `Lv. ${option.value}`;
+                      : `Lv. ${option.value}`;
 
                 const selected = select.value === option.value;
 
@@ -100,7 +94,7 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
                         ? `C${select.value}`
                         : select.matches("[data-planner-talent]")
                           ? select.value
-                          : selectedOption?.textContent.trim() || `Lv. ${select.value}`;
+                          : `Lv. ${select.value}`;
 
                     close();
                     trigger.focus();
@@ -121,22 +115,31 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
     }
 
     const controls = [];
+    const triggers = new Map();
 
     selectors.forEach((select) => {
+        const isCurrentWeaponLevel = select.matches("[data-planner-current-weapon-level-input]");
         const trigger = document.createElement("button");
         trigger.type = "button";
         trigger.className = "planner-choice-trigger";
         trigger.setAttribute("aria-haspopup", "true");
         trigger.setAttribute("aria-expanded", "false");
 
-        const fieldName = select.matches("[data-planner-weapon-choice]")
-            ? "weapon"
-            : select.closest("label")?.querySelector("span")?.textContent.trim() || "Goal";
+        const fieldName =
+            select.closest("label")?.querySelector("span")?.textContent.trim() ||
+            select
+                .closest(".planner-level-value")
+                ?.querySelector(":scope > span")
+                ?.textContent.trim() ||
+            "Goal";
 
         trigger.setAttribute("aria-label", `Choose ${fieldName.toLowerCase()}`);
 
-        const value = document.createElement("span");
-        value.className = "planner-choice-value";
+        const existingValue = select
+            .closest(".planner-level-value")
+            ?.querySelector("[data-planner-current-weapon-level]");
+        const value = existingValue || document.createElement("span");
+        value.classList.add("planner-choice-value");
 
         const arrow = document.createElement("span");
         arrow.className = "planner-choice-arrow";
@@ -144,11 +147,16 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
         trigger.append(value, arrow);
 
+        if (isCurrentWeaponLevel) {
+            trigger.classList.add("planner-current-weapon-choice");
+        }
+
         select.classList.add("planner-native-select");
         select.tabIndex = -1;
         select.setAttribute("aria-hidden", "true");
 
         select.after(trigger);
+        triggers.set(select, trigger);
 
         function sync() {
             const option = select.selectedOptions[0];
@@ -157,12 +165,15 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
                 value.textContent = `C${select.value}`;
             } else if (select.matches("[data-planner-talent]")) {
                 value.textContent = select.value;
+            } else if (isCurrentWeaponLevel) {
+                value.textContent = `Lv. ${select.value}`;
             } else {
                 value.textContent = option?.textContent.trim() || `Lv. ${select.value}`;
             }
         }
 
         trigger.addEventListener("click", () => {
+            if (select.disabled) return;
             open(select, trigger);
         });
 
@@ -202,6 +213,9 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
     return {
         close,
+        getTrigger(select) {
+            return triggers.get(select) || null;
+        },
         sync() {
             controls.forEach((update) => update());
         },
@@ -268,11 +282,20 @@ function initCharacterPlanner() {
     const currentWeaponNameElement = editor.querySelector("[data-planner-current-weapon-name]");
     const currentWeaponIcon = editor.querySelector("[data-planner-weapon-icon]");
     const currentWeaponLevelElement = editor.querySelector("[data-planner-current-weapon-level]");
+    const currentWeaponLevelInput = editor.querySelector(
+        "[data-planner-current-weapon-level-input]",
+    );
 
     const progressionTabs = Array.from(form.querySelectorAll("[data-planner-tab]"));
     const progressionPanels = Array.from(form.querySelectorAll("[data-planner-panel]"));
 
-    if (!notesInput || !constellationInput || !levelInput || !weaponLevelInput) {
+    if (
+        !notesInput ||
+        !constellationInput ||
+        !levelInput ||
+        !weaponLevelInput ||
+        !currentWeaponLevelInput
+    ) {
         console.error(
             "Character Planner could not initialise: " + "one or more plan fields are missing.",
         );
@@ -319,7 +342,17 @@ function initCharacterPlanner() {
     let editingId = null;
     let editingPlan = null;
     let weaponCataloguePromise = null;
-    const weaponChoice = form.querySelector("[data-planner-weapon-choice]");
+    const weaponPicker = page.querySelector("[data-planner-weapon-picker]");
+    const chooseWeaponButton = form.querySelector("[data-planner-choose-weapon]");
+    const syncWeaponButton = form.querySelector("[data-planner-sync-weapon]");
+    const weaponStatus = form.querySelector("[data-planner-weapon-status]");
+    const weaponSearch = weaponPicker.querySelector("[data-planner-weapon-search]");
+    const weaponRarityFilter = weaponPicker.querySelector("[data-planner-weapon-rarity]");
+    const weaponPickerStatus = weaponPicker.querySelector("[data-planner-weapon-picker-status]");
+    const weaponGrid = weaponPicker.querySelector("[data-planner-weapon-grid]");
+    const weaponRetry = weaponPicker.querySelector("[data-planner-weapon-retry]");
+    let weaponCatalogue = [];
+    let weaponSyncRequestId = 0;
     const ownershipFilter = picker.querySelector("[data-planner-ownership]");
     const ownershipControl = picker.querySelector("[data-planner-ownership-control]");
     const ownershipButton = ownershipControl?.querySelector(".custom-select-button");
@@ -379,6 +412,7 @@ function initCharacterPlanner() {
     let loadedInventory = null;
     let craftingUpdaters = [];
     const goalCostCache = new Map();
+    const pendingGoalCosts = new Map();
     const UNREPORTED_INVENTORY_IDS = new Set(["104001", "104002", "104011", "104012"]);
 
     /* =====================================================
@@ -705,6 +739,19 @@ function initCharacterPlanner() {
     }
 
     function combinePlanCosts(costs) {
+        const groups = ["level", "talents", ...(currentProgression?.weapon ? ["weapon"] : [])];
+        if (
+            groups.some(
+                (group) =>
+                    !costs?.[group] || ["unavailable", "invalid"].includes(costs[group].status),
+            )
+        ) {
+            return {
+                status: "unavailable",
+                items: [],
+                message: "Some material costs couldn't be loaded. Please try again.",
+            };
+        }
         const items = new Map();
 
         ["level", "talents", "weapon"].forEach((group) => {
@@ -756,7 +803,191 @@ function initCharacterPlanner() {
         };
     }
 
+    function characterWeaponType(plan) {
+        const type =
+            pickerButtons.find(
+                (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+            )?.dataset.plannerCharacterWeapon || plan.weaponType;
+        return (
+            ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"].find(
+                (value) => value.toLowerCase() === type?.toLowerCase(),
+            ) || ""
+        );
+    }
+
+    function plannedWeapon(plan, character = null) {
+        const equipped = !isUnowned(plan) && plan.weaponSource !== "manual" && character?.weapon;
+        const weapon = equipped
+            ? {
+                  ...equipped,
+                  type: characterWeaponType(plan),
+                  refinement: Number(equipped.refinement) || 1,
+              }
+            : plan.plannedWeapon;
+        return weapon
+            ? {
+                  ...weapon,
+                  level:
+                      plan.weaponSource === "manual"
+                          ? normaliseNumber(
+                                plan.currentWeaponLevel,
+                                Number(weapon.level) || 1,
+                                1,
+                                90,
+                            )
+                          : Number(weapon.level) || 1,
+                  ascension:
+                      weapon.ascension ??
+                      (Number(
+                          plan.weaponSource === "manual"
+                              ? plan.currentWeaponLevel
+                              : weapon.level || 1,
+                      ) === 1
+                          ? 0
+                          : undefined),
+              }
+            : null;
+    }
+
+    function closeWeaponPicker() {
+        closeWeaponRarity();
+        if (weaponPicker.open) weaponPicker.close();
+        chooseWeaponButton.focus();
+    }
+
+    function selectWeapon(weapon) {
+        const plan = editingPlan;
+        if (!plan) return;
+        weaponSyncRequestId++;
+        syncWeaponButton.disabled = false;
+        syncWeaponButton.textContent = "Sync from HoYoLAB";
+        plan.weaponSource = "manual";
+        plan.plannedWeapon = weapon ? { ...weapon, level: 1, ascension: 0 } : null;
+        plan.currentWeaponLevel = weapon ? 1 : null;
+        plan.currentWeaponRarity = weapon ? Number(weapon.rarity) || 5 : null;
+        plan.weaponLevel = 1;
+        weaponLevelInput.value = "1";
+        weaponStatus.textContent = "";
+        closeWeaponPicker();
+        loadCurrentProgression(plan, ++progressionRequestId);
+    }
+
+    function renderWeaponChoices() {
+        const plan = editingPlan;
+        if (!plan) return;
+        const type = characterWeaponType(plan);
+        const query = weaponSearch.value.trim().toLocaleLowerCase();
+        const availableWeapons = weaponCatalogue.filter(
+            (weapon) =>
+                (!weapon.unreleased ||
+                    document.documentElement.dataset.showUnreleased === "true") &&
+                weapon.type?.toLowerCase() === type?.toLowerCase(),
+        );
+        const weapons = availableWeapons
+            .filter(
+                (weapon) =>
+                    (!weaponRarityFilter.value ||
+                        Number(weapon.rarity) === Number(weaponRarityFilter.value)) &&
+                    `${weapon.name} ${weapon.tag?.label || ""}`.toLocaleLowerCase().includes(query),
+            )
+            .sort(
+                (a, b) =>
+                    b.rarity - a.rarity ||
+                    (b.release_version || "0").localeCompare(a.release_version || "0", undefined, {
+                        numeric: true,
+                    }) ||
+                    a.name.localeCompare(b.name),
+            );
+        weaponGrid.replaceChildren();
+        const shownCount = makeElement("strong");
+        shownCount.textContent = String(weapons.length);
+        const baseCount = makeElement("strong");
+        baseCount.textContent = String(availableWeapons.length);
+        const totalCount = makeElement("strong");
+        totalCount.textContent = String(availableWeapons.length);
+        const divider = makeElement("span", "characters-count-divider");
+        divider.textContent = "|";
+        divider.setAttribute("aria-hidden", "true");
+        weaponPickerStatus.replaceChildren(
+            "Showing ",
+            shownCount,
+            " of ",
+            baseCount,
+            " weapons ",
+            divider,
+            " ",
+            totalCount,
+            " Total",
+        );
+        for (const weapon of weapons) {
+            const card = makeElement("button", "weapon-card");
+            card.type = "button";
+            card.dataset.rarity = String(weapon.rarity);
+            card.dataset.weaponId = String(weapon.id);
+            card.setAttribute("aria-label", weapon.name);
+            card.setAttribute(
+                "aria-pressed",
+                String(
+                    String(plan.plannedWeapon?.id) === String(weapon.id) ||
+                        plan.plannedWeapon?.name === weapon.name,
+                ),
+            );
+            const art = makeElement("span", "weapon-art");
+            if (weapon.icon?.startsWith("https://")) {
+                const image = makeElement("img");
+                image.src = weapon.icon;
+                image.alt = "";
+                image.loading = "lazy";
+                image.addEventListener(
+                    "error",
+                    () => {
+                        image.hidden = true;
+                    },
+                    { once: true },
+                );
+                art.append(image);
+            }
+            const stars = makeElement("span", "weapon-badge weapon-stars");
+            stars.setAttribute("aria-label", `${weapon.rarity}-star weapon`);
+            for (
+                let index = 0;
+                index < Math.max(1, Math.min(5, Number(weapon.rarity) || 1));
+                index++
+            ) {
+                const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                star.setAttribute("viewBox", "0 0 24 24");
+                star.setAttribute("aria-hidden", "true");
+                const shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                shape.setAttribute(
+                    "d",
+                    "m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2 2 9.3l6.9-1Z",
+                );
+                shape.setAttribute("fill", "currentColor");
+                star.append(shape);
+                stars.append(star);
+            }
+            art.append(stars);
+            const body = makeElement("span", "weapon-body");
+            body.append(
+                makeElement("span", "weapon-type", weapon.type),
+                makeElement("strong", "weapon-name", weapon.name),
+            );
+            const tag = weapon.tag;
+            const pill = makeElement("span", "weapon-tag", tag?.label || "Source unavailable");
+            pill.dataset.kind = tag?.kind || "source";
+            pill.dataset.source = tag?.source || tag?.label || "";
+            if (tag?.kind === "signature") pill.title = `${tag.label} - Acquisition: ${tag.source}`;
+            body.append(pill);
+            card.append(art, body);
+            card.addEventListener("click", () => selectWeapon(weapon));
+            weaponGrid.append(card);
+        }
+    }
+
     async function loadWeaponChoices(plan) {
+        weaponGrid.replaceChildren();
+        weaponRetry.hidden = true;
+        weaponPickerStatus.textContent = "Loading weapons...";
         try {
             weaponCataloguePromise ??= fetch(
                 `/api/weapons?account_id=${encodeURIComponent(accountId)}`,
@@ -764,8 +995,8 @@ function initCharacterPlanner() {
             )
                 .then(async (response) => {
                     const data = await response.json();
-                    if (!response.ok || data.catalogue_error)
-                        throw new Error(data.catalogue_error || "Could not load weapons");
+                    if (!response.ok || data.catalogue_error || !Array.isArray(data.catalogue))
+                        throw new Error(data.catalogue_error || "Could not load weapons.");
                     return data.catalogue;
                 })
                 .catch((error) => {
@@ -773,134 +1004,340 @@ function initCharacterPlanner() {
                     throw error;
                 });
             const weapons = await weaponCataloguePromise;
-            if (editingPlan !== plan || editor.hidden) return;
-            const type =
-                plan.weaponType ||
-                pickerButtons.find(
-                    (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
-                )?.dataset.plannerCharacterWeapon;
-            weaponChoice.replaceChildren(new Option("No weapon", ""));
-            weapons
-                .filter((weapon) => weapon.type.toLowerCase() === type?.toLowerCase())
-                .forEach((weapon) => {
-                    const option = new Option(weapon.name, String(weapon.id));
-                    option.dataset.weapon = JSON.stringify(weapon);
-                    weaponChoice.add(option);
-                });
-            weaponChoice.value = plan.plannedWeapon ? String(plan.plannedWeapon.id) : "";
-            plannerSelectors.sync();
+            if (editingPlan !== plan || !weaponPicker.open) return;
+            weaponCatalogue = weapons;
+            renderWeaponChoices();
         } catch (error) {
-            console.warn("Could not load planned weapons.", error);
-            if (editingPlan !== plan || editor.hidden) return;
-            weaponChoice.add(
-                new Option("Couldn't load weapons. Reopen to retry.", "", false, false),
-            );
+            if (editingPlan !== plan || !weaponPicker.open) return;
+            weaponPickerStatus.textContent = error.message || "Couldn't load weapons.";
+            weaponRetry.hidden = false;
         }
     }
 
-    weaponChoice?.addEventListener("change", () => {
+    chooseWeaponButton.addEventListener("click", () => {
         if (!editingPlan) return;
-        const selected = weaponChoice.selectedOptions[0]?.dataset.weapon;
-        editingPlan.plannedWeapon = selected ? JSON.parse(selected) : null;
-        loadCurrentProgression(editingPlan, ++progressionRequestId);
+        plannerSelectors.close();
+        weaponSearch.value = "";
+        weaponRarityFilter.value = "";
+        syncWeaponRarity();
+        closeWeaponRarity();
+        weaponPicker.querySelector("[data-planner-weapon-picker-description]").textContent =
+            `Choose a weapon for ${editingPlan.name}.`;
+        weaponPicker.showModal();
+        weaponSearch.focus();
+        loadWeaponChoices(editingPlan);
+    });
+    weaponSearch.addEventListener("input", renderWeaponChoices);
+    const weaponRarityControl = weaponPicker.querySelector("[data-planner-weapon-rarity-control]");
+    const weaponRarityButton = weaponRarityControl.querySelector(".custom-select-button");
+    function closeWeaponRarity() {
+        weaponRarityControl.classList.remove("open");
+        weaponRarityButton.setAttribute("aria-expanded", "false");
+    }
+    function syncWeaponRarity() {
+        weaponRarityButton.querySelector(".custom-select-value").textContent =
+            weaponRarityFilter.selectedOptions[0].textContent;
+        weaponRarityControl.querySelectorAll("[data-value]").forEach((option) => {
+            const selected = option.dataset.value === weaponRarityFilter.value;
+            option.classList.toggle("selected", selected);
+            option.setAttribute("aria-selected", String(selected));
+        });
+    }
+    weaponRarityButton.addEventListener("click", () => {
+        const open = weaponRarityControl.classList.toggle("open");
+        weaponRarityButton.setAttribute("aria-expanded", String(open));
+    });
+    weaponRarityControl.querySelectorAll("[data-value]").forEach((option) =>
+        option.addEventListener("click", () => {
+            weaponRarityFilter.value = option.dataset.value;
+            syncWeaponRarity();
+            closeWeaponRarity();
+            renderWeaponChoices();
+            weaponRarityButton.focus();
+        }),
+    );
+    weaponPicker.addEventListener("pointerdown", (event) => {
+        if (!weaponRarityControl.contains(event.target)) closeWeaponRarity();
+    });
+    weaponRarityControl.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && weaponRarityControl.classList.contains("open")) {
+            event.preventDefault();
+            event.stopPropagation();
+            closeWeaponRarity();
+            weaponRarityButton.focus();
+        }
+    });
+    weaponRarityFilter.addEventListener("change", () => {
+        syncWeaponRarity();
+        renderWeaponChoices();
+    });
+    weaponPicker.querySelector("[data-planner-weapon-reset]").addEventListener("click", () => {
+        weaponSearch.value = "";
+        weaponRarityFilter.value = "";
+        syncWeaponRarity();
+        closeWeaponRarity();
+        renderWeaponChoices();
+    });
+    weaponPicker
+        .querySelector("[data-planner-weapon-clear]")
+        .addEventListener("click", () => selectWeapon(null));
+    weaponPicker
+        .querySelector("[data-planner-weapon-picker-close]")
+        .addEventListener("click", closeWeaponPicker);
+    weaponRetry.addEventListener("click", () => loadWeaponChoices(editingPlan));
+    weaponPicker.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeWeaponPicker();
+    });
+    weaponPicker.addEventListener("click", (event) => {
+        if (event.target !== weaponPicker) return;
+        const rect = weaponPicker.getBoundingClientRect();
+        if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+        )
+            closeWeaponPicker();
+    });
+    syncWeaponButton.addEventListener("click", async () => {
+        const plan = editingPlan;
+        if (!plan || isUnowned(plan)) return;
+        const requestId = ++weaponSyncRequestId;
+        syncWeaponButton.disabled = true;
+        syncWeaponButton.textContent = "Syncing...";
+        weaponStatus.textContent = "";
+        try {
+            const response = await fetch(
+                `/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`,
+                {
+                    credentials: "same-origin",
+                    cache: "no-store",
+                    headers: { Accept: "application/json", "X-Cyrene-Loading": "syncing" },
+                },
+            );
+            const payload = await response.json();
+            if (!response.ok)
+                throw new Error(payload?.error || "Couldn't sync the equipped weapon.");
+            const character = Array.isArray(payload.data)
+                ? payload.data[0]
+                : payload.data?.characters?.[0];
+            if (!character?.weapon?.name || !Number.isFinite(Number(character.weapon.level)))
+                throw new Error("HoYoLAB didn't return an equipped weapon. Try again.");
+            if (editingPlan !== plan || requestId !== weaponSyncRequestId || editor.hidden) return;
+            plan.weaponSource = "hoyolab";
+            plan.plannedWeapon = plannedWeapon(plan, character);
+            plan.weaponLevel = Math.max(
+                Number(plan.weaponLevel) || 1,
+                Number(character.weapon.level),
+            );
+            weaponLevelInput.value = String(plan.weaponLevel);
+            await loadCurrentProgression(plan, ++progressionRequestId, character);
+        } catch (error) {
+            if (editingPlan === plan && requestId === weaponSyncRequestId)
+                weaponStatus.textContent =
+                    error.message || "Couldn't sync the equipped weapon. Try again.";
+        } finally {
+            if (editingPlan === plan && requestId === weaponSyncRequestId) {
+                syncWeaponButton.disabled = false;
+                syncWeaponButton.textContent = "Sync from HoYoLAB";
+            }
+        }
     });
 
-    async function loadPlanTotal(plan, target) {
-        target.replaceChildren(makeElement("p", "planner-cost-message", "Calculating total…"));
-
-        try {
-            const accountQuery = `?account_id=${encodeURIComponent(accountId)}`;
-            const showcaseResponse = isUnowned(plan)
-                ? {
-                      ok: true,
-                      json: async () => ({ data: { characters: [unownedCharacter(plan)] } }),
-                  }
-                : await fetch(
-                      `/api/characters/${encodeURIComponent(plan.id)}/showcase${accountQuery}`,
-                      {
-                          credentials: "same-origin",
-                          headers: { Accept: "application/json" },
-                      },
-                  );
-            const showcasePayload = await showcaseResponse.json();
-
-            if (!showcaseResponse.ok) {
-                throw new Error(showcasePayload?.error || "Couldn't load current progression.");
-            }
-
-            const responseData = showcasePayload?.data;
-            const character = Array.isArray(responseData)
-                ? responseData[0]
-                : responseData?.characters?.[0];
-            const talents = getCharacterCombatTalents(character);
-
-            if (!character || talents.length !== 3) {
-                throw new Error("Current progression is unavailable.");
-            }
-
-            const weapon = character.weapon;
-            const talentBonuses = getTalentBonuses(character, talents);
-            const currentTalentLevels = talents.map((skill) => Number(skill.level));
-            const characterName = [10000005, 10000007].includes(Number(plan.id))
-                ? `Traveler (${character.element || plan.element})`
-                : character.name || plan.name;
-            const parameters = new URLSearchParams({
-                character_name: characterName,
-                current_level: String(character.level),
-                target_level: String(plan.level),
-                current_talents: withoutTalentBonuses(currentTalentLevels, talentBonuses).join(","),
-                target_talents: withoutTalentBonuses(plan.talents, talentBonuses).join(","),
-                target_weapon_level: String(plan.weaponLevel),
+    async function loadGoalCostPayload(requestUrl) {
+        if (goalCostCache.has(requestUrl)) return goalCostCache.get(requestUrl);
+        if (pendingGoalCosts.has(requestUrl)) return pendingGoalCosts.get(requestUrl);
+        const pending = (async () => {
+            const response = await fetch(requestUrl, {
+                credentials: "same-origin",
+                headers: { Accept: "application/json", "X-Cyrene-Loading": "materials" },
             });
-
-            if (character.ascension != null) {
-                parameters.set("current_ascension", String(character.ascension));
-            }
-            if (weapon) {
-                parameters.set("weapon_name", weapon.name || "");
-                parameters.set("weapon_rarity", String(weapon.rarity));
-                parameters.set("current_weapon_level", String(weapon.level));
-                if (weapon.ascension != null) {
-                    parameters.set("weapon_ascension", String(weapon.ascension));
-                }
-            }
-
-            const requestUrl =
-                `/api/characters/${encodeURIComponent(plan.id)}` +
-                `/planner-costs?${parameters.toString()}`;
-            let payload = goalCostCache.get(requestUrl);
-
-            if (!payload) {
-                const response = await fetch(requestUrl, {
-                    credentials: "same-origin",
-                    headers: { Accept: "application/json" },
-                });
+            const message =
+                response.status === 401 || response.status === 403 || response.redirected
+                    ? "Your session may have expired. Sign in again to load materials."
+                    : "Couldn't load material data from the server. Please try again.";
+            let payload;
+            try {
                 payload = await response.json();
-                if (!response.ok) {
-                    throw new Error(payload?.error || "Couldn't calculate total.");
-                }
-                goalCostCache.set(requestUrl, payload);
+            } catch {
+                throw new Error(message);
             }
-
-            const inventory = await loadInventory();
-            renderGoalCost(target, combinePlanCosts(payload?.costs), inventory);
-        } catch (error) {
-            console.error("Could not calculate the plan total.", error);
-            target.replaceChildren(
-                makeElement(
-                    "p",
-                    "planner-cost-message",
-                    error.message || "Couldn't calculate the total.",
-                ),
-            );
+            if (!response.ok)
+                throw new Error(typeof payload?.error === "string" ? payload.error : message);
+            if (
+                !payload?.costs ||
+                typeof payload.costs !== "object" ||
+                Array.isArray(payload.costs)
+            )
+                throw new Error(message);
+            // Failed sections must be retried rather than preserved in the cache.
+            if (
+                ["level", "talents", "weapon"].every(
+                    (key) =>
+                        payload.costs[key] &&
+                        !["unavailable", "invalid"].includes(payload.costs[key].status),
+                )
+            ) {
+                goalCostCache.set(requestUrl, payload);
+                if (goalCostCache.size > 20)
+                    goalCostCache.delete(goalCostCache.keys().next().value);
+            }
+            return payload;
+        })();
+        pendingGoalCosts.set(requestUrl, pending);
+        try {
+            return await pending;
+        } finally {
+            pendingGoalCosts.delete(requestUrl);
         }
+    }
+
+    async function loadPlanTotal(plan, target) {
+        if (String(plan.id) !== editingId) return;
+        target.replaceChildren(makeElement("p", "planner-cost-message", "Calculating total..."));
+        target.setAttribute("aria-busy", "true");
+        // The editor already owns current progression and selected weapon state.
+        // Its latest calculation also supplies Total, avoiding another showcase request.
+        if (currentProgression) await updateGoalCosts();
     }
 
     /* =====================================================
        PLAN CARD RENDERING
        ===================================================== */
 
+    let cardDrag = null;
+
+    function finishCardDrag(commit = false) {
+        const drag = cardDrag;
+        if (!drag) return;
+        cardDrag = null;
+        clearTimeout(drag.timer);
+        drag.preview?.remove();
+        drag.card.classList.remove("is-dragging");
+        if (drag.card.hasPointerCapture(drag.pointerId))
+            drag.card.releasePointerCapture(drag.pointerId);
+        if (!drag.active) return;
+        if (commit) {
+            const ids = [...plannerGrid.querySelectorAll(".planner-character-card")].map(
+                (card) => card.dataset.planId,
+            );
+            const byId = new Map(plans.map((plan) => [String(plan.id), plan]));
+            const visible = new Set(ids);
+            let index = 0;
+            plans = plans.map((plan) =>
+                visible.has(String(plan.id)) ? byId.get(ids[index++]) : plan,
+            );
+            persistPlans();
+        } else {
+            renderPlans();
+        }
+    }
+
+    document.addEventListener("pointerup", (event) => {
+        if (cardDrag?.pointerId === event.pointerId) finishCardDrag(true);
+    });
+    document.addEventListener("pointercancel", (event) => {
+        if (cardDrag?.pointerId === event.pointerId) finishCardDrag();
+    });
+
+    window.addEventListener("blur", () => finishCardDrag());
+
+    function enableCardReordering(card) {
+        card.addEventListener("pointerdown", (event) => {
+            if (
+                event.button !== 0 ||
+                !event.isPrimary ||
+                event.target.closest("button, a, input, select, textarea")
+            )
+                return;
+            finishCardDrag();
+            const drag = {
+                card,
+                pointerId: event.pointerId,
+                x: event.clientX,
+                y: event.clientY,
+                active: false,
+                timer: null,
+                preview: null,
+            };
+            cardDrag = drag;
+            drag.timer = window.setTimeout(() => {
+                if (cardDrag !== drag || !card.isConnected) return;
+                drag.active = true;
+                const rect = card.getBoundingClientRect();
+                drag.left = rect.left;
+                drag.top = rect.top;
+                drag.preview = card.cloneNode(true);
+                drag.preview.classList.add("planner-card-drag-preview");
+                drag.preview.setAttribute("aria-hidden", "true");
+                drag.preview.removeAttribute("tabindex");
+                drag.preview.style.width = `${rect.width}px`;
+                drag.preview.style.height = `${rect.height}px`;
+                drag.preview.style.left = `${rect.left}px`;
+                drag.preview.style.top = `${rect.top}px`;
+                document.body.append(drag.preview);
+                card.classList.add("is-dragging");
+                card.setPointerCapture(event.pointerId);
+                window.getSelection()?.removeAllRanges();
+            }, 250);
+        });
+        card.addEventListener(
+            "touchmove",
+            (event) => {
+                if (cardDrag?.active) event.preventDefault();
+            },
+            { passive: false },
+        );
+        card.addEventListener("dragstart", (event) => event.preventDefault());
+        card.addEventListener("pointermove", (event) => {
+            const drag = cardDrag;
+            if (!drag || drag.card !== card || event.pointerId !== drag.pointerId) return;
+            if (!drag.active) {
+                if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 8)
+                    finishCardDrag();
+                return;
+            }
+            event.preventDefault();
+            drag.preview.style.left = `${drag.left + event.clientX - drag.x}px`;
+            drag.preview.style.top = `${drag.top + event.clientY - drag.y}px`;
+            const target = document
+                .elementFromPoint(event.clientX, event.clientY)
+                ?.closest(".planner-character-card");
+            if (!target || target === card || target.parentElement !== plannerGrid) return;
+            const cards = [...plannerGrid.children];
+            plannerGrid.insertBefore(
+                card,
+                cards.indexOf(card) < cards.indexOf(target) ? target.nextSibling : target,
+            );
+            card.setPointerCapture(event.pointerId);
+        });
+        card.addEventListener("pointerup", () => {
+            if (cardDrag?.card === card) finishCardDrag(true);
+        });
+        card.addEventListener("pointercancel", () => {
+            if (cardDrag?.card === card) finishCardDrag();
+        });
+        card.addEventListener("keydown", (event) => {
+            if (
+                event.target !== card ||
+                !event.altKey ||
+                !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)
+            )
+                return;
+            event.preventDefault();
+            const index = plans.findIndex((plan) => String(plan.id) === card.dataset.planId);
+            const next = index + (["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1);
+            if (next < 0 || next >= plans.length) return;
+            [plans[index], plans[next]] = [plans[next], plans[index]];
+            persistPlans();
+            renderPlans();
+            plannerGrid.querySelector(`[data-plan-id="${card.dataset.planId}"]`)?.focus();
+        });
+    }
+
     function renderPlans() {
+        finishCardDrag();
         plannerGrid.replaceChildren();
 
         const visiblePlans = plans.filter(
@@ -922,167 +1359,179 @@ function initCharacterPlanner() {
             ]),
         );
 
-        const releaseOrder = new Map(
-            pickerButtons.map((button, index) => [
-                String(button.dataset.plannerCharacterId),
-                index,
-            ]),
-        );
-        [...visiblePlans]
-            .sort(
-                (a, b) =>
-                    (releaseOrder.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) -
-                    (releaseOrder.get(String(b.id)) ?? Number.MAX_SAFE_INTEGER),
-            )
-            .forEach((plan) => {
-                const card = makeElement("article", "planner-character-card");
+        visiblePlans.forEach((plan) => {
+            const card = makeElement("article", "planner-character-card");
 
-                const image = makeElement("img");
-                image.src = plan.icon;
-                image.alt = plan.name;
-                image.loading = "lazy";
+            const image = makeElement("img");
+            image.src = plan.icon;
+            image.alt = plan.name;
+            image.loading = "lazy";
 
-                card.dataset.unreleased =
-                    pickerButtons.find(
-                        (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
-                    )?.dataset.unreleased || "false";
-                card.dataset.rarity = String(plan.rarity || 4);
-                card.dataset.element = (plan.element || "").toLocaleLowerCase();
+            card.dataset.unreleased =
+                pickerButtons.find(
+                    (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+                )?.dataset.unreleased || "false";
+            card.dataset.planId = String(plan.id);
+            card.tabIndex = 0;
+            card.setAttribute(
+                "aria-label",
+                `${plan.name} plan. Hold to drag, or use Alt and arrow keys to reorder.`,
+            );
+            card.dataset.rarity = String(plan.rarity || 4);
+            card.dataset.element = (plan.element || "").toLocaleLowerCase();
 
-                const portrait = makeElement("div", "planner-card-portrait");
-                const identity = makeElement("div", "planner-card-identity");
-                const name = makeElement("h3", "", plan.name);
-                const elementBadge = makeElement("span", "planner-card-element");
-                const elementIcon = makeElement("img");
-                elementIcon.src = `/static/images/characters/Element_${plan.element}.webp`;
-                elementIcon.alt = plan.element || "Element";
-                elementIcon.title = plan.element || "Element";
-                elementBadge.append(elementIcon);
-                identity.append(name, elementBadge);
-                if (card.dataset.unreleased === "true")
-                    identity.append(makeElement("span", "cyrene-unreleased-badge", "Unreleased"));
-                const constellationBadge = makeElement("span", "planner-card-constellation");
-                const constellationChanged =
-                    plan.currentConstellation != null &&
-                    plan.currentConstellation !== plan.constellation;
-                if (constellationChanged) {
-                    constellationBadge.append(
-                        makeElement("span", "", `C${plan.currentConstellation}`),
-                        makeArrow(),
-                        makeElement("span", "", `C${plan.constellation}`),
-                    );
-                } else {
-                    constellationBadge.textContent = `C${plan.constellation}`;
-                }
-                constellationBadge.classList.toggle("has-goal", constellationChanged);
-                portrait.append(image, constellationBadge, identity);
-
-                const content = makeElement("div", "planner-card-content");
-                const goals = makeElement("div", "planner-card-goals");
-                const levelGoal = makeElement("div", "planner-card-goal");
-                const currentLevel = currentLevels.get(String(plan.id)) || plan.currentLevel;
-                const levelValues = makeProgressionValues(currentLevel, plan.level, "Lv. ");
-                levelGoal.append(makeElement("span", "", "Character level"), levelValues);
-
-                goals.append(levelGoal);
-
-                const talentRow = makeElement("div", "planner-card-talents");
-                const talentLabels = [
-                    ["N", "Normal Attack"],
-                    ["E", "Elemental Skill"],
-                    ["Q", "Elemental Burst"],
-                ];
-
-                plan.talents.forEach((value, index) => {
-                    const talent = makeElement("div", "planner-card-talent");
-                    const currentTalent = plan.currentTalents?.[index];
-                    talent.setAttribute(
-                        "aria-label",
-                        `${talentLabels[index][1]} level ` +
-                            `${currentTalent ?? "unknown"} to ${value}`,
-                    );
-                    talent.title = talentLabels[index][1];
-                    const talentValues = makeProgressionValues(currentTalent, value);
-                    talentValues.classList.add("planner-card-talent-values");
-                    talent.classList.toggle(
-                        "has-goal",
-                        talentValues.classList.contains("has-goal"),
-                    );
-                    const talentKey = makeElement(
+            const portrait = makeElement("div", "planner-card-portrait");
+            const identity = makeElement("div", "planner-card-identity");
+            const name = makeElement("h3", "", plan.name);
+            const elementBadge = makeElement("span", "planner-card-element");
+            const elementIcon = makeElement("img");
+            elementIcon.src = `/static/images/characters/Element_${plan.element}.webp`;
+            elementIcon.alt = plan.element || "Element";
+            elementIcon.title = plan.element || "Element";
+            elementBadge.append(elementIcon);
+            identity.append(name, elementBadge);
+            if (card.dataset.unreleased === "true")
+                identity.append(
+                    makeElement(
                         "span",
-                        `planner-card-talent-key talent-${index + 1}`,
-                    );
-                    talentKey.append(makeElement("span", "", talentLabels[index][0]));
-                    talent.append(talentKey, talentValues);
-                    talentRow.append(talent);
-                });
-
-                const weaponMaximum =
-                    plan.currentWeaponRarity && plan.currentWeaponRarity < 3 ? 70 : 90;
-                const weaponGoal = Math.min(plan.weaponLevel, weaponMaximum);
-                const weapon = makeElement("div", "planner-card-weapon");
-                const weaponLevels = makeElement("div", "planner-card-goal");
-                weaponLevels.append(
-                    makeElement("span", "", "Weapon level"),
-                    isUnowned(plan) && !plan.plannedWeapon
-                        ? makeElement("strong", "planner-card-no-weapon", "No weapon")
-                        : makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "),
+                        "cyrene-unreleased-badge planner-card-unreleased",
+                        "Unreleased",
+                    ),
                 );
-                weapon.append(weaponLevels);
-                if (plan.currentWeaponIcon || plan.currentWeaponName) {
-                    const identity = makeElement("div", "planner-card-equipped-weapon");
-                    if (plan.currentWeaponIcon) {
-                        const icon = makeElement("img");
-                        icon.src = plan.currentWeaponIcon;
-                        icon.alt = "";
-                        icon.loading = "lazy";
-                        identity.append(icon);
-                    }
-                    const name = makeElement(
-                        "span",
-                        "",
-                        plan.currentWeaponName || "Equipped weapon",
-                    );
-                    name.title = name.textContent;
-                    identity.append(name);
-                    weapon.append(identity);
-                }
+            const constellationBadge = makeElement("span", "planner-card-constellation");
+            const constellationChanged =
+                plan.currentConstellation != null &&
+                plan.currentConstellation !== plan.constellation;
+            if (constellationChanged) {
+                constellationBadge.append(
+                    makeElement("span", "", `C${plan.currentConstellation}`),
+                    makeArrow(),
+                    makeElement("span", "", `C${plan.constellation}`),
+                );
+            } else {
+                constellationBadge.textContent = `C${plan.constellation}`;
+            }
+            constellationBadge.classList.toggle("has-goal", constellationChanged);
+            portrait.append(image, constellationBadge, identity);
 
-                content.append(goals, talentRow, weapon);
+            const content = makeElement("div", "planner-card-content");
+            const goals = makeElement("div", "planner-card-goals");
+            const levelGoal = makeElement("div", "planner-card-goal");
+            const currentLevel = currentLevels.get(String(plan.id)) || plan.currentLevel;
+            const levelValues = makeProgressionValues(currentLevel, plan.level, "Lv. ");
+            levelGoal.append(makeElement("span", "", "Character level"), levelValues);
 
-                const actions = makeElement("div", "planner-card-actions");
+            goals.append(levelGoal);
 
-                const editButton = makeElement("button", "planner-card-edit", "✎");
-                editButton.type = "button";
-                editButton.title = `Edit ${plan.name}'s plan`;
-                editButton.setAttribute("aria-label", `Edit ${plan.name}'s plan`);
-                editButton.addEventListener("click", () => {
-                    openEditor(plan.id);
-                });
+            const talentRow = makeElement("div", "planner-card-talents");
+            const talentLabels = [
+                ["N", "Normal Attack"],
+                ["E", "Elemental Skill"],
+                ["Q", "Elemental Burst"],
+            ];
 
-                const removeButton = makeElement("button", "planner-card-remove");
-                const closeIcon = makeElement("span", "cyrene-close");
-                closeIcon.setAttribute("aria-hidden", "true");
-                removeButton.append(closeIcon);
-                removeButton.type = "button";
-                removeButton.title = `Remove ${plan.name}'s plan`;
-                removeButton.setAttribute("aria-label", `Remove ${plan.name}'s plan`);
-                removeButton.addEventListener("click", () => {
-                    removePlan(plan.id);
-                });
-
-                actions.append(editButton, removeButton);
-                goals.append(actions);
-                card.append(portrait, content);
-
-                if (plan.notes.trim()) {
-                    const notes = makeElement("p", "planner-card-notes");
-                    notes.textContent = plan.notes;
-
-                    content.append(notes);
-                }
-                plannerGrid.append(card);
+            plan.talents.forEach((value, index) => {
+                const talent = makeElement("div", "planner-card-talent");
+                const currentTalent = plan.currentTalents?.[index];
+                talent.setAttribute(
+                    "aria-label",
+                    `${talentLabels[index][1]} level ` +
+                        `${currentTalent ?? "unknown"} to ${value}`,
+                );
+                talent.title = talentLabels[index][1];
+                const talentValues = makeProgressionValues(currentTalent, value);
+                talentValues.classList.add("planner-card-talent-values");
+                talent.classList.toggle("has-goal", talentValues.classList.contains("has-goal"));
+                const talentKey = makeElement(
+                    "span",
+                    `planner-card-talent-key talent-${index + 1}`,
+                );
+                const letter = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                letter.setAttribute("viewBox", "0 0 12 12");
+                letter.setAttribute("aria-hidden", "true");
+                const strokes = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                strokes.setAttribute(
+                    "d",
+                    [
+                        "M2.806 10.026L2.806 1.974L4.388 1.974L7.684 7.351L7.684 1.974L9.194 1.974L9.194 10.026L7.563 10.026L4.316 4.775L4.316 10.026Z",
+                        "M2.938 10.026L2.938 1.974L8.909 1.974L8.909 3.336L4.564 3.336L4.564 5.121L8.607 5.121L8.607 6.478L4.564 6.478L4.564 8.67L9.062 8.67L9.062 10.026Z",
+                        "M8.755 8.67C9.154 8.955 9.588 9.182 10.057 9.351L9.458 10.499C9.213 10.426 8.973 10.325 8.738 10.197C8.687 10.171 8.326 9.933 7.656 9.483C7.129 9.713 6.545 9.829 5.904 9.829C4.666 9.829 3.697 9.464 2.995 8.736C2.294 8.007 1.943 6.983 1.943 5.665C1.943 4.35 2.295 3.328 2.998 2.597C3.701 1.866 4.655 1.501 5.86 1.501C7.054 1.501 8 1.866 8.7 2.597C9.399 3.328 9.749 4.35 9.749 5.665C9.749 6.361 9.652 6.972 9.458 7.5C9.311 7.902 9.077 8.292 8.755 8.67ZM7.447 7.752C7.656 7.507 7.813 7.21 7.917 6.862C8.021 6.515 8.074 6.115 8.074 5.665C8.074 4.735 7.869 4.04 7.458 3.58C7.048 3.121 6.512 2.891 5.849 2.891C5.186 2.891 4.649 3.122 4.237 3.583C3.825 4.044 3.619 4.738 3.619 5.665C3.619 6.606 3.825 7.31 4.237 7.777C4.649 8.244 5.17 8.477 5.799 8.477C6.034 8.477 6.255 8.439 6.464 8.362C6.135 8.146 5.799 7.978 5.459 7.857L5.915 6.928C6.45 7.111 6.96 7.386 7.447 7.752Z",
+                    ][index],
+                );
+                strokes.setAttribute("fill", "currentColor");
+                strokes.setAttribute("fill-rule", "evenodd");
+                strokes.setAttribute("stroke-linecap", "round");
+                strokes.setAttribute("stroke-linejoin", "round");
+                letter.append(strokes);
+                talentKey.append(letter);
+                talent.append(talentKey, talentValues);
+                talentRow.append(talent);
             });
+
+            const weaponMaximum =
+                plan.currentWeaponRarity && plan.currentWeaponRarity < 3 ? 70 : 90;
+            const weaponGoal = Math.min(plan.weaponLevel, weaponMaximum);
+            const weapon = makeElement("div", "planner-card-weapon");
+            const weaponLevels = makeElement("div", "planner-card-goal");
+            weaponLevels.append(
+                makeElement("span", "", "Weapon level"),
+                !plan.plannedWeapon && !plan.currentWeaponName
+                    ? makeElement("strong", "planner-card-no-weapon", "No weapon")
+                    : makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "),
+            );
+            weapon.append(weaponLevels);
+            if (plan.currentWeaponIcon || plan.currentWeaponName) {
+                const identity = makeElement("div", "planner-card-equipped-weapon");
+                if (plan.currentWeaponIcon) {
+                    const icon = makeElement("img");
+                    icon.src = plan.currentWeaponIcon;
+                    icon.alt = "";
+                    icon.loading = "lazy";
+                    identity.append(icon);
+                }
+                const name = makeElement("span", "", plan.currentWeaponName || "Equipped weapon");
+                name.title = name.textContent;
+                identity.append(name);
+                weapon.append(identity);
+            }
+
+            content.append(goals, talentRow, weapon);
+
+            const actions = makeElement("div", "planner-card-actions");
+
+            const editButton = makeElement("button", "planner-card-edit");
+            editButton.append(makeElement("span", "cyrene-edit"));
+            editButton.type = "button";
+            editButton.title = `Edit ${plan.name}'s plan`;
+            editButton.setAttribute("aria-label", `Edit ${plan.name}'s plan`);
+            editButton.addEventListener("click", () => {
+                openEditor(plan.id);
+            });
+
+            const removeButton = makeElement("button", "planner-card-remove");
+            const closeIcon = makeElement("span", "cyrene-close");
+            closeIcon.setAttribute("aria-hidden", "true");
+            removeButton.append(closeIcon);
+            removeButton.type = "button";
+            removeButton.title = `Remove ${plan.name}'s plan`;
+            removeButton.setAttribute("aria-label", `Remove ${plan.name}'s plan`);
+            removeButton.addEventListener("click", () => {
+                removePlan(plan.id);
+            });
+
+            actions.append(editButton, removeButton);
+            goals.append(actions);
+            card.append(portrait, content);
+
+            if (plan.notes.trim()) {
+                const notes = makeElement("p", "planner-card-notes");
+                notes.textContent = plan.notes;
+
+                content.append(notes);
+            }
+            enableCardReordering(card);
+            plannerGrid.append(card);
+        });
     }
 
     /* =====================================================
@@ -1289,6 +1738,8 @@ function initCharacterPlanner() {
     }
 
     function closeEditor() {
+        if (weaponPicker.open) weaponPicker.close();
+        weaponSyncRequestId++;
         plannerSelectors.close();
         closeTotalPanel(true);
 
@@ -1470,6 +1921,7 @@ function initCharacterPlanner() {
 
     function setCurrentProgressionUnavailable() {
         currentProgression = null;
+        const manualWeapon = editingPlan?.weaponSource === "manual" && editingPlan?.plannedWeapon;
 
         if (currentLevelElement) {
             currentLevelElement.textContent = "Unavailable";
@@ -1479,8 +1931,21 @@ function initCharacterPlanner() {
             currentWeaponNameElement.textContent = "Weapon data unavailable";
         }
 
-        if (currentWeaponLevelElement) {
+        if (manualWeapon) {
+            setCurrentWeaponLevelMode(
+                editingPlan.currentWeaponLevel ?? editingPlan.plannedWeapon.level ?? 1,
+                true,
+                editingPlan.currentWeaponRarity ?? editingPlan.plannedWeapon.rarity ?? 5,
+            );
+        } else if (currentWeaponLevelElement) {
             currentWeaponLevelElement.textContent = "Unavailable";
+            currentWeaponLevelInput.disabled = true;
+            const trigger = plannerSelectors.getTrigger(currentWeaponLevelInput);
+            if (trigger) {
+                trigger.disabled = true;
+                trigger.classList.add("is-readonly");
+                trigger.tabIndex = -1;
+            }
         }
 
         [1, 2, 3].forEach((index) => {
@@ -1526,7 +1991,27 @@ function initCharacterPlanner() {
         return maximum;
     }
 
-    async function loadCurrentProgression(plan, requestId) {
+    function setCurrentWeaponLevelMode(level, editable, rarity = 5) {
+        const maximum = Number(rarity) < 3 ? 70 : 90;
+        const target = normaliseNumber(level, 1, 1, maximum);
+
+        setLevelLimits(currentWeaponLevelInput, 1, maximum);
+        currentWeaponLevelInput.value = String(target);
+        currentWeaponLevelInput.disabled = !editable;
+
+        const trigger = plannerSelectors.getTrigger(currentWeaponLevelInput);
+        if (trigger) {
+            trigger.disabled = !editable;
+            trigger.classList.toggle("is-readonly", !editable);
+            trigger.setAttribute("aria-disabled", String(!editable));
+            trigger.tabIndex = editable ? 0 : -1;
+        }
+
+        plannerSelectors.sync();
+        return target;
+    }
+
+    async function loadCurrentProgression(plan, requestId, syncedCharacter = null) {
         if (!accountId) {
             setCurrentProgressionUnavailable();
             setGoalCostsMessage("Link an account to calculate costs from current levels.");
@@ -1538,18 +2023,21 @@ function initCharacterPlanner() {
         try {
             const query = `?account_id=${encodeURIComponent(accountId)}`;
 
-            const response = isUnowned(plan)
-                ? {
-                      ok: true,
-                      json: async () => ({ data: { characters: [unownedCharacter(plan)] } }),
-                  }
-                : await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase${query}`, {
-                      method: "GET",
-                      credentials: "same-origin",
-                      headers: {
-                          Accept: "application/json",
-                      },
-                  });
+            const response = syncedCharacter
+                ? { ok: true, json: async () => ({ data: { characters: [syncedCharacter] } }) }
+                : isUnowned(plan)
+                  ? {
+                        ok: true,
+                        json: async () => ({ data: { characters: [unownedCharacter(plan)] } }),
+                    }
+                  : await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase${query}`, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            Accept: "application/json",
+                            "X-Cyrene-Loading": "materials",
+                        },
+                    });
 
             let payload;
 
@@ -1582,13 +2070,14 @@ function initCharacterPlanner() {
                     character.level != null ? `Lv. ${character.level}` : "Unavailable";
             }
 
-            const weapon = character.weapon;
+            const weapon = plannedWeapon(plan, character);
+            if (plan.weaponSource !== "manual") plan.plannedWeapon = weapon;
             const weaponComparison = editor.querySelector(
                 ".planner-weapon-overview .planner-level-comparison",
             );
-            if (weaponComparison) weaponComparison.hidden = isUnowned(plan) && !weapon;
+            if (weaponComparison) weaponComparison.hidden = !weapon;
             const weaponOverview = editor.querySelector(".planner-weapon-overview");
-            if (weaponOverview) weaponOverview.hidden = isUnowned(plan) && !weapon;
+            if (weaponOverview) weaponOverview.hidden = !weapon;
             const weaponRarity = Number(weapon?.rarity);
             const weaponIdentity = currentWeaponIcon?.closest(".planner-weapon-identity");
 
@@ -1597,8 +2086,7 @@ function initCharacterPlanner() {
             }
 
             if (currentWeaponNameElement) {
-                currentWeaponNameElement.textContent =
-                    weapon?.name || (isUnowned(plan) ? "No weapon" : "Weapon data unavailable");
+                currentWeaponNameElement.textContent = weapon?.name || "No weapon";
             }
 
             if (currentWeaponIcon) {
@@ -1613,13 +2101,19 @@ function initCharacterPlanner() {
                 }
             }
 
-            if (currentWeaponLevelElement) {
-                currentWeaponLevelElement.textContent =
-                    weapon?.level != null
-                        ? `Lv. ${weapon.level}`
-                        : isUnowned(plan)
-                          ? "No weapon"
-                          : "Unavailable";
+            const manualWeapon = plan.weaponSource === "manual";
+            if (weapon) {
+                setCurrentWeaponLevelMode(weapon.level, manualWeapon, weaponRarity);
+            } else {
+                currentWeaponLevelInput.disabled = true;
+                const trigger = plannerSelectors.getTrigger(currentWeaponLevelInput);
+                if (trigger) {
+                    trigger.disabled = true;
+                    trigger.classList.add("is-readonly");
+                    trigger.setAttribute("aria-disabled", "true");
+                    trigger.tabIndex = -1;
+                }
+                if (currentWeaponLevelElement) currentWeaponLevelElement.textContent = "No weapon";
             }
 
             const talents = getCharacterCombatTalents(character);
@@ -1738,6 +2232,7 @@ function initCharacterPlanner() {
     function setGoalCostsMessage(message, loading = false) {
         craftingUpdaters = [];
         const costElements = Array.from(form.querySelectorAll("[data-planner-cost]"));
+        if (editor.classList.contains("is-total-open")) costElements.push(totalContent);
 
         costElements.forEach((element) => {
             element.setAttribute("aria-busy", String(loading));
@@ -1771,7 +2266,12 @@ function initCharacterPlanner() {
                     "Try again",
                 );
                 retry.type = "button";
-                retry.addEventListener("click", updateGoalCosts);
+                retry.addEventListener("click", () => {
+                    goalCostCache.clear();
+                    if (!currentProgression && editingPlan)
+                        loadCurrentProgression(editingPlan, ++progressionRequestId);
+                    else updateGoalCosts();
+                });
                 element.append(retry);
             }
             return;
@@ -1813,81 +2313,20 @@ function initCharacterPlanner() {
         grid.setAttribute("role", "list");
         element.append(grid);
 
-        const requirements = new Map(
-            cost.items.map((item) => [String(item.id), Number(item.amount)]),
-        );
-
         function inventoryAmount(materialId) {
             const inventoryItem = inventory?.get(String(materialId));
             return Number(inventoryItem?.amount) || 0;
         }
-
         function craftingPlan() {
-            const families = new Map();
-
-            cost.items.forEach((item) => {
-                if (!Array.isArray(item.crafting_lower)) {
-                    return;
-                }
-
-                const family = [
-                    ...item.crafting_lower,
-                    {
-                        id: item.id,
-                        name: item.name,
-                    },
-                ];
-                const familyId = String(family[0]?.id ?? item.id);
-                const existing = families.get(familyId);
-
-                if (!existing || family.length > existing.length) {
-                    families.set(familyId, family);
-                }
-            });
-
-            const plan = new Map();
-
-            families.forEach((family) => {
-                const craftAmounts = Array(family.length).fill(0);
-
-                for (let index = family.length - 1; index > 0; index--) {
-                    const materialId = String(family[index].id);
-                    const required = requirements.get(materialId) || 0;
-                    const consumedAbove =
-                        index < family.length - 1 ? craftAmounts[index + 1] * 3 : 0;
-                    craftAmounts[index] = Math.max(
-                        0,
-                        required + consumedAbove - inventoryAmount(materialId),
-                    );
-                }
-
-                let craftedFromLower = 0;
-
-                family.forEach((material, index) => {
-                    const materialId = String(material.id);
-                    const before = inventoryAmount(materialId);
-                    const available = before + craftedFromLower;
-                    const required = requirements.get(materialId) || 0;
-                    let craftedUpward = 0;
-
-                    if (index < family.length - 1) {
-                        const desired = craftAmounts[index + 1];
-                        const craftable = Math.floor(Math.max(0, available - required) / 3);
-                        craftedUpward = Math.min(desired, craftable);
-                    }
-
-                    const after = available - craftedUpward * 3;
-                    plan.set(materialId, {
-                        before,
-                        after,
-                        enough: after >= required,
-                        enoughBeforeCrafting: before >= required,
-                    });
-                    craftedFromLower = craftedUpward;
-                });
-            });
-
-            return plan;
+            return window.CyrenePlannerMaterials.craftingPlan(
+                cost.items,
+                new Map(
+                    Array.from(inventory || []).map(([id, item]) => [
+                        String(id),
+                        Number(item.amount) || 0,
+                    ]),
+                ),
+            );
         }
 
         cost.items.forEach((item) => {
@@ -1951,7 +2390,8 @@ function initCharacterPlanner() {
                 maximumFractionDigits: 1,
             });
             const amount = compactFormatter.format(requiredAmount);
-            const quantity = makeElement("strong", "planner-cost-quantity", `\u00d7${amount}`);
+            const quantity = makeElement("strong", "planner-cost-quantity");
+            quantity.append(makeElement("span", "planner-cost-required", `\u00d7${amount}`));
             let remainingElement = null;
 
             if (inventory instanceof Map) {
@@ -2145,26 +2585,7 @@ function initCharacterPlanner() {
                 `/api/characters/${encodeURIComponent(plan.id)}` +
                 `/planner-costs?${parameters.toString()}`;
             const inventoryRequest = loadInventory();
-            let payload = goalCostCache.get(requestUrl);
-
-            if (!payload) {
-                const response = await fetch(requestUrl, {
-                    method: "GET",
-                    credentials: "same-origin",
-                    headers: { Accept: "application/json" },
-                });
-
-                payload = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(payload?.error || "Couldn't calculate goal costs.");
-                }
-
-                goalCostCache.set(requestUrl, payload);
-                if (goalCostCache.size > 20) {
-                    goalCostCache.delete(goalCostCache.keys().next().value);
-                }
-            }
+            const payload = await loadGoalCostPayload(requestUrl);
 
             if (requestId !== costRequestId || editor.hidden || String(plan.id) !== editingId) {
                 return;
@@ -2175,9 +2596,7 @@ function initCharacterPlanner() {
                 form.querySelectorAll("[data-planner-cost]").forEach((element) => {
                     renderGoalCost(
                         element,
-                        element.dataset.plannerCost === "weapon" &&
-                            isUnowned(plan) &&
-                            !currentProgression.weapon
+                        element.dataset.plannerCost === "weapon" && !currentProgression.weapon
                             ? {
                                   status: "not_planned",
                                   message: "Choose a weapon to plan its upgrades.",
@@ -2186,6 +2605,9 @@ function initCharacterPlanner() {
                         inventory,
                     );
                 });
+                if (editor.classList.contains("is-total-open")) {
+                    renderGoalCost(totalContent, combinePlanCosts(payload.costs), inventory);
+                }
             };
 
             renderCosts(loadedInventory);
@@ -2212,6 +2634,12 @@ function initCharacterPlanner() {
             form.querySelectorAll("[data-planner-cost]").forEach((element) => {
                 renderGoalCost(element, { status: "unavailable", message: error.message });
             });
+            if (editor.classList.contains("is-total-open")) {
+                renderGoalCost(totalContent, {
+                    status: "unavailable",
+                    message: error.message || "Couldn't calculate the total. Please try again.",
+                });
+            }
         }
     }
 
@@ -2228,6 +2656,8 @@ function initCharacterPlanner() {
             return;
         }
 
+        plan.weaponSource ||= isUnowned(plan) || plan.plannedWeapon ? "manual" : "hoyolab";
+        plan.plannedWeapon ??= null;
         editingId = String(plan.id);
         costRequestId++;
 
@@ -2237,16 +2667,11 @@ function initCharacterPlanner() {
             `${plan.element || "Unknown element"} · ` + `${plan.rarity || "?"}-star character`;
 
         editorIcon?.setAttribute("data-rarity", String(plan.rarity));
-        if (weaponChoice) {
-            weaponChoice.closest("label").hidden = !isUnowned(plan);
-            weaponChoice.replaceChildren(new Option("No weapon", ""));
-            if (plan.plannedWeapon)
-                weaponChoice.add(
-                    new Option(plan.plannedWeapon.name, String(plan.plannedWeapon.id)),
-                );
-            weaponChoice.value = plan.plannedWeapon ? String(plan.plannedWeapon.id) : "";
-            if (isUnowned(plan)) loadWeaponChoices(plan);
-        }
+        weaponSyncRequestId++;
+        syncWeaponButton.hidden = isUnowned(plan);
+        syncWeaponButton.disabled = false;
+        syncWeaponButton.textContent = "Sync from HoYoLAB";
+        weaponStatus.textContent = "";
         if (editorIcon) {
             editorIcon.src = plan.icon;
             editorIcon.alt = plan.name;
@@ -2260,6 +2685,11 @@ function initCharacterPlanner() {
 
         setLevelLimits(levelInput, plan.currentLevel ?? 1, 90);
         setWeaponLevelLimits(plan.currentWeaponRarity ?? 5, plan.currentWeaponLevel ?? 1);
+        setCurrentWeaponLevelMode(
+            plan.currentWeaponLevel ?? plan.plannedWeapon?.level ?? 1,
+            plan.weaponSource === "manual" || isUnowned(plan),
+            plan.currentWeaponRarity ?? plan.plannedWeapon?.rarity ?? 5,
+        );
 
         setTalentLimits(
             [1, 1, 1],
@@ -2318,6 +2748,23 @@ function initCharacterPlanner() {
 
     levelInput.addEventListener("change", updateGoalCosts);
     weaponLevelInput.addEventListener("change", updateGoalCosts);
+    currentWeaponLevelInput.addEventListener("change", () => {
+        const plan = editingPlan;
+        if (!plan || plan.weaponSource !== "manual") return;
+
+        const current = Number(currentWeaponLevelInput.value) || 1;
+        plan.currentWeaponLevel = current;
+        if (plan.plannedWeapon) {
+            plan.plannedWeapon.level = current;
+            plan.plannedWeapon.ascension = current === 1 ? 0 : plan.plannedWeapon.ascension;
+        }
+
+        setWeaponLevelLimits(plan.currentWeaponRarity ?? plan.plannedWeapon?.rarity ?? 5, current);
+        if (Number(weaponLevelInput.value) < current) weaponLevelInput.value = String(current);
+        plannerSelectors.sync();
+        if (currentProgression?.weapon) currentProgression.weapon.level = current;
+        updateGoalCosts();
+    });
     form.querySelectorAll("[data-planner-talent]").forEach((input) => {
         input.addEventListener("change", updateGoalCosts);
     });
@@ -2381,7 +2828,17 @@ function initCharacterPlanner() {
     });
 
     document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && cardDrag) {
+            finishCardDrag();
+            return;
+        }
         if (event.key !== "Escape") {
+            return;
+        }
+
+        if (weaponPicker.open) {
+            event.preventDefault();
+            closeWeaponPicker();
             return;
         }
 
@@ -2410,19 +2867,33 @@ function initCharacterPlanner() {
         let changed = false;
         await Promise.all(
             plans.map(async (plan) => {
-                if (plan.currentWeaponIcon || !accountId || isUnowned(plan)) return;
+                if (
+                    plan.weaponSource === "manual" ||
+                    (plan.plannedWeapon && !plan.weaponSource) ||
+                    !accountId ||
+                    isUnowned(plan)
+                )
+                    return;
                 try {
                     const response = await fetch(
                         `/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`,
-                        { credentials: "same-origin" },
+                        { credentials: "same-origin", headers: { "X-Cyrene-Background": "1" } },
                     );
                     if (!response.ok) return;
                     const data = await response.json();
                     const character = Array.isArray(data.data)
                         ? data.data[0]
                         : data.data?.characters?.[0];
-                    const weapon = character?.weapon;
+                    const weapon = plannedWeapon({ ...plan, weaponSource: "hoyolab" }, character);
                     if (!weapon || getPlan(plan.id) !== plan) return;
+                    plan.weaponSource = "hoyolab";
+                    plan.plannedWeapon = weapon;
+                    plan.currentWeaponLevel = Number(weapon.level) || 1;
+                    plan.currentWeaponRarity = Number(weapon.rarity) || 5;
+                    plan.weaponLevel = Math.max(
+                        Number(plan.weaponLevel) || 1,
+                        plan.currentWeaponLevel,
+                    );
                     plan.currentWeaponName = weapon.name || "";
                     plan.currentWeaponIcon = weapon.icon || "";
                     changed = true;

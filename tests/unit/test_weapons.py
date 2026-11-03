@@ -8,7 +8,12 @@ from fastapi import HTTPException
 
 from utils.hoyolab import database
 from utils.web import app as web
-from utils.web.weapons import owned_weapon_rows, validate_manual_weapon, weapon_tag
+from utils.web.weapons import (
+    catalogue_weapon_rows,
+    owned_weapon_rows,
+    validate_manual_weapon,
+    weapon_tag,
+)
 
 
 class WeaponsTests(unittest.IsolatedAsyncioTestCase):
@@ -26,6 +31,55 @@ class WeaponsTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(normalised["plannedWeapon"]["name"], "Dull Blade")
         self.assertEqual(web._normalise_character_plan(normalised), normalised)
         self.assertIsNone(web._normalise_character_plan({**plan, "plannedWeapon": {}}))
+
+    def test_planner_preserves_synced_weapon_level_and_ascension(self):
+        weapon = {
+            "id": 11401,
+            "name": "Favonius Sword",
+            "type": "Sword",
+            "rarity": 4,
+            "icon": "https://example.com/sword.webp",
+            "level": 70,
+            "refinement": 3,
+            "ascension": 4,
+        }
+        plan = {"id": 10000002, "level": 40, "weaponLevel": 90, "plannedWeapon": weapon}
+        normalised = web._normalise_character_plan(plan)
+        self.assertEqual(normalised["plannedWeapon"], weapon)
+        self.assertEqual(web._normalise_character_plan(normalised), normalised)
+        self.assertIsNone(
+            web._normalise_character_plan({**plan, "plannedWeapon": {**weapon, "ascension": 8}})
+        )
+
+    def test_planner_keeps_the_equipped_or_manual_weapon_source(self):
+        base = {"id": 10000002, "level": 40, "weaponLevel": 90}
+        self.assertEqual(web._normalise_character_plan(base)["weaponSource"], "hoyolab")
+        manual = web._normalise_character_plan(
+            {**base, "weaponSource": "manual", "plannedWeapon": None}
+        )
+        self.assertEqual(manual["weaponSource"], "manual")
+        self.assertEqual(web._normalise_character_plan(manual), manual)
+
+    def test_announced_72_weapon_supplements_the_live_catalogue_without_duplicates(self):
+        rows = catalogue_weapon_rows([])
+        weapon = next(row for row in rows if row["id"] == 14525)
+        self.assertEqual(weapon["name"], "Starsealed Edict")
+        self.assertEqual(weapon["type"], "Catalyst")
+        self.assertEqual(weapon["rarity"], 5)
+        self.assertEqual(weapon["release_version"], "7.2")
+        self.assertEqual(weapon["tag"]["label"], "Mitya's Signature")
+        live = Item(
+            id=14525,
+            name="Starsealed Edict",
+            type="Catalyst",
+            rarity=5,
+            max_level=90,
+            icon="https://example.com/live.png",
+        )
+        merged = catalogue_weapon_rows([live])
+        matches = [row for row in merged if row["id"] == 14525]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["icon"], live.icon)
 
     def test_tags_cover_signature_and_acquisition_examples(self):
         for weapon_id, expected in {
@@ -148,7 +202,7 @@ class WeaponsTests(unittest.IsolatedAsyncioTestCase):
             patch.object(web, "get_account_client", AsyncMock(return_value=client)),
         ):
             result = await web.weapons_data("session", 2)
-        self.assertEqual(result["catalogue"][0]["name"], "Sword")
+        self.assertTrue(any(row["name"] == "Sword" for row in result["catalogue"]))
         self.assertEqual(result["owned"], [])
         self.assertIn("owned_error", result)
         self.assertNotIn("PRIVATE_TOKEN", str(result))

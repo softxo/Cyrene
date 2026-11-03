@@ -1,9 +1,34 @@
-/** Shared notifications live outside SPA panels so navigation cannot remove them. */
+const toastModalHosts = new WeakSet();
+function positionToastRegion(region) {
+    const modal = document.activeElement?.closest("dialog[open]") ||
+        Array.from(document.querySelectorAll("dialog[open]")).at(-1);
+    const host = modal || document.body;
+    if (region.parentElement !== host) {
+        if (region.matches(":popover-open"))
+            region.hidePopover();
+        host.append(region);
+    }
+    if (modal && !toastModalHosts.has(modal)) {
+        toastModalHosts.add(modal);
+        modal.addEventListener("close", () => {
+            const notifications = modal.querySelector("[data-cyrene-toasts]");
+            if (notifications)
+                positionToastRegion(notifications);
+        });
+    }
+    if (typeof region.showPopover === "function" && region.childElementCount) {
+        if (region.matches(":popover-open"))
+            region.hidePopover();
+        region.showPopover();
+    }
+}
+/** Shared notifications survive navigation and stay interactive above native modals. */
 export function showCyreneToast(message, kind = "success") {
     let region = document.querySelector("[data-cyrene-toasts]");
     if (!region) {
         region = document.createElement("div");
         region.className = "cyrene-toasts";
+        region.setAttribute("popover", "manual");
         region.dataset.cyreneToasts = "";
         region.setAttribute("aria-label", "Notifications");
         region.setAttribute("aria-live", "polite");
@@ -74,6 +99,7 @@ export function showCyreneToast(message, kind = "success") {
         visible[0].querySelector("button")?.click();
     }
     region.append(toast);
+    positionToastRegion(region);
     resume();
 }
 window.showCyreneToast = showCyreneToast;

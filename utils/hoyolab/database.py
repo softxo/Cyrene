@@ -11,6 +11,7 @@ from . import (
     character_store,
     events_store,
     reminder_store,
+    weapon_plan_store,
     wish_store,
 )
 from .auth import HoYoLABCredentials
@@ -102,6 +103,7 @@ async def initialise_database() -> None:
             "CREATE INDEX IF NOT EXISTS idx_manual_weapons_uid ON manual_weapons(genshin_uid)"
         )
         await _initialise_shared_weapon_scans(connection)
+        await weapon_plan_store.migrate(connection)
 
         # =========================================
         # ACCOUNTS

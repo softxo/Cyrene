@@ -7,7 +7,7 @@ function initSettings() {
     initialiseAccountLinking();
     initialiseAccountManagement();
     const unreleasedToggle = document.getElementById("show-unreleased-toggle");
-    const applyUnreleased = enabled => {
+    const applyUnreleased = (enabled) => {
         document.documentElement.dataset.showUnreleased = String(enabled);
         unreleasedToggle?.setAttribute("aria-pressed", String(enabled));
         unreleasedToggle?.classList.toggle("active", enabled);

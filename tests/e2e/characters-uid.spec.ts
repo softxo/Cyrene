@@ -13,7 +13,7 @@ import json,sys
 from types import SimpleNamespace
 from jinja2 import Environment,ChoiceLoader,DictLoader,FileSystemLoader
 data=json.load(sys.stdin)
-base='''<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/static/build/css/global.css"><link rel="stylesheet" href="/static/build/css/characters.css"></head><body>{% block content %}{% endblock %}<script src="/static/build/browser/pages/characters/characters-planner.js"></script><script>initCharacterPlanner()</script></body></html>'''
+base='''<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/static/build/css/global.css"><link rel="stylesheet" href="/static/build/css/characters.css"></head><body>{% block content %}{% endblock %}<script src="/static/build/browser/core/planner-materials.js"></script><script src="/static/build/browser/pages/characters/characters-planner.js"></script><script>initCharacterPlanner()</script></body></html>'''
 env=Environment(loader=ChoiceLoader([DictLoader({'base.html':base}),FileSystemLoader('website/templates')]))
 account={'id':data['account'],'genshin_uid':data['uid'],'nickname':'UID test'}
 html=env.get_template('characters.html').render(request=SimpleNamespace(query_params={'tab':'planner'}),accounts=[account],selected_account=account,planner_user_id=data['user'],characters=[])

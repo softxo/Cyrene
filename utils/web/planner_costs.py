@@ -254,8 +254,13 @@ async def _result(
         images = material.get("images") or {}
         filename = images.get("filename_icon")
 
+        remote_icon = images.get("icon")
         icon = images.get("local_icon") or (
-            f"https://static.nanoka.cc/assets/gi/{filename}.webp" if filename else None
+            remote_icon
+            if isinstance(remote_icon, str) and remote_icon.startswith("https://")
+            else f"https://static.nanoka.cc/assets/gi/{filename}.webp"
+            if filename
+            else None
         )
 
         decorated_item = {
@@ -453,14 +458,14 @@ async def _weapon_cost(db, name, start, end, phase):
         prefix="ascend",
         positions={
             1: 2,  # Weapon ascension materials
-            2: 3,  # Common enemy drops
-            3: 3,  # Additional enemy drops
+            2: 3,  # Elite enemy drops
+            3: 4,  # Common enemy drops
         },
         start=1,
         end=6,
     )
 
-    return await _result(
+    result = await _result(
         db,
         items,
         category="weapon",
@@ -473,6 +478,10 @@ async def _weapon_cost(db, name, start, end, phase):
             end=6,
         ),
     )
+
+    if data.get("preview"):
+        result["preview"] = True
+    return result
 
 
 async def calculate_planner_costs(

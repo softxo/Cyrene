@@ -1,4 +1,44 @@
 /* Shared directional icon: one SVG shape, inheriting the surrounding colour. */
+.cyrene-plus,
+.cyrene-edit,
+.cyrene-sparkle,
+.cyrene-rarity-star {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: 0 0 1em;
+    background: currentColor;
+    vertical-align: middle;
+    mask: var(--cyrene-icon) center / contain no-repeat;
+}
+.cyrene-rarity-star[data-rarity="5"] {
+    color: #e7b65b;
+}
+.cyrene-rarity-star[data-rarity="4"] {
+    color: #b788e2;
+}
+.enka-rarity-star.cyrene-rarity-star {
+    color: #e7b65b;
+    width: 14px;
+    height: 14px;
+}
+.characters-icon-button > .cyrene-rarity-star {
+    width: 19px;
+    height: 19px;
+    flex-basis: 19px;
+}
+.cyrene-plus {
+    --cyrene-icon: url("/static/images/ui/plus.svg");
+}
+.cyrene-edit {
+    --cyrene-icon: url("/static/images/ui/edit.svg");
+}
+.cyrene-sparkle {
+    --cyrene-icon: url("/static/images/ui/sparkle.svg");
+}
+.cyrene-rarity-star {
+    --cyrene-icon: url("/static/images/characters/Rarity_5.webp");
+}
 .cyrene-arrow {
     display: inline-block;
     width: var(--arrow-size, 1em);
@@ -20,7 +60,9 @@
     mask: url("/static/images/ui/check.svg") center / contain no-repeat;
     -webkit-mask: url("/static/images/ui/check.svg") center / contain no-repeat;
 }
-.cyrene-arrow--left { rotate: 180deg; }
+.cyrene-arrow--left {
+    rotate: 180deg;
+}
 
 .cyrene-close {
     display: inline-block;
@@ -98,9 +140,11 @@ dialog:not([open])::backdrop {
     }
 }
 @media (prefers-reduced-motion: reduce) {
-    :root dialog::backdrop { transition: none !important; animation: none !important; }
-    :root
-        :is(dialog, [aria-modal="true"], [data-modal-shell], [data-modal-panel]) {
+    :root dialog::backdrop {
+        transition: none !important;
+        animation: none !important;
+    }
+    :root :is(dialog, [aria-modal="true"], [data-modal-shell], [data-modal-panel]) {
         transition: none !important;
         animation: none !important;
     }
@@ -162,7 +206,9 @@ dialog:not([open])::backdrop {
 }
 
 /* Overlay shells own the backdrop fade; prevent older per-page entrances stacking. */
-:root [data-modal-shell] > [class$="-backdrop"] { animation: none; }
+:root [data-modal-shell] > [class$="-backdrop"] {
+    animation: none;
+}
 
 /* Interpolate the blur itself, rather than switching it on behind a fading panel. */
 :root dialog::backdrop,
@@ -170,8 +216,12 @@ dialog:not([open])::backdrop {
     opacity: 1;
     backdrop-filter: blur(var(--modal-backdrop-blur, 6px));
     -webkit-backdrop-filter: blur(var(--modal-backdrop-blur, 6px));
-    transition: opacity 220ms ease-out, backdrop-filter 220ms ease-out,
-        -webkit-backdrop-filter 220ms ease-out, display 220ms allow-discrete, overlay 220ms allow-discrete;
+    transition:
+        opacity 220ms ease-out,
+        backdrop-filter 220ms ease-out,
+        -webkit-backdrop-filter 220ms ease-out,
+        display 220ms allow-discrete,
+        overlay 220ms allow-discrete;
 }
 :root dialog:not([open])::backdrop,
 :root [data-modal-shell][hidden] > [class$="-backdrop"] {
@@ -191,9 +241,18 @@ dialog:not([open])::backdrop {
 }
 @media (prefers-reduced-motion: reduce) {
     :root dialog::backdrop,
-    :root [data-modal-shell] > [class$="-backdrop"] { transition: none !important; }
+    :root [data-modal-shell] > [class$="-backdrop"] {
+        transition: none !important;
+    }
 }
 .cyrene-toasts {
+    top: auto;
+    left: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
     position: fixed;
     z-index: 11000;
     right: max(20px, env(safe-area-inset-right));
@@ -348,7 +407,8 @@ dialog:not([open])::backdrop {
 .cyrene-button:disabled {
     cursor: not-allowed;
 }
-.cyrene-button > svg {
+.cyrene-button > svg,
+.cyrene-button > .cyrene-plus {
     display: block;
     flex: none;
     width: 20px;
@@ -2483,12 +2543,24 @@ body:has(#navigation-loading-status)::before {
     color: var(--error);
 }
 
-.navigation-loading-spark { width: 18px; height: 18px; flex: 0 0 18px; }
+.navigation-loading-spark {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
 
 /* Hidden before first paint, including when navigating into a fresh SPA panel. */
-html:not([data-show-unreleased="true"]) [data-unreleased="true"] { display: none !important; }
+html:not([data-show-unreleased="true"]) [data-unreleased="true"] {
+    display: none !important;
+}
 .cyrene-unreleased-badge {
-    display: inline-block; padding: 3px 7px; border: 1px solid var(--accent-border);
-    border-radius: 7px; background: var(--surface); color: var(--accent);
-    font-size: 0.65rem; font-weight: 700; line-height: 1.3;
+    display: inline-block;
+    padding: 3px 7px;
+    border: 1px solid var(--accent-border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.3;
 }

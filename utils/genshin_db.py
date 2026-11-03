@@ -91,7 +91,7 @@ class GenshinDB:
 
         if (
             preview
-            and folder in {"characters", "talents"}
+            and folder in {"characters", "talents", "weapons"}
             and not matches_preview_materials(data, preview)
         ):
             self.using_preview = True

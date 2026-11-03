@@ -1115,7 +1115,6 @@
     }
 }
 
-
 .changelog-tool-label {
     color: var(--text-muted);
     font-size: 13px;
@@ -1272,7 +1271,10 @@
     box-shadow: none;
 }
 
-.changelog-dialog { user-select: none; -webkit-user-select: none; }
+.changelog-dialog {
+    user-select: none;
+    -webkit-user-select: none;
+}
 .changelog-content-editor,
 .changelog-dialog input:not([type="color"]):not([type="range"]):not([type="checkbox"]),
 .changelog-preview,

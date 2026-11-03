@@ -17,7 +17,7 @@ from .errors import (
     HoYoLABVerificationError,
 )
 
-WEB_BASE_URL = "https://cyrene.apps.bot-hosting.cloud"
+WEB_BASE_URL = "https://cyrene-teyvat.xyz"
 
 
 async def login_with_password(
@@ -35,9 +35,7 @@ async def login_with_password(
             mmt=mmt,
         )
 
-        challenge_url = (
-            f"{WEB_BASE_URL}/challenge/{session.token}"
-        )
+        challenge_url = f"{WEB_BASE_URL}/challenge/{session.token}"
 
         print("===== CAPTCHA CHALLENGE CREATED =====")
         print(f"User ID: {user_id}")

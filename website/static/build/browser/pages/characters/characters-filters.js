@@ -6,10 +6,7 @@ function initCharactersFilters() {
     const page = document.querySelector(".characters-page");
     const toolbar = page?.querySelector("[data-character-filters]");
     const grid = page?.querySelector(".characters-grid");
-    if (!page ||
-        !toolbar ||
-        !grid ||
-        toolbar.dataset.initialised === "true") {
+    if (!page || !toolbar || !grid || toolbar.dataset.initialised === "true") {
         return;
     }
     const searchInput = toolbar.querySelector("[data-character-search]");
@@ -20,13 +17,10 @@ function initCharactersFilters() {
     const ownershipSelect = toolbar.querySelector("[data-character-ownership]");
     const resetButton = toolbar.querySelector("[data-character-reset]");
     const countElement = page.querySelector("[data-character-count]");
-    const filterDropdowns = [
-        sortSelect,
-        ownershipSelect
-    ];
+    const filterDropdowns = [sortSelect, ownershipSelect];
     const cards = Array.from(grid.querySelectorAll(".character-card"));
     if (!searchInput ||
-        filterDropdowns.some(dropdown => !dropdown) ||
+        filterDropdowns.some((dropdown) => !dropdown) ||
         !rarityFilter ||
         !elementFilter ||
         !weaponFilter ||
@@ -43,7 +37,7 @@ function initCharactersFilters() {
         button?.setAttribute("aria-expanded", "false");
     }
     function closeAllDropdowns(except = null) {
-        filterDropdowns.forEach(dropdown => {
+        filterDropdowns.forEach((dropdown) => {
             if (dropdown !== except) {
                 closeDropdown(dropdown);
             }
@@ -54,19 +48,18 @@ function initCharactersFilters() {
     }
     function setDropdownValue(dropdown, value) {
         const options = dropdown.querySelectorAll(".custom-select-option");
-        const selectedOption = Array.from(options).find(option => option.dataset.value === value);
+        const selectedOption = Array.from(options).find((option) => option.dataset.value === value);
         if (!selectedOption) {
             return;
         }
-        options.forEach(option => {
+        options.forEach((option) => {
             const isSelected = option === selectedOption;
             option.classList.toggle("selected", isSelected);
             option.setAttribute("aria-selected", String(isSelected));
         });
         const valueElement = dropdown.querySelector(".custom-select-value");
         if (valueElement) {
-            valueElement.textContent =
-                selectedOption.textContent.trim();
+            valueElement.textContent = selectedOption.textContent.trim();
         }
     }
     function initialiseDropdown(dropdown) {
@@ -76,7 +69,7 @@ function initCharactersFilters() {
         if (!button || !menu || !options.length) {
             return;
         }
-        button.addEventListener("click", event => {
+        button.addEventListener("click", (event) => {
             event.preventDefault();
             const isOpen = dropdown.classList.contains("open");
             closeAllDropdowns(dropdown);
@@ -88,7 +81,7 @@ function initCharactersFilters() {
                 button.setAttribute("aria-expanded", "true");
             }
         });
-        options.forEach(option => {
+        options.forEach((option) => {
             option.addEventListener("click", () => {
                 const value = option.dataset.value;
                 if (value === undefined) {
@@ -99,13 +92,12 @@ function initCharactersFilters() {
                 applyFilters();
             });
         });
-        button.addEventListener("keydown", event => {
+        button.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 closeDropdown(dropdown);
                 button.focus();
             }
-            if (event.key === "ArrowDown" &&
-                !dropdown.classList.contains("open")) {
+            if (event.key === "ArrowDown" && !dropdown.classList.contains("open")) {
                 event.preventDefault();
                 closeAllDropdowns(dropdown);
                 dropdown.classList.add("open");
@@ -114,7 +106,7 @@ function initCharactersFilters() {
             }
         });
         options.forEach((option, index) => {
-            option.addEventListener("keydown", event => {
+            option.addEventListener("keydown", (event) => {
                 let nextIndex;
                 if (event.key === "ArrowDown") {
                     nextIndex = (index + 1) % options.length;
@@ -148,7 +140,7 @@ function initCharactersFilters() {
     }
     function setButtonFilterValue(container, value) {
         const buttons = container.querySelectorAll(".characters-icon-button");
-        buttons.forEach(button => {
+        buttons.forEach((button) => {
             const selected = button.dataset.value === value;
             button.classList.toggle("selected", selected);
             button.setAttribute("aria-pressed", String(selected));
@@ -156,7 +148,7 @@ function initCharactersFilters() {
     }
     function initialiseButtonFilter(container) {
         const buttons = container.querySelectorAll(".characters-icon-button");
-        buttons.forEach(button => {
+        buttons.forEach((button) => {
             button.addEventListener("click", () => {
                 setButtonFilterValue(container, button.dataset.value);
                 applyFilters();
@@ -167,8 +159,8 @@ function initCharactersFilters() {
     initialiseButtonFilter(elementFilter);
     initialiseButtonFilter(weaponFilter);
     /* Close dropdowns when clicking elsewhere. */
-    document.addEventListener("click", event => {
-        if (!filterDropdowns.some(dropdown => dropdown.contains(event.target))) {
+    document.addEventListener("click", (event) => {
+        if (!filterDropdowns.some((dropdown) => dropdown.contains(event.target))) {
             closeAllDropdowns();
         }
     });
@@ -185,7 +177,8 @@ function initCharactersFilters() {
                 return aOwned ? -1 : 1;
             }
             if (!aOwned && (a.dataset.unreleased === "true" || b.dataset.unreleased === "true")) {
-                const previewOrder = Number(b.dataset.unreleased === "true") - Number(a.dataset.unreleased === "true") ||
+                const previewOrder = Number(b.dataset.unreleased === "true") -
+                    Number(a.dataset.unreleased === "true") ||
                     (b.dataset.releaseDate || "").localeCompare(a.dataset.releaseDate || "");
                 if (previewOrder)
                     return previewOrder;
@@ -198,22 +191,16 @@ function initCharactersFilters() {
             const bName = b.dataset.name || "";
             if (sortBy === "name") {
                 // Alphabetical order, with rarity as a tiebreaker.
-                return (aName.localeCompare(bName) ||
-                    bRarity - aRarity ||
-                    bLevel - aLevel);
+                return aName.localeCompare(bName) || bRarity - aRarity || bLevel - aLevel;
             }
             if (sortBy === "rarity") {
                 // Rarity first, then level, then alphabetical order.
-                return (bRarity - aRarity ||
-                    bLevel - aLevel ||
-                    aName.localeCompare(bName));
+                return bRarity - aRarity || bLevel - aLevel || aName.localeCompare(bName);
             }
             // Default: Level first, rarity as the tiebreaker.
-            return (bLevel - aLevel ||
-                bRarity - aRarity ||
-                aName.localeCompare(bName));
+            return bLevel - aLevel || bRarity - aRarity || aName.localeCompare(bName);
         });
-        visibleCards.forEach(card => grid.appendChild(card));
+        visibleCards.forEach((card) => grid.appendChild(card));
     }
     /* =====================================================
        APPLY FILTERS
@@ -225,7 +212,7 @@ function initCharactersFilters() {
         const weapon = getButtonFilterValue(weaponFilter);
         const ownership = getDropdownValue(ownershipSelect);
         const visibleCards = [];
-        cards.forEach(card => {
+        cards.forEach((card) => {
             const name = card.dataset.name || "";
             const cardRarity = card.dataset.rarity;
             const cardElement = (card.dataset.element || "").toLowerCase();
@@ -238,7 +225,8 @@ function initCharactersFilters() {
             const matchesOwnership = ownership === "all" ||
                 (ownership === "owned" && owned) ||
                 (ownership === "unowned" && !owned);
-            const matches = (document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true") &&
+            const matches = (document.documentElement.dataset.showUnreleased === "true" ||
+                card.dataset.unreleased !== "true") &&
                 matchesSearch &&
                 matchesRarity &&
                 matchesElement &&
@@ -251,9 +239,12 @@ function initCharactersFilters() {
         });
         sortCards(visibleCards);
         if (countElement) {
-            countElement.querySelector("[data-count-shown]").textContent = String(visibleCards.filter(card => card.dataset.owned === "true").length);
-            countElement.querySelector("[data-count-base]").textContent = String(cards.filter(card => card.dataset.owned === "true" && (document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true")).length);
-            countElement.querySelector("[data-count-total]").textContent = String(cards.filter(card => document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true").length);
+            countElement.querySelector("[data-count-shown]").textContent = String(visibleCards.filter((card) => card.dataset.owned === "true").length);
+            countElement.querySelector("[data-count-base]").textContent = String(cards.filter((card) => card.dataset.owned === "true" &&
+                (document.documentElement.dataset.showUnreleased === "true" ||
+                    card.dataset.unreleased !== "true")).length);
+            countElement.querySelector("[data-count-total]").textContent = String(cards.filter((card) => document.documentElement.dataset.showUnreleased === "true" ||
+                card.dataset.unreleased !== "true").length);
         }
     }
     /* =====================================================
@@ -270,7 +261,9 @@ function initCharactersFilters() {
         closeAllDropdowns();
         applyFilters();
     });
-    window.addEventListener("cyrene-content-preferences-changed", () => { if (page.isConnected)
-        applyFilters(); });
+    window.addEventListener("cyrene-content-preferences-changed", () => {
+        if (page.isConnected)
+            applyFilters();
+    });
     applyFilters();
 }

@@ -32,6 +32,17 @@ print(templates.get_template(path.strip('/')+'.html').render(request=request,acc
 }
 const characters = fixture("/characters");
 const settings = fixture("/settings");
+const previewWeapons = JSON.parse(
+    execFileSync(
+        ".venv/Scripts/python.exe",
+        [
+            "-c",
+            "import json; from utils.web.weapons import catalogue_weapon_rows; print(json.dumps(catalogue_weapon_rows([])))",
+        ],
+        { encoding: "utf8" },
+    ),
+);
+
 const previewLevels = JSON.parse(
     execFileSync(
         ".venv/Scripts/python.exe",
@@ -40,12 +51,14 @@ const previewLevels = JSON.parse(
             String.raw`
 import asyncio,json
 from utils.web.preview_materials import preview_entry
-from utils.web.planner_costs import _level_cost
+from utils.web.planner_costs import _level_cost, _weapon_cost
 class PreviewDB:
     async def get(self,folder,name):
         return preview_entry(folder,name)
 async def main():
-    return {name:await _level_cost(PreviewDB(),name,1,90,0) for name in ('Mitya','Valeriy')}
+    result={name:await _level_cost(PreviewDB(),name,1,90,0) for name in ('Mitya','Valeriy')}
+    result['Starsealed Edict']=await _weapon_cost(PreviewDB(),'Starsealed Edict',1,90,0)
+    return result
 print(json.dumps(asyncio.run(main())))
 `,
         ],
@@ -76,6 +89,13 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
         }
     });
     let writes = 0;
+    await page.route("https://cdn.gachabase.net/**", (route) =>
+        route.fulfill({
+            contentType: "image/svg+xml",
+            body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="gray"/></svg>',
+        }),
+    );
+
     await page.route("https://static.nanoka.cc/**", (route) =>
         route.fulfill({
             contentType: "image/svg+xml",
@@ -95,8 +115,34 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
                                 ? { status: "complete", items: [] }
                                 : previewLevels[url.searchParams.get("character_name")!],
                         talents: { status: "complete", items: [] },
-                        weapon: { status: "unavailable", items: [] },
+                        weapon:
+                            url.searchParams.get("weapon_name") === "Starsealed Edict" &&
+                            url.searchParams.get("target_weapon_level") === "90"
+                                ? previewLevels["Starsealed Edict"]
+                                : { status: "complete", items: [] },
                     },
+                },
+            });
+        if (path === "/api/weapons")
+            return route.fulfill({
+                json: {
+                    catalogue: [
+                        ...previewWeapons,
+                        {
+                            id: 14401,
+                            name: "Test Catalyst",
+                            type: "Catalyst",
+                            rarity: 4,
+                            icon: "https://static.nanoka.cc/test.webp",
+                        },
+                        {
+                            id: 11401,
+                            name: "Test Sword",
+                            type: "Sword",
+                            rarity: 4,
+                            icon: "https://static.nanoka.cc/test.webp",
+                        },
+                    ],
                 },
             });
         if (path === "/api/characters/plans")
@@ -194,6 +240,25 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
     await expect(page.locator("[data-character-count] [data-count-total]")).toHaveText("7");
     await page.locator('[data-characters-tab="planner"]').click();
     await expect(page.locator(".planner-character-card")).toHaveCount(1);
+    const badgeLayout = await page.locator(".planner-card-unreleased").evaluate((badge) => {
+        const pill = badge.getBoundingClientRect();
+        const element = badge
+            .parentElement!.querySelector(".planner-card-element")!
+            .getBoundingClientRect();
+        const name = badge.parentElement!.querySelector("h3")!.getBoundingClientRect();
+        return {
+            right: pill.right,
+            elementLeft: element.left,
+            centreDifference: Math.abs(
+                pill.top + pill.height / 2 - element.top - element.height / 2,
+            ),
+            belowImage: pill.bottom > name.top,
+        };
+    });
+    expect(badgeLayout.right).toBeLessThan(badgeLayout.elementLeft);
+    expect(badgeLayout.centreDifference).toBeLessThan(4);
+    expect(badgeLayout.belowImage).toBe(false);
+
     await page.locator("[data-planner-add]").first().click();
     await expect(page.locator(".planner-picker-character").first()).toHaveAttribute(
         "data-planner-character-name",
@@ -218,6 +283,55 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
     expect(badgePlacement.centreOffset).toBeLessThan(1);
     expect(badgePlacement.bottomGap).toBe(4);
     await page.locator('[data-planner-character-id="3"]').click();
+    await page.locator('[data-planner-tab="weapon"]').click();
+    await expect(page.getByRole("button", { name: "Sync from HoYoLAB", exact: true })).toBeHidden();
+    await page.getByRole("button", { name: "Choose weapon", exact: true }).click();
+    await expect(page.locator(".planner-weapon-picker .weapon-card")).toHaveCount(2);
+    await expect(page.locator(".planner-weapon-picker .weapon-card").first()).toHaveAttribute(
+        "aria-label",
+        "Starsealed Edict",
+    );
+    await expect(
+        page.getByRole("button", { name: "Starsealed Edict", exact: true }).locator(".weapon-tag"),
+    ).toHaveText("Mitya's Signature");
+    await page.getByRole("button", { name: "Starsealed Edict", exact: true }).click();
+    await page.locator("[data-planner-weapon-level]").evaluate((select: HTMLSelectElement) => {
+        select.value = "90";
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    const weaponCost = page.locator('[data-planner-cost="weapon"]');
+    await expect(weaponCost).toContainText("Preview materials");
+    await expect(weaponCost).not.toContainText("Couldn't load");
+    const materialOrder = await weaponCost
+        .locator(".planner-cost-entry")
+        .evaluateAll((entries) =>
+            entries.map(
+                (entry) =>
+                    entry
+                        .querySelector("button[aria-label]")
+                        ?.getAttribute("aria-label")
+                        ?.split(":")[0],
+            ),
+        );
+    expect(materialOrder).toEqual(
+        previewLevels["Starsealed Edict"].items.map((item: { name: string }) => item.name),
+    );
+
+    await expect(
+        weaponCost.locator('button[aria-label^="Snowborn Heart of Ignorance:"]'),
+    ).toHaveAttribute("aria-label", /41 required/);
+    await expect(
+        weaponCost.locator('button[aria-label^="The Frost Emperor\'s Farewell:"]'),
+    ).toHaveAttribute("aria-label", /6 required/);
+    await expect(weaponCost.locator(".planner-cost-artwork img")).toHaveCount(
+        previewLevels["Starsealed Edict"].items.length,
+    );
+    await page.screenshot({
+        path: "test-results/starsealed-edict-materials.png",
+        animations: "disabled",
+    });
+    await page.locator('[data-planner-tab="level"]').click();
+
     await expect(page.locator('[data-planner-cost="level"]')).toContainText("Preview materials");
     await expect(
         page.locator('[data-planner-cost="level"] button[aria-label^="Crystalfold:"]'),
@@ -246,6 +360,13 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
     await page.locator(".planner-editor-close").click();
     await page.locator("[data-planner-add]").first().click();
     await page.locator('[data-planner-character-id="4"]').click();
+    await page.locator('[data-planner-tab="weapon"]').click();
+    await page.getByRole("button", { name: "Choose weapon", exact: true }).click();
+    await expect(page.locator(".planner-weapon-picker .weapon-card")).toHaveCount(1);
+    await expect(page.getByRole("button", { name: "Test Sword", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Close weapon picker", exact: true }).click();
+    await page.locator('[data-planner-tab="level"]').click();
+
     await page.locator("[data-planner-level]").evaluate((select: HTMLSelectElement) => {
         select.value = "90";
         select.dispatchEvent(new Event("change", { bubbles: true }));

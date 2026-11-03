@@ -11,13 +11,30 @@ DATA = json.loads(
 )
 
 
+WEAPON_DATA = json.loads(
+    (Path(__file__).resolve().parents[2] / "data/preview_weapon_materials.json").read_text(
+        encoding="utf-8"
+    )
+)
+
+
 def preview_entry(folder: str, name: str) -> dict | None:
+    if folder == "weapons":
+        weapon = next(
+            (
+                value
+                for key, value in WEAPON_DATA["weapons"].items()
+                if key.casefold() == name.casefold()
+            ),
+            None,
+        )
+        return {**copy.deepcopy(weapon), "sources": WEAPON_DATA["sources"]} if weapon else None
     if folder == "materials":
         return copy.deepcopy(
             next(
                 (
                     value
-                    for key, value in DATA["materials"].items()
+                    for key, value in {**WEAPON_DATA["materials"], **DATA["materials"]}.items()
                     if key.casefold() == name.casefold()
                 ),
                 None,

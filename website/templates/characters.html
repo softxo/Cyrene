@@ -199,10 +199,7 @@
                         aria-label="{{ rarity }}-star characters"
                         title="{{ rarity }}-star characters"
                     >
-                        <img
-                            src="/static/images/characters/Rarity_{{ rarity }}.webp"
-                            alt=""
-                        >
+                        <span class="cyrene-rarity-star" data-rarity="{{ rarity }}" aria-hidden="true"></span>
                     </button>
                     {% endfor %}
                 </div>
@@ -359,11 +356,7 @@
                         
                         <span class="character-rarity">
                             {{ character.rarity }}
-                            <img
-                                src="/static/images/characters/Rarity_{{ character.rarity }}.webp"
-                                alt="Rarity"
-                                title="{{ character.rarity }}-star rarity"
-                            >
+                            <span class="cyrene-rarity-star" data-rarity="{{ character.rarity }}" aria-label="{{ character.rarity }}-star rarity"></span>
                         </span>
 
                     </div>
@@ -511,6 +504,28 @@
     {% endif %}
     </section>
 
+    <dialog class="planner-picker-dialog planner-weapon-picker" data-planner-weapon-picker aria-labelledby="planner-weapon-picker-title">
+        <button type="button" class="planner-modal-close" data-planner-weapon-picker-close aria-label="Close weapon picker"><span class="cyrene-close" aria-hidden="true"></span></button>
+        <h2 id="planner-weapon-picker-title">Choose weapon</h2>
+        <p class="planner-weapon-picker-description" data-planner-weapon-picker-description></p>
+        <div class="planner-weapon-picker-filters">
+            <label class="characters-search"><input type="search" data-planner-weapon-search placeholder="Search weapons or signature..." aria-label="Search weapons"></label>
+            <div class="custom-select planner-weapon-rarity" data-planner-weapon-rarity-control>
+                <select data-planner-weapon-rarity aria-label="Weapon rarity" hidden><option value="">All rarities</option>{% for rarity in [5,4,3,2,1] %}<option value="{{ rarity }}">{{ rarity }}-star</option>{% endfor %}</select>
+                <button type="button" class="custom-select-button" aria-label="Weapon rarity" aria-haspopup="listbox" aria-expanded="false"><span class="custom-select-value">All rarities</span><span class="custom-select-arrow" aria-hidden="true"></span></button>
+                <div class="custom-select-menu" role="listbox" aria-label="Weapon rarity">
+                    <button type="button" class="custom-select-option selected" role="option" data-value="" aria-selected="true">All rarities</button>
+                    {% for rarity in [5,4,3,2,1] %}<button type="button" class="custom-select-option" role="option" data-value="{{ rarity }}" aria-selected="false">{{ rarity }}-star</button>{% endfor %}
+                </div>
+            </div>
+            <button type="button" class="cyrene-button" data-planner-weapon-reset>Reset</button>
+            <button type="button" class="cyrene-button" data-planner-weapon-clear>No weapon</button>
+        </div>
+        <p class="characters-summary planner-weapon-status" data-planner-weapon-picker-status role="status"></p>
+        <button type="button" class="cyrene-button" data-planner-weapon-retry hidden>Retry</button>
+        <div class="weapons-grid planner-weapon-picker-grid" data-planner-weapon-grid></div>
+    </dialog>
+
     <!-- CHARACTER PLANNER -->
     <section
         class="characters-panel{% if planner_active %} active{% endif %}"
@@ -534,7 +549,7 @@
         </header>
 
         <div class="planner-empty-state" data-planner-empty>
-            <div class="planner-empty-icon" aria-hidden="true">✦</div>
+            <div class="planner-empty-icon" aria-hidden="true"><span class="cyrene-sparkle"></span></div>
             <h3>No characters planned yet</h3>
             <p>
                 Add any character to start planning their levels, talents,
@@ -608,7 +623,7 @@
                         {% for option in options %}
                         <button type="button" class="characters-icon-button" data-value="{{ option | lower }}"
                             aria-pressed="false" aria-label="{{ option }}{{ '-star' if key == 'rarity' else '' }}" title="{{ option }}{{ '-star' if key == 'rarity' else '' }}">
-                            {% if key == 'rarity' %}<img src="/static/images/characters/Rarity_{{ option }}.webp" alt="">{% else %}
+                            {% if key == 'rarity' %}<span class="cyrene-rarity-star" data-rarity="{{ option }}" aria-hidden="true"></span>{% else %}
                             <img src="/static/images/characters/{{ 'Element_' if key == 'element' else '' }}{{ option }}.webp" alt="">
                             {% endif %}
                         </button>
@@ -663,7 +678,7 @@
                         {% if character.unreleased %}<span class="cyrene-unreleased-badge character-release-badge">Unreleased</span>{% endif %}
                         <img src="{{ character.icon }}" alt="" loading="lazy">
                         <span class="planner-picker-rarity" aria-label="{{ character.rarity }}-star character">
-                            {{ character.rarity }} &#9733;
+                            {{ character.rarity }} <span class="cyrene-rarity-star" aria-hidden="true"></span>
                         </span>
                     </span>
                     <span class="planner-picker-character-info">
@@ -898,9 +913,11 @@
                         data-planner-panel="weapon"
                         hidden
                     >
-                        <label class="planner-weapon-choice" hidden><span>Weapon</span>
-                            <select data-planner-weapon-choice aria-label="Choose planned weapon"><option value="">No weapon</option></select>
-                        </label>
+                        <div class="planner-weapon-actions">
+                            <button type="button" class="cyrene-button" data-planner-choose-weapon aria-haspopup="dialog">Choose weapon</button>
+                            <button type="button" class="cyrene-button" data-planner-sync-weapon hidden>Sync from HoYoLAB</button>
+                        </div>
+                        <p class="planner-weapon-status" data-planner-weapon-status role="status"></p>
                         <div class="planner-weapon-overview">
                             <div class="planner-weapon-identity">
                                 <img
@@ -917,8 +934,21 @@
                             </div>
 
                             <div class="planner-level-comparison">
-                                <div class="planner-level-value">
+                                <div class="planner-level-value planner-current-weapon-level-field">
                                     <span>Current</span>
+                                    <select
+                                        id="planner-current-weapon-level"
+                                        name="current_weapon_level"
+                                        data-planner-current-weapon-level-input
+                                        aria-label="Current weapon level"
+                                    >
+                                        {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
+                                        <option
+                                            value="{{ level }}"
+                                            {% if level == 1 %}selected{% endif %}
+                                        >Lv. {{ level }}</option>
+                                        {% endfor %}
+                                    </select>
                                     <strong data-planner-current-weapon-level>—</strong>
                                 </div>
 

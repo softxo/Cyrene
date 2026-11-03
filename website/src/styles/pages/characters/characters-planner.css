@@ -84,9 +84,14 @@
     --planner-name-background: #87502e;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+    html:not([data-hover-effects="off"]) .planner-character-card:hover {
+        transform: translateY(-2px);
+    }
+}
+
 .planner-character-card:hover {
     border-color: var(--planner-card-accent);
-    transform: translateY(-2px);
 }
 
 .planner-card-portrait {
@@ -269,9 +274,11 @@
 }
 
 .planner-card-talents {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 10px;
 }
 
 .planner-card-talent {
@@ -318,12 +325,11 @@
     top: 1px;
 }
 
-.planner-card-talent-key > span {
-    text-box: trim-both cap alphabetic;
-}
-
-.planner-card-talent-key.talent-1 > span {
-    transform: translateX(-1px);
+.planner-card-talent-key > svg {
+    display: block;
+    width: 11px;
+    height: 11px;
+    overflow: visible;
 }
 
 .planner-card-notes {
@@ -587,6 +593,9 @@
 }
 
 .planner-picker-rarity {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
     position: absolute;
     top: 6px;
     right: 6px;
@@ -599,6 +608,41 @@
     font-weight: 800;
     line-height: 1;
     backdrop-filter: blur(8px);
+}
+
+.planner-picker-portrait {
+    background: linear-gradient(180deg, #9568b4, #54386d);
+}
+.planner-picker-character[data-planner-character-rarity="5"] .planner-picker-portrait {
+    background: linear-gradient(180deg, #c18e49, #7a4f33);
+}
+.planner-picker-character[data-planner-character-rarity="1"] .planner-picker-portrait {
+    background: linear-gradient(180deg, #88878a, #4d4b50);
+}
+.planner-picker-character[data-planner-character-rarity="2"] .planner-picker-portrait {
+    background: linear-gradient(180deg, #6e9b79, #3e614b);
+}
+.planner-picker-character[data-planner-character-rarity="3"] .planner-picker-portrait {
+    background: linear-gradient(180deg, #598ab6, #355677);
+}
+.planner-picker-rarity .cyrene-rarity-star {
+    width: 12px;
+    height: 12px;
+    flex-basis: 12px;
+}
+.planner-picker-grid > .planner-picker-character {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+    row-gap: 8px;
+}
+.planner-picker-grid .planner-picker-character-info {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    align-items: start;
+    padding-top: 0;
+    row-gap: 8px;
 }
 
 .planner-picker-character-info {
@@ -729,7 +773,8 @@
 
 .planner-editor-total-content .planner-cost-quantity {
     min-height: 25px;
-    padding: 4px 3px;
+    padding: 4px 1px;
+    gap: 1px;
     font-size: 0.72rem;
 }
 
@@ -1472,12 +1517,19 @@
 }
 
 .planner-cost-remaining {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     opacity: 0.58;
     font-size: 0.82em;
     font-weight: 650;
 }
+.planner-cost-required {
+    flex-shrink: 0;
+}
 
 .planner-cost-tooltip {
+    display: none;
     position: absolute;
     z-index: 2;
     bottom: calc(100% + 7px);
@@ -1499,6 +1551,7 @@
 
 .planner-cost-entry:hover .planner-cost-tooltip,
 .planner-cost-entry:focus-within .planner-cost-tooltip {
+    display: block;
     visibility: visible;
 }
 
@@ -1925,15 +1978,13 @@ label.planner-level-value > span {
     place-items: center;
     height: 40px;
 }
-.planner-picker-ownership,
-.planner-weapon-choice {
+.planner-picker-ownership {
     display: flex;
     gap: 8px;
     align-items: center;
     color: var(--text-muted);
 }
-.planner-picker-ownership select,
-.planner-weapon-choice select {
+.planner-picker-ownership select {
     min-width: 0;
     padding: 8px;
     border: 1px solid var(--border);
@@ -1941,12 +1992,6 @@ label.planner-level-value > span {
     background: var(--surface);
     color: var(--text);
     font: inherit;
-}
-.planner-weapon-choice {
-    margin-bottom: 12px;
-}
-.planner-weapon-choice[hidden] {
-    display: none;
 }
 @media (max-width: 520px) {
     .planner-talent-grid {
@@ -2049,16 +2094,6 @@ label.planner-level-value > span {
     }
 }
 
-.planner-weapon-choice .planner-choice-trigger {
-    width: min(100%, 320px);
-}
-.planner-weapon-choice-list {
-    grid-template-columns: minmax(0, 1fr);
-}
-.planner-weapon-choice-list .planner-choice-option {
-    padding: 8px 12px;
-    text-align: left;
-}
 .planner-cost-retry {
     padding: 7px 12px;
 }
@@ -2097,40 +2132,8 @@ label.planner-level-value > span {
 .planner-cost-status {
     --check-size: 15px;
 }
-.planner-weapon-choice {
-    justify-content: center;
-}
 .planner-weapon-overview[hidden] {
     display: none;
-}
-.planner-choice-grid.planner-weapon-choice-list {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-}
-.planner-weapon-choice-list .planner-choice-option {
-    width: 100%;
-    justify-items: start;
-    white-space: normal;
-    overflow-wrap: anywhere;
-}
-
-.planner-weapon-choice {
-    display: grid;
-    grid-template-columns: 54px minmax(0, 320px) 54px;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-}
-.planner-weapon-choice > span {
-    justify-self: end;
-}
-.planner-weapon-choice .planner-choice-trigger {
-    grid-column: 2;
-    width: 100%;
-}
-.planner-choice-grid.planner-weapon-choice-list .planner-choice-option {
-    display: flex;
-    justify-content: flex-start;
 }
 
 .planner-picker-search {
@@ -2181,12 +2184,37 @@ label.planner-level-value > span {
     justify-self: center;
     margin-left: 0;
 }
-.planner-card-talents {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px 10px;
+@media (max-width: 560px) {
+    .planner-level-value .planner-choice-trigger {
+        grid-template-columns: 10px minmax(0, 1fr) 10px;
+        padding-inline: 6px;
+    }
+    .planner-level-value .planner-choice-value {
+        grid-column: 2;
+    }
+    .planner-level-value .planner-choice-arrow {
+        grid-column: 3;
+    }
+}
+.planner-current-weapon-choice .planner-choice-value {
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+.planner-current-weapon-choice.is-readonly {
+    min-height: 40px;
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+}
+.planner-current-weapon-choice.is-readonly .planner-choice-value {
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 750;
+}
+.planner-current-weapon-choice.is-readonly .planner-choice-arrow {
+    display: none;
 }
 .planner-card-talent {
     flex: 0 0 auto;
@@ -2195,4 +2223,202 @@ label.planner-level-value > span {
 .planner-goal-cost .planner-cost-message {
     margin: 0 0 16px;
     opacity: 0.65;
+}
+
+/* Weapon catalogue picker */
+.planner-weapon-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.planner-weapon-status {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 10px 0;
+}
+.planner-weapon-status:empty {
+    display: none;
+}
+.planner-weapon-picker {
+    width: min(900px, calc(100vw - 32px));
+    max-height: 85dvh;
+    box-sizing: border-box;
+}
+.planner-weapon-picker:not([open]) {
+    display: none;
+}
+.planner-weapon-picker::backdrop {
+    background: rgb(5 7 14 / 76%);
+    backdrop-filter: blur(8px);
+}
+.planner-weapon-picker h2 {
+    margin: 0 44px 8px 0;
+}
+.planner-weapon-picker-description {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0 0 20px;
+}
+.planner-weapon-picker-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.planner-weapon-picker-filters .characters-search {
+    flex: 1 1 220px;
+}
+.planner-weapon-picker-filters label {
+    display: grid;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+.planner-weapon-picker-filters input,
+.planner-weapon-picker-filters select {
+    min-height: 38px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--text);
+    background: var(--surface);
+}
+.planner-weapon-picker-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.planner-weapon-picker .weapon-card {
+    color: var(--text);
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+}
+.planner-weapon-picker .weapon-card[aria-pressed="true"] {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+.planner-weapon-picker .weapon-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+.planner-weapon-picker .weapon-art {
+    width: 100%;
+}
+.planner-weapon-picker .weapon-body {
+    width: 100%;
+    box-sizing: border-box;
+}
+.planner-weapon-picker .weapon-art > img {
+    width: 110px;
+    height: 110px;
+}
+.planner-weapon-picker .weapon-name {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    min-height: 2.8em;
+}
+@media (max-width: 480px) {
+    .planner-weapon-picker {
+        padding: 18px;
+    }
+    .planner-weapon-picker-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.planner-weapon-picker .weapon-stars {
+    gap: 2px;
+}
+.planner-weapon-picker .weapon-stars svg {
+    display: block;
+    width: 10px;
+    height: 10px;
+}
+
+.planner-card-unreleased {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 4px;
+    max-width: calc(100% - 42px);
+    box-sizing: border-box;
+    padding: 3px 4px;
+    font-size: 0.58rem;
+    white-space: nowrap;
+    z-index: 2;
+}
+.planner-character-card {
+    cursor: grab;
+}
+.planner-character-card.is-dragging {
+    opacity: 0.4;
+    outline: 2px solid var(--accent);
+    cursor: grabbing;
+}
+.planner-character-card.planner-card-drag-preview {
+    position: fixed;
+    z-index: 1600;
+    pointer-events: none;
+    margin: 0;
+    opacity: 0.9;
+    transform: none !important;
+    transition: none;
+    cursor: grabbing;
+}
+.planner-character-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+.planner-weapon-picker-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: center;
+}
+.planner-weapon-picker-filters .characters-search {
+    display: block;
+    grid-column: auto;
+    margin: 0;
+}
+.planner-weapon-picker-filters .characters-search input,
+.planner-weapon-picker-filters .custom-select-button,
+.planner-weapon-picker-filters > .cyrene-button {
+    height: 42px;
+    min-height: 42px;
+}
+.planner-weapon-picker-filters .custom-select {
+    min-width: 126px;
+}
+.planner-weapon-picker-filters .custom-select-menu {
+    z-index: 5;
+    min-width: 100%;
+}
+@media (max-width: 600px) {
+    .planner-weapon-picker-filters {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+    }
+    .planner-weapon-picker-filters .characters-search {
+        grid-column: 1 / -1;
+    }
+    .planner-weapon-picker-filters .custom-select {
+        min-width: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .planner-character-card {
+        transition: none;
+    }
+}
+
+.planner-weapon-picker-filters > .characters-search {
+    height: 42px;
+    padding: 0;
+    line-height: 0;
+}
+.planner-weapon-picker-filters .characters-search input {
+    display: block;
+    margin: 0;
 }

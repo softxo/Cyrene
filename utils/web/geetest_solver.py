@@ -10,10 +10,7 @@ from utils.web.sessions import (
     delete_challenge_session,
 )
 
-ChallengeNotifier = Callable[
-    [str],
-    Awaitable[None]
-]
+ChallengeNotifier = Callable[[str], Awaitable[None]]
 
 
 async def solve_geetest(
@@ -27,9 +24,7 @@ async def solve_geetest(
         mmt=mmt,
     )
 
-    challenge_url = (
-        f"https://cyrene.apps.bot-hosting.cloud/challenge/{session.token}"
-    )
+    challenge_url = f"https://cyrene-teyvat.xyz/challenge/{session.token}"
 
     try:
         await notify(challenge_url)
@@ -37,9 +32,7 @@ async def solve_geetest(
         await session.completion_event.wait()
 
         if session.result is None:
-            raise RuntimeError(
-                "CAPTCHA challenge completed without a result."
-            )
+            raise RuntimeError("CAPTCHA challenge completed without a result.")
 
         return session.result
 

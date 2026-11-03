@@ -141,3 +141,27 @@ test("background character prefetches stay silent", async ({ page }) => {
     await expect(page.getByRole("status")).toHaveCount(0);
     release();
 });
+
+test("planner API feedback names materials and HoYoLAB syncing", async ({ page }) => {
+    await page.route("**/characters", (route) =>
+        route.fulfill({ contentType: "text/html", body: shell("Characters") }),
+    );
+    let release!: () => void;
+    await page.route("**/api/characters/1/**", async (route) => {
+        await new Promise<void>((resolve) => (release = resolve));
+        await route.fulfill({ json: {} });
+    });
+    await page.goto("/characters");
+    await page.evaluate(() => {
+        void fetch("/api/characters/1/planner-costs");
+    });
+    await expect(page.locator("#navigation-loading-status")).toHaveText("Loading Materials\u2026");
+    release();
+    await expect(page.locator("#navigation-loading-status")).toHaveCount(0);
+    await page.evaluate(() => {
+        void fetch("/api/characters/1/showcase", { headers: { "X-Cyrene-Loading": "syncing" } });
+    });
+    await expect(page.locator("#navigation-loading-status")).toHaveText("Syncing\u2026");
+    release();
+    await expect(page.locator("#navigation-loading-status")).toHaveCount(0);
+});

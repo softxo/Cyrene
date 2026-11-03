@@ -1,6 +1,7 @@
 """Weapon rows shared by the account view and calculator catalogue."""
 
 import json
+from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 
@@ -82,6 +83,7 @@ def owned_weapon_rows(characters):
                 "type": CALCULATOR_WEAPON_TYPES.get(weapon.type, "Unknown"),
                 "level": weapon.level,
                 "refinement": weapon.refinement,
+                "ascension": getattr(weapon, "ascension", None),
                 "equipped": character.name,
                 "character_icon": character.icon,
                 "character_rarity": character.rarity,
@@ -93,19 +95,32 @@ def owned_weapon_rows(characters):
 
 
 def catalogue_weapon_rows(weapons):
-    return sorted(
-        [
+    rows = {
+        int(weapon.id): {
+            "id": weapon.id,
+            "name": weapon.name,
+            "icon": weapon.icon,
+            "rarity": weapon.rarity,
+            "type": weapon.type,
+            "max_level": weapon.max_level,
+            "tag": weapon_tag(weapon.id),
+            "release_version": weapon_release_version(weapon.id),
+        }
+        for weapon in weapons
+    }
+    # HoYoLAB's calculator can lag behind announced weapons. Prefer its exact
+    # record as soon as it arrives, without duplicating the supplemental entry.
+    path = Path(__file__).resolve().parents[2] / "data" / "preview_weapons.json"
+    today = datetime.now(timezone.utc).date().isoformat()
+    for weapon in json.loads(path.read_text(encoding="utf-8"))["weapons"]:
+        if weapon["id"] in rows:
+            rows[weapon["id"]]["unreleased"] = weapon["release_date"] > today
+        rows.setdefault(
+            weapon["id"],
             {
-                "id": weapon.id,
-                "name": weapon.name,
-                "icon": weapon.icon,
-                "rarity": weapon.rarity,
-                "type": weapon.type,
-                "max_level": weapon.max_level,
-                "tag": weapon_tag(weapon.id),
-                "release_version": weapon_release_version(weapon.id),
-            }
-            for weapon in weapons
-        ],
-        key=weapon_sort_key,
-    )
+                **weapon,
+                "tag": weapon_tag(weapon["id"]),
+                "unreleased": weapon["release_date"] > today,
+            },
+        )
+    return sorted(rows.values(), key=weapon_sort_key)
