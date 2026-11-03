@@ -93,10 +93,10 @@
     </section>
     {% endif %}
 </div>
-<div class="wish-import-dialog" id="wish-import-dialog" role="dialog" aria-modal="true" aria-labelledby="wish-import-dialog-title" hidden>
+<div data-modal-shell class="wish-import-dialog" id="wish-import-dialog" role="dialog" aria-modal="true" aria-labelledby="wish-import-dialog-title" hidden>
     <button class="wish-import-dialog-backdrop" type="button" data-close-import-dialog aria-label="Close import dialog"></button>
-    <div class="wish-import-dialog-panel">
-        <button class="wish-import-dialog-x" type="button" data-close-import-dialog aria-label="Close">×</button>
+    <div data-modal-panel class="wish-import-dialog-panel">
+        <button class="wish-import-dialog-x" type="button" data-close-import-dialog aria-label="Close"><span class="cyrene-close" aria-hidden="true"></span></button>
         <span class="wish-card-kicker">CYRENE SCANNER</span>
         <h2 id="wish-import-dialog-title">Import wish history</h2>
         <p>Paste the URL copied by Wish Scanner. The auth key is used once for the import and is never stored.</p>
@@ -108,14 +108,14 @@
         </div>
     </div>
 </div>
-<div class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" aria-modal="true" hidden>
+<div data-modal-shell class="wish-import-success" id="wish-import-success" role="status" aria-live="polite" aria-modal="true" hidden>
     <div class="wish-import-success-backdrop"></div>
-    <div class="wish-import-success-panel">
+    <div data-modal-panel class="wish-import-success-panel">
         <div class="wish-import-verified-icon" aria-hidden="true">
             <span class="wish-import-corner top-left"></span><span class="wish-import-corner top-right"></span>
             <span class="wish-import-corner bottom-left"></span><span class="wish-import-corner bottom-right"></span>
             <span class="wish-import-scan-line"></span>
-            <svg class="wish-import-check" viewBox="0 0 64 64" focusable="false"><path d="M17 33.5 27.5 44 48 22"></path></svg>
+            <svg class="wish-import-check" viewBox="0 0 24 24" focusable="false"><use href="/static/images/ui/check.svg#check"></use></svg>
         </div>
         <h2 id="wish-import-title">Importing wishes</h2>
         <strong class="wish-import-count" id="wish-import-count">0</strong>

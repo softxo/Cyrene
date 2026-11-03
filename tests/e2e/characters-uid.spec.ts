@@ -99,8 +99,9 @@ for (const legacyPending of [true, false]) {
         await expect(page.locator(".planner-character-card")).toHaveCount(0);
         await page.goto("/characters?account_id=4&tab=planner");
         await expect(page.locator(".planner-card-notes")).toHaveText(plan.notes);
-        page.once("dialog", (dialog) => dialog.accept());
+
         await page.getByRole("button", { name: "Remove Fischl's plan", exact: true }).click();
+        await page.locator(".character-plan-delete-dialog [data-delete-confirm]").click();
         await expect.poll(() => sharedPlans.length).toBe(0);
         await page.reload();
         await expect(page.locator(".planner-character-card")).toHaveCount(0);

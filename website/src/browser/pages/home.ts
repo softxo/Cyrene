@@ -25,70 +25,9 @@ interface Window {
         const list = root.querySelector<HTMLElement>("[data-changelog-entries]")!;
         const add = root.querySelector<HTMLButtonElement>("[data-changelog-add]")!;
         const dialog = root.querySelector<HTMLDialogElement>("dialog")!;
-        let modalMotion: Animation | null = null;
-        let closingModal: Promise<void> | null = null;
-        function animateEditorIn() {
-            modalMotion?.cancel();
-            dialog.inert = false;
-            dialog.classList.remove("is-closing");
-            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-            dialog.classList.add("is-opening");
-            const motion = dialog.animate(
-                [
-                    { opacity: 0, transform: "translateY(14px) scale(.97)" },
-                    { opacity: 1, transform: "translateY(0) scale(1)" },
-                ],
-                { duration: 220, easing: "cubic-bezier(.2,.7,.2,1)", fill: "both" },
-            );
-            modalMotion = motion;
-            void motion.finished
-                .then(() => {
-                    if (modalMotion !== motion) return;
-                    motion.cancel();
-                    modalMotion = null;
-                    dialog.classList.remove("is-opening");
-                })
-                .catch(() => {
-                    /* Closing can replace an unfinished entrance. */
-                });
-        }
         function closeEditor(): Promise<void> {
-            if (closingModal) return closingModal;
-            if (!dialog.open) return Promise.resolve();
-            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                modalMotion?.cancel();
-                modalMotion = null;
-                dialog.close();
-                return Promise.resolve();
-            }
-            const style = getComputedStyle(dialog);
-            const opacity = style.opacity;
-            const transform = style.transform;
-            modalMotion?.cancel();
-            dialog.inert = true;
-            dialog.classList.remove("is-opening");
-            dialog.classList.add("is-closing");
-            const motion = dialog.animate(
-                [
-                    { opacity, transform },
-                    { opacity: 0, transform: "translateY(10px) scale(.98)" },
-                ],
-                { duration: 180, easing: "cubic-bezier(.4,0,1,1)", fill: "both" },
-            );
-            modalMotion = motion;
-            closingModal = motion.finished
-                .catch(() => {})
-                .then(() => {
-                    if (modalMotion === motion) {
-                        dialog.close();
-                        motion.cancel();
-                        modalMotion = null;
-                        dialog.classList.remove("is-closing");
-                        dialog.inert = false;
-                    }
-                    closingModal = null;
-                });
-            return closingModal;
+            dialog.close();
+            return Promise.resolve();
         }
         const form = root.querySelector<HTMLFormElement>("form")!;
         const deleteDialog = root.querySelector<HTMLDialogElement>(".changelog-delete-dialog")!;
@@ -1416,7 +1355,6 @@ interface Window {
             dialog.style.marginTop = `${top}px`;
             dialog.style.marginBottom = "auto";
             dialog.style.maxHeight = `calc(100dvh - ${top + 24}px)`;
-            animateEditorIn();
             form.querySelector<HTMLElement>("h2")!.focus();
         }
 
@@ -1662,8 +1600,6 @@ interface Window {
             animations.clear();
             window.clearInterval(liveTimer);
             lifecycle.abort();
-            modalMotion?.cancel();
-            modalMotion = null;
             deleteDialog.close();
             dialog.close();
             delete root.dataset.initialised;

@@ -635,6 +635,10 @@
     background: var(--background);
 }
 
+.settings-toggle + .settings-toggle {
+    margin-top: 10px;
+}
+
 .settings-toggle-info {
     display: flex;
     flex-direction: column;

@@ -166,11 +166,16 @@
 
         </div>
 
+        <div class="settings-toggle">
+            <div class="settings-toggle-info"><strong>Show Unreleased content</strong><span>Show announced characters and other preview content. Material data may be unavailable before release.</span></div>
+            <button type="button" class="settings-toggle-switch" id="show-unreleased-toggle" aria-label="Show Unreleased content" aria-pressed="false"></button>
+        </div>
+
     </section>
 
     </div>
 
-    <div id="account-link-modal" class="settings-modal" hidden>
+    <div id="account-link-modal" data-modal-shell class="settings-modal" hidden>
         <div class="settings-modal-backdrop" data-close-account-modal></div>
 
         <section
@@ -184,7 +189,7 @@
                 class="settings-modal-close"
                 data-close-account-modal
                 aria-label="Close"
-            >×</button>
+            ><span class="cyrene-close" aria-hidden="true"></span></button>
 
             <div id="account-link-modal-content">
                 <h3 id="account-link-title">Add HoYoLAB account</h3>
@@ -237,7 +242,7 @@
         </section>
     </div>
 
-    <div id="account-manage-modal" class="settings-modal" hidden>
+    <div id="account-manage-modal" data-modal-shell class="settings-modal" hidden>
         <div class="settings-modal-backdrop" data-close-manage-modal></div>
 
         <section
@@ -251,7 +256,7 @@
                 class="settings-modal-close"
                 data-close-manage-modal
                 aria-label="Close"
-            >×</button>
+            ><span class="cyrene-close" aria-hidden="true"></span></button>
 
             <h3 id="account-manage-title">Manage account</h3>
             <p id="account-manage-details" class="settings-modal-description"></p>

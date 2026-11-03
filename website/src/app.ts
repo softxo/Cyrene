@@ -1,3 +1,5 @@
+import { beginNavigationLoading, initialiseFetchLoading } from "./browser/core/loading-feedback";
+import "./browser/core/toasts";
 import { initialiseSiteUpdates } from "./site-updates";
 import { initialiseButtonMotion } from "./browser/core/button-motion";
 import { initialiseSearchControls } from "./browser/core/search-controls";
@@ -71,6 +73,7 @@ function initialiseHoverEffects(): void {
     document.documentElement.dataset.hoverEffects = hoverEffectsEnabled ? "on" : "off";
 }
 
+initialiseFetchLoading();
 initialiseHoverEffects();
 initialiseButtonMotion();
 initialiseSearchControls();
@@ -82,22 +85,22 @@ initialiseSiteUpdates();
    ========================================================= */
 
 const pageScripts: Record<string, string | string[]> = {
-    "/": "/static/build/browser/pages/home.js?v=25",
+    "/": "/static/build/browser/pages/home.js?v=26",
     "/weapons": [
         "/static/build/browser/pages/events/events-rewards.js?v=4",
         "/static/build/browser/pages/weapons.js?v=17",
     ],
     "/characters": [
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
-        "/static/build/browser/pages/characters/characters-filters.js",
+        "/static/build/browser/pages/characters/characters-filters.js?v=4",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
-        "/static/build/browser/pages/characters/characters-showcase.js?v=8",
-        "/static/build/browser/pages/characters/characters-planner.js?v=12",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=10",
+        "/static/build/browser/pages/characters/characters-planner.js?v=24",
         "/static/build/browser/pages/characters/characters.js",
     ],
-    "/achievements": "/static/build/browser/pages/achievements.js?v=3",
+    "/achievements": "/static/build/browser/pages/achievements.js?v=4",
     "/inventory": "/static/build/browser/pages/inventory.js",
-    "/planner": "/static/build/browser/pages/planner.js?v=3",
+    "/planner": "/static/build/browser/pages/planner.js?v=4",
     "/verify": "/static/build/browser/pages/verification.js?v=3",
     "/codes": "/static/build/browser/pages/codes.js?v=1",
 
@@ -110,25 +113,25 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-timers.js?v=6",
         "/static/build/browser/pages/events/events-activity.js?v=10",
         "/static/build/browser/pages/events/events-refresh.js?v=8",
-        "/static/build/browser/pages/events/events-custom.js?v=9",
+        "/static/build/browser/pages/events/events-custom.js?v=10",
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js?v=5",
+    "/settings": "/static/build/browser/pages/settings.js?v=8",
 };
 
 const pageStyles: Record<string, string> = {
     "/weapons": "/static/build/css/weapons.css?v=23",
-    "/": "/static/build/css/home.css?v=40",
-    "/achievements": "/static/build/css/achievements.css?v=7",
-    "/wishes": "/static/build/css/wishes.css?v=14",
-    "/characters": "/static/build/css/characters.css?v=41",
+    "/": "/static/build/css/home.css?v=41",
+    "/achievements": "/static/build/css/achievements.css?v=8",
+    "/wishes": "/static/build/css/wishes.css?v=15",
+    "/characters": "/static/build/css/characters.css?v=54",
     "/inventory": "/static/build/css/inventory.css?v=7",
-    "/planner": "/static/build/css/planner.css?v=7",
-    "/verify": "/static/build/css/verification.css?v=14",
+    "/planner": "/static/build/css/planner.css?v=8",
+    "/verify": "/static/build/css/verification.css?v=15",
     "/codes": "/static/build/css/codes.css?v=7",
-    "/events": "/static/build/css/events.css?v=48",
-    "/settings": "/static/build/css/settings.css?v=8",
+    "/events": "/static/build/css/events.css?v=49",
+    "/settings": "/static/build/css/settings.css?v=10",
 };
 
 /* =========================================================
@@ -273,14 +276,14 @@ function initialisePage(path: string): void {
     }
 }
 
-async function preparePage(path: string): Promise<void> {
+async function preparePage(path: string, signal?: AbortSignal): Promise<void> {
     await loadPageStyle(path);
 
     if (document.querySelector("[data-no-accounts]")) return;
 
     await loadPageScript(path);
 
-    initialisePage(path);
+    if (!signal?.aborted) initialisePage(path);
 }
 
 /* =========================================================
@@ -307,31 +310,13 @@ function updateActiveNavigation(url: string | URL): void {
 
 let navigationController: AbortController | undefined;
 
-function showEventsNavigationLoading(show: boolean): void {
-    document.getElementById("events-navigation-status")?.remove();
-    document.querySelector(".main-content")?.removeAttribute("aria-busy");
-    document
-        .querySelectorAll(".nav-item.is-loading")
-        .forEach((item) => item.classList.remove("is-loading"));
-    if (!show) return;
-
-    document.querySelector(".main-content")?.setAttribute("aria-busy", "true");
-    document.querySelectorAll<HTMLAnchorElement>(".nav-item").forEach((item) => {
-        item.classList.toggle("is-loading", new URL(item.href).pathname === "/events");
-    });
-    const status = document.createElement("div");
-    status.id = "events-navigation-status";
-    status.setAttribute("role", "status");
-    status.innerHTML =
-        '<span class="navigation-loading-spark" aria-hidden="true">&#10022;</span><span>Loading Events&hellip;</span>';
-    document.body.appendChild(status);
-}
-
 async function navigate(url: string | URL, addToHistory = true): Promise<void> {
     navigationController?.abort();
     const controller = new AbortController();
     navigationController = controller;
-    showEventsNavigationLoading(new URL(url, window.location.origin).pathname === "/events");
+    const destination = new URL(url, window.location.origin);
+    updateActiveNavigation(destination);
+    const finishLoading = beginNavigationLoading(destination.pathname);
     try {
         const response = await fetch(url, {
             redirect: "manual",
@@ -418,7 +403,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
          * Load assets and initialise the destination page.
          */
 
-        await preparePage(finalPath);
+        await preparePage(finalPath, controller.signal);
         if (controller.signal.aborted) return;
 
         /*
@@ -442,7 +427,7 @@ async function navigate(url: string | URL, addToHistory = true): Promise<void> {
         window.location.href = url.toString();
     } finally {
         if (navigationController === controller) {
-            showEventsNavigationLoading(false);
+            finishLoading();
         }
     }
 }

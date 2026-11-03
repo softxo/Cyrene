@@ -781,10 +781,10 @@
     width: 72px;
     height: 72px;
 }
-.wish-import-check path {
+.wish-import-check use {
     fill: none;
     stroke: currentColor;
-    stroke-width: 5;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-dasharray: 50;
@@ -909,7 +909,7 @@
     .wish-import-success-panel,
     .wish-import-corner,
     .wish-import-scan-line,
-    .wish-import-check path {
+    .wish-import-check use {
         animation-duration: 1ms;
         animation-delay: 0ms;
     }

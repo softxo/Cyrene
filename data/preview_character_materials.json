@@ -1,0 +1,232 @@
+{
+    "sources": [
+        "https://www.icy-veins.com/genshin-impact/news/mitya-ascension-and-talent-materials-in-genshin-impact/",
+        "https://www.icy-veins.com/genshin-impact/valeriy-profile-talents-constellations",
+        "https://github.com/theBowja/genshin-db/tree/main/src/data/English/materials",
+        "https://gi.gachabase.net/inventory/adventure-items/101274/crystalfold/beta/7.1.51/48543888",
+        "https://gi.gachabase.net/inventory/adventure-items/101273/fairy-wormwood/beta/7.1.52/48704485",
+        "https://gi.gachabase.net/inventory/upgrade-materials/113093/shattered-stability-anchor/release"
+    ],
+    "note": "Preview material requirements; subject to release changes. Namespace keys identify materials whose numeric game IDs are not yet verified; they must never match inventory entries.",
+    "characters": {
+        "Mitya": {
+            "boss": "Shattered Stabilizing Anchor",
+            "speciality": "Crystalfold",
+            "common": ["Chimeric Core", "Symbiotic Chimeric Nucleus", "Prime Chimeric Nexus"],
+            "books": ["Teachings of Charity", "Guide to Charity", "Philosophies of Charity"],
+            "weekly": "Mask of the Virtuous Doctor"
+        },
+        "Valeriy": {
+            "boss": "Severed Tail of the Sky-Roamer",
+            "speciality": "Fairy Wormwood",
+            "common": ["Ethereal Glimmershard", "Ethereal Crystal", "Ethereal Crystalscale Stone"],
+            "books": ["Teachings of Glory", "Guide to Glory", "Philosophies of Glory"],
+            "weekly": "Counterfeit Resin"
+        }
+    },
+    "materials": {
+        "Vajrada Amethyst Sliver": {
+            "id": 104141,
+            "name": "Vajrada Amethyst Sliver",
+            "rarity": 2,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104141"
+            }
+        },
+        "Vajrada Amethyst Fragment": {
+            "id": 104142,
+            "name": "Vajrada Amethyst Fragment",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104142"
+            }
+        },
+        "Vajrada Amethyst Chunk": {
+            "id": 104143,
+            "name": "Vajrada Amethyst Chunk",
+            "rarity": 4,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104143"
+            }
+        },
+        "Vajrada Amethyst Gemstone": {
+            "id": 104144,
+            "name": "Vajrada Amethyst Gemstone",
+            "rarity": 5,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104144"
+            }
+        },
+        "Chimeric Core": {
+            "id": 112149,
+            "name": "Chimeric Core",
+            "rarity": 1,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112149"
+            }
+        },
+        "Symbiotic Chimeric Nucleus": {
+            "id": 112150,
+            "name": "Symbiotic Chimeric Nucleus",
+            "rarity": 2,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112150"
+            }
+        },
+        "Prime Chimeric Nexus": {
+            "id": 112151,
+            "name": "Prime Chimeric Nexus",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112151"
+            }
+        },
+        "Guide to Charity": {
+            "id": 104366,
+            "name": "Guide to Charity",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104366"
+            }
+        },
+        "Philosophies of Charity": {
+            "id": 104367,
+            "name": "Philosophies of Charity",
+            "rarity": 4,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104367"
+            }
+        },
+        "Mask of the Virtuous Doctor": {
+            "id": 113081,
+            "name": "Mask of the Virtuous Doctor",
+            "rarity": 5,
+            "images": {
+                "filename_icon": "UI_ItemIcon_113081"
+            }
+        },
+        "Severed Tail of the Sky-Roamer": {
+            "id": 113091,
+            "name": "Severed Tail of the Sky-Roamer",
+            "rarity": 4,
+            "images": {
+                "filename_icon": "UI_ItemIcon_113091"
+            }
+        },
+        "Ethereal Glimmershard": {
+            "id": 112146,
+            "name": "Ethereal Glimmershard",
+            "rarity": 1,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112146"
+            }
+        },
+        "Ethereal Crystal": {
+            "id": 112147,
+            "name": "Ethereal Crystal",
+            "rarity": 2,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112147"
+            }
+        },
+        "Ethereal Crystalscale Stone": {
+            "id": 112148,
+            "name": "Ethereal Crystalscale Stone",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_112148"
+            }
+        },
+        "Teachings of Glory": {
+            "id": 104371,
+            "name": "Teachings of Glory",
+            "rarity": 2,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104371"
+            }
+        },
+        "Guide to Glory": {
+            "id": 104372,
+            "name": "Guide to Glory",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104372"
+            }
+        },
+        "Philosophies of Glory": {
+            "id": 104373,
+            "name": "Philosophies of Glory",
+            "rarity": 4,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104373"
+            }
+        },
+        "Counterfeit Resin": {
+            "id": 113087,
+            "name": "Counterfeit Resin",
+            "rarity": 5,
+            "images": {
+                "filename_icon": "UI_ItemIcon_113087"
+            }
+        },
+        "Crown of Insight": {
+            "id": 104319,
+            "name": "Crown of Insight",
+            "rarity": 5,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104319"
+            }
+        },
+        "Mora": {
+            "id": 202,
+            "name": "Mora",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_202"
+            }
+        },
+        "Hero's Wit": {
+            "id": 104003,
+            "name": "Hero's Wit",
+            "rarity": 4,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104003"
+            }
+        },
+        "Teachings of Charity": {
+            "id": 104365,
+            "name": "Teachings of Charity",
+            "rarity": 2,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104365"
+            }
+        },
+        "Crystalfold": {
+            "id": "preview:crystalfold",
+            "name": "Crystalfold",
+            "rarity": 1,
+            "images": {
+                "local_icon": "/static/images/materials/preview/crystalfold.png"
+            },
+            "inventory_unavailable": true
+        },
+        "Fairy Wormwood": {
+            "id": "preview:fairy-wormwood",
+            "name": "Fairy Wormwood",
+            "rarity": 1,
+            "images": {
+                "local_icon": "/static/images/materials/preview/fairy-wormwood.png"
+            },
+            "inventory_unavailable": true
+        },
+        "Shattered Stabilizing Anchor": {
+            "id": "preview:shattered-stabilizing-anchor",
+            "name": "Shattered Stabilizing Anchor",
+            "rarity": 4,
+            "images": {
+                "local_icon": "/static/images/materials/preview/shattered-stabilizing-anchor.png"
+            },
+            "inventory_unavailable": true
+        }
+    }
+}

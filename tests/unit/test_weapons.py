@@ -12,6 +12,21 @@ from utils.web.weapons import owned_weapon_rows, validate_manual_weapon, weapon_
 
 
 class WeaponsTests(unittest.IsolatedAsyncioTestCase):
+    def test_planner_keeps_optional_weapon_across_server_round_trip(self):
+        plan = {"id": 10000002, "level": 1, "weaponLevel": 1}
+        self.assertIsNone(web._normalise_character_plan(plan)["plannedWeapon"])
+        weapon = {
+            "id": 11101,
+            "name": "Dull Blade",
+            "type": "Sword",
+            "rarity": 1,
+            "icon": "https://example.com/blade.png",
+        }
+        normalised = web._normalise_character_plan({**plan, "plannedWeapon": weapon})
+        self.assertEqual(normalised["plannedWeapon"]["name"], "Dull Blade")
+        self.assertEqual(web._normalise_character_plan(normalised), normalised)
+        self.assertIsNone(web._normalise_character_plan({**plan, "plannedWeapon": {}}))
+
     def test_tags_cover_signature_and_acquisition_examples(self):
         for weapon_id, expected in {
             14522: "Columbina's Signature",

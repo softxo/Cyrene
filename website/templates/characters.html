@@ -38,7 +38,9 @@
             {% if accounts and not character_error %}
             <div class="characters-summary"{% if planner_active %} hidden{% endif %}>
                 <span data-character-count>
-                    Showing {{ characters | length }} of {{ characters | length }} characters
+                    {% set public_characters = characters | rejectattr("unreleased") | list %}
+                    {% set owned_count = public_characters | selectattr("owned") | list | length %}
+                    Showing <strong data-count-shown>{{ owned_count }}</strong> of <strong data-count-base>{{ owned_count }}</strong> characters <span class="characters-count-divider" aria-hidden="true">|</span> <strong data-count-total>{{ public_characters | length }}</strong> Total characters
                 </span>
             </div>
             {% endif %}
@@ -324,6 +326,8 @@
                 data-weapon="{{ character.weapon | lower }}"
                 data-rarity="{{ character.rarity }}"
                 data-owned="{{ 'true' if character.owned else 'false' }}"
+                data-unreleased="{{ 'true' if character.unreleased else 'false' }}"
+                data-release-date="{{ character.release_date }}"
             >
                 <div class="character-card-image">
                     <img
@@ -332,6 +336,7 @@
                         loading="lazy"
                     >
 
+                    {% if character.unreleased %}<span class="cyrene-unreleased-badge character-release-badge">Unreleased</span>{% endif %}
                     {% if character.owned %}
                         <span class="character-level">Lv. {{ character.level }}</span>
                     {% else %}
@@ -395,7 +400,7 @@
         
         <!-- ENKACARD-INSPIRED CHARACTER BUILD SHOWCASE -->
         <div
-            class="character-showcase"
+            data-modal-shell class="character-showcase"
             data-character-showcase
             data-account-id="{{ selected_account.id if selected_account else '' }}"
             aria-hidden="true"
@@ -418,7 +423,7 @@
                     class="character-showcase-close"
                     data-showcase-close
                     aria-label="Close character showcase"
-                >&times;</button>
+                ><span class="cyrene-close" aria-hidden="true"></span></button>
 
                 <div class="enka-build-card" data-showcase-card data-element="">
 
@@ -554,7 +559,7 @@
 
     <!-- ADD CHARACTER PICKER -->
     <div
-        class="planner-picker"
+        data-modal-shell class="planner-picker"
         data-planner-picker
         data-planner-user-id="{{ planner_user_id }}"
         data-planner-account-uid="{{ selected_account.genshin_uid if selected_account else '' }}"
@@ -579,7 +584,7 @@
                 class="planner-modal-close"
                 data-planner-picker-close
                 aria-label="Close character picker"
-            >&times;</button>
+            ><span class="cyrene-close" aria-hidden="true"></span></button>
 
             <header class="planner-picker-heading">
                 <span class="planner-picker-heading-icon" aria-hidden="true"></span>
@@ -603,7 +608,7 @@
                         {% for option in options %}
                         <button type="button" class="characters-icon-button" data-value="{{ option | lower }}"
                             aria-pressed="false" aria-label="{{ option }}{{ '-star' if key == 'rarity' else '' }}" title="{{ option }}{{ '-star' if key == 'rarity' else '' }}">
-                            {% if key == 'rarity' %}<span>{{ option }} &#9733;</span>{% else %}
+                            {% if key == 'rarity' %}<img src="/static/images/characters/Rarity_{{ option }}.webp" alt="">{% else %}
                             <img src="/static/images/characters/{{ 'Element_' if key == 'element' else '' }}{{ option }}.webp" alt="">
                             {% endif %}
                         </button>
@@ -618,13 +623,27 @@
                         autocomplete="off" data-planner-character-search>
                 </label>
             </div>
-            <div class="planner-picker-results"><span data-planner-picker-count aria-live="polite"></span><span>Release date &middot; newest first</span></div>
+            <div class="planner-picker-results">
+                <span class="characters-summary" data-planner-picker-count aria-live="polite">Showing <strong data-count-shown>0</strong> of <strong data-count-base>{{ characters | length }}</strong> characters <span class="characters-count-divider" aria-hidden="true">|</span> <strong data-count-owned>{{ characters | selectattr('owned') | list | length }}</strong> owned <span class="characters-count-divider" aria-hidden="true">|</span> <strong data-count-total>{{ characters | length }}</strong> Total</span>
+                <div class="planner-picker-ownership">
+                    <span id="planner-ownership-label">Ownership</span>
+                    <div class="custom-select" data-planner-ownership-control>
+                        <button type="button" class="custom-select-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="planner-ownership-label planner-ownership-value"><span class="custom-select-value" id="planner-ownership-value">All characters</span><span class="custom-select-arrow"></span></button>
+                        <div class="custom-select-menu" role="listbox" aria-labelledby="planner-ownership-label">
+                            {% for value, label in [('all', 'All characters'), ('owned', 'Owned'), ('unowned', 'Not owned')] %}
+                            <button type="button" class="custom-select-option{{ ' selected' if value == 'all' else '' }}" data-value="{{ value }}" role="option" aria-selected="{{ 'true' if value == 'all' else 'false' }}">{{ label }}</button>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" data-planner-ownership value="all">
+                    </div>
+                </div>
+            </div>
 
             <div
                 class="planner-picker-grid"
                 data-planner-picker-grid
             >
-                {% for character in characters if character.owned %}
+                {% for character in characters %}
                 <button
                     type="button"
                     class="planner-picker-character"
@@ -634,11 +653,14 @@
                     data-planner-character-rarity="{{ character.rarity }}"
                     data-planner-character-weapon="{{ character.weapon | lower }}"
                     data-planner-character-release="{{ character.release_date }}"
+                    data-unreleased="{{ 'true' if character.unreleased else 'false' }}"
+                    data-planner-character-ownership="{{ 'owned' if character.owned else 'unowned' }}"
                     data-planner-character-icon="{{ character.icon }}"
                     data-planner-character-level="{{ character.level if character.level is not none else '' }}"
                     data-planner-character-constellation="{{ character.constellation if character.constellation is not none else 0 }}"
                 >
                     <span class="planner-picker-portrait">
+                        {% if character.unreleased %}<span class="cyrene-unreleased-badge character-release-badge">Unreleased</span>{% endif %}
                         <img src="{{ character.icon }}" alt="" loading="lazy">
                         <span class="planner-picker-rarity" aria-label="{{ character.rarity }}-star character">
                             {{ character.rarity }} &#9733;
@@ -653,6 +675,7 @@
                             >
                             {{ character.element }}
                         </span>
+                        {% if not character.owned %}<span class="character-unowned-status">Not owned</span>{% endif %}
                     </span>
                 </button>
                 {% endfor %}
@@ -671,7 +694,7 @@
         
         <!-- CHARACTER PROGRESSION PLANNER -->
         <div
-            class="planner-editor"
+            data-modal-shell class="planner-editor"
             data-planner-editor
             aria-hidden="true"
             hidden
@@ -705,7 +728,7 @@
                         data-planner-editor-close
                         aria-label="Close planner"
                     >
-                        <span aria-hidden="true">&times;</span>
+                        <span class="cyrene-close" aria-hidden="true"></span>
                     </button>
                 </header>
 
@@ -782,20 +805,20 @@
                     >
                         <div class="planner-level-comparison">
                             <div class="planner-level-value">
-                                <span>Current Level</span>
+                                <span>Current</span>
                                 <strong data-planner-current-level>—</strong>
                             </div>
 
-                            <span class="planner-level-arrow" aria-hidden="true">→</span>
+                            <span class="planner-level-arrow" aria-hidden="true"><span class="cyrene-arrow"></span></span>
 
                             <label class="planner-level-value" for="planner-level">
-                                <span>Goal Level</span>
+                                <span>Goal</span>
                                 <select
                                     id="planner-level"
                                     name="level"
                                     data-planner-level
                                 >
-                                    {% for level in [20, 40, 50, 60, 70, 80, 90] %}
+                                    {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
                                     <option
                                         value="{{ level }}"
                                         {% if level == 90 %}selected{% endif %}
@@ -839,7 +862,7 @@
                                         >—</strong>
                                     </div>
 
-                                    <span aria-hidden="true">→</span>
+                                    <span aria-hidden="true"><span class="cyrene-arrow"></span></span>
 
                                     <label for="planner-talent-{{ loop.index }}">
                                         <span>Goal</span>
@@ -875,6 +898,9 @@
                         data-planner-panel="weapon"
                         hidden
                     >
+                        <label class="planner-weapon-choice" hidden><span>Weapon</span>
+                            <select data-planner-weapon-choice aria-label="Choose planned weapon"><option value="">No weapon</option></select>
+                        </label>
                         <div class="planner-weapon-overview">
                             <div class="planner-weapon-identity">
                                 <img
@@ -892,23 +918,23 @@
 
                             <div class="planner-level-comparison">
                                 <div class="planner-level-value">
-                                    <span>Current Level</span>
+                                    <span>Current</span>
                                     <strong data-planner-current-weapon-level>—</strong>
                                 </div>
 
                                 <span class="planner-level-arrow" aria-hidden="true">
-                                    →
+                                    <span class="cyrene-arrow"></span>
                                 </span>
 
                                 <label class="planner-level-value"
                                     for="planner-weapon-level">
-                                    <span>Goal Level</span>
+                                    <span>Goal</span>
                                     <select
                                         id="planner-weapon-level"
                                         name="weapon_level"
                                         data-planner-weapon-level
                                     >
-                                        {% for level in [20, 40, 50, 60, 70, 80, 90] %}
+                                        {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
                                         <option
                                             value="{{ level }}"
                                             {% if level == 90 %}selected{% endif %}
@@ -965,4 +991,7 @@
         </div>
 
     </div>
+{% with delete_dialog_class='character-plan-delete-dialog', delete_prefix='character-plan-delete', delete_title='Remove character plan?', delete_cancel='Keep plan', delete_confirm='Remove plan' %}
+{% include 'components/deletion_confirmation.html' %}
+{% endwith %}
 {% endblock %}

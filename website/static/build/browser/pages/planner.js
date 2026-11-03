@@ -630,36 +630,6 @@ function initialiseReminderPanel() {
         });
     }
 }
-let plannerToastTimeout = null;
-function showPlannerToast(message) {
-    const toast = document.getElementById("planner-toast");
-    const toastMessage = document.getElementById("planner-toast-message");
-    if (!toast || !toastMessage) {
-        return;
-    }
-    /*
-     * Cancel any previous timeout.
-     */
-    if (plannerToastTimeout) {
-        clearTimeout(plannerToastTimeout);
-        plannerToastTimeout = null;
-    }
-    /*
-     * Update the message.
-     */
-    toastMessage.textContent = message;
-    /*
-     * Show the toast.
-     */
-    toast.classList.add("show");
-    /*
-     * Hide it after 3 seconds.
-     */
-    plannerToastTimeout = setTimeout(() => {
-        toast.classList.remove("show");
-        plannerToastTimeout = null;
-    }, 3000);
-}
 async function saveReminder() {
     const typeInput = document.getElementById("reminder-type");
     const accountInput = document.getElementById("reminder-account");
@@ -715,7 +685,7 @@ async function saveReminder() {
             throw new Error(result.detail || "Failed to save reminder.");
         }
         closeReminderPanel();
-        showPlannerToast("Reminder added successfully.");
+        window.showCyreneToast?.("Reminder added successfully.");
         await loadPlanner();
     }
     catch (exception) {
@@ -770,7 +740,7 @@ async function deleteReminder(reminderId) {
         /*
          * Show success notification.
          */
-        showPlannerToast("Reminder deleted successfully.");
+        window.showCyreneToast?.("Reminder deleted successfully.");
         /*
          * Refresh planner data so the local
          * state remains accurate.

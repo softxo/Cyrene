@@ -43,7 +43,10 @@ export function initialiseSearchControls(): void {
         clear.className = "cyrene-search-clear";
         clear.setAttribute("aria-label", "Clear search");
         if (input.id) clear.setAttribute("aria-controls", input.id);
-        clear.append(icon("M7 7l10 10M17 7 7 17"));
+        const closeIcon = document.createElement("span");
+        closeIcon.className = "cyrene-close";
+        closeIcon.setAttribute("aria-hidden", "true");
+        clear.append(closeIcon);
         clear.addEventListener("click", () => {
             input.value = "";
             update(input);

@@ -355,76 +355,6 @@
 }
 
 /* ================================
-   Planner Toast
-   ================================ */
-
-.planner-toast {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: 1000;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    min-width: 220px;
-    max-width: 320px;
-
-    box-sizing: border-box;
-    padding: 12px 15px;
-
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-
-    box-shadow: 0 10px 30px color-mix(in srgb, var(--text) 15%, transparent);
-
-    color: var(--text);
-
-    font-size: 13px;
-    font-weight: 500;
-
-    opacity: 0;
-    transform: translateY(12px);
-
-    pointer-events: none;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
-}
-
-.planner-toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.planner-toast-icon {
-    width: 20px;
-    height: 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    background: color-mix(in srgb, var(--accent) 15%, transparent);
-    border-radius: 50%;
-
-    color: var(--accent);
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.planner-toast-message {
-    min-width: 0;
-
-    line-height: 1.4;
-}
-
-/* ================================
    Empty State
    ================================ */
 
@@ -548,14 +478,7 @@
         min-width: 0;
     }
 
-    .planner-toast {
-        right: 16px;
-        bottom: 16px;
-        left: 16px;
 
-        max-width: none;
-        min-width: 0;
-    }
 }
 
 .planner-button {

@@ -8,7 +8,8 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         "[data-planner-constellation], " +
             "[data-planner-level], " +
             "[data-planner-weapon-level], " +
-            "[data-planner-talent]",
+            "[data-planner-talent], " +
+            "[data-planner-weapon-choice]",
     );
 
     let activeMenu = null;
@@ -28,7 +29,10 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
     function positionMenu(menu, trigger) {
         const rect = trigger.getBoundingClientRect();
-        const width = Math.min(260, window.innerWidth - 24);
+        const width = Math.min(
+            trigger.closest(".planner-weapon-choice") ? rect.width : 260,
+            window.innerWidth - 24,
+        );
         const centredLeft = rect.left + rect.width / 2 - width / 2;
         const left = Math.max(12, Math.min(centredLeft, window.innerWidth - width - 12));
 
@@ -60,6 +64,8 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
 
         const grid = document.createElement("div");
         grid.className = "planner-choice-grid";
+        if (select.matches("[data-planner-weapon-choice]"))
+            grid.classList.add("planner-weapon-choice-list");
 
         const isConstellation = select.matches("[data-planner-constellation]");
 
@@ -68,13 +74,15 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
             .forEach((option) => {
                 const button = document.createElement("button");
                 button.type = "button";
-                button.className = "planner-choice-option";
+                button.className = "cyrene-button planner-choice-option";
 
                 button.textContent = isConstellation
                     ? `C${option.value}`
                     : select.matches("[data-planner-talent]")
                       ? option.value
-                      : `Lv. ${option.value}`;
+                      : select.matches("[data-planner-weapon-choice]")
+                        ? option.textContent
+                        : `Lv. ${option.value}`;
 
                 const selected = select.value === option.value;
 
@@ -121,8 +129,9 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         trigger.setAttribute("aria-haspopup", "true");
         trigger.setAttribute("aria-expanded", "false");
 
-        const fieldName =
-            select.closest("label")?.querySelector("span")?.textContent.trim() || "Goal";
+        const fieldName = select.matches("[data-planner-weapon-choice]")
+            ? "weapon"
+            : select.closest("label")?.querySelector("span")?.textContent.trim() || "Goal";
 
         trigger.setAttribute("aria-label", `Choose ${fieldName.toLowerCase()}`);
 
@@ -308,6 +317,60 @@ function initCharacterPlanner() {
     syncStatus.hidden = true;
     plannerGrid.before(syncStatus);
     let editingId = null;
+    let editingPlan = null;
+    let weaponCataloguePromise = null;
+    const weaponChoice = form.querySelector("[data-planner-weapon-choice]");
+    const ownershipFilter = picker.querySelector("[data-planner-ownership]");
+    const ownershipControl = picker.querySelector("[data-planner-ownership-control]");
+    const ownershipButton = ownershipControl?.querySelector(".custom-select-button");
+    function closeOwnership() {
+        ownershipControl?.classList.remove("open");
+        ownershipButton?.setAttribute("aria-expanded", "false");
+    }
+    function setOwnership(value) {
+        if (!ownershipFilter || !ownershipControl) return;
+        ownershipFilter.value = value;
+        ownershipControl.querySelectorAll(".custom-select-option").forEach((option) => {
+            const selected = option.dataset.value === value;
+            option.classList.toggle("selected", selected);
+            option.setAttribute("aria-selected", String(selected));
+            if (selected)
+                ownershipControl.querySelector(".custom-select-value").textContent =
+                    option.textContent;
+        });
+        closeOwnership();
+    }
+    ownershipButton?.addEventListener("click", () => {
+        const opening = !ownershipControl.classList.contains("open");
+        ownershipControl.classList.toggle("open", opening);
+        ownershipButton.setAttribute("aria-expanded", String(opening));
+    });
+    ownershipControl?.querySelectorAll(".custom-select-option").forEach((option) => {
+        option.addEventListener("click", () => {
+            setOwnership(option.dataset.value);
+            filterPicker();
+            ownershipButton.focus();
+        });
+    });
+    document.addEventListener("click", (event) => {
+        if (!ownershipControl?.contains(event.target)) closeOwnership();
+    });
+    ownershipControl?.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            event.stopPropagation();
+            closeOwnership();
+            ownershipButton.focus();
+        } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
+            event.preventDefault();
+            const options = Array.from(ownershipControl.querySelectorAll(".custom-select-option"));
+            const index = options.indexOf(document.activeElement);
+            ownershipControl.classList.add("open");
+            ownershipButton.setAttribute("aria-expanded", "true");
+            options[
+                (index + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length
+            ].focus();
+        }
+    });
     let previouslyFocused = null;
     let progressionRequestId = 0;
     let costRequestId = 0;
@@ -545,6 +608,13 @@ function initCharacterPlanner() {
         }
     }
 
+    function makeArrow() {
+        const arrow = makeElement("span", "cyrene-arrow");
+        arrow.setAttribute("role", "img");
+        arrow.setAttribute("aria-label", "to");
+        return arrow;
+    }
+
     function makeProgressionValues(current, target, prefix = "") {
         const values = makeElement("div", "planner-card-level-values");
         const hasCurrent = current !== null && current !== undefined;
@@ -555,7 +625,7 @@ function initCharacterPlanner() {
         } else {
             values.append(
                 makeElement("strong", "", hasCurrent ? `${prefix}${current}` : `${prefix}—`),
-                makeElement("span", "", "→"),
+                makeArrow(),
                 makeElement("strong", "", `${prefix}${target}`),
             );
         }
@@ -656,6 +726,7 @@ function initCharacterPlanner() {
         return {
             status: items.size > 0 ? "required" : "complete",
             items: Array.from(items.values()),
+            preview: ["level", "talents", "weapon"].some((group) => costs?.[group]?.preview),
             message:
                 items.size > 0
                     ? "Combined character, talent, and weapon costs."
@@ -663,18 +734,94 @@ function initCharacterPlanner() {
         };
     }
 
+    function isUnowned(plan) {
+        return (
+            pickerButtons.find(
+                (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+            )?.dataset.plannerCharacterOwnership === "unowned"
+        );
+    }
+
+    function unownedCharacter(plan) {
+        const weapon = plan.plannedWeapon;
+        return {
+            name: plan.name,
+            element: plan.element,
+            level: 1,
+            ascension: 0,
+            constellation: 0,
+            constellations: [],
+            skills: [1, 2, 3].map((id) => ({ id, skill_type: 1, level: 1 })),
+            weapon: weapon ? { ...weapon, level: 1, ascension: 0 } : null,
+        };
+    }
+
+    async function loadWeaponChoices(plan) {
+        try {
+            weaponCataloguePromise ??= fetch(
+                `/api/weapons?account_id=${encodeURIComponent(accountId)}`,
+                { credentials: "same-origin" },
+            )
+                .then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok || data.catalogue_error)
+                        throw new Error(data.catalogue_error || "Could not load weapons");
+                    return data.catalogue;
+                })
+                .catch((error) => {
+                    weaponCataloguePromise = null;
+                    throw error;
+                });
+            const weapons = await weaponCataloguePromise;
+            if (editingPlan !== plan || editor.hidden) return;
+            const type =
+                plan.weaponType ||
+                pickerButtons.find(
+                    (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+                )?.dataset.plannerCharacterWeapon;
+            weaponChoice.replaceChildren(new Option("No weapon", ""));
+            weapons
+                .filter((weapon) => weapon.type.toLowerCase() === type?.toLowerCase())
+                .forEach((weapon) => {
+                    const option = new Option(weapon.name, String(weapon.id));
+                    option.dataset.weapon = JSON.stringify(weapon);
+                    weaponChoice.add(option);
+                });
+            weaponChoice.value = plan.plannedWeapon ? String(plan.plannedWeapon.id) : "";
+            plannerSelectors.sync();
+        } catch (error) {
+            console.warn("Could not load planned weapons.", error);
+            if (editingPlan !== plan || editor.hidden) return;
+            weaponChoice.add(
+                new Option("Couldn't load weapons. Reopen to retry.", "", false, false),
+            );
+        }
+    }
+
+    weaponChoice?.addEventListener("change", () => {
+        if (!editingPlan) return;
+        const selected = weaponChoice.selectedOptions[0]?.dataset.weapon;
+        editingPlan.plannedWeapon = selected ? JSON.parse(selected) : null;
+        loadCurrentProgression(editingPlan, ++progressionRequestId);
+    });
+
     async function loadPlanTotal(plan, target) {
         target.replaceChildren(makeElement("p", "planner-cost-message", "Calculating total…"));
 
         try {
             const accountQuery = `?account_id=${encodeURIComponent(accountId)}`;
-            const showcaseResponse = await fetch(
-                `/api/characters/${encodeURIComponent(plan.id)}/showcase${accountQuery}`,
-                {
-                    credentials: "same-origin",
-                    headers: { Accept: "application/json" },
-                },
-            );
+            const showcaseResponse = isUnowned(plan)
+                ? {
+                      ok: true,
+                      json: async () => ({ data: { characters: [unownedCharacter(plan)] } }),
+                  }
+                : await fetch(
+                      `/api/characters/${encodeURIComponent(plan.id)}/showcase${accountQuery}`,
+                      {
+                          credentials: "same-origin",
+                          headers: { Accept: "application/json" },
+                      },
+                  );
             const showcasePayload = await showcaseResponse.json();
 
             if (!showcaseResponse.ok) {
@@ -756,7 +903,14 @@ function initCharacterPlanner() {
     function renderPlans() {
         plannerGrid.replaceChildren();
 
-        const hasPlans = plans.length > 0;
+        const visiblePlans = plans.filter(
+            (plan) =>
+                document.documentElement.dataset.showUnreleased === "true" ||
+                pickerButtons.find(
+                    (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+                )?.dataset.unreleased !== "true",
+        );
+        const hasPlans = visiblePlans.length > 0;
 
         emptyState.hidden = hasPlans;
         plannerGrid.hidden = !hasPlans;
@@ -774,7 +928,7 @@ function initCharacterPlanner() {
                 index,
             ]),
         );
-        [...plans]
+        [...visiblePlans]
             .sort(
                 (a, b) =>
                     (releaseOrder.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) -
@@ -788,6 +942,10 @@ function initCharacterPlanner() {
                 image.alt = plan.name;
                 image.loading = "lazy";
 
+                card.dataset.unreleased =
+                    pickerButtons.find(
+                        (button) => String(button.dataset.plannerCharacterId) === String(plan.id),
+                    )?.dataset.unreleased || "false";
                 card.dataset.rarity = String(plan.rarity || 4);
                 card.dataset.element = (plan.element || "").toLocaleLowerCase();
 
@@ -800,16 +958,24 @@ function initCharacterPlanner() {
                 elementIcon.alt = plan.element || "Element";
                 elementIcon.title = plan.element || "Element";
                 elementBadge.append(elementIcon);
-                identity.append(name);
+                identity.append(name, elementBadge);
+                if (card.dataset.unreleased === "true")
+                    identity.append(makeElement("span", "cyrene-unreleased-badge", "Unreleased"));
                 const constellationBadge = makeElement("span", "planner-card-constellation");
                 const constellationChanged =
                     plan.currentConstellation != null &&
                     plan.currentConstellation !== plan.constellation;
-                constellationBadge.textContent = constellationChanged
-                    ? `C${plan.currentConstellation} → C${plan.constellation}`
-                    : `C${plan.constellation}`;
+                if (constellationChanged) {
+                    constellationBadge.append(
+                        makeElement("span", "", `C${plan.currentConstellation}`),
+                        makeArrow(),
+                        makeElement("span", "", `C${plan.constellation}`),
+                    );
+                } else {
+                    constellationBadge.textContent = `C${plan.constellation}`;
+                }
                 constellationBadge.classList.toggle("has-goal", constellationChanged);
-                portrait.append(image, constellationBadge, elementBadge, identity);
+                portrait.append(image, constellationBadge, identity);
 
                 const content = makeElement("div", "planner-card-content");
                 const goals = makeElement("div", "planner-card-goals");
@@ -858,7 +1024,9 @@ function initCharacterPlanner() {
                 const weaponLevels = makeElement("div", "planner-card-goal");
                 weaponLevels.append(
                     makeElement("span", "", "Weapon level"),
-                    makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "),
+                    isUnowned(plan) && !plan.plannedWeapon
+                        ? makeElement("strong", "planner-card-no-weapon", "No weapon")
+                        : makeProgressionValues(plan.currentWeaponLevel, weaponGoal, "Lv. "),
                 );
                 weapon.append(weaponLevels);
                 if (plan.currentWeaponIcon || plan.currentWeaponName) {
@@ -892,7 +1060,10 @@ function initCharacterPlanner() {
                     openEditor(plan.id);
                 });
 
-                const removeButton = makeElement("button", "planner-card-remove", "×");
+                const removeButton = makeElement("button", "planner-card-remove");
+                const closeIcon = makeElement("span", "cyrene-close");
+                closeIcon.setAttribute("aria-hidden", "true");
+                removeButton.append(closeIcon);
                 removeButton.type = "button";
                 removeButton.title = `Remove ${plan.name}'s plan`;
                 removeButton.setAttribute("aria-label", `Remove ${plan.name}'s plan`);
@@ -927,6 +1098,11 @@ function initCharacterPlanner() {
             const name = (button.dataset.plannerCharacterName || "").toLocaleLowerCase();
 
             const matches =
+                (document.documentElement.dataset.showUnreleased === "true" ||
+                    button.dataset.unreleased !== "true") &&
+                (!ownershipFilter ||
+                    ownershipFilter.value === "all" ||
+                    button.dataset.plannerCharacterOwnership === ownershipFilter.value) &&
                 name.includes(query) &&
                 Object.entries(pickerFilters).every(
                     ([key, value]) =>
@@ -946,13 +1122,26 @@ function initCharacterPlanner() {
         });
 
         pickerEmpty.hidden = visibleCount !== 0;
-        if (pickerCount)
-            pickerCount.textContent = `${visibleCount} of ${pickerButtons.length} characters`;
+        if (pickerCount) {
+            const available = pickerButtons.filter(
+                (button) =>
+                    document.documentElement.dataset.showUnreleased === "true" ||
+                    button.dataset.unreleased !== "true",
+            );
+            pickerCount.querySelector("[data-count-shown]").textContent = String(visibleCount);
+            pickerCount.querySelector("[data-count-base]").textContent = String(available.length);
+            pickerCount.querySelector("[data-count-owned]").textContent = String(
+                available.filter((button) => button.dataset.plannerCharacterOwnership === "owned")
+                    .length,
+            );
+            pickerCount.querySelector("[data-count-total]").textContent = String(available.length);
+        }
     }
 
     async function openPicker() {
         await hydrationPromise;
         pickerSearch.value = "";
+        setOwnership("all");
         filterPicker();
 
         showModal(picker, pickerDialog);
@@ -960,6 +1149,7 @@ function initCharacterPlanner() {
     }
 
     function closePicker() {
+        closeOwnership();
         hideModal(picker);
     }
 
@@ -993,19 +1183,17 @@ function initCharacterPlanner() {
                     0,
                     6,
                 ),
-                currentLevel: normaliseOptionalNumber(button.dataset.plannerCharacterLevel, 1, 90),
-                level: 90,
+                currentLevel:
+                    normaliseOptionalNumber(button.dataset.plannerCharacterLevel, 1, 90) || 1,
+                weaponType: button.dataset.plannerCharacterWeapon,
+                level: button.dataset.plannerCharacterOwnership === "unowned" ? 1 : 90,
                 talents: [1, 1, 1],
-                weaponLevel: 90,
+                weaponLevel: button.dataset.plannerCharacterOwnership === "unowned" ? 1 : 90,
             };
-
-            plans.push(plan);
-            persistPlans();
-            renderPlans();
         }
 
         closePicker();
-        openEditor(plan.id);
+        openEditor(plan.id, plan);
     }
 
     async function removePlan(id) {
@@ -1016,7 +1204,43 @@ function initCharacterPlanner() {
             return;
         }
 
-        const confirmed = window.confirm(`Remove ${plan.name} from your Character Planner?`);
+        const confirmation =
+            page.querySelector(".character-plan-delete-dialog") ||
+            document.querySelector(".character-plan-delete-dialog");
+        if (!confirmation || confirmation.open) return;
+        confirmation.querySelector("[data-delete-description]").textContent =
+            `Remove ${plan.name}'s saved plan from your Character Planner? This cannot be undone.`;
+        confirmation.returnValue = "cancel";
+        const confirmed = await new Promise((resolve) => {
+            confirmation.addEventListener(
+                "close",
+                () => resolve(confirmation.returnValue === "delete"),
+                { once: true },
+            );
+            confirmation.querySelector("[data-delete-confirm]").onclick = () =>
+                confirmation.close("delete");
+            confirmation.querySelector("[data-delete-cancel]").onclick = () =>
+                confirmation.close("cancel");
+            let pressedOutside = false;
+            const outside = (event) => {
+                const rect = confirmation.getBoundingClientRect();
+                return (
+                    event.target === confirmation &&
+                    (event.clientX < rect.left ||
+                        event.clientX > rect.right ||
+                        event.clientY < rect.top ||
+                        event.clientY > rect.bottom)
+                );
+            };
+            confirmation.onpointerdown = (event) => {
+                pressedOutside = outside(event);
+            };
+            confirmation.onclick = (event) => {
+                if (pressedOutside && outside(event)) confirmation.close("cancel");
+                pressedOutside = false;
+            };
+            confirmation.showModal();
+        });
 
         if (!confirmed) {
             return;
@@ -1026,6 +1250,15 @@ function initCharacterPlanner() {
 
         persistPlans();
         renderPlans();
+        window.showCyreneToast?.(`${plan.name} removed from Character Planner.`);
+        try {
+            await databaseSavePromise;
+        } catch {
+            window.showCyreneToast?.(
+                `${plan.name} removed in this browser. Sync failed; reload to retry.`,
+                "warning",
+            );
+        }
     }
 
     /* =====================================================
@@ -1062,6 +1295,8 @@ function initCharacterPlanner() {
         progressionRequestId++;
         costRequestId++;
         currentProgression = null;
+        editingPlan = null;
+        editingId = null;
 
         hideModal(editor);
     }
@@ -1141,7 +1376,7 @@ function initCharacterPlanner() {
     }
 
     function openTotalPanel() {
-        const plan = getPlan(editingId);
+        const plan = editingPlan;
 
         if (!plan || !totalButton || !totalPanel || !totalContent) {
             return;
@@ -1303,16 +1538,18 @@ function initCharacterPlanner() {
         try {
             const query = `?account_id=${encodeURIComponent(accountId)}`;
 
-            const response = await fetch(
-                `/api/characters/${encodeURIComponent(plan.id)}/showcase${query}`,
-                {
-                    method: "GET",
-                    credentials: "same-origin",
-                    headers: {
-                        Accept: "application/json",
-                    },
-                },
-            );
+            const response = isUnowned(plan)
+                ? {
+                      ok: true,
+                      json: async () => ({ data: { characters: [unownedCharacter(plan)] } }),
+                  }
+                : await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase${query}`, {
+                      method: "GET",
+                      credentials: "same-origin",
+                      headers: {
+                          Accept: "application/json",
+                      },
+                  });
 
             let payload;
 
@@ -1346,6 +1583,12 @@ function initCharacterPlanner() {
             }
 
             const weapon = character.weapon;
+            const weaponComparison = editor.querySelector(
+                ".planner-weapon-overview .planner-level-comparison",
+            );
+            if (weaponComparison) weaponComparison.hidden = isUnowned(plan) && !weapon;
+            const weaponOverview = editor.querySelector(".planner-weapon-overview");
+            if (weaponOverview) weaponOverview.hidden = isUnowned(plan) && !weapon;
             const weaponRarity = Number(weapon?.rarity);
             const weaponIdentity = currentWeaponIcon?.closest(".planner-weapon-identity");
 
@@ -1354,7 +1597,8 @@ function initCharacterPlanner() {
             }
 
             if (currentWeaponNameElement) {
-                currentWeaponNameElement.textContent = weapon?.name || "Weapon data unavailable";
+                currentWeaponNameElement.textContent =
+                    weapon?.name || (isUnowned(plan) ? "No weapon" : "Weapon data unavailable");
             }
 
             if (currentWeaponIcon) {
@@ -1371,7 +1615,11 @@ function initCharacterPlanner() {
 
             if (currentWeaponLevelElement) {
                 currentWeaponLevelElement.textContent =
-                    weapon?.level != null ? `Lv. ${weapon.level}` : "Unavailable";
+                    weapon?.level != null
+                        ? `Lv. ${weapon.level}`
+                        : isUnowned(plan)
+                          ? "No weapon"
+                          : "Unavailable";
             }
 
             const talents = getCharacterCombatTalents(character);
@@ -1435,8 +1683,6 @@ function initCharacterPlanner() {
 
             weaponLevelInput.value = String(plan.weaponLevel);
             plannerSelectors.sync();
-            persistPlans();
-            renderPlans();
 
             if (
                 Number.isFinite(Number(character.level)) &&
@@ -1506,6 +1752,10 @@ function initCharacterPlanner() {
         const section = element.closest(".planner-goal-cost");
         section?.querySelector(".planner-cost-status")?.remove();
 
+        if (cost?.status === "not_planned") {
+            element.append(makeElement("p", "planner-cost-message", cost.message));
+            return;
+        }
         if (!cost || ["unavailable", "invalid"].includes(cost.status)) {
             element.append(
                 makeElement(
@@ -1515,7 +1765,11 @@ function initCharacterPlanner() {
                 ),
             );
             if (cost?.status !== "invalid") {
-                const retry = makeElement("button", "planner-cost-retry", "Try again");
+                const retry = makeElement(
+                    "button",
+                    "cyrene-button planner-cost-retry",
+                    "Try again",
+                );
                 retry.type = "button";
                 retry.addEventListener("click", updateGoalCosts);
                 element.append(retry);
@@ -1526,8 +1780,13 @@ function initCharacterPlanner() {
         const status = makeElement(
             "span",
             "planner-cost-status",
-            cost.status === "complete" ? "✓ Done" : "Required",
+            cost.status === "complete" ? "Done" : "Required",
         );
+        if (cost.status === "complete") {
+            const check = makeElement("span", "cyrene-check");
+            check.setAttribute("aria-hidden", "true");
+            status.prepend(check);
+        }
         status.classList.toggle("is-complete", cost.status === "complete");
         section?.querySelector("h3")?.append(status);
 
@@ -1542,6 +1801,14 @@ function initCharacterPlanner() {
             return;
         }
 
+        if (cost.preview)
+            element.append(
+                makeElement(
+                    "p",
+                    "planner-cost-message",
+                    "Preview materials; requirements may change before release.",
+                ),
+            );
         const grid = makeElement("div", "planner-cost-grid");
         grid.setAttribute("role", "list");
         element.append(grid);
@@ -1657,7 +1924,7 @@ function initCharacterPlanner() {
                 const materialId = String(item.id);
                 const owned = inventory.has(materialId)
                     ? inventoryAmount(materialId)
-                    : UNREPORTED_INVENTORY_IDS.has(materialId)
+                    : item.inventory_unavailable || UNREPORTED_INVENTORY_IDS.has(materialId)
                       ? null
                       : 0;
                 ownedAmount = owned;
@@ -1836,7 +2103,7 @@ function initCharacterPlanner() {
     }
 
     async function updateGoalCosts() {
-        const plan = getPlan(editingId);
+        const plan = editingPlan;
 
         if (!plan || !currentProgression) {
             return;
@@ -1908,7 +2175,14 @@ function initCharacterPlanner() {
                 form.querySelectorAll("[data-planner-cost]").forEach((element) => {
                     renderGoalCost(
                         element,
-                        payload?.costs?.[element.dataset.plannerCost],
+                        element.dataset.plannerCost === "weapon" &&
+                            isUnowned(plan) &&
+                            !currentProgression.weapon
+                            ? {
+                                  status: "not_planned",
+                                  message: "Choose a weapon to plan its upgrades.",
+                              }
+                            : payload?.costs?.[element.dataset.plannerCost],
                         inventory,
                     );
                 });
@@ -1945,8 +2219,10 @@ function initCharacterPlanner() {
        OPEN AND SAVE EDITOR
        ===================================================== */
 
-    function openEditor(id) {
-        const plan = getPlan(id);
+    function openEditor(id, draft = null) {
+        const saved = getPlan(id) || draft;
+        const plan = saved ? JSON.parse(JSON.stringify(saved)) : null;
+        editingPlan = plan;
 
         if (!plan) {
             return;
@@ -1960,6 +2236,17 @@ function initCharacterPlanner() {
         editorSubtitle.textContent =
             `${plan.element || "Unknown element"} · ` + `${plan.rarity || "?"}-star character`;
 
+        editorIcon?.setAttribute("data-rarity", String(plan.rarity));
+        if (weaponChoice) {
+            weaponChoice.closest("label").hidden = !isUnowned(plan);
+            weaponChoice.replaceChildren(new Option("No weapon", ""));
+            if (plan.plannedWeapon)
+                weaponChoice.add(
+                    new Option(plan.plannedWeapon.name, String(plan.plannedWeapon.id)),
+                );
+            weaponChoice.value = plan.plannedWeapon ? String(plan.plannedWeapon.id) : "";
+            if (isUnowned(plan)) loadWeaponChoices(plan);
+        }
         if (editorIcon) {
             editorIcon.src = plan.icon;
             editorIcon.alt = plan.name;
@@ -2022,6 +2309,7 @@ function initCharacterPlanner() {
     });
     picker.querySelector("[data-planner-filter-reset]")?.addEventListener("click", () => {
         pickerSearch.value = "";
+        setOwnership("all");
         picker
             .querySelectorAll('[data-planner-filter] [data-value="all"]')
             .forEach((button) => button.click());
@@ -2058,7 +2346,7 @@ function initCharacterPlanner() {
         event.preventDefault();
         await hydrationPromise;
 
-        const plan = getPlan(editingId);
+        const plan = editingPlan;
 
         if (!plan) {
             return;
@@ -2070,16 +2358,24 @@ function initCharacterPlanner() {
         plan.talents = getTalentTargets();
         plan.weaponLevel = Number(weaponLevelInput.value);
 
+        const existingIndex = plans.findIndex((item) => String(item.id) === String(plan.id));
+        if (existingIndex < 0) plans.push(plan);
+        else plans[existingIndex] = plan;
         persistPlans();
         renderPlans();
 
+        closeEditor();
+        window.showCyreneToast?.(
+            existingIndex < 0
+                ? `${plan.name} added to Character Planner.`
+                : `${plan.name}'s plan updated.`,
+        );
         try {
             await databaseSavePromise;
-            closeEditor();
         } catch {
-            window.alert(
-                "The plan was kept in this browser, but could not be " +
-                    "saved to the database. Please try again.",
+            window.showCyreneToast?.(
+                "Plan kept in this browser. Could not sync; try saving again.",
+                "warning",
             );
         }
     });
@@ -2102,6 +2398,11 @@ function initCharacterPlanner() {
 
     const plannerSelectors = createPlannerButtonSelectors(form, editor, editorDialog);
 
+    window.addEventListener("cyrene-content-preferences-changed", () => {
+        if (!page.isConnected) return;
+        renderPlans();
+        filterPicker();
+    });
     renderPlans();
     filterPicker();
     const hydrationPromise = hydratePlansFromDatabase();
@@ -2109,7 +2410,7 @@ function initCharacterPlanner() {
         let changed = false;
         await Promise.all(
             plans.map(async (plan) => {
-                if (plan.currentWeaponIcon || !accountId) return;
+                if (plan.currentWeaponIcon || !accountId || isUnowned(plan)) return;
                 try {
                     const response = await fetch(
                         `/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`,

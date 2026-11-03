@@ -1,3 +1,6 @@
+@import "../components/icons.css";
+@import "../components/modals.css";
+@import "../components/toasts.css";
 @import "../components/buttons.css";
 @import "../components/forms.css";
 
@@ -1181,8 +1184,8 @@ html body .checkbox-control {
     }
 }
 
-/* Immediate feedback while Events fetches account data. */
-#events-navigation-status {
+/* Shared feedback while pages or API requests fetch data. */
+#navigation-loading-status {
     position: fixed;
     z-index: 10000;
     top: 24px;
@@ -1201,7 +1204,7 @@ html body .checkbox-control {
     pointer-events: none;
 }
 
-body:has(#events-navigation-status)::before {
+body:has(#navigation-loading-status)::before {
     content: "";
     position: fixed;
     z-index: 10001;
@@ -1240,12 +1243,12 @@ body:has(#events-navigation-status)::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body:has(#events-navigation-status)::before,
+    body:has(#navigation-loading-status)::before,
     .navigation-loading-spark,
     .nav-item.is-loading .nav-icon {
         animation: none;
     }
-    body:has(#events-navigation-status)::before {
+    body:has(#navigation-loading-status)::before {
         background: var(--accent);
     }
 }
@@ -1478,4 +1481,26 @@ body:has(#events-navigation-status)::before {
     --button-border: color-mix(in srgb, var(--error) 60%, transparent);
     --button-hover-border: var(--error);
     color: var(--error);
+}
+
+.navigation-loading-spark {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+
+/* Hidden before first paint, including when navigating into a fresh SPA panel. */
+html:not([data-show-unreleased="true"]) [data-unreleased="true"] {
+    display: none !important;
+}
+.cyrene-unreleased-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border: 1px solid var(--accent-border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.3;
 }

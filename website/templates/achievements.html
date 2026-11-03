@@ -276,7 +276,7 @@
                     id="achievement-back"
                     aria-label="Back to categories"
                 >
-                    ←
+                    <span class="cyrene-arrow cyrene-arrow--left" aria-hidden="true"></span>
                 </button>
 
                 <span>Categories</span>
@@ -384,7 +384,7 @@
 
 
 <div
-    class="achievement-import-success"
+    data-modal-shell class="achievement-import-success"
     id="achievement-import-success"
     role="status"
     aria-live="polite"
@@ -392,7 +392,7 @@
 >
     <div class="achievement-import-success-backdrop"></div>
 
-    <div class="achievement-import-success-panel">
+    <div data-modal-panel class="achievement-import-success-panel">
         <div class="achievement-import-verified-icon" aria-hidden="true">
             <span class="achievement-import-corner top-left"></span>
             <span class="achievement-import-corner top-right"></span>
@@ -400,8 +400,8 @@
             <span class="achievement-import-corner bottom-right"></span>
             <span class="achievement-import-scan-line"></span>
 
-            <svg class="achievement-import-check" viewBox="0 0 64 64" focusable="false">
-                <path d="M17 33.5 27.5 44 48 22"></path>
+            <svg class="achievement-import-check" viewBox="0 0 24 24" focusable="false">
+                <use href="/static/images/ui/check.svg#check"></use>
             </svg>
         </div>
 
@@ -415,7 +415,7 @@
 
 <!-- Notes Modal -->
 <div
-    class="achievement-notes-modal"
+    data-modal-shell class="achievement-notes-modal"
     id="achievement-notes-modal"
     hidden
 >
@@ -444,7 +444,7 @@
                 aria-label="Close"
                 title="Close"
             >
-                ×
+                <span class="cyrene-close" aria-hidden="true"></span>
             </button>
 
         </div>

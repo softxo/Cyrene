@@ -81,6 +81,7 @@
 
 .planner-character-card[data-rarity="5"] {
     --planner-card-accent: #d6972f;
+    --planner-name-background: #87502e;
 }
 
 .planner-character-card:hover {
@@ -109,8 +110,8 @@
     position: relative;
     width: 100%;
     padding: 6px 8px;
-    border-top: 1px solid color-mix(in srgb, var(--planner-card-accent) 55%, var(--border));
-    background: color-mix(in srgb, var(--planner-card-accent) 38%, var(--surface));
+    border-top: 1px solid rgb(255 255 255 / 8%);
+    background: var(--planner-name-background, #573777);
     text-align: center;
 }
 
@@ -124,29 +125,22 @@
 .planner-card-element {
     position: absolute;
     z-index: 2;
-    bottom: 35px;
-    right: 5px;
+    bottom: calc(100% + 2px);
+    right: 4px;
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
-    padding: 6px;
-    border: 1px solid rgb(255 255 255 / 22%);
+    width: 28px;
+    height: 28px;
+    padding: 2px;
     border-radius: 50%;
-    background: linear-gradient(145deg, rgb(255 255 255 / 18%), rgb(8 11 19 / 58%));
-    box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 18%),
-        0 6px 16px rgb(0 0 0 / 24%);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    overflow: hidden;
+    background: rgb(17 49 54 / 40%);
 }
 
 .planner-card-element img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 2px 5px rgb(0 0 0 / 35%));
 }
 
 .planner-card-content {
@@ -233,7 +227,7 @@
     gap: 5px;
 }
 
-.planner-card-level-values > span {
+.planner-card-level-values > span:not(.cyrene-arrow) {
     position: relative;
     top: 1px;
     color: var(--text-muted);
@@ -1899,4 +1893,306 @@
 }
 .planner-add-button {
     padding: 10px 16px;
+}
+
+/* Align labels and values independently of the selector's height. */
+.planner-talent-levels,
+.planner-level-comparison {
+    align-items: start;
+}
+.planner-talent-levels {
+    grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1.15fr);
+    gap: 8px;
+}
+.planner-talent-current,
+.planner-talent-levels label,
+.planner-level-value {
+    grid-template-rows: 18px 40px;
+    gap: 4px;
+}
+.planner-talent-current > strong,
+.planner-level-value > strong {
+    align-self: center;
+}
+.planner-talent-levels label > span,
+label.planner-level-value > span {
+    text-align: center;
+}
+.planner-talent-levels > span,
+.planner-level-arrow {
+    align-self: end;
+    display: grid;
+    place-items: center;
+    height: 40px;
+}
+.planner-picker-ownership,
+.planner-weapon-choice {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--text-muted);
+}
+.planner-picker-ownership select,
+.planner-weapon-choice select {
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+.planner-weapon-choice {
+    margin-bottom: 12px;
+}
+.planner-weapon-choice[hidden] {
+    display: none;
+}
+@media (max-width: 520px) {
+    .planner-talent-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .planner-talent-panel h3 {
+        min-height: 0;
+    }
+    .planner-picker-results {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 700px) {
+    .characters-page .characters-toolbar > .characters-icon-filter:has([data-character-rarity]) {
+        grid-column: auto;
+    }
+}
+@media (max-width: 380px) {
+    .characters-page .characters-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .characters-page .characters-search {
+        grid-column: 1 / -1;
+    }
+}
+[data-planner-filter="rarity"] img {
+    width: 19px;
+    height: 19px;
+}
+
+/* Shared count emphasis and neutral separators. */
+.characters-summary {
+    max-width: 100%;
+    box-sizing: border-box;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.5;
+}
+.characters-summary strong {
+    color: var(--accent);
+    font-weight: 800;
+}
+.characters-count-divider {
+    color: var(--text-muted);
+    opacity: 0.35;
+    margin-inline: 4px;
+}
+.planner-picker-results {
+    align-items: center;
+}
+.planner-picker-ownership {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+.planner-picker-ownership > .custom-select {
+    width: 155px;
+}
+.planner-picker-filters {
+    display: grid;
+    grid-template-columns: auto auto auto minmax(max-content, 1fr);
+}
+.planner-picker-filters > .characters-reset-filters {
+    justify-self: end;
+}
+.planner-picker-search {
+    grid-column: 1 / -1;
+    min-width: 0;
+}
+.planner-picker-character[data-planner-character-ownership="unowned"] {
+    opacity: 0.72;
+}
+.planner-picker-character .character-unowned-status {
+    width: fit-content;
+    align-self: center;
+    justify-self: center;
+    padding: 3px 8px;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 999px;
+    background: rgb(12 10 16 / 85%);
+    color: #e4dfe7;
+    font-size: 0.65rem;
+    line-height: 1.3;
+}
+@media (max-width: 850px) {
+    .planner-picker-filters {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .planner-picker-filter:first-child {
+        grid-column: 1 / -1;
+    }
+    .planner-picker-filters > .characters-reset-filters {
+        grid-column: 2;
+    }
+}
+@media (max-width: 420px) {
+    .planner-picker-filter:nth-child(2) {
+        grid-column: 1 / -1;
+    }
+}
+
+.planner-weapon-choice .planner-choice-trigger {
+    width: min(100%, 320px);
+}
+.planner-weapon-choice-list {
+    grid-template-columns: minmax(0, 1fr);
+}
+.planner-weapon-choice-list .planner-choice-option {
+    padding: 8px 12px;
+    text-align: left;
+}
+.planner-cost-retry {
+    padding: 7px 12px;
+}
+
+.planner-weapon-overview .planner-level-comparison[hidden] {
+    display: none;
+}
+.planner-card-no-weapon {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.planner-level-arrow,
+.planner-talent-levels > span {
+    --arrow-size: 20px;
+}
+.planner-card-level-values .cyrene-arrow {
+    --arrow-size: 13px;
+    color: var(--text-muted);
+}
+.planner-card-constellation.has-goal {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+.planner-card-constellation .cyrene-arrow {
+    --arrow-size: 11px;
+}
+
+.planner-cost-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.planner-cost-status {
+    --check-size: 15px;
+}
+.planner-weapon-choice {
+    justify-content: center;
+}
+.planner-weapon-overview[hidden] {
+    display: none;
+}
+.planner-choice-grid.planner-weapon-choice-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+}
+.planner-weapon-choice-list .planner-choice-option {
+    width: 100%;
+    justify-items: start;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.planner-weapon-choice {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 320px) 54px;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+.planner-weapon-choice > span {
+    justify-self: end;
+}
+.planner-weapon-choice .planner-choice-trigger {
+    grid-column: 2;
+    width: 100%;
+}
+.planner-choice-grid.planner-weapon-choice-list .planner-choice-option {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.planner-picker-search {
+    margin-top: 8px;
+    margin-bottom: -8px;
+}
+
+/* Keep comparison labels and controls on shared rows, even beside a tall weapon. */
+.planner-level-comparison {
+    grid-template-rows: 18px 40px;
+    row-gap: 4px;
+    align-content: center;
+}
+.planner-level-comparison > .planner-level-value {
+    grid-row: 1 / span 2;
+    text-align: center;
+}
+.planner-level-comparison > .planner-level-value:first-child {
+    grid-column: 1;
+}
+.planner-level-comparison > label.planner-level-value {
+    grid-column: 3;
+}
+.planner-level-comparison > .planner-level-arrow {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+}
+.planner-level-value > span,
+.planner-talent-current {
+    text-align: center;
+}
+.planner-level-value > strong {
+    justify-self: center;
+}
+.planner-level-value .planner-choice-trigger {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) 16px;
+    gap: 0;
+}
+.planner-level-value .planner-choice-value {
+    grid-column: 2;
+    text-align: center;
+}
+.planner-level-value .planner-choice-arrow {
+    grid-column: 3;
+    justify-self: center;
+    margin-left: 0;
+}
+.planner-card-talents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 10px;
+}
+.planner-card-talent {
+    flex: 0 0 auto;
+}
+
+.planner-goal-cost .planner-cost-message {
+    margin: 0 0 16px;
+    opacity: 0.65;
 }

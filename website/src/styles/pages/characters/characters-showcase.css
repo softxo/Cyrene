@@ -14,7 +14,7 @@
 
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: 1400;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -721,7 +721,7 @@ body.character-showcase-open {
 
 .enka-weapon-stat {
     display: grid;
-    grid-template-columns: 16px minmax(70px, 1fr) minmax(55px, 1fr);
+    grid-template-columns: 19px minmax(70px, 1fr) minmax(55px, 1fr);
     align-items: center;
     justify-content: flex-start;
     gap: 6px;
@@ -747,9 +747,16 @@ body.character-showcase-open {
     font-variant-numeric: tabular-nums;
 }
 
-.enka-weapon-stat:nth-child(2) {
-    position: relative;
-    top: -2px;
+.enka-weapon-stat > * {
+    align-self: center;
+}
+.enka-weapon-stat .enka-weapon-stat-name,
+.enka-weapon-stat .enka-weapon-stat-value {
+    line-height: 20px;
+}
+.enka-weapon-stat .enka-stat-icon {
+    width: 19px;
+    height: 19px;
 }
 
 /* =========================================================
@@ -851,7 +858,7 @@ body.character-showcase-open {
 }
 
 .enka-artifact-image-wrap:hover .enka-artifact-icon {
-    transform: scale(1.05);
+    transform: none;
 }
 
 .enka-artifact-level {
@@ -1402,8 +1409,7 @@ body.character-showcase-open {
     transition:
         background 180ms ease,
         border-color 180ms ease,
-        box-shadow 180ms ease,
-        transform 180ms ease;
+        box-shadow 180ms ease;
 }
 
 /* Slightly stronger elemental glow on hover */
@@ -1415,7 +1421,7 @@ body.character-showcase-open {
         0 0 9px color-mix(in srgb, var(--showcase-element-colour) 45%, transparent),
         0 0 16px color-mix(in srgb, var(--showcase-element-colour) 24%, transparent);
 
-    transform: translateY(-2px);
+    transform: none;
 }
 
 .enka-artifact-cv {
@@ -1447,5 +1453,28 @@ body.character-showcase-open {
         margin-top: 8px;
         padding-top: 6px;
         font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .enka-talent-column {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .enka-stat-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .enka-stat-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .enka-stat-label {
+        white-space: normal;
+        overflow: visible;
+    }
+    .enka-stats-panel [data-showcase-stats] > .enka-stat-row {
+        border-bottom: 1px solid var(--enka-border);
+    }
+    .enka-stats-panel [data-showcase-stats] > .enka-stat-row:last-child {
+        border-bottom: none;
     }
 }

@@ -67,29 +67,17 @@
     position: relative;
     aspect-ratio: 1;
     overflow: hidden;
-    background: linear-gradient(
-        180deg,
-        #8055a8 0%,
-        #49345f 100%
-    );
+    background: linear-gradient(180deg, #8055a8 0%, #49345f 100%);
 }
 
 /* Five-star characters: orange-gold */
 .character-card[data-rarity="5"] .character-card-image {
-    background: linear-gradient(
-        180deg,
-        #d99a43 0%,
-        #87502e 100%
-    );
+    background: linear-gradient(180deg, #d99a43 0%, #87502e 100%);
 }
 
 /* Four-star characters: purple */
 .character-card[data-rarity="4"] .character-card-image {
-    background: linear-gradient(
-        180deg,
-        #a16acb 0%,
-        #573777 100%
-    );
+    background: linear-gradient(180deg, #a16acb 0%, #573777 100%);
 }
 
 .character-card-image img {
@@ -102,16 +90,12 @@
 /* Character level badge */
 .character-level {
     position: absolute;
-    right: 6px;
-    bottom: 6px;
+    right: 3px;
+    bottom: 3px;
     padding: 4px 6px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: color-mix(
-        in srgb,
-        var(--background) 90%,
-        transparent
-    );
+    background: color-mix(in srgb, var(--background) 90%, transparent);
     color: var(--text);
     font-size: 0.72rem;
     font-weight: 600;
@@ -299,8 +283,8 @@
 
 .character-unowned-label {
     position: absolute;
-    right: 6px;
-    bottom: 6px;
+    right: 3px;
+    bottom: 3px;
     padding: 4px 7px;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -313,4 +297,37 @@
 .character-unowned-status {
     color: var(--text-secondary);
     font-size: 0.72rem;
+}
+
+/* Shared rarity artwork backgrounds for roster, picker, and planner. */
+.character-card,
+.planner-character-card,
+.planner-picker-character,
+.planner-editor-character-icon {
+    --character-portrait-background: linear-gradient(180deg, #a16acb 0%, #573777 100%);
+}
+.character-card[data-rarity="5"],
+.planner-character-card[data-rarity="5"],
+.planner-picker-character[data-planner-character-rarity="5"],
+.planner-editor-character-icon[data-rarity="5"] {
+    --character-portrait-background: linear-gradient(180deg, #d99a43 0%, #87502e 100%);
+}
+.character-card .character-card-image,
+.planner-character-card .planner-card-portrait,
+.planner-picker-character .planner-picker-portrait,
+.planner-editor-character-icon[data-rarity] {
+    background: var(--character-portrait-background);
+}
+.character-unowned-status {
+    text-align: center;
+    width: 100%;
+}
+
+.character-release-badge {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 2;
 }

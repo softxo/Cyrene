@@ -56,7 +56,7 @@ function initCharacterShowcase() {
     function createImage(src, alt, className = "") {
         const image = createElement("img", className);
         image.alt = alt;
-        image.loading = "lazy";
+        image.loading = "eager";
         if (src) {
             image.src = src;
         }
@@ -260,7 +260,7 @@ function initCharacterShowcase() {
         icon.setAttribute("aria-hidden", "true");
         icon.loading = "lazy";
         // Avoid broken-image placeholders if an optional icon is unavailable.
-        icon.addEventListener("error", () => icon.remove(), { once: true });
+        icon.addEventListener("error", () => { icon.style.visibility = "hidden"; }, { once: true });
         container.append(icon);
     }
     function renderRarityStars(container, rarity) {
@@ -421,7 +421,7 @@ function initCharacterShowcase() {
             {
                 label: "Healing Bonus",
                 names: ["Healing Bonus", "Heal Bonus"],
-                icon: "HP_Percentage.png",
+                icon: "Healing_Bonus.png",
                 percentage: true
             },
             {
@@ -433,11 +433,11 @@ function initCharacterShowcase() {
             {
                 label: "Incoming Healing",
                 names: ["Incoming Healing Bonus", "Incoming Heal Bonus"],
-                icon: "HP.png",
+                icon: "Healing_Bonus.png",
                 percentage: true
             },
             {
-                label: "Elemental DMG Bonus",
+                label: `${element || "Elemental"} DMG Bonus`,
                 names: elementalDamageNames,
                 icon: getElementDamageIcon(element),
                 percentage: true
@@ -459,7 +459,7 @@ function initCharacterShowcase() {
             const icon = createImage(iconPath, "", "enka-stat-icon");
             icon.alt = "";
             icon.setAttribute("aria-hidden", "true");
-            icon.addEventListener("error", () => icon.remove(), { once: true });
+            icon.addEventListener("error", () => { icon.style.visibility = "hidden"; }, { once: true });
             label.append(icon, createElement("span", "enka-stat-label", definition.label));
             row.append(label, createElement("strong", "enka-stat-value", getStatDisplayValue(property, definition.percentage)));
             statsElement.append(row);
@@ -633,7 +633,7 @@ function initCharacterShowcase() {
             const iconPath = getElementIcon(character?.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
-                icon.addEventListener("error", () => icon.remove(), {
+                icon.addEventListener("error", () => { icon.style.visibility = "hidden"; }, {
                     once: true
                 });
                 elementIconElement.append(icon);
@@ -645,7 +645,7 @@ function initCharacterShowcase() {
         errorElement.hidden = true;
         errorElement.textContent = "";
     }
-    function fetchCharacter(card) {
+    function fetchCharacter(card, background = false) {
         const characterId = card.dataset.characterId;
         const accountId = modal.dataset.accountId;
         if (!characterId) {
@@ -661,7 +661,7 @@ function initCharacterShowcase() {
         const request = fetch(`/api/characters/${encodeURIComponent(characterId)}/showcase${query}`, {
             method: "GET",
             credentials: "same-origin",
-            headers: { Accept: "application/json" }
+            headers: { Accept: "application/json", ...(background ? { "X-Cyrene-Background": "1" } : {}) }
         }).then(async (response) => {
             let payload;
             try {
@@ -705,7 +705,7 @@ function initCharacterShowcase() {
             const iconPath = getElementIcon(character.element);
             if (iconPath) {
                 const icon = createImage(iconPath, `${character.element} element`, "enka-element-icon");
-                icon.addEventListener("error", () => icon.remove(), {
+                icon.addEventListener("error", () => { icon.style.visibility = "hidden"; }, {
                     once: true
                 });
                 elementIconElement.append(icon);
@@ -798,7 +798,7 @@ function initCharacterShowcase() {
         if (card.dataset.owned !== "true") {
             return;
         }
-        fetchCharacter(card).then(character => {
+        fetchCharacter(card, true).then(character => {
             const source = character.display_image || character.icon;
             if (source) {
                 const image = new Image();

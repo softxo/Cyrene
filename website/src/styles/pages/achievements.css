@@ -833,10 +833,10 @@
     height: 72px;
 }
 
-.achievement-import-check path {
+.achievement-import-check use {
     fill: none;
     stroke: currentColor;
-    stroke-width: 5;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-dasharray: 50;
@@ -892,7 +892,7 @@
     .achievement-import-success-panel,
     .achievement-import-corner,
     .achievement-import-scan-line,
-    .achievement-import-check path {
+    .achievement-import-check use {
         animation-duration: 1ms;
         animation-delay: 0ms;
     }

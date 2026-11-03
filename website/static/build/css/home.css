@@ -773,48 +773,6 @@
     gap: 8px;
 }
 
-.changelog-delete-dialog {
-    width: min(420px, calc(100vw - 32px));
-    padding: 26px;
-    border: 1px solid var(--border-strong);
-    border-radius: 18px;
-    color: var(--text);
-    background: var(--panel-background);
-    box-shadow: var(--shadow-float);
-}
-.changelog-delete-dialog::backdrop {
-    background: #0009;
-    backdrop-filter: blur(5px);
-}
-.changelog-delete-icon {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 13px;
-    background: color-mix(in srgb, var(--error) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--error) 25%, transparent);
-    margin-bottom: 16px;
-}
-.changelog-delete-icon img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-}
-.changelog-delete-dialog h2 {
-    margin: 0 0 10px;
-    font-size: 21px;
-}
-.changelog-delete-dialog p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--text-muted);
-}
-.changelog-delete-dialog strong {
-    color: var(--text);
-}
-
 .changelog-content-editor {
     width: 100%;
     min-height: 180px;
@@ -1129,21 +1087,6 @@
     }
 }
 
-.changelog-delete-heading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-}
-.changelog-delete-heading .changelog-delete-icon {
-    flex-shrink: 0;
-    margin: 0;
-}
-.changelog-delete-heading h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
 .changelog-format-toolbar .changelog-text-tools {
     grid-template-columns: 80px 36px minmax(0, 1fr) auto;
 }
@@ -1172,36 +1115,6 @@
     }
 }
 
-.changelog-dialog {
-    transform-origin: center;
-}
-.changelog-dialog.is-opening::backdrop {
-    animation: changelog-backdrop-in 220ms ease-out both;
-}
-.changelog-dialog.is-closing::backdrop {
-    animation: changelog-backdrop-out 180ms ease-in both;
-}
-@keyframes changelog-backdrop-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-@keyframes changelog-backdrop-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-@media (prefers-reduced-motion: reduce) {
-    .changelog-dialog::backdrop {
-        animation: none !important;
-    }
-}
 
 .changelog-tool-label {
     color: var(--text-muted);
@@ -1359,11 +1272,7 @@
     box-shadow: none;
 }
 
-.changelog-dialog,
-.changelog-delete-dialog {
-    user-select: none;
-    -webkit-user-select: none;
-}
+.changelog-dialog { user-select: none; -webkit-user-select: none; }
 .changelog-content-editor,
 .changelog-dialog input:not([type="color"]):not([type="range"]):not([type="checkbox"]),
 .changelog-preview,

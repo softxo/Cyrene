@@ -67,10 +67,10 @@ export function initialiseSiteUpdates(): void {
             svg.setAttribute("width", "15");
             svg.setAttribute("height", "15");
             svg.setAttribute("fill", "none");
-            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("d", "M5 12l4 4L19 6");
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            path.setAttribute("href", "/static/images/ui/check.svg#check");
             path.setAttribute("stroke", "currentColor");
-            path.setAttribute("stroke-width", "2.5");
+            path.setAttribute("stroke-width", "1.8");
             path.setAttribute("stroke-linecap", "round");
             path.setAttribute("stroke-linejoin", "round");
             svg.append(path);

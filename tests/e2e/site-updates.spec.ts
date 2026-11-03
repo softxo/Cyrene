@@ -158,7 +158,7 @@ for (const width of [390, 1280]) {
         await expect(page).toHaveURL("http://127.0.0.1:8000/settings?view=test");
         await expect(notice).toHaveCount(0);
         await expect(page.getByRole("status")).toContainText("Cyrene updated");
-        await expect(page.locator(".site-update-success-icon svg path")).toHaveCount(1);
+        await expect(page.locator(".site-update-success-icon svg use")).toHaveCount(1);
         await page
             .locator(".site-update-success")
             .screenshot({ path: `test-results/site-update-success-${width}.png` });

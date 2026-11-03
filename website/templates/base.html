@@ -20,6 +20,7 @@
     <script>
         const savedTheme = localStorage.getItem("theme") || "blue";
         document.documentElement.dataset.theme = savedTheme;
+        try { document.documentElement.dataset.showUnreleased = localStorage.getItem("cyrene-show-unreleased") === "true" ? "true" : "false"; } catch { document.documentElement.dataset.showUnreleased = "false"; }
     </script>
 
     <script id="limited-event-filter-bootstrap">
@@ -41,21 +42,21 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=38"
+        href="/static/build/css/global.css?v=48"
     >
 
     {% set page_styles = {
         '/weapons': '/static/build/css/weapons.css?v=23',
-        '/': '/static/build/css/home.css?v=40',
-        '/achievements': '/static/build/css/achievements.css?v=7',
-        '/wishes': '/static/build/css/wishes.css?v=14',
-        '/characters': '/static/build/css/characters.css?v=41',
+        '/': '/static/build/css/home.css?v=41',
+        '/achievements': '/static/build/css/achievements.css?v=8',
+        '/wishes': '/static/build/css/wishes.css?v=15',
+        '/characters': '/static/build/css/characters.css?v=54',
         '/inventory': '/static/build/css/inventory.css?v=7',
-        '/planner': '/static/build/css/planner.css?v=7',
-        '/verify': '/static/build/css/verification.css?v=14',
+        '/planner': '/static/build/css/planner.css?v=8',
+        '/verify': '/static/build/css/verification.css?v=15',
         '/codes': '/static/build/css/codes.css?v=7',
-        '/events': '/static/build/css/events.css?v=48',
-        '/settings': '/static/build/css/settings.css?v=8'
+        '/events': '/static/build/css/events.css?v=49',
+        '/settings': '/static/build/css/settings.css?v=10'
     } %}
 
     {% set page_path = '/events' if request.url.path == '/events/refresh' else request.url.path %}
@@ -242,7 +243,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=4.50"></script>
+    <script type="module" src="/static/build/js/app.js?v=4.65"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

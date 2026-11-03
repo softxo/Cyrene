@@ -75,7 +75,7 @@
             <form data-changelog-form>
                 <div class="changelog-heading">
                     <h2 id="changelog-editor-title" tabindex="-1">Add Changelog</h2>
-                    <button type="button" data-changelog-close aria-label="Close editor">&times;</button>
+                    <button type="button" data-changelog-close aria-label="Close editor"><span class="cyrene-close" aria-hidden="true"></span></button>
                 </div>
                 <div class="changelog-meta-grid"><div class="changelog-date-field">
                 <label for="changelog-date">Date &amp; time</label>
@@ -191,17 +191,9 @@
                 </div>
             </form>
         </dialog>
-        <dialog class="changelog-delete-dialog" aria-labelledby="changelog-delete-title" aria-describedby="changelog-delete-description">
-            <div class="changelog-delete-heading">
-                <div class="changelog-delete-icon" aria-hidden="true"><img src="/static/images/ui/ui_misc/Deletion.png" alt=""></div>
-                <h2 id="changelog-delete-title">Delete this update?</h2>
-            </div>
-            <p id="changelog-delete-description">The changelog for <strong data-delete-date></strong> will be removed for everyone. This cannot be undone.</p>
-            <div class="changelog-editor-actions">
-                <button type="button" data-delete-cancel autofocus class="cyrene-button cyrene-button--compact">Keep update</button>
-                <button type="button" data-delete-confirm class="cyrene-button cyrene-button--danger">Delete update</button>
-            </div>
-        </dialog>
+        {% with delete_dialog_class='changelog-delete-dialog', delete_prefix='changelog-delete', delete_title='Delete this update?', delete_date=true, delete_cancel='Keep update', delete_confirm='Delete update' %}
+        {% include 'components/deletion_confirmation.html' %}
+        {% endwith %}
     </section>
 </div>
 

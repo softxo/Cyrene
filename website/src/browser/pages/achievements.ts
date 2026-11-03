@@ -1879,7 +1879,7 @@ window.initAchievements = function () {
                                                                     aria-label="Remove Note"
                                                                     title="Remove Note"
                                                                 >
-                                                                    ×
+                                                                    <span class="cyrene-close" aria-hidden="true"></span>
                                                                 </button>
                                                 
                                                             </div>

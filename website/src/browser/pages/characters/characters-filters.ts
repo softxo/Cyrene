@@ -8,52 +8,26 @@ function initCharactersFilters() {
     const toolbar = page?.querySelector("[data-character-filters]");
     const grid = page?.querySelector(".characters-grid");
 
-    if (
-        !page ||
-        !toolbar ||
-        !grid ||
-        toolbar.dataset.initialised === "true"
-    ) {
+    if (!page || !toolbar || !grid || toolbar.dataset.initialised === "true") {
         return;
     }
 
-    const searchInput = toolbar.querySelector(
-        "[data-character-search]"
-    );
-    const sortSelect = toolbar.querySelector(
-        "[data-character-sort]"
-    );
-    const rarityFilter = toolbar.querySelector(
-        "[data-character-rarity]"
-    );
-    const elementFilter = toolbar.querySelector(
-        "[data-character-element]"
-    );
-    const weaponFilter = toolbar.querySelector(
-        "[data-character-weapon]"
-    );
-    const ownershipSelect = toolbar.querySelector(
-        "[data-character-ownership]"
-    );
-    const resetButton = toolbar.querySelector(
-        "[data-character-reset]"
-    );
-    const countElement = page.querySelector(
-        "[data-character-count]"
-    );
+    const searchInput = toolbar.querySelector("[data-character-search]");
+    const sortSelect = toolbar.querySelector("[data-character-sort]");
+    const rarityFilter = toolbar.querySelector("[data-character-rarity]");
+    const elementFilter = toolbar.querySelector("[data-character-element]");
+    const weaponFilter = toolbar.querySelector("[data-character-weapon]");
+    const ownershipSelect = toolbar.querySelector("[data-character-ownership]");
+    const resetButton = toolbar.querySelector("[data-character-reset]");
+    const countElement = page.querySelector("[data-character-count]");
 
-    const filterDropdowns = [
-        sortSelect,
-        ownershipSelect
-    ];
+    const filterDropdowns = [sortSelect, ownershipSelect];
 
-    const cards = Array.from(
-        grid.querySelectorAll(".character-card")
-    );
+    const cards = Array.from(grid.querySelectorAll(".character-card"));
 
     if (
         !searchInput ||
-        filterDropdowns.some(dropdown => !dropdown) ||
+        filterDropdowns.some((dropdown) => !dropdown) ||
         !rarityFilter ||
         !elementFilter ||
         !weaponFilter ||
@@ -71,15 +45,13 @@ function initCharactersFilters() {
     function closeDropdown(dropdown) {
         dropdown.classList.remove("open");
 
-        const button = dropdown.querySelector(
-            ".custom-select-button"
-        );
+        const button = dropdown.querySelector(".custom-select-button");
 
         button?.setAttribute("aria-expanded", "false");
     }
 
     function closeAllDropdowns(except = null) {
-        filterDropdowns.forEach(dropdown => {
+        filterDropdowns.forEach((dropdown) => {
             if (dropdown !== except) {
                 closeDropdown(dropdown);
             }
@@ -87,62 +59,44 @@ function initCharactersFilters() {
     }
 
     function getDropdownValue(dropdown) {
-        return dropdown.querySelector(
-            ".custom-select-option.selected"
-        )?.dataset.value ?? "all";
+        return dropdown.querySelector(".custom-select-option.selected")?.dataset.value ?? "all";
     }
 
     function setDropdownValue(dropdown, value) {
-        const options = dropdown.querySelectorAll(
-            ".custom-select-option"
-        );
+        const options = dropdown.querySelectorAll(".custom-select-option");
 
-        const selectedOption = Array.from(options).find(
-            option => option.dataset.value === value
-        );
+        const selectedOption = Array.from(options).find((option) => option.dataset.value === value);
 
         if (!selectedOption) {
             return;
         }
 
-        options.forEach(option => {
+        options.forEach((option) => {
             const isSelected = option === selectedOption;
 
             option.classList.toggle("selected", isSelected);
-            option.setAttribute(
-                "aria-selected",
-                String(isSelected)
-            );
+            option.setAttribute("aria-selected", String(isSelected));
         });
 
-        const valueElement = dropdown.querySelector(
-            ".custom-select-value"
-        );
+        const valueElement = dropdown.querySelector(".custom-select-value");
 
         if (valueElement) {
-            valueElement.textContent =
-                selectedOption.textContent.trim();
+            valueElement.textContent = selectedOption.textContent.trim();
         }
     }
 
     function initialiseDropdown(dropdown) {
-        const button = dropdown.querySelector(
-            ".custom-select-button"
-        );
+        const button = dropdown.querySelector(".custom-select-button");
 
-        const menu = dropdown.querySelector(
-            ".custom-select-menu"
-        );
+        const menu = dropdown.querySelector(".custom-select-menu");
 
-        const options = dropdown.querySelectorAll(
-            ".custom-select-option"
-        );
+        const options = dropdown.querySelectorAll(".custom-select-option");
 
         if (!button || !menu || !options.length) {
             return;
         }
 
-        button.addEventListener("click", event => {
+        button.addEventListener("click", (event) => {
             event.preventDefault();
 
             const isOpen = dropdown.classList.contains("open");
@@ -157,7 +111,7 @@ function initCharactersFilters() {
             }
         });
 
-        options.forEach(option => {
+        options.forEach((option) => {
             option.addEventListener("click", () => {
                 const value = option.dataset.value;
 
@@ -172,28 +126,23 @@ function initCharactersFilters() {
             });
         });
 
-        button.addEventListener("keydown", event => {
+        button.addEventListener("keydown", (event) => {
             if (event.key === "Escape") {
                 closeDropdown(dropdown);
                 button.focus();
             }
 
-            if (
-                event.key === "ArrowDown" &&
-                !dropdown.classList.contains("open")
-            ) {
+            if (event.key === "ArrowDown" && !dropdown.classList.contains("open")) {
                 event.preventDefault();
                 closeAllDropdowns(dropdown);
                 dropdown.classList.add("open");
                 button.setAttribute("aria-expanded", "true");
-                dropdown.querySelector(
-                    ".custom-select-option.selected"
-                )?.focus();
+                dropdown.querySelector(".custom-select-option.selected")?.focus();
             }
         });
 
         options.forEach((option, index) => {
-            option.addEventListener("keydown", event => {
+            option.addEventListener("keydown", (event) => {
                 let nextIndex;
 
                 if (event.key === "ArrowDown") {
@@ -219,23 +168,18 @@ function initCharactersFilters() {
 
     filterDropdowns.forEach(initialiseDropdown);
 
-    
     /* =====================================================
     RARITY, ELEMENT AND WEAPON ICON FILTERS
     ===================================================== */
 
     function getButtonFilterValue(container) {
-        return container.querySelector(
-            ".characters-icon-button.selected"
-        )?.dataset.value ?? "all";
+        return container.querySelector(".characters-icon-button.selected")?.dataset.value ?? "all";
     }
 
     function setButtonFilterValue(container, value) {
-        const buttons = container.querySelectorAll(
-            ".characters-icon-button"
-        );
+        const buttons = container.querySelectorAll(".characters-icon-button");
 
-        buttons.forEach(button => {
+        buttons.forEach((button) => {
             const selected = button.dataset.value === value;
 
             button.classList.toggle("selected", selected);
@@ -244,11 +188,9 @@ function initCharactersFilters() {
     }
 
     function initialiseButtonFilter(container) {
-        const buttons = container.querySelectorAll(
-            ".characters-icon-button"
-        );
+        const buttons = container.querySelectorAll(".characters-icon-button");
 
-        buttons.forEach(button => {
+        buttons.forEach((button) => {
             button.addEventListener("click", () => {
                 setButtonFilterValue(container, button.dataset.value);
                 applyFilters();
@@ -262,12 +204,8 @@ function initCharactersFilters() {
 
     /* Close dropdowns when clicking elsewhere. */
 
-    document.addEventListener("click", event => {
-        if (
-            !filterDropdowns.some(
-                dropdown => dropdown.contains(event.target)
-            )
-        ) {
+    document.addEventListener("click", (event) => {
+        if (!filterDropdowns.some((dropdown) => dropdown.contains(event.target))) {
             closeAllDropdowns();
         }
     });
@@ -288,6 +226,13 @@ function initCharactersFilters() {
                 return aOwned ? -1 : 1;
             }
 
+            if (!aOwned && (a.dataset.unreleased === "true" || b.dataset.unreleased === "true")) {
+                const previewOrder =
+                    Number(b.dataset.unreleased === "true") -
+                        Number(a.dataset.unreleased === "true") ||
+                    (b.dataset.releaseDate || "").localeCompare(a.dataset.releaseDate || "");
+                if (previewOrder) return previewOrder;
+            }
             const aLevel = Number(a.dataset.level) || 0;
             const bLevel = Number(b.dataset.level) || 0;
 
@@ -299,31 +244,19 @@ function initCharactersFilters() {
 
             if (sortBy === "name") {
                 // Alphabetical order, with rarity as a tiebreaker.
-                return (
-                    aName.localeCompare(bName) ||
-                    bRarity - aRarity ||
-                    bLevel - aLevel
-                );
+                return aName.localeCompare(bName) || bRarity - aRarity || bLevel - aLevel;
             }
 
             if (sortBy === "rarity") {
                 // Rarity first, then level, then alphabetical order.
-                return (
-                    bRarity - aRarity ||
-                    bLevel - aLevel ||
-                    aName.localeCompare(bName)
-                );
+                return bRarity - aRarity || bLevel - aLevel || aName.localeCompare(bName);
             }
 
             // Default: Level first, rarity as the tiebreaker.
-            return (
-                bLevel - aLevel ||
-                bRarity - aRarity ||
-                aName.localeCompare(bName)
-            );
+            return bLevel - aLevel || bRarity - aRarity || aName.localeCompare(bName);
         });
 
-        visibleCards.forEach(card => grid.appendChild(card));
+        visibleCards.forEach((card) => grid.appendChild(card));
     }
 
     /* =====================================================
@@ -340,30 +273,22 @@ function initCharactersFilters() {
 
         const visibleCards = [];
 
-        cards.forEach(card => {
+        cards.forEach((card) => {
             const name = card.dataset.name || "";
             const cardRarity = card.dataset.rarity;
-            const cardElement = (
-                card.dataset.element || ""
-            ).toLowerCase();
+            const cardElement = (card.dataset.element || "").toLowerCase();
 
-            const cardWeapon = (
-                card.dataset.weapon || ""
-            ).toLowerCase();
+            const cardWeapon = (card.dataset.weapon || "").toLowerCase();
 
             const owned = card.dataset.owned === "true";
 
-            const matchesSearch =
-                !query || name.includes(query);
+            const matchesSearch = !query || name.includes(query);
 
-            const matchesRarity =
-                rarity === "all" || cardRarity === rarity;
+            const matchesRarity = rarity === "all" || cardRarity === rarity;
 
-            const matchesElement =
-                element === "all" || cardElement === element;
+            const matchesElement = element === "all" || cardElement === element;
 
-            const matchesWeapon =
-                weapon === "all" || cardWeapon === weapon;
+            const matchesWeapon = weapon === "all" || cardWeapon === weapon;
 
             const matchesOwnership =
                 ownership === "all" ||
@@ -371,6 +296,8 @@ function initCharactersFilters() {
                 (ownership === "unowned" && !owned);
 
             const matches =
+                (document.documentElement.dataset.showUnreleased === "true" ||
+                    card.dataset.unreleased !== "true") &&
                 matchesSearch &&
                 matchesRarity &&
                 matchesElement &&
@@ -387,8 +314,24 @@ function initCharactersFilters() {
         sortCards(visibleCards);
 
         if (countElement) {
-            countElement.textContent =
-                `Showing ${visibleCards.length} of ${cards.length} characters`;
+            countElement.querySelector("[data-count-shown]").textContent = String(
+                visibleCards.filter((card) => card.dataset.owned === "true").length,
+            );
+            countElement.querySelector("[data-count-base]").textContent = String(
+                cards.filter(
+                    (card) =>
+                        card.dataset.owned === "true" &&
+                        (document.documentElement.dataset.showUnreleased === "true" ||
+                            card.dataset.unreleased !== "true"),
+                ).length,
+            );
+            countElement.querySelector("[data-count-total]").textContent = String(
+                cards.filter(
+                    (card) =>
+                        document.documentElement.dataset.showUnreleased === "true" ||
+                        card.dataset.unreleased !== "true",
+                ).length,
+            );
         }
     }
 
@@ -411,5 +354,8 @@ function initCharactersFilters() {
         applyFilters();
     });
 
+    window.addEventListener("cyrene-content-preferences-changed", () => {
+        if (page.isConnected) applyFilters();
+    });
     applyFilters();
 }

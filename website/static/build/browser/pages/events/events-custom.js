@@ -698,7 +698,10 @@ function initCustomEvents() {
         const removeButton = document.createElement("button");
         removeButton.type = "button";
         removeButton.className = "cyrene-button events-custom-objective-remove";
-        setButtonIcon(removeButton, "M6 6l12 12M18 6L6 18");
+        const closeIcon = document.createElement("span");
+        closeIcon.className = "cyrene-close";
+        closeIcon.setAttribute("aria-hidden", "true");
+        removeButton.replaceChildren(closeIcon);
         removeButton.setAttribute("aria-label", "Remove objective");
         removeButton.addEventListener("click", () => row.remove());
         row.append(titleInput, currentInput, targetInput, removeButton);

@@ -1,0 +1,36 @@
+/* Shared directional icon: one SVG shape, inheriting the surrounding colour. */
+.cyrene-arrow {
+    display: inline-block;
+    width: var(--arrow-size, 1em);
+    height: var(--arrow-size, 1em);
+    flex: 0 0 var(--arrow-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+}
+
+.cyrene-check {
+    display: inline-block;
+    width: var(--check-size, 1em);
+    height: var(--check-size, 1em);
+    flex: 0 0 var(--check-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+}
+.cyrene-arrow--left {
+    rotate: 180deg;
+}
+
+.cyrene-close {
+    display: inline-block;
+    width: var(--close-size, 16px);
+    height: var(--close-size, 16px);
+    flex: 0 0 var(--close-size, 16px);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+}

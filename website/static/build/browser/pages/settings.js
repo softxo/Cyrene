@@ -6,6 +6,27 @@ function initSettings() {
     updateThemeSelection(document.documentElement.dataset.theme);
     initialiseAccountLinking();
     initialiseAccountManagement();
+    const unreleasedToggle = document.getElementById("show-unreleased-toggle");
+    const applyUnreleased = enabled => {
+        document.documentElement.dataset.showUnreleased = String(enabled);
+        unreleasedToggle?.setAttribute("aria-pressed", String(enabled));
+        unreleasedToggle?.classList.toggle("active", enabled);
+        window.dispatchEvent(new Event("cyrene-content-preferences-changed"));
+    };
+    applyUnreleased(document.documentElement.dataset.showUnreleased === "true");
+    if (unreleasedToggle && !unreleasedToggle.dataset.initialised) {
+        unreleasedToggle.dataset.initialised = "true";
+        unreleasedToggle.addEventListener("click", () => {
+            const enabled = document.documentElement.dataset.showUnreleased !== "true";
+            try {
+                localStorage.setItem("cyrene-show-unreleased", String(enabled));
+            }
+            catch {
+                // Keep the preference usable for this page when storage is unavailable.
+            }
+            applyUnreleased(enabled);
+        });
+    }
     // =========================================
     // HOVER EFFECTS
     // =========================================
@@ -278,8 +299,8 @@ function initialiseAccountLinking() {
                     <span class="verified-corner bottom-left"></span>
                     <span class="verified-corner bottom-right"></span>
                     <span class="verified-scan-line"></span>
-                    <svg class="verified-check" viewBox="0 0 64 64" focusable="false">
-                        <path d="M17 33.5 27.5 44 48 22"></path>
+                    <svg class="verified-check" viewBox="0 0 24 24" focusable="false">
+                        <use href="/static/images/ui/check.svg#check"></use>
                     </svg>
                 </div>
                 <h4></h4>

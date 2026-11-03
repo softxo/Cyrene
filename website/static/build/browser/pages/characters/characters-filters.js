@@ -184,6 +184,12 @@ function initCharactersFilters() {
             if (aOwned !== bOwned) {
                 return aOwned ? -1 : 1;
             }
+            if (!aOwned && (a.dataset.unreleased === "true" || b.dataset.unreleased === "true")) {
+                const previewOrder = Number(b.dataset.unreleased === "true") - Number(a.dataset.unreleased === "true") ||
+                    (b.dataset.releaseDate || "").localeCompare(a.dataset.releaseDate || "");
+                if (previewOrder)
+                    return previewOrder;
+            }
             const aLevel = Number(a.dataset.level) || 0;
             const bLevel = Number(b.dataset.level) || 0;
             const aRarity = Number(a.dataset.rarity) || 0;
@@ -232,7 +238,8 @@ function initCharactersFilters() {
             const matchesOwnership = ownership === "all" ||
                 (ownership === "owned" && owned) ||
                 (ownership === "unowned" && !owned);
-            const matches = matchesSearch &&
+            const matches = (document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true") &&
+                matchesSearch &&
                 matchesRarity &&
                 matchesElement &&
                 matchesWeapon &&
@@ -244,8 +251,9 @@ function initCharactersFilters() {
         });
         sortCards(visibleCards);
         if (countElement) {
-            countElement.textContent =
-                `Showing ${visibleCards.length} of ${cards.length} characters`;
+            countElement.querySelector("[data-count-shown]").textContent = String(visibleCards.filter(card => card.dataset.owned === "true").length);
+            countElement.querySelector("[data-count-base]").textContent = String(cards.filter(card => card.dataset.owned === "true" && (document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true")).length);
+            countElement.querySelector("[data-count-total]").textContent = String(cards.filter(card => document.documentElement.dataset.showUnreleased === "true" || card.dataset.unreleased !== "true").length);
         }
     }
     /* =====================================================
@@ -262,5 +270,7 @@ function initCharactersFilters() {
         closeAllDropdowns();
         applyFilters();
     });
+    window.addEventListener("cyrene-content-preferences-changed", () => { if (page.isConnected)
+        applyFilters(); });
     applyFilters();
 }

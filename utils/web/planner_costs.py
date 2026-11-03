@@ -1,7 +1,8 @@
 """GenshinDB upgrade costs and material metadata for the Planner.
 
 The public API does not supply levelling EXP tables, so only the generic
-EXP helpers are retained. No local character or material catalogue is read.
+EXP helpers are retained. Exact public records are preferred; reviewed preview
+sheets cover announced characters missing from the provider.
 """
 
 import asyncio
@@ -13,7 +14,7 @@ from collections import OrderedDict
 import aiohttp
 
 from utils.constants.costs import WEAPON_ORE_EXP
-from utils.genshin_db import GenshinDB, GenshinDBError
+from utils.genshin_db import GenshinDB, GenshinDBError, GenshinDBIdentityError
 from utils.resource_calculator.character_resource_calculator import calculate_character_exp_books
 from utils.resource_calculator.weapon_resource_calculator import (
     calculate_weapon_exp_materials,
@@ -43,6 +44,7 @@ class PlannerValidationError(ValueError):
     def public_message(self) -> str:
         return self.MESSAGES.get(self.code, "Invalid planner goals.")
 
+
 ASCENSION_LEVELS = (20, 40, 50, 60, 70, 80)
 BOOKS = (
     (104003, "Hero's Wit", "heros_wit", 20000),
@@ -56,7 +58,12 @@ ORES = (
 )
 
 
-def _add(items: dict, material_id: int, name: str, count: int):
+def _material_key(value) -> int | str:
+    # Preview references never impersonate a numeric inventory/game ID.
+    return value if isinstance(value, str) and value.startswith("preview:") else int(value)
+
+
+def _add(items: dict, material_id: int | str, name: str, count: int):
     if count <= 0:
         return
     if material_id not in items:
@@ -80,7 +87,7 @@ def _ascensions(items: dict, data: dict, start: int, end: int, phase: int | None
             _add_step(items, data.get("costs", {}), f"ascend{index}")
 
 
-def _get_level_categories(data: dict) -> dict[int, int]:
+def _get_level_categories(data: dict) -> dict[int | str, int]:
     """Classify character ascension materials using GenshinDB costs."""
 
     categories = {}
@@ -118,7 +125,7 @@ def _get_level_categories(data: dict) -> dict[int, int]:
         for position, category in positions.items():
             material = step[position]
 
-            material_id = int(material["id"])
+            material_id = _material_key(material["id"])
 
             categories[material_id] = category
 
@@ -128,10 +135,10 @@ def _get_level_categories(data: dict) -> dict[int, int]:
 def _get_upgrade_categories(
     costs: dict,
     prefix: str,
-    positions: dict[int, int],
+    positions: dict[int | str, int],
     start: int,
     end: int,
-) -> dict[int, int]:
+) -> dict[int | str, int]:
     """Classify upgrade materials using their cost-list positions."""
 
     categories = {}
@@ -151,12 +158,12 @@ def _get_upgrade_categories(
             if not isinstance(material, dict):
                 continue
 
-            categories[int(material["id"])] = category
+            categories[_material_key(material["id"])] = category
 
     return categories
 
 
-def _crafting_chains(groups: list[list[dict]]) -> dict[int, list[dict]]:
+def _crafting_chains(groups: list[list[dict]]) -> dict[int | str, list[dict]]:
     """Map each craftable material to the lower tiers in its family."""
 
     chains = {}
@@ -166,14 +173,16 @@ def _crafting_chains(groups: list[list[dict]]) -> dict[int, list[dict]]:
         seen = set()
 
         for material in group:
-            material_id = int(material["id"])
+            material_id = _material_key(material["id"])
             if material_id in seen:
                 continue
             seen.add(material_id)
-            ordered.append({
-                "id": material_id,
-                "name": material.get("name") or "Lower-tier material",
-            })
+            ordered.append(
+                {
+                    "id": material_id,
+                    "name": material.get("name") or "Lower-tier material",
+                }
+            )
 
         for index, material in enumerate(ordered[1:], start=1):
             chains[material["id"]] = ordered[:index]
@@ -181,7 +190,7 @@ def _crafting_chains(groups: list[list[dict]]) -> dict[int, list[dict]]:
     return chains
 
 
-def _get_level_crafting_chains(data: dict) -> dict[int, list[int]]:
+def _get_level_crafting_chains(data: dict) -> dict[int | str, list[dict]]:
     costs = data.get("costs", {})
     stones = []
     common_drops = []
@@ -210,7 +219,7 @@ def _get_upgrade_crafting_chains(
     positions: tuple[int, ...],
     start: int,
     end: int,
-) -> dict[int, list[int]]:
+) -> dict[int | str, list[dict]]:
     groups = {position: [] for position in positions}
 
     for index in range(start, end + 1):
@@ -229,9 +238,9 @@ async def _result(
     db: GenshinDB,
     items: dict,
     category: str = "generic",
-    level_categories: dict[int, int] | None = None,
-    upgrade_categories: dict[int, int] | None = None,
-    crafting_chains: dict[int, list[dict]] | None = None,
+    level_categories: dict[int | str, int] | None = None,
+    upgrade_categories: dict[int | str, int] | None = None,
+    crafting_chains: dict[int | str, list[dict]] | None = None,
 ) -> dict:
     if not items:
         return {"status": "complete", "items": []}
@@ -240,17 +249,13 @@ async def _result(
         material = await db.get("materials", item["name"])
 
         if material.get("id") != item["id"]:
-            raise GenshinDBError(
-                "The material lookup returned an unexpected item."
-            )
+            raise GenshinDBError("The material lookup returned an unexpected item.")
 
         images = material.get("images") or {}
         filename = images.get("filename_icon")
 
-        icon = (
-            f"https://static.nanoka.cc/assets/gi/{filename}.webp"
-            if filename
-            else None
+        icon = images.get("local_icon") or (
+            f"https://static.nanoka.cc/assets/gi/{filename}.webp" if filename else None
         )
 
         decorated_item = {
@@ -258,17 +263,16 @@ async def _result(
             "name": material["name"],
             "rarity": material.get("rarity", 1),
             "icon": icon,
+            "inventory_unavailable": bool(material.get("inventory_unavailable")),
         }
 
-        lower_tiers = (crafting_chains or {}).get(int(item["id"]))
+        lower_tiers = (crafting_chains or {}).get(_material_key(item["id"]))
         if lower_tiers:
             decorated_item["crafting_lower"] = lower_tiers
 
         return decorated_item
 
-    decorated = await asyncio.gather(
-        *(decorate(item) for item in items.values())
-    )
+    decorated = await asyncio.gather(*(decorate(item) for item in items.values()))
 
     if category == "level":
         exp_ids = {104001, 104002, 104003}
@@ -276,7 +280,7 @@ async def _result(
         level_categories = level_categories or {}
 
         def sort_key(item):
-            material_id = int(item["id"])
+            material_id = _material_key(item["id"])
             rarity = int(item.get("rarity") or 1)
 
             # 0 — Mora
@@ -299,18 +303,18 @@ async def _result(
             return (
                 material_category,
                 -rarity,
-                material_id,
+                str(material_id),
             )
 
         decorated.sort(key=sort_key)
-        
+
     elif category in {"talents", "weapon"}:
         upgrade_categories = upgrade_categories or {}
 
         exp_ids = {104011, 104012, 104013}
 
         def sort_key(item):
-            material_id = int(item["id"])
+            material_id = _material_key(item["id"])
             rarity = int(item.get("rarity") or 1)
 
             if material_id == 202:
@@ -327,7 +331,7 @@ async def _result(
             return (
                 material_category,
                 -rarity,
-                material_id,
+                str(material_id),
             )
 
         decorated.sort(key=sort_key)
@@ -348,20 +352,20 @@ async def _level_cost(db, name, start, end, phase):
 
     level_categories = _get_level_categories(data)
 
-    return await _result(
+    result = await _result(
         db,
         items,
         category="level",
         level_categories=level_categories,
         crafting_chains=_get_level_crafting_chains(data),
     )
-    
-    
+    if data.get("preview"):
+        result["preview"] = True
+    return result
+
+
 async def _talent_cost(db, name, starts, ends):
-    if all(
-        start >= end
-        for start, end in zip(starts, ends)
-    ):
+    if all(start >= end for start, end in zip(starts, ends)):
         return {"status": "complete", "items": []}
 
     data = await db.get("talents", name)
@@ -374,9 +378,7 @@ async def _talent_cost(db, name, starts, ends):
         zip(starts, ends),
         start=1,
     ):
-        costs = data.get(
-            f"combat{index}", {}
-        ).get("costs", data.get("costs", {}))
+        costs = data.get(f"combat{index}", {}).get("costs", data.get("costs", {}))
 
         categories.update(
             _get_upgrade_categories(
@@ -405,25 +407,34 @@ async def _talent_cost(db, name, starts, ends):
         for level in range(start + 1, end + 1):
             _add_step(items, costs, f"lvl{level}")
 
-    return await _result(
+    result = await _result(
         db,
         items,
         category="talents",
         upgrade_categories=categories,
         crafting_chains=crafting_chains,
     )
+    if data.get("preview"):
+        result["preview"] = True
+    return result
 
 
 async def _weapon_cost(db, name, start, end, phase):
     if start is None or not name:
-        return {"status": "unavailable", "items": [],
-                "message": "Equipped weapon progression is unavailable."}
+        return {
+            "status": "unavailable",
+            "items": [],
+            "message": "Equipped weapon progression is unavailable.",
+        }
     data = await db.get("weapons", name)
     rarity = int(data["rarity"])
     maximum = 70 if rarity < 3 else 90
     if start > maximum or end > maximum:
-        return {"status": "invalid", "items": [],
-                "message": f"This weapon can only reach level {maximum}."}
+        return {
+            "status": "invalid",
+            "items": [],
+            "message": f"This weapon can only reach level {maximum}.",
+        }
     if start >= end:
         return {"status": "complete", "items": []}
     items = OrderedDict()
@@ -463,6 +474,7 @@ async def _weapon_cost(db, name, start, end, phase):
         ),
     )
 
+
 async def calculate_planner_costs(
     character_name: str,
     current_level: int,
@@ -494,9 +506,18 @@ async def calculate_planner_costs(
     async def available(coroutine):
         try:
             return await coroutine
+        except GenshinDBIdentityError:
+            return {
+                "status": "unavailable",
+                "items": [],
+                "message": "Exact material data for this character is not available yet.",
+            }
         except GenshinDBError:
-            return {"status": "unavailable", "items": [],
-                    "message": "Couldn't load material data. Please try again."}
+            return {
+                "status": "unavailable",
+                "items": [],
+                "message": "Couldn't load material data. Please try again.",
+            }
 
     async with aiohttp.ClientSession() as session:
         db = GenshinDB(session)

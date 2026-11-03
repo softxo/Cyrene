@@ -1,3 +1,291 @@
+/* Shared directional icon: one SVG shape, inheriting the surrounding colour. */
+.cyrene-arrow {
+    display: inline-block;
+    width: var(--arrow-size, 1em);
+    height: var(--arrow-size, 1em);
+    flex: 0 0 var(--arrow-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+}
+
+.cyrene-check {
+    display: inline-block;
+    width: var(--check-size, 1em);
+    height: var(--check-size, 1em);
+    flex: 0 0 var(--check-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+}
+.cyrene-arrow--left { rotate: 180deg; }
+
+.cyrene-close {
+    display: inline-block;
+    width: var(--close-size, 16px);
+    height: var(--close-size, 16px);
+    flex: 0 0 var(--close-size, 16px);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+}
+
+/* The Add Changelog motion is the shared default for every modal. */
+:root :is(dialog, [aria-modal="true"]:not([data-modal-shell]), [data-modal-panel]) {
+    opacity: 1;
+    translate: 0 0;
+    scale: none;
+    transform-origin: center;
+    animation: none;
+    transition:
+        opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        translate 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        display 220ms allow-discrete,
+        overlay 220ms allow-discrete;
+}
+:root
+    :is(
+        dialog:not([open]),
+        [aria-modal="true"][hidden]:not([data-modal-shell]),
+        [data-modal-shell][hidden] [aria-modal="true"],
+        [data-modal-shell][hidden] [data-modal-panel]
+    ) {
+    opacity: 0;
+    translate: 0 10px;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    pointer-events: none;
+}
+[data-modal-shell] {
+    opacity: 1;
+    transition:
+        opacity 220ms ease-out,
+        display 220ms allow-discrete;
+}
+[data-modal-shell][hidden] {
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: 180ms;
+    transition-timing-function: ease-in;
+}
+dialog::backdrop {
+    opacity: 1;
+    transition:
+        opacity 220ms ease-out,
+        display 220ms allow-discrete,
+        overlay 220ms allow-discrete;
+}
+dialog:not([open])::backdrop {
+    opacity: 0;
+    transition-duration: 180ms;
+}
+@starting-style {
+    :root
+        :is(
+            dialog[open],
+            [aria-modal="true"]:not([hidden]):not([data-modal-shell]),
+            [data-modal-panel]
+        ) {
+        opacity: 0;
+        translate: 0 14px;
+    }
+    [data-modal-shell]:not([hidden]),
+    dialog[open]::backdrop {
+        opacity: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    :root dialog::backdrop { transition: none !important; animation: none !important; }
+    :root
+        :is(dialog, [aria-modal="true"], [data-modal-shell], [data-modal-panel]) {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+.cyrene-delete-dialog {
+    width: min(420px, calc(100vw - 32px));
+    padding: 26px;
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    color: var(--text);
+    background: var(--panel-background);
+    box-shadow: var(--shadow-float);
+}
+.cyrene-delete-dialog::backdrop {
+    background: #0009;
+    backdrop-filter: blur(5px);
+}
+.cyrene-delete-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.cyrene-delete-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: color-mix(in srgb, var(--error) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--error) 25%, transparent);
+}
+.cyrene-delete-icon img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.cyrene-delete-heading h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.cyrene-delete-dialog p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+.cyrene-delete-dialog strong {
+    color: var(--text);
+}
+.cyrene-delete-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+/* Overlay shells own the backdrop fade; prevent older per-page entrances stacking. */
+:root [data-modal-shell] > [class$="-backdrop"] { animation: none; }
+
+/* Interpolate the blur itself, rather than switching it on behind a fading panel. */
+:root dialog::backdrop,
+:root [data-modal-shell] > [class$="-backdrop"] {
+    opacity: 1;
+    backdrop-filter: blur(var(--modal-backdrop-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--modal-backdrop-blur, 6px));
+    transition: opacity 220ms ease-out, backdrop-filter 220ms ease-out,
+        -webkit-backdrop-filter 220ms ease-out, display 220ms allow-discrete, overlay 220ms allow-discrete;
+}
+:root dialog:not([open])::backdrop,
+:root [data-modal-shell][hidden] > [class$="-backdrop"] {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition-duration: 180ms;
+    transition-timing-function: ease-in;
+}
+@starting-style {
+    :root dialog[open]::backdrop,
+    :root [data-modal-shell]:not([hidden]) > [class$="-backdrop"] {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    :root dialog::backdrop,
+    :root [data-modal-shell] > [class$="-backdrop"] { transition: none !important; }
+}
+.cyrene-toasts {
+    position: fixed;
+    z-index: 11000;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    display: grid;
+    gap: 10px;
+    width: min(380px, calc(100vw - 32px));
+    pointer-events: none;
+}
+.cyrene-toast {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 14px;
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--surface) 94%, var(--accent) 6%);
+    box-shadow: 0 10px 32px rgb(0 0 0 / 24%);
+    color: var(--text);
+    pointer-events: auto;
+    animation: cyrene-toast-enter 180ms ease-out;
+}
+.cyrene-toast svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.cyrene-toast-icon {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+.cyrene-toast-message {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.cyrene-toast-close {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+    --control-radius: 9px;
+    color: var(--text-muted);
+}
+.cyrene-toast-close svg {
+    width: 16px;
+    height: 16px;
+}
+@keyframes cyrene-toast-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 520px) {
+    .cyrene-toasts {
+        right: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cyrene-toast {
+        animation: none;
+    }
+}
+
+/* Error notifications use the same outlined treatment as delete buttons. */
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) {
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+    background: color-mix(in srgb, var(--error) 3%, var(--surface));
+    color: var(--error);
+}
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) .cyrene-toast-icon {
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+    background: color-mix(in srgb, var(--error) 8%, transparent);
+    color: var(--error);
+}
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) .cyrene-toast-close {
+    color: var(--error);
+}
 .cyrene-button {
     --button-shrink: 0;
     --button-surface: var(--control-surface);
@@ -1896,8 +2184,8 @@ html body .checkbox-control {
     }
 }
 
-/* Immediate feedback while Events fetches account data. */
-#events-navigation-status {
+/* Shared feedback while pages or API requests fetch data. */
+#navigation-loading-status {
     position: fixed;
     z-index: 10000;
     top: 24px;
@@ -1916,7 +2204,7 @@ html body .checkbox-control {
     pointer-events: none;
 }
 
-body:has(#events-navigation-status)::before {
+body:has(#navigation-loading-status)::before {
     content: "";
     position: fixed;
     z-index: 10001;
@@ -1955,12 +2243,12 @@ body:has(#events-navigation-status)::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body:has(#events-navigation-status)::before,
+    body:has(#navigation-loading-status)::before,
     .navigation-loading-spark,
     .nav-item.is-loading .nav-icon {
         animation: none;
     }
-    body:has(#events-navigation-status)::before {
+    body:has(#navigation-loading-status)::before {
         background: var(--accent);
     }
 }
@@ -2193,4 +2481,14 @@ body:has(#events-navigation-status)::before {
     --button-border: color-mix(in srgb, var(--error) 60%, transparent);
     --button-hover-border: var(--error);
     color: var(--error);
+}
+
+.navigation-loading-spark { width: 18px; height: 18px; flex: 0 0 18px; }
+
+/* Hidden before first paint, including when navigating into a fresh SPA panel. */
+html:not([data-show-unreleased="true"]) [data-unreleased="true"] { display: none !important; }
+.cyrene-unreleased-badge {
+    display: inline-block; padding: 3px 7px; border: 1px solid var(--accent-border);
+    border-radius: 7px; background: var(--surface); color: var(--accent);
+    font-size: 0.65rem; font-weight: 700; line-height: 1.3;
 }

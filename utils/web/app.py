@@ -110,6 +110,7 @@ from utils.web.auth import (
     save_discord_profile,
 )
 from utils.web.changelog import router as changelog_router
+from utils.web.content_metadata import character_content_metadata
 from utils.web.discord_oauth import refresh_profile as refresh_discord_profile
 from utils.web.discord_oauth import router as discord_oauth_router
 from utils.web.limited_event_checks import (
@@ -3261,7 +3262,10 @@ async def characters_page(
                             "level": (owned.level if owned is not None else None),
                             "friendship": (owned.friendship if owned is not None else None),
                             "constellation": (owned.constellation if owned is not None else None),
-                            "release_date": release_dates.get(name, ""),
+                            **character_content_metadata(
+                                owned.name if owned is not None else name,
+                                release_dates.get(name, ""),
+                            ),
                             "weapon": get_weapon_type(owned, data),
                             "owned": owned is not None,
                         }
@@ -3273,6 +3277,13 @@ async def characters_page(
                     key=lambda character: (
                         not character["owned"],
                         -(character["level"] or 0),
+                        -int(character.get("unreleased", False)),
+                        -(
+                            datetime.fromisoformat(character["release_date"]).toordinal()
+                            if character.get("unreleased") and character.get("release_date")
+                            else 0
+                        ),
+                        -(character["rarity"] or 0),
                         character["name"].casefold(),
                     )
                 )
@@ -3349,6 +3360,21 @@ def _normalise_character_plan(plan: object) -> dict | None:
                 return None
         return result if len(result) == 3 else None
 
+    planned_weapon = None
+    if plan.get("plannedWeapon") is not None:
+        from utils.web.weapons import validate_manual_weapon
+
+        try:
+            planned_weapon = validate_manual_weapon(
+                {
+                    **plan["plannedWeapon"],
+                    "level": 1,
+                    "refinement": 1,
+                }
+            )
+        except TypeError, ValueError:
+            return None
+
     target_talents = bounded_list(talents, 1, 13) or [1, 1, 1]
     current_talents = bounded_list(plan.get("currentTalents"), 1, 15)
 
@@ -3370,6 +3396,7 @@ def _normalise_character_plan(plan: object) -> dict | None:
         "talents": target_talents,
         "currentTalents": current_talents,
         "weaponLevel": weapon_level,
+        "plannedWeapon": planned_weapon,
         "currentWeaponName": str(plan.get("currentWeaponName") or "")[:100],
         "currentWeaponIcon": str(plan.get("currentWeaponIcon") or "")[:1000],
         "currentWeaponLevel": optional_int(
