@@ -171,6 +171,23 @@ test("unreleased content is hidden before scripts, opted into in Settings, sorte
     expect(rowGap).toBe(10);
     await page.goto("/characters");
     await expect(page.locator('[data-character-id="3"]')).toBeVisible();
+    for (const id of [3, 4]) {
+        const card = page.locator(`[data-character-id="${id}"]`);
+        await expect(card.locator(".character-unowned-label")).toHaveCount(0);
+        await expect(card.locator(".character-unowned-status")).toHaveText("Not owned");
+        const placement = await card.locator(".character-release-badge").evaluate((badge) => {
+            const pill = badge.getBoundingClientRect();
+            const portrait = badge.parentElement!.getBoundingClientRect();
+            return {
+                centreOffset: Math.abs(
+                    (pill.left + pill.right - portrait.left - portrait.right) / 2,
+                ),
+                bottomGap: portrait.bottom - pill.bottom,
+            };
+        });
+        expect(placement.centreOffset).toBeLessThan(1);
+        expect(placement.bottomGap).toBe(4);
+    }
     await expect(page.locator('[data-character-id="3"] .cyrene-unreleased-badge')).toHaveText(
         "Unreleased",
     );

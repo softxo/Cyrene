@@ -339,7 +339,7 @@
                     {% if character.unreleased %}<span class="cyrene-unreleased-badge character-release-badge">Unreleased</span>{% endif %}
                     {% if character.owned %}
                         <span class="character-level">Lv. {{ character.level }}</span>
-                    {% else %}
+                    {% elif not character.unreleased %}
                         <span class="character-unowned-label">Not owned</span>
                     {% endif %}
                 </div>
