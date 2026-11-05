@@ -95,7 +95,10 @@ function createPlannerButtonSelectors(form, editor, editorDialog) {
         trigger.setAttribute("aria-haspopup", "true");
         trigger.setAttribute("aria-expanded", "false");
         const fieldName = select.closest("label")?.querySelector("span")?.textContent.trim() ||
-            select.closest(".planner-level-value")?.querySelector(":scope > span")?.textContent.trim() ||
+            select
+                .closest(".planner-level-value")
+                ?.querySelector(":scope > span")
+                ?.textContent.trim() ||
             "Goal";
         trigger.setAttribute("aria-label", `Choose ${fieldName.toLowerCase()}`);
         const existingValue = select
@@ -2268,6 +2271,35 @@ function initCharacterPlanner() {
     const hydrationPromise = hydratePlansFromDatabase();
     void hydrationPromise.then(async () => {
         let changed = false;
+        plans.forEach((plan) => {
+            const character = pickerButtons.find((button) => String(button.dataset.plannerCharacterId) === String(plan.id));
+            if (character?.dataset.plannerCharacterOwnership !== "owned")
+                return;
+            const currentConstellation = normaliseOptionalNumber(character.dataset.plannerCharacterConstellation, 0, 6);
+            if (currentConstellation !== null) {
+                if (plan.currentConstellation !== currentConstellation)
+                    changed = true;
+                plan.currentConstellation = currentConstellation;
+                const constellationGoal = Math.max(plan.constellation, currentConstellation);
+                if (plan.constellation !== constellationGoal)
+                    changed = true;
+                plan.constellation = constellationGoal;
+            }
+            const currentLevel = normaliseOptionalNumber(character.dataset.plannerCharacterLevel, 1, 90);
+            if (currentLevel !== null) {
+                if (plan.currentLevel !== currentLevel)
+                    changed = true;
+                plan.currentLevel = currentLevel;
+                const levelGoal = Math.max(plan.level, currentLevel);
+                if (plan.level !== levelGoal)
+                    changed = true;
+                plan.level = levelGoal;
+            }
+        });
+        if (changed) {
+            persistPlans();
+            renderPlans();
+        }
         await Promise.all(plans.map(async (plan) => {
             if (plan.weaponSource === "manual" ||
                 (plan.plannedWeapon && !plan.weaponSource) ||

@@ -16,7 +16,7 @@ COLOURED_ELEMENT_EMOJIS = {
     "dendro": "<:Element_Dendro:1530806708266598490>",
     "geo": "<:Element_Geo:1530806711617585232>",
     "anemo": "<:Element_Anemo:1530806704814559243>",
-    "physical": "<:Element_Physical:1530823447041540156>"
+    "physical": "<:Element_Physical:1530823447041540156>",
 }
 
 WEAPON_EMOJIS = {
@@ -24,14 +24,13 @@ WEAPON_EMOJIS = {
     "sword": "<:Sword:1529164852529205350>",
     "claymore": "<:Claymore:1529164849727410217>",
     "polearm": "<:Polearm:1529164851157667851>",
-    "catalyst": "<:Catalyst:1529164848397816021>"
+    "catalyst": "<:Catalyst:1529164848397816021>",
 }
 
 WARD_EMOJIS = {
     "elementless": "<:Shield:1530937059722924213>",
     "void": "<:Shield_Void:1530937062646349834>",
     "deepdark": "<:Shield_Deepdark:1530937061350047834>",
-
     "nightsoul": "<:Nightsoul:1532056480478527678>",
     "lunar_charged": "<:Lunar_Charged:1532033232491642960>",
     "lunar_bloom": "<:Lunar_Bloom:1532035491275477163>",
@@ -43,12 +42,10 @@ WARD_EMOJIS = {
     "all_elements": "<:Elements:1532046611461701693>",
     "physical_damage": "<:Physical_Damage:1532047833350537489>",
     "blunt_attacks": "<:Blunt_Attacks:1532475500315021414>",
-    "geo_attacks": "<:Element_Geo:1530806711617585232>"
+    "geo_attacks": "<:Element_Geo:1530806711617585232>",
 }
 
-STAT_EMOJIS = {
-    "hp" : "<:HP:1530927836993552576>"
-}
+STAT_EMOJIS = {"hp": "<:HP:1530927836993552576>"}
 
 MISC_EMOJIS = {
     "info": "<:info:1532802335393321080>",
@@ -56,14 +53,14 @@ MISC_EMOJIS = {
     "add": "<:Add:1535757951011131542>",
     "remove": "<:Remove:1535757952403775578>",
     "rename": "<:Rename:1535757957650714734>",
-    "back": "<:Back:1537723004748959815>"
+    "back": "<:Back:1537723004748959815>",
 }
 
 ERROR_EMOJIS = {
     "error": "<:Error:1534168169865023580>",
     "warning": "<:Warning:1534254848546181212>",
     "info": "<:Info:1534158852268753007>",
-    "success": "<:Success:1534168168027783278>"
+    "success": "<:Success:1534168168027783278>",
 }
 
 ERROR_TYPE_EMOJIS = {
@@ -74,10 +71,11 @@ ERROR_TYPE_EMOJIS = {
     "invalid_input": "<:Error:1534168169865023580>",
     "missing_argument": "<:Missing_Arg:1534168164269555843>",
     "unexpected": "<:Unexpected_Error:1534254583449387191>",
-    "success": "<:Success:1534168168027783278>"
+    "success": "<:Success:1534168168027783278>",
 }
 
 HOYOLAB_EMOJIS = {
+    "realm_currency": "<:Realm_Currency:1567870868434980895>",
     "original_resin": "<:Original_Resin:1537057573466017814>",
     "serenitea_pot": "<:Serenitea_Pot:1537057570890580039>",
     "parametric_transformer": "<:Parametric_Transformer:1537057568298635314>",
@@ -85,7 +83,7 @@ HOYOLAB_EMOJIS = {
     "custom": "<:Custom_Reminder:1537059737147932672>",
     "notification": "<:Notification:1537060765805052026>",
     "account": "<:Account:1538168557672865882>",
-    "reminder": "<:Reminder:1538168559476146249>"
+    "reminder": "<:Reminder:1538168559476146249>",
 }
 
 MUSIC_EMOJIS = {
@@ -107,5 +105,5 @@ MUSIC_EMOJIS = {
     "musicpauseresume": "<:musicpause:1536426141416554496>",
     "musicskip": "<:musicskip:1536426140015661127>",
     "musicstop": "<:musicstop:1536428845391941786>",
-    "musiclyrics": "<:musiclyrics:1536426134579974184>"
+    "musiclyrics": "<:musiclyrics:1536426134579974184>",
 }

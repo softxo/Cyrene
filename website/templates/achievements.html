@@ -38,7 +38,7 @@
                     aria-expanded="false"
                 >
                     <span class="custom-select-value">
-                        {{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}
+                        <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="display">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}</span>
                         · {{ selected_account.genshin_uid }}
                     </span>
                     <span class="custom-select-arrow"></span>
@@ -52,7 +52,7 @@
                         data-value="{{ account.id }}"
                         aria-selected="{{ 'true' if account.id == selected_account.id else 'false' }}"
                     >
-                        {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}
+                        <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}</span>
                         · {{ account.genshin_uid }}
                     </button>
                     {% endfor %}

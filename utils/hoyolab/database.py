@@ -152,7 +152,8 @@ async def initialise_database() -> None:
             ALTER TABLE accounts
                 ADD COLUMN IF NOT EXISTS cookie_token TEXT,
                 ADD COLUMN IF NOT EXISTS account_id TEXT,
-                ADD COLUMN IF NOT EXISTS stoken TEXT
+                ADD COLUMN IF NOT EXISTS stoken TEXT,
+                ADD COLUMN IF NOT EXISTS profile_checked_at TIMESTAMPTZ
             """
         )
 
@@ -1067,9 +1068,13 @@ async def get_accounts(discord_user_id: int) -> list[dict]:
                 "level": row["level"],
                 "created_at": row["created_at"],
                 "updated_at": row["updated_at"],
+                "profile_checked_at": row.get("profile_checked_at"),
             }
         )
 
+    from .account_profiles import refresh_account_profiles
+
+    await refresh_account_profiles(accounts)
     return accounts
 
 
@@ -1109,7 +1114,7 @@ async def get_account(discord_user_id: int, genshin_uid: str) -> dict | None:
         account_id=(crypto.decrypt(row["account_id"]) if row["account_id"] else None),
     )
 
-    return {
+    account = {
         "id": row["id"],
         "discord_user_id": row["discord_user_id"],
         "discord_username": row["discord_username"],
@@ -1124,7 +1129,13 @@ async def get_account(discord_user_id: int, genshin_uid: str) -> dict | None:
         "level": row["level"],
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
+        "profile_checked_at": row.get("profile_checked_at"),
     }
+
+    from .account_profiles import refresh_account_profiles
+
+    await refresh_account_profiles([account])
+    return account
 
 
 async def get_event_activity_check(
@@ -1210,6 +1221,7 @@ async def update_reminder(
     *,
     enabled: bool | None = None,
     config: dict | None = None,
+    reminder_mode: str | None = None,
     next_trigger_at: datetime | None | object = _UNSET,
     last_triggered_at: datetime | None = None,
 ) -> bool:
@@ -1219,6 +1231,7 @@ async def update_reminder(
         reminder_id,
         enabled=enabled,
         config=config,
+        reminder_mode=reminder_mode,
         next_trigger_at=next_trigger_at,
         last_triggered_at=last_triggered_at,
     )

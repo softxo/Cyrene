@@ -51,7 +51,7 @@
                 >
                     <span id="codes-account-label">
                         {% if accounts %}
-                            {{ accounts[0].nickname }} · {{ accounts[0].genshin_uid }}
+                            <span data-account-profile-name="{{ accounts[0].genshin_uid }}" data-account-profile-field="nickname">{{ accounts[0].nickname }}</span> · {{ accounts[0].genshin_uid }}
                             ({{ accounts[0].genshin_server }})
                         {% else %}
                             No accounts available
@@ -74,9 +74,9 @@
                         role="option"
                         aria-selected="{{ 'true' if loop.first else 'false' }}"
                         data-value="{{ account.id }}"
-                        data-label="{{ account.nickname }} · {{ account.genshin_uid }} ({{ account.genshin_server }})"
+                        data-account-profile-label="{{ account.genshin_uid }}" data-account-profile-old-name="{{ account.nickname }}" data-label="{{ account.nickname }} · {{ account.genshin_uid }} ({{ account.genshin_server }})"
                     >
-                        {{ account.nickname }} · {{ account.genshin_uid }}
+                        <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.nickname }}</span> · {{ account.genshin_uid }}
                         ({{ account.genshin_server }})
                     </button>
                     {% endfor %}

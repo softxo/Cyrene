@@ -72,7 +72,7 @@
     data-activity-type="limited_event" data-event-key="{{ event.completion_key }}"
     data-event-token="{{ event.completion_token }}"
     data-account-id="{{ account.id }}"
-    aria-label="Mark rewards claimed for {{ event.name }} for {{ account.nickname }}"
+    data-account-profile-aria="{{ account.genshin_uid }}" data-account-profile-old-name="{{ account.nickname }}" aria-label="Mark rewards claimed for {{ event.name }} for {{ account.nickname }}"
     title="Track claimed rewards manually"
     aria-pressed="{{ 'true' if event.manual_checked else 'false' }}"
 ></button>
@@ -185,7 +185,7 @@
 {% if event %}
 <article id="temper-thyself-{{ account.id }}" class="event-list-item event-temper-item{% if event.checked %} completed{% endif %}" data-permanent-event="temper-thyself" data-account-id="{{ account.id }}">
     <div class="event-list-left">
-        <div class="event-list-check"><button type="button" class="event-checkmark{% if not event.checked %} event-checkmark-empty{% endif %}" data-activity-type="temper_thyself" data-account-id="{{ account.id }}" aria-label="Mark {{ event.name }} complete{% if show_account %} for {{ account.nickname }}{% endif %}" aria-pressed="{{ 'true' if event.checked else 'false' }}"></button></div>
+        <div class="event-list-check"><button type="button" class="event-checkmark{% if not event.checked %} event-checkmark-empty{% endif %}" data-activity-type="temper_thyself" data-account-id="{{ account.id }}" data-account-profile-aria="{{ account.genshin_uid }}" data-account-profile-old-name="{{ account.nickname }}" aria-label="Mark {{ event.name }} complete{% if show_account %} for {{ account.nickname }}{% endif %}" aria-pressed="{{ 'true' if event.checked else 'false' }}"></button></div>
         <div class="event-list-icon"><img src="{{ event.icon }}" alt="" width="36" height="36"></div>
         <strong class="event-list-name">{{ event.name }}</strong>
     </div>
@@ -387,7 +387,7 @@
                             type="button"
                         >
                             <span class="custom-select-value">
-                                {{ selected_account.nickname }}
+                                <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.nickname }}</span>
                                 ·
                                 {{ selected_account.genshin_uid }}
                             </span>
@@ -408,7 +408,7 @@
                                     type="button"
                                     data-account-id="{{ account.id }}"
                                 >
-                                    {{ account.nickname }}
+                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.nickname }}</span>
                                     ·
                                     {{ account.genshin_uid }}
                                 </button>
@@ -1868,7 +1868,7 @@
                                     data-account-id="{{ account.id }}"
                                     aria-selected="{{ 'true' if loop.first else 'false' }}"
                                 >
-                                    {{ account.nickname or account.genshin_uid }} · {{ account.genshin_uid }}
+                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.nickname or account.genshin_uid }}</span> · {{ account.genshin_uid }}
                                 </button>
                                 {% endfor %}
                             </div>
@@ -2165,7 +2165,7 @@
                     data-automatic-complete="{{ 'true' if item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward else 'false' }}">
 
                     <div class="overview-account-name">
-                        <strong>{{ item.account.nickname }}</strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
 
@@ -2207,7 +2207,7 @@
                                     class="event-checkmark{% if not item.daily.checked %} event-checkmark-empty{% endif %}"
                                     data-activity-type="daily_commissions"
                                     data-account-id="{{ item.account.id }}"
-                                    aria-label="Mark Daily Commissions complete for {{ item.account.nickname }}"
+                                    data-account-profile-aria="{{ item.account.genshin_uid }}" data-account-profile-old-name="{{ item.account.nickname }}" aria-label="Mark Daily Commissions complete for {{ item.account.nickname }}"
                                     aria-pressed="{{ 'true' if item.daily.checked else 'false' }}"
                                 ></button>
 
@@ -2247,7 +2247,7 @@
                     <div class="overview-account-name">
 
                         <strong>
-                            {{ item.account.nickname }}
+                            <span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span>
                         </strong>
 
                         <span>
@@ -2336,7 +2336,7 @@
             <details open id="permanent-account-{{ item.account.id }}" class="events-custom-account-group" data-permanent-account-group data-account-id="{{ item.account.id }}">
                 <summary class="events-custom-account-heading">
                     <div class="events-custom-account-info overview-account-name">
-                        <strong>{{ item.account.nickname }}</strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
                     <span class="events-custom-account-count{% if complete_count == 2 %} event-completion-pill{% endif %}" data-permanent-account-count>{{ complete_count }}/2 complete</span>
@@ -2344,7 +2344,7 @@
                 <div class="events-custom-list">
                     <article class="event-list-item event-trounce-item{% if trounce_complete %} completed{% endif %}" data-automatic-complete="{{ 'true' if item.trounce.has_data and item.trounce.remaining <= 0 else 'false' }}">
                         <div class="event-list-left">
-                            <div class="event-list-check"><button type="button" class="event-checkmark{% if not item.trounce.checked %} event-checkmark-empty{% endif %}" data-activity-type="trounce_domains" data-account-id="{{ item.account.id }}" aria-label="Mark Trounce Domains complete for {{ item.account.nickname }}" aria-pressed="{{ 'true' if item.trounce.checked else 'false' }}"></button></div>
+                            <div class="event-list-check"><button type="button" class="event-checkmark{% if not item.trounce.checked %} event-checkmark-empty{% endif %}" data-activity-type="trounce_domains" data-account-id="{{ item.account.id }}" data-account-profile-aria="{{ item.account.genshin_uid }}" data-account-profile-old-name="{{ item.account.nickname }}" aria-label="Mark Trounce Domains complete for {{ item.account.nickname }}" aria-pressed="{{ 'true' if item.trounce.checked else 'false' }}"></button></div>
                             <div class="event-list-icon"><img src="/static/images/events/permanent/Trounce_Domains.png" alt="" width="36" height="36"></div>
                             <strong class="event-list-name">Trounce Domains</strong>
                         </div>
@@ -2371,7 +2371,7 @@
                 <div class="overview-account-row overview-endgame-row">
 
                     <div class="overview-account-name">
-                        <strong>{{ item.account.nickname }}</strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
 
@@ -2694,7 +2694,7 @@
             <details open class="events-custom-account-group" data-limited-account-group data-account-id="{{ item.account.id }}" data-account-uid="{{ item.account.genshin_uid }}">
                 <summary class="events-custom-account-heading">
                     <div class="events-custom-account-info overview-account-name">
-                        <strong>{{ item.account.nickname }}</strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
                     <span class="events-custom-account-count{% if item.limited_events and (item.limited_events | selectattr('is_finished') | list | length) == (item.limited_events | length) %} event-completion-pill{% endif %}" data-limited-account-count>{{ item.limited_events | selectattr('is_finished') | list | length }}/{{ item.limited_events | length }} complete</span>
@@ -2745,7 +2745,7 @@
                     >
                         <summary class="events-custom-account-heading">
                             <div class="events-custom-account-info overview-account-name">
-                                <strong>{{ item.account.nickname }}</strong>
+                                <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
                                 <span>{{ item.account.genshin_uid }}</span>
                             </div>
                             <span class="events-custom-account-count" data-custom-account-count>Loading...</span>

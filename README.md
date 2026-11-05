@@ -37,7 +37,7 @@ Cyrene combines a **Discord bot** with a **web dashboard** for Genshin Impact. T
 | Area                    | What it offers                                                                                     |
 | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | **Characters**          | Browse character rosters, inspect builds, talents and constellations, and plan character upgrades. |
-| **Planner**             | Configure reminders for resin, expeditions and other recurring activities.                         |
+| **Reminders**           | Configure reminders for resin, expeditions and other recurring activities.                         |
 | **Achievements**        | Browse achievements and track completion per linked account.                                       |
 | **Events**              | Track daily activities, endgame modes, limited-time events and custom objectives.                  |
 | **Wishes**              | View available banners and wish-related information.                                               |

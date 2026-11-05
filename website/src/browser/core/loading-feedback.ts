@@ -15,7 +15,7 @@ const labels: Record<string, string> = {
     "/weapons": "Weapons",
     "/wishes": "Wishes",
     "/achievements": "Achievements",
-    "/planner": "Planner",
+    "/reminders": "Reminders",
     "/settings": "Settings",
     "/codes": "Gift Codes",
     "/verify": "Verification",

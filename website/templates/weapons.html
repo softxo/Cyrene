@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Cyrene · Weapons{% endblock %}
 {% block content %}
-<div class="page characters-page weapons-page" data-weapons-page data-account-nickname="{{ selected_account.get('nickname', '') if selected_account else '' }}" data-account-id="{{ selected_account.id if selected_account else '' }}">
+<div class="page characters-page weapons-page" data-weapons-page data-account-profile-weapon="{{ selected_account.genshin_uid if selected_account else '' }}" data-account-nickname="{{ selected_account.get('nickname', '') if selected_account else '' }}" data-account-id="{{ selected_account.id if selected_account else '' }}">
     <header class="characters-header">
         <div class="characters-page-heading"><span class="eyebrow">ARMOURY</span><h1>Weapons</h1><p>Your weapon inventory and the complete weapon catalogue.</p></div>
     </header>
@@ -21,10 +21,10 @@
             <label id="weapons-account-label">Account</label>
             <div class="custom-select characters-account-select" data-weapons-select>
                 <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="weapons-account-label weapons-account-value">
-                    <span class="custom-select-value" id="weapons-account-value">{{ selected_account.get('nickname') or 'Genshin' }} &middot; {{ selected_account.genshin_uid }}</span><span class="custom-select-arrow"></span>
+                    <span class="custom-select-value" id="weapons-account-value"><span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.get('nickname') or 'Genshin' }}</span> &middot; {{ selected_account.genshin_uid }}</span><span class="custom-select-arrow"></span>
                 </button>
                 <div class="custom-select-menu" role="listbox" aria-labelledby="weapons-account-label">
-                    {% for account in accounts %}<button type="button" class="custom-select-option{% if selected_account.id == account.id %} selected{% endif %}" role="option" aria-selected="{{ 'true' if selected_account.id == account.id else 'false' }}" data-value="{{ account.id }}">{{ account.get('nickname') or 'Genshin' }} &middot; {{ account.genshin_uid }}</button>{% endfor %}
+                    {% for account in accounts %}<button type="button" class="custom-select-option{% if selected_account.id == account.id %} selected{% endif %}" role="option" aria-selected="{{ 'true' if selected_account.id == account.id else 'false' }}" data-value="{{ account.id }}"><span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.get('nickname') or 'Genshin' }}</span> &middot; {{ account.genshin_uid }}</button>{% endfor %}
                 </div>
                 <input type="hidden" name="account_id" value="{{ selected_account.id }}" data-weapons-account>
             </div>

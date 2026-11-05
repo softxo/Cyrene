@@ -109,7 +109,17 @@ function initialiseAccountManagement() {
         nicknameInput.focus();
     };
 
+    list.addEventListener("cyrene:account-profiles", (event) => {
+        for (const account of list.accountProfiles || []) {
+            const fresh = event.detail?.find((item) => item.uid === account.uid);
+            if (fresh) Object.assign(account, fresh);
+        }
+        if (selectedAccount && !modal.hidden) {
+            details.textContent = `${selectedAccount.nickname || "Unnamed account"} ? UID ${selectedAccount.uid}`;
+        }
+    });
     const renderAccounts = (accounts) => {
+        list.accountProfiles = accounts;
         list.innerHTML = "";
 
         if (!accounts.length) {
@@ -128,6 +138,8 @@ function initialiseAccountManagement() {
             info.className = "linked-account-info";
 
             const name = document.createElement("strong");
+            name.dataset.accountProfileName = account.uid;
+            name.dataset.accountProfileField = "display";
             name.textContent = account.cyrene_nickname || account.nickname || "Unnamed account";
 
             const heading = document.createElement("div");
@@ -173,6 +185,7 @@ function initialiseAccountManagement() {
             heading.append(access);
 
             const meta = document.createElement("span");
+            meta.dataset.accountProfileMeta = account.uid;
             meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
 
             const manage = document.createElement("button");

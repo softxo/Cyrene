@@ -2,18 +2,25 @@ import asyncio
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import discord
 
 from utils.constants.emojis import HOYOLAB_EMOJIS
 from utils.hoyolab.account_client import get_account_client
-from utils.hoyolab.daily_note import get_resin
+from utils.hoyolab.daily_note import (
+    get_expeditions,
+    get_home_coin,
+    get_resin,
+    get_transformer_status,
+)
 from utils.hoyolab.database import (
     get_accounts,
     get_due_reminders,
     get_reminder_recipients,
     update_reminder,
 )
+from utils.hoyolab.expedition_icons import EXPEDITION_ICONS
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +30,7 @@ RESIN_REGEN_SECONDS = 480
 RESIN_TRIGGERED_CHECK_SECONDS = 300
 
 RESIN_IMAGE = Path("assets/hoyolab/daily/Original_Resin.webp")
+REALM_CURRENCY_IMAGE = Path("website/static/images/misc/Realm_Currency.png")
 
 
 class ReminderScheduler:
@@ -299,25 +307,310 @@ class ReminderScheduler:
         )
 
     async def handle_expedition(self, reminder: dict):
-        logger.debug("Expedition reminder %s is not implemented yet.", reminder["id"])
+        reminder_id = reminder["id"]
+        genshin_uid = reminder.get("genshin_uid")
+        reminder_mode = reminder.get("reminder_mode", "automatic")
+        config = dict(reminder.get("config") or {})
 
-        await self.retry_reminder(reminder, seconds=60)
+        if not genshin_uid:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
 
-        return False
+        response = None
+        expeditions = []
+        for candidate in await get_reminder_recipients(genshin_uid):
+            try:
+                client = await get_account_client(candidate, genshin_uid)
+                if client is None:
+                    continue
+                async with client:
+                    response = await client.get_genshin_daily_note(
+                        client.genshin_uid, client.genshin_server
+                    )
+                expeditions = get_expeditions(response)
+                reminder = {**reminder, "discord_user_id": candidate}
+                break
+            except Exception:
+                response = None
+                logger.exception(
+                    "Failed to fetch Expeditions for reminder %s using linked user %s.",
+                    reminder_id,
+                    candidate,
+                )
+
+        if response is None:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+
+        valid_expeditions = []
+        for slot, expedition in enumerate(expeditions if isinstance(expeditions, list) else []):
+            if not isinstance(expedition, dict):
+                continue
+            try:
+                remaining_seconds = max(0, int(expedition.get("remained_time", 0) or 0))
+            except TypeError, ValueError:
+                remaining_seconds = 0
+            status = str(expedition.get("status") or "Unknown")
+            if status == "Ongoing" and remaining_seconds == 0:
+                status = "Finished"
+
+            icon_url = str(expedition.get("avatar_side_icon") or "")
+            icon_filename = urlsplit(icon_url).path.rstrip("/").rsplit("/", 1)[-1]
+            icon_hash = icon_filename.removesuffix(".png")
+            character_name = EXPEDITION_ICONS.get(icon_hash, "Unknown")
+            valid_expeditions.append(
+                {
+                    "slot": str(slot),
+                    "name": character_name.replace("_", " "),
+                    "status": status,
+                    "remaining_seconds": remaining_seconds,
+                }
+            )
+
+        finished = {
+            expedition["slot"]: expedition["name"]
+            for expedition in valid_expeditions
+            if expedition["status"] == "Finished"
+        }
+
+        if reminder_mode == "manual":
+            if not finished:
+                await self.schedule_expedition_check(
+                    reminder, valid_expeditions, fallback_seconds=60
+                )
+                return False
+
+            sent = await self.send_expedition_reminder(reminder, finished, "Manual")
+            if not sent:
+                await self.retry_reminder(reminder, seconds=60)
+                return False
+
+            await update_reminder(
+                reminder["discord_user_id"],
+                reminder_id,
+                enabled=False,
+                last_triggered_at=datetime.now(timezone.utc),
+                next_trigger_at=None,
+            )
+            return True
+
+        seen_finished = config.get("finished_slots", [])
+        if not isinstance(seen_finished, list):
+            seen_finished = []
+        seen_finished = {str(slot) for slot in seen_finished}
+        new_finished = {slot: name for slot, name in finished.items() if slot not in seen_finished}
+        updated_config = {**config, "finished_slots": sorted(finished)}
+
+        if new_finished:
+            sent = await self.send_expedition_reminder(reminder, new_finished, "Automatic")
+            if not sent:
+                await self.retry_reminder(reminder, seconds=60)
+                return False
+
+        next_check = self.next_expedition_check(
+            valid_expeditions, fallback_seconds=300 if finished else 60
+        )
+        update_values = {
+            "enabled": True,
+            "next_trigger_at": next_check,
+        }
+        if updated_config != config:
+            update_values["config"] = updated_config
+        if new_finished:
+            update_values["last_triggered_at"] = datetime.now(timezone.utc)
+
+        await update_reminder(reminder["discord_user_id"], reminder_id, **update_values)
+        return bool(new_finished)
+
+    def next_expedition_check(self, expeditions: list[dict], *, fallback_seconds: int):
+        now = datetime.now(timezone.utc)
+        remaining = [
+            expedition["remaining_seconds"]
+            for expedition in expeditions
+            if expedition["status"] == "Ongoing" and expedition["remaining_seconds"] > 0
+        ]
+        delay = min(remaining) if remaining else fallback_seconds
+        return now + timedelta(seconds=delay)
+
+    async def schedule_expedition_check(
+        self, reminder: dict, expeditions: list[dict], *, fallback_seconds: int
+    ):
+        await update_reminder(
+            reminder["discord_user_id"],
+            reminder["id"],
+            enabled=True,
+            next_trigger_at=self.next_expedition_check(
+                expeditions, fallback_seconds=fallback_seconds
+            ),
+        )
+
+    async def send_expedition_reminder(self, reminder: dict, finished: dict, mode: str) -> bool:
+        genshin_uid = reminder.get("genshin_uid")
+        user_id = reminder["discord_user_id"]
+        accounts = await get_accounts(user_id)
+        account = next((item for item in accounts if item.get("genshin_uid") == genshin_uid), None)
+        account_name = (
+            account.get("cyrene_nickname") or account.get("nickname") or "Unknown"
+            if account
+            else "Unknown"
+        )
+        names = "\n".join(f"• **{name}**" for name in finished.values())
+        return await self.send_reminder(
+            reminder,
+            title="Expeditions Complete",
+            message=(
+                "Hey {recipient_mention}!\n\n"
+                f"Your account **{account_name}** has finished these Expeditions:\n{names}"
+            ),
+            footer=f"UID: {genshin_uid} — {mode} Expedition Reminder",
+        )
 
     async def handle_teapot(self, reminder: dict):
-        logger.debug("Teapot reminder %s is not implemented yet.", reminder["id"])
+        uid = reminder.get("genshin_uid")
+        if not uid:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
 
-        await self.retry_reminder(reminder, seconds=60)
+        currency = None
+        for candidate in await get_reminder_recipients(uid):
+            try:
+                client = await get_account_client(candidate, uid)
+                if client is None:
+                    continue
+                async with client:
+                    response = await client.get_genshin_daily_note(
+                        client.genshin_uid, client.genshin_server
+                    )
+                currency = get_home_coin(response)
+                reminder = {**reminder, "discord_user_id": candidate}
+                break
+            except Exception:
+                logger.exception("Failed to fetch Realm Currency for reminder %s.", reminder["id"])
+        if currency is None:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
 
-        return False
+        current, maximum, recovery = currency
+        config = dict(reminder.get("config") or {})
+        amount = config.get("amount", maximum)
+        if isinstance(amount, bool) or not isinstance(amount, int) or amount < 1:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+        amount = min(amount, maximum)
+        config["amount"] = amount
+        now = datetime.now(timezone.utc)
+        manual = reminder.get("reminder_mode") == "manual"
+        if current < amount:
+            config["triggered"] = False
+            await update_reminder(
+                reminder["discord_user_id"],
+                reminder["id"],
+                enabled=True,
+                config=config,
+                next_trigger_at=now
+                + timedelta(seconds=max(60, recovery) if amount == maximum else 60),
+            )
+            return False
+        if not manual and config.get("triggered"):
+            await self.retry_reminder(reminder, seconds=300)
+            return False
+
+        accounts = await get_accounts(reminder["discord_user_id"])
+        account = next((item for item in accounts if item.get("genshin_uid") == uid), {})
+        name = account.get("cyrene_nickname") or account.get("nickname") or uid
+        sent = await self.send_reminder(
+            reminder,
+            title="Realm Currency Full" if amount == maximum else "Realm Currency Reminder",
+            message=(
+                "Hey {recipient_mention}!\n\n"
+                f"Your account **{name}** has {HOYOLAB_EMOJIS['realm_currency']}**{current}/{maximum}** Realm Currency."
+            ),
+            footer=f"UID: {uid} \u2014 {'Manual' if manual else 'Automatic'} Reminder",
+            thumbnail=REALM_CURRENCY_IMAGE,
+        )
+        if not sent:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+        config["triggered"] = True
+        await update_reminder(
+            reminder["discord_user_id"],
+            reminder["id"],
+            enabled=not manual,
+            config=config,
+            last_triggered_at=now,
+            next_trigger_at=None if manual else now + timedelta(seconds=300),
+        )
+        return True
 
     async def handle_transformer(self, reminder: dict):
-        logger.debug("Transformer reminder %s is not implemented yet.", reminder["id"])
-
-        await self.retry_reminder(reminder, seconds=60)
-
-        return False
+        uid = reminder.get("genshin_uid")
+        if not uid:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+        state = None
+        for candidate in await get_reminder_recipients(uid):
+            try:
+                client = await get_account_client(candidate, uid)
+                if client is None:
+                    continue
+                async with client:
+                    response = await client.get_genshin_daily_note(
+                        client.genshin_uid, client.genshin_server
+                    )
+                state = get_transformer_status(response)
+                reminder = {**reminder, "discord_user_id": candidate}
+                break
+            except Exception:
+                logger.exception(
+                    "Failed to fetch Parametric Transformer for reminder %s.", reminder["id"]
+                )
+        if state is None:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+        config = dict(reminder.get("config") or {})
+        now = datetime.now(timezone.utc)
+        if not state["obtained"] or state["remaining_seconds"] > 0:
+            config["triggered"] = False
+            await update_reminder(
+                reminder["discord_user_id"],
+                reminder["id"],
+                config=config,
+                next_trigger_at=now
+                + timedelta(
+                    seconds=max(60, state["remaining_seconds"]) if state["obtained"] else 3600
+                ),
+            )
+            return False
+        manual = reminder.get("reminder_mode") == "manual"
+        if not manual and config.get("triggered"):
+            await self.retry_reminder(reminder, seconds=300)
+            return False
+        accounts = await get_accounts(reminder["discord_user_id"])
+        account = next((item for item in accounts if item.get("genshin_uid") == uid), {})
+        name = account.get("cyrene_nickname") or account.get("nickname") or uid
+        sent = await self.send_reminder(
+            reminder,
+            title="Parametric Transformer Ready",
+            message=(
+                "Hey {recipient_mention}!\n\n"
+                f"Your account **{name}** has a {HOYOLAB_EMOJIS['parametric_transformer']} Parametric Transformer ready to use."
+            ),
+            footer=f"UID: {uid} \u2014 {'Manual' if manual else 'Automatic'} Reminder",
+            thumbnail=Path("assets/hoyolab/daily/Parametric_Transformer.webp"),
+        )
+        if not sent:
+            await self.retry_reminder(reminder, seconds=60)
+            return False
+        config["triggered"] = True
+        await update_reminder(
+            reminder["discord_user_id"],
+            reminder["id"],
+            enabled=not manual,
+            config=config,
+            last_triggered_at=now,
+            next_trigger_at=None if manual else now + timedelta(seconds=300),
+        )
+        return True
 
     async def handle_custom(self, reminder: dict) -> bool:
         config = reminder.get("config") or {}

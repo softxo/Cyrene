@@ -27,11 +27,11 @@ for (const width of [390, 1280]) {
         const notice = page.getByRole("complementary", { name: "Site update" });
         await expect(notice).toHaveCount(0);
         offline = true;
-        await page.clock.fastForward(61000);
+        await page.clock.fastForward(16000);
         await expect(notice).toHaveCount(0);
         offline = false;
         version = "b".repeat(20);
-        await page.clock.fastForward(61000);
+        await page.clock.fastForward(16000);
         await expect(notice).toBeVisible();
         await expect(notice).toContainText("Update available");
         await expect(notice).toHaveCSS("box-shadow", "none");
@@ -113,10 +113,10 @@ for (const width of [390, 1280]) {
             expect(await button.boundingBox()).toEqual(bounds);
         }
         expect(documents).toBe(1);
-        await page.clock.fastForward(61000);
+        await page.clock.fastForward(16000);
         await expect(notice).toHaveCount(1);
         await notice.getByRole("button", { name: "Later", exact: true }).click();
-        await page.clock.fastForward(61000);
+        await page.clock.fastForward(16000);
         await expect(notice).toBeHidden();
         const dot = page.getByRole("button", { name: "Show available update", exact: true });
         await expect(dot).toBeVisible();
@@ -146,7 +146,7 @@ for (const width of [390, 1280]) {
         await expect(dot).toBeVisible();
         await expect(dot).toBeEnabled();
         version = "c".repeat(20);
-        await page.clock.fastForward(61000);
+        await page.clock.fastForward(16000);
         await expect(notice).toBeVisible();
         await expect(dot).toHaveCount(0);
         await notice.screenshot({ path: `test-results/site-update-notice-${width}.png` });

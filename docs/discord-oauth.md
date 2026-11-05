@@ -14,7 +14,7 @@ The existing `HOYOLAB_ENCRYPTION_KEY` encrypts stored access and refresh tokens 
 
 The verification box always shows **Authorise with Discord**. All three OAuth2 variables must be configured for authorisation to work; until then, clicking the button displays an availability message and leaves code verification usable. The button requests only `identify`, which permits reading the account's ID, username, display name and avatar. It does not request email, guild membership or messages.
 
-Successful authorisation uses the same Discord user ID and session mechanism as `/verify`, so existing Genshin accounts and Planner data remain associated with that identity. Authorising another Discord account switches the web session only after success; it does not transfer data between accounts.
+Successful authorisation uses the same Discord user ID and session mechanism as `/verify`, so existing Genshin accounts and Reminders data remain associated with that identity. Authorising another Discord account switches the web session only after success; it does not transfer data between accounts.
 
 Opening Connect Discord refreshes the authorised profile and rotates expired access tokens on the server. If Discord is unavailable or consent was revoked, the last saved profile remains visible. Authorise again to renew revoked access. Disconnecting signs out the current browser session; Discord authorisation can separately be revoked under Discord's Authorized Apps settings.
 

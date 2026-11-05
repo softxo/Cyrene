@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from utils.character.character_loader import CHARACTERS, load_characters
 from utils.errors.error_database import initialise_database as initialise_error_database
 from utils.errors.error_handler import handle_app_command_error, handle_prefix_command_error
+from utils.hoyolab.account_profiles import account_profile_worker
 from utils.hoyolab.daily_checkin_worker import daily_checkin_worker
 from utils.hoyolab.database import close_database as close_hoyolab_database
 from utils.hoyolab.database import initialise_database as initialise_hoyolab_database
@@ -33,7 +34,6 @@ load_characters()
 load_weapons()
 
 
-
 print("========== Data ==========")
 print(f"Loaded {len(CHARACTERS)} character(s):")
 print(f"  {', '.join(CHARACTERS)}")
@@ -48,59 +48,48 @@ intents.message_content = True
 
 
 bot = commands.Bot(
-    command_prefix=lambda bot, message: get_prefix(
-        message.guild.id if message.guild else None
-    ),
+    command_prefix=lambda bot, message: get_prefix(message.guild.id if message.guild else None),
     intents=intents,
 )
 
 bot.tree.allowed_contexts = app_commands.AppCommandContext(
-    guild=True,
-    dm_channel=True,
-    private_channel=True
+    guild=True, dm_channel=True, private_channel=True
 )
 
 reminder_scheduler = ReminderScheduler(bot)
 
 
 @bot.tree.interaction_check
-async def update_slash_user(
-    interaction: discord.Interaction
-) -> bool:
+async def update_slash_user(interaction: discord.Interaction) -> bool:
     user = interaction.user
 
     await update_discord_user(
-        discord_user_id=user.id,
-        discord_username=user.name,
-        discord_display_name=user.display_name
+        discord_user_id=user.id, discord_username=user.name, discord_display_name=user.display_name
     )
 
     if interaction.guild:
         await update_discord_server(
             discord_user_id=user.id,
             discord_guild_id=interaction.guild.id,
-            discord_guild_name=interaction.guild.name
+            discord_guild_name=interaction.guild.name,
         )
 
     return True
 
+
 @bot.before_invoke
-async def update_prefix_user(
-    ctx: commands.Context
-):
+async def update_prefix_user(ctx: commands.Context):
     user = ctx.author
 
     await update_discord_user(
-        discord_user_id=user.id,
-        discord_username=user.name,
-        discord_display_name=user.display_name
+        discord_user_id=user.id, discord_username=user.name, discord_display_name=user.display_name
     )
 
     if ctx.guild:
         await update_discord_server(
             discord_user_id=user.id,
             discord_guild_id=ctx.guild.id,
-            discord_guild_name=ctx.guild.name
+            discord_guild_name=ctx.guild.name,
         )
 
 
@@ -111,6 +100,7 @@ async def setup_hook():
     print("========= Discord =========")
     print(f"Loaded {len(bot.application_emojis)} application emojis")
     print()
+
 
 async def load_cogs():
     print("========== Cogs ==========")
@@ -130,27 +120,21 @@ async def load_cogs():
 
     print()
 
+
 @bot.event
 async def on_ready():
     print("========== Reminder Scheduler ==========")
 
-    print(
-        "Scheduler running before start:",
-        reminder_scheduler.is_running()
-    )
+    print("Scheduler running before start:", reminder_scheduler.is_running())
 
     if not reminder_scheduler.is_running():
         reminder_scheduler.start()
 
-    print(
-        "Scheduler running after start:",
-        reminder_scheduler.is_running()
-    )
+    print("Scheduler running after start:", reminder_scheduler.is_running())
 
     await bot.change_presence(
         activity=discord.Activity(
-            type=discord.ActivityType.listening,
-            name="I could really use a wish right now"
+            type=discord.ActivityType.listening, name="I could really use a wish right now"
         )
     )
 
@@ -165,12 +149,7 @@ async def on_ready():
 
         if cmd.name == "constellations":
             for option in cmd.parameters:
-                print(
-                    "OPTION:",
-                    option.name,
-                    "autocomplete:",
-                    option.autocomplete
-                )
+                print("OPTION:", option.name, "autocomplete:", option.autocomplete)
 
     synced = await bot.tree.sync()
     print(f"Synced {len(synced)} command(s).")
@@ -195,16 +174,21 @@ async def main():
 
     gift_code_task = None
     daily_checkin_task = None
+    account_profile_task = None
 
     try:
         async with bot:
             await load_cogs()
 
+            account_profile_task = asyncio.create_task(
+                account_profile_worker(), name="account-profile-worker"
+            )
+
             gift_code_task = asyncio.create_task(
                 gift_code_worker(),
                 name="gift-code-worker",
             )
-            
+
             daily_checkin_task = asyncio.create_task(
                 daily_checkin_worker(),
                 name="daily-checkin-worker",
@@ -217,6 +201,10 @@ async def main():
             )
 
     finally:
+        if account_profile_task is not None:
+            account_profile_task.cancel()
+            await asyncio.gather(account_profile_task, return_exceptions=True)
+
         if gift_code_task is not None:
             gift_code_task.cancel()
 
@@ -224,7 +212,7 @@ async def main():
                 gift_code_task,
                 return_exceptions=True,
             )
-            
+
         if daily_checkin_task is not None:
             daily_checkin_task.cancel()
 
@@ -239,25 +227,20 @@ async def main():
 
 @bot.tree.error
 async def on_app_command_error(
-        interaction: discord.Interaction,
-        error: app_commands.AppCommandError
+    interaction: discord.Interaction, error: app_commands.AppCommandError
 ):
     await handle_app_command_error(interaction, error)
 
+
 @bot.event
-async def on_command_error(
-        ctx: commands.Context,
-        error: commands.CommandError
-):
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     await handle_prefix_command_error(ctx, error)
+
 
 if __name__ == "__main__":
     if os.name == "nt":
         asyncio.run(
-            main(),
-            loop_factory=lambda: asyncio.SelectorEventLoop(
-                selectors.SelectSelector()
-            )
+            main(), loop_factory=lambda: asyncio.SelectorEventLoop(selectors.SelectSelector())
         )
     else:
         asyncio.run(main())

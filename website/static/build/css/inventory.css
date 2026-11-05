@@ -263,3 +263,43 @@
         gap: 10px;
     }
 }
+
+.inventory-filter {
+    display: grid;
+    gap: 7px;
+    flex: 1 1 160px;
+    min-width: 0;
+}
+
+.inventory-filter label {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.inventory-filter .custom-select-button,
+.inventory-toolbar [data-inventory-reset] {
+    height: 42px;
+    box-sizing: border-box;
+}
+
+.inventory-filter .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.inventory-summary {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.inventory-toolbar .inventory-search {
+    flex: 2 1 240px;
+}
+
+.inventory-card[hidden],
+.inventory-toolbar[hidden],
+.inventory-grid[hidden] {
+    display: none;
+}

@@ -102,6 +102,7 @@ export function initialiseSiteUpdates(): void {
             else {
                 const response = await fetch("/api/site-version", {
                     cache: "no-store",
+                    headers: { "X-Cyrene-Background": "1" },
                     signal: AbortSignal.timeout(10000),
                 });
                 if (!response.ok) return;
@@ -260,9 +261,11 @@ export function initialiseSiteUpdates(): void {
         }
     }
 
-    window.setInterval(() => void check(), 60000);
+    window.setInterval(() => void check(), 15000);
     document.addEventListener("visibilitychange", () => void check());
     window.addEventListener("focus", () => void check());
+    window.addEventListener("online", () => void check());
+    window.addEventListener("pageshow", () => void check());
     const available = readState("cyrene-available-update");
     if (/^[a-f0-9]{20}$/.test(available)) void check(available).then(() => check());
     else void check();

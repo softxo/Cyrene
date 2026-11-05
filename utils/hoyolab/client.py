@@ -6,6 +6,7 @@ import aiohttp
 import genshin
 
 from .auth import HoYoLABCredentials
+from .material_kinds import material_kinds, material_name_key
 
 
 class RedemptionAuthenticationError(RuntimeError):
@@ -450,6 +451,9 @@ class HoYoLABClient:
                 "icon": (material.get("icon_url") or material.get("icon")),
                 "rarity": int(material.get("level") or 0),
                 "amount": amount,
+                "kind": material_kinds().get(
+                    material_name_key(material.get("name") or ""), "Other materials"
+                ),
             }
 
             existing = inventory_by_id.get(material_id)

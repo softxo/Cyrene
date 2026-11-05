@@ -130,6 +130,7 @@ async def update_reminder(
     *,
     enabled=None,
     config=None,
+    reminder_mode=None,
     next_trigger_at=UNSET,
     last_triggered_at=None,
 ):
@@ -141,10 +142,15 @@ async def update_reminder(
     if config is not None:
         updates.append("config=%s")
         values.append(Jsonb(config))
+    if reminder_mode is not None:
+        if reminder_mode not in {"automatic", "manual"}:
+            raise ValueError("Invalid reminder mode.")
+        updates.append("reminder_mode=%s")
+        values.append(reminder_mode)
     if next_trigger_at is not UNSET:
         updates.append("next_trigger_at=%s")
         values.append(next_trigger_at)
-    elif config is not None:
+    elif config is not None or reminder_mode is not None:
         updates.append("next_trigger_at=NOW()")
     elif enabled is True:
         updates.append("next_trigger_at=COALESCE(next_trigger_at,NOW())")

@@ -16,14 +16,14 @@
                 <label>Account</label>
                 <div class="custom-select" data-wish-select data-submit-on-select>
                     <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false">
-                        <span class="custom-select-value">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }} · {{ selected_account.genshin_uid }}</span>
+                        <span class="custom-select-value"><span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="display">{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}</span> · {{ selected_account.genshin_uid }}</span>
                         <span class="custom-select-arrow"></span>
                     </button>
                     <div class="custom-select-menu" role="listbox">
                         {% for account in accounts %}
                         <button class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
                                 type="button" data-value="{{ account.id }}" role="option">
-                            {{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }} · {{ account.genshin_uid }}
+                            <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}</span> · {{ account.genshin_uid }}
                         </button>
                         {% endfor %}
                     </div>

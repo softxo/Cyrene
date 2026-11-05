@@ -89,7 +89,18 @@ function initialiseAccountManagement() {
         document.body.classList.add("settings-modal-open");
         nicknameInput.focus();
     };
+    list.addEventListener("cyrene:account-profiles", event => {
+        for (const account of list.accountProfiles || []) {
+            const fresh = event.detail?.find(item => item.uid === account.uid);
+            if (fresh)
+                Object.assign(account, fresh);
+        }
+        if (selectedAccount && !modal.hidden) {
+            details.textContent = `${selectedAccount.nickname || "Unnamed account"} ? UID ${selectedAccount.uid}`;
+        }
+    });
     const renderAccounts = (accounts) => {
+        list.accountProfiles = accounts;
         list.innerHTML = "";
         if (!accounts.length) {
             const empty = document.createElement("p");
@@ -104,6 +115,8 @@ function initialiseAccountManagement() {
             const info = document.createElement("div");
             info.className = "linked-account-info";
             const name = document.createElement("strong");
+            name.dataset.accountProfileName = account.uid;
+            name.dataset.accountProfileField = "display";
             name.textContent = account.cyrene_nickname || account.nickname || "Unnamed account";
             const heading = document.createElement("div");
             heading.className = "linked-account-heading";
@@ -141,6 +154,7 @@ function initialiseAccountManagement() {
             }
             heading.append(access);
             const meta = document.createElement("span");
+            meta.dataset.accountProfileMeta = account.uid;
             meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
             const manage = document.createElement("button");
             manage.type = "button";

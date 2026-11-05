@@ -15,7 +15,10 @@
     overflow: hidden;
     background: linear-gradient(
         155deg,
-        var(--weapon-card-rarity-soft, color-mix(in srgb, var(--weapon-rarity-colour) 18%, transparent)),
+        var(
+            --weapon-card-rarity-soft,
+            color-mix(in srgb, var(--weapon-rarity-colour) 18%, transparent)
+        ),
         var(--surface-inset) 58%
     );
     box-shadow:

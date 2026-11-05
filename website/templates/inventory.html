@@ -29,7 +29,7 @@
                 >
                     <span class="custom-select-value">
                         {% if selected_account %}
-                            {{ selected_account.get("nickname") or selected_account.get("genshin_uid") }}
+                            <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.get("nickname") or selected_account.get("genshin_uid") }}</span>
                             · {{ selected_account.genshin_uid }}
                         {% else %}
                             Select an account
@@ -47,7 +47,7 @@
                         data-value="{{ account.id }}"
                         aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
                     >
-                        {{ account.get("nickname") or account.get("genshin_uid") }}
+                        <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.get("nickname") or account.get("genshin_uid") }}</span>
                         · {{ account.genshin_uid }}
                     </button>
                     {% endfor %}
@@ -90,6 +90,21 @@
              class="cyrene-input">
         </div>
 
+        {% for key, label, all_label in [('rarity', 'Rarity', 'All rarities'), ('kind', 'Type', 'All types')] %}
+        <div class="inventory-filter">
+            <label id="inventory-{{ key }}-label">{{ label }}</label>
+            <div class="custom-select" data-inventory-select="{{ key }}">
+                <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="inventory-{{ key }}-label inventory-{{ key }}-value">
+                    <span class="custom-select-value" id="inventory-{{ key }}-value">{{ all_label }}</span>
+                    <span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox" aria-labelledby="inventory-{{ key }}-label"></div>
+                <input type="hidden" data-inventory-{{ key }} value="">
+            </div>
+        </div>
+        {% endfor %}
+        <button type="button" class="cyrene-button" data-inventory-reset disabled>Reset filters</button>
+
         <p class="inventory-summary" aria-live="polite">
             <span data-inventory-count>0</span>
             materials
@@ -99,7 +114,7 @@
     <section class="inventory-grid" data-inventory-grid hidden></section>
 
     <p class="inventory-empty-filter" data-inventory-empty hidden>
-        No materials match that search.
+        No materials match your filters.
     </p>
 
     <p class="inventory-note" data-inventory-note hidden>

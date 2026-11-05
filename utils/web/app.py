@@ -36,6 +36,7 @@ from genshin.models.auth.geetest import (
 )
 from genshin.models.genshin.constants import CHARACTER_NAMES
 from jinja2.utils import htmlsafe_json_dumps
+from psycopg.errors import UniqueViolation
 
 from utils.achievements.achievements import load_achievements
 from utils.achievements.importer import import_achievements
@@ -45,7 +46,12 @@ from utils.hoyolab.account_client import get_account_client
 from utils.hoyolab.account_limits import get_account_limit
 from utils.hoyolab.accounts import get_genshin_accounts
 from utils.hoyolab.daily_checkin_worker import request_daily_checkin
-from utils.hoyolab.daily_note import get_resin
+from utils.hoyolab.daily_note import (
+    get_expeditions,
+    get_home_coin,
+    get_resin,
+    get_transformer_status,
+)
 from utils.hoyolab.database import (
     change_custom_event_account_progress,
     create_custom_event,
@@ -96,6 +102,7 @@ from utils.hoyolab.errors import (
     HoYoLABRateLimitError,
     HoYoLABVerificationError,
 )
+from utils.hoyolab.expedition_icons import EXPEDITION_ICONS
 from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.login import login_with_password
 from utils.web.announcement_events import announcement_reward_events, merge_announcement_events
@@ -576,8 +583,14 @@ async def complete_hoyolab_link(
     }
 
 
+@app.get("/planner", include_in_schema=False)
+async def legacy_planner_redirect(request: Request):
+    query = f"?{request.url.query}" if request.url.query else ""
+    return RedirectResponse(url=f"/reminders{query}", status_code=308)
+
+
 @app.get(
-    "/planner",
+    "/reminders",
     response_class=HTMLResponse,
 )
 async def planner(request: Request, cyrene_session: str | None = Cookie(default=None)):
@@ -585,7 +598,7 @@ async def planner(request: Request, cyrene_session: str | None = Cookie(default=
 
     if session is None:
         return RedirectResponse(
-            url="/verify?next=/planner",
+            url="/verify?next=/reminders",
             status_code=303,
         )
 
@@ -599,7 +612,108 @@ async def planner(request: Request, cyrene_session: str | None = Cookie(default=
     )
 
 
-@app.get("/api/planner")
+def _planner_expedition_icon(icon_url: str) -> tuple[str, str, str | None]:
+    try:
+        parsed = urlsplit(icon_url)
+        port = parsed.port
+    except ValueError:
+        return "", "Unknown", None
+
+    hostname = (parsed.hostname or "").lower().rstrip(".")
+    trusted_domains = ("mihoyo.com", "hoyoverse.com", "hoyolab.com", "enka.network")
+    trusted_host = any(
+        hostname == domain or hostname.endswith(f".{domain}") for domain in trusted_domains
+    )
+    filename = parsed.path.rstrip("/").rsplit("/", 1)[-1]
+    icon_hash = filename[:-4].lower() if filename.lower().endswith(".png") else ""
+    character_name = EXPEDITION_ICONS.get(icon_hash, "Unknown")
+
+    if (
+        parsed.scheme != "https"
+        or not trusted_host
+        or port not in (None, 443)
+        or parsed.username is not None
+        or parsed.password is not None
+        or not re.fullmatch(r"[a-f0-9]{32}", icon_hash)
+        or character_name == "Unknown"
+        or filename.lower() != f"{icon_hash}.png"
+    ):
+        return "", character_name, None
+
+    return icon_hash, character_name, parsed.geturl()
+
+
+_planner_character_icon_cache: dict[str, tuple[float, str | None]] = {}
+_planner_character_icon_tasks: dict[str, asyncio.Task] = {}
+_planner_character_icon_semaphore = asyncio.Semaphore(4)
+
+
+async def _planner_character_portrait(character_name: str, catalogue: GenshinDB) -> str | None:
+    cache_key = character_name.strip().casefold()
+    if not cache_key or cache_key == "unknown":
+        return None
+
+    now = time.monotonic()
+    cached = _planner_character_icon_cache.get(cache_key)
+    if cached and cached[0] > now:
+        return cached[1]
+
+    portrait = None
+    try:
+        character = await asyncio.wait_for(
+            catalogue.get("characters", character_name),
+            timeout=2.5,
+        )
+        filename = (character.get("images") or {}).get("filename_icon")
+        if isinstance(filename, str) and re.fullmatch(r"[A-Za-z0-9_]+", filename):
+            portrait = f"https://enka.network/ui/{filename}.png"
+    except GenshinDBError, asyncio.TimeoutError, aiohttp.ClientError, ValueError, TypeError:
+        pass
+
+    cache_ttl = 24 * 60 * 60 if portrait else 60
+    _planner_character_icon_cache[cache_key] = (now + cache_ttl, portrait)
+    return portrait
+
+
+async def _refresh_planner_character_portrait(character_name: str, cache_key: str) -> None:
+    try:
+        async with _planner_character_icon_semaphore:
+            async with aiohttp.ClientSession() as catalogue_client:
+                await _planner_character_portrait(
+                    character_name,
+                    GenshinDB(catalogue_client),
+                )
+    except Exception:
+        _planner_character_icon_cache[cache_key] = (
+            time.monotonic() + 60,
+            None,
+        )
+    finally:
+        task = asyncio.current_task()
+        if _planner_character_icon_tasks.get(cache_key) is task:
+            _planner_character_icon_tasks.pop(cache_key, None)
+
+
+def _schedule_planner_character_portrait(character_name: str) -> asyncio.Task | None:
+    cache_key = character_name.strip().casefold()
+    if not cache_key or cache_key == "unknown":
+        return None
+
+    cached = _planner_character_icon_cache.get(cache_key)
+    if cached and cached[0] > time.monotonic():
+        return None
+
+    task = _planner_character_icon_tasks.get(cache_key)
+    if task and not task.done():
+        return task
+
+    task = asyncio.create_task(_refresh_planner_character_portrait(character_name, cache_key))
+    _planner_character_icon_tasks[cache_key] = task
+    return task
+
+
+@app.get("/api/reminders")
+@app.get("/api/planner", include_in_schema=False)
 async def planner_data(cyrene_session: str | None = Cookie(default=None)):
     user_id = await get_authenticated_user(cyrene_session)
 
@@ -607,6 +721,8 @@ async def planner_data(cyrene_session: str | None = Cookie(default=None)):
         get_accounts(user_id),
         get_reminders(user_id),
     )
+
+    portrait_tasks = set()
 
     async def load_planner_account(account):
         client = await get_account_client(user_id, account["genshin_uid"])
@@ -621,14 +737,73 @@ async def planner_data(cyrene_session: str | None = Cookie(default=None)):
                 )
 
             current_resin, max_resin, recovery = get_resin(response)
+            raw_expeditions = get_expeditions(response)
 
         except Exception as error:
-            print("===== WEBSITE PLANNER RESIN ERROR =====")
+            print("===== WEBSITE PLANNER DAILY NOTE ERROR =====")
             print(type(error).__name__)
             print(error)
             print("========================================")
 
             return None
+
+        now = int(time.time())
+        expeditions = []
+        for slot, expedition in enumerate(
+            raw_expeditions if isinstance(raw_expeditions, list) else []
+        ):
+            if not isinstance(expedition, dict):
+                continue
+
+            try:
+                remaining_seconds = max(0, int(expedition.get("remained_time", 0) or 0))
+            except TypeError, ValueError:
+                remaining_seconds = 0
+
+            status = str(expedition.get("status") or "Unknown")
+            if status == "Ongoing" and remaining_seconds == 0:
+                status = "Finished"
+
+            icon_url = str(expedition.get("avatar_side_icon") or "")
+            icon_hash, character_name, fallback_icon = _planner_expedition_icon(icon_url)
+            lookup_name = character_name.replace("_", " ")
+            if icon_hash:
+                portrait_task = _schedule_planner_character_portrait(lookup_name)
+                if portrait_task:
+                    portrait_tasks.add(portrait_task)
+
+            expeditions.append(
+                {
+                    "slot": slot,
+                    "character_name": lookup_name,
+                    "character_icon_hash": icon_hash,
+                    "character_icon": fallback_icon,
+                    "character_icon_fallback": fallback_icon,
+                    "status": status,
+                    "remaining_seconds": remaining_seconds,
+                    "finishes_at": now + remaining_seconds if status == "Ongoing" else None,
+                }
+            )
+
+        teapot = None
+        try:
+            current_coin, max_coin, coin_recovery = get_home_coin(response)
+            teapot = {
+                "current": current_coin,
+                "maximum": max_coin,
+                "full_at": now + coin_recovery if current_coin < max_coin else None,
+            }
+        except KeyError, TypeError, ValueError:
+            pass
+
+        transformer = None
+        try:
+            transformer = get_transformer_status(response)
+            transformer["ready_at"] = (
+                now + transformer.pop("remaining_seconds") if transformer["obtained"] else None
+            )
+        except KeyError, TypeError, ValueError:
+            pass
 
         replenished_at = None
         full_resin_at = None
@@ -643,15 +818,32 @@ async def planner_data(cyrene_session: str | None = Cookie(default=None)):
         return {
             "genshin_uid": account["genshin_uid"],
             "nickname": account.get("nickname"),
+            "cyrene_nickname": account.get("cyrene_nickname"),
             "level": account.get("level"),
             "genshin_server": account["genshin_server"],
             "current_resin": current_resin,
             "max_resin": max_resin,
             "replenished_at": replenished_at,
             "full_resin_at": full_resin_at,
+            "expeditions": expeditions,
+            "teapot": teapot,
+            "transformer": transformer,
         }
 
     loaded_accounts = await asyncio.gather(*(load_planner_account(account) for account in accounts))
+    if portrait_tasks:
+        # Each catalogue lookup has its own timeout. Wait for queued lookups too,
+        # so a cold cache does not mix portraits with daily-note side icons.
+        await asyncio.gather(*portrait_tasks)
+
+    for account in loaded_accounts:
+        if account is None:
+            continue
+        for expedition in account["expeditions"]:
+            cache_key = expedition["character_name"].strip().casefold()
+            cached_portrait = _planner_character_icon_cache.get(cache_key)
+            if cached_portrait and cached_portrait[0] > time.monotonic() and cached_portrait[1]:
+                expedition["character_icon"] = cached_portrait[1]
     planner_accounts = [account for account in loaded_accounts if account is not None]
 
     planner_reminders = []
@@ -670,7 +862,9 @@ async def planner_data(cyrene_session: str | None = Cookie(default=None)):
         planner_reminders.append(
             {
                 "id": reminder["id"],
-                "account_nickname": (account.get("nickname") if account else None),
+                "account_nickname": (
+                    account.get("cyrene_nickname") or account.get("nickname") if account else None
+                ),
                 "type": reminder["reminder_type"],
                 "mode": reminder["reminder_mode"],
                 "genshin_uid": reminder["genshin_uid"],
@@ -684,7 +878,35 @@ async def planner_data(cyrene_session: str | None = Cookie(default=None)):
     }
 
 
-@app.post("/api/planner/reminders")
+def _validate_realm_currency_amount(value, maximum=2400) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or not 1 <= value <= maximum:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Realm Currency must be a whole number between 1 and {maximum}.",
+        )
+    return value
+
+
+async def _realm_currency_capacity(user_id: int, uid: str) -> int:
+    try:
+        client = await get_account_client(user_id, uid)
+        if client is None:
+            raise ValueError("Account is unavailable")
+        async with client:
+            response = await client.get_genshin_daily_note(
+                client.genshin_uid, client.genshin_server
+            )
+        _, maximum, _ = get_home_coin(response)
+        return maximum
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Could not verify this account's Realm Currency capacity. Please refresh and try again.",
+        ) from None
+
+
+@app.post("/api/reminders")
+@app.post("/api/planner/reminders", include_in_schema=False)
 async def create_planner_reminder(data: dict, cyrene_session: str | None = Cookie(default=None)):
     user_id = await get_authenticated_user(cyrene_session)
 
@@ -756,6 +978,10 @@ async def create_planner_reminder(data: dict, cyrene_session: str | None = Cooki
 
         config["amount"] = amount
 
+    if reminder_type == "teapot":
+        maximum = await _realm_currency_capacity(user_id, genshin_uid)
+        config = {"amount": _validate_realm_currency_amount(config.get("amount", maximum), maximum)}
+
     # --------------------------------
     # Automatic reminder restrictions
     # --------------------------------
@@ -782,7 +1008,8 @@ async def create_planner_reminder(data: dict, cyrene_session: str | None = Cooki
     }
 
 
-@app.patch("/api/planner/reminders/{reminder_id}")
+@app.patch("/api/reminders/{reminder_id}")
+@app.patch("/api/planner/reminders/{reminder_id}", include_in_schema=False)
 async def update_planner_reminder(
     reminder_id: int, data: dict, cyrene_session: str | None = Cookie(default=None)
 ):
@@ -795,6 +1022,7 @@ async def update_planner_reminder(
 
     enabled = data.get("enabled")
     config = data.get("config")
+    reminder_mode = data.get("mode")
 
     if enabled is not None:
         if not isinstance(enabled, bool):
@@ -807,23 +1035,55 @@ async def update_planner_reminder(
         if reminder["reminder_type"] == "resin":
             amount = config.get("amount")
 
-            if amount is not None:
-                try:
-                    amount = int(amount)
-                except TypeError, ValueError:
-                    raise HTTPException(status_code=400, detail="Invalid Resin amount.")
+            try:
+                amount = int(amount)
+            except TypeError, ValueError:
+                raise HTTPException(status_code=400, detail="Invalid Resin amount.")
 
-                if not 1 <= amount <= 200:
-                    raise HTTPException(status_code=400, detail="Resin must be between 1 and 200.")
+            if not 1 <= amount <= 200:
+                raise HTTPException(status_code=400, detail="Resin must be between 1 and 200.")
 
-                config["amount"] = amount
+            config["amount"] = amount
 
-    updated = await update_reminder(
-        discord_user_id=user_id,
-        reminder_id=reminder_id,
-        enabled=enabled,
-        config=config,
-    )
+        if reminder["reminder_type"] == "teapot":
+            maximum = await _realm_currency_capacity(user_id, reminder["genshin_uid"])
+            config = {"amount": _validate_realm_currency_amount(config.get("amount"), maximum)}
+
+    if reminder_mode is not None:
+        if reminder_mode not in {"automatic", "manual"}:
+            raise HTTPException(status_code=400, detail="Invalid reminder mode.")
+        if reminder_mode == "automatic" and reminder["reminder_type"] == "custom":
+            raise HTTPException(
+                status_code=400, detail="Custom reminders cannot use automatic mode."
+            )
+
+        if reminder_mode != reminder["reminder_mode"]:
+            existing = await get_reminders(user_id)
+            if any(
+                str(item["id"]) != str(reminder["id"])
+                and item.get("genshin_uid") == reminder.get("genshin_uid")
+                and item.get("reminder_type") == reminder.get("reminder_type")
+                and item.get("reminder_mode") == reminder_mode
+                for item in existing
+            ):
+                raise HTTPException(
+                    status_code=409,
+                    detail=f"A {reminder_mode} reminder of this type already exists for this account.",
+                )
+
+    try:
+        updated = await update_reminder(
+            discord_user_id=user_id,
+            reminder_id=reminder_id,
+            enabled=enabled,
+            config=config,
+            reminder_mode=reminder_mode,
+        )
+    except UniqueViolation:
+        raise HTTPException(
+            status_code=409,
+            detail=f"A {reminder_mode} reminder of this type already exists for this account.",
+        ) from None
 
     if not updated:
         raise HTTPException(status_code=400, detail="Nothing to update.")
@@ -833,7 +1093,8 @@ async def update_planner_reminder(
     }
 
 
-@app.delete("/api/planner/reminders/{reminder_id}")
+@app.delete("/api/reminders/{reminder_id}")
+@app.delete("/api/planner/reminders/{reminder_id}", include_in_schema=False)
 async def delete_planner_reminder(
     reminder_id: int, cyrene_session: str | None = Cookie(default=None)
 ):
@@ -3335,6 +3596,37 @@ async def characters_page(
                             or character_weapon_type(character_id, name)
                             or local_weapon_types.get(name, ""),
                             "owned": owned is not None,
+                        }
+                    )
+
+                # The installed character catalogue can lag behind a game
+                # release. Keep newly owned characters visible using the
+                # account data while the catalogue catches up.
+                catalogue_ids = {int(character_id) for character_id in catalogue}
+                for owned in owned_characters:
+                    character_id = int(owned.id)
+                    if character_id in catalogue_ids:
+                        continue
+
+                    name = str(getattr(owned, "name", "") or f"Character {character_id}")
+                    characters.append(
+                        {
+                            "id": character_id,
+                            "name": name,
+                            "element": getattr(owned, "element", "") or "",
+                            "rarity": getattr(owned, "rarity", 0) or 0,
+                            "icon": getattr(owned, "icon", "") or "",
+                            "level": getattr(owned, "level", None),
+                            "friendship": getattr(owned, "friendship", None),
+                            "constellation": getattr(owned, "constellation", None),
+                            **character_content_metadata(
+                                name,
+                                release_dates.get(name, ""),
+                            ),
+                            "weapon": get_weapon_type(owned, None)
+                            or character_weapon_type(character_id, name)
+                            or local_weapon_types.get(name, ""),
+                            "owned": True,
                         }
                     )
 

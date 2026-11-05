@@ -350,33 +350,20 @@
 }
 
 .spinner-arrow {
-    width: 7px;
-    height: 7px;
-
     display: block;
-
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-
-    transition:
-        color 0.12s ease,
-        transform 0.12s ease;
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    mask: url("/static/images/ui/chevron-down.svg") center / contain no-repeat;
 }
 
 .number-spinner-button[data-direction="up"] .spinner-arrow {
-    transform: rotate(225deg);
+    transform: rotate(180deg);
 }
 
-.number-spinner-button[data-direction="down"] .spinner-arrow {
-    transform: rotate(45deg);
-}
-
-.number-spinner-button[data-direction="up"]:active .spinner-arrow {
-    transform: rotate(225deg) translate(-1px, -1px);
-}
-
-.number-spinner-button[data-direction="down"]:active .spinner-arrow {
-    transform: rotate(45deg) translate(1px, 1px);
+.number-spinner-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
 }
 
 /* Value pickers share the dropdown skin; each page owns popup placement and grids. */

@@ -42,7 +42,7 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=52"
+        href="/static/build/css/global.css?v=53"
     >
 
     {% set page_styles = {
@@ -51,8 +51,8 @@
         '/achievements': '/static/build/css/achievements.css?v=8',
         '/wishes': '/static/build/css/wishes.css?v=15',
         '/characters': '/static/build/css/characters.css?v=65',
-        '/inventory': '/static/build/css/inventory.css?v=7',
-        '/planner': '/static/build/css/planner.css?v=8',
+        '/inventory': '/static/build/css/inventory.css?v=9',
+        '/reminders': '/static/build/css/planner.css?v=24',
         '/verify': '/static/build/css/verification.css?v=15',
         '/codes': '/static/build/css/codes.css?v=7',
         '/events': '/static/build/css/events.css?v=49',
@@ -147,13 +147,13 @@
                 <span>Inventory</span>
             </a>
 
-            <a href="/planner" class="nav-item {% if request.path == '/planner' %}active{% endif %}">
+            <a href="/reminders" class="nav-item {% if request.path == '/reminders' %}active{% endif %}">
                 <span class="nav-icon">
                     <img
                         src="/static/images/ui/ui_icons/Planner.png"
-                        alt="Planner">
+                        alt="Reminders">
                 </span>
-                <span>Planner</span>
+                <span>Reminders</span>
             </a>
 
             <a href="/events" class="nav-item {% if request.path == '/events' %}active{% endif %}">
@@ -243,7 +243,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=4.77"></script>
+    <script type="module" src="/static/build/js/app.js?v=4.95"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

@@ -40,6 +40,8 @@ async function loadInventory() {
             const card = document.createElement("article");
             card.className = `inventory-card rarity-${Number(item.rarity) || 0}`;
             card.dataset.inventoryItem = "";
+            card.dataset.inventoryRarity = String(Number(item.rarity) || 0);
+            card.dataset.inventoryKind = item.kind || "Other materials";
             card.dataset.inventoryName = String(item.name || "").toLowerCase();
             const iconWrap = document.createElement("div");
             iconWrap.className = "inventory-icon-wrap";
@@ -75,7 +77,7 @@ async function loadInventory() {
     catch (error) {
         loading.classList.add("inventory-message-error");
         loading.removeAttribute("data-inventory-loading");
-        loading.innerHTML = "";
+        loading.replaceChildren();
         const title = document.createElement("h2");
         title.textContent = "Unable to load inventory";
         const description = document.createElement("p");
@@ -141,20 +143,106 @@ function initInventorySearch() {
         return;
     }
     search.dataset.initialised = "true";
-    search.addEventListener("input", () => {
+    const rarity = document.querySelector("[data-inventory-rarity]");
+    const kind = document.querySelector("[data-inventory-kind]");
+    const reset = document.querySelector("[data-inventory-reset]");
+    const syncSelect = select => {
+        const root = select.closest(".custom-select");
+        root.querySelectorAll(".custom-select-option").forEach(option => {
+            const selected = option.dataset.value === select.value;
+            option.classList.toggle("selected", selected);
+            option.setAttribute("aria-selected", String(selected));
+            if (selected)
+                root.querySelector(".custom-select-value").textContent = option.textContent;
+        });
+    };
+    const addOptions = (select, values, label) => {
+        const root = select.closest(".custom-select");
+        const trigger = root.querySelector(".custom-select-button");
+        const menu = root.querySelector(".custom-select-menu");
+        const close = () => {
+            root.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+        };
+        ["", ...values].forEach(value => {
+            const option = document.createElement("button");
+            option.type = "button";
+            option.className = "custom-select-option";
+            option.setAttribute("role", "option");
+            option.dataset.value = value;
+            option.textContent = !value ? label : select === rarity ? `${value}-star` : value;
+            option.addEventListener("click", () => {
+                select.value = value;
+                syncSelect(select);
+                select.dispatchEvent(new Event("change"));
+                close();
+                trigger.focus();
+            });
+            menu.append(option);
+        });
+        syncSelect(select);
+        trigger.addEventListener("click", () => {
+            const open = !root.classList.contains("open");
+            document.querySelectorAll("[data-inventory-select] .custom-select-button").forEach(button => {
+                button.closest(".custom-select").classList.remove("open");
+                button.setAttribute("aria-expanded", "false");
+            });
+            root.classList.toggle("open", open);
+            trigger.setAttribute("aria-expanded", String(open));
+        });
+        root.addEventListener("keydown", event => {
+            const options = [...menu.querySelectorAll("button")];
+            if (event.key === "Escape") {
+                close();
+                trigger.focus();
+            }
+            if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+                event.preventDefault();
+                root.classList.add("open");
+                trigger.setAttribute("aria-expanded", "true");
+                const current = options.indexOf(document.activeElement);
+                const next = event.key === "Home" ? 0 : event.key === "End" ? options.length - 1
+                    : (current + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length;
+                options[next]?.focus();
+            }
+        });
+        root.addEventListener("focusout", event => { if (!root.contains(event.relatedTarget))
+            close(); });
+        document.addEventListener("click", event => { if (!root.contains(event.target))
+            close(); });
+    };
+    addOptions(rarity, [...new Set([...items].map(item => item.dataset.inventoryRarity))]
+        .filter(value => Number(value) > 0).sort((a, b) => Number(b) - Number(a)), "All rarities");
+    addOptions(kind, [...new Set([...items].map(item => item.dataset.inventoryKind))]
+        .filter(value => value !== "Other materials")
+        .sort((a, b) => a.localeCompare(b)), "All types");
+    const apply = () => {
         const query = search.value.trim().toLowerCase();
         let visible = 0;
         items.forEach(item => {
-            const matches = item.dataset.inventoryName.includes(query);
+            const matches = item.dataset.inventoryName.includes(query)
+                && (!rarity.value || item.dataset.inventoryRarity === rarity.value)
+                && (!kind.value || item.dataset.inventoryKind === kind.value);
             item.hidden = !matches;
             visible += Number(matches);
         });
-        if (count) {
+        if (count)
             count.textContent = String(visible);
-        }
-        if (empty) {
+        if (empty)
             empty.hidden = visible !== 0;
-        }
+        reset.disabled = !query && !rarity.value && !kind.value;
+    };
+    search.addEventListener("input", apply);
+    rarity.addEventListener("change", apply);
+    kind.addEventListener("change", apply);
+    reset.addEventListener("click", () => {
+        search.value = "";
+        rarity.value = "";
+        kind.value = "";
+        syncSelect(rarity);
+        syncSelect(kind);
+        apply();
     });
+    apply();
 }
 window.initInventory = initInventory;

@@ -1,3 +1,4 @@
+import { initialiseAccountProfiles } from "./browser/core/account-profiles";
 import { beginNavigationLoading, initialiseFetchLoading } from "./browser/core/loading-feedback";
 import "./browser/core/toasts";
 import { initialiseSiteUpdates } from "./site-updates";
@@ -98,12 +99,12 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/characters/characters-filters.js?v=4",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
         "/static/build/browser/pages/characters/characters-showcase.js?v=11",
-        "/static/build/browser/pages/characters/characters-planner.js?v=34",
+        "/static/build/browser/pages/characters/characters-planner.js?v=35",
         "/static/build/browser/pages/characters/characters.js",
     ],
     "/achievements": "/static/build/browser/pages/achievements.js?v=4",
-    "/inventory": "/static/build/browser/pages/inventory.js",
-    "/planner": "/static/build/browser/pages/planner.js?v=4",
+    "/inventory": "/static/build/browser/pages/inventory.js?v=3",
+    "/reminders": "/static/build/browser/pages/planner.js?v=19",
     "/verify": "/static/build/browser/pages/verification.js?v=3",
     "/codes": "/static/build/browser/pages/codes.js?v=1",
 
@@ -120,7 +121,7 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js?v=8",
+    "/settings": "/static/build/browser/pages/settings.js?v=9",
 };
 
 const pageStyles: Record<string, string> = {
@@ -129,8 +130,8 @@ const pageStyles: Record<string, string> = {
     "/achievements": "/static/build/css/achievements.css?v=8",
     "/wishes": "/static/build/css/wishes.css?v=15",
     "/characters": "/static/build/css/characters.css?v=65",
-    "/inventory": "/static/build/css/inventory.css?v=7",
-    "/planner": "/static/build/css/planner.css?v=8",
+    "/inventory": "/static/build/css/inventory.css?v=9",
+    "/reminders": "/static/build/css/planner.css?v=24",
     "/verify": "/static/build/css/verification.css?v=15",
     "/codes": "/static/build/css/codes.css?v=7",
     "/events": "/static/build/css/events.css?v=49",
@@ -253,7 +254,7 @@ function initialisePage(path: string): void {
             window.initInventory?.();
             break;
 
-        case "/planner":
+        case "/reminders":
             window.initPlanner?.();
             break;
 
@@ -501,6 +502,7 @@ document.addEventListener("DOMContentLoaded", async () => {
      */
 
     await preparePage(window.location.pathname);
+    initialiseAccountProfiles();
 
     updateActiveNavigation(window.location.href);
 });
