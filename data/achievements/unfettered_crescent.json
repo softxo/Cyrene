@@ -1,11 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80490,
-                80491,
-                80492
-            ],
+            "id": [80490, 80491, 80492],
             "name": "Moonmist Treasure Hunter",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -14,7 +10,7 @@
             "stage1": {
                 "title": "Moonmist Treasure Hunter",
                 "ps5title": "Moonmist Treasure Hunter (I)",
-                "description": "Open 45 chests in the Dunanna Pit and the Frost Moon",
+                "description": "Open {param0} chests in the Dunanna Pit and the Frost Moon",
                 "progress": 45,
                 "reward": {
                     "id": 201,
@@ -25,7 +21,7 @@
             "stage2": {
                 "title": "Moonmist Treasure Hunter",
                 "ps5title": "Moonmist Treasure Hunter (II)",
-                "description": "Open 90 chests in the Dunanna Pit and the Frost Moon",
+                "description": "Open {param0} chests in the Dunanna Pit and the Frost Moon",
                 "progress": 90,
                 "reward": {
                     "id": 201,
@@ -36,7 +32,7 @@
             "stage3": {
                 "title": "Moonmist Treasure Hunter",
                 "ps5title": "Moonmist Treasure Hunter (III)",
-                "description": "Open 180 chests in the Dunanna Pit and the Frost Moon",
+                "description": "Open {param0} chests in the Dunanna Pit and the Frost Moon",
                 "progress": 180,
                 "reward": {
                     "id": 201,
@@ -47,9 +43,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80493
-            ],
+            "id": [80493],
             "name": "Moonmist Adventurer",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -57,7 +51,7 @@
             "stages": 1,
             "stage1": {
                 "title": "Moonmist Adventurer",
-                "description": "Complete 4 Open World Time Trial Challenges in the Dunanna Pit and the Frost Moon.",
+                "description": "Complete {param0} Open World Time Trial Challenges in the Dunanna Pit and the Frost Moon.",
                 "progress": 4,
                 "reward": {
                     "id": 201,
@@ -68,9 +62,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80494
-            ],
+            "id": [80494],
             "name": "A Lamentation of Catastrophe",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -89,9 +81,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80495
-            ],
+            "id": [80495],
             "name": "Blue Moon",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -110,9 +100,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80496
-            ],
+            "id": [80496],
             "name": "Any Colour You Like",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -131,9 +119,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80501
-            ],
+            "id": [80501],
             "name": "Le Voyage dans la Lune",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -152,9 +138,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80498
-            ],
+            "id": [80498],
             "name": "A Fall of Moondust",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -173,9 +157,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80499
-            ],
+            "id": [80499],
             "name": "Hoards Found — We Don't Have a Problem",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -194,9 +176,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80497
-            ],
+            "id": [80497],
             "name": "6EQUJ5",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -216,9 +196,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80502
-            ],
+            "id": [80502],
             "name": "Darkness Out of Space",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",
@@ -237,9 +215,7 @@
             "version": "6.7"
         },
         {
-            "id": [
-                80503
-            ],
+            "id": [80503],
             "name": "The Inner Light",
             "achievementGroupId": 68,
             "achievementGroupName": "Unfettered Crescent",

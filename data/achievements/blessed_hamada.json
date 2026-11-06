@@ -1,9 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80237
-            ],
+            "id": [80237],
             "name": "Continental Explorer: Blessed Hamada",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -22,9 +20,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80238
-            ],
+            "id": [80238],
             "name": "Descending Into the Depths of Desolation",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -43,9 +39,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80239
-            ],
+            "id": [80239],
             "name": "Sanctuary Pilgrim: Blessed Hamada",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -64,11 +58,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80240,
-                80241,
-                80242
-            ],
+            "id": [80240, 80241, 80242],
             "name": "Dune Guide",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -76,7 +66,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Dune Guide",
-                "description": "Follow 4 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "description": "Follow {param0} Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
                 "progress": 4,
                 "reward": {
                     "id": 201,
@@ -86,7 +76,7 @@
             },
             "stage2": {
                 "title": "Dune Guide",
-                "description": "Follow 8 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "description": "Follow {param0} Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
                 "progress": 8,
                 "reward": {
                     "id": 201,
@@ -96,7 +86,7 @@
             },
             "stage3": {
                 "title": "Dune Guide",
-                "description": "Follow 16 Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
+                "description": "Follow {param0} Seelie in Gavireh Lajavard and Realm of Farakhkert to their Seelie Courts.",
                 "progress": 16,
                 "reward": {
                     "id": 201,
@@ -107,11 +97,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80243,
-                80244,
-                80245
-            ],
+            "id": [80243, 80244, 80245],
             "name": "Badlands Treasure Hunter",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -119,7 +105,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Badlands Treasure Hunter",
-                "description": "Open a total of 40 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Open a total of {param0} treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 40,
                 "reward": {
                     "id": 201,
@@ -129,7 +115,7 @@
             },
             "stage2": {
                 "title": "Badlands Treasure Hunter",
-                "description": "Open a total of 80 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Open a total of {param0} treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 80,
                 "reward": {
                     "id": 201,
@@ -139,7 +125,7 @@
             },
             "stage3": {
                 "title": "Badlands Treasure Hunter",
-                "description": "Open a total of 160 treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Open a total of {param0} treasure chests in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 160,
                 "reward": {
                     "id": 201,
@@ -150,11 +136,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80246,
-                80247,
-                80248
-            ],
+            "id": [80246, 80247, 80248],
             "name": "Badlands Adventurer",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -162,7 +144,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Badlands Adventurer",
-                "description": "Complete a total of 4 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Complete a total of {param0} Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 4,
                 "reward": {
                     "id": 201,
@@ -172,7 +154,7 @@
             },
             "stage2": {
                 "title": "Badlands Adventurer",
-                "description": "Complete a total of 8 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Complete a total of {param0} Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 8,
                 "reward": {
                     "id": 201,
@@ -182,7 +164,7 @@
             },
             "stage3": {
                 "title": "Badlands Adventurer",
-                "description": "Complete a total of 16 Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
+                "description": "Complete a total of {param0} Open World Time Trial Challenges in Gavireh Lajavard and Realm of Farakhkert.",
                 "progress": 16,
                 "reward": {
                     "id": 201,
@@ -193,9 +175,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80250
-            ],
+            "id": [80250],
             "name": "Alkanet Amrita",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",
@@ -214,9 +194,7 @@
             "version": "3.6"
         },
         {
-            "id": [
-                80249
-            ],
+            "id": [80249],
             "name": "Khvarena of Good and Evil",
             "achievementGroupId": 41,
             "achievementGroupName": "Blessed Hamada",

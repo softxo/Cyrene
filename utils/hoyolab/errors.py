@@ -27,14 +27,15 @@ class HoYoLABAccountMutedError(HoYoLABError):
 class HoYoLABVerificationError(HoYoLABError):
     """HoYoLAB verification failed or was rate-limited."""
 
+    def __init__(self, public_message: str | None = None):
+        self.public_message = public_message
+        super().__init__(public_message or "HoYoLAB verification could not be completed.")
+
 
 class HoYoLABCaptchaError(HoYoLABError):
     """HoYoLAB CAPTCHA verification failed or is required."""
 
-    def __init__(
-            self,
-            mmt: dict
-    ):
+    def __init__(self, mmt: dict):
         self.mmt = mmt
 
         super().__init__()
@@ -56,24 +57,12 @@ class HoYoLABUnexpectedError(HoYoLABError):
     """An unexpected HoYoLAB error occurred."""
 
 
-def build_hoyolab_error_embed(
-    error_type: str,
-    title: str,
-    description: str
-) -> discord.Embed:
-    
-    emoji = ERROR_TYPE_EMOJIS.get(
-        error_type,
-        ERROR_EMOJIS.get(error_type, ERROR_EMOJIS["error"])
-    )
+def build_hoyolab_error_embed(error_type: str, title: str, description: str) -> discord.Embed:
+
+    emoji = ERROR_TYPE_EMOJIS.get(error_type, ERROR_EMOJIS.get(error_type, ERROR_EMOJIS["error"]))
 
     colour = ERROR_TYPE_COLOURS.get(
-        error_type,
-        ERROR_COLOURS.get(error_type, ERROR_COLOURS["error"])
+        error_type, ERROR_COLOURS.get(error_type, ERROR_COLOURS["error"])
     )
 
-    return discord.Embed(
-        title=f"{emoji} {title}",
-        description=description,
-        colour=colour
-    )
+    return discord.Embed(title=f"{emoji} {title}", description=description, colour=colour)

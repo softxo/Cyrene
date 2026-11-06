@@ -1,11 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80442,
-                80443,
-                80444
-            ],
+            "id": [80442, 80443, 80444],
             "name": "Moondust Treasure Hunter (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -14,7 +10,7 @@
             "stage1": {
                 "title": "Moondust Treasure Hunter (I)",
                 "ps5title": "Moondust Treasure Hunter (I)",
-                "description": "Open 60 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Open {param0} chests on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 60,
                 "reward": {
                     "id": 201,
@@ -25,7 +21,7 @@
             "stage2": {
                 "title": "Moondust Treasure Hunter (I)",
                 "ps5title": "Moondust Treasure Hunter (II)",
-                "description": "Open 120 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Open {param0} chests on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 120,
                 "reward": {
                     "id": 201,
@@ -36,7 +32,7 @@
             "stage3": {
                 "title": "Moondust Treasure Hunter (I)",
                 "ps5title": "Moondust Treasure Hunter (III)",
-                "description": "Open 240 chests on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Open {param0} chests on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 240,
                 "reward": {
                     "id": 201,
@@ -47,11 +43,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80445,
-                80446,
-                80447
-            ],
+            "id": [80445, 80446, 80447],
             "name": "Moondust Adventurer (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -59,7 +51,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Moondust Adventurer (I)",
-                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 3,
                 "reward": {
                     "id": 201,
@@ -69,7 +61,7 @@
             },
             "stage2": {
                 "title": "Moondust Adventurer (I)",
-                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 6,
                 "reward": {
                     "id": 201,
@@ -79,7 +71,7 @@
             },
             "stage3": {
                 "title": "Moondust Adventurer (I)",
-                "description": "Complete 10 Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges on Lempo Isle, Hiisi Island, and Paha Isle.",
                 "progress": 10,
                 "reward": {
                     "id": 201,
@@ -90,9 +82,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80452
-            ],
+            "id": [80452],
             "name": "Shine Bright Like the Moon",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -112,9 +102,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80448
-            ],
+            "id": [80448],
             "name": "Continental Explorer: Moonlit Isles (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -134,9 +122,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80449
-            ],
+            "id": [80449],
             "name": "Frosty Groves Beyond the Darkness (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -156,9 +142,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80450
-            ],
+            "id": [80450],
             "name": "Sanctuary Pilgrim: Moonlit Isles (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -177,9 +161,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80451
-            ],
+            "id": [80451],
             "name": "Offerings to the Night: Moonlit Isles (I)",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -198,9 +180,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                81600
-            ],
+            "id": [81600],
             "name": "The Weaver in the Ossuary",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -220,9 +200,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                81601
-            ],
+            "id": [81601],
             "name": "The Sins of the Fathers",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -242,9 +220,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80453
-            ],
+            "id": [80453],
             "name": "Joint Meeting Point Construction: Final Night Cemetery",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -264,9 +240,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80454
-            ],
+            "id": [80454],
             "name": "Joint Meeting Point Construction: Clink-Clank Krumkake Craftshop",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",
@@ -286,9 +260,7 @@
             "version": "6.0"
         },
         {
-            "id": [
-                80455
-            ],
+            "id": [80455],
             "name": "Joint Meeting Point Construction: Frostmoon Enclave",
             "achievementGroupId": 63,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (I)",

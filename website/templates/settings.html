@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Cyrene • Settings{% endblock %}
+{% block title %}Cyrene • Settings{% with delete_dialog_class='settings-delete-dialog', delete_prefix='settings-delete', delete_title='Remove account?', delete_cancel='Keep account', delete_confirm='Remove account' %}
+    {% include "components/deletion_confirmation.html" %}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
 
@@ -275,6 +278,8 @@
                 <button type="submit" class="cyrene-button account-save-nickname">Save nickname</button>
             </form>
 
+            <p id="account-manage-status" class="account-link-message" role="status" aria-live="polite"></p>
+
             <div class="account-danger-zone">
                 <div>
                     <strong>Remove account</strong>
@@ -286,10 +291,13 @@
                 </button>
             </div>
 
-            <p id="account-manage-status" class="account-link-message" aria-live="polite"></p>
+
         </section>
     </div>
 
 </div>
 
+{% with delete_dialog_class='settings-delete-dialog', delete_prefix='settings-delete', delete_title='Remove account?', delete_cancel='Keep account', delete_confirm='Remove account' %}
+    {% include "components/deletion_confirmation.html" %}
+{% endwith %}
 {% endblock %}

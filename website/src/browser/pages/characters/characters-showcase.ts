@@ -53,6 +53,11 @@ function initCharacterShowcase() {
     let previouslyFocused = null;
     let activeRequestId = 0;
     const characterCache = new Map();
+    const characterCacheTimes = new Map();
+    page.addEventListener("characters-refreshed", () => {
+        characterCache.clear();
+        characterCacheTimes.clear();
+    });
 
     function createElement(tag, className, text = "") {
         const element = document.createElement(tag);
@@ -932,7 +937,10 @@ function initCharacterShowcase() {
         const query = accountId ? `?account_id=${encodeURIComponent(accountId)}` : "";
         const cacheKey = `${accountId || "default"}:${characterId}`;
 
-        if (characterCache.has(cacheKey)) {
+        if (
+            characterCache.has(cacheKey) &&
+            Date.now() - (characterCacheTimes.get(cacheKey) || 0) < 120_000
+        ) {
             return characterCache.get(cacheKey);
         }
 
@@ -969,6 +977,7 @@ function initCharacterShowcase() {
         });
 
         characterCache.set(cacheKey, request);
+        characterCacheTimes.set(cacheKey, Date.now());
         request.catch(() => characterCache.delete(cacheKey));
         return request;
     }

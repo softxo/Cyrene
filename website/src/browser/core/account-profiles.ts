@@ -52,7 +52,7 @@ export function applyAccountProfiles(): void {
     });
     document.querySelectorAll<HTMLElement>("[data-account-profile-meta]").forEach((element) => {
         const profile = profiles.get(element.dataset.accountProfileMeta!);
-        if (profile) setText(element, `UID ${profile.uid} ? AR ${profile.level ?? "Unknown"}`);
+        if (profile) setText(element, `UID ${profile.uid} | AR ${profile.level ?? "Unknown"}`);
     });
     document.querySelectorAll<HTMLElement>("[data-account-profile-option]").forEach((element) => {
         const profile = profiles.get(element.dataset.accountProfileOption!);
@@ -67,7 +67,7 @@ export function applyAccountProfiles(): void {
             const profile = profiles.get(uid!);
             const previous = element.dataset.accountProfileOldName;
             if (!profile || !previous) return;
-            const name = profile.nickname || profile.uid;
+            const name = profile.cyrene_nickname || profile.nickname || profile.uid;
             const attribute = element.dataset.accountProfileLabel ? "data-label" : "aria-label";
             const value = element.getAttribute(attribute);
             if (value?.includes(previous))
@@ -121,6 +121,7 @@ async function refreshProfiles(): Promise<void> {
 export function initialiseAccountProfiles(): void {
     void refreshProfiles();
     window.setInterval(() => void refreshProfiles(), 60_000);
+    document.addEventListener("cyrene:account-renamed", () => void refreshProfiles());
     document.addEventListener("visibilitychange", () => {
         if (!document.hidden) void refreshProfiles();
     });

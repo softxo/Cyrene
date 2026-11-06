@@ -339,6 +339,7 @@ function initCharactersFilters() {
        RESET FILTERS
        ===================================================== */
 
+    page.addEventListener("characters-refreshed", applyFilters);
     searchInput.addEventListener("input", applyFilters);
 
     resetButton.addEventListener("click", () => {

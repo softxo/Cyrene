@@ -155,417 +155,44 @@ window.initAchievements = function () {
     });
 
     let achievementData = null;
+    let achievementsByCategory = new Map();
+    let achievementListObserver = null;
+    let searchRebuildTimer = null;
 
     let achievementSearchQuery = "";
 
     let hideCompletedAchievements = false;
 
-    let achievementSelectedVersion = "all";
+    const achievementSelectedVersions = new Set();
 
     let achievementNoteTarget = null;
 
     let activeCategory = null;
 
-    const CATEGORY_ICONS = {
-        "Wonders of the World": "/static/images/achievements/categories/Wonders_of_the_World.png",
-
-        "Memories of the Heart": "/static/images/achievements/categories/Memories_of_the_Heart.png",
-
-        "Mortal Travails: Series I":
-            "/static/images/achievements/categories/Mortal_Travails_Series_I.png",
-
-        "Mortal Travails: Series II":
-            "/static/images/achievements/categories/Mortal_Travails_Series_II.png",
-
-        "Mortal Travails: Series III":
-            "/static/images/achievements/categories/Mortal_Travails_Series_III.png",
-
-        "Mortal Travails: Series IV":
-            "/static/images/achievements/categories/Mortal_Travails_Series_IV.png",
-
-        "Mortal Travails: Series V":
-            "/static/images/achievements/categories/Mortal_Travails_Series_V.png",
-
-        "Mortal Travails: Series VI":
-            "/static/images/achievements/categories/Mortal_Travails_Series_VI.png",
-
-        "Mortal Travails: Series VII":
-            "/static/images/achievements/categories/Mortal_Travails_Series_VII.png",
-
-        "The Art of Adventure": "/static/images/achievements/categories/The_Art_of_Adventure.png",
-
-        "The Hero's Journey": "/static/images/achievements/categories/The_Heros_Journey.png",
-
-        "Mondstadt: The City of Wind and Song":
-            "/static/images/achievements/categories/Mondstadt_The_City_of_Wind_and_Song.png",
-
-        "Liyue: The Harbor of Stone and Contracts":
-            "/static/images/achievements/categories/Liyue_The_Harbor_of_Stone_and_Contracts.png",
-
-        "Elemental Specialist: Series I":
-            "/static/images/achievements/categories/Elemental_Specialist_Series_I.png",
-
-        "Elemental Specialist: Series II":
-            "/static/images/achievements/categories/Elemental_Specialist_Series_II.png",
-
-        Marksmanship: "/static/images/achievements/categories/Marksmanship.png",
-
-        "Challenger: Series I": "/static/images/achievements/categories/Challenger_Series_I.png",
-
-        "Challenger: Series II": "/static/images/achievements/categories/Challenger_Series_II.png",
-
-        "Challenger: Series III":
-            "/static/images/achievements/categories/Challenger_Series_III.png",
-
-        "Challenger: Series IV": "/static/images/achievements/categories/Challenger_Series_IV.png",
-
-        "Challenger: Series V": "/static/images/achievements/categories/Challenger_Series_V.png",
-
-        "Challenger: Series VI": "/static/images/achievements/categories/Challenger_Series_VI.png",
-
-        "Challenger: Series VII":
-            "/static/images/achievements/categories/Challenger_Series_VII.png",
-
-        "Challenger: Series VIII":
-            "/static/images/achievements/categories/Challenger_Series_VIII.png",
-
-        "Challenger: Series IX": "/static/images/achievements/categories/Challenger_Series_IX.png",
-
-        "Challenger: Series X": "/static/images/achievements/categories/Challenger_Series_X.png",
-
-        "Domains and Spiral Abyss: Series I":
-            "/static/images/achievements/categories/Domains_and_Spiral_Abyss_Series_I.png",
-
-        "Olah!: Series I": "/static/images/achievements/categories/Olah!_Series_I.png",
-
-        "Snezhnaya Does Not Believe in Tears: Series I":
-            "/static/images/achievements/categories/Snezhnaya_Does_Not_Believe_in_Tears_Series_I.png",
-
-        "Stone Harbor's Nostalgia: Series I":
-            "/static/images/achievements/categories/Stone_Harbors_Nostalgia_Series_I.png",
-
-        "Meetings in Outrealm: Series I":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_I.png",
-
-        "Meetings in Outrealm: Series II":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_II.png",
-
-        "Meetings in Outrealm: Series III":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_III.png",
-
-        "Meetings in Outrealm: Series IV":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_IV.png",
-
-        "Meetings in Outrealm: Series V":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_V.png",
-
-        "Meetings in Outrealm: Series VI":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_VI.png",
-
-        "Meetings in Outrealm: Series VII":
-            "/static/images/achievements/categories/Meetings_in_Outrealm_Series_VII.png",
-
-        "Visitors on the Icy Mountain":
-            "/static/images/achievements/categories/Visitors_on_the_Icy_Mountain.png",
-
-        "A Realm Beyond: Series I":
-            "/static/images/achievements/categories/A_Realm_Beyond_Series_I.png",
-
-        "A Realm Beyond: Series II":
-            "/static/images/achievements/categories/A_Realm_Beyond_Series_II.png",
-
-        "A Realm Beyond: Series III":
-            "/static/images/achievements/categories/A_Realm_Beyond_Series_III.png",
-
-        "Inazuma: The Islands of Thunder and Eternity - Series I":
-            "/static/images/achievements/categories/Inazuma_The_Islands_of_Thunder_and_Eternity_Series_I.png",
-
-        "Inazuma: The Islands of Thunder and Eternity - Series II":
-            "/static/images/achievements/categories/Inazuma_The_Islands_of_Thunder_and_Eternity_Series_II.png",
-
-        "The Chronicles of the Sea of Fog":
-            "/static/images/achievements/categories/The_Chronicles_of_the_Sea_of_Fog.png",
-
-        "Teyvat Fishing Guide: Series I":
-            "/static/images/achievements/categories/Teyvat_Fishing_Guide_Series_I.png",
-
-        "The Light of Day": "/static/images/achievements/categories/The_Light_of_Day.png",
-
-        Chasmlighter: "/static/images/achievements/categories/Chasmlighter.png",
-
-        "Sumeru: The Rainforest of Lore":
-            "/static/images/achievements/categories/Sumeru_The_Rainforest_of_Lore.png",
-
-        "Sumeru: The Gilded Desert - Series I":
-            "/static/images/achievements/categories/Sumeru_The_Gilded_Desert_Series_I.png",
-
-        "Sumeru: The Gilded Desert - Series II":
-            "/static/images/achievements/categories/Sumeru_The_Gilded_Desert_Series_II.png",
-
-        "Genius Invokation TCG": "/static/images/achievements/categories/Genius_Invokation_TCG.png",
-
-        "Blessed Hamada": "/static/images/achievements/categories/Blessed_Hamada.png",
-
-        "Fontaine: Dance of the Dew-White Springs (I)":
-            "/static/images/achievements/categories/Fontaine_Dance_of_the_Dew_White_Springs_I.png",
-
-        "Fontaine: Dance of the Dew-White Springs (II)":
-            "/static/images/achievements/categories/Fontaine_Dance_of_the_Dew_White_Springs_II.png",
-
-        "Fontaine: Dance of the Dew-White Springs (III)":
-            "/static/images/achievements/categories/Fontaine_Dance_of_the_Dew_White_Springs_III.png",
-
-        "Chenyu's Splendor": "/static/images/achievements/categories/Chenyus_Splendor.png",
-
-        "Rhapsodia in the Ancient Sea":
-            "/static/images/achievements/categories/Rhapsodia_in_the_Ancient_Sea.png",
-
-        "Imaginarium Theater: The First Folio":
-            "/static/images/achievements/categories/Imaginarium_Theater_The_First_Folio.png",
-
-        "Imaginarium Theater: The Second Folio":
-            "/static/images/achievements/categories/Imaginarium_Theater_The_Second_Folio.png",
-
-        "Natlan: The Land of Fire and Competition (I)":
-            "/static/images/achievements/categories/Natlan_The_Land_of_Fire_and_Competition_I.png",
-
-        "Natlan: The Land of Fire and Competition (II)":
-            "/static/images/achievements/categories/Natlan_The_Land_of_Fire_and_Competition_II.png",
-
-        "Duelist: Series I": "/static/images/achievements/categories/Duelist_Series_I.png",
-
-        "Duelist: Series II": "/static/images/achievements/categories/Duelist_Series_II.png",
-
-        "Duelist: Series III": "/static/images/achievements/categories/Duelist_Series_III.png",
-
-        "Repertoire of Myriad Melodies":
-            "/static/images/achievements/categories/Repertoire_of_Myriad_Melodies.png",
-
-        "Sacred Mountain's Fading Glow":
-            "/static/images/achievements/categories/Sacred_Mountains_Fading_Glow.png",
-
-        "A Summer of Ash and Prickly Pears":
-            "/static/images/achievements/categories/A_Summer_of_Ash_and_Prickly_Pears.png",
-
-        "Nod-Krai: An Elysium of Moonlight and Wanderings (I)":
-            "/static/images/achievements/categories/Nod_Krai_An_Elysium_of_Moonlight_and_Wanderings_I.png",
-
-        "Nod-Krai: An Elysium of Moonlight and Wanderings (II)":
-            "/static/images/achievements/categories/Nod_Krai_An_Elysium_of_Moonlight_and_Wanderings_II.png",
-
-        "Demon Mountain's Breath":
-            "/static/images/achievements/categories/Demon_Mountains_Breath.png",
-
-        "Unfettered Crescent": "/static/images/achievements/categories/Unfettered_Crescent.png",
-
-        "Snezhnaya: Sacred city of ice and pale star (I)":
-            "/static/images/achievements/categories/Snezhnaya_Sacred_city_of_ice_and_pale_star_I.png",
-
-        "Land of Surging Shadows":
-            "/static/images/achievements/categories/Land_of_Surging_Shadows.png",
-    };
-
-    const CATEGORY_SIDEBAR_ICONS = {
-        "Wonders of the World":
-            "/static/images/achievements/categories/sidebar/Wonders_of_the_World.png",
-
-        "Memories of the Heart":
-            "/static/images/achievements/categories/sidebar/Memories_of_the_Heart.png",
-
-        "Mortal Travails: Series I":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series II":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series III":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series IV":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series V":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series VI":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "Mortal Travails: Series VII":
-            "/static/images/achievements/categories/sidebar/Mortal_Travails.png",
-
-        "The Art of Adventure":
-            "/static/images/achievements/categories/sidebar/The_Art_of_Adventure.png",
-
-        "The Hero's Journey":
-            "/static/images/achievements/categories/sidebar/The_Heros_Journey.png",
-
-        "Mondstadt: The City of Wind and Song":
-            "/static/images/achievements/categories/sidebar/Mondstadt_The_City_of_Wind_and_Song.png",
-
-        "Liyue: The Harbor of Stone and Contracts":
-            "/static/images/achievements/categories/sidebar/Liyue_The_Harbor_of_Stone_and_Contracts.png",
-
-        "Elemental Specialist: Series I":
-            "/static/images/achievements/categories/sidebar/Elemental_Specialist_Series_I.png",
-
-        "Elemental Specialist: Series II":
-            "/static/images/achievements/categories/sidebar/Elemental_Specialist_Series_II.png",
-
-        Marksmanship: "/static/images/achievements/categories/sidebar/Marksmanship.png",
-
-        "Challenger: Series I": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series II": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series III": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series IV": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series V": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series VI": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series VII": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series VIII": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series IX": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Challenger: Series X": "/static/images/achievements/categories/sidebar/Challenger.png",
-
-        "Domains and Spiral Abyss: Series I":
-            "/static/images/achievements/categories/sidebar/Domains_and_Spiral_Abyss_Series_I.png",
-
-        "Olah!: Series I": "/static/images/achievements/categories/sidebar/Olah!_Series_I.png",
-
-        "Snezhnaya Does Not Believe in Tears: Series I":
-            "/static/images/achievements/categories/sidebar/Snezhnaya_Does_Not_Believe_in_Tears_Series_I.png",
-
-        "Stone Harbor's Nostalgia: Series I":
-            "/static/images/achievements/categories/sidebar/Stone_Harbors_Nostalgia_Series_I.png",
-
-        "Meetings in Outrealm: Series I":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series II":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series III":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series IV":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series V":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series VI":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Meetings in Outrealm: Series VII":
-            "/static/images/achievements/categories/sidebar/Meetings_in_Outrealm.png",
-
-        "Visitors on the Icy Mountain":
-            "/static/images/achievements/categories/sidebar/Visitors_on_the_Icy_Mountain.png",
-
-        "A Realm Beyond: Series I":
-            "/static/images/achievements/categories/sidebar/A_Realm_Beyond.png",
-
-        "A Realm Beyond: Series II":
-            "/static/images/achievements/categories/sidebar/A_Realm_Beyond.png",
-
-        "A Realm Beyond: Series III":
-            "/static/images/achievements/categories/sidebar/A_Realm_Beyond.png",
-
-        "Inazuma: The Islands of Thunder and Eternity - Series I":
-            "/static/images/achievements/categories/sidebar/Inazuma_The_Islands_of_Thunder_and_Eternity.png",
-
-        "Inazuma: The Islands of Thunder and Eternity - Series II":
-            "/static/images/achievements/categories/sidebar/Inazuma_The_Islands_of_Thunder_and_Eternity.png",
-
-        "The Chronicles of the Sea of Fog":
-            "/static/images/achievements/categories/sidebar/Inazuma_The_Islands_of_Thunder_and_Eternity.png",
-
-        "Teyvat Fishing Guide: Series I":
-            "/static/images/achievements/categories/sidebar/Teyvat_Fishing_Guide_Series_I.png",
-
-        "The Light of Day": "/static/images/achievements/categories/sidebar/The_Light_of_Day.png",
-
-        Chasmlighter: "/static/images/achievements/categories/sidebar/Chasmlighter.png",
-
-        "Sumeru: The Rainforest of Lore":
-            "/static/images/achievements/categories/sidebar/Sumeru_The_Rainforest_of_Lore.png",
-
-        "Sumeru: The Gilded Desert - Series I":
-            "/static/images/achievements/categories/sidebar/Sumeru_The_Gilded_Desert.png",
-
-        "Sumeru: The Gilded Desert - Series II":
-            "/static/images/achievements/categories/sidebar/Sumeru_The_Gilded_Desert.png",
-
-        "Genius Invokation TCG":
-            "/static/images/achievements/categories/sidebar/Genius_Invokation_TCG.png",
-
-        "Blessed Hamada": "/static/images/achievements/categories/sidebar/Blessed_Hamada.png",
-
-        "Fontaine: Dance of the Dew-White Springs (I)":
-            "/static/images/achievements/categories/sidebar/Fontaine_Dance_of_the_Dew_White_Springs.png",
-
-        "Fontaine: Dance of the Dew-White Springs (II)":
-            "/static/images/achievements/categories/sidebar/Fontaine_Dance_of_the_Dew_White_Springs.png",
-
-        "Fontaine: Dance of the Dew-White Springs (III)":
-            "/static/images/achievements/categories/sidebar/Fontaine_Dance_of_the_Dew_White_Springs.png",
-
-        "Chenyu's Splendor": "/static/images/achievements/categories/sidebar/Chenyus_Splendor.png",
-
-        "Rhapsodia in the Ancient Sea":
-            "/static/images/achievements/categories/sidebar/Rhapsodia_in_the_Ancient_Sea.png",
-
-        "Imaginarium Theater: The First Folio":
-            "/static/images/achievements/categories/sidebar/Imaginarium_Theater.png",
-
-        "Imaginarium Theater: The Second Folio":
-            "/static/images/achievements/categories/sidebar/Imaginarium_Theater.png",
-
-        "Natlan: The Land of Fire and Competition (I)":
-            "/static/images/achievements/categories/sidebar/Natlan_The_Land_of_Fire_and_Competition.png",
-
-        "Natlan: The Land of Fire and Competition (II)":
-            "/static/images/achievements/categories/sidebar/Natlan_The_Land_of_Fire_and_Competition.png",
-
-        "Duelist: Series I": "/static/images/achievements/categories/sidebar/Duelist.png",
-
-        "Duelist: Series II": "/static/images/achievements/categories/sidebar/Duelist.png",
-
-        "Duelist: Series III": "/static/images/achievements/categories/sidebar/Duelist.png",
-
-        "Repertoire of Myriad Melodies":
-            "/static/images/achievements/categories/sidebar/Repertoire_of_Myriad_Melodies.png",
-
-        "Sacred Mountain's Fading Glow":
-            "/static/images/achievements/categories/sidebar/Sacred_Mountains_Fading_Glow.png",
-
-        "A Summer of Ash and Prickly Pears":
-            "/static/images/achievements/categories/sidebar/A_Summer_of_Ash_and_Prickly_Pears.png",
-
-        "Nod-Krai: An Elysium of Moonlight and Wanderings (I)":
-            "/static/images/achievements/categories/sidebar/Nod_Krai_An_Elysium_of_Moonlight_and_Wanderings.png",
-
-        "Nod-Krai: An Elysium of Moonlight and Wanderings (II)":
-            "/static/images/achievements/categories/sidebar/Nod_Krai_An_Elysium_of_Moonlight_and_Wanderings.png",
-
-        "Demon Mountain's Breath":
-            "/static/images/achievements/categories/sidebar/Demon_Mountains_Breath.png",
-
-        "Unfettered Crescent":
-            "/static/images/achievements/categories/sidebar/Unfettered_Crescent.png",
-
-        "Snezhnaya: Sacred city of ice and pale star (I)":
-            "/static/images/achievements/categories/sidebar/Snezhnaya_Sacred_city_of_ice_and_pale_star.png",
-
-        "Land of Surging Shadows":
-            "/static/images/achievements/categories/sidebar/Land_of_Surging_Shadows.png",
-    };
+    function getCategoryIcon(category) {
+        const icon = achievementData.categories[category]?.icon_url;
+        if (
+            typeof icon === "string" &&
+            /^https:\/\/static\.wikia\.nocookie\.net\/gensin-impact\/images\/[^?#]+\.png$/.test(
+                icon,
+            )
+        ) {
+            return escapeHTML(icon);
+        }
+        return "/static/images/ui/ui_icons/Achievements.png";
+    }
+
+    function filteredCategoryProgress(category) {
+        const achievements = (achievementsByCategory.get(category) || []).filter((achievement) =>
+            achievementMatchesFilters(achievement),
+        );
+        const tiers = achievements.flatMap((achievement) => achievement.tiers || []);
+        return {
+            total: tiers.length,
+            completed: tiers.filter((tier) => tier.completed).length,
+            matches: achievements.length,
+        };
+    }
 
     const CATEGORY_ORDER = [
         "Wonders of the World",
@@ -594,7 +221,7 @@ window.initAchievements = function () {
         "Challenger: Series VIII",
         "Challenger: Series IX",
         "Challenger: Series X",
-        "Domain and Spiral Abyss: Series I",
+        "Domains and Spiral Abyss: Series I",
         "Olah!: Series I",
         "Snezhnaya Does Not Believe in Tears: Series I",
         "Stone Harbor's Nostalgia: Series I",
@@ -617,8 +244,8 @@ window.initAchievements = function () {
         "The Light of Day",
         "Chasmlighter",
         "Sumeru: The Rainforest of Lore",
-        "Sumeru: The Gilded Desert I - Series I",
-        "Sumeru: The Gilded Desert I - Series II",
+        "Sumeru: The Gilded Desert - Series I",
+        "Sumeru: The Gilded Desert - Series II",
         "Genius Invokation TCG",
         "Blessed Hamada",
         "Fontaine: Dance of the Dew-White Springs (I)",
@@ -641,8 +268,38 @@ window.initAchievements = function () {
         "Demon Mountain's Breath",
         "Unfettered Crescent",
         "Snezhnaya: Sacred city of ice and pale star (I)",
-        "Land of Surging Shadows",
+        "Land of Surging Shadows (I)",
     ];
+
+    function orderedCategories() {
+        const normalise = (name) => name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const family = (name) =>
+            normalise(name.replace(/(?:\s*-?\s*Series\s+[IVXLCDM]+|\s*\([IVXLCDM]+\))$/i, ""));
+        const familyRanks = new Map();
+        CATEGORY_ORDER.forEach((name, index) => {
+            if (!familyRanks.has(family(name))) familyRanks.set(family(name), index);
+        });
+        const romanNumber = (name) => {
+            const match = name.match(/(?:Series\s+|\()([IVXLCDM]+)\)?$/i);
+            if (!match) return 0;
+            const values = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+            const digits = [...match[1].toUpperCase()].map((digit) => values[digit]);
+            return digits.reduce(
+                (sum, value, index) => sum + (value < (digits[index + 1] || 0) ? -value : value),
+                0,
+            );
+        };
+        return Object.keys(achievementData.categories).sort((a, b) => {
+            const rankA = familyRanks.get(family(a)) ?? Number.MAX_SAFE_INTEGER;
+            const rankB = familyRanks.get(family(b)) ?? Number.MAX_SAFE_INTEGER;
+            return (
+                rankA - rankB ||
+                family(a).localeCompare(family(b)) ||
+                romanNumber(a) - romanNumber(b) ||
+                a.localeCompare(b)
+            );
+        });
+    }
 
     /*
      * --------------------------------------------------
@@ -765,6 +422,8 @@ window.initAchievements = function () {
         }
 
         menu.innerHTML = "";
+        menu.setAttribute("role", "listbox");
+        menu.setAttribute("aria-multiselectable", "true");
 
         const versions = new Set();
 
@@ -881,7 +540,7 @@ window.initAchievements = function () {
 
         allOption.dataset.value = "all";
 
-        const allVersionsSelected = achievementSelectedVersion === "all";
+        const allVersionsSelected = achievementSelectedVersions.size === 0;
 
         allOption.classList.toggle("selected", allVersionsSelected);
 
@@ -892,34 +551,9 @@ window.initAchievements = function () {
         allOption.setAttribute("role", "option");
 
         allOption.addEventListener("click", () => {
-            achievementSelectedVersion = "all";
-
-            const hiddenVersionInput = document.getElementById("achievement-version");
-
-            if (hiddenVersionInput) {
-                hiddenVersionInput.value = "all";
-            }
-
-            value.textContent = "All Versions";
-
-            menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
-                const selected = otherOption === allOption;
-
-                otherOption.classList.toggle("selected", selected);
-
-                otherOption.setAttribute("aria-selected", selected ? "true" : "false");
-            });
-
-            select.classList.remove("open");
-
-            const button = select.querySelector(".custom-select-button");
-
-            if (button) {
-                button.setAttribute("aria-expanded", "false");
-            }
-
+            achievementSelectedVersions.clear();
+            syncVersionSelection();
             rebuildCategoryView();
-            syncSecondaryVersionSelect();
         });
 
         menu.appendChild(allOption);
@@ -1043,35 +677,16 @@ window.initAchievements = function () {
 
                 option.textContent = formatVersionLabel(version);
 
-                option.addEventListener("click", () => {
+                option.addEventListener("click", (event) => {
+                    event.stopPropagation();
                     const selectedValue = option.dataset.value;
-
-                    achievementSelectedVersion = selectedValue;
-
-                    const hiddenVersionInput = document.getElementById("achievement-version");
-
-                    if (hiddenVersionInput) {
-                        hiddenVersionInput.value = selectedValue;
+                    if (achievementSelectedVersions.has(selectedValue)) {
+                        achievementSelectedVersions.delete(selectedValue);
+                    } else {
+                        achievementSelectedVersions.add(selectedValue);
                     }
-
-                    value.textContent = option.textContent;
-
-                    menu.querySelectorAll(".custom-select-option").forEach((otherOption) => {
-                        const selected = otherOption === option;
-
-                        otherOption.classList.toggle("selected", selected);
-
-                        otherOption.setAttribute("aria-selected", selected ? "true" : "false");
-                    });
-
-                    select.classList.remove("open");
-
-                    select
-                        .querySelector(".custom-select-button")
-                        .setAttribute("aria-expanded", "false");
-
+                    syncVersionSelection();
                     rebuildCategoryView();
-                    syncSecondaryVersionSelect();
                 });
 
                 menu.appendChild(option);
@@ -1085,7 +700,10 @@ window.initAchievements = function () {
          */
 
         menu.querySelectorAll(".custom-select-option").forEach((option) => {
-            const selected = option.dataset.value === achievementSelectedVersion;
+            const selected =
+                option.dataset.value === "all"
+                    ? achievementSelectedVersions.size === 0
+                    : achievementSelectedVersions.has(option.dataset.value);
 
             option.classList.toggle("selected", selected);
 
@@ -1170,7 +788,55 @@ window.initAchievements = function () {
         }
     }
 
+    function syncVersionSelection() {
+        const primary = document.getElementById("achievement-version-select");
+        primary.querySelector(".custom-select-value").textContent = achievementSelectedVersions.size
+            ? [...achievementSelectedVersions].join(", ")
+            : "All Versions";
+        primary.querySelectorAll(".custom-select-option").forEach((option) => {
+            const selected =
+                option.dataset.value === "all"
+                    ? achievementSelectedVersions.size === 0
+                    : achievementSelectedVersions.has(option.dataset.value);
+            option.classList.toggle("selected", selected);
+            option.setAttribute("aria-selected", String(selected));
+        });
+        syncSecondaryVersionSelect();
+    }
+
+    function syncVersionResetButtons() {
+        document.querySelectorAll("[data-achievement-version-select]").forEach((select) => {
+            let reset = select.querySelector(".achievement-version-reset");
+            if (!reset) {
+                reset = document.createElement("button");
+                reset.type = "button";
+                reset.className = "achievement-version-reset";
+                reset.setAttribute("aria-label", "Reset to All Versions");
+                const icon = document.createElement("span");
+                icon.className = "cyrene-close";
+                icon.setAttribute("aria-hidden", "true");
+                reset.appendChild(icon);
+                reset.onclick = (event) => {
+                    event.stopPropagation();
+                    achievementSelectedVersions.clear();
+                    syncVersionSelection();
+                    rebuildCategoryView();
+                };
+                select.appendChild(reset);
+            }
+            reset.hidden = achievementSelectedVersions.size === 0;
+            const label = achievementSelectedVersions.size
+                ? [...achievementSelectedVersions].join(", ")
+                : "All Versions";
+            select.style.setProperty(
+                "--version-select-width",
+                `${Math.min(420, Math.max(170, label.length * 8 + 100))}px`,
+            );
+        });
+    }
+
     function syncSecondaryVersionSelect() {
+        syncVersionResetButtons();
         const primary = document.getElementById("achievement-version-select");
         const secondary = [...document.querySelectorAll("[data-achievement-version-select]")].find(
             (select) => select !== primary,
@@ -1189,19 +855,21 @@ window.initAchievements = function () {
             return;
         }
 
-        const selected = primaryMenu.querySelector(".custom-select-option.selected");
-        secondaryValue.textContent = selected?.textContent || "All Versions";
-        secondaryMenu.innerHTML = primaryMenu.innerHTML;
+        secondaryValue.textContent = primary.querySelector(".custom-select-value").textContent;
+        secondaryMenu.replaceChildren(
+            ...[...primaryMenu.childNodes].map((node) => node.cloneNode(true)),
+        );
+        secondaryMenu.setAttribute("role", "listbox");
+        secondaryMenu.setAttribute("aria-multiselectable", "true");
 
         secondaryMenu.querySelectorAll(".custom-select-option").forEach((option) => {
-            option.addEventListener("click", () => {
+            option.addEventListener("click", (event) => {
+                event.stopPropagation();
                 const primaryOption = [
                     ...primaryMenu.querySelectorAll(".custom-select-option"),
                 ].find((item) => item.dataset.value === option.dataset.value);
 
                 primaryOption?.click();
-                secondary.classList.remove("open");
-                secondaryButton.setAttribute("aria-expanded", "false");
             });
         });
 
@@ -1222,7 +890,7 @@ window.initAchievements = function () {
         return achievement.tiers.every((tier) => tier.completed === true);
     }
 
-    function achievementMatchesFilters(achievement) {
+    function achievementMatchesFilters(achievement, filterCompleted = true) {
         /*
          * ------------------------------------------
          * SEARCH
@@ -1232,18 +900,7 @@ window.initAchievements = function () {
         if (achievementSearchQuery) {
             const query = achievementSearchQuery.toLowerCase().trim();
 
-            const name = String(achievement.name || "").toLowerCase();
-
-            const descriptions = Array.isArray(achievement.tiers)
-                ? achievement.tiers
-                      .map((tier) => String(tier.description || ""))
-                      .join(" ")
-                      .toLowerCase()
-                : "";
-
-            if (!name.includes(query) && !descriptions.includes(query)) {
-                return false;
-            }
+            if (!achievement.searchText.includes(query)) return false;
         }
 
         /*
@@ -1252,12 +909,13 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
 
-        if (achievementSelectedVersion !== "all") {
-            const versions = getAchievementVersions(achievement);
-
-            if (!versions.includes(achievementSelectedVersion)) {
-                return false;
-            }
+        if (
+            achievementSelectedVersions.size &&
+            !getAchievementVersions(achievement).some((version) =>
+                achievementSelectedVersions.has(version),
+            )
+        ) {
+            return false;
         }
 
         /*
@@ -1266,7 +924,7 @@ window.initAchievements = function () {
          * ------------------------------------------
          */
 
-        if (hideCompletedAchievements && achievementIsCompleted(achievement)) {
+        if (filterCompleted && hideCompletedAchievements && achievementIsCompleted(achievement)) {
             return false;
         }
 
@@ -1274,7 +932,9 @@ window.initAchievements = function () {
     }
 
     function rebuildCategoryView() {
+        clearTimeout(searchRebuildTimer);
         if (activeCategory && !browser.hidden) {
+            buildSidebar(activeCategory);
             buildAchievements(activeCategory);
             return;
         }
@@ -1292,7 +952,8 @@ window.initAchievements = function () {
                 }
             });
 
-            rebuildCategoryView();
+            clearTimeout(searchRebuildTimer);
+            searchRebuildTimer = setTimeout(rebuildCategoryView, 120);
         });
     });
 
@@ -1329,6 +990,18 @@ window.initAchievements = function () {
             }
 
             achievementData = await response.json();
+            achievementsByCategory = new Map();
+            achievementData.achievements.forEach((achievement) => {
+                if (!achievementsByCategory.has(achievement.category))
+                    achievementsByCategory.set(achievement.category, []);
+                achievementsByCategory.get(achievement.category).push(achievement);
+                achievement.searchText = [
+                    achievement.name || "",
+                    ...(achievement.tiers || []).map((tier) => tier.description || ""),
+                ]
+                    .join(" ")
+                    .toLowerCase();
+            });
 
             const loadError = document.getElementById("achievement-load-error");
             if (loadError) loadError.hidden = true;
@@ -1366,71 +1039,74 @@ window.initAchievements = function () {
 
         categoryGrid.innerHTML = "";
 
-        const categoryEntries = CATEGORY_ORDER.map((category) => {
-            const data = achievementData.categories[category];
+        const categoryEntries = orderedCategories()
+            .map((category) => {
+                const data = achievementData.categories[category];
 
-            if (!data) {
-                return null;
-            }
-
-            /*
-             * Get only achievements belonging
-             * to this category.
-             */
-
-            const categoryAchievements = achievementData.achievements.filter(
-                (achievement) => achievement.category === category,
-            );
-
-            /*
-             * Apply the currently active
-             * Search / Version / Hide Completed
-             * filters.
-             */
-
-            const filteredAchievements = categoryAchievements.filter((achievement) =>
-                achievementMatchesFilters(achievement),
-            );
-
-            /*
-             * Don't display categories that
-             * have no matching achievements.
-             */
-
-            if (filteredAchievements.length === 0) {
-                return null;
-            }
-
-            /*
-             * Count tiers rather than achievement
-             * objects, matching the way Overall
-             * Progress is calculated.
-             */
-
-            let total = 0;
-            let completed = 0;
-
-            filteredAchievements.forEach((achievement) => {
-                if (!Array.isArray(achievement.tiers)) {
-                    return;
+                if (
+                    !data ||
+                    (hideCompletedAchievements && data.total > 0 && data.completed === data.total)
+                ) {
+                    return null;
                 }
 
-                achievement.tiers.forEach((tier) => {
-                    total++;
+                /*
+                 * Get only achievements belonging
+                 * to this category.
+                 */
 
-                    if (tier.completed === true) {
-                        completed++;
+                const categoryAchievements = achievementsByCategory.get(category) || [];
+
+                /*
+                 * Apply the currently active
+                 * Search and Version filters. On this page, Hide Completed
+                 * applies to whole categories rather than individual achievements.
+                 */
+
+                const filteredAchievements = categoryAchievements.filter((achievement) =>
+                    achievementMatchesFilters(achievement, false),
+                );
+
+                /*
+                 * Don't display categories that
+                 * have no matching achievements.
+                 */
+
+                if (filteredAchievements.length === 0) {
+                    return null;
+                }
+
+                /*
+                 * Count tiers rather than achievement
+                 * objects, matching the way Overall
+                 * Progress is calculated.
+                 */
+
+                let total = 0;
+                let completed = 0;
+
+                filteredAchievements.forEach((achievement) => {
+                    if (!Array.isArray(achievement.tiers)) {
+                        return;
                     }
-                });
-            });
 
-            return {
-                category,
-                data,
-                total,
-                completed,
-            };
-        }).filter(Boolean);
+                    achievement.tiers.forEach((tier) => {
+                        total++;
+
+                        if (tier.completed === true) {
+                            completed++;
+                        }
+                    });
+                });
+
+                return {
+                    category,
+                    data,
+                    total,
+                    completed,
+                };
+            })
+            .filter(Boolean);
 
         /*
          * Build category cards.
@@ -1442,6 +1118,12 @@ window.initAchievements = function () {
             button.type = "button";
 
             button.className = "achievement-category";
+            button.classList.toggle(
+                "category-completed",
+                achievementData.categories[category].total > 0 &&
+                    achievementData.categories[category].completed ===
+                        achievementData.categories[category].total,
+            );
 
             const progress = total > 0 ? (completed / total) * 100 : 0;
 
@@ -1450,7 +1132,8 @@ window.initAchievements = function () {
                     <div class="achievement-category-icon">
                 
                         <img
-                            src="${CATEGORY_ICONS[category] || "/static/images/ui/ui_icons/Achievements.png"}"
+                            src="${getCategoryIcon(category)}"
+                            loading="lazy" decoding="async"
                             alt=""
                         >
                 
@@ -1513,7 +1196,7 @@ window.initAchievements = function () {
 
         sidebarList.innerHTML = "";
 
-        CATEGORY_ORDER.forEach((category) => {
+        orderedCategories().forEach((category) => {
             const data = achievementData.categories[category];
 
             if (!data) {
@@ -1525,22 +1208,32 @@ window.initAchievements = function () {
             button.type = "button";
 
             button.className = "achievement-sidebar-item";
+            const completed = data.total > 0 && data.completed === data.total;
+            if (hideCompletedAchievements && completed) return;
+            button.classList.toggle("category-completed", completed);
 
             if (category === selectedCategory) {
                 button.classList.add("active");
+                button.setAttribute("aria-current", "page");
             }
 
-            const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
+            const filtered = filteredCategoryProgress(category);
+            const progress = filtered.total > 0 ? (filtered.completed / filtered.total) * 100 : 0;
+            const searchMatch = Boolean(achievementSearchQuery.trim()) && filtered.matches > 0;
+            button.classList.toggle("search-match", searchMatch);
+            if (searchMatch)
+                button.setAttribute(
+                    "aria-label",
+                    `${category}: ${filtered.matches} search matches`,
+                );
 
             button.innerHTML = `
                 
                     <div class="achievement-sidebar-icon">
                 
                         <img
-                            src="${
-                                CATEGORY_SIDEBAR_ICONS[category] ||
-                                "/static/images/ui/ui_icons/Achievements.png"
-                            }"
+                            src="${getCategoryIcon(category)}"
+                            loading="lazy" decoding="async"
                             alt=""
                         >
                 
@@ -1551,9 +1244,9 @@ window.initAchievements = function () {
                 
                         <span class="achievement-sidebar-name">
                             ${escapeHTML(category)}
+                            ${completed ? '<span class="cyrene-check achievement-category-complete-mark" role="img" aria-label="Completed"></span>' : ""}
                         </span>
-                
-                
+                        ${searchMatch ? '<span class="achievement-search-match-label">Search match</span>' : ""}
                         <div class="achievement-sidebar-progress-row">
                 
                             <div class="achievement-sidebar-progress">
@@ -1567,7 +1260,7 @@ window.initAchievements = function () {
                 
                 
                             <small>
-                                ${data.completed}/${data.total}
+                                ${filtered.completed}/${filtered.total}
                             </small>
                 
                         </div>
@@ -1582,6 +1275,13 @@ window.initAchievements = function () {
 
             sidebarList.appendChild(button);
         });
+        const firstMatch = sidebarList.querySelector(".search-match");
+        if (firstMatch) {
+            const container = sidebarList.getBoundingClientRect();
+            const match = firstMatch.getBoundingClientRect();
+            sidebarList.scrollTop += match.top - container.top;
+            sidebarList.scrollLeft += match.left - container.left;
+        }
     }
 
     /*
@@ -1726,23 +1426,32 @@ window.initAchievements = function () {
             return;
         }
 
+        achievementListObserver?.disconnect();
         achievementList.innerHTML = "";
+        achievementList.scrollTop = 0;
 
         const achievements = achievementData.achievements.filter(
             (achievement) =>
-                achievement.category === category && achievementMatchesFilters(achievement),
+                (achievementSearchQuery.trim() || achievement.category === category) &&
+                achievementMatchesFilters(achievement),
         );
 
-        const fragment = document.createDocumentFragment();
+        let renderedCount = 0;
+        const sentinel = document.createElement("div");
+        sentinel.className = "achievement-list-sentinel";
+        sentinel.setAttribute("aria-hidden", "true");
+        function renderNextBatch() {
+            const fragment = document.createDocumentFragment();
+            const batch = achievements.slice(renderedCount, renderedCount + 40);
+            renderedCount += batch.length;
+            batch.forEach((achievement) => {
+                const item = document.createElement("div");
 
-        achievements.forEach((achievement) => {
-            const item = document.createElement("div");
+                item.className = "achievement-item";
 
-            item.className = "achievement-item";
+                const totalTiers = achievement.tiers?.length || 1;
 
-            const totalTiers = achievement.tiers?.length || 1;
-
-            item.innerHTML = `
+                item.innerHTML = `
     
                     <!-- Large achievement icon -->
     
@@ -1968,148 +1677,165 @@ window.initAchievements = function () {
     
                 `;
 
-            const tierButtons = item.querySelectorAll(".achievement-complete-button");
+                const tierButtons = item.querySelectorAll(".achievement-complete-button");
 
-            const notesButtons = item.querySelectorAll(".achievement-notes-button");
+                const notesButtons = item.querySelectorAll(".achievement-notes-button");
 
-            const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
+                const noteRemoveButtons = item.querySelectorAll(".achievement-tier-note-remove");
 
-            notesButtons.forEach((button) => {
-                button.addEventListener("click", (event) => {
-                    event.stopPropagation();
+                notesButtons.forEach((button) => {
+                    button.addEventListener("click", (event) => {
+                        event.stopPropagation();
 
-                    achievementNoteTarget = {
-                        achievement,
-                        tier: achievement.tiers[Array.from(notesButtons).indexOf(button)],
-                    };
+                        achievementNoteTarget = {
+                            achievement,
+                            tier: achievement.tiers[Array.from(notesButtons).indexOf(button)],
+                        };
 
-                    const modal = document.getElementById("achievement-notes-modal");
+                        const modal = document.getElementById("achievement-notes-modal");
 
-                    const input = document.getElementById("achievement-notes-input");
+                        const input = document.getElementById("achievement-notes-input");
 
-                    if (!modal || !input) {
-                        return;
-                    }
+                        if (!modal || !input) {
+                            return;
+                        }
 
-                    /*
-                     * Clear the input whenever the
-                     * Notes button is opened.
-                     */
+                        /*
+                         * Clear the input whenever the
+                         * Notes button is opened.
+                         */
 
-                    input.value = "";
+                        input.value = "";
 
-                    /*
-                     * Show the modal.
-                     */
+                        /*
+                         * Show the modal.
+                         */
 
-                    modal.hidden = false;
+                        modal.hidden = false;
 
-                    /*
-                     * Focus the textarea so the user
-                     * can immediately start typing.
-                     */
+                        /*
+                         * Focus the textarea so the user
+                         * can immediately start typing.
+                         */
 
-                    requestAnimationFrame(() => {
-                        input.focus();
+                        requestAnimationFrame(() => {
+                            input.focus();
+                        });
                     });
                 });
-            });
 
-            noteRemoveButtons.forEach((button) => {
-                button.addEventListener("click", async (event) => {
-                    event.stopPropagation();
+                noteRemoveButtons.forEach((button) => {
+                    button.addEventListener("click", async (event) => {
+                        event.stopPropagation();
 
-                    const tierElement = button.closest(".achievement-tier");
+                        const tierElement = button.closest(".achievement-tier");
 
-                    if (!tierElement) {
-                        return;
-                    }
+                        if (!tierElement) {
+                            return;
+                        }
 
-                    const tierNumber = Number(tierElement.dataset.tier);
+                        const tierNumber = Number(tierElement.dataset.tier);
 
-                    const tier = achievement.tiers.find(
-                        (achievementTier) => achievementTier.tier === tierNumber,
-                    );
-
-                    if (!tier) {
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch(
-                            achievementApiUrl(
-                                `/api/achievements/${encodeURIComponent(
-                                    tier.genshin_id,
-                                )}/tiers/${tier.tier}/note`,
-                            ),
-                            {
-                                method: "PATCH",
-
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-
-                                body: JSON.stringify({
-                                    note: null,
-                                }),
-                            },
+                        const tier = achievement.tiers.find(
+                            (achievementTier) => achievementTier.tier === tierNumber,
                         );
 
-                        if (!response.ok) {
-                            const result = await response.json();
-
-                            throw new Error(result.detail || "Failed to remove note.");
+                        if (!tier) {
+                            return;
                         }
 
-                        /*
-                         * Update local state.
-                         */
+                        try {
+                            const response = await fetch(
+                                achievementApiUrl(
+                                    `/api/achievements/${encodeURIComponent(
+                                        tier.genshin_id,
+                                    )}/tiers/${tier.tier}/note`,
+                                ),
+                                {
+                                    method: "PATCH",
 
-                        tier.note = null;
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
 
-                        /*
-                         * Remove the note box immediately.
-                         */
+                                    body: JSON.stringify({
+                                        note: null,
+                                    }),
+                                },
+                            );
 
-                        const noteElement = button.closest(".achievement-tier-note");
+                            if (!response.ok) {
+                                const result = await response.json();
 
-                        if (noteElement) {
-                            noteElement.remove();
+                                throw new Error(result.detail || "Failed to remove note.");
+                            }
+
+                            /*
+                             * Update local state.
+                             */
+
+                            tier.note = null;
+
+                            /*
+                             * Remove the note box immediately.
+                             */
+
+                            const noteElement = button.closest(".achievement-tier-note");
+
+                            if (noteElement) {
+                                noteElement.remove();
+                            }
+
+                            console.log("Achievement note removed:", achievement.name, tier.tier);
+                        } catch (error) {
+                            console.error("[Achievements] Failed to remove note:", error);
+
+                            alert(error.message);
                         }
-
-                        console.log("Achievement note removed:", achievement.name, tier.tier);
-                    } catch (error) {
-                        console.error("[Achievements] Failed to remove note:", error);
-
-                        alert(error.message);
-                    }
-                });
-            });
-
-            tierButtons.forEach((button, index) => {
-                const tier = achievement.tiers[index];
-
-                button.addEventListener("click", () => {
-                    console.log("[Achievements] Completion button clicked", {
-                        achievement: achievement.name,
-                        tier: tier.tier,
-                        completed: tier.completed,
-                        disabled: button.disabled,
-                        locked: button.closest(".achievement-tier")?.classList.contains("locked"),
                     });
-
-                    toggleTierCompleted(achievement, tier, item, button);
                 });
+
+                tierButtons.forEach((button, index) => {
+                    const tier = achievement.tiers[index];
+
+                    button.addEventListener("click", () => {
+                        console.log("[Achievements] Completion button clicked", {
+                            achievement: achievement.name,
+                            tier: tier.tier,
+                            completed: tier.completed,
+                            disabled: button.disabled,
+                            locked: button
+                                .closest(".achievement-tier")
+                                ?.classList.contains("locked"),
+                        });
+
+                        toggleTierCompleted(achievement, tier, item, button);
+                    });
+                });
+
+                fragment.appendChild(item);
+
+                updateLockedTiers(item);
+                updateAchievementProgress(item);
             });
 
-            fragment.appendChild(item);
-
-            updateLockedTiers(item);
-            updateAchievementProgress(item);
-        });
-
-        achievementList.appendChild(fragment);
-        achievementList.parentElement.scrollTop = 0;
+            achievementList.appendChild(fragment);
+            if (renderedCount < achievements.length) achievementList.appendChild(sentinel);
+            else {
+                sentinel.remove();
+                achievementListObserver?.disconnect();
+            }
+        }
+        renderNextBatch();
+        if (renderedCount < achievements.length) {
+            achievementListObserver = new IntersectionObserver(
+                (entries) => {
+                    if (entries.some((entry) => entry.isIntersecting)) renderNextBatch();
+                },
+                { root: achievementList, rootMargin: "400px" },
+            );
+            achievementListObserver.observe(sentinel);
+        }
     }
 
     function getTierImage(currentTier, totalTiers) {
@@ -2455,14 +2181,6 @@ window.initAchievements = function () {
         item.classList.remove("progress-low", "progress-high");
 
         /*
-         * Force the browser to register
-         * the class removal so the animation
-         * can restart when the new class is added.
-         */
-
-        void item.offsetWidth;
-
-        /*
          * Do not apply progress colour
          * to a fully completed achievement.
          */
@@ -2503,8 +2221,8 @@ window.initAchievements = function () {
         Object.entries(achievementData.categories).forEach(([category, data]) => {
             let completed = 0;
 
-            achievementData.achievements.forEach((achievement) => {
-                if (achievement.category !== category || !Array.isArray(achievement.tiers)) {
+            (achievementsByCategory.get(category) || []).forEach((achievement) => {
+                if (!Array.isArray(achievement.tiers)) {
                     return;
                 }
 
@@ -2522,61 +2240,12 @@ window.initAchievements = function () {
          * Rebuild the category cards.
          */
 
-        buildCategories();
+        if (!categories.hidden) buildCategories();
 
-        if (browser && !browser.hidden && categoryTitle && sidebarList) {
-            const currentCategory = categoryTitle.textContent;
-
-            /*
-             * Update the existing sidebar progress
-             * bars instead of immediately destroying
-             * and recreating them.
-             */
-
-            sidebarList.querySelectorAll(".achievement-sidebar-item").forEach((item) => {
-                const categoryName = item
-                    .querySelector(".achievement-sidebar-name")
-                    ?.textContent.trim();
-
-                if (!categoryName) {
-                    return;
-                }
-
-                const data = achievementData.categories[categoryName];
-
-                if (!data) {
-                    return;
-                }
-
-                const progress = data.total > 0 ? (data.completed / data.total) * 100 : 0;
-
-                const progressFill = item.querySelector(".achievement-sidebar-progress-fill");
-
-                const count = item.querySelector(".achievement-sidebar-progress-row small");
-
-                if (progressFill) {
-                    progressFill.style.width = `${progress}%`;
-                }
-
-                if (count) {
-                    count.textContent = `${data.completed}/${data.total}`;
-                }
-            });
-
-            /*
-             * Keep the currently selected sidebar
-             * category state intact.
-             */
-
-            const activeItem = sidebarList.querySelector(".achievement-sidebar-item.active");
-
-            if (
-                !activeItem ||
-                activeItem.querySelector(".achievement-sidebar-name")?.textContent.trim() !==
-                    currentCategory
-            ) {
-                buildSidebar(currentCategory);
-            }
+        if (browser && !browser.hidden) {
+            const scrollTop = sidebarList.scrollTop;
+            buildSidebar(activeCategory);
+            sidebarList.scrollTop = scrollTop;
         }
     }
 
@@ -2804,8 +2473,9 @@ window.initAchievements = function () {
      */
 
     function closeBrowser() {
+        achievementListObserver?.disconnect();
         browser.hidden = true;
-
+        buildCategories();
         categories.hidden = false;
     }
 

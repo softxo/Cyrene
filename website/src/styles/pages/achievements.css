@@ -601,11 +601,11 @@
 /* Completion count */
 
 .achievement-sidebar-progress-row small {
-    flex: 0 0 48px;
+    flex: 0 0 72px;
 
-    width: 48px;
+    width: 72px;
 
-    min-width: 48px;
+    min-width: 72px;
 
     height: 22px;
 
@@ -1769,8 +1769,8 @@
     border-color: var(--accent-border);
 
     box-shadow:
-        0 0 0 1px var(--accent-soft),
-        0 8px 30px var(--accent-glow);
+        inset 0 0 0 1px var(--accent-soft),
+        inset 0 0 22px var(--accent-soft);
 }
 
 .achievement-item.completed:hover {
@@ -2601,4 +2601,212 @@
     background: color-mix(in srgb, var(--accent) 12%, transparent);
 
     color: var(--accent);
+}
+
+/* Completed categories follow the active Cyrene theme. */
+.achievement-category.category-completed,
+.achievement-sidebar-item.category-completed {
+    border-color: var(--accent-border);
+    background: linear-gradient(135deg, var(--accent-soft), transparent 80%), var(--background);
+    box-shadow:
+        inset 0 0 0 1px var(--accent-border),
+        inset 0 0 18px var(--accent-soft);
+}
+.category-completed .achievement-category-percent,
+.category-completed .achievement-sidebar-progress-row small {
+    color: var(--accent);
+}
+.category-completed .achievement-sidebar-progress-fill {
+    background: var(--accent);
+}
+.achievement-sidebar-item[hidden] {
+    display: none;
+}
+.achievement-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.achievement-content-header,
+.achievement-browser-controls {
+    flex: 0 0 auto;
+}
+.achievement-list {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 8px 16px 2px;
+}
+.achievement-item {
+    flex-shrink: 0;
+}
+.achievement-version-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.achievement-version-select:has(.achievement-version-reset:not([hidden])) .custom-select-button {
+    padding-right: 64px;
+}
+.achievement-version-reset {
+    position: absolute;
+    z-index: 1003;
+    right: 30px;
+    top: 8px;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 5px;
+    color: var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+}
+.achievement-version-reset:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+.achievement-version-reset[hidden] {
+    display: none;
+}
+@media (max-width: 700px) {
+    .achievement-browser {
+        display: flex;
+        flex-direction: column;
+        height: 85dvh;
+        min-height: 600px;
+    }
+    .achievement-sidebar {
+        flex: 0 0 auto;
+    }
+    .achievement-content {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+    .achievement-browser-controls [data-achievement-version-select] .custom-select-menu {
+        width: min(430px, calc(100vw - 64px));
+    }
+}
+
+.achievement-sidebar-progress-row small {
+    padding: 0 6px;
+    font-variant-numeric: tabular-nums;
+}
+.achievement-sidebar-item.search-match {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: inset 3px 0 var(--accent);
+}
+.achievement-search-match-label {
+    display: block;
+    color: var(--accent);
+    font-size: 10px;
+    margin: 3px 0;
+    font-weight: 600;
+}
+.achievement-category-controls {
+    flex-wrap: wrap;
+}
+.achievement-category-controls > .achievement-version-select {
+    width: var(--version-select-width, 170px);
+    flex: 0 1 var(--version-select-width, 170px);
+    max-width: 100%;
+    min-width: 0;
+}
+.achievement-version-select .custom-select-button {
+    min-height: 42px;
+    height: auto;
+}
+.achievement-version-select .custom-select-value {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    text-align: left;
+}
+.achievement-version-reset {
+    top: 50%;
+    transform: translateY(-50%);
+}
+@media (max-width: 700px) {
+    .achievement-category-controls > .achievement-version-select {
+        width: 100%;
+        flex: none;
+    }
+}
+
+.achievement-version-select .custom-select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    margin: -5px 0 0;
+}
+.achievement-version-select.open .custom-select-arrow {
+    margin-top: -2px;
+}
+
+/* Skip layout and painting of cards outside the scrolling viewport. */
+.achievement-item {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 140px;
+}
+.achievement-list-sentinel {
+    height: 1px;
+    min-height: 1px;
+    flex: 0 0 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .achievement-item::before {
+        animation: none !important;
+        opacity: 1;
+    }
+}
+
+/* Completion is a quiet finish; the current category has its own persistent marker. */
+.achievement-sidebar-item.category-completed {
+    border-color: transparent;
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 7%, transparent),
+        transparent 85%
+    );
+    box-shadow: none;
+}
+.achievement-category-complete-mark {
+    --check-size: 12px;
+    margin-left: 4px;
+    color: var(--accent);
+}
+.achievement-sidebar-item.active {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--background));
+    box-shadow: none;
+    color: var(--text);
+}
+
+.achievement-sidebar-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Respect the site hover setting without changing positioning transforms. */
+html[data-hover-effects="off"]
+    :is(.achievement-category, .achievement-back, .achievement-complete-button):hover {
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    :is(.achievement-category, .achievement-back, .achievement-complete-button):hover {
+        transform: none;
+    }
+}
+
+/* An opacity-animated ancestor isolates backdrop filtering until its fade ends. */
+:root .achievement-notes-modal[data-modal-shell] {
+    opacity: 1;
+    transition: display 220ms allow-discrete;
+}
+:root .achievement-notes-modal[data-modal-shell][hidden] {
+    opacity: 1;
+    transition-duration: 180ms;
 }

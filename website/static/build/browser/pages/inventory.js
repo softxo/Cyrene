@@ -103,7 +103,7 @@ function initInventoryAccountDropdown() {
         select.classList.remove("open");
         button.setAttribute("aria-expanded", "false");
     };
-    button.addEventListener("click", event => {
+    button.addEventListener("click", (event) => {
         event.preventDefault();
         const shouldOpen = !select.classList.contains("open");
         close();
@@ -112,7 +112,7 @@ function initInventoryAccountDropdown() {
             button.setAttribute("aria-expanded", "true");
         }
     });
-    options.forEach(option => {
+    options.forEach((option) => {
         option.addEventListener("click", () => {
             if (!option.dataset.value) {
                 return;
@@ -123,12 +123,12 @@ function initInventoryAccountDropdown() {
             form.requestSubmit();
         });
     });
-    document.addEventListener("click", event => {
+    document.addEventListener("click", (event) => {
         if (!select.contains(event.target)) {
             close();
         }
     });
-    button.addEventListener("keydown", event => {
+    button.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
             close();
         }
@@ -146,9 +146,9 @@ function initInventorySearch() {
     const rarity = document.querySelector("[data-inventory-rarity]");
     const kind = document.querySelector("[data-inventory-kind]");
     const reset = document.querySelector("[data-inventory-reset]");
-    const syncSelect = select => {
+    const syncSelect = (select) => {
         const root = select.closest(".custom-select");
-        root.querySelectorAll(".custom-select-option").forEach(option => {
+        root.querySelectorAll(".custom-select-option").forEach((option) => {
             const selected = option.dataset.value === select.value;
             option.classList.toggle("selected", selected);
             option.setAttribute("aria-selected", String(selected));
@@ -164,7 +164,7 @@ function initInventorySearch() {
             root.classList.remove("open");
             trigger.setAttribute("aria-expanded", "false");
         };
-        ["", ...values].forEach(value => {
+        ["", ...values].forEach((value) => {
             const option = document.createElement("button");
             option.type = "button";
             option.className = "custom-select-option";
@@ -183,14 +183,16 @@ function initInventorySearch() {
         syncSelect(select);
         trigger.addEventListener("click", () => {
             const open = !root.classList.contains("open");
-            document.querySelectorAll("[data-inventory-select] .custom-select-button").forEach(button => {
+            document
+                .querySelectorAll("[data-inventory-select] .custom-select-button")
+                .forEach((button) => {
                 button.closest(".custom-select").classList.remove("open");
                 button.setAttribute("aria-expanded", "false");
             });
             root.classList.toggle("open", open);
             trigger.setAttribute("aria-expanded", String(open));
         });
-        root.addEventListener("keydown", event => {
+        root.addEventListener("keydown", (event) => {
             const options = [...menu.querySelectorAll("button")];
             if (event.key === "Escape") {
                 close();
@@ -201,28 +203,37 @@ function initInventorySearch() {
                 root.classList.add("open");
                 trigger.setAttribute("aria-expanded", "true");
                 const current = options.indexOf(document.activeElement);
-                const next = event.key === "Home" ? 0 : event.key === "End" ? options.length - 1
-                    : (current + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length;
+                const next = event.key === "Home"
+                    ? 0
+                    : event.key === "End"
+                        ? options.length - 1
+                        : (current + (event.key === "ArrowDown" ? 1 : -1) + options.length) %
+                            options.length;
                 options[next]?.focus();
             }
         });
-        root.addEventListener("focusout", event => { if (!root.contains(event.relatedTarget))
-            close(); });
-        document.addEventListener("click", event => { if (!root.contains(event.target))
-            close(); });
+        root.addEventListener("focusout", (event) => {
+            if (!root.contains(event.relatedTarget))
+                close();
+        });
+        document.addEventListener("click", (event) => {
+            if (!root.contains(event.target))
+                close();
+        });
     };
-    addOptions(rarity, [...new Set([...items].map(item => item.dataset.inventoryRarity))]
-        .filter(value => Number(value) > 0).sort((a, b) => Number(b) - Number(a)), "All rarities");
-    addOptions(kind, [...new Set([...items].map(item => item.dataset.inventoryKind))]
-        .filter(value => value !== "Other materials")
+    addOptions(rarity, [...new Set([...items].map((item) => item.dataset.inventoryRarity))]
+        .filter((value) => Number(value) > 0)
+        .sort((a, b) => Number(b) - Number(a)), "All rarities");
+    addOptions(kind, [...new Set([...items].map((item) => item.dataset.inventoryKind))]
+        .filter((value) => value !== "Other materials")
         .sort((a, b) => a.localeCompare(b)), "All types");
     const apply = () => {
         const query = search.value.trim().toLowerCase();
         let visible = 0;
-        items.forEach(item => {
-            const matches = item.dataset.inventoryName.includes(query)
-                && (!rarity.value || item.dataset.inventoryRarity === rarity.value)
-                && (!kind.value || item.dataset.inventoryKind === kind.value);
+        items.forEach((item) => {
+            const matches = item.dataset.inventoryName.includes(query) &&
+                (!rarity.value || item.dataset.inventoryRarity === rarity.value) &&
+                (!kind.value || item.dataset.inventoryKind === kind.value);
             item.hidden = !matches;
             visible += Number(matches);
         });

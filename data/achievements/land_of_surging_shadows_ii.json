@@ -1,0 +1,137 @@
+{
+    "achievements": [
+        {
+            "id": [86108],
+            "name": "Sosruko Here!",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9105,
+            "stages": 1,
+            "stage1": {
+                "title": "Sosruko Here!",
+                "description": "Obtain the shotgun \"Sosruko's Flame.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86109],
+            "name": "Might I Suggest This One?",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9106,
+            "stages": 1,
+            "stage1": {
+                "title": "Might I Suggest This One?",
+                "description": "Obtain the shotgun \"Apsat's Mountain Hunt.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86110],
+            "name": "Urban Combat Specialist",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9107,
+            "stages": 1,
+            "stage1": {
+                "title": "Urban Combat Specialist",
+                "description": "Obtain at least 1 Edge of Survival Medal in each of \"Hammer and Anvil,\" \"Harbor Under Heavy Guard,\" and \"The Calamity-Torn Old City\" in \"Edge of Survival.\"",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86111],
+            "name": "Kurdalagon's Breath",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9108,
+            "stages": 1,
+            "stage1": {
+                "title": "Kurdalagon's Breath",
+                "description": "Install 4 accessories on \"Sosruko's Flame.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86112],
+            "name": "Super Shotgun",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9109,
+            "stages": 1,
+            "stage1": {
+                "title": "Super Shotgun",
+                "description": "Install 4 accessories on \"Apsat's Mountain Hunt.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86113],
+            "name": "Rip and Tear, Until It Is Done",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9110,
+            "stages": 1,
+            "stage1": {
+                "title": "Rip and Tear, Until It Is Done",
+                "description": "Fire 10 consecutive shots within 15 seconds using \"Sosruko's Flame.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86114],
+            "name": "Though He Was No Giant...",
+            "achievementGroupId": 74,
+            "achievementGroupName": "Land of Surging Shadows (II)",
+            "sortOrder": 9111,
+            "stages": 1,
+            "stage1": {
+                "title": "Though He Was No Giant...",
+                "description": "Hit an enemy over 30 meters away using a Heavy Slug from \"Apsat's Mountain Hunt.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        }
+    ]
+}

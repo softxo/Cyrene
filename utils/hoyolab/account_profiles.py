@@ -21,7 +21,12 @@ async def _refresh(account: dict) -> dict | None:
         async with _semaphore:
             async with asyncio.timeout(8):
                 async with HoYoLABClient(account["credentials"]) as client:
-                    response = await client.get_game_roles()
+                    try:
+                        response = await client.get_game_roles()
+                    except Exception:
+                        response = None
+                    if not response or response.get("retcode") != 0:
+                        response = await client.get_game_roles_by_ltoken()
         if response.get("retcode") != 0:
             raise ValueError("HoYoLAB rejected the profile request")
         role = next(

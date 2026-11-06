@@ -1,9 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80504
-            ],
+            "id": [80504],
             "name": "Continental Explorer: Snow Blanketed Nation (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -23,9 +21,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80505
-            ],
+            "id": [80505],
             "name": "Across the Icebound Snowscape (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -45,9 +41,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80506
-            ],
+            "id": [80506],
             "name": "Sanctuary Pilgrim: Snow Blanketed Nation (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -66,9 +60,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80507
-            ],
+            "id": [80507],
             "name": "Pale and Lucent as Ice",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -87,9 +79,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80508
-            ],
+            "id": [80508],
             "name": "Bounty of the Shadow Realm: Snow Blanketed Nation (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -108,11 +98,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80509,
-                80510,
-                80511
-            ],
+            "id": [80509, 80510, 80511],
             "name": "The Tundra Will Guide You Home (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -120,7 +106,7 @@
             "stages": 3,
             "stage1": {
                 "title": "The Tundra Will Guide You Home (I)",
-                "description": "Follow 3 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "description": "Follow {param0} Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
                 "progress": 3,
                 "reward": {
                     "id": 201,
@@ -130,7 +116,7 @@
             },
             "stage2": {
                 "title": "The Tundra Will Guide You Home (I)",
-                "description": "Follow 5 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "description": "Follow {param0} Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
                 "progress": 5,
                 "reward": {
                     "id": 201,
@@ -140,7 +126,7 @@
             },
             "stage3": {
                 "title": "The Tundra Will Guide You Home (I)",
-                "description": "Follow 10 Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
+                "description": "Follow {param0} Seelies in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak to their Seelie Courts.",
                 "progress": 10,
                 "reward": {
                     "id": 201,
@@ -151,11 +137,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80512,
-                80513,
-                80514
-            ],
+            "id": [80512, 80513, 80514],
             "name": "Glacial Treasure Hunter (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -164,7 +146,7 @@
             "stage1": {
                 "title": "Glacial Treasure Hunter (I)",
                 "ps5title": "Glacial Treasure Hunter (I)",
-                "description": "Open 65 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Open {param0} chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 65,
                 "reward": {
                     "id": 201,
@@ -175,7 +157,7 @@
             "stage2": {
                 "title": "Glacial Treasure Hunter (I)",
                 "ps5title": "Glacial Treasure Hunter (II)",
-                "description": "Open 130 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Open {param0} chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 130,
                 "reward": {
                     "id": 201,
@@ -186,7 +168,7 @@
             "stage3": {
                 "title": "Glacial Treasure Hunter (I)",
                 "ps5title": "Glacial Treasure Hunter (III)",
-                "description": "Open 260 chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Open {param0} chests in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 260,
                 "reward": {
                     "id": 201,
@@ -197,11 +179,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80515,
-                80516,
-                80517
-            ],
+            "id": [80515, 80516, 80517],
             "name": "Chillwinter Adventurer (I)",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -209,7 +187,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Chillwinter Adventurer (I)",
-                "description": "Complete 6 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Complete {param0} Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 6,
                 "reward": {
                     "id": 201,
@@ -219,7 +197,7 @@
             },
             "stage2": {
                 "title": "Chillwinter Adventurer (I)",
-                "description": "Complete 12 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Complete {param0} Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 12,
                 "reward": {
                     "id": 201,
@@ -229,7 +207,7 @@
             },
             "stage3": {
                 "title": "Chillwinter Adventurer (I)",
-                "description": "Complete 24 Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
+                "description": "Complete {param0} Open World Time Trial Challenges in Everfrozen Earth, Volkodlak Tundra, Flamefeather Valley, White Birch Snowgrave, and Fellfrost Peak.",
                 "progress": 24,
                 "reward": {
                     "id": 201,
@@ -240,9 +218,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80518
-            ],
+            "id": [80518],
             "name": "Ladder of Love",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -261,9 +237,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80519
-            ],
+            "id": [80519],
             "name": "Gather for Everlasting Happiness",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -282,9 +256,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80520
-            ],
+            "id": [80520],
             "name": "A Thousand Affections Caught in a Sigh",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -303,9 +275,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80521
-            ],
+            "id": [80521],
             "name": "Birth of the Singer in the Shell",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -325,9 +295,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80522
-            ],
+            "id": [80522],
             "name": "Hunt for Your Worth in the Waking World",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -347,9 +315,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80523
-            ],
+            "id": [80523],
             "name": "Glorification of the Chosen One",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",
@@ -369,9 +335,7 @@
             "version": "7.0"
         },
         {
-            "id": [
-                80529
-            ],
+            "id": [80529],
             "name": "Open Your Eyelids Lulled by Night",
             "achievementGroupId": 69,
             "achievementGroupName": "Snezhnaya: Sacred city of ice and pale star (I)",

@@ -993,7 +993,7 @@ async def update_account_nickname(
         result = await connection.execute(
             """
             UPDATE accounts
-            SET cyrene_nickname = %s
+            SET cyrene_nickname = %s, profile_checked_at = NULL
             WHERE discord_user_id = %s
             AND genshin_uid = %s
             """,

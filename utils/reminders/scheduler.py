@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
+import aiohttp
 import discord
 
 from utils.constants.emojis import HOYOLAB_EMOJIS
@@ -21,6 +22,7 @@ from utils.hoyolab.database import (
     update_reminder,
 )
 from utils.hoyolab.expedition_icons import EXPEDITION_ICONS
+from utils.icons import get_application_emoji, get_character_icon, get_emoji_character_name
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,8 @@ REALM_CURRENCY_IMAGE = Path("website/static/images/misc/Realm_Currency.png")
 class ReminderScheduler:
     def __init__(self, bot: discord.Client):
         self.bot = bot
+        self._expedition_emojis: dict[str, str] = {}
+        self._expedition_emoji_lock = asyncio.Lock()
         self.task: asyncio.Task | None = None
         self.running = False
 
@@ -362,6 +366,7 @@ class ReminderScheduler:
                 {
                     "slot": str(slot),
                     "name": character_name.replace("_", " "),
+                    "icon_url": icon_url,
                     "status": status,
                     "remaining_seconds": remaining_seconds,
                 }
@@ -380,7 +385,12 @@ class ReminderScheduler:
                 )
                 return False
 
-            sent = await self.send_expedition_reminder(reminder, finished, "Manual")
+            sent = await self.send_expedition_reminder(
+                reminder,
+                finished,
+                "Manual",
+                icon_urls={item["name"]: item["icon_url"] for item in valid_expeditions},
+            )
             if not sent:
                 await self.retry_reminder(reminder, seconds=60)
                 return False
@@ -402,7 +412,12 @@ class ReminderScheduler:
         updated_config = {**config, "finished_slots": sorted(finished)}
 
         if new_finished:
-            sent = await self.send_expedition_reminder(reminder, new_finished, "Automatic")
+            sent = await self.send_expedition_reminder(
+                reminder,
+                new_finished,
+                "Automatic",
+                icon_urls={item["name"]: item["icon_url"] for item in valid_expeditions},
+            )
             if not sent:
                 await self.retry_reminder(reminder, seconds=60)
                 return False
@@ -444,7 +459,53 @@ class ReminderScheduler:
             ),
         )
 
-    async def send_expedition_reminder(self, reminder: dict, finished: dict, mode: str) -> bool:
+    async def expedition_character_emoji(self, character_name: str, icon_url: str = "") -> str:
+        character_id = character_name.lower().replace(" ", "_")
+        emoji_name = get_emoji_character_name(character_id)
+        async with self._expedition_emoji_lock:
+            if character_id in self._expedition_emojis:
+                return self._expedition_emojis[character_id]
+            emoji = get_application_emoji(getattr(self.bot, "application_emojis", ()), emoji_name)
+            if not emoji:
+                emoji = get_application_emoji(getattr(self.bot, "emojis", ()), emoji_name)
+            icon = get_character_icon(character_id)
+            if not emoji:
+                try:
+                    image = None
+                    if icon.is_file():
+                        image = await asyncio.to_thread(icon.read_bytes)
+                    else:
+                        url = urlsplit(icon_url)
+                        trusted_host = any(
+                            (url.hostname or "").endswith("." + domain) or url.hostname == domain
+                            for domain in ("hoyolab.com", "hoyoverse.com", "mihoyo.com")
+                        )
+                        if url.scheme == "https" and trusted_host:
+                            async with aiohttp.ClientSession(
+                                timeout=aiohttp.ClientTimeout(total=10)
+                            ) as session:
+                                async with session.get(icon_url, allow_redirects=False) as response:
+                                    response.raise_for_status()
+                                    if response.status != 200:
+                                        return ""
+                                    image = await response.read()
+                                    if len(image) > 256_000:
+                                        return ""
+                    if not image:
+                        return ""
+                    created = await self.bot.create_application_emoji(name=emoji_name, image=image)
+                    emoji = str(created)
+                except discord.HTTPException, OSError, aiohttp.ClientError, TimeoutError:
+                    logger.exception(
+                        "Could not register the expedition icon for %s.", character_name
+                    )
+            if emoji:
+                self._expedition_emojis[character_id] = emoji
+            return emoji
+
+    async def send_expedition_reminder(
+        self, reminder: dict, finished: dict, mode: str, *, icon_urls: dict[str, str] | None = None
+    ) -> bool:
         genshin_uid = reminder.get("genshin_uid")
         user_id = reminder["discord_user_id"]
         accounts = await get_accounts(user_id)
@@ -454,13 +515,17 @@ class ReminderScheduler:
             if account
             else "Unknown"
         )
-        names = "\n".join(f"• **{name}**" for name in finished.values())
+        lines = []
+        for name in finished.values():
+            icon = await self.expedition_character_emoji(name, (icon_urls or {}).get(name, ""))
+            lines.append(f"{icon} **{name}**".strip())
+        names = "\n".join(lines)
         return await self.send_reminder(
             reminder,
             title="Expeditions Complete",
             message=(
                 "Hey {recipient_mention}!\n\n"
-                f"Your account **{account_name}** has finished these Expeditions:\n{names}"
+                f"Your account **{account_name}** has finished these Expeditions:\n\n{names}"
             ),
             footer=f"UID: {genshin_uid} — {mode} Expedition Reminder",
         )

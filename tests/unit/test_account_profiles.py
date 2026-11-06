@@ -26,6 +26,7 @@ class AccountProfileTests(unittest.IsolatedAsyncioTestCase):
         self.client = MagicMock()
         self.client.__aenter__ = AsyncMock(return_value=self.client)
         self.client.__aexit__ = AsyncMock(return_value=None)
+        self.client.get_game_roles_by_ltoken = AsyncMock(side_effect=RuntimeError("offline"))
         self.client.get_game_roles = AsyncMock(
             return_value={
                 "retcode": 0,
@@ -92,3 +93,12 @@ class AccountProfileTests(unittest.IsolatedAsyncioTestCase):
         await self.refresh([self.account, other])
         self.client.get_game_roles.assert_awaited_once()
         self.assertEqual(other["nickname"], "New")
+
+    async def test_login_cookie_fallback_refreshes_without_cookie_token(self):
+        self.client.get_game_roles_by_ltoken.side_effect = None
+        self.client.get_game_roles_by_ltoken.return_value = self.client.get_game_roles.return_value
+        self.client.get_game_roles.return_value = {"retcode": -100}
+        await self.refresh()
+        self.assertEqual(self.account["nickname"], "New")
+        self.assertEqual(self.account["cyrene_nickname"], "My alias")
+        self.client.get_game_roles_by_ltoken.assert_awaited_once()

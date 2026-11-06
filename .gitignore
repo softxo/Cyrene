@@ -54,3 +54,8 @@ Desktop.ini
 *.swp
 *.swo
 *~
+
+/data/achievement_catalogue_cache.json
+/data/achievement_catalogue_cache.tmp
+
+/data/achievement_category_icons.tmp

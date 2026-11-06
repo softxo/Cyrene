@@ -1,0 +1,55 @@
+.discord-account-type {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--background);
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.discord-account-premium {
+    color: #d4af37;
+}
+
+.discord-account-special {
+    color: #410270;
+    background-color: #410270;
+    background-image:
+        radial-gradient(circle, #fff 0 0.5px, #e3b2ff 0.7px, transparent 1.3px),
+        radial-gradient(ellipse 0.7px 1.7px, #fff 40%, transparent 100%),
+        radial-gradient(circle, #c580ee 0 0.5px, transparent 1px);
+    background-size:
+        13px 11px,
+        23px 17px,
+        9px 19px;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: discord-special-glimmer 3s linear infinite;
+}
+
+@keyframes discord-special-glimmer {
+    from {
+        background-position:
+            0 0,
+            7px 3px,
+            3px 8px;
+    }
+    to {
+        background-position:
+            26px -22px,
+            -16px 20px,
+            21px -11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .discord-account-special {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: currentColor;
+    }
+}

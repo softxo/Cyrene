@@ -39,6 +39,8 @@ for (const width of [390, 1280]) {
         await page.setViewportSize({ width, height: 900 });
         const errors: string[] = [];
         page.on("pageerror", (error) => errors.push(error.message));
+        let releasePlans!: () => void;
+        const initialPlans = new Promise<void>((resolve) => (releasePlans = resolve));
         let saved: any[] = [];
         let writes = 0;
         let failShowcase = false;
@@ -46,6 +48,8 @@ for (const width of [390, 1280]) {
         let releaseShowcase!: () => void;
         const costRequests: URL[] = [];
         let showcaseCalls = 0;
+        let equippedLevel = 70;
+        let equippedRefinement = 3;
         let totalFixture = false;
         let htmlCostResponse = false;
         let holdNextCost = false;
@@ -78,6 +82,7 @@ for (const width of [390, 1280]) {
         await page.route("**/api/**", async (route) => {
             const url = new URL(route.request().url());
             if (url.pathname === "/api/characters/plans") {
+                if (route.request().method() === "GET") await initialPlans;
                 if (route.request().method() === "PUT") {
                     saved = route.request().postDataJSON().plans;
                     writes++;
@@ -144,10 +149,10 @@ for (const width of [390, 1280]) {
                                         id: 14302,
                                         type: 10,
                                         ascension: 4,
-                                        refinement: 3,
+                                        refinement: equippedRefinement,
                                         name: "Thrilling Tales of Dragon Slayers",
                                         rarity: 3,
-                                        level: 70,
+                                        level: equippedLevel,
                                         icon: character.icon,
                                         main_stat: { name: "Base ATK", value: "309" },
                                         sub_stat: { name: "HP Percentage", value: "29.0%" },
@@ -218,6 +223,12 @@ for (const width of [390, 1280]) {
             route.fulfill({ contentType: "text/html", body: shell }),
         );
         await page.goto("/characters?account_id=1");
+        await page.locator('[data-characters-tab="planner"]').click();
+        await expect(page.locator("[data-planner-empty]")).toBeHidden();
+        await expect(page.locator("[data-planner-loading]")).toBeVisible();
+        releasePlans();
+        await expect(page.locator("[data-planner-loading]")).toBeHidden();
+        await page.locator('[data-characters-tab="characters"]').click();
         await expect(page.locator("[data-character-count]")).toHaveText(
             "Showing 1 of 1 characters | 2 Total characters",
         );
@@ -701,6 +712,46 @@ for (const width of [390, 1280]) {
         await page.locator('[data-plan-id="10000002"] .planner-card-edit').click();
         await page.locator('[data-planner-tab="weapon"]').click();
         await expect(page.locator("[data-planner-current-weapon-level]")).toHaveText("Lv. 1");
+        // Older and manually selected snapshots of the equipped weapon must also follow HoYoLAB.
+        for (const source of ["manual", undefined]) {
+            saved = saved.map((plan) =>
+                String(plan.id) === "10000002"
+                    ? {
+                          ...plan,
+                          weaponSource: source,
+                          plannedWeapon: {
+                              id: 14302,
+                              name: "Thrilling Tales of Dragon Slayers",
+                              type: "Sword",
+                              rarity: 3,
+                              icon: "https://assets.test/weapon.webp",
+                              level: 70,
+                              refinement: 3,
+                          },
+                          currentWeaponName: "Thrilling Tales of Dragon Slayers",
+                          currentWeaponLevel: 70,
+                      }
+                    : plan,
+            );
+            equippedLevel = 80;
+            equippedRefinement = 5;
+            await page.reload();
+            await page.locator('[data-characters-tab="planner"]').click();
+            await expect
+                .poll(
+                    () =>
+                        saved.find((plan) => String(plan.id) === "10000002")?.plannedWeapon
+                            ?.refinement,
+                )
+                .toBe(5);
+            await expect
+                .poll(() => saved.find((plan) => String(plan.id) === "10000002")?.weaponSource)
+                .toBe("hoyolab");
+            await page.locator('[data-plan-id="10000002"] .planner-card-edit').click();
+            await page.locator('[data-planner-tab="weapon"]').click();
+            await expect(page.locator("[data-planner-current-weapon-level]")).toHaveText("Lv. 80");
+            await page.keyboard.press("Escape");
+        }
         expect(errors).toEqual([]);
     });
 }

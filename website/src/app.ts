@@ -92,19 +92,19 @@ const pageScripts: Record<string, string | string[]> = {
     "/weapons": [
         "/static/build/browser/core/planner-materials.js?v=1",
         "/static/build/browser/pages/events/events-rewards.js?v=6",
-        "/static/build/browser/pages/weapon-planner.js?v=10",
-        "/static/build/browser/pages/weapons.js?v=23",
+        "/static/build/browser/pages/weapon-planner.js?v=12",
+        "/static/build/browser/pages/weapons.js?v=24",
     ],
     "/characters": [
         "/static/build/browser/core/planner-materials.js?v=1",
         "/static/build/browser/pages/characters/characters-talents.js?v=1",
-        "/static/build/browser/pages/characters/characters-filters.js?v=4",
+        "/static/build/browser/pages/characters/characters-filters.js?v=5",
         "/static/build/browser/pages/characters/characters-tabs.js?v=2",
-        "/static/build/browser/pages/characters/characters-showcase.js?v=11",
-        "/static/build/browser/pages/characters/characters-planner.js?v=35",
-        "/static/build/browser/pages/characters/characters.js",
+        "/static/build/browser/pages/characters/characters-showcase.js?v=12",
+        "/static/build/browser/pages/characters/characters-planner.js?v=37",
+        "/static/build/browser/pages/characters/characters.js?v=1",
     ],
-    "/achievements": "/static/build/browser/pages/achievements.js?v=4",
+    "/achievements": "/static/build/browser/pages/achievements.js?v=10",
     "/inventory": "/static/build/browser/pages/inventory.js?v=3",
     "/reminders": "/static/build/browser/pages/planner.js?v=19",
     "/verify": "/static/build/browser/pages/verification.js?v=3",
@@ -123,21 +123,21 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events.js",
     ],
 
-    "/settings": "/static/build/browser/pages/settings.js?v=9",
+    "/settings": "/static/build/browser/pages/settings.js?v=16",
 };
 
 const pageStyles: Record<string, string> = {
-    "/weapons": "/static/build/css/weapons.css?v=37",
+    "/weapons": "/static/build/css/weapons.css?v=39",
     "/": "/static/build/css/home.css?v=41",
-    "/achievements": "/static/build/css/achievements.css?v=8",
+    "/achievements": "/static/build/css/achievements.css?v=15",
     "/wishes": "/static/build/css/wishes.css?v=15",
-    "/characters": "/static/build/css/characters.css?v=65",
+    "/characters": "/static/build/css/characters.css?v=67",
     "/inventory": "/static/build/css/inventory.css?v=9",
     "/reminders": "/static/build/css/planner.css?v=24",
-    "/verify": "/static/build/css/verification.css?v=15",
+    "/verify": "/static/build/css/verification.css?v=19",
     "/codes": "/static/build/css/codes.css?v=7",
     "/events": "/static/build/css/events.css?v=68",
-    "/settings": "/static/build/css/settings.css?v=10",
+    "/settings": "/static/build/css/settings.css?v=13",
 };
 
 /* =========================================================

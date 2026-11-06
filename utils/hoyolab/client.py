@@ -69,6 +69,15 @@ class HoYoLABClient:
             response.raise_for_status()
             return await response.json()
 
+    async def get_game_roles_by_ltoken(self) -> dict:
+        """Read linked roles with login cookies when the cookie token is unavailable."""
+        if self.genshin_client is None:
+            raise RuntimeError("HoYoLABClient must be used with 'async with'.")
+        data = await self.genshin_client.request_hoyolab(
+            "binding/api/getUserGameRolesByCookie", lang="en-us"
+        )
+        return {"retcode": 0, "data": dict(data)}
+
     async def get_genshin_daily_note(self, genshin_uid: str, genshin_server: str) -> dict:
         if self.session is None:
             raise RuntimeError("HoYoLABClient must be used with 'async with'.")

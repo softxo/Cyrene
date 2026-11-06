@@ -245,6 +245,7 @@ function initCharacterPlanner() {
     const pickerFilters = { element: "all", weapon: "all", rarity: "all" };
     const pickerCount = picker.querySelector("[data-planner-picker-count]");
     let plans = loadPlans();
+    let plansLoading = true;
     let plansRevision = 0;
     let databaseSavePromise = Promise.resolve();
     const syncStatus = document.createElement("p");
@@ -451,6 +452,8 @@ function initCharacterPlanner() {
     }
     async function hydratePlansFromDatabase() {
         if (!accountId) {
+            plansLoading = false;
+            renderPlans();
             return;
         }
         const startingRevision = plansRevision;
@@ -497,6 +500,10 @@ function initCharacterPlanner() {
             syncStatus.hidden = false;
             syncStatus.textContent =
                 "Could not sync Planner. Showing this browser's saved plans; reload to retry.";
+        }
+        finally {
+            plansLoading = false;
+            renderPlans();
         }
     }
     function getPlan(id) {
@@ -645,7 +652,11 @@ function initCharacterPlanner() {
         return (["Sword", "Claymore", "Polearm", "Bow", "Catalyst"].find((value) => value.toLowerCase() === type?.toLowerCase()) || "");
     }
     function plannedWeapon(plan, character = null) {
-        const equipped = !isUnowned(plan) && plan.weaponSource !== "manual" && character?.weapon;
+        const liveWeapon = !isUnowned(plan) && character?.weapon;
+        const followsEquippedWeapon = plan.weaponSource !== "manual" ||
+            (liveWeapon && String(plan.plannedWeapon?.id) === String(liveWeapon.id));
+        const equipped = followsEquippedWeapon && liveWeapon;
+        const manualWeapon = !equipped && plan.weaponSource === "manual";
         const weapon = equipped
             ? {
                 ...equipped,
@@ -656,13 +667,11 @@ function initCharacterPlanner() {
         return weapon
             ? {
                 ...weapon,
-                level: plan.weaponSource === "manual"
+                level: manualWeapon
                     ? normaliseNumber(plan.currentWeaponLevel, Number(weapon.level) || 1, 1, 90)
                     : Number(weapon.level) || 1,
                 ascension: weapon.ascension ??
-                    (Number(plan.weaponSource === "manual"
-                        ? plan.currentWeaponLevel
-                        : weapon.level || 1) === 1
+                    (Number(manualWeapon ? plan.currentWeaponLevel : weapon.level || 1) === 1
                         ? 0
                         : undefined),
             }
@@ -1106,7 +1115,10 @@ function initCharacterPlanner() {
         const visiblePlans = plans.filter((plan) => document.documentElement.dataset.showUnreleased === "true" ||
             pickerButtons.find((button) => String(button.dataset.plannerCharacterId) === String(plan.id))?.dataset.unreleased !== "true");
         const hasPlans = visiblePlans.length > 0;
-        emptyState.hidden = hasPlans;
+        emptyState.hidden = plansLoading || hasPlans;
+        const loadingStatus = page.querySelector("[data-planner-loading]");
+        if (loadingStatus)
+            loadingStatus.hidden = !plansLoading || hasPlans;
         plannerGrid.hidden = !hasPlans;
         const currentLevels = new Map(pickerButtons.map((button) => [
             String(button.dataset.plannerCharacterId),
@@ -1645,6 +1657,9 @@ function initCharacterPlanner() {
                     character.level != null ? `Lv. ${character.level}` : "Unavailable";
             }
             const weapon = plannedWeapon(plan, character);
+            if (!isUnowned(plan) && character.weapon && String(weapon?.id) === String(character.weapon.id)) {
+                plan.weaponSource = "hoyolab";
+            }
             if (plan.weaponSource !== "manual")
                 plan.plannedWeapon = weapon;
             const weaponComparison = editor.querySelector(".planner-weapon-overview .planner-level-comparison");
@@ -2269,70 +2284,98 @@ function initCharacterPlanner() {
     renderPlans();
     filterPicker();
     const hydrationPromise = hydratePlansFromDatabase();
-    void hydrationPromise.then(async () => {
-        let changed = false;
-        plans.forEach((plan) => {
-            const character = pickerButtons.find((button) => String(button.dataset.plannerCharacterId) === String(plan.id));
-            if (character?.dataset.plannerCharacterOwnership !== "owned")
-                return;
-            const currentConstellation = normaliseOptionalNumber(character.dataset.plannerCharacterConstellation, 0, 6);
-            if (currentConstellation !== null) {
-                if (plan.currentConstellation !== currentConstellation)
-                    changed = true;
-                plan.currentConstellation = currentConstellation;
-                const constellationGoal = Math.max(plan.constellation, currentConstellation);
-                if (plan.constellation !== constellationGoal)
-                    changed = true;
-                plan.constellation = constellationGoal;
-            }
-            const currentLevel = normaliseOptionalNumber(character.dataset.plannerCharacterLevel, 1, 90);
-            if (currentLevel !== null) {
-                if (plan.currentLevel !== currentLevel)
-                    changed = true;
-                plan.currentLevel = currentLevel;
-                const levelGoal = Math.max(plan.level, currentLevel);
-                if (plan.level !== levelGoal)
-                    changed = true;
-                plan.level = levelGoal;
-            }
-        });
-        if (changed) {
-            persistPlans();
-            renderPlans();
-        }
-        await Promise.all(plans.map(async (plan) => {
-            if (plan.weaponSource === "manual" ||
-                (plan.plannedWeapon && !plan.weaponSource) ||
-                !accountId ||
-                isUnowned(plan))
-                return;
-            try {
-                const response = await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`, { credentials: "same-origin", headers: { "X-Cyrene-Background": "1" } });
-                if (!response.ok)
+    let refreshingProgression = false;
+    async function refreshProgression() {
+        await hydrationPromise;
+        if (refreshingProgression || !page.isConnected || !editor.hidden)
+            return;
+        refreshingProgression = true;
+        try {
+            goalCostCache.clear();
+            filterPicker();
+            let changed = false;
+            plans.forEach((plan) => {
+                const character = pickerButtons.find((button) => String(button.dataset.plannerCharacterId) === String(plan.id));
+                if (character?.dataset.plannerCharacterOwnership !== "owned")
                     return;
-                const data = await response.json();
-                const character = Array.isArray(data.data)
-                    ? data.data[0]
-                    : data.data?.characters?.[0];
-                const weapon = plannedWeapon({ ...plan, weaponSource: "hoyolab" }, character);
-                if (!weapon || getPlan(plan.id) !== plan)
+                const currentConstellation = normaliseOptionalNumber(character.dataset.plannerCharacterConstellation, 0, 6);
+                if (currentConstellation !== null) {
+                    if (plan.currentConstellation !== currentConstellation)
+                        changed = true;
+                    plan.currentConstellation = currentConstellation;
+                    const constellationGoal = Math.max(plan.constellation, currentConstellation);
+                    if (plan.constellation !== constellationGoal)
+                        changed = true;
+                    plan.constellation = constellationGoal;
+                }
+                const currentLevel = normaliseOptionalNumber(character.dataset.plannerCharacterLevel, 1, 90);
+                if (currentLevel !== null) {
+                    if (plan.currentLevel !== currentLevel)
+                        changed = true;
+                    plan.currentLevel = currentLevel;
+                    const levelGoal = Math.max(plan.level, currentLevel);
+                    if (plan.level !== levelGoal)
+                        changed = true;
+                    plan.level = levelGoal;
+                }
+            });
+            if (changed) {
+                persistPlans();
+                renderPlans();
+            }
+            await Promise.all(plans.map(async (plan) => {
+                if (!accountId || isUnowned(plan))
                     return;
-                plan.weaponSource = "hoyolab";
-                plan.plannedWeapon = weapon;
-                plan.currentWeaponLevel = Number(weapon.level) || 1;
-                plan.currentWeaponRarity = Number(weapon.rarity) || 5;
-                plan.weaponLevel = Math.max(Number(plan.weaponLevel) || 1, plan.currentWeaponLevel);
-                plan.currentWeaponName = weapon.name || "";
-                plan.currentWeaponIcon = weapon.icon || "";
-                changed = true;
+                try {
+                    const response = await fetch(`/api/characters/${encodeURIComponent(plan.id)}/showcase?account_id=${encodeURIComponent(accountId)}`, { credentials: "same-origin", headers: { "X-Cyrene-Background": "1" } });
+                    if (!response.ok)
+                        return;
+                    const data = await response.json();
+                    const character = Array.isArray(data.data)
+                        ? data.data[0]
+                        : data.data?.characters?.[0];
+                    if (!character ||
+                        getPlan(plan.id) !== plan ||
+                        !page.isConnected ||
+                        !editor.hidden)
+                        return;
+                    const talents = getCharacterCombatTalents(character);
+                    const levels = talents.map((talent) => Number(talent.level));
+                    if (levels.length === 3 && levels.every(Number.isFinite)) {
+                        plan.currentTalents = levels;
+                        const bonuses = getTalentBonuses(character, talents);
+                        plan.talents = plan.talents.map((goal, index) => Math.min(10 + bonuses[index], Math.max(levels[index], goal)));
+                        changed = true;
+                    }
+                    if ((plan.weaponSource === "manual" ||
+                        (plan.plannedWeapon && !plan.weaponSource)) &&
+                        String(plan.plannedWeapon?.id) !== String(character.weapon?.id))
+                        return;
+                    const weapon = plannedWeapon({ ...plan, weaponSource: "hoyolab" }, character);
+                    if (!weapon)
+                        return;
+                    plan.weaponSource = "hoyolab";
+                    plan.plannedWeapon = weapon;
+                    plan.currentWeaponLevel = Number(weapon.level) || 1;
+                    plan.currentWeaponRarity = Number(weapon.rarity) || 5;
+                    plan.weaponLevel = Math.max(Number(plan.weaponLevel) || 1, plan.currentWeaponLevel);
+                    plan.currentWeaponName = weapon.name || "";
+                    plan.currentWeaponIcon = weapon.icon || "";
+                    changed = true;
+                }
+                catch (error) {
+                    console.warn("Could not load the equipped weapon for a planner card.", error);
+                }
+            }));
+            if (changed) {
+                persistPlans();
+                renderPlans();
             }
-            catch (error) {
-                console.warn("Could not load the equipped weapon for a planner card.", error);
-            }
-        }));
-        if (changed) {
-            persistPlans();
-            renderPlans();
         }
-    });
+        finally {
+            refreshingProgression = false;
+        }
+    }
+    page.addEventListener("characters-refreshed", () => void refreshProgression());
+    void refreshProgression();
 }

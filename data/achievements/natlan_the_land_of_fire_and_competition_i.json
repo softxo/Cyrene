@@ -1,9 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80328
-            ],
+            "id": [80328],
             "name": "Continental Explorer: Pyre Plains (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -23,9 +21,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80329
-            ],
+            "id": [80329],
             "name": "Scaling the Scorching Sacred Mountain (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -45,9 +41,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80330
-            ],
+            "id": [80330],
             "name": "Sanctuary Pilgrim: Pyre Plains (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -66,9 +60,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80331
-            ],
+            "id": [80331],
             "name": "Radiant As Fire",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -88,9 +80,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80346
-            ],
+            "id": [80346],
             "name": "Offerings to the Night: Pyre Plains (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -109,9 +99,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80332
-            ],
+            "id": [80332],
             "name": "The Fiery Hue of the Scorching Sun",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -131,11 +119,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80333,
-                80334,
-                80335
-            ],
+            "id": [80333, 80334, 80335],
             "name": "Monetoo Will Guide You Home (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -143,7 +127,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Monetoo Will Guide You Home (I)",
-                "description": "Follow 8 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Follow {param0} Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 8,
                 "reward": {
                     "id": 201,
@@ -153,7 +137,7 @@
             },
             "stage2": {
                 "title": "Monetoo Will Guide You Home (I)",
-                "description": "Follow 16 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Follow {param0} Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 16,
                 "reward": {
                     "id": 201,
@@ -163,7 +147,7 @@
             },
             "stage3": {
                 "title": "Monetoo Will Guide You Home (I)",
-                "description": "Follow 32 Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Follow {param0} Monetoo and complete the graffiti in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 32,
                 "reward": {
                     "id": 201,
@@ -174,11 +158,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80336,
-                80337,
-                80338
-            ],
+            "id": [80336, 80337, 80338],
             "name": "Ignited Treasure Hunter (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -187,7 +167,7 @@
             "stage1": {
                 "title": "Ignited Treasure Hunter (I)",
                 "ps5title": "Ignited Treasure Hunter (I)",
-                "description": "Open 80 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Open {param0} chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 80,
                 "reward": {
                     "id": 201,
@@ -198,7 +178,7 @@
             "stage2": {
                 "title": "Ignited Treasure Hunter (I)",
                 "ps5title": "Ignited Treasure Hunter (II)",
-                "description": "Open 160 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Open {param0} chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 160,
                 "reward": {
                     "id": 201,
@@ -209,7 +189,7 @@
             "stage3": {
                 "title": "Ignited Treasure Hunter (I)",
                 "ps5title": "Ignited Treasure Hunter (III)",
-                "description": "Open 320 chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Open {param0} chests in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 320,
                 "reward": {
                     "id": 201,
@@ -220,11 +200,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80339,
-                80347,
-                80348
-            ],
+            "id": [80339, 80347, 80348],
             "name": "Ignited Adventurer (I)",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -232,7 +208,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Ignited Adventurer (I)",
-                "description": "Complete 3 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Complete {param0} Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 3,
                 "reward": {
                     "id": 201,
@@ -242,7 +218,7 @@
             },
             "stage2": {
                 "title": "Ignited Adventurer (I)",
-                "description": "Complete 6 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Complete {param0} Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 6,
                 "reward": {
                     "id": 201,
@@ -252,7 +228,7 @@
             },
             "stage3": {
                 "title": "Ignited Adventurer (I)",
-                "description": "Complete 12 Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
+                "description": "Complete {param0} Open World Time Trial Challenges in the Basin of Unnumbered Flames, Tequemecan Valley, Coatepec Mountain, and Toyac Springs.",
                 "progress": 12,
                 "reward": {
                     "id": 201,
@@ -263,9 +239,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80342
-            ],
+            "id": [80342],
             "name": "Ancestral Reminiscence",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -285,9 +259,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80343
-            ],
+            "id": [80343],
             "name": "Not All Treasure Is Silver and Gold",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",
@@ -307,9 +279,7 @@
             "version": "5.0"
         },
         {
-            "id": [
-                80345
-            ],
+            "id": [80345],
             "name": "Gold of the Sun, Together with his Blood",
             "achievementGroupId": 51,
             "achievementGroupName": "Natlan: The Land of Fire and Competition (I)",

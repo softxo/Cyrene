@@ -80,23 +80,23 @@ function initialiseAccountManagement() {
     };
     const openModal = (account) => {
         selectedAccount = account;
-        details.textContent = `${account.nickname || "Unnamed account"} · UID ${account.uid}`;
+        details.textContent = `${account.nickname || "Unnamed account"} | UID ${account.uid}`;
         nicknameInput.value = account.cyrene_nickname || "";
         status.textContent = "";
-        status.classList.remove("error");
+        status.classList.remove("error", "success");
         deleteButton.disabled = false;
         modal.hidden = false;
         document.body.classList.add("settings-modal-open");
         nicknameInput.focus();
     };
-    list.addEventListener("cyrene:account-profiles", event => {
+    list.addEventListener("cyrene:account-profiles", (event) => {
         for (const account of list.accountProfiles || []) {
-            const fresh = event.detail?.find(item => item.uid === account.uid);
+            const fresh = event.detail?.find((item) => item.uid === account.uid);
             if (fresh)
                 Object.assign(account, fresh);
         }
         if (selectedAccount && !modal.hidden) {
-            details.textContent = `${selectedAccount.nickname || "Unnamed account"} ? UID ${selectedAccount.uid}`;
+            details.textContent = `${selectedAccount.nickname || "Unnamed account"} | UID ${selectedAccount.uid}`;
         }
     });
     const renderAccounts = (accounts) => {
@@ -129,8 +129,8 @@ function initialiseAccountManagement() {
                 badge.className = "linked-discord-profile";
                 const avatar = document.createElement("img");
                 avatar.alt = "";
-                avatar.width = 22;
-                avatar.height = 22;
+                avatar.width = 36;
+                avatar.height = 36;
                 const fallback = "/static/images/ui/ui_icons/Discord.png";
                 const avatarUrl = typeof profile.avatar_url === "string" ? profile.avatar_url : "";
                 avatar.src =
@@ -143,25 +143,43 @@ function initialiseAccountManagement() {
                 const displayName = document.createElement("span");
                 displayName.className = "linked-discord-name";
                 displayName.textContent = profile.display_name || "Discord account";
-                badge.append(avatar, displayName);
+                const copy = document.createElement("span");
+                copy.className = "linked-discord-copy";
+                const title = document.createElement("span");
+                title.className = "linked-discord-title";
+                const tier = document.createElement("span");
+                const accountType = ["premium", "special"].includes(profile.account_type)
+                    ? profile.account_type
+                    : "normal";
+                tier.className = "discord-account-type";
+                const tierLabel = document.createElement(accountType === "normal" ? "span" : "b");
+                if (accountType !== "normal")
+                    tierLabel.className = `discord-account-${accountType}`;
+                tierLabel.textContent = accountType[0].toUpperCase() + accountType.slice(1);
+                tier.append(tierLabel);
+                title.append(displayName, tier);
+                copy.append(title);
+                badge.append(avatar, copy);
                 if (profile.username) {
                     const username = document.createElement("span");
                     username.className = "linked-discord-username";
-                    username.textContent = `(@${profile.username})`;
-                    badge.append(username);
+                    username.textContent = `@${profile.username}`;
+                    copy.append(username);
                 }
                 access.append(badge);
             }
-            heading.append(access);
             const meta = document.createElement("span");
             meta.dataset.accountProfileMeta = account.uid;
-            meta.textContent = `UID ${account.uid} · AR ${account.level || "Unknown"}`;
+            meta.textContent = `UID ${account.uid} | AR ${account.level || "Unknown"}`;
             const manage = document.createElement("button");
             manage.type = "button";
             manage.className = "cyrene-button linked-account-manage";
             manage.textContent = "Manage";
             manage.addEventListener("click", () => openModal(account));
-            info.append(heading, meta);
+            const identity = document.createElement("div");
+            identity.className = "linked-account-identity";
+            identity.append(heading, meta);
+            info.append(identity, access);
             row.append(info, manage);
             list.appendChild(row);
         });
@@ -186,7 +204,9 @@ function initialiseAccountManagement() {
         button.addEventListener("click", closeModal);
     });
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !modal.hidden) {
+        if (event.key === "Escape" &&
+            !modal.hidden &&
+            !document.querySelector(".settings-delete-dialog[open]")) {
             closeModal();
         }
     });
@@ -195,7 +215,7 @@ function initialiseAccountManagement() {
         if (!selectedAccount) {
             return;
         }
-        status.classList.remove("error");
+        status.classList.remove("error", "success");
         status.textContent = "Saving…";
         try {
             const data = await request(`/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`, {
@@ -204,6 +224,8 @@ function initialiseAccountManagement() {
                 body: JSON.stringify({ nickname: nicknameInput.value }),
             });
             selectedAccount.cyrene_nickname = data.nickname;
+            document.dispatchEvent(new Event("cyrene:account-renamed"));
+            status.classList.add("success");
             status.textContent = "Nickname saved.";
             await loadAccounts();
         }
@@ -212,25 +234,62 @@ function initialiseAccountManagement() {
             status.textContent = error.message;
         }
     });
-    deleteButton.addEventListener("click", async () => {
-        if (!selectedAccount ||
-            !window.confirm("Remove this HoYoLAB account from Cyrene and Discord?")) {
-            return;
+    const confirmation = document.querySelector(".settings-delete-dialog");
+    const confirmButton = confirmation.querySelector("[data-delete-confirm]");
+    const cancelButton = confirmation.querySelector("[data-delete-cancel]");
+    const cancelRemoval = () => {
+        if (!confirmButton.disabled)
+            confirmation.close();
+    };
+    cancelButton.addEventListener("click", cancelRemoval);
+    confirmation.addEventListener("cancel", (event) => {
+        if (confirmButton.disabled)
+            event.preventDefault();
+    });
+    confirmation.addEventListener("click", (event) => {
+        if (event.target === confirmation) {
+            const bounds = confirmation.getBoundingClientRect();
+            if (event.clientX < bounds.left ||
+                event.clientX > bounds.right ||
+                event.clientY < bounds.top ||
+                event.clientY > bounds.bottom)
+                cancelRemoval();
         }
+    });
+    deleteButton.addEventListener("click", () => {
+        if (!selectedAccount)
+            return;
+        confirmation.querySelector("[data-delete-description]").textContent =
+            `Remove ${selectedAccount.cyrene_nickname || selectedAccount.nickname || "this account"} (UID ${selectedAccount.uid}) from Cyrene and Discord? Saved game progress will be kept.`;
+        confirmation.showModal();
+    });
+    confirmButton.addEventListener("click", async () => {
+        if (!selectedAccount || confirmButton.disabled)
+            return;
+        confirmButton.disabled = true;
+        cancelButton.disabled = true;
+        confirmButton.textContent = "Removing...";
         deleteButton.disabled = true;
-        status.classList.remove("error");
+        status.classList.remove("error", "success");
         status.textContent = "Removing account…";
         try {
             await request(`/api/hoyolab/accounts/${encodeURIComponent(selectedAccount.uid)}`, {
                 method: "DELETE",
             });
+            confirmation.close();
             closeModal();
             await loadAccounts();
         }
         catch (error) {
+            confirmation.close();
             deleteButton.disabled = false;
             status.classList.add("error");
             status.textContent = error.message;
+        }
+        finally {
+            confirmButton.disabled = false;
+            cancelButton.disabled = false;
+            confirmButton.textContent = "Remove account";
         }
     });
     void loadAccounts();
@@ -270,7 +329,9 @@ function initialiseAccountLinking() {
         button.addEventListener("click", closeModal);
     });
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !modal.hidden) {
+        if (event.key === "Escape" &&
+            !modal.hidden &&
+            !document.querySelector(".settings-delete-dialog[open]")) {
             closeModal();
         }
     });
@@ -346,7 +407,7 @@ function initialiseAccountLinking() {
             const name = document.createElement("strong");
             name.textContent = account.nickname || "Unnamed account";
             const details = document.createElement("span");
-            details.textContent = `UID ${account.game_uid} · AR ${account.level}`;
+            details.textContent = `UID ${account.game_uid} | AR ${account.level}`;
             button.append(name, details);
             button.addEventListener("click", async () => {
                 button.disabled = true;
@@ -362,11 +423,95 @@ function initialiseAccountLinking() {
         });
         result.appendChild(choices);
     };
+    const showEmailCode = (token, submissionUrl) => {
+        form.hidden = true;
+        result.replaceChildren();
+        const description = document.createElement("p");
+        description.className = "account-link-message";
+        description.textContent = "Enter the six-digit code HoYoLAB sent to your email.";
+        const codeForm = document.createElement("form");
+        codeForm.className = "account-link-form account-link-code-form";
+        const label = document.createElement("label");
+        const labelText = document.createElement("span");
+        labelText.textContent = "Verification code";
+        const input = document.createElement("input");
+        input.className = "cyrene-input";
+        input.name = "code";
+        input.type = "text";
+        input.inputMode = "numeric";
+        input.autocomplete = "one-time-code";
+        input.maxLength = 6;
+        input.pattern = "[0-9]{6}";
+        input.required = true;
+        input.setAttribute("aria-describedby", "account-link-code-status");
+        label.append(labelText, input);
+        const verify = document.createElement("button");
+        verify.type = "submit";
+        verify.className = "cyrene-button";
+        verify.textContent = "Verify code";
+        const status = document.createElement("p");
+        status.id = "account-link-code-status";
+        status.className = "account-link-message account-link-code-status";
+        status.setAttribute("role", "status");
+        codeForm.append(label, verify);
+        result.append(description, codeForm, status);
+        let checking = false;
+        const check = async () => {
+            if (checking || !/^[0-9]{6}$/.test(input.value))
+                return;
+            checking = true;
+            verify.disabled = true;
+            input.readOnly = true;
+            input.removeAttribute("aria-invalid");
+            status.classList.remove("error", "success");
+            status.textContent = "Checking verification code…";
+            try {
+                await request(submissionUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code: input.value }),
+                });
+                result.replaceChildren();
+                await poll(token);
+            }
+            catch (error) {
+                status.textContent = error.message;
+                status.classList.add("error");
+                input.readOnly = false;
+                input.setAttribute("aria-invalid", "true");
+                input.focus();
+                input.select();
+                verify.disabled = false;
+            }
+            finally {
+                checking = false;
+            }
+        };
+        input.addEventListener("input", () => {
+            input.value = input.value.replace(/[^0-9]/g, "").slice(0, 6);
+            input.removeAttribute("aria-invalid");
+            if (input.value.length === 6)
+                void check();
+        });
+        codeForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            void check();
+        });
+        input.focus();
+    };
     const poll = async (token) => {
         try {
             const data = await request(`/api/hoyolab/link/status?token=${encodeURIComponent(token)}`);
             if (data.status === "error") {
                 showError(data.error);
+                return;
+            }
+            if (data.status === "complete") {
+                window.location.reload();
+                return;
+            }
+            if (data.status === "email") {
+                showEmailCode(token, data.submission_url);
                 return;
             }
             if (data.status === "select") {
@@ -385,14 +530,14 @@ function initialiseAccountLinking() {
             if (data.status === "captcha") {
                 message.classList.add("warning");
                 message.textContent =
-                    "HoYoLAB needs a CAPTCHA before continuing. Complete it in the new page, then return here.";
+                    "Complete the CAPTCHA in the temporary tab. It will close automatically; continue here afterwards.";
                 result.appendChild(message);
                 const link = document.createElement("a");
                 link.className = "cyrene-button account-link-action";
                 link.href = data.challenge_url;
                 link.target = "_blank";
                 link.rel = "noopener";
-                link.textContent = "Complete CAPTCHA";
+                link.textContent = "Complete verification";
                 result.appendChild(link);
             }
             else {
@@ -427,6 +572,15 @@ function initialiseAccountLinking() {
             showError(error.message);
         }
     });
+    const resumeUrl = new URL(window.location.href);
+    const resumeToken = resumeUrl.searchParams.get("link_attempt");
+    if (resumeToken) {
+        resumeUrl.searchParams.delete("link_attempt");
+        window.history.replaceState(null, "", resumeUrl);
+        openModal();
+        form.hidden = true;
+        void poll(resumeToken);
+    }
 }
 /* =========================================================
    HOVER EFFECTS SETTING

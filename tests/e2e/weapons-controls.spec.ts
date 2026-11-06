@@ -65,7 +65,7 @@ test.beforeEach(async ({ page }) => {
     await page.route("**/api/weapons/manual?*", (route) =>
         route.fulfill({ json: { weapons: [] } }),
     );
-    await page.route("**/weapons", (route) =>
+    await page.route(/^https?:\/\/[^/]+\/weapons(?:\?.*)?$/, (route) =>
         route.fulfill({ contentType: "text/html", body: html }),
     );
     await page.route("**/characters", (route) =>
@@ -1382,4 +1382,89 @@ test("7.2 weapon appears in Catalogue with Mitya's signature tag and respects pr
         await page.locator("[data-weapons-search]").fill("Starsealed");
         await expect(page.locator(".weapon-card:visible")).toHaveCount(0);
     }
+});
+
+test("automatically applies R3 to R5 to inventory and saved plans", async ({ page }) => {
+    await page.clock.install();
+    let refinement = 3;
+    const weapon = () => ({
+        id: 1,
+        name: "Live blade",
+        type: "Sword",
+        rarity: 5,
+        icon: "https://assets.test/icon.svg",
+        level: 80,
+        refinement,
+        equipped: "Ayaka",
+    });
+    await page.route("**/api/weapons?*", (route) =>
+        route.fulfill({ json: { owned: [weapon()], catalogue: [weapon()] } }),
+    );
+    await page.route("**/api/weapons/plans?*", (route) =>
+        route.fulfill({
+            json: {
+                plans: [
+                    {
+                        key: "live",
+                        weapon: weapon(),
+                        source: "imported",
+                        equippedCharacter: "Ayaka",
+                        currentLevel: 80,
+                        targetLevel: 90,
+                        currentRefinement: 3,
+                        targetRefinement: 5,
+                        ascension: 5,
+                    },
+                ],
+            },
+        }),
+    );
+    await page.route("**/api/weapons/scanned?*", (route) =>
+        route.fulfill({
+            json: { weapons: [{ ...weapon(), scan_copy_id: "scan:1", refinement: 3 }] },
+        }),
+    );
+    await page.reload();
+    await expect(page.locator(".weapon-card")).toHaveCount(1);
+    await expect(page.locator(".weapon-plan-card")).toContainText("R3");
+    refinement = 5;
+    await page.clock.runFor(120_001);
+    await expect(page.locator(".weapon-card")).toContainText("R5");
+    await expect(page.locator(".weapon-plan-card")).toContainText("R5");
+    await expect(page.locator(".weapon-plan-card")).not.toContainText("R3");
+    await page.route("**/api/weapons?*", (route) => route.fulfill({ status: 502, json: {} }));
+    await page.clock.runFor(120_001);
+    await expect(page.locator(".weapon-card")).toContainText("R5");
+});
+
+for (const tab of ["catalogue", "planner"]) {
+    test(`keeps ${tab} selected on reload and account submission`, async ({ page }) => {
+        await page.locator(`[data-weapons-tab="${tab}"]`).click();
+        await expect(page).toHaveURL(new RegExp(`tab=${tab}`));
+        await page.reload();
+        await expect(page.locator(`[data-weapons-tab="${tab}"]`)).toHaveAttribute(
+            "aria-selected",
+            "true",
+        );
+        await expect(page.locator("[data-weapons-tab-input]")).toHaveValue(tab);
+        const formData = await page
+            .locator(".characters-account-form")
+            .evaluate((form) => Object.fromEntries(new FormData(form as HTMLFormElement)));
+        expect(formData.tab).toBe(tab);
+    });
+}
+
+test("weapon plans keep loading feedback until the saved plans arrive", async ({ page }) => {
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => (release = resolve));
+    await page.route("**/api/weapons/plans?*", async (route) => {
+        await pending;
+        return route.fulfill({ json: { plans: [] } });
+    });
+    await page.reload();
+    await page.locator('[data-weapons-tab="planner"]').click();
+    await expect(page.locator("[data-wp-status]")).toContainText("Loading your plans");
+    await expect(page.locator("[data-wp-empty]")).toBeHidden();
+    release();
+    await expect(page.locator("[data-wp-empty]")).toBeVisible();
 });

@@ -1,9 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80382
-            ],
+            "id": [80382],
             "name": "Land of Fertility: Runaway Saurians",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -22,9 +20,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80383
-            ],
+            "id": [80383],
             "name": "Rendezvous With Ruin",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -43,9 +39,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80384
-            ],
+            "id": [80384],
             "name": "Sacred Mountain Guide",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -64,9 +58,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80385
-            ],
+            "id": [80385],
             "name": "Sanctuary Pilgrim: Plain of Fertile Ash",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -85,9 +77,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80386
-            ],
+            "id": [80386],
             "name": "Offerings to the Night: Plain of Fertile Ash",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -106,11 +96,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80387,
-                80388,
-                80389
-            ],
+            "id": [80387, 80388, 80389],
             "name": "Votre Toast, Je Peux Vous Le Rendre",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -118,7 +104,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Votre Toast, Je Peux Vous Le Rendre",
-                "description": "Follow 3 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "description": "Follow {param0} Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
                 "progress": 3,
                 "reward": {
                     "id": 201,
@@ -128,7 +114,7 @@
             },
             "stage2": {
                 "title": "Votre Toast, Je Peux Vous Le Rendre",
-                "description": "Follow 6 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "description": "Follow {param0} Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
                 "progress": 6,
                 "reward": {
                     "id": 201,
@@ -138,7 +124,7 @@
             },
             "stage3": {
                 "title": "Votre Toast, Je Peux Vous Le Rendre",
-                "description": "Follow 9 Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
+                "description": "Follow {param0} Matador Monetoo and complete the graffiti in Ancient Sacred Mountain and Atocpan.",
                 "progress": 9,
                 "reward": {
                     "id": 201,
@@ -149,11 +135,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80390,
-                80391,
-                80392
-            ],
+            "id": [80390, 80391, 80392],
             "name": "Fertile Ash Treasure Hunter",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -161,7 +143,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Fertile Ash Treasure Hunter",
-                "description": "Open 40 chests in Ancient Sacred Mountain and Atocpan.",
+                "description": "Open {param0} chests in Ancient Sacred Mountain and Atocpan.",
                 "progress": 40,
                 "reward": {
                     "id": 201,
@@ -171,7 +153,7 @@
             },
             "stage2": {
                 "title": "Fertile Ash Treasure Hunter",
-                "description": "Open 80 chests in Ancient Sacred Mountain and Atocpan.",
+                "description": "Open {param0} chests in Ancient Sacred Mountain and Atocpan.",
                 "progress": 80,
                 "reward": {
                     "id": 201,
@@ -181,7 +163,7 @@
             },
             "stage3": {
                 "title": "Fertile Ash Treasure Hunter",
-                "description": "Open 160 chests in Ancient Sacred Mountain and Atocpan.",
+                "description": "Open {param0} chests in Ancient Sacred Mountain and Atocpan.",
                 "progress": 160,
                 "reward": {
                     "id": 201,
@@ -192,11 +174,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80393,
-                80394,
-                80395
-            ],
+            "id": [80393, 80394, 80395],
             "name": "Fertile Ash Adventurer",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",
@@ -204,7 +182,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Fertile Ash Adventurer",
-                "description": "Complete 3 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
                 "progress": 3,
                 "reward": {
                     "id": 201,
@@ -214,7 +192,7 @@
             },
             "stage2": {
                 "title": "Fertile Ash Adventurer",
-                "description": "Complete 6 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
                 "progress": 6,
                 "reward": {
                     "id": 201,
@@ -224,7 +202,7 @@
             },
             "stage3": {
                 "title": "Fertile Ash Adventurer",
-                "description": "Complete 9 Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges in Ancient Sacred Mountain and Atocpan.",
                 "progress": 9,
                 "reward": {
                     "id": 201,
@@ -235,9 +213,7 @@
             "version": "5.5"
         },
         {
-            "id": [
-                80396
-            ],
+            "id": [80396],
             "name": "Flowers for Someone",
             "achievementGroupId": 60,
             "achievementGroupName": "Sacred Mountain's Fading Glow",

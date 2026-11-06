@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Cyrene · Weapons{% endblock %}
 {% block content %}
+{% set weapons_tab = request.query_params.get('tab', 'owned') %}
+{% if weapons_tab not in ['owned', 'catalogue', 'planner'] %}{% set weapons_tab = 'owned' %}{% endif %}
 <div class="page characters-page weapons-page" data-weapons-page data-account-profile-weapon="{{ selected_account.genshin_uid if selected_account else '' }}" data-account-nickname="{{ selected_account.get('nickname', '') if selected_account else '' }}" data-account-id="{{ selected_account.id if selected_account else '' }}">
     <header class="characters-header">
         <div class="characters-page-heading"><span class="eyebrow">ARMOURY</span><h1>Weapons</h1><p>Your weapon inventory and the complete weapon catalogue.</p></div>
@@ -11,20 +13,21 @@
     <div class="characters-navigation-row">
         <div class="characters-navigation-primary">
             <div class="characters-page-tabs" role="tablist" aria-label="Weapon collection">
-                <button class="characters-page-tab active" type="button" role="tab" id="weapons-owned-tab" aria-controls="weapons-results" aria-selected="true" data-weapons-tab="owned">Owned</button>
-                <button class="characters-page-tab" type="button" role="tab" id="weapons-catalogue-tab" aria-controls="weapons-results" aria-selected="false" tabindex="-1" data-weapons-tab="catalogue">Catalogue</button>
-                <button class="characters-page-tab" type="button" role="tab" id="weapons-planner-tab" aria-controls="weapons-planner" aria-selected="false" tabindex="-1" data-weapons-tab="planner">Planner</button>
+                <button class="characters-page-tab{% if weapons_tab == 'owned' %} active{% endif %}" type="button" role="tab" id="weapons-owned-tab" aria-controls="weapons-results" aria-selected="{{ 'true' if weapons_tab == 'owned' else 'false' }}" tabindex="{{ '0' if weapons_tab == 'owned' else '-1' }}" data-weapons-tab="owned">Owned</button>
+                <button class="characters-page-tab{% if weapons_tab == 'catalogue' %} active{% endif %}" type="button" role="tab" id="weapons-catalogue-tab" aria-controls="weapons-results" aria-selected="{{ 'true' if weapons_tab == 'catalogue' else 'false' }}" tabindex="{{ '0' if weapons_tab == 'catalogue' else '-1' }}" data-weapons-tab="catalogue">Catalogue</button>
+                <button class="characters-page-tab{% if weapons_tab == 'planner' %} active{% endif %}" type="button" role="tab" id="weapons-planner-tab" aria-controls="weapons-planner" aria-selected="{{ 'true' if weapons_tab == 'planner' else 'false' }}" tabindex="{{ '0' if weapons_tab == 'planner' else '-1' }}" data-weapons-tab="planner">Planner</button>
             </div>
         </div>
         <div class="weapons-account-actions">
         <form action="/weapons" method="get" class="characters-account-form">
+            <input type="hidden" name="tab" value="{{ weapons_tab }}" data-weapons-tab-input>
             <label id="weapons-account-label">Account</label>
             <div class="custom-select characters-account-select" data-weapons-select>
                 <button class="custom-select-button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="weapons-account-label weapons-account-value">
-                    <span class="custom-select-value" id="weapons-account-value"><span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.get('nickname') or 'Genshin' }}</span> &middot; {{ selected_account.genshin_uid }}</span><span class="custom-select-arrow"></span>
+                    <span class="custom-select-value" id="weapons-account-value"><span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="display">{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span> &middot; {{ selected_account.genshin_uid }}</span><span class="custom-select-arrow"></span>
                 </button>
                 <div class="custom-select-menu" role="listbox" aria-labelledby="weapons-account-label">
-                    {% for account in accounts %}<button type="button" class="custom-select-option{% if selected_account.id == account.id %} selected{% endif %}" role="option" aria-selected="{{ 'true' if selected_account.id == account.id else 'false' }}" data-value="{{ account.id }}"><span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.get('nickname') or 'Genshin' }}</span> &middot; {{ account.genshin_uid }}</button>{% endfor %}
+                    {% for account in accounts %}<button type="button" class="custom-select-option{% if selected_account.id == account.id %} selected{% endif %}" role="option" aria-selected="{{ 'true' if selected_account.id == account.id else 'false' }}" data-value="{{ account.id }}"><span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span> &middot; {{ account.genshin_uid }}</button>{% endfor %}
                 </div>
                 <input type="hidden" name="account_id" value="{{ selected_account.id }}" data-weapons-account>
             </div>
@@ -34,7 +37,7 @@
         <input type="file" accept=".json,application/json" hidden data-weapons-import-file>
         </div>
     </div>
-    <div class="characters-toolbar weapons-toolbar">
+    <div class="characters-toolbar weapons-toolbar"{% if weapons_tab == "planner" %} hidden{% endif %}>
         <div class="characters-search"><label for="weapons-search">Search weapons</label><input id="weapons-search" type="search" placeholder="Search by name..." data-weapons-search class="cyrene-input"></div>
         <div class="characters-filter weapons-tag-filter">
             <label id="weapons-tag-label">Tags</label>
@@ -70,7 +73,7 @@
         </div>
         <button class="cyrene-button characters-reset-filters" type="button" data-weapons-retry>Refresh</button>
     </div>
-    <div class="weapons-summary-row">
+    <div class="weapons-summary-row"{% if weapons_tab == "planner" %} hidden{% endif %}>
         <span class="characters-summary" data-weapons-count>Loading weapons...</span>
         <div class="weapons-help event-insight" data-popover-placement="top">
             <button type="button" class="weapons-help-trigger" aria-label="About weapon data" aria-describedby="weapons-data-help" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="12" r=".85" fill="currentColor"/></svg></button>
@@ -79,7 +82,7 @@
             </div>
         </div>
     </div>
-    <section id="weapons-results" role="tabpanel" aria-labelledby="weapons-owned-tab">
+    <section id="weapons-results" role="tabpanel" aria-labelledby="weapons-{{ weapons_tab if weapons_tab != 'planner' else 'owned' }}-tab"{% if weapons_tab == "planner" %} hidden{% endif %}>
         <p data-weapons-status role="status">Loading weapons from HoYoLAB…</p>
         <p class="weapons-note" data-weapons-manual-status role="status"></p>
         <div class="weapons-grid" data-weapons-grid></div>

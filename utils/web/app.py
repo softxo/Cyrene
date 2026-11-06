@@ -29,6 +29,7 @@ from fastapi.responses import (
 )
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from genshin import errors as genshin_errors
 from genshin.models.auth.geetest import (
     SessionMMTResult,
     SessionMMTv4,
@@ -38,7 +39,8 @@ from genshin.models.genshin.constants import CHARACTER_NAMES
 from jinja2.utils import htmlsafe_json_dumps
 from psycopg.errors import UniqueViolation
 
-from utils.achievements.achievements import load_achievements
+from utils.achievements.achievements import load_current_achievements
+from utils.achievements.category_icons import load_category_icons
 from utils.achievements.importer import import_achievements
 from utils.achievements.progress import load_progress
 from utils.genshin_db import GenshinDB, GenshinDBError
@@ -135,6 +137,7 @@ from utils.web.limited_event_checks import (
 from utils.web.planner_costs import PlannerValidationError, calculate_planner_costs
 from utils.web.quest_reward_details import enrich_quest_rewards
 from utils.web.sessions import (
+    EmailChallenge,
     complete_challenge,
     get_challenge_session,
 )
@@ -346,7 +349,9 @@ def _account_link_error(error: Exception) -> str:
     if isinstance(error, HoYoLABAccountMutedError):
         return "This HoYoLAB account is currently restricted."
     if isinstance(error, HoYoLABVerificationError):
-        return "HoYoLAB verification could not be completed. Please try again."
+        return (
+            error.public_message or "HoYoLAB verification could not be completed. Please try again."
+        )
     if isinstance(error, HoYoLABCaptchaError):
         return "The CAPTCHA could not be completed. Please try again."
     if isinstance(error, HoYoLABRateLimitError):
@@ -362,8 +367,17 @@ async def _run_web_account_login(
     attempt = _account_link_attempts[token]
 
     async def notify(challenge_url: str) -> None:
-        attempt["status"] = "captcha"
+        challenge_session = get_challenge_session(challenge_url.rsplit("/", 1)[-1])
+        attempt["status"] = (
+            "email"
+            if challenge_session and isinstance(challenge_session.mmt, EmailChallenge)
+            else "captcha"
+        )
         attempt["challenge_url"] = challenge_url
+
+    async def challenge_complete() -> None:
+        attempt["status"] = "authenticating"
+        attempt["challenge_url"] = None
 
     try:
         client, credentials = await login_with_password(
@@ -371,6 +385,8 @@ async def _run_web_account_login(
             password,
             user_id=attempt["user_id"],
             notify=notify,
+            link_token=token,
+            on_challenge_complete=challenge_complete,
         )
 
         accounts = await get_genshin_accounts(client)
@@ -523,12 +539,17 @@ async def hoyolab_link_status(
 
     if attempt["status"] == "captcha":
         response["challenge_url"] = attempt["challenge_url"]
+    elif attempt["status"] == "email":
+        challenge_token = attempt["challenge_url"].rsplit("/", 1)[-1]
+        response["submission_url"] = f"/challenge/{challenge_token}/send-data"
     elif attempt["status"] == "select":
         response["accounts"] = attempt["accounts"]
     elif attempt["status"] == "error":
         response["error"] = attempt["error"]
+    elif attempt["status"] == "complete":
+        response["result"] = attempt["result"]
 
-    return response
+    return JSONResponse(response, headers={"Cache-Control": "no-store"})
 
 
 @app.post("/api/hoyolab/link/complete")
@@ -538,8 +559,19 @@ async def complete_hoyolab_link(
 ):
     user_id = await get_authenticated_user(cyrene_session)
     token = str(data.get("token") or "")
-    selected_uid = str(data.get("uid") or "")
     attempt = _get_account_link_attempt(token, user_id)
+    async with attempt.setdefault("completion_lock", asyncio.Lock()):
+        if attempt["status"] == "complete":
+            if str(data.get("uid") or "") != attempt["result"]["account"]["game_uid"]:
+                raise HTTPException(
+                    status_code=409, detail="This login has already linked an account."
+                )
+            return attempt["result"]
+        return await _save_hoyolab_link(data, user_id, attempt)
+
+
+async def _save_hoyolab_link(data: dict, user_id: int, attempt: dict):
+    selected_uid = str(data.get("uid") or "")
 
     if attempt["status"] != "select":
         raise HTTPException(
@@ -581,13 +613,15 @@ async def complete_hoyolab_link(
         level=account["level"],
     )
 
-    _account_link_attempts.pop(token, None)
-
-    return {
+    result = {
         "success": True,
         "account": account,
         "reconnected": existing_account is not None,
     }
+    attempt["status"] = "complete"
+    attempt["result"] = result
+    attempt["credentials"] = None
+    return result
 
 
 @app.get("/planner", include_in_schema=False)
@@ -5016,7 +5050,7 @@ async def achievements_data(
 
     account = await _get_achievement_account(user_id, account_id)
 
-    source_achievements = load_achievements()
+    source_achievements = await load_current_achievements(wait_for_refresh=False)
     saved_progress = await load_progress(
         user_id,
         account_id,
@@ -5130,6 +5164,10 @@ async def achievements_data(
         categories[category]["total"] += len(tiers)
 
         categories[category]["completed"] += sum(1 for tier in tiers if tier["completed"])
+
+    category_icons = await load_category_icons(list(categories), wait_for_refresh=False)
+    for category, icon_url in category_icons.items():
+        categories[category]["icon_url"] = icon_url
 
     return {
         "achievements": achievements,
@@ -5251,6 +5289,7 @@ async def import_achievements_api(
         temp_path = temp_file.name
 
     try:
+        await load_current_achievements()
         result = await import_achievements(
             user_id=user_id,
             account_id=account_id,
@@ -5277,7 +5316,7 @@ async def import_achievements_api(
     "/challenge/{token}",
     response_class=HTMLResponse,
 )
-async def challenge(token: str):
+async def challenge(token: str, request: Request):
     session = get_challenge_session(token)
 
     if session is None:
@@ -5320,6 +5359,17 @@ async def challenge(token: str):
             status_code=410,
         )
 
+    if isinstance(session.mmt, EmailChallenge):
+        return templates.TemplateResponse(
+            request=request,
+            name="hoyolab_email_challenge.html",
+            context={
+                "submission_url": f"/challenge/{session.token}/send-data",
+                "link_token": session.link_token or "",
+            },
+            headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"},
+        )
+
     mmt = session.mmt
     mmt_json = htmlsafe_json_dumps(mmt.model_dump(mode="json"))
     submission_url_json = htmlsafe_json_dumps(f"/challenge/{session.token}/send-data")
@@ -5334,6 +5384,8 @@ async def challenge(token: str):
 
     if is_v4:
         gt_url = "https://static.geetest.com/v4/gt4.js"
+        session_field = "session_id" if session.app_login else "mmt_key"
+        api_server = "gcaptcha4.captchami.com" if session.app_login else "api-na.geetest.com"
 
         captcha_script = f"""
         const mmt = {mmt_json};
@@ -5343,10 +5395,10 @@ async def challenge(token: str):
             riskType: mmt.risk_type,
             userInfo: mmt.session_id
                 ? JSON.stringify({{
-                    mmt_key: mmt.session_id
+                    {session_field}: mmt.session_id
                 }})
                 : undefined,
-            apiServers: ["api-na.geetest.com"],
+            apiServers: ["{api_server}"],
             product: "bind",
             language: "en"
         }};
@@ -5396,10 +5448,8 @@ async def challenge(token: str):
                     );
 
                     if (!response.ok) {{
-                        console.error(
-                            "Failed to submit CAPTCHA:",
-                            await response.text()
-                        );
+                        const data = await response.json().catch(() => ({{}}));
+                        showCaptchaError(data.detail || "The CAPTCHA could not be verified.");
                         return;
                     }}
 
@@ -5474,10 +5524,8 @@ async def challenge(token: str):
                     );
 
                     if (!response.ok) {{
-                        console.error(
-                            "Failed to submit CAPTCHA:",
-                            await response.text()
-                        );
+                        const data = await response.json().catch(() => ({{}}));
+                        showCaptchaError(data.detail || "The CAPTCHA could not be verified.");
                         return;
                     }}
 
@@ -5512,6 +5560,20 @@ async def challenge(token: str):
 
             <title>Cyrene • HoYoLAB Verification</title>
 
+            <script>
+                function applyTheme() {{
+                    try {{
+                        document.documentElement.dataset.theme = localStorage.getItem("theme") || "blue";
+                    }} catch {{
+                        document.documentElement.dataset.theme = "blue";
+                    }}
+                }}
+                applyTheme();
+                window.addEventListener("storage", event => {{
+                    if (event.key === "theme" || event.key === null) applyTheme();
+                }});
+            </script>
+            <link rel="stylesheet" href="/static/build/css/global.css?v=56">
             <script src="{gt_url}"></script>
 
             <style>
@@ -5523,17 +5585,15 @@ async def challenge(token: str):
                     align-items: center;
                     justify-content: center;
 
-                    background-color: #0f1117;
-                    color: #ffffff;
-
-                    font-family: Arial, sans-serif;
+                    background-color: var(--background);
+                    color: var(--text);
                 }}
 
                 .container {{
                     width: min(90%, 500px);
                     padding: 40px;
 
-                    background-color: #181b24;
+                    background-color: var(--surface);
                     border-radius: 16px;
 
                     text-align: center;
@@ -5545,7 +5605,7 @@ async def challenge(token: str):
                 }}
 
                 p {{
-                    color: #b8bdc9;
+                    color: var(--text-muted);
                     line-height: 1.6;
                 }}
 
@@ -5553,7 +5613,7 @@ async def challenge(token: str):
                     margin-top: 24px;
                 }}
 
-                .success-screen {{ min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#0f1117; text-align:center; animation:success-in 300ms ease-out both; }}
+                .success-screen {{ min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; animation:success-in 300ms ease-out both; }}
                 .success-icon {{ position:relative; width:112px; height:112px; color:#59d58b; }}
                 .success-corner {{ position:absolute; width:31px; height:31px; border-color:currentColor; border-style:solid; opacity:0; animation:frame-in 420ms cubic-bezier(.2,.8,.2,1) forwards; }}
                 .success-corner.tl {{ top:0; left:0; border-width:4px 0 0 4px; border-radius:14px 0 0; }}
@@ -5592,6 +5652,16 @@ async def challenge(token: str):
             </div>
 
             <script>
+
+                function showCaptchaError(message) {{
+                    const container = document.querySelector(".container");
+                    if (!container) return;
+                    container.querySelector("h1").textContent = "Login could not continue";
+                    const paragraphs = container.querySelectorAll("p");
+                    paragraphs[0].textContent = message;
+                    paragraphs[0].setAttribute("role", "alert");
+                    paragraphs[1].textContent = "Return to Accounts to review this login attempt.";
+                }}
 
                 function showSuccess() {{
                     document.body.innerHTML = `
@@ -5661,6 +5731,36 @@ async def challenge_send_data(
             detail="This challenge has already been completed.",
         )
 
+    if isinstance(session.mmt, EmailChallenge):
+        code = data.get("code")
+        if not isinstance(code, str) or re.fullmatch(r"[0-9]{6}", code) is None:
+            raise HTTPException(status_code=400, detail="Enter the six-digit email code.")
+        if session.submitting:
+            raise HTTPException(status_code=409, detail="A code is already being checked.")
+        if session.mmt.verify is None:
+            raise HTTPException(status_code=410, detail="Start login again to request a new code.")
+        session.submitting = True
+        try:
+            await session.mmt.verify(code)
+        except genshin_errors.WrongOTP as error:
+            raise HTTPException(
+                status_code=400, detail="That email code is incorrect. Check it and try again."
+            ) from error
+        except genshin_errors.TooManyRequests as error:
+            raise HTTPException(
+                status_code=429,
+                detail="HoYoLAB is rate-limiting verification. Please wait before trying again.",
+            ) from error
+        except Exception as error:
+            raise HTTPException(
+                status_code=400,
+                detail="HoYoLAB could not verify this code. Check it or start login again.",
+            ) from error
+        finally:
+            session.submitting = False
+        complete_challenge(token, code)
+        return {"success": True}
+
     try:
         if isinstance(session.mmt, SessionMMTv4):
             result = SessionMMTv4Result(**data)
@@ -5671,7 +5771,6 @@ async def challenge_send_data(
         print("===== CAPTCHA RESULT ERROR =====")
         print(f"Type: {type(error).__name__}")
         print(f"Error: {error}")
-        print(f"Data: {data}")
         print("================================")
 
         raise HTTPException(
@@ -5679,10 +5778,24 @@ async def challenge_send_data(
             detail="Invalid CAPTCHA result.",
         ) from error
 
-    complete_challenge(
-        token,
-        result,
-    )
+    if session.validate is not None:
+        if session.submitting:
+            raise HTTPException(status_code=409, detail="This CAPTCHA is already being checked.")
+        session.submitting = True
+        try:
+            result = await session.validate(result)
+        except Exception as error:
+            complete_challenge(token, error)
+            detail = (
+                error.public_message
+                if isinstance(error, HoYoLABVerificationError)
+                else "HoYoLAB could not validate this CAPTCHA. Cyrene has stopped this login attempt."
+            )
+            raise HTTPException(status_code=400, detail=detail) from error
+        finally:
+            session.submitting = False
+
+    complete_challenge(token, result)
 
     return {
         "success": True,

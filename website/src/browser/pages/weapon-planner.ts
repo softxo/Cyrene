@@ -404,7 +404,33 @@ interface Window {
                 }
             });
         }
+        function synchroniseProgression(plan: Plan) {
+            if (plan.source === "manual" || plan.source === "unowned") return;
+            const candidates = owned.filter(
+                (weapon) => weapon.id === plan.weapon.id && !weapon.copy_id && !weapon.scan_copy_id,
+            );
+            const live =
+                candidates.find((weapon) => weapon.equipped === plan.equippedCharacter) ||
+                (owned.filter((weapon) => weapon.id === plan.weapon.id).length === 1
+                    ? candidates[0]
+                    : undefined);
+            if (!live) return;
+            plan.source = "hoyolab";
+            plan.weapon = { ...live };
+            plan.currentLevel = live.level || plan.currentLevel;
+            plan.currentRefinement = live.refinement || plan.currentRefinement;
+            plan.targetLevel = Math.max(plan.currentLevel, plan.targetLevel);
+            plan.targetRefinement = Math.max(plan.currentRefinement, plan.targetRefinement);
+            plan.equippedCharacter = live.equipped || "";
+            plan.ascension = live.ascension ?? plan.ascension;
+        }
         function renderPlans() {
+            if (!ready) {
+                find("[data-wp-empty]").hidden = true;
+                find("[data-wp-plans]").hidden = true;
+                return;
+            }
+            plans.forEach(synchroniseProgression);
             clearDrag();
             const grid = find("[data-wp-plans]");
             grid.replaceChildren();
@@ -478,7 +504,8 @@ interface Window {
         async function hydrate() {
             ready = false;
             add.disabled = true;
-            status.textContent = "Loading weapon plans...";
+            status.classList.add("planner-loading");
+            status.textContent = "Loading your plans\u2026";
             status.hidden = false;
             find("[data-wp-retry]").hidden = true;
             try {
@@ -487,9 +514,11 @@ interface Window {
                 plans = result.plans;
                 ready = true;
                 add.disabled = false;
+                status.classList.remove("planner-loading");
                 renderPlans();
             } catch (error) {
                 if (signal.aborted) return;
+                status.classList.remove("planner-loading");
                 status.textContent = `Couldn't load saved weapon plans. ${failed(error)}`;
                 find("[data-wp-retry]").hidden = false;
             }
@@ -710,6 +739,7 @@ interface Window {
                     .detail;
                 catalogue = detail.catalogue;
                 owned = detail.owned;
+                if (ready) renderPlans();
                 if (picker.open) renderPicker();
             },
             { signal },
@@ -774,6 +804,7 @@ interface Window {
         }
         function openEditor(plan: Plan, _existing: boolean) {
             if (busy) return;
+            synchroniseProgression(plan);
             draft = structuredClone(plan);
             const live = owned.find(
                 (weapon) =>

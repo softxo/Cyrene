@@ -65,7 +65,7 @@
                 >
                     <span class="custom-select-value">
                         {% if selected_account %}
-                            <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.get("nickname") or selected_account.get("genshin_uid") }}</span>
+                            <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="display">{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span>
                             · {{ selected_account.genshin_uid }}
                         {% else %}
                             Select an account
@@ -84,7 +84,7 @@
                         data-value="{{ account.id }}"
                         aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
                     >
-                        <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.get("nickname") or account.get("genshin_uid") }}</span>
+                        <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span>
                         · {{ account.genshin_uid }}
                     </button>
                     {% endfor %}
@@ -548,7 +548,8 @@
             </button>
         </header>
 
-        <div class="planner-empty-state" data-planner-empty>
+        <p class="planner-loading" data-planner-loading role="status">Loading your plans&#8230;</p>
+        <div class="planner-empty-state" data-planner-empty hidden>
             <div class="planner-empty-icon" aria-hidden="true"><span class="cyrene-sparkle"></span></div>
             <h3>No characters planned yet</h3>
             <p>

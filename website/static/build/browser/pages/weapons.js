@@ -20,7 +20,8 @@
         const rarity = page.querySelector("[data-weapons-rarity]");
         const tagFilter = page.querySelector("[data-weapons-tag]");
         const refresh = page.querySelector("[data-weapons-retry]");
-        let tab = "owned";
+        const requestedTab = new URLSearchParams(window.location.search).get("tab");
+        let tab = requestedTab === "catalogue" || requestedTab === "planner" ? requestedTab : "owned";
         window.initWeaponPlanner?.(page, lifecycle.signal);
         let data = null;
         let manual = [];
@@ -666,7 +667,7 @@
             renderedTab = tab;
             renderedSource = source;
         }
-        async function load(notifyResult = false) {
+        async function load(notifyResult = false, background = false) {
             if (loading)
                 return;
             loading = true;
@@ -674,21 +675,29 @@
             refresh.disabled = true;
             resetButton.disabled = true;
             importButton.disabled = true;
-            render();
+            if (!background)
+                render();
             try {
                 const [synced, saved, scan] = await Promise.allSettled([
-                    fetch(`/api/weapons?${accountQuery}`, { signal: lifecycle.signal }).then(async (response) => {
+                    fetch(`/api/weapons?${accountQuery}`, {
+                        signal: lifecycle.signal,
+                        headers: background ? { "X-Cyrene-Background": "1" } : {},
+                    }).then(async (response) => {
                         if (!response.ok)
                             throw new Error();
                         return (await response.json());
                     }),
-                    fetch(`/api/weapons/manual?${accountQuery}`, { signal: lifecycle.signal }).then(async (response) => {
+                    fetch(`/api/weapons/manual?${accountQuery}`, {
+                        signal: lifecycle.signal,
+                        headers: background ? { "X-Cyrene-Background": "1" } : {},
+                    }).then(async (response) => {
                         if (!response.ok)
                             throw new Error();
                         return (await response.json());
                     }),
                     fetch(`/api/weapons/scanned?${accountQuery}`, {
                         signal: lifecycle.signal,
+                        headers: background ? { "X-Cyrene-Background": "1" } : {},
                     }).then(async (response) => {
                         if (!response.ok)
                             throw new Error();
@@ -700,10 +709,20 @@
                 cardCaches.owned.clear();
                 cardCaches.catalogue.clear();
                 renderedTab = "";
-                if (synced.status === "fulfilled")
-                    data = synced.value;
+                if (synced.status === "fulfilled") {
+                    const next = synced.value;
+                    data =
+                        background && data
+                            ? {
+                                ...next,
+                                owned: next.owned_error ? data.owned : next.owned,
+                                catalogue: next.catalogue_error ? data.catalogue : next.catalogue,
+                            }
+                            : next;
+                }
                 else {
-                    data = null;
+                    if (!background)
+                        data = null;
                     error = "Couldn't sync weapons from HoYoLAB.";
                 }
                 if (saved.status === "fulfilled") {
@@ -794,6 +813,15 @@
         for (const button of tabs) {
             button.addEventListener("click", () => {
                 tab = button.dataset.weaponsTab;
+                const url = new URL(window.location.href);
+                if (tab === "owned")
+                    url.searchParams.delete("tab");
+                else
+                    url.searchParams.set("tab", tab);
+                history.replaceState(history.state, "", url);
+                const tabInput = page.querySelector("[data-weapons-tab-input]");
+                if (tabInput)
+                    tabInput.value = tab;
                 for (const item of tabs) {
                     item.setAttribute("aria-selected", String(item === button));
                     item.classList.toggle("active", item === button);
@@ -818,6 +846,7 @@
                 next.click();
             });
         }
+        tabs.find((button) => button.dataset.weaponsTab === tab)?.click();
         for (const select of page.querySelectorAll("[data-weapons-select]")) {
             const trigger = select.querySelector(".custom-select-button");
             const options = [...select.querySelectorAll("[role=option]")];
@@ -905,6 +934,23 @@
         type.addEventListener("change", render);
         rarity.addEventListener("change", render);
         refresh.addEventListener("click", () => void load(true));
+        let lastRefresh = Date.now();
+        const autoRefresh = () => {
+            if (document.hidden ||
+                !page.isConnected ||
+                loading ||
+                page.querySelector("dialog[open]") ||
+                Date.now() - lastRefresh < 120_000)
+                return;
+            lastRefresh = Date.now();
+            void load(false, true);
+        };
+        const refreshTimer = window.setInterval(autoRefresh, 120_000);
+        document.addEventListener("visibilitychange", autoRefresh, { signal: lifecycle.signal });
+        window.addEventListener("focus", autoRefresh, { signal: lifecycle.signal });
+        lifecycle.signal.addEventListener("abort", () => window.clearInterval(refreshTimer), {
+            once: true,
+        });
         void load();
     };
 })();

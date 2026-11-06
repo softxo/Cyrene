@@ -42,21 +42,21 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=54"
+        href="/static/build/css/global.css?v=56"
     >
 
     {% set page_styles = {
-        '/weapons': '/static/build/css/weapons.css?v=37',
+        '/weapons': '/static/build/css/weapons.css?v=39',
         '/': '/static/build/css/home.css?v=41',
-        '/achievements': '/static/build/css/achievements.css?v=8',
+        '/achievements': '/static/build/css/achievements.css?v=15',
         '/wishes': '/static/build/css/wishes.css?v=15',
-        '/characters': '/static/build/css/characters.css?v=65',
+        '/characters': '/static/build/css/characters.css?v=67',
         '/inventory': '/static/build/css/inventory.css?v=9',
         '/reminders': '/static/build/css/planner.css?v=24',
-        '/verify': '/static/build/css/verification.css?v=15',
+        '/verify': '/static/build/css/verification.css?v=19',
         '/codes': '/static/build/css/codes.css?v=7',
         '/events': '/static/build/css/events.css?v=68',
-        '/settings': '/static/build/css/settings.css?v=10'
+        '/settings': '/static/build/css/settings.css?v=13'
     } %}
 
     {% set page_path = '/events' if request.url.path == '/events/refresh' else request.url.path %}
@@ -243,7 +243,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=5.00"></script>
+    <script type="module" src="/static/build/js/app.js?v=5.28"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

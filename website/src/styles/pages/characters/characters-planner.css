@@ -2422,3 +2422,50 @@ label.planner-level-value > span {
     display: block;
     margin: 0;
 }
+
+.planner-empty-state[hidden],
+.planner-character-grid[hidden],
+[data-planner-loading][hidden] {
+    display: none;
+}
+
+/* Shared, quiet loading treatment for both planners. */
+.planner-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 120px;
+    margin: 0;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.planner-loading::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: planner-loading-spin 900ms linear infinite;
+}
+
+.planner-loading[hidden] {
+    display: none;
+}
+
+@keyframes planner-loading-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .planner-loading::before {
+        animation: none;
+    }
+}

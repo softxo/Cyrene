@@ -1,9 +1,9 @@
-<section id="weapons-planner" role="tabpanel" aria-labelledby="weapons-planner-tab" hidden>
+<section id="weapons-planner" role="tabpanel" aria-labelledby="weapons-planner-tab"{% if weapons_tab|default("owned") != "planner" %} hidden{% endif %}>
     <header class="planner-header">
         <div><h2>Planner</h2><p>Plan your next weapon build and track the resources you'll need.</p></div>
         <button type="button" class="cyrene-button planner-add-button" data-wp-add disabled><span class="cyrene-plus" aria-hidden="true"></span>Add Weapon</button>
     </header>
-    <p class="weapons-note" data-wp-status role="status">Loading weapon plans...</p>
+    <p class="planner-loading" data-wp-status role="status">Loading your plans&#8230;</p>
     <button type="button" class="cyrene-button" data-wp-retry hidden>Retry loading plans</button>
     <div class="planner-empty-state" data-wp-empty hidden>
         <div class="planner-empty-icon" aria-hidden="true"><span class="cyrene-sparkle"></span></div>

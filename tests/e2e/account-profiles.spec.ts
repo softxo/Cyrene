@@ -50,15 +50,15 @@ for (const width of [390, 1485]) {
         );
         await expect(page.locator(".custom-select-button span")).toHaveText("New <name> ? 123");
         await expect(page.locator("[data-account-profile-rank]")).toHaveText("56");
-        await expect(page.locator("[data-account-profile-meta]")).toHaveText("UID 123 ? AR 56");
+        await expect(page.locator("[data-account-profile-meta]")).toHaveText("UID 123 | AR 56");
         await expect(page.locator("h2")).toHaveText("My alias");
         await expect(page.locator("[data-account-profile-label]")).toHaveAttribute(
             "data-label",
-            "New <name> ? 123",
+            "My alias ? 123",
         );
         await expect(page.locator("[data-account-profile-aria]")).toHaveAttribute(
             "aria-label",
-            "Mark complete for New <name>",
+            "Mark complete for My alias",
         );
         await expect(page.locator("#draft")).toHaveValue("Keep this draft");
         expect(await page.locator("name").count()).toBe(0);
@@ -72,3 +72,37 @@ for (const width of [390, 1485]) {
         await expect(page.locator("#navigated-name")).toHaveText(nickname);
     });
 }
+
+test("Cyrene aliases update dropdowns immediately while game names refresh separately", async ({
+    page,
+}) => {
+    let alias: string | null = "Melody";
+    let nickname = "melody";
+    await page.route("http://profiles.test/api/hoyolab/accounts", (route) =>
+        route.fulfill({
+            json: { accounts: [{ uid: "123", nickname, cyrene_nickname: alias, level: 60 }] },
+        }),
+    );
+    await page.route("http://profiles.test/", (route) =>
+        route.fulfill({
+            contentType: "text/html",
+            body: `<div class="custom-select"><button class="custom-select-button"><span><span data-account-profile-name="123" data-account-profile-field="display">melody</span> ? 123</span></button><button class="custom-select-option selected"><span data-account-profile-name="123" data-account-profile-field="display">melody</span></button></div><div id="overview" data-account-profile-name="123" data-account-profile-field="display">melody</div><div id="game" data-account-profile-name="123" data-account-profile-field="nickname">melody</div>`,
+        }),
+    );
+    await page.goto("http://profiles.test/");
+    const source = readFileSync(
+        "website/static/build/browser/core/account-profiles.js",
+        "utf8",
+    ).replaceAll("export function", "function");
+    await page.addScriptTag({ content: source + "\ninitialiseAccountProfiles();" });
+    await expect(page.locator("#overview")).toHaveText("Melody");
+    nickname = "Mellow";
+    await page.evaluate(() => document.dispatchEvent(new Event("cyrene:account-renamed")));
+    await expect(page.locator("#game")).toHaveText("Mellow");
+    await expect(page.locator(".custom-select-option span")).toHaveText("Melody");
+    await expect(page.locator("#overview")).toHaveText("Melody");
+    alias = null;
+    await page.evaluate(() => document.dispatchEvent(new Event("cyrene:account-renamed")));
+    await expect(page.locator("#overview")).toHaveText("Mellow");
+    await expect(page.locator(".custom-select-button")).toHaveText("Mellow ? 123");
+});

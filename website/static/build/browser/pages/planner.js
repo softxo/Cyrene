@@ -92,7 +92,8 @@ function renderPlanner(plannerData) {
             accounts.appendChild(card);
         }
         if (window.plannerAccounts.length === 0) {
-            accounts.innerHTML = '<div class="planner-empty">Account data is currently unavailable.</div>';
+            accounts.innerHTML =
+                '<div class="planner-empty">Account data is currently unavailable.</div>';
         }
     }
     renderExpeditionAccounts(window.plannerAccounts);
@@ -112,7 +113,8 @@ function getTransformerReminderState(account) {
         return { label: "Not obtained", finished: false };
     const timestamp = Number(state.ready_at);
     return timestamp > Math.floor(Date.now() / 1000)
-        ? { timestamp, finished: false } : { label: "Ready", finished: true };
+        ? { timestamp, finished: false }
+        : { label: "Ready", finished: true };
 }
 function renderTransformerAccounts(accounts) {
     const grid = document.getElementById("transformer-accounts");
@@ -217,13 +219,13 @@ function getSafeExpeditionIconUrl(expedition, field = "character_icon") {
     try {
         const iconUrl = new URL(source, window.location.origin);
         const hostname = iconUrl.hostname.toLowerCase().replace(/\.$/, "");
-        const approvedHost = ["mihoyo.com", "hoyoverse.com", "hoyolab.com", "enka.network"]
-            .some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
+        const approvedHost = ["mihoyo.com", "hoyoverse.com", "hoyolab.com", "enka.network"].some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
         const filename = iconUrl.pathname.split("/").pop()?.toLowerCase();
         const isDailyNoteIcon = filename === `${iconHash}.png`;
         const isEnkaPortrait = hostname === "enka.network" &&
             /^\/ui\/[a-z0-9_]+\.png$/i.test(iconUrl.pathname) &&
-            !iconUrl.search && !iconUrl.hash;
+            !iconUrl.search &&
+            !iconUrl.hash;
         if (iconUrl.protocol !== "https:" ||
             !approvedHost ||
             (iconUrl.port && iconUrl.port !== "443") ||
@@ -263,7 +265,8 @@ function renderExpeditionAccounts(accounts) {
     if (grid.dataset.iconFallbackInitialised !== "true") {
         grid.dataset.iconFallbackInitialised = "true";
         grid.addEventListener("error", (event) => {
-            if (event.target instanceof HTMLImageElement && event.target.matches(".planner-expedition-icon")) {
+            if (event.target instanceof HTMLImageElement &&
+                event.target.matches(".planner-expedition-icon")) {
                 const fallback = event.target.dataset.fallbackSrc;
                 if (fallback &&
                     fallback !== event.target.src &&
@@ -279,7 +282,8 @@ function renderExpeditionAccounts(accounts) {
     setAccountGridLayout(grid, accounts.length);
     grid.innerHTML = "";
     if (accounts.length === 0) {
-        grid.innerHTML = '<div class="planner-empty">Expedition data is currently unavailable.</div>';
+        grid.innerHTML =
+            '<div class="planner-empty">Expedition data is currently unavailable.</div>';
         return;
     }
     for (const account of accounts) {
@@ -289,11 +293,17 @@ function renderExpeditionAccounts(accounts) {
         card.className = "planner-card planner-expedition-card";
         card.dataset.genshinUid = account.genshin_uid;
         const rows = expeditions.length
-            ? expeditions.map((expedition) => {
+            ? expeditions
+                .map((expedition) => {
                 const characterName = String(expedition.character_name || "Unknown").replaceAll("_", " ");
                 const name = escapePlannerHtml(characterName);
-                const initials = escapePlannerHtml(characterName.split(/\s+/).filter(Boolean).slice(0, 2)
-                    .map((part) => part[0]).join("").toUpperCase() || "?");
+                const initials = escapePlannerHtml(characterName
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map((part) => part[0])
+                    .join("")
+                    .toUpperCase() || "?");
                 const iconUrl = getSafeExpeditionIconUrl(expedition);
                 const fallbackIconUrl = getSafeExpeditionIconUrl(expedition, "character_icon_fallback");
                 const mark = `<span class="planner-expedition-mark" aria-hidden="true"><span class="planner-expedition-initials">${initials}</span>${iconUrl ? `<img class="planner-expedition-icon" src="${escapePlannerHtml(iconUrl)}" data-fallback-src="${escapePlannerHtml(fallbackIconUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ""}</span>`;
@@ -308,7 +318,8 @@ function renderExpeditionAccounts(accounts) {
                     return `<div class="planner-expedition-item">${mark}<strong class="planner-expedition-name">${name}</strong><strong class="planner-expedition-time" data-expedition-timestamp="${timestamp}">${formatExpeditionDuration(remaining)}</strong></div>`;
                 }
                 return `<div class="planner-expedition-item">${mark}<strong class="planner-expedition-name">${name}</strong><strong class="planner-expedition-time${finished ? " is-finished" : ""}">${finished ? "Finished" : status}</strong></div>`;
-            }).join("")
+            })
+                .join("")
             : '<div class="planner-expedition-empty">No Expedition data available.</div>';
         const accountName = escapePlannerHtml(getPlannerAccountName(account));
         const uid = escapePlannerHtml(account.genshin_uid);
@@ -326,7 +337,13 @@ function renderExpeditionAccounts(accounts) {
     }
 }
 function renderPlannerReminders(type) {
-    const container = document.getElementById(type === "transformer" ? "transformer-reminders" : type === "teapot" ? "teapot-reminders" : type === "expedition" ? "expedition-reminders" : "reminders");
+    const container = document.getElementById(type === "transformer"
+        ? "transformer-reminders"
+        : type === "teapot"
+            ? "teapot-reminders"
+            : type === "expedition"
+                ? "expedition-reminders"
+                : "reminders");
     if (!container)
         return;
     const reminders = (window.plannerReminders || []).filter((reminder) => reminder.type === type);
@@ -338,16 +355,26 @@ function renderPlannerReminders(type) {
     for (const reminder of reminders) {
         const account = (window.plannerAccounts || []).find((item) => item.genshin_uid === reminder.genshin_uid);
         const capacity = type === "teapot" ? Number(account?.teapot?.maximum) || 0 : 200;
-        const amount = type === "teapot" ? Math.min(Number(reminder.config?.amount ?? capacity), capacity) : reminder.config?.amount;
+        const amount = type === "teapot"
+            ? Math.min(Number(reminder.config?.amount ?? capacity), capacity)
+            : reminder.config?.amount;
         const mode = reminder.mode === "manual" ? "manual" : "automatic";
         const resin = type === "resin" || type === "teapot";
         const currencyLabel = type === "teapot" ? "Realm Currency" : "Resin";
         const currencyIcon = type === "teapot" ? "Realm_Currency.png" : "Original_Resin.webp";
         const custom = type === "custom";
-        const displayType = type === "transformer" ? "Parametric Transformer" : type === "teapot" ? "Serenitea Pot" : type.charAt(0).toUpperCase() + type.slice(1);
+        const displayType = type === "transformer"
+            ? "Parametric Transformer"
+            : type === "teapot"
+                ? "Serenitea Pot"
+                : type.charAt(0).toUpperCase() + type.slice(1);
         const accountName = escapePlannerHtml(account ? getPlannerAccountName(account) : reminder.account_nickname || "Account");
         const safeReminderId = escapePlannerHtml(reminder.id);
-        const state = type === "transformer" ? getTransformerReminderState(account) : type === "teapot" ? getTeapotReminderState(account) : getExpeditionReminderState(account);
+        const state = type === "transformer"
+            ? getTransformerReminderState(account)
+            : type === "teapot"
+                ? getTeapotReminderState(account)
+                : getExpeditionReminderState(account);
         const card = document.createElement("div");
         card.className = "reminder-card";
         card.dataset.reminderId = String(reminder.id);
@@ -497,7 +524,8 @@ async function refreshResin() {
         window.plannerReminders = plannerData.reminders || [];
         for (const type of ["resin", "expedition", "teapot", "transformer"]) {
             const list = document.getElementById(type === "resin" ? "reminders" : `${type}-reminders`);
-            if (list?.contains(document.activeElement) || list?.querySelector('[data-saving="true"]'))
+            if (list?.contains(document.activeElement) ||
+                list?.querySelector('[data-saving="true"]'))
                 continue;
             renderPlannerReminders(type);
         }
@@ -614,7 +642,8 @@ function describeReminderLifetime(type, mode, account, amount) {
         timestamp = Number(account.teapot.full_at);
     }
     const expected = timestamp > Date.now() / 1000
-        ? ` Expected ${new Date(timestamp * 1000).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}.` : "";
+        ? ` Expected ${new Date(timestamp * 1000).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}.`
+        : "";
     return `Manual: stays active until ${condition}, then sends once and is removed from your active reminders after successful delivery. No fixed expiry.${expected}`;
 }
 function updateReminderModeHelp() {
@@ -622,7 +651,7 @@ function updateReminderModeHelp() {
     if (!help)
         return;
     const uid = document.getElementById("reminder-account")?.value;
-    const account = (window.plannerAccounts || []).find(item => item.genshin_uid === uid);
+    const account = (window.plannerAccounts || []).find((item) => item.genshin_uid === uid);
     help.textContent = describeReminderLifetime(document.getElementById("reminder-type")?.value, document.getElementById("reminder-create-mode")?.value, account, Number(document.getElementById("reminder-amount")?.value));
 }
 function openReminderPanel() {
@@ -643,7 +672,13 @@ function openReminderPanel() {
     const expeditionTab = window.plannerActiveTab === "expeditions";
     const teapotTab = window.plannerActiveTab === "teapot";
     const transformerTab = window.plannerActiveTab === "transformer";
-    const targetSection = document.getElementById(transformerTab ? "transformer-reminder-section" : teapotTab ? "teapot-reminder-section" : expeditionTab ? "expedition-reminder-section" : "resin-reminder-section");
+    const targetSection = document.getElementById(transformerTab
+        ? "transformer-reminder-section"
+        : teapotTab
+            ? "teapot-reminder-section"
+            : expeditionTab
+                ? "expedition-reminder-section"
+                : "resin-reminder-section");
     const targetList = targetSection?.querySelector(".reminders-list");
     if (targetSection && targetList) {
         targetSection.insertBefore(panel, targetList);
@@ -651,10 +686,22 @@ function openReminderPanel() {
     const typeSelect = document.getElementById("reminder-type-select");
     const typeInput = document.getElementById("reminder-type");
     const typeValue = typeSelect?.querySelector(".custom-select-button span");
-    const selectedType = transformerTab ? "transformer" : teapotTab ? "teapot" : expeditionTab ? "expedition" : "resin";
+    const selectedType = transformerTab
+        ? "transformer"
+        : teapotTab
+            ? "teapot"
+            : expeditionTab
+                ? "expedition"
+                : "resin";
     if (typeInput && typeSelect && typeValue) {
         typeInput.value = selectedType;
-        typeValue.textContent = transformerTab ? "Parametric Transformer" : teapotTab ? "Serenitea Pot" : expeditionTab ? "Expedition" : "Resin";
+        typeValue.textContent = transformerTab
+            ? "Parametric Transformer"
+            : teapotTab
+                ? "Serenitea Pot"
+                : expeditionTab
+                    ? "Expedition"
+                    : "Resin";
         typeSelect.querySelectorAll(".custom-select-option").forEach((option) => {
             option.classList.toggle("selected", option.dataset.value === selectedType);
         });
@@ -678,9 +725,10 @@ function openReminderPanel() {
         option.dataset.value = account.genshin_uid;
         option.dataset.accountProfileOption = account.genshin_uid;
         const accountName = getPlannerAccountName(account);
-        option.textContent = accountName !== account.genshin_uid
-            ? `${accountName} (${account.genshin_uid})`
-            : account.genshin_uid;
+        option.textContent =
+            accountName !== account.genshin_uid
+                ? `${accountName} (${account.genshin_uid})`
+                : account.genshin_uid;
         option.addEventListener("click", () => {
             accountInput.value = account.genshin_uid;
             updateReminderTypeConfiguration(document.getElementById("reminder-type")?.value);
@@ -709,7 +757,9 @@ function openReminderPanel() {
     const modeSelect = document.getElementById("reminder-create-mode-select");
     if (modeSelect) {
         modeSelect.querySelector(".custom-select-button span").textContent = "Automatic";
-        modeSelect.querySelectorAll(".custom-select-option").forEach(option => option.classList.toggle("selected", option.dataset.value === "automatic"));
+        modeSelect
+            .querySelectorAll(".custom-select-option")
+            .forEach((option) => option.classList.toggle("selected", option.dataset.value === "automatic"));
     }
     updateReminderModeHelp();
     panel.hidden = false;
@@ -724,31 +774,40 @@ function updateReminderTypeConfiguration(type) {
         resinConfiguration.hidden = !hasAmount;
         const input = resinConfiguration.querySelector("input");
         if (input) {
-            const account = (window.plannerAccounts || []).find(item => item.genshin_uid === document.getElementById("reminder-account")?.value);
+            const account = (window.plannerAccounts || []).find((item) => item.genshin_uid === document.getElementById("reminder-account")?.value);
             const maximum = teapot ? Number(account?.teapot?.maximum) || 0 : 200;
             input.max = String(maximum);
             input.disabled = !maximum;
-            if (input.dataset.currency !== type || Number(input.value) > maximum || Number(input.value) < 1) {
+            if (input.dataset.currency !== type ||
+                Number(input.value) > maximum ||
+                Number(input.value) < 1) {
                 input.value = String(teapot ? maximum : 160);
             }
             input.dataset.currency = type;
-            resinConfiguration.querySelectorAll(".number-spinner-button").forEach(button => button.disabled = !maximum);
+            resinConfiguration
+                .querySelectorAll(".number-spinner-button")
+                .forEach((button) => (button.disabled = !maximum));
         }
         const image = resinConfiguration.querySelector("img");
         if (image) {
-            image.src = teapot ? "/static/images/misc/Realm_Currency.png" : "/static/images/misc/Original_Resin.webp";
+            image.src = teapot
+                ? "/static/images/misc/Realm_Currency.png"
+                : "/static/images/misc/Original_Resin.webp";
             image.alt = label;
         }
         const currencyLabel = document.getElementById("reminder-currency-label");
         if (currencyLabel)
             currencyLabel.textContent = label;
-        resinConfiguration.querySelectorAll(".number-spinner-button").forEach(button => {
+        resinConfiguration.querySelectorAll(".number-spinner-button").forEach((button) => {
             button.setAttribute("aria-label", `${button.dataset.direction === "up" ? "Increase" : "Decrease"} ${label}`);
         });
     }
     if (expeditionNote) {
         expeditionNote.hidden = !["expedition", "transformer"].includes(type);
-        expeditionNote.textContent = type === "transformer" ? "Notify when your Parametric Transformer is ready. Automatic reminders repeat after use; manual reminders notify once." : "Notify when an Expedition finishes. Automatic reminders track future Expeditions; manual reminders notify once.";
+        expeditionNote.textContent =
+            type === "transformer"
+                ? "Notify when your Parametric Transformer is ready. Automatic reminders repeat after use; manual reminders notify once."
+                : "Notify when an Expedition finishes. Automatic reminders track future Expeditions; manual reminders notify once.";
     }
     updateReminderModeHelp();
 }
@@ -783,8 +842,12 @@ function initialiseReminderPanel() {
     if (addButton) {
         addButton.addEventListener("click", openReminderPanel);
     }
-    document.getElementById("add-transformer-reminder-button")?.addEventListener("click", openReminderPanel);
-    document.getElementById("add-teapot-reminder-button")?.addEventListener("click", openReminderPanel);
+    document
+        .getElementById("add-transformer-reminder-button")
+        ?.addEventListener("click", openReminderPanel);
+    document
+        .getElementById("add-teapot-reminder-button")
+        ?.addEventListener("click", openReminderPanel);
     if (expeditionAddButton) {
         expeditionAddButton.addEventListener("click", openReminderPanel);
     }
@@ -819,7 +882,9 @@ function initialiseReminderPanel() {
             document.querySelectorAll(".custom-select.open").forEach((otherSelect) => {
                 if (otherSelect !== select) {
                     otherSelect.classList.remove("open");
-                    otherSelect.querySelector(".custom-select-button")?.setAttribute("aria-expanded", "false");
+                    otherSelect
+                        .querySelector(".custom-select-button")
+                        ?.setAttribute("aria-expanded", "false");
                 }
             });
             select.classList.toggle("open");
@@ -880,7 +945,9 @@ function initialiseReminderPanel() {
                 document.querySelectorAll(".reminder-mode-select.open").forEach((otherSelect) => {
                     if (otherSelect !== select) {
                         otherSelect.classList.remove("open");
-                        otherSelect.querySelector(".custom-select-button")?.setAttribute("aria-expanded", "false");
+                        otherSelect
+                            .querySelector(".custom-select-button")
+                            ?.setAttribute("aria-expanded", "false");
                     }
                 });
                 select?.classList.toggle("open");
@@ -894,7 +961,9 @@ function initialiseReminderPanel() {
                 const modeInput = card?.querySelector("[data-reminder-mode]");
                 const nextMode = modeOption.dataset.value;
                 select?.classList.remove("open");
-                select?.querySelector(".custom-select-button")?.setAttribute("aria-expanded", "false");
+                select
+                    ?.querySelector(".custom-select-button")
+                    ?.setAttribute("aria-expanded", "false");
                 if (!card || !modeInput || !["automatic", "manual"].includes(nextMode)) {
                     return;
                 }
@@ -973,9 +1042,7 @@ function initialiseNumberSpinners(root) {
             const min = input.min === "" ? -Infinity : Number(input.min);
             const max = input.max === "" ? Infinity : Number(input.max);
             const step = Number(input.step) || 1;
-            const current = input.value === ""
-                ? (Number.isFinite(min) ? min : 0)
-                : Number(input.value);
+            const current = input.value === "" ? (Number.isFinite(min) ? min : 0) : Number(input.value);
             const next = button.dataset.direction === "up"
                 ? Math.min(current + step, max)
                 : Math.max(current - step, min);
@@ -1034,7 +1101,9 @@ async function updateReminderCard(card) {
         return;
     }
     if (amountInput &&
-        (!Number.isInteger(amount) || amount < Number(amountInput.min) || amount > Number(amountInput.max))) {
+        (!Number.isInteger(amount) ||
+            amount < Number(amountInput.min) ||
+            amount > Number(amountInput.max))) {
         window.showCyreneToast?.(`Enter a whole number between ${amountInput.min} and ${amountInput.max}.`, "warning");
         amountInput.value = card.dataset.reminderAmount;
         if (modeInput) {
@@ -1079,7 +1148,7 @@ async function updateReminderCard(card) {
         if (lifetime)
             lifetime.hidden = card.dataset.reminderMode === "automatic";
         if (lifetime)
-            lifetime.textContent = describeReminderLifetime(card.dataset.reminderType, card.dataset.reminderMode, (window.plannerAccounts || []).find(account => account.genshin_uid === card.dataset.genshinUid), Number(card.dataset.reminderAmount));
+            lifetime.textContent = describeReminderLifetime(card.dataset.reminderType, card.dataset.reminderMode, (window.plannerAccounts || []).find((account) => account.genshin_uid === card.dataset.genshinUid), Number(card.dataset.reminderAmount));
         window.showCyreneToast?.("Reminder updated.");
     }
     catch (error) {
@@ -1121,7 +1190,7 @@ async function saveReminder() {
      * Resin-specific configuration.
      */
     if (type === "resin" || type === "teapot") {
-        const account = (window.plannerAccounts || []).find(item => item.genshin_uid === genshinUid);
+        const account = (window.plannerAccounts || []).find((item) => item.genshin_uid === genshinUid);
         const maximum = type === "teapot" ? Number(account?.teapot?.maximum) || 0 : 200;
         const amount = Number(amountInput?.value);
         if (!Number.isInteger(amount) || amount < 1 || amount > maximum) {

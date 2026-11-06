@@ -236,9 +236,7 @@ for (const width of [390, 1280]) {
             "#ff88aa",
         );
         await dialog.getByLabel("Preset hex colour", { exact: true }).fill("#aa88ff");
-        await expect(dialog.getByLabel("Preset colour picker", { exact: true })).toHaveValue(
-            "#aa88ff",
-        );
+        await expect(dialog.locator("[data-preset-picker]")).toHaveValue("#aa88ff");
         await dialog.getByLabel("Preset hex colour", { exact: true }).fill("#ff88aa");
         await dialog.getByRole("button", { name: "Save preset", exact: true }).click();
         await dialog.getByRole("button", { name: "Use colour #ff88aa", exact: true }).click();
@@ -290,9 +288,7 @@ for (const width of [390, 1280]) {
         await expect(dialog.locator("[name=pill_colour]")).toHaveValue("#e889b5");
         await expect(dialog.getByLabel("Gradient", { exact: true })).toBeChecked();
         await expect(dialog.locator(".changelog-date-time")).toHaveText("22:19");
-        await expect(dialog.getByLabel("Gradient end colour", { exact: true })).toHaveValue(
-            "#44aa66",
-        );
+        await expect(dialog.locator("[data-pill-colour-end]")).toHaveValue("#44aa66");
 
         await expect(textBox.locator("span[data-text-colour]")).toHaveText("Bold");
         await dialog.getByRole("button", { name: "Text colour", exact: true }).click();

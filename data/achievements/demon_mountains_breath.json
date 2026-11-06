@@ -1,9 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80479
-            ],
+            "id": [80479],
             "name": "Colorless Wind on Mysterious Mountain",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -22,9 +20,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80480
-            ],
+            "id": [80480],
             "name": "Aimless Journey to the Abandoned Sanatorium",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -43,9 +39,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80486
-            ],
+            "id": [80486],
             "name": "Tagelieder for Tithonus",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -64,11 +58,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80475,
-                80476,
-                80477
-            ],
+            "id": [80475, 80476, 80477],
             "name": "Treasure Hunter of the Interstice",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -76,7 +66,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Treasure Hunter of the Interstice",
-                "description": "Open 45 chests at Windrest Peak and the Temple of Space.",
+                "description": "Open {param0} chests at Windrest Peak and the Temple of Space.",
                 "progress": 45,
                 "reward": {
                     "id": 201,
@@ -86,7 +76,7 @@
             },
             "stage2": {
                 "title": "Treasure Hunter of the Interstice",
-                "description": "Open 90 chests at Windrest Peak and the Temple of Space.",
+                "description": "Open {param0} chests at Windrest Peak and the Temple of Space.",
                 "progress": 90,
                 "reward": {
                     "id": 201,
@@ -96,7 +86,7 @@
             },
             "stage3": {
                 "title": "Treasure Hunter of the Interstice",
-                "description": "Open 180 chests at Windrest Peak and the Temple of Space.",
+                "description": "Open {param0} chests at Windrest Peak and the Temple of Space.",
                 "progress": 180,
                 "reward": {
                     "id": 201,
@@ -107,11 +97,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80487,
-                80488,
-                80489
-            ],
+            "id": [80487, 80488, 80489],
             "name": "Adventurer of the Interstice",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -119,7 +105,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Adventurer of the Interstice",
-                "description": "Complete 7 Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
+                "description": "Complete {param0} Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
                 "progress": 7,
                 "reward": {
                     "id": 201,
@@ -129,7 +115,7 @@
             },
             "stage2": {
                 "title": "Adventurer of the Interstice",
-                "description": "Complete 14 Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
+                "description": "Complete {param0} Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
                 "progress": 14,
                 "reward": {
                     "id": 201,
@@ -139,7 +125,7 @@
             },
             "stage3": {
                 "title": "Adventurer of the Interstice",
-                "description": "Complete 28 Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
+                "description": "Complete {param0} Open World Time Trial Challenges at Windrest Peak and the Temple of Space.",
                 "progress": 28,
                 "reward": {
                     "id": 201,
@@ -150,9 +136,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80500
-            ],
+            "id": [80500],
             "name": "Guide of the Interstice",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -171,9 +155,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80485
-            ],
+            "id": [80485],
             "name": "Space and Unfree Will",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -192,9 +174,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80484
-            ],
+            "id": [80484],
             "name": "To a Heart That's True",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -213,9 +193,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80482
-            ],
+            "id": [80482],
             "name": "Three Reunions and a Farewell",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",
@@ -234,9 +212,7 @@
             "version": "6.5"
         },
         {
-            "id": [
-                80481
-            ],
+            "id": [80481],
             "name": "Farewell, Magic Mountain",
             "achievementGroupId": 67,
             "achievementGroupName": "Demon Mountain's Breath",

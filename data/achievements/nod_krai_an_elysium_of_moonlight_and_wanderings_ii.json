@@ -1,11 +1,7 @@
 {
     "achievements": [
         {
-            "id": [
-                80462,
-                80463,
-                80464
-            ],
+            "id": [80462, 80463, 80464],
             "name": "Moondust Treasure Hunter (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -13,7 +9,7 @@
             "stages": 3,
             "stage1": {
                 "title": "Moondust Treasure Hunter (II)",
-                "description": "Open 45 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "description": "Open {param0} chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
                 "progress": 45,
                 "reward": {
                     "id": 201,
@@ -23,7 +19,7 @@
             },
             "stage2": {
                 "title": "Moondust Treasure Hunter (II)",
-                "description": "Open 90 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "description": "Open {param0} chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
                 "progress": 90,
                 "reward": {
                     "id": 201,
@@ -33,7 +29,7 @@
             },
             "stage3": {
                 "title": "Moondust Treasure Hunter (II)",
-                "description": "Open 180 chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "description": "Open {param0} chests in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
                 "progress": 180,
                 "reward": {
                     "id": 201,
@@ -44,9 +40,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80465
-            ],
+            "id": [80465],
             "name": "Moondust Adventurer (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -54,7 +48,7 @@
             "stages": 1,
             "stage1": {
                 "title": "Moondust Adventurer (II)",
-                "description": "Complete 5 Open World mechanism-activated Time Trial Challenges in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
+                "description": "Complete {param0} Open World mechanism-activated Time Trial Challenges in Voidsea Outlook, Wavechaser Plain, and Ashveil Peak.",
                 "progress": 5,
                 "reward": {
                     "id": 201,
@@ -65,9 +59,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80466
-            ],
+            "id": [80466],
             "name": "Continental Explorer: Moonlit Isles (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -86,9 +78,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80467
-            ],
+            "id": [80467],
             "name": "Frosty Groves Beyond the Darkness (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -107,9 +97,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80468
-            ],
+            "id": [80468],
             "name": "Sanctuary Pilgrim: Moonlit Isles (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -128,9 +116,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80469
-            ],
+            "id": [80469],
             "name": "Offerings to the Night: Moonlit Isles (II)",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -149,9 +135,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80470
-            ],
+            "id": [80470],
             "name": "The Winds Awaken, the Leaves Whirl Round",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -170,9 +154,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80471
-            ],
+            "id": [80471],
             "name": "Si le grain ne meurt",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -191,9 +173,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80472
-            ],
+            "id": [80472],
             "name": "Joint Meeting Point Construction: Cliffwatch Camp",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -212,9 +192,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80473
-            ],
+            "id": [80473],
             "name": "Joint Meeting Point Construction: The Witch's Garden",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",
@@ -233,9 +211,7 @@
             "version": "6.3"
         },
         {
-            "id": [
-                80474
-            ],
+            "id": [80474],
             "name": "Joint Meeting Point Construction: Favonius Keep",
             "achievementGroupId": 66,
             "achievementGroupName": "Nod-Krai: An Elysium of Moonlight and Wanderings (II)",

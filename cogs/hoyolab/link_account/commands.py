@@ -24,12 +24,7 @@ from utils.hoyolab.login import login_with_password
 
 
 class GenshinAccountSelect(discord.ui.Select):
-    def __init__(
-            self,
-            accounts,
-            credentials,
-            discord_user_id
-    ):
+    def __init__(self, accounts, credentials, discord_user_id):
         options = []
 
         for account in accounts:
@@ -41,74 +36,47 @@ class GenshinAccountSelect(discord.ui.Select):
             if len(nickname) > 100:
                 nickname = nickname[:97] + "..."
 
-            description = (
-                f"UID: {account['game_uid']} • "
-                f"AR: {account['level']}"
-            )
+            description = f"UID: {account['game_uid']} • AR: {account['level']}"
 
             if len(description) > 100:
                 description = description[:97] + "..."
 
             options.append(
                 discord.SelectOption(
-                    label=nickname,
-                    description=description,
-                    value=str(account["game_uid"])
+                    label=nickname, description=description, value=str(account["game_uid"])
                 )
             )
 
-        super().__init__(
-            placeholder="Select a Genshin Account...",
-            options=options
-        )
+        super().__init__(placeholder="Select a Genshin Account...", options=options)
 
         self.accounts = accounts
         self.credentials = credentials
         self.discord_user_id = discord_user_id
 
-    async def callback(
-            self,
-            interaction: discord.Interaction
-    ):
+    async def callback(self, interaction: discord.Interaction):
         selected_uid = self.values[0]
 
         account = next(
-            (
-                account
-                for account in self.accounts
-                if account["game_uid"] == selected_uid
-            ),
-            None
+            (account for account in self.accounts if account["game_uid"] == selected_uid), None
         )
 
         if account is None:
             embed = build_hoyolab_error_embed(
-                "error",
-                "Account Not Found",
-                "The selected Genshin account could not be found."
+                "error", "Account Not Found", "The selected Genshin account could not be found."
             )
 
-            await interaction.response.send_message(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
             return
-
 
         existing_account = await get_account(
             self.discord_user_id,
             selected_uid,
         )
 
+        account_count = await get_account_count(self.discord_user_id)
 
-        account_count = await get_account_count(
-            self.discord_user_id
-        )
-
-        account_limit = get_account_limit(
-            self.discord_user_id
-        )
+        account_limit = get_account_limit(self.discord_user_id)
 
         if (
             existing_account is None
@@ -120,13 +88,10 @@ class GenshinAccountSelect(discord.ui.Select):
                 "Account Limit Reached",
                 (
                     f"You currently have **{account_count}/{account_limit}** HoYoLAB accounts linked."
-                )
+                ),
             )
 
-            await interaction.response.send_message(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
             return
 
@@ -137,24 +102,16 @@ class GenshinAccountSelect(discord.ui.Select):
                 discord_username=interaction.user.name,
                 discord_display_name=interaction.user.display_name,
                 discord_guild_id=(
-                    existing_account["discord_guild_id"]
-                    if existing_account
-                    else None
+                    existing_account["discord_guild_id"] if existing_account else None
                 ),
                 discord_guild_name=(
-                    existing_account["discord_guild_name"]
-                    if existing_account
-                    else None
+                    existing_account["discord_guild_name"] if existing_account else None
                 ),
                 genshin_uid=account["game_uid"],
                 genshin_server=account["region"],
                 nickname=account["nickname"],
-                cyrene_nickname=(
-                    existing_account["cyrene_nickname"]
-                    if existing_account
-                    else None
-                ),
-                level=account["level"]
+                cyrene_nickname=(existing_account["cyrene_nickname"] if existing_account else None),
+                level=account["level"],
             )
 
         except Exception as error:
@@ -164,15 +121,10 @@ class GenshinAccountSelect(discord.ui.Select):
             print("==============================")
 
             embed = build_hoyolab_error_embed(
-                "error",
-                "Failed to Link Account",
-                "The account could not be saved."
+                "error", "Failed to Link Account", "The account could not be saved."
             )
 
-            await interaction.response.send_message(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
             return
 
@@ -187,61 +139,39 @@ class GenshinAccountSelect(discord.ui.Select):
                 f"**AR:** {account['level']}\n"
                 f"**Server:** {account['region_name'].removesuffix(' Server')}"
             ),
-            colour=ERROR_COLOURS["success"]
+            colour=ERROR_COLOURS["success"],
         )
 
-        await interaction.response.send_message(
-            embed=embed,
-            ephemeral=True
-        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 class GenshinAccountView(discord.ui.View):
-    def __init__(
-        self,
-        accounts,
-        credentials,
-        discord_user_id
-    ):
+    def __init__(self, accounts, credentials, discord_user_id):
         super().__init__(timeout=300)
 
-        self.add_item(
-            GenshinAccountSelect(
-                accounts,
-                credentials,
-                discord_user_id
-            )
-        )
+        self.add_item(GenshinAccountSelect(accounts, credentials, discord_user_id))
 
-async def notify_captcha(
-        interaction: discord.Interaction,
-        challenge_url: str
-):
+
+async def notify_captcha(interaction: discord.Interaction, challenge_url: str):
     embed = discord.Embed(
-        title="<:Warning:1534254848546181212> CAPTCHA Required",
+        title="<:Warning:1534254848546181212> Verification Required",
         description=(
-            "Cyrene encountered a **CAPTCHA** during your HoYoLAB authentication and requires human assistance.\n\n"
-            "Click the button below to open the CAPTCHA page and complete the verification.\n\n"
+            "HoYoLAB requires a **CAPTCHA or email verification** to connect your account.\n\n"
+            "Click the button below to complete the verification.\n\n"
             "Once completed, Cyrene will automatically continue the authentication process."
         ),
-        colour=ERROR_COLOURS["warning"]
+        colour=ERROR_COLOURS["warning"],
     )
 
     view = discord.ui.View()
 
     view.add_item(
         discord.ui.Button(
-            label="Complete CAPTCHA",
-            style=discord.ButtonStyle.link,
-            url=challenge_url
+            label="Complete verification", style=discord.ButtonStyle.link, url=challenge_url
         )
     )
 
-    await interaction.followup.send(
-        embed=embed,
-        view=view,
-        ephemeral=True
-    )
+    await interaction.followup.send(embed=embed, view=view, ephemeral=True)
 
 
 class HoYoLABLoginModal(discord.ui.Modal, title="HoYoLAB Login"):
@@ -249,7 +179,7 @@ class HoYoLABLoginModal(discord.ui.Modal, title="HoYoLAB Login"):
         label="Email / Username",
         placeholder="Enter your HoYoLAB email or username",
         required=True,
-        max_length=100
+        max_length=100,
     )
 
     password = discord.ui.TextInput(
@@ -257,84 +187,66 @@ class HoYoLABLoginModal(discord.ui.Modal, title="HoYoLAB Login"):
         placeholder="Enter your HoYoLAB password",
         required=True,
         max_length=100,
-        style=discord.TextStyle.short
+        style=discord.TextStyle.short,
     )
 
-    async def on_submit(
-            self,
-            interaction: discord.Interaction
-    ):
-        await interaction.response.defer(
-            ephemeral=True
-        )
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
 
         try:
             client, credentials = await login_with_password(
                 self.account.value,
                 self.password.value,
                 user_id=interaction.user.id,
-                notify=lambda challenge_url: notify_captcha(
-                    interaction,
-                    challenge_url
-                )
+                notify=lambda challenge_url: notify_captcha(interaction, challenge_url),
             )
 
         except HoYoLABAccountNotFoundError:
             embed = build_hoyolab_error_embed(
-                "not_found",
-                "HoYoLAB Account Not Found",
-                "The HoYoLAB account could not be found."
+                "not_found", "HoYoLAB Account Not Found", "The HoYoLAB account could not be found."
             )
 
         except HoYoLABAuthenticationError:
             embed = build_hoyolab_error_embed(
                 "invalid_input",
                 "Invalid Credentials",
-                "The HoYoLAB email/username or password is incorrect."
+                "The HoYoLAB email/username or password is incorrect.",
             )
 
         except HoYoLABAccountLockedError:
             embed = build_hoyolab_error_embed(
-                "error",
-                "Account Locked",
-                "This HoYoLAB account is currently locked."
+                "error", "Account Locked", "This HoYoLAB account is currently locked."
             )
 
         except HoYoLABAccountMutedError:
             embed = build_hoyolab_error_embed(
-                "error",
-                "Account Restricted",
-                "This HoYoLAB account is currently restricted."
+                "error", "Account Restricted", "This HoYoLAB account is currently restricted."
             )
 
         except HoYoLABVerificationError:
             embed = build_hoyolab_error_embed(
                 "warning",
                 "Verification Failed",
-                "HoYoLAB verification could not be completed.\n"
-                "Please try again later."
+                "HoYoLAB verification could not be completed.\nPlease try again later.",
             )
 
         except HoYoLABCaptchaError:
             embed = build_hoyolab_error_embed(
                 "warning",
                 "CAPTCHA Required",
-                "HoYoLAB requires CAPTCHA verification before you can continue."
+                "HoYoLAB requires CAPTCHA verification before you can continue.",
             )
 
         except HoYoLABRateLimitError:
             embed = build_hoyolab_error_embed(
                 "warning",
                 "Too Many Requests",
-                "HoYoLAB is temporarily rate-limiting requests.\n"
-                "Please try again later."
+                "HoYoLAB is temporarily rate-limiting requests.\nPlease try again later.",
             )
 
         except HoYoLABError:
             embed = build_hoyolab_error_embed(
-                "error",
-                "HoYoLAB Login Failed",
-                "An unexpected HoYoLAB error occurred."
+                "error", "HoYoLAB Login Failed", "An unexpected HoYoLAB error occurred."
             )
 
         else:
@@ -344,105 +256,66 @@ class HoYoLABLoginModal(discord.ui.Modal, title="HoYoLAB Login"):
                 embed = build_hoyolab_error_embed(
                     "not_found",
                     "No Genshin Accounts Found",
-                    "No Genshin accounts are linked to this HoYoLAB account."
+                    "No Genshin accounts are linked to this HoYoLAB account.",
                 )
 
-                await interaction.followup.send(
-                    embed=embed,
-                    ephemeral=True
-                )
+                await interaction.followup.send(embed=embed, ephemeral=True)
                 return
 
             embed = discord.Embed(
-                title=(
-                    f"{ERROR_EMOJIS['success']} "
-                    "HoYoLAB Login Successful"
-                ),
+                title=(f"{ERROR_EMOJIS['success']} HoYoLAB Login Successful"),
                 description=(
                     "Your HoYoLAB account has been successfully authenticated.\n\n"
                     "**Select the Genshin account you want to link to Cyrene:**"
                 ),
-                colour=ERROR_COLOURS["success"]
+                colour=ERROR_COLOURS["success"],
             )
 
             await interaction.followup.send(
                 embed=embed,
-                view=GenshinAccountView(
-                    accounts,
-                    credentials,
-                    interaction.user.id
-                 ),
-                ephemeral=True
+                view=GenshinAccountView(accounts, credentials, interaction.user.id),
+                ephemeral=True,
             )
 
             return
 
-        await interaction.followup.send(
-            embed=embed,
-            ephemeral=True
-        )
+        await interaction.followup.send(embed=embed, ephemeral=True)
 
 
 class HoYoLABCookieContinueView(discord.ui.View):
-    def __init__(
-        self,
-        ltuid_v2: str,
-        ltoken_v2: str,
-        ltmid_v2: str
-    ):
+    def __init__(self, ltuid_v2: str, ltoken_v2: str, ltmid_v2: str):
         super().__init__(timeout=300)
 
         self.ltuid_v2 = ltuid_v2
         self.ltoken_v2 = ltoken_v2
         self.ltmid_v2 = ltmid_v2
 
-    @discord.ui.button(
-        label="Continue",
-        style=discord.ButtonStyle.primary
-    )
-    async def continue_login(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
+    @discord.ui.button(label="Continue", style=discord.ButtonStyle.primary)
+    async def continue_login(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(
             HoYoLABCookieModalStep2(
-                ltuid_v2=self.ltuid_v2,
-                ltoken_v2=self.ltoken_v2,
-                ltmid_v2=self.ltmid_v2
+                ltuid_v2=self.ltuid_v2, ltoken_v2=self.ltoken_v2, ltmid_v2=self.ltmid_v2
             )
         )
 
 
-class HoYoLABCookieModalStep1(
-    discord.ui.Modal,
-    title="HoYoLAB Cookies • 1/2"
-):
+class HoYoLABCookieModalStep1(discord.ui.Modal, title="HoYoLAB Cookies • 1/2"):
     ltuid_v2 = discord.ui.TextInput(
-        label="ltuid_v2",
-        placeholder="Paste your ltuid_v2 cookie...",
-        required=True,
-        max_length=200
+        label="ltuid_v2", placeholder="Paste your ltuid_v2 cookie...", required=True, max_length=200
     )
 
     ltoken_v2 = discord.ui.TextInput(
         label="ltoken_v2",
         placeholder="Paste your ltoken_v2 cookie...",
         required=True,
-        max_length=500
+        max_length=500,
     )
 
     ltmid_v2 = discord.ui.TextInput(
-        label="ltmid_v2",
-        placeholder="Paste your ltmid_v2 cookie...",
-        required=True,
-        max_length=500
+        label="ltmid_v2", placeholder="Paste your ltmid_v2 cookie...", required=True, max_length=500
     )
 
-    async def on_submit(
-        self,
-        interaction: discord.Interaction
-    ):
+    async def on_submit(self, interaction: discord.Interaction):
         ltuid_v2 = self.ltuid_v2.value.strip()
         ltoken_v2 = self.ltoken_v2.value.strip()
         ltmid_v2 = self.ltmid_v2.value.strip()
@@ -453,72 +326,54 @@ class HoYoLABCookieModalStep1(
                 "The first three cookies have been received.\n\n"
                 "Click **Continue** to enter the remaining three cookies."
             ),
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.blurple(),
         )
 
         await interaction.response.send_message(
             embed=embed,
-            view=HoYoLABCookieContinueView(
-                ltuid_v2,
-                ltoken_v2,
-                ltmid_v2
-            ),
-            ephemeral=True
+            view=HoYoLABCookieContinueView(ltuid_v2, ltoken_v2, ltmid_v2),
+            ephemeral=True,
         )
 
 
-class HoYoLABCookieModalStep2(
-    discord.ui.Modal,
-    title="HoYoLAB Cookies • 2/2"
-):
+class HoYoLABCookieModalStep2(discord.ui.Modal, title="HoYoLAB Cookies • 2/2"):
     cookie_token_v2 = discord.ui.TextInput(
         label="cookie_token_v2",
         placeholder="Paste your cookie_token_v2 cookie...",
         required=True,
-        max_length=500
+        max_length=500,
     )
 
     account_mid_v2 = discord.ui.TextInput(
         label="account_mid_v2",
         placeholder="Paste your account_mid_v2 cookie...",
         required=True,
-        max_length=500
+        max_length=500,
     )
 
     account_id_v2 = discord.ui.TextInput(
         label="account_id_v2",
         placeholder="Paste your account_id_v2 cookie...",
         required=True,
-        max_length=500
+        max_length=500,
     )
 
     stoken = discord.ui.TextInput(
         label="stoken (optional, enables auto-refresh)",
         placeholder="Paste your stoken cookie...",
         required=False,
-        max_length=500
+        max_length=500,
     )
 
-    def __init__(
-        self,
-        *,
-        ltuid_v2: str,
-        ltoken_v2: str,
-        ltmid_v2: str
-    ):
+    def __init__(self, *, ltuid_v2: str, ltoken_v2: str, ltmid_v2: str):
         super().__init__()
 
         self.ltuid_v2_value = ltuid_v2
         self.ltoken_v2_value = ltoken_v2
         self.ltmid_v2_value = ltmid_v2
 
-    async def on_submit(
-        self,
-        interaction: discord.Interaction
-    ):
-        await interaction.response.defer(
-            ephemeral=True
-        )
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
 
         credentials = HoYoLABCredentials(
             stoken=self.stoken.value.strip() or None,
@@ -527,7 +382,7 @@ class HoYoLABCookieModalStep2(
             ltmid_v2=self.ltmid_v2_value,
             cookie_token_v2=self.cookie_token_v2.value.strip(),
             account_mid_v2=self.account_mid_v2.value.strip(),
-            account_id_v2=self.account_id_v2.value.strip()
+            account_id_v2=self.account_id_v2.value.strip(),
         )
 
         try:
@@ -541,15 +396,10 @@ class HoYoLABCookieModalStep2(
             print("==============================")
 
             embed = build_hoyolab_error_embed(
-                "error",
-                "Cookie Login Failed",
-                "An error occurred while contacting HoYoLAB."
+                "error", "Cookie Login Failed", "An error occurred while contacting HoYoLAB."
             )
 
-            await interaction.followup.send(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
 
             return
 
@@ -560,64 +410,43 @@ class HoYoLABCookieModalStep2(
                 (
                     "HoYoLAB rejected the provided cookies.\n"
                     f"Message: {result.get('message', 'Unknown error')}"
-                )
+                ),
             )
 
-            await interaction.followup.send(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
 
             return
 
-        accounts = result.get(
-            "data",
-            {}
-        ).get(
-            "list",
-            []
-        )
+        accounts = result.get("data", {}).get("list", [])
 
         genshin_accounts = [
-            account
-            for account in accounts
-            if account.get("game_biz") == "hk4e_global"
+            account for account in accounts if account.get("game_biz") == "hk4e_global"
         ]
 
         if not genshin_accounts:
             embed = build_hoyolab_error_embed(
                 "not_found",
                 "No Genshin Accounts Found",
-                "No Genshin accounts are linked to this HoYoLAB account."
+                "No Genshin accounts are linked to this HoYoLAB account.",
             )
 
-            await interaction.followup.send(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
 
             return
 
         embed = discord.Embed(
-            title=(
-                f"{ERROR_EMOJIS['success']} "
-                "Cookie Login Successful"
-            ),
+            title=(f"{ERROR_EMOJIS['success']} Cookie Login Successful"),
             description=(
                 "Your HoYoLAB cookies are valid.\n\n"
                 "**Select the Genshin account you want to link to Cyrene:**"
             ),
-            colour=ERROR_COLOURS["success"]
+            colour=ERROR_COLOURS["success"],
         )
 
         await interaction.followup.send(
             embed=embed,
-            view=GenshinAccountView(
-                genshin_accounts,
-                credentials,
-                interaction.user.id
-            ),
-            ephemeral=True
+            view=GenshinAccountView(genshin_accounts, credentials, interaction.user.id),
+            ephemeral=True,
         )
 
 
@@ -628,59 +457,36 @@ class HoYoLABAccountsView(discord.ui.View):
     @discord.ui.button(
         label="Discord Login",
         style=discord.ButtonStyle.secondary,
-        emoji="<:Discord:1535081024470392842>"
+        emoji="<:Discord:1535081024470392842>",
     )
-    async def discord_login(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
-        await interaction.response.send_modal(
-            HoYoLABLoginModal()
-        )
+    async def discord_login(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_modal(HoYoLABLoginModal())
 
     @discord.ui.button(
         label="Browser Login",
         style=discord.ButtonStyle.secondary,
-        emoji="<:Browser:1535081023115894846>"
+        emoji="<:Browser:1535081023115894846>",
     )
-    async def browser_login(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
+    async def browser_login(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_message(
-            "Browser login will be implemented here.",
-            ephemeral=True
+            "Browser login will be implemented here.", ephemeral=True
         )
 
     @discord.ui.button(
         label="Cookie Login",
         style=discord.ButtonStyle.secondary,
-        emoji="<:Cookies:1535081025888321607>"
+        emoji="<:Cookies:1535081025888321607>",
     )
-    async def cookie_login(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
-        await interaction.response.send_modal(
-            HoYoLABCookieModalStep1()
-        )
+    async def cookie_login(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_modal(HoYoLABCookieModalStep1())
 
 
 class LinkAccounts(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(
-        name="link-account",
-        description="Link a HoYoLAB account to Cyrene."
-    )
-    async def accounts(
-        self,
-        interaction: discord.Interaction
-    ):
+    @app_commands.command(name="link-account", description="Link a HoYoLAB account to Cyrene.")
+    async def accounts(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="<:Link:1535081027108741201> Link HoYoLAB Account(s)",
             description=(
@@ -694,87 +500,55 @@ class LinkAccounts(commands.Cog):
                 "*And more*\n\n"
                 "To start linking, click on one of the options below."
             ),
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.blurple(),
         )
 
-        embed.set_footer(
-            text="Your HoYoLAB password is never stored by Cyrene."
-        )
+        embed.set_footer(text="Your HoYoLAB password is never stored by Cyrene.")
 
         await interaction.response.send_message(
-            embed=embed,
-            view=HoYoLABAccountsView(),
-            ephemeral=True
+            embed=embed, view=HoYoLABAccountsView(), ephemeral=True
         )
 
     @app_commands.command(
-        name="unlink-account",
-        description="Unlink a HoYoLAB account from Cyrene."
+        name="unlink-account", description="Unlink a HoYoLAB account from Cyrene."
     )
-    @app_commands.describe(
-        genshin_uid="The Genshin UID you want to unlink."
-    )
-    async def unlink(
-            self,
-            interaction: discord.Interaction,
-            genshin_uid: str
-    ):
-        account = await get_account(
-            interaction.user.id,
-            genshin_uid
-        )
+    @app_commands.describe(genshin_uid="The Genshin UID you want to unlink.")
+    async def unlink(self, interaction: discord.Interaction, genshin_uid: str):
+        account = await get_account(interaction.user.id, genshin_uid)
 
         if account is None:
             embed = build_hoyolab_error_embed(
                 "not_found",
                 "Account Not Found",
-                (
-                    f"Genshin account `{genshin_uid}` is not linked to your Cyrene account."
-                )
+                (f"Genshin account `{genshin_uid}` is not linked to your Cyrene account."),
             )
 
-            await interaction.response.send_message(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
             return
 
-        deleted = await delete_account(
-            interaction.user.id,
-            genshin_uid
-        )
+        deleted = await delete_account(interaction.user.id, genshin_uid)
 
         if not deleted:
             embed = build_hoyolab_error_embed(
                 "error",
                 "Failed to Unlink Account",
-                (
-                    "Cyrene was unable to unlink the selected Genshin account."
-                )
+                ("Cyrene was unable to unlink the selected Genshin account."),
             )
 
-            await interaction.response.send_message(
-                embed=embed,
-                ephemeral=True
-            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
             return
 
         embed = discord.Embed(
-            title=(
-                f"{ERROR_EMOJIS['success']} Account Unlinked"
-            ),
+            title=(f"{ERROR_EMOJIS['success']} Account Unlinked"),
             description=(
                 f"Genshin account **{account['nickname']}** [`{account['genshin_uid']}`] has been successfully unlinked from Cyrene."
             ),
-            colour=ERROR_COLOURS["success"]
+            colour=ERROR_COLOURS["success"],
         )
 
-        await interaction.response.send_message(
-            embed=embed,
-            ephemeral=True
-        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 async def setup(bot):

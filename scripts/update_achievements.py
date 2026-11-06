@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import io
 import json
 import re
 import sys
+import tarfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -11,8 +13,6 @@ from pathlib import Path
 # ============================================================
 # Configuration
 # ============================================================
-
-GENSHIN_DB_API = "https://genshin-db-api.vercel.app/api/v5/achievements"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,119 +25,33 @@ ACHIEVEMENTS_DIR = PROJECT_ROOT / "data" / "achievements"
 
 
 def download_achievements() -> list[dict]:
-    """Download the current English GenshinDB achievements."""
+    """Read the latest published package; the public API can lag behind releases."""
 
-    params = urllib.parse.urlencode(
-        {
-            "query": "names",
-            "matchCategories": "true",
-            "verboseCategories": "true",
-            "queryLanguages": "english",
-            "resultLanguage": "english",
-        }
-    )
+    def fetch_json(url):
+        request = urllib.request.Request(url, headers={"User-Agent": "Cyrene-Achievement-Updater"})
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return json.load(response)
 
-    url = f"{GENSHIN_DB_API}?{params}"
-
-    print("Downloading:")
-    print(f"  {url}")
-    print()
-
-    request = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "Cyrene-Achievement-Updater",
-            "Accept": "application/json",
-        },
-    )
-
-    try:
-        with urllib.request.urlopen(
-            request,
-            timeout=60,
-        ) as response:
-            raw_data = response.read()
-
-    except urllib.error.HTTPError as error:
-        raise RuntimeError(
-            f"HTTP Error {error.code} while downloading GenshinDB achievements."
-        ) from error
-
-    except urllib.error.URLError as error:
-        raise RuntimeError(f"Connection Error: {error.reason}") from error
-
-    except TimeoutError as error:
-        raise RuntimeError("Download timed out.") from error
-
-    print(f"Downloaded {len(raw_data):,} bytes.")
-    print()
-
-    # --------------------------------------------------------
-    # Parse JSON
-    # --------------------------------------------------------
-
-    try:
-        data = json.loads(raw_data.decode("utf-8"))
-
-    except (
-        UnicodeDecodeError,
-        json.JSONDecodeError,
-    ) as error:
-        raise RuntimeError("GenshinDB returned invalid JSON.") from error
-
-    # --------------------------------------------------------
-    # API response
-    # --------------------------------------------------------
-    #
-    # With:
-    #
-    #   query=names
-    #   matchCategories=true
-    #   verboseCategories=true
-    #
-    # GenshinDB returns the achievement objects directly.
-    #
-    # Depending on the API version, the response can either
-    # be the list itself or a dumpResult-style wrapper.
-    # --------------------------------------------------------
-
-    if isinstance(data, list):
-        achievements = data
-
-    elif isinstance(data, dict):
-        # Standard dumpResult-style response.
-        result = data.get("result")
-
-        if isinstance(result, list):
-            achievements = result
-
-        else:
-            # Some versions may return the category result
-            # under another top-level field.
-            achievements = None
-
-            for value in data.values():
-                if (
-                    isinstance(value, list)
-                    and value
-                    and isinstance(value[0], dict)
-                    and "achievementgroup" in value[0]
-                ):
-                    achievements = value
-                    break
-
-    else:
-        achievements = None
-
-    if not isinstance(
-        achievements,
-        list,
-    ):
-        raise RuntimeError("Unexpected GenshinDB API response.")
-
+    metadata = fetch_json("https://registry.npmjs.org/genshin-db/latest")
+    url = metadata["dist"]["tarball"]
+    if not url.startswith("https://registry.npmjs.org/genshin-db/-/"):
+        raise RuntimeError("Unexpected GenshinDB package URL")
+    request = urllib.request.Request(url, headers={"User-Agent": "Cyrene-Achievement-Updater"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        package = response.read()
+    # Read the single known member in memory, without extracting archive paths.
+    with tarfile.open(fileobj=io.BytesIO(package), mode="r:gz") as archive:
+        member = archive.extractfile("package/src/min/data.min.json")
+        if member is None:
+            raise RuntimeError("GenshinDB package has no dataset")
+        data = json.load(member)
+    achievements = []
+    for key, source in data["data"]["English"]["achievements"].items():
+        achievement = dict(source)
+        achievement["version"] = data["version"]["achievements"][key]
+        achievements.append(achievement)
     if not achievements:
-        raise RuntimeError("GenshinDB returned zero achievements.")
-
+        raise RuntimeError("GenshinDB returned zero achievements")
     return achievements
 
 
@@ -479,8 +393,8 @@ def update_achievements() -> None:
         if validate_achievement(achievement):
             valid_achievements.append(achievement)
 
-    if not valid_achievements:
-        raise RuntimeError("No valid achievements were found.")
+    if not valid_achievements or len(valid_achievements) != len(achievements):
+        raise RuntimeError("The complete achievement dataset did not pass validation.")
 
     print(f"Validated: {len(valid_achievements):,}")
 
