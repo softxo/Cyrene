@@ -1924,13 +1924,12 @@ img[src$="/IT_Stella.png"] {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     gap: 6px;
-    max-width: 42%;
+    max-width: none;
     min-width: 0;
     padding: 2px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    overflow: visible;
 }
 
 .event-limited-rewards::-webkit-scrollbar {
@@ -2021,7 +2020,7 @@ img[src$="/IT_Stella.png"] {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.24);
 }
 
-.event-list-right .event-time-left.upcoming {
+.event-time-left.upcoming {
     border-color: rgba(92, 174, 255, 0.62);
     background: rgba(44, 127, 211, 0.28);
     color: #c9e7ff;
@@ -2710,6 +2709,114 @@ img[src$="/IT_Stella.png"] {
         flex: 1 0 auto;
     }
 }
+
+.event-all-rewards {
+    display: flex;
+    align-items: center;
+}
+
+.event-rewards-more {
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 0 9px;
+    white-space: nowrap;
+    font-size: 11px;
+}
+.event-all-reward-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+.event-limited-item .event-checkmark:disabled {
+    cursor: default;
+    opacity: 0.45;
+}
+.event-time-left.event-insight {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.event-time-left:not(.upcoming) > .event-upcoming-help {
+    display: none;
+}
+.event-upcoming-help {
+    color: inherit;
+}
+.event-time-left .event-insight-popover {
+    white-space: normal;
+    text-align: left;
+    font-weight: 400;
+}
+@media (max-width: 1200px) {
+    .event-limited-rewards > .event-limited-reward:nth-child(n + 6) {
+        display: none;
+    }
+}
+@media (max-width: 600px) {
+    .event-limited-main > .event-limited-rewards {
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+    .event-limited-rewards > .event-limited-reward:nth-child(n + 5) {
+        display: none;
+    }
+}
+
+@media (min-width: 1201px) {
+    .event-rewards-responsive-more {
+        display: none;
+    }
+}
+@media (min-width: 601px) {
+    .event-rewards-mobile-more {
+        display: none;
+    }
+}
+
+.event-list-right .event-time-left.upcoming {
+    width: 126px;
+    min-width: 126px;
+    max-width: 126px;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+/* Keep the button centred on the reward artwork, independently of amount badges. */
+.event-rewards-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+.event-opening-popover .event-insight-content {
+    padding-bottom: 12px;
+}
+.event-opening-popover p:last-child {
+    margin-bottom: 0;
+}
+
+/* Keep training progress within the standard activity row height. */
+.event-temper-progress-box {
+    min-width: 145px;
+    height: 32px;
+    padding: 3px 8px;
+    gap: 3px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1;
+}
+.event-temper-day-track > span {
+    min-width: 0;
+    height: 3px;
+}
+@media (min-width: 1001px) {
+    .event-temper-item {
+        flex-wrap: nowrap;
+    }
+    .event-temper-item .event-list-right {
+        flex-wrap: nowrap;
+    }
+}
 /* =========================================================
    EVENTS — WISH BANNER CARDS, BANNER CONTENT AND WISH-RELATED RESPONSIVE RULES
    Extracted from the original events.css.
@@ -2757,15 +2864,13 @@ img[src$="/IT_Stella.png"] {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 
     transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
+        border-color 140ms ease-in-out,
+        box-shadow 140ms ease-in-out;
 }
 
 .wish-banner-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+    border-color: color-mix(in srgb, #38343e 80%, var(--accent) 20%);
+    box-shadow: 0 9px 26px rgba(0, 0, 0, 0.17);
 }
 
 /* Background artwork */
@@ -2778,15 +2883,14 @@ img[src$="/IT_Stella.png"] {
     width: 100%;
     height: 100%;
 
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
 
-    transform: scale(1.001);
-    transition: transform 0.6s ease;
+    transform: none;
 }
 
 .wish-banner-card:hover .wish-banner-image {
-    transform: scale(1.045);
+    transform: none;
 }
 
 /* Darken the text area while keeping the artwork visible */
@@ -2867,13 +2971,14 @@ img[src$="/IT_Stella.png"] {
 /* Featured character panels */
 .wish-banner-featured {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     margin-top: 14px;
     padding: 12px 14px;
     width: fit-content;
     max-width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(231, 182, 91, 0.46);
+    box-shadow: 0 0 12px rgba(231, 182, 91, 0.06);
     border-radius: 13px;
     background: rgba(15, 17, 24, 0.48);
     backdrop-filter: blur(8px);
@@ -2903,9 +3008,9 @@ img[src$="/IT_Stella.png"] {
     align-items: center;
     gap: 5px;
     width: 66px;
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1.25;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.3;
     text-align: center;
     color: rgba(255, 255, 255, 0.92);
 }
@@ -2922,12 +3027,13 @@ img[src$="/IT_Stella.png"] {
 
 /* Four-star characters */
 .wish-banner-four-star {
-    opacity: 0.9;
+    border-color: rgba(183, 136, 226, 0.3);
+    box-shadow: none;
 }
 
 .wish-banner-four-star .wish-banner-item {
-    width: 58px;
-    font-size: 10px;
+    width: 66px;
+    font-size: 12px;
 }
 
 .wish-banner-four-star .wish-banner-item img {
@@ -3025,7 +3131,7 @@ img[src$="/IT_Stella.png"] {
 
     .wish-banner-item {
         width: 58px;
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .wish-banner-item img {
@@ -3056,9 +3162,9 @@ img[src$="/IT_Stella.png"] {
     }
 }
 
-/* Keep an unpaired weapon banner at card width, centred below character wishes. */
+/* Centre the final card whenever a two-column Wish grid has an odd count. */
 @media (min-width: 761px) {
-    .wish-banners:not(:has(> [data-banner-type="500"])) > [data-banner-type="302"] {
+    .wish-banners > .wish-banner-card:last-child:nth-child(odd) {
         grid-column: 1 / -1;
         width: calc((100% - var(--wish-banner-gap)) / 2);
         justify-self: center;
@@ -3068,12 +3174,234 @@ img[src$="/IT_Stella.png"] {
 /* Overview retains two columns down to its narrower mobile breakpoint. */
 @media (min-width: 651px) and (max-width: 760px) {
     .events-overview-panel[data-overview-panel="wishes"]
-        .wish-banners:not(:has(> [data-banner-type="500"]))
-        > [data-banner-type="302"] {
+        .wish-banners > .wish-banner-card:last-child:nth-child(odd) {
         grid-column: 1 / -1;
         width: calc((100% - var(--wish-banner-gap)) / 2);
         justify-self: center;
     }
+}
+
+/* Public previews use character splash art until official banner art is available. */
+.wish-banner-preview-art {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: flex;
+    --wish-preview-warm-background: linear-gradient(140deg, #625044, #363456);
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-panel {
+    position: relative;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+}
+.wish-preview-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+}
+.wish-preview-character img {
+    object-fit: contain;
+    object-position: center top;
+}
+.wish-preview-chronicled .wish-preview-panel + .wish-preview-panel {
+    border-left: 2px solid rgba(255, 255, 255, 0.5);
+}
+.wish-preview-weapons .wish-preview-panel {
+    position: absolute;
+    inset: 0;
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-weapons .wish-preview-panel:first-child {
+    clip-path: polygon(0 0, 60% 0, 40% 100%, 0 100%);
+}
+.wish-preview-weapons .wish-preview-panel:last-child {
+    clip-path: polygon(60% 0, 100% 0, 100% 100%, 40% 100%);
+}
+.wish-preview-weapons .wish-preview-panel img {
+    width: 55%;
+    object-fit: contain;
+    padding: 25px 0 90px;
+    box-sizing: border-box;
+}
+.wish-preview-weapons .wish-preview-panel:last-child img {
+    margin-left: 45%;
+}
+.wish-preview-weapons::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.65);
+    clip-path: polygon(59.8% 0, 60.2% 0, 40.2% 100%, 39.8% 100%);
+}
+.wish-banner-preview .wish-banner-overlay {
+    background: linear-gradient(
+        0deg,
+        rgba(9, 11, 18, 0.96),
+        rgba(9, 11, 18, 0.3) 45%,
+        transparent 75%
+    );
+}
+.wish-banner-preview .wish-banner-content {
+    justify-content: flex-end;
+    padding-top: 64px;
+}
+.wish-banner-preview .wish-banner-featured {
+    display: none;
+}
+.wish-banner-preview .wish-banner-title {
+    margin-bottom: 8px;
+}
+.wish-preview-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.wish-preview-name {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 5px 11px;
+    border: 1px solid rgba(231, 182, 91, 0.3);
+    border-radius: 999px;
+    background: rgba(12, 14, 22, 0.86);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.wish-banner-time.upcoming {
+    min-width: 126px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.wish-upcoming-section {
+    margin-top: 30px;
+    min-width: 0;
+}
+.wish-banner-media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    border-radius: inherit;
+    clip-path: inset(0 round 19px);
+    background: #0c0e16;
+}
+.wish-banner-media .wish-banner-image {
+    z-index: auto;
+    border-radius: 0;
+}
+.wish-banner-overlay,
+.wish-banner-preview-art {
+    border-radius: inherit;
+    overflow: hidden;
+}
+.wish-banner-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    gap: 3px;
+    min-width: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+}
+.wish-preview-chronicled {
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-chronicled .wish-preview-panel {
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-chronicled .wish-preview-panel img {
+    object-fit: cover;
+    object-position: center top;
+}
+.wish-preview-chronicled-weapons .wish-preview-panel img {
+    object-fit: contain;
+    padding: 24px 2px 100px;
+    box-sizing: border-box;
+}
+
+/* Let published artwork establish the card's size instead of letterboxing it. */
+.wish-banner-card:has(> .wish-banner-media) {
+    display: grid;
+    min-height: 0;
+    align-self: start;
+}
+.wish-banner-card > .wish-banner-media {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    min-width: 0;
+    align-self: stretch;
+}
+.wish-banner-media .wish-banner-image {
+    position: static;
+    display: block;
+    height: auto;
+}
+.wish-banner-card:has(> .wish-banner-media) > .wish-banner-content {
+    grid-area: 1 / 1;
+    min-height: 0;
+    padding: 16px 24px;
+}
+
+/* Keep weapon rarity groups stacked, with more room for each name. */
+.wish-banner-card[data-banner-type="302"] .wish-banner-featured {
+    box-sizing: border-box;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-item,
+.wish-banner-card[data-banner-type="302"] .wish-banner-four-star .wish-banner-item {
+    width: 100px;
+}
+@media (max-width: 1100px) {
+    .wish-banner-card > .wish-banner-media {
+        grid-area: 1 / 1;
+        align-self: start;
+    }
+    .wish-banner-card:has(> .wish-banner-media) > .wish-banner-content {
+        grid-area: 2 / 1;
+    }
+    .wish-banner-card:has(> .wish-banner-media) .wish-banner-time {
+        top: 12px;
+        right: 12px;
+    }
+}
+
+/* Clip artwork once at the outer frame, without translucent corner seams. */
+.wish-banner-card {
+    background-clip: padding-box;
+    border-color: #38343e;
+}
+.wish-banner-card > .wish-banner-media,
+.wish-banner-card > .wish-banner-overlay,
+.wish-banner-card > .wish-banner-preview-art {
+    border-radius: 0;
+    clip-path: none;
+}
+
+/* Keep both weapon rarity panels comfortably above the artwork's lower edge. */
+.wish-banner-card[data-banner-type="302"] .wish-banner-title {
+    margin-bottom: 4px;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-featured {
+    margin-top: 14px;
+    padding: 8px 14px;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-name-long {
+    font-size: 12px;
+    line-height: 1.25;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-four-star .wish-banner-name-long {
+    font-size: 11.5px;
 }
 /* =========================================================
    EVENTS — ACCOUNT-LAYOUT TABS AND OVERVIEW PANELS
@@ -4060,8 +4388,8 @@ img[src$="/IT_Stella.png"] {
     }
 
     .event-limited-main:has(.event-insight) > .event-limited-rewards {
-        max-width: 45%;
-        flex-shrink: 0;
+        max-width: 100%;
+        flex: 1 1 100%;
     }
 
     .event-limited-main:has(.event-insight) > .event-list-right {
@@ -4104,11 +4432,13 @@ html[data-hover-effects="off"] .overview-account-row:hover {
     display: flex;
     align-items: center;
     min-height: 64px;
+    column-gap: 12px;
 }
 
 .events-overview-panel[data-overview-panel="daily"] .overview-encounter-points {
-    position: absolute;
-    left: calc(100% - 284px);
+    position: static;
+    margin-left: auto;
+    flex: 0 0 82px;
 
     width: 82px;
     min-width: 82px;
@@ -4118,7 +4448,7 @@ html[data-hover-effects="off"] .overview-account-row:hover {
 }
 
 .events-overview-panel[data-overview-panel="daily"] .overview-account-status {
-    margin-left: auto;
+    margin-left: 0;
     flex: 0 0 auto;
 }
 
@@ -4610,6 +4940,40 @@ html[data-hover-effects="off"] .overview-account-row:hover {
     flex-shrink: 0;
 }
 
+@media (max-width: 700px) {
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-account-status {
+        width: 100%;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-progress {
+        flex-wrap: wrap;
+    }
+}
+
+/* Account names retain their heading style; only the UID is muted. */
+.events-page .overview-account-name strong,
+.events-page .overview-account-name strong [data-account-profile-name],
+.events-page .overview-account-name > [data-account-profile-name] {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 1;
+}
+.overview-account-name > span:not([data-account-profile-name]) {
+    font-size: 13px;
+    opacity: 0.6;
+}
+.overview-account-row.completed {
+    opacity: 1;
+}
+.overview-account-row.completed .overview-account-status,
+.overview-account-row.completed .overview-encounter-points {
+    opacity: 0.65;
+}
 /* =========================================================
    CUSTOM EVENTS
    ========================================================= */
@@ -5824,198 +6188,77 @@ html[data-hover-effects="off"] .overview-account-row:hover {
    ========================================================= */
 
 .events-custom-dialog .events-custom-number {
-    position: relative !important;
-
-    display: flex !important;
-    align-items: center !important;
-
-    width: 100% !important;
-    height: 38px !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-
-    border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-
-    background: var(--background) !important;
-    overflow: hidden !important;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: var(--custom-control-height, 42px);
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--control-border);
+    border-radius: 10px;
+    background: var(--control-surface);
+    overflow: hidden;
 }
-
-/* Number input */
-.events-custom-dialog .events-custom-number input[type="number"] {
-    appearance: textfield !important;
-    -webkit-appearance: textfield !important;
-    -moz-appearance: textfield !important;
-
-    display: block !important;
-    flex: 1 1 auto !important;
-
-    width: 0 !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 6px 0 9px !important;
-    box-sizing: border-box !important;
-
-    border: 1px solid var(--control-border) !important;
-    border-radius: 0 !important;
-    outline: none !important;
-    box-shadow: none !important;
-
-    background: var(--control-surface) !important;
-    color: var(--control-text) !important;
-
-    font-family: "Inter", sans-serif !important;
-    font-size: 0.82rem !important;
+.events-custom-dialog .events-custom-number:focus-within {
+    border-color: var(--control-focus-border);
 }
-
-.events-custom-dialog .events-custom-number input[type="number"]::-webkit-inner-spin-button,
-.events-custom-dialog .events-custom-number input[type="number"]::-webkit-outer-spin-button {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    margin: 0 !important;
+.events-custom-dialog .events-custom-number > input[type="number"][data-custom-spinner] {
+    appearance: textfield;
+    flex: 1 1 0;
+    width: 0;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0 6px 0 10px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--control-text);
+    box-shadow: none;
+    font: inherit;
+    font-size: 13px;
 }
-
-/* =========================================================
-   SPINNER COLUMN — COMPACT, CENTRED ARROWS
-   ========================================================= */
-
+.events-custom-dialog .events-custom-number input::-webkit-inner-spin-button,
+.events-custom-dialog .events-custom-number input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 .events-custom-dialog .events-custom-number > .number-spinner {
-    position: static !important;
-    transform: none !important;
-
-    display: flex !important;
-    flex: 0 0 22px !important;
-    flex-direction: column !important;
-    align-self: center !important;
-
-    width: 22px !important;
-    height: 28px !important;
-    min-width: 22px !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 1px !important;
-    box-sizing: border-box !important;
-    gap: 0 !important;
-
-    border: 0 !important;
-    border-radius: 0 !important;
-
-    background: transparent !important;
-    box-shadow: none !important;
+    position: static;
+    display: flex;
+    flex: 0 0 24px;
+    flex-direction: column;
+    align-self: stretch;
+    width: 24px;
+    height: 100%;
+    margin: 0;
+    padding: 2px;
+    box-sizing: border-box;
+    transform: none;
 }
-
-/* Individual arrow buttons */
 .events-custom-dialog .events-custom-number .number-spinner-button {
-    position: static !important;
-
-    display: flex !important;
-    flex: 1 1 50% !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    border: 0 !important;
-    border-radius: 3px !important;
-
-    background: transparent !important;
-    color: var(--text-muted) !important;
-    box-shadow: none !important;
-    transform: none !important;
-
-    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    touch-action: none;
 }
-
 .events-custom-dialog .events-custom-number .number-spinner-button:hover {
-    background: var(--accent-soft) !important;
-    color: var(--accent) !important;
+    background: var(--accent-soft);
+    color: var(--accent);
 }
-
-/* =========================================================
-   CHEVRON ICONS — MATCH PLANNER
-   ========================================================= */
-
 .events-custom-dialog .events-custom-number .spinner-arrow {
-    width: 7px !important;
-    height: 7px !important;
-
-    display: block !important;
-    box-sizing: border-box !important;
-
-    border-right: 1.5px solid currentColor !important;
-    border-bottom: 1.5px solid currentColor !important;
-    border-top: 0 !important;
-    border-left: 0 !important;
-
-    transition:
-        color 0.12s ease,
-        transform 0.12s ease;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
 }
-
-.events-custom-dialog .number-spinner-button[data-direction="up"] .spinner-arrow {
-    transform: rotate(225deg) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="down"] .spinner-arrow {
-    transform: rotate(45deg) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="up"]:active .spinner-arrow {
-    transform: rotate(225deg) translate(-1px, -1px) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="down"]:active .spinner-arrow {
-    transform: rotate(45deg) translate(1px, 1px) !important;
-}
-
-/* =========================================================
-   CUSTOM EVENTS — FORCE REMOVE SPINNER ARROW FOCUS
-   ========================================================= */
-
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus-visible,
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:active,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus
-    .spinner-arrow,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus-visible
-    .spinner-arrow {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: var(--control-focus-border) !important;
-}
-
-/* Prevent global button focus styles from affecting spinner buttons */
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button {
-    -webkit-tap-highlight-color: transparent !important;
-    outline: 0 !important;
-    box-shadow: none !important;
-}
-
-/* =========================================================
-   CUSTOM EVENTS — CUSTOM FORM DROPDOWNS
-   ========================================================= */
 
 .events-custom-dialog [data-custom-dropdown] {
     position: relative;
@@ -6946,7 +7189,8 @@ html[data-hover-effects="off"] .overview-account-row:hover {
 .events-page .events-custom-account-count.event-completion-pill,
 .events-page .event-list-status.event-completion-pill,
 .events-page .overview-status.event-completion-pill,
-.events-page .events-custom-countdown.event-completion-pill {
+.events-page .events-custom-countdown.event-completion-pill,
+.events-page .events-custom-completion.event-completion-pill {
     background: rgba(93, 231, 151, 0.16);
     border-color: rgba(93, 231, 151, 0.32);
     color: #72eea2;
@@ -6966,7 +7210,7 @@ html[data-hover-effects="off"] .overview-account-row:hover {
 }
 .events-custom-overview .event-list-item.events-limited-overview-event {
     border-radius: 14px;
-    min-height: 76px;
+    min-height: 60px;
 }
 .events-custom-overview .event-list-item.events-limited-overview-event::before {
     display: none;
@@ -7171,4 +7415,94 @@ html[data-hover-effects="off"] .overview-account-row:hover {
 .events-custom-overview-objective-button > svg {
     width: 16px;
     height: 16px;
+}
+
+/* Editor controls share one height and leave enough room for their menus. */
+.events-custom-dialog .events-custom-objective > input,
+.events-custom-dialog .events-custom-objective-remove {
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+}
+.events-custom-dialog [data-custom-dropdown] [role="listbox"] {
+    max-height: min(300px, 45vh);
+    overflow-y: auto;
+    padding-bottom: 8px;
+}
+.events-custom-dialog .events-custom-icon-upload {
+    flex-wrap: nowrap;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--control-border);
+    border-radius: 12px;
+    background: var(--control-surface);
+}
+.events-custom-dialog .events-custom-icon-preview {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+}
+.events-custom-icon-controls {
+    flex: 1;
+    min-width: 0;
+}
+.events-custom-icon-filename {
+    flex: 0 0 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.events-custom-icon-controls .events-custom-icon-button {
+    min-height: 34px;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+/* Menus live in the top layer, independently of the editor's scroll area. */
+.events-custom-dialog .custom-select-menu[popover] {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    overflow-y: auto;
+}
+.events-custom-dialog .custom-select-menu[popover]:not(:popover-open) {
+    display: none;
+}
+.events-custom-scope-hint {
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.55;
+}
+.events-custom-dialog {
+    padding-bottom: 16px;
+}
+@media (max-width: 640px) {
+    .events-custom-dialog {
+        padding-bottom: 14px;
+    }
+    .events-custom-form-actions {
+        bottom: -14px;
+        margin-bottom: -14px;
+        padding-bottom: 12px;
+    }
+}
+
+.events-custom-status-pills {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.events-custom-card-status {
+    margin-left: auto;
+}
+.events-custom-status-pills .events-custom-countdown {
+    margin-left: 0;
+}
+.events-custom-overview-summary-status {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 1;
 }

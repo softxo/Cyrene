@@ -14,6 +14,8 @@
 :root
     :is(
         dialog:not([open]),
+        [data-modal-panel][hidden],
+        [data-modal-panel][popover]:not(:popover-open),
         [aria-modal="true"][hidden]:not([data-modal-shell]),
         [data-modal-shell][hidden] [aria-modal="true"],
         [data-modal-shell][hidden] [data-modal-panel]

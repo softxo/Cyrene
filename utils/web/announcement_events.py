@@ -95,7 +95,7 @@ def announcement_reward_events(announcements, server: str, now: int) -> list[dic
         if not re.search(r"within the specified (?:duration|time period)", title, re.I):
             continue
         if re.search(r"exploration missions?", title, re.I):
-            category = "World Exploration"
+            category = "Exploration"
         elif re.search(r"complete (?:the |a |an )?(?:archon |story |world )?quest", title, re.I):
             category = "Quest"
         else:
@@ -135,10 +135,32 @@ def announcement_reward_events(announcements, server: str, now: int) -> list[dic
         name = plain_text(announcement.subtitle or title).strip('"“” ')
         target_chapter = re.search(
             r"\bArchon Quests?\s+((?:Chapter\s+[IVXLCDM\d]+|Prologue)"
-            r'\s*:\s*Act\s+[IVXLCDM\d]+)\s*["\u201c]' + re.escape(name) + r'["\u201d]',
+            r'\s*:\s*Act\s+[IVXLCDM\d]+)\s*(?:[-\u2013\u2014]\s*)?["\u201c]'
+            + re.escape(name)
+            + r'["\u201d]',
             plain_text(content),
             re.I,
         )
+        # Campaign notices can list several new acts without repeating their
+        # names. Resolve the named act from the update's New Archon Quest section,
+        # never from the campaign's prerequisite/unlock criteria.
+        if target_chapter is None and category == "Quest":
+            for update in announcements:
+                if not re.search(r"Version \d+\.\d+ Update Details", update.title, re.I):
+                    continue
+                story = plain_text(update.content)
+                story = re.search(
+                    r"New Archon Quest\b(.*?)(?:New World Quests|V\. New Enemies|$)", story, re.I
+                )
+                if story:
+                    target_chapter = re.search(
+                        r"((?:Chapter\s+[IVXLCDM\d]+|Prologue)\s*:\s*Act\s+[IVXLCDM\d]+)"
+                        r'\s*(?:[-\u2013\u2014]\s*)?["\u201c]' + re.escape(name) + r'["\u201d]',
+                        story[1],
+                        re.I,
+                    )
+                    if target_chapter:
+                        break
         result.append(
             {
                 "id": f"announcement:{announcement.id}",
@@ -146,14 +168,7 @@ def announcement_reward_events(announcements, server: str, now: int) -> list[dic
                 "category": category,
                 "quest_chapter": target_chapter[1] if target_chapter else None,
                 "quest_type": "archon" if re.search(r"\barchon quest\b", title, re.I) else None,
-                "quest_is_mainline": bool(
-                    re.search(
-                        r"\bArchon Quests?\s+(?:Chapter\s+[IVXLCDM\d]+|Prologue)"
-                        r'\s*:\s*Act\s+[IVXLCDM\d]+\s*["“]' + re.escape(name) + r'["”]',
-                        plain_text(content),
-                        re.I,
-                    )
-                ),
+                "quest_is_mainline": target_chapter is not None,
                 "description": "Bonus reward period. Account completion is not available from HoYoLAB's calendar.",
                 "icon": announcement.img or announcement.banner,
                 "is_tcg": False,
@@ -197,7 +212,22 @@ def merge_announcement_events(events: list[dict], supplements: list[dict]) -> li
         result,
         key=lambda event: (
             event["is_upcoming"],
-            event["is_tcg"],
+            False if event["is_upcoming"] else event["is_tcg"],
             event["start_time"] if event["is_upcoming"] else event["end_time"],
         ),
     )
+
+
+def notice_event_schedule(announcement, server: str) -> tuple[int, int] | None:
+    """Read explicit event dates only, excluding eligibility and notice dates."""
+    if announcement is None or server not in SERVER_OFFSETS:
+        return None
+    content = html.unescape(announcement.content)
+    section = re.search(r"〓Event Duration〓(.*?)(?:〓|$)", content, re.S)
+    if not section:
+        return None
+    dates = list(TIME_TAG.finditer(section[1]))
+    if len(dates) != 2:
+        return None
+    start, end = (timestamp(date, server) for date in dates)
+    return (start, end + 59) if start is not None and end is not None and start < end else None

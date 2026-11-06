@@ -58,6 +58,7 @@ class ArchonQuestProgressTests(unittest.TestCase):
         response["data"]["archon_quest_progress"].update(
             is_finish_all_mainline=True,
             is_finish_all_interchapter=True,
+            is_open_archon_quest=False,
         )
         events = [event()]
         apply_archon_quest_progress(events, response, 50)
@@ -71,16 +72,6 @@ class ArchonQuestProgressTests(unittest.TestCase):
             {"retcode": -1},
             notes(),
             {"retcode": 0, "data": {"archon_quest_progress": None}},
-            {
-                "retcode": 0,
-                "data": {
-                    "archon_quest_progress": {
-                        "list": [],
-                        "is_open_archon_quest": False,
-                        "is_finish_all_mainline": True,
-                    }
-                },
-            },
         ):
             with self.subTest(response=response):
                 events = [event()]

@@ -69,11 +69,12 @@ async def localise_reward_images(details: dict) -> None:
                 continue
             url = entry.get("source_icon", "")
         parsed = urlsplit(url)
-        trusted_avatar = re.fullmatch(
-            r"https://enka\.network/ui/UI_AvatarIcon_[A-Za-z0-9_]+\.png", url
+        trusted_artwork = re.fullmatch(
+            r"https://enka\.network/ui/UI_(?:AvatarIcon|EquipIcon|Gacha_AvatarIcon)_[A-Za-z0-9_]+\.png",
+            url,
         )
         if parsed.scheme == "https" and (
-            parsed.hostname == "static.wikia.nocookie.net" or trusted_avatar
+            parsed.hostname == "static.wikia.nocookie.net" or trusted_artwork
         ):
             entry["source_icon"] = url
             remote.setdefault(url, []).append(entry)
@@ -213,7 +214,7 @@ def parse_quest_reward_table(markup: str, event_name: str) -> dict | None:
     parser = TableParser()
     parser.feed(markup)
     for table in parser.root.walk("table"):
-        if "Archon Quest Rewards" not in table.text() or "Insight Rewards" not in table.text():
+        if "Archon Quest Rewards" not in table.text():
             continue
         main, insights, section = [], [], None
         for row in table.walk("tr"):
@@ -240,11 +241,7 @@ def parse_quest_reward_table(markup: str, event_name: str) -> dict | None:
                 and task
                 and normalise_name(task.text()) == normalise_name(event_name)
             ):
-                main.extend(
-                    reward
-                    for reward in rewards
-                    if normalise_name(reward["name"]) in {"primogem", "primogems"}
-                )
+                main.extend(rewards)
             elif section == "insight":
                 portrait = next(cells[0].walk("img"), None)
                 character = next(cells[0].walk("a"), None)
@@ -258,7 +255,7 @@ def parse_quest_reward_table(markup: str, event_name: str) -> dict | None:
                             "rewards": rewards,
                         }
                     )
-        if main and insights:
+        if main:
             return {"rewards": main, "insight_rewards": insights}
     return None
 
@@ -275,7 +272,13 @@ async def get_quest_reward_details(name: str) -> dict | None:
         result = None
         try:
             # Separate public session: account cookies must never go to the wiki.
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as session:
+            async with aiohttp.ClientSession(
+                headers={
+                    "User-Agent": "Cyrene event preview reader",
+                    "Accept": "application/json,text/html",
+                },
+                timeout=aiohttp.ClientTimeout(total=8),
+            ) as session:
                 for title in (f"{name} (Event)", name):
                     async with session.get(
                         API_URL,
@@ -287,7 +290,8 @@ async def get_quest_reward_details(name: str) -> dict | None:
                             "redirects": "1",
                         },
                     ) as response:
-                        response.raise_for_status()
+                        if response.status != 200:
+                            continue
                         data = await response.json()
                     markup = data.get("parse", {}).get("text", {}).get("*", "")
                     result = parse_quest_reward_table(markup, name)
@@ -296,6 +300,19 @@ async def get_quest_reward_details(name: str) -> dict | None:
                             title.replace(" ", "_"), safe=""
                         )
                         break
+                if result is None:
+                    # Some wiki installations restrict the parse API but serve rendered pages.
+                    for title in (f"{name} (Event)", name):
+                        source = "https://genshin-impact.fandom.com/wiki/" + quote(
+                            title.replace(" ", "_"), safe=""
+                        )
+                        async with session.get(source, params={"action": "render"}) as response:
+                            response.raise_for_status()
+                            markup = await response.text()
+                        result = parse_quest_reward_table(markup, name)
+                        if result:
+                            result["reward_source"] = source
+                            break
         except aiohttp.ClientError, asyncio.TimeoutError, ValueError, KeyError:
             logger.warning("Quest reward preview unavailable for %s", name)
         if result is None and cached:

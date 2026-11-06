@@ -595,8 +595,8 @@
     }
 
     .event-limited-main:has(.event-insight) > .event-limited-rewards {
-        max-width: 45%;
-        flex-shrink: 0;
+        max-width: 100%;
+        flex: 1 1 100%;
     }
 
     .event-limited-main:has(.event-insight) > .event-list-right {

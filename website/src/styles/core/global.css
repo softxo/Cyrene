@@ -1255,7 +1255,7 @@ body:has(#navigation-loading-status)::before {
 
 .site-update-notice {
     position: fixed;
-    top: 16px;
+    top: var(--cyrene-feedback-top, 16px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 9000;
@@ -1288,7 +1288,7 @@ body:has(#navigation-loading-status)::before {
 
 .site-update-dot {
     position: fixed;
-    top: 12px;
+    top: var(--cyrene-feedback-top, 12px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 9000;
@@ -1372,7 +1372,7 @@ body:has(#navigation-loading-status)::before {
 .site-update-success {
     position: fixed;
     left: 50%;
-    top: 16px;
+    top: var(--cyrene-feedback-top, 16px);
     transform: translateX(-50%);
     z-index: 9000;
     display: flex;

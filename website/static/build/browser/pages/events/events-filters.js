@@ -45,7 +45,9 @@
     try {
         const saved = JSON.parse(localStorage.getItem(key) || "[]");
         if (Array.isArray(saved))
-            disabled = new Set(saved.filter((value) => typeof value === "string"));
+            disabled = new Set(saved
+                .filter((value) => typeof value === "string")
+                .map((value) => (value === "World Exploration" ? "Exploration" : value)));
     }
     catch {
         /* Storage can be unavailable; filtering still works for this visit. */
@@ -60,13 +62,16 @@
             document.head.append(visibilityStyle);
         }
         const rules = [...disabled]
-            .map((category) => `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`)
+            .map((category) => category === "Upcoming"
+            ? ".events-page [data-limited-category].upcoming { display: none !important; }"
+            : `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`)
             .join("\n");
         if (visibilityStyle.textContent !== rules)
             visibilityStyle.textContent = rules;
         restoreAccountGroups();
         document.querySelectorAll("[data-limited-category]").forEach((card) => {
-            const hidden = disabled.has(card.dataset.limitedCategory || "Other Events");
+            const hidden = disabled.has(card.dataset.limitedCategory || "Other Events") ||
+                (disabled.has("Upcoming") && card.classList.contains("upcoming"));
             if (card.hidden !== hidden)
                 card.hidden = hidden;
         });
@@ -91,7 +96,7 @@
         document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
             const cards = [
                 ...group.querySelectorAll("[data-limited-category]"),
-            ].filter((card) => !card.hidden);
+            ].filter((card) => !card.hidden && !card.classList.contains("upcoming"));
             const completed = cards.filter((card) => card.classList.contains("completed")).length;
             const count = group.querySelector("[data-limited-account-count]");
             const text = `${completed}/${cards.length} complete`;
@@ -150,7 +155,14 @@
         }
         const options = popup.querySelector("[data-limited-filter-options]");
         options.replaceChildren();
-        const categories = new Set(["Quest", "World Exploration", "Daily", "TCG", "Other Events"]);
+        const categories = new Set([
+            "Quest",
+            "Exploration",
+            "Daily",
+            "TCG",
+            "Upcoming",
+            "Other Events",
+        ]);
         document
             .querySelectorAll("[data-limited-category]")
             .forEach((card) => categories.add(card.dataset.limitedCategory));

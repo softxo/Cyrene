@@ -95,6 +95,11 @@ for (const width of [390, 1280]) {
             "aria-label",
             "Cycle end",
         );
+        if (width >= 1001) {
+            const training = await card.boundingBox();
+            const trounce = await page.locator(".event-trounce-item").boundingBox();
+            expect(training!.height).toBe(trounce!.height);
+        }
         await card.screenshot({ path: `test-results/temper-thyself-progress-${width}.png` });
         expect(
             Number(await card.locator("[data-end-time]").first().getAttribute("data-end-time")),

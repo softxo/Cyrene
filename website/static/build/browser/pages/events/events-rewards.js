@@ -36,7 +36,7 @@
     const position = (wrapper) => {
         const popup = wrapper.querySelector(".event-insight-popover");
         const button = wrapper.querySelector("button");
-        if (!popup || !button)
+        if (!popup || !button || !button.getClientRects().length)
             return;
         const anchor = button.getBoundingClientRect();
         const content = popup.querySelector(".event-insight-content");
@@ -66,7 +66,7 @@
         close(true);
         const popup = wrapper.querySelector(".event-insight-popover");
         const button = wrapper.querySelector("button");
-        if (!popup || !button)
+        if (!popup || !button || !button.getClientRects().length)
             return;
         if (!popup.id)
             popup.id = `insight-rewards-${++nextId}`;
@@ -89,6 +89,8 @@
         const wrapper = wrapperFor(event.target);
         if (wrapper) {
             clearTimeout(closeTimer);
+            if (wrapper.dataset.popoverActivation === "click")
+                return;
             if (event.relatedTarget instanceof Node && wrapper.contains(event.relatedTarget))
                 return;
             clearTimeout(openTimer);
@@ -100,12 +102,13 @@
         if (wrapper &&
             !(event.relatedTarget instanceof Node && wrapper.contains(event.relatedTarget))) {
             clearTimeout(openTimer);
-            closeTimer = setTimeout(() => close(), 180);
+            if (wrapper.dataset.popoverActivation !== "click")
+                closeTimer = setTimeout(() => close(), 180);
         }
     });
     document.addEventListener("focusin", (event) => {
         const wrapper = wrapperFor(event.target);
-        if (wrapper)
+        if (wrapper && wrapper.dataset.popoverActivation !== "click")
             open(wrapper);
     });
     document.addEventListener("focusout", (event) => {
@@ -117,7 +120,10 @@
         const wrapper = wrapperFor(event.target);
         if (wrapper && event.target instanceof Element && event.target.closest("button")) {
             event.preventDefault();
-            open(wrapper);
+            if (active === wrapper && wrapper.dataset.popoverActivation === "click")
+                close();
+            else
+                open(wrapper);
         }
         else if (!wrapper)
             close();
@@ -130,12 +136,7 @@
         if (!active ||
             (event.target instanceof Element && event.target.closest(".event-insight-popover")))
             return;
-        requestAnimationFrame(() => {
-            if (active?.isConnected)
-                position(active);
-            else
-                close();
-        });
+        close(true);
     }, true);
     window.addEventListener("resize", () => close(true));
 })();

@@ -91,6 +91,8 @@
 :root
     :is(
         dialog:not([open]),
+        [data-modal-panel][hidden],
+        [data-modal-panel][popover]:not(:popover-open),
         [aria-modal="true"][hidden]:not([data-modal-shell]),
         [data-modal-shell][hidden] [aria-modal="true"],
         [data-modal-shell][hidden] [data-modal-panel]
@@ -274,6 +276,8 @@ dialog:not([open])::backdrop {
     box-shadow: 0 10px 32px rgb(0 0 0 / 24%);
     color: var(--text);
     pointer-events: auto;
+    opacity: var(--toast-opacity, 1);
+    transition: opacity 180ms ease-in-out;
     animation: cyrene-toast-enter 180ms ease-out;
 }
 .cyrene-toast svg {
@@ -315,7 +319,7 @@ dialog:not([open])::backdrop {
         transform: translateY(6px);
     }
     to {
-        opacity: 1;
+        opacity: var(--toast-opacity, 1);
         transform: translateY(0);
     }
 }
@@ -328,6 +332,7 @@ dialog:not([open])::backdrop {
 @media (prefers-reduced-motion: reduce) {
     .cyrene-toast {
         animation: none;
+        transition: none;
     }
 }
 
@@ -2302,7 +2307,7 @@ body:has(#navigation-loading-status)::before {
 
 .site-update-notice {
     position: fixed;
-    top: 16px;
+    top: var(--cyrene-feedback-top, 16px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 9000;
@@ -2335,7 +2340,7 @@ body:has(#navigation-loading-status)::before {
 
 .site-update-dot {
     position: fixed;
-    top: 12px;
+    top: var(--cyrene-feedback-top, 12px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 9000;
@@ -2419,7 +2424,7 @@ body:has(#navigation-loading-status)::before {
 .site-update-success {
     position: fixed;
     left: 50%;
-    top: 16px;
+    top: var(--cyrene-feedback-top, 16px);
     transform: translateX(-50%);
     z-index: 9000;
     display: flex;

@@ -64,6 +64,22 @@ class DailyLimitedEventsTests(unittest.TestCase):
             ],
         )
 
+    def test_upcoming_events_ignore_existing_manual_checks(self):
+        event = dict(self.event("Future Event"), is_upcoming=True)
+        apply_completion_checks([event], {completion_key(event): True})
+        self.assertFalse(event["manual_checked"])
+        self.assertFalse(event["is_finished"])
+
+    def test_every_heated_battle_mode_is_tcg_without_reward_data(self):
+        for name in (
+            "Heated Battle Mode",
+            "Heated Battle Mode: Sprinting Stratagems",
+            "Heated Battle Mode: Automatic Artistry",
+        ):
+            event = dict(self.event(name), is_upcoming=True)
+            annotate_daily_events([event], 1800000000)
+            self.assertTrue(event["is_tcg"])
+
     def test_non_daily_completion_identity_stays_unchanged(self):
         event = self.event("Regular Limited Event")
         key = completion_key(event)

@@ -1212,198 +1212,77 @@
    ========================================================= */
 
 .events-custom-dialog .events-custom-number {
-    position: relative !important;
-
-    display: flex !important;
-    align-items: center !important;
-
-    width: 100% !important;
-    height: 38px !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-
-    border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-
-    background: var(--background) !important;
-    overflow: hidden !important;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: var(--custom-control-height, 42px);
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--control-border);
+    border-radius: 10px;
+    background: var(--control-surface);
+    overflow: hidden;
 }
-
-/* Number input */
-.events-custom-dialog .events-custom-number input[type="number"] {
-    appearance: textfield !important;
-    -webkit-appearance: textfield !important;
-    -moz-appearance: textfield !important;
-
-    display: block !important;
-    flex: 1 1 auto !important;
-
-    width: 0 !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 6px 0 9px !important;
-    box-sizing: border-box !important;
-
-    border: 1px solid var(--control-border) !important;
-    border-radius: 0 !important;
-    outline: none !important;
-    box-shadow: none !important;
-
-    background: var(--control-surface) !important;
-    color: var(--control-text) !important;
-
-    font-family: "Inter", sans-serif !important;
-    font-size: 0.82rem !important;
+.events-custom-dialog .events-custom-number:focus-within {
+    border-color: var(--control-focus-border);
 }
-
-.events-custom-dialog .events-custom-number input[type="number"]::-webkit-inner-spin-button,
-.events-custom-dialog .events-custom-number input[type="number"]::-webkit-outer-spin-button {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    margin: 0 !important;
+.events-custom-dialog .events-custom-number > input[type="number"][data-custom-spinner] {
+    appearance: textfield;
+    flex: 1 1 0;
+    width: 0;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0 6px 0 10px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--control-text);
+    box-shadow: none;
+    font: inherit;
+    font-size: 13px;
 }
-
-/* =========================================================
-   SPINNER COLUMN — COMPACT, CENTRED ARROWS
-   ========================================================= */
-
+.events-custom-dialog .events-custom-number input::-webkit-inner-spin-button,
+.events-custom-dialog .events-custom-number input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 .events-custom-dialog .events-custom-number > .number-spinner {
-    position: static !important;
-    transform: none !important;
-
-    display: flex !important;
-    flex: 0 0 22px !important;
-    flex-direction: column !important;
-    align-self: center !important;
-
-    width: 22px !important;
-    height: 28px !important;
-    min-width: 22px !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 1px !important;
-    box-sizing: border-box !important;
-    gap: 0 !important;
-
-    border: 0 !important;
-    border-radius: 0 !important;
-
-    background: transparent !important;
-    box-shadow: none !important;
+    position: static;
+    display: flex;
+    flex: 0 0 24px;
+    flex-direction: column;
+    align-self: stretch;
+    width: 24px;
+    height: 100%;
+    margin: 0;
+    padding: 2px;
+    box-sizing: border-box;
+    transform: none;
 }
-
-/* Individual arrow buttons */
 .events-custom-dialog .events-custom-number .number-spinner-button {
-    position: static !important;
-
-    display: flex !important;
-    flex: 1 1 50% !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    border: 0 !important;
-    border-radius: 3px !important;
-
-    background: transparent !important;
-    color: var(--text-muted) !important;
-    box-shadow: none !important;
-    transform: none !important;
-
-    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    touch-action: none;
 }
-
 .events-custom-dialog .events-custom-number .number-spinner-button:hover {
-    background: var(--accent-soft) !important;
-    color: var(--accent) !important;
+    background: var(--accent-soft);
+    color: var(--accent);
 }
-
-/* =========================================================
-   CHEVRON ICONS — MATCH PLANNER
-   ========================================================= */
-
 .events-custom-dialog .events-custom-number .spinner-arrow {
-    width: 7px !important;
-    height: 7px !important;
-
-    display: block !important;
-    box-sizing: border-box !important;
-
-    border-right: 1.5px solid currentColor !important;
-    border-bottom: 1.5px solid currentColor !important;
-    border-top: 0 !important;
-    border-left: 0 !important;
-
-    transition:
-        color 0.12s ease,
-        transform 0.12s ease;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
 }
-
-.events-custom-dialog .number-spinner-button[data-direction="up"] .spinner-arrow {
-    transform: rotate(225deg) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="down"] .spinner-arrow {
-    transform: rotate(45deg) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="up"]:active .spinner-arrow {
-    transform: rotate(225deg) translate(-1px, -1px) !important;
-}
-
-.events-custom-dialog .number-spinner-button[data-direction="down"]:active .spinner-arrow {
-    transform: rotate(45deg) translate(1px, 1px) !important;
-}
-
-/* =========================================================
-   CUSTOM EVENTS — FORCE REMOVE SPINNER ARROW FOCUS
-   ========================================================= */
-
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:focus,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus-visible,
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button:active,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus
-    .spinner-arrow,
-.events-custom-dialog
-    .events-custom-number
-    .number-spinner
-    button.number-spinner-button:focus-visible
-    .spinner-arrow {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: var(--control-focus-border) !important;
-}
-
-/* Prevent global button focus styles from affecting spinner buttons */
-.events-custom-dialog .events-custom-number .number-spinner button.number-spinner-button {
-    -webkit-tap-highlight-color: transparent !important;
-    outline: 0 !important;
-    box-shadow: none !important;
-}
-
-/* =========================================================
-   CUSTOM EVENTS — CUSTOM FORM DROPDOWNS
-   ========================================================= */
 
 .events-custom-dialog [data-custom-dropdown] {
     position: relative;
@@ -2334,7 +2213,8 @@
 .events-page .events-custom-account-count.event-completion-pill,
 .events-page .event-list-status.event-completion-pill,
 .events-page .overview-status.event-completion-pill,
-.events-page .events-custom-countdown.event-completion-pill {
+.events-page .events-custom-countdown.event-completion-pill,
+.events-page .events-custom-completion.event-completion-pill {
     background: rgba(93, 231, 151, 0.16);
     border-color: rgba(93, 231, 151, 0.32);
     color: #72eea2;
@@ -2354,7 +2234,7 @@
 }
 .events-custom-overview .event-list-item.events-limited-overview-event {
     border-radius: 14px;
-    min-height: 76px;
+    min-height: 60px;
 }
 .events-custom-overview .event-list-item.events-limited-overview-event::before {
     display: none;
@@ -2559,4 +2439,94 @@
 .events-custom-overview-objective-button > svg {
     width: 16px;
     height: 16px;
+}
+
+/* Editor controls share one height and leave enough room for their menus. */
+.events-custom-dialog .events-custom-objective > input,
+.events-custom-dialog .events-custom-objective-remove {
+    height: var(--custom-control-height);
+    min-height: var(--custom-control-height);
+}
+.events-custom-dialog [data-custom-dropdown] [role="listbox"] {
+    max-height: min(300px, 45vh);
+    overflow-y: auto;
+    padding-bottom: 8px;
+}
+.events-custom-dialog .events-custom-icon-upload {
+    flex-wrap: nowrap;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--control-border);
+    border-radius: 12px;
+    background: var(--control-surface);
+}
+.events-custom-dialog .events-custom-icon-preview {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+}
+.events-custom-icon-controls {
+    flex: 1;
+    min-width: 0;
+}
+.events-custom-icon-filename {
+    flex: 0 0 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.events-custom-icon-controls .events-custom-icon-button {
+    min-height: 34px;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+/* Menus live in the top layer, independently of the editor's scroll area. */
+.events-custom-dialog .custom-select-menu[popover] {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    overflow-y: auto;
+}
+.events-custom-dialog .custom-select-menu[popover]:not(:popover-open) {
+    display: none;
+}
+.events-custom-scope-hint {
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.55;
+}
+.events-custom-dialog {
+    padding-bottom: 16px;
+}
+@media (max-width: 640px) {
+    .events-custom-dialog {
+        padding-bottom: 14px;
+    }
+    .events-custom-form-actions {
+        bottom: -14px;
+        margin-bottom: -14px;
+        padding-bottom: 12px;
+    }
+}
+
+.events-custom-status-pills {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.events-custom-card-status {
+    margin-left: auto;
+}
+.events-custom-status-pills .events-custom-countdown {
+    margin-left: 0;
+}
+.events-custom-overview-summary-status {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 1;
 }

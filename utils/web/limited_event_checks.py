@@ -13,7 +13,7 @@ def apply_archon_quest_progress(events: list[dict], notes: dict, now: int) -> No
         return
     data = notes.get("data")
     progress = data.get("archon_quest_progress") if isinstance(data, dict) else None
-    if not isinstance(progress, dict) or progress.get("is_open_archon_quest") is not True:
+    if not isinstance(progress, dict):
         return
     quests = progress.get("list")
     if not isinstance(quests, list):
@@ -66,6 +66,16 @@ def apply_archon_quest_progress(events: list[dict], notes: dict, now: int) -> No
         )
 
 
+def is_tcg_event(name: str, rewards: list[dict]) -> bool:
+    name = normalise_name(name)
+    return (
+        name.startswith("heated battle mode")
+        or name.startswith("the forge realm s temper")
+        or name.startswith("genius invokation tcg")
+        or any("lucky coin" in reward.get("name", "").casefold() for reward in rewards)
+    )
+
+
 def annotate_daily_events(events: list[dict], reset_time: int) -> None:
     # Explicit recurring reward campaigns, not ordinary events mentioning daily tasks.
     campaigns = (
@@ -76,6 +86,9 @@ def annotate_daily_events(events: list[dict], reset_time: int) -> None:
         "overflowing abundance",
     )
     for event in events:
+        event["is_tcg"] = bool(event.get("is_tcg")) or is_tcg_event(
+            event["name"], event.get("rewards", [])
+        )
         name = normalise_name(event["name"])
         if any(name == campaign or name.startswith(campaign + " ") for campaign in campaigns):
             event["category"] = "Daily"
@@ -86,8 +99,12 @@ def annotate_daily_events(events: list[dict], reset_time: int) -> None:
     events.sort(
         key=lambda event: (
             bool(event.get("is_upcoming")),
-            bool(event.get("category") or event.get("is_tcg")),
-            event.get("start_time", 0) if event.get("is_upcoming") else event["end_time"],
+            False
+            if event.get("is_upcoming")
+            else bool(event.get("category") or event.get("is_tcg")),
+            (event.get("start_time") or event.get("opening_date_timestamp") or float("inf"))
+            if event.get("is_upcoming")
+            else event["end_time"],
         )
     )
 
@@ -105,6 +122,11 @@ def apply_completion_checks(events: list[dict], checks: dict[str, bool]) -> None
     for event in events:
         key = completion_key(event)
         event["completion_key"] = key
+        if event.get("is_upcoming"):
+            event["automatic_finished"] = False
+            event["manual_checked"] = False
+            event["is_finished"] = False
+            continue
         event["automatic_finished"] = event["is_finished"]
         event["manual_checked"] = checks.get(key)
         event["is_finished"] = bool(event["automatic_finished"] or checks.get(key, False))

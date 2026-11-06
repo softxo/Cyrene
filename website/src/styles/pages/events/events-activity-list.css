@@ -133,13 +133,12 @@
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     gap: 6px;
-    max-width: 42%;
+    max-width: none;
     min-width: 0;
     padding: 2px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    overflow: visible;
 }
 
 .event-limited-rewards::-webkit-scrollbar {
@@ -230,7 +229,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.24);
 }
 
-.event-list-right .event-time-left.upcoming {
+.event-time-left.upcoming {
     border-color: rgba(92, 174, 255, 0.62);
     background: rgba(44, 127, 211, 0.28);
     color: #c9e7ff;
@@ -917,5 +916,113 @@
     }
     .event-temper-progress-box {
         flex: 1 0 auto;
+    }
+}
+
+.event-all-rewards {
+    display: flex;
+    align-items: center;
+}
+
+.event-rewards-more {
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 0 9px;
+    white-space: nowrap;
+    font-size: 11px;
+}
+.event-all-reward-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+.event-limited-item .event-checkmark:disabled {
+    cursor: default;
+    opacity: 0.45;
+}
+.event-time-left.event-insight {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.event-time-left:not(.upcoming) > .event-upcoming-help {
+    display: none;
+}
+.event-upcoming-help {
+    color: inherit;
+}
+.event-time-left .event-insight-popover {
+    white-space: normal;
+    text-align: left;
+    font-weight: 400;
+}
+@media (max-width: 1200px) {
+    .event-limited-rewards > .event-limited-reward:nth-child(n + 6) {
+        display: none;
+    }
+}
+@media (max-width: 600px) {
+    .event-limited-main > .event-limited-rewards {
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+    .event-limited-rewards > .event-limited-reward:nth-child(n + 5) {
+        display: none;
+    }
+}
+
+@media (min-width: 1201px) {
+    .event-rewards-responsive-more {
+        display: none;
+    }
+}
+@media (min-width: 601px) {
+    .event-rewards-mobile-more {
+        display: none;
+    }
+}
+
+.event-list-right .event-time-left.upcoming {
+    width: 126px;
+    min-width: 126px;
+    max-width: 126px;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+/* Keep the button centred on the reward artwork, independently of amount badges. */
+.event-rewards-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+.event-opening-popover .event-insight-content {
+    padding-bottom: 12px;
+}
+.event-opening-popover p:last-child {
+    margin-bottom: 0;
+}
+
+/* Keep training progress within the standard activity row height. */
+.event-temper-progress-box {
+    min-width: 145px;
+    height: 32px;
+    padding: 3px 8px;
+    gap: 3px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1;
+}
+.event-temper-day-track > span {
+    min-width: 0;
+    height: 3px;
+}
+@media (min-width: 1001px) {
+    .event-temper-item {
+        flex-wrap: nowrap;
+    }
+    .event-temper-item .event-list-right {
+        flex-wrap: nowrap;
     }
 }

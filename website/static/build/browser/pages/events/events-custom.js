@@ -29,6 +29,7 @@ function initCustomEvents() {
             previewObjectUrl = null;
         }
     }
+    form.querySelector("[data-custom-icon-choose]")?.addEventListener("click", () => iconInput?.click());
     function getCustomIconUrl(value) {
         // Match the server's upload allowlist before using API or DOM-derived values as URLs.
         return typeof value === "string" &&
@@ -52,8 +53,8 @@ function initCustomEvents() {
             iconImage.hidden = true;
         }
         if (iconFilename) {
-            iconFilename.textContent =
-                filename || (src ? "Current event icon" : "No image selected");
+            iconFilename.textContent = filename || (src ? "Saved event icon" : "No image selected");
+            iconFilename.title = filename;
         }
         if (removeIconButton) {
             removeIconButton.hidden = !src;
@@ -93,6 +94,7 @@ function initCustomEvents() {
         }
         renderCustomIconPreview();
     });
+    let editingAccountId = null;
     let events = [];
     const accountLoadErrors = new Map();
     const eventsByAccount = new Map();
@@ -204,6 +206,7 @@ function initCustomEvents() {
             const popover = document.createElement("div");
             popover.className = "cyrene-popover events-custom-calendar";
             popover.setAttribute("role", "dialog");
+            popover.setAttribute("data-modal-panel", "");
             popover.setAttribute("aria-label", "Choose date and time");
             popover.hidden = true;
             const header = document.createElement("div");
@@ -346,8 +349,7 @@ function initCustomEvents() {
                 selectedDate = Number.isNaN(parsed.getTime()) ? new Date() : parsed;
                 displayedMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
                 hour.value = String(selectedDate.getHours()).padStart(2, "0");
-                const roundedMinute = Math.round(selectedDate.getMinutes() / 5) * 5;
-                minute.value = String(roundedMinute === 60 ? 55 : roundedMinute).padStart(2, "0");
+                minute.value = String(selectedDate.getMinutes()).padStart(2, "0");
                 renderCalendar();
                 popover.hidden = false;
                 trigger.setAttribute("aria-expanded", "true");
@@ -376,7 +378,17 @@ function initCustomEvents() {
                     closePicker();
                 }
             });
-            popover.addEventListener("click", (event) => event.stopPropagation());
+            popover.addEventListener("click", (event) => {
+                event.stopPropagation();
+                // The picker sits inside a field label. Suppress label activation
+                // on its background and buttons, which otherwise toggles the trigger.
+                if (!event.target.closest("input"))
+                    event.preventDefault();
+            });
+            wrapper.addEventListener("click", (event) => {
+                if (event.target === wrapper)
+                    event.preventDefault();
+            });
             previous.addEventListener("click", () => {
                 displayedMonth.setMonth(displayedMonth.getMonth() - 1);
                 renderCalendar();
@@ -452,7 +464,8 @@ function initCustomEvents() {
     // =========================================
     // MODAL
     // =========================================
-    function openModal(event = null) {
+    function openModal(event = null, accountId = null) {
+        editingAccountId = accountId || event?.account_id || page.dataset.accountId || null;
         clearPreviewObjectUrl();
         form.reset();
         clearError();
@@ -465,10 +478,23 @@ function initCustomEvents() {
         form.elements.event_id.value = event?.id ?? "";
         form.elements.title.value = event?.title ?? "";
         form.elements.description.value = event?.description ?? "";
-        form.elements.account_scope.value = event?.account_scope ?? "all";
+        form.elements.account_scope.value = "account";
+        const scopeDescription = form.querySelector("[data-custom-scope-description]");
+        if (scopeDescription)
+            scopeDescription.textContent = event
+                ? "updates the existing copies. Each account keeps its own notes, progress and completion."
+                : "creates a separate event for each linked account. Edits, progress and deletion stay with that account.";
+        $$('input[name="account_scope"]', form).forEach((input) => {
+            input.disabled = false;
+        });
         const accountDropdown = $("[data-custom-account-select]", form);
-        const defaultAccountId = accountDropdown?.querySelector("[data-account-id]")?.dataset.accountId ?? "";
-        updateAccountDropdown(event?.account_id != null ? String(event.account_id) : defaultAccountId);
+        const accountButton = accountDropdown?.querySelector(".custom-select-button");
+        if (accountButton)
+            accountButton.disabled = !!event;
+        const defaultAccountId = page.dataset.accountId ||
+            accountDropdown?.querySelector("[data-account-id]")?.dataset.accountId ||
+            "";
+        updateAccountDropdown(event ? String(editingAccountId || defaultAccountId) : defaultAccountId);
         form.elements.start_at.value = toLocalInputValue(event?.start_at);
         form.elements.end_at.value = toLocalInputValue(event?.end_at);
         $$('input[type="datetime-local"]', form).forEach((input) => {
@@ -508,6 +534,9 @@ function initCustomEvents() {
         const hiddenInput = dropdown.querySelector('input[name="account_id"]');
         const valueElement = dropdown.querySelector(".custom-select-value");
         const options = Array.from(dropdown.querySelectorAll("[data-account-id]"));
+        const preferred = options.find((option) => option.dataset.accountId === String(page.dataset.accountId));
+        if (preferred)
+            preferred.parentElement.prepend(preferred);
         const selectedOption = options.find((option) => option.dataset.accountId === String(selectedId));
         if (hiddenInput) {
             hiddenInput.value = selectedOption ? selectedOption.dataset.accountId : "";
@@ -531,12 +560,17 @@ function initCustomEvents() {
         const menu = dropdown.querySelector(".custom-select-menu");
         if (!button || !menu)
             return;
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (event) => {
+            event.preventDefault();
+            activeDateTimePicker?.close();
             const isOpen = dropdown.classList.toggle("open");
+            if (isOpen)
+                revealDropdown(dropdown);
             button.setAttribute("aria-expanded", String(isOpen));
         });
         dropdown.querySelectorAll("[data-account-id]").forEach((option) => {
-            option.addEventListener("click", () => {
+            option.addEventListener("click", (event) => {
+                event.preventDefault();
                 updateAccountDropdown(option.dataset.accountId);
                 dropdown.classList.remove("open");
                 button.setAttribute("aria-expanded", "false");
@@ -548,7 +582,8 @@ function initCustomEvents() {
                 button.setAttribute("aria-expanded", "false");
             }
         });
-        updateAccountDropdown(dropdown.querySelector("[data-account-id]")?.dataset.accountId);
+        updateAccountDropdown(page.dataset.accountId ||
+            dropdown.querySelector("[data-account-id]")?.dataset.accountId);
     }
     // =========================================
     // SCHEDULE AND REMINDER DROPDOWNS
@@ -575,18 +610,63 @@ function initCustomEvents() {
             option.setAttribute("aria-selected", String(selected));
         });
     }
+    function revealDropdown(dropdown) {
+        const menu = dropdown.querySelector('[role="listbox"]');
+        const trigger = dropdown.querySelector(".custom-select-button");
+        const panel = modal.querySelector(".events-custom-dialog");
+        if (!menu || !trigger || !panel || !dropdown.classList.contains("open"))
+            return;
+        if (!menu.matches(":popover-open"))
+            menu.showPopover();
+        const box = trigger.getBoundingClientRect();
+        const frame = panel.getBoundingClientRect();
+        const upper = Math.max(12, frame.top + 12);
+        const lower = Math.min(window.innerHeight - 12, frame.bottom - 12);
+        const below = Math.max(0, lower - box.bottom - 6);
+        const above = Math.max(0, box.top - upper - 6);
+        const upwards = below < Math.min(menu.scrollHeight, 300) && above > below;
+        menu.style.width = `${box.width}px`;
+        menu.style.maxHeight = `${Math.min(300, upwards ? above : below)}px`;
+        menu.style.left = `${box.left}px`;
+        menu.style.top = `${upwards ? box.top - 6 - menu.offsetHeight : box.bottom + 6}px`;
+    }
+    // The shared select controller owns trigger clicks. Observe its open state
+    // so menus work identically with that controller and in standalone panels.
+    $$(".custom-select", form).forEach((dropdown) => {
+        const menu = dropdown.querySelector('[role="listbox"]');
+        if (!menu)
+            return;
+        menu.setAttribute("popover", "manual");
+        new MutationObserver(() => {
+            if (dropdown.classList.contains("open"))
+                revealDropdown(dropdown);
+            else if (menu.matches(":popover-open"))
+                menu.hidePopover();
+        }).observe(dropdown, { attributes: true, attributeFilter: ["class"] });
+    });
+    modal.querySelector(".events-custom-dialog")?.addEventListener("scroll", (event) => {
+        if (event.target !== event.currentTarget)
+            return;
+        $$(".custom-select.open", form).forEach(revealDropdown);
+    });
+    window.addEventListener("resize", () => $$(".custom-select.open", form).forEach(revealDropdown));
     function initialiseFormDropdowns() {
         $$("[data-custom-dropdown]", form).forEach((dropdown) => {
             const button = dropdown.querySelector(".custom-select-button");
             if (!button)
                 return;
             const name = dropdown.dataset.customDropdown;
-            button.addEventListener("click", () => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                activeDateTimePicker?.close();
                 const isOpen = dropdown.classList.toggle("open");
+                if (isOpen)
+                    revealDropdown(dropdown);
                 button.setAttribute("aria-expanded", String(isOpen));
             });
             dropdown.querySelectorAll("[data-value]").forEach((option) => {
-                option.addEventListener("click", () => {
+                option.addEventListener("click", (event) => {
+                    event.preventDefault();
                     updateFormDropdown(name, option.dataset.value);
                     dropdown.classList.remove("open");
                     button.setAttribute("aria-expanded", "false");
@@ -612,6 +692,10 @@ function initCustomEvents() {
     function closeModal() {
         clearPreviewObjectUrl();
         activeDateTimePicker?.close();
+        $$(".custom-select.open", form).forEach((dropdown) => {
+            dropdown.classList.remove("open");
+            dropdown.querySelector("[aria-expanded]")?.setAttribute("aria-expanded", "false");
+        });
         modal.hidden = true;
         document.body.style.overflow = "";
         clearError();
@@ -684,10 +768,9 @@ function initCustomEvents() {
         const currentInput = document.createElement("input");
         currentInput.type = "number";
         currentInput.min = "0";
-        currentInput.value = "0";
-        currentInput.disabled = true;
+        currentInput.value = objective.current ?? 0;
         currentInput.setAttribute("aria-description", "Progress is tracked separately for each account.");
-        currentInput.setAttribute("aria-label", "Progress is tracked separately for each account");
+        currentInput.setAttribute("aria-label", "Current progress");
         currentInput.dataset.objectiveCurrent = "";
         const targetInput = document.createElement("input");
         targetInput.type = "number";
@@ -695,6 +778,13 @@ function initCustomEvents() {
         targetInput.value = objective.target ?? 1;
         targetInput.setAttribute("aria-label", "Progress target");
         targetInput.dataset.objectiveTarget = "";
+        function constrainCurrent() {
+            currentInput.max = String(Math.max(1, Number(targetInput.value) || 1));
+            if (Number(currentInput.value) > Number(currentInput.max))
+                currentInput.value = currentInput.max;
+        }
+        targetInput.addEventListener("input", constrainCurrent);
+        constrainCurrent();
         const removeButton = document.createElement("button");
         removeButton.type = "button";
         removeButton.className = "cyrene-button events-custom-objective-remove";
@@ -747,45 +837,32 @@ function initCustomEvents() {
             button.setAttribute("aria-label", label);
             const arrow = document.createElement("span");
             arrow.className = "spinner-arrow";
+            arrow.setAttribute("aria-hidden", "true");
             button.append(arrow);
             let holdTimeout = null;
             let holdInterval = null;
             function stopHolding() {
-                if (holdTimeout !== null) {
-                    clearTimeout(holdTimeout);
-                    holdTimeout = null;
-                }
-                if (holdInterval !== null) {
-                    clearInterval(holdInterval);
-                    holdInterval = null;
-                }
+                clearTimeout(holdTimeout);
+                clearInterval(holdInterval);
             }
-            function startHolding(event) {
-                if (event.type === "mousedown" && event.button !== 0) {
+            button.addEventListener("pointerdown", (event) => {
+                if (event.button !== 0)
                     return;
-                }
                 event.preventDefault();
-                stopHolding();
+                button.setPointerCapture(event.pointerId);
                 changeValue(direction);
                 holdTimeout = setTimeout(() => {
-                    holdInterval = setInterval(() => {
-                        changeValue(direction);
-                    }, 50);
-                    holdTimeout = null;
+                    holdInterval = setInterval(() => changeValue(direction), 80);
                 }, 350);
-            }
-            button.addEventListener("mousedown", startHolding);
-            button.addEventListener("mouseup", stopHolding);
-            button.addEventListener("mouseleave", stopHolding);
-            button.addEventListener("touchstart", startHolding, {
-                passive: false,
             });
-            button.addEventListener("touchend", stopHolding);
-            button.addEventListener("touchcancel", stopHolding);
+            ["pointerup", "pointercancel", "lostpointercapture"].forEach((type) => {
+                button.addEventListener(type, stopHolding);
+            });
             button.addEventListener("click", (event) => {
                 event.preventDefault();
+                if (event.detail === 0)
+                    changeValue(direction);
             });
-            window.addEventListener("blur", stopHolding);
             return button;
         }
         spinner.append(createButton("up", "Increase value"), createButton("down", "Decrease value"));
@@ -797,7 +874,7 @@ function initCustomEvents() {
     function readObjectives() {
         return $$(".events-custom-objective", form).map((row) => ({
             title: $("[data-objective-title]", row).value.trim(),
-            current: 0,
+            current: Number($("[data-objective-current]", row).value),
             target: Number($("[data-objective-target]", row).value),
         }));
     }
@@ -932,6 +1009,7 @@ function initCustomEvents() {
                     ordered_event_ids: orderedIds.map(Number),
                 }),
             });
+            window.showCyreneToast?.("Event order saved.");
         }
         catch (error) {
             if (isOverview) {
@@ -941,7 +1019,7 @@ function initCustomEvents() {
                 events = previousEvents;
             }
             renderEvents();
-            alert(error.message || "Could not save the event order. Please try again.");
+            window.showCyreneToast?.(error.message || "Could not save the event order. Please try again.", "error");
         }
         finally {
             savingOrder = false;
@@ -1035,7 +1113,7 @@ function initCustomEvents() {
         const accountId = page.dataset.accountId;
         // Never write shared progress from a normal page without an account ID.
         if (!isOverview && !accountId) {
-            window.alert("The selected account could not be identified. Please refresh the page.");
+            window.showCyreneToast?.("The selected account could not be identified. Please refresh the page.", "error");
             return;
         }
         const target = Math.max(1, Number(objective.target) || 1);
@@ -1095,12 +1173,13 @@ function initCustomEvents() {
                     body: JSON.stringify(payload),
                 }, window.CyreneSchemas.customEventResponseSchema);
             }
+            window.showCyreneToast?.("Objective progress saved.");
         }
         catch (error) {
             // Restore the previous value if the save fails.
             objective.current = previous;
             updateProgressUI(previous);
-            window.alert(error.message || "Unable to update objective progress.");
+            window.showCyreneToast?.(error.message || "Unable to update objective progress.", "error");
         }
         finally {
             // Re-enable only the buttons that are currently valid.
@@ -1248,16 +1327,17 @@ function initCustomEvents() {
             month: "short",
         }).format(date);
         topRow.append(makeElement("span", "events-custom-chip", dateLabel), makeElement("span", "events-custom-chip", recurrenceLabel(event.recurrence)), makeElement("span", "events-custom-chip", event.account_scope === "all" ? "All accounts" : "Specific account"));
-        const countdown = makeElement("span", `events-custom-countdown${completed ? " event-completion-pill" : ""}`, completed ? "Completed" : "");
+        const countdown = makeElement("span", "events-custom-countdown", "");
         const startValue = Number(event.start_at);
         const startTimestamp = Number.isFinite(startValue) && startValue > 0
             ? startValue < 1e12
                 ? startValue * 1000
                 : startValue
             : new Date(event.start_at).getTime();
-        if (!completed)
-            countdown.dataset.countdownTarget = String(getCustomEventCountdownTarget(event));
-        topRow.append(countdown);
+        countdown.dataset.countdownTarget = String(getCustomEventCountdownTarget(event));
+        const statusPills = makeElement("div", "events-custom-status-pills events-custom-card-status");
+        statusPills.append(makeElement("span", `events-custom-completion event-list-status ${completed ? "claimed event-completion-pill" : ""}`, completed ? "Complete" : "Incomplete"), countdown);
+        topRow.append(statusPills);
         content.append(topRow);
         if (event.description) {
             content.append(makeElement("p", "events-custom-card-description", event.description));
@@ -1274,7 +1354,7 @@ function initCustomEvents() {
             else {
                 reminderLabel = `Reminder: ${event.reminder_minutes} minutes before`;
             }
-            topRow.insertBefore(makeElement("span", "events-custom-card-reminder", reminderLabel), countdown);
+            topRow.insertBefore(makeElement("span", "events-custom-card-reminder", reminderLabel), statusPills);
         }
         renderProgress(event, content);
         const actions = makeElement("div", "events-custom-card-actions");
@@ -1432,23 +1512,23 @@ function initCustomEvents() {
             objectiveSummary = makeElement("span", `events-custom-overview-progress${finished === objectives.length ? " event-completion-pill" : ""}`, `${finished}/${objectives.length} objectives`);
             summaryStatus.append(objectiveSummary);
         }
-        const status = makeElement("span", `events-custom-countdown${completed ? " event-completion-pill" : ""}`, completed ? "Completed" : "");
+        const status = makeElement("span", "events-custom-countdown", "");
         if (completed) {
             row.classList.add("is-completed");
         }
-        else {
-            status.dataset.countdownTarget = String(getCustomEventCountdownTarget(event));
-        }
+        status.dataset.countdownTarget = String(getCustomEventCountdownTarget(event));
         const toggleIcon = makeElement("span", "events-custom-overview-toggle");
         toggleIcon.setAttribute("aria-hidden", "true");
-        summaryStatus.append(status, toggleIcon);
+        const statusPills = makeElement("span", "events-custom-status-pills");
+        statusPills.append(makeElement("span", `events-custom-completion event-list-status ${completed ? "claimed event-completion-pill" : ""}`, completed ? "Complete" : "Incomplete"), status);
+        summaryStatus.append(statusPills, toggleIcon);
         summary.append(summaryStatus);
         const body = makeElement("div", "events-custom-overview-details");
         if (event.description) {
             body.append(makeElement("p", "events-custom-card-description", event.description));
         }
         const actions = makeElement("div", "events-custom-card-actions events-custom-overview-actions");
-        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, getCompletionOccurrenceStart(event), accountId)), makeButton("Edit", "", () => openModal(event)), makeButton("Delete", "events-custom-action-danger cyrene-button--danger", () => removeEvent(event)));
+        actions.append(makeButton(completed ? "Mark Incomplete" : "Mark Complete", "", () => toggleCompletion(event, !completed, getCompletionOccurrenceStart(event), accountId)), makeButton("Edit", "", () => openModal(event, accountId)), makeButton("Delete", "events-custom-action-danger cyrene-button--danger", () => removeEvent(event, accountId)));
         const manage = makeElement("a", "events-custom-overview-manage events-custom-action", "Manage in account");
         manage.href = `/events?account_id=${encodeURIComponent(accountId)}&tab=custom`;
         actions.append(manage);
@@ -1508,10 +1588,11 @@ function initCustomEvents() {
                         throw new Error("The server returned invalid progress. Please try again.");
                     }
                     update(Math.max(0, Math.min(target, Number(result.current))));
+                    window.showCyreneToast?.("Objective progress saved.");
                 }
                 catch (error) {
                     update(previous);
-                    window.alert(error.message || "Unable to update objective progress.");
+                    window.showCyreneToast?.(error.message || "Unable to update objective progress.", "error");
                 }
             }
             decrease.addEventListener("click", () => changeProgress(-1));
@@ -1678,6 +1759,7 @@ function initCustomEvents() {
                 body: JSON.stringify(payload),
             }, window.CyreneSchemas.customEventResponseSchema);
             closeModal();
+            window.showCyreneToast?.(eventId ? "Event updated." : "Event created.");
             await loadEvents();
             if (window.refreshEvents) {
                 // Keep any existing refresh logic here, if you have it.
@@ -1685,6 +1767,7 @@ function initCustomEvents() {
         }
         catch (error) {
             showError(error.message || "Unable to save this event.");
+            window.showCyreneToast?.(error.message || "Unable to save this event.", "error");
         }
         finally {
             if (saveButton) {
@@ -1695,16 +1778,28 @@ function initCustomEvents() {
     // =========================================
     // DELETE
     // =========================================
-    async function removeEvent(event) {
-        const confirmed = window.confirm(`Delete "${event.title}"? This cannot be undone.`);
+    async function removeEvent(event, accountId = null) {
+        const confirmation = page.querySelector(".events-custom-delete-dialog");
+        if (!confirmation || confirmation.open)
+            return;
+        confirmation.querySelector("[data-delete-description]").textContent =
+            `Delete "${event.title}" from this account? Your other accounts keep their events. This cannot be undone.`;
+        confirmation.returnValue = "cancel";
+        const confirmed = await new Promise((resolve) => {
+            confirmation.addEventListener("close", () => resolve(confirmation.returnValue === "delete"), { once: true });
+            confirmation.querySelector("[data-delete-confirm]").onclick = () => confirmation.close("delete");
+            confirmation.querySelector("[data-delete-cancel]").onclick = () => confirmation.close("cancel");
+            confirmation.showModal();
+        });
         if (!confirmed)
             return;
         try {
-            await apiRequest(`/api/custom-events/${encodeURIComponent(event.id)}`, { method: "DELETE" }, window.CyreneSchemas.deleteCustomEventResponseSchema);
+            await apiRequest(`/api/custom-events/${encodeURIComponent(event.id)}?account_id=${encodeURIComponent(accountId || event.account_id || page.dataset.accountId)}`, { method: "DELETE" }, window.CyreneSchemas.deleteCustomEventResponseSchema);
+            window.showCyreneToast?.("Event deleted.");
             await loadEvents();
         }
         catch (error) {
-            window.alert(error.message || "Unable to delete this event.");
+            window.showCyreneToast?.(error.message || "Unable to delete this event.", "error");
         }
     }
     // =========================================
@@ -1740,11 +1835,12 @@ function initCustomEvents() {
                 body: JSON.stringify(payload),
                 signal: AbortSignal.timeout(15000),
             }, window.CyreneSchemas.customEventCompletionResponseSchema);
+            window.showCyreneToast?.(`${event.title}: marked ${completed ? "complete" : "incomplete"}.`);
         }
         catch (error) {
             event.completions = previousCompletions;
             renderCompletion();
-            window.alert(error.message || "Unable to update event completion.");
+            window.showCyreneToast?.(error.message || "Unable to update event completion.", "error");
         }
         finally {
             event.completionSaving = false;

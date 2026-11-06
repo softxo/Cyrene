@@ -1,6 +1,7 @@
 const requests = new Map();
 let navigation;
 let installed = false;
+let loadingSizeObserver;
 const labels = {
     "/": "Home",
     "/characters": "Characters",
@@ -29,12 +30,15 @@ function renderLoading() {
     const existing = document.getElementById("navigation-loading-status");
     if (!show) {
         existing?.remove();
+        loadingSizeObserver?.disconnect();
+        document.body.style.removeProperty("--cyrene-feedback-top");
         return;
     }
     const message = (!navigation && current?.message) || `Loading ${labels[path] || "page"}\u2026`;
     if (existing?.dataset.path === path && existing?.dataset.message === message)
         return;
     existing?.remove();
+    loadingSizeObserver?.disconnect();
     const status = document.createElement("div");
     status.id = "navigation-loading-status";
     status.dataset.path = path;
@@ -52,6 +56,10 @@ function renderLoading() {
     text.textContent = message;
     status.append(icon, text);
     document.body.append(status);
+    const positionFeedback = () => document.body.style.setProperty("--cyrene-feedback-top", `${status.getBoundingClientRect().bottom + 12}px`);
+    positionFeedback();
+    loadingSizeObserver = new ResizeObserver(positionFeedback);
+    loadingSizeObserver.observe(status);
 }
 /** Navigation feedback owns the indicator until the destination is ready. */
 export function beginNavigationLoading(path) {

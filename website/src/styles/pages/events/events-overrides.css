@@ -11,11 +11,13 @@
     display: flex;
     align-items: center;
     min-height: 64px;
+    column-gap: 12px;
 }
 
 .events-overview-panel[data-overview-panel="daily"] .overview-encounter-points {
-    position: absolute;
-    left: calc(100% - 284px);
+    position: static;
+    margin-left: auto;
+    flex: 0 0 82px;
 
     width: 82px;
     min-width: 82px;
@@ -25,7 +27,7 @@
 }
 
 .events-overview-panel[data-overview-panel="daily"] .overview-account-status {
-    margin-left: auto;
+    margin-left: 0;
     flex: 0 0 auto;
 }
 
@@ -33,8 +35,7 @@
    DAILY OVERVIEW — STATUS PILL
    ========================================================= */
 
-.events-overview-panel[data-overview-panel="daily"]
-.event-list-status-with-claim {
+.events-overview-panel[data-overview-panel="daily"] .event-list-status-with-claim {
     width: 135px;
     min-width: 135px;
     max-width: 135px;
@@ -42,7 +43,7 @@
 }
 
 .events-overview-panel[data-overview-panel="daily"]
-.event-list-status-with-claim:not(.unclaimed):not(.handbook-claimed):not(.claimed) {
+    .event-list-status-with-claim:not(.unclaimed):not(.handbook-claimed):not(.claimed) {
     color: var(--text-secondary);
     border-color: var(--border);
     background: var(--surface);
@@ -129,7 +130,7 @@
     box-sizing: border-box;
 
     background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
 
     text-align: center;
@@ -188,7 +189,6 @@
     white-space: nowrap;
 }
 
-
 /* Card headings: Abyss and Theater */
 .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header {
     display: flex;
@@ -218,7 +218,6 @@
     text-overflow: ellipsis;
 }
 
-
 /* Tablet: less horizontal space */
 @media (max-width: 900px) {
     .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
@@ -243,7 +242,6 @@
         font-size: 12px;
     }
 }
-
 
 /* Mobile: account above the four result cards */
 @media (max-width: 650px) {
@@ -298,7 +296,7 @@
 .stygian-dire-prestige {
     margin-top: 24px;
     padding: 20px 22px;
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     background: rgba(12, 14, 22, 0.58);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
@@ -346,14 +344,14 @@
 
 .stygian-dire-prestige-status.active {
     color: #b9f5d0;
-    background: rgba(52, 211, 153, 0.10);
+    background: rgba(52, 211, 153, 0.1);
     border-color: rgba(52, 211, 153, 0.25);
 }
 
 .stygian-dire-prestige-status.inactive {
     color: #c4c7d0;
-    background: rgba(156, 163, 175, 0.10);
-    border-color: rgba(156, 163, 175, 0.20);
+    background: rgba(156, 163, 175, 0.1);
+    border-color: rgba(156, 163, 175, 0.2);
 }
 
 /* Progress labels */
@@ -463,7 +461,6 @@
     min-height: 100%;
 }
 
-
 /* =========================================================
    STYGIAN — TWO COLLAPSED SUMMARY BOXES
    ========================================================= */
@@ -488,31 +485,61 @@
     white-space: nowrap;
 }
 
-.event-featured-card[data-event-type="stygian"]
-.event-collapsed-value .stygian-difficulty-icon {
+.event-featured-card[data-event-type="stygian"] .event-collapsed-value .stygian-difficulty-icon {
     width: 22px;
     height: 22px;
 }
 
-.event-featured-card[data-event-type="stygian"]
-.event-collapsed-value strong {
+.event-featured-card[data-event-type="stygian"] .event-collapsed-value strong {
     min-width: 0;
     font-size: clamp(13px, 1.05vw, 16px);
 }
 
-.event-featured-card[data-event-type="stygian"]
-.event-stat-separator {
+.event-featured-card[data-event-type="stygian"] .event-stat-separator {
     flex-shrink: 0;
 }
-
 
 /* =========================================================
    IMAGINARIUM THEATER — COLLAPSED STELLA ICON
    ========================================================= */
 
-.event-featured-card[data-event-type="theater"]
-.event-collapsed-value .it-stella {
+.event-featured-card[data-event-type="theater"] .event-collapsed-value .it-stella {
     width: 30px;
     height: 30px;
     flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-account-status {
+        width: 100%;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-progress {
+        flex-wrap: wrap;
+    }
+}
+
+/* Account names retain their heading style; only the UID is muted. */
+.events-page .overview-account-name strong,
+.events-page .overview-account-name strong [data-account-profile-name],
+.events-page .overview-account-name > [data-account-profile-name] {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 1;
+}
+.overview-account-name > span:not([data-account-profile-name]) {
+    font-size: 13px;
+    opacity: 0.6;
+}
+.overview-account-row.completed {
+    opacity: 1;
+}
+.overview-account-row.completed .overview-account-status,
+.overview-account-row.completed .overview-encounter-points {
+    opacity: 0.65;
 }

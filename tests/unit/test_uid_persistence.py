@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from utils.achievements import importer
-from utils.hoyolab import database
+from utils.hoyolab import database, events_store
 from utils.web import auth
 
 
@@ -36,7 +36,10 @@ class Result:
         return result
 
     async def fetchall(self):
-        return [dict(row) for row in self.cursor.fetchall()]
+        result = []
+        while (row := await self.fetchone()) is not None:
+            result.append(row)
+        return result
 
 
 class Connection:
@@ -206,6 +209,9 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
                 discord_user_id INTEGER, account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
                 event_id INTEGER REFERENCES custom_events(id) ON DELETE CASCADE, sort_order INTEGER,
                 PRIMARY KEY(discord_user_id, account_id, event_id));
+            CREATE TABLE custom_event_copy_groups (
+                event_id INTEGER PRIMARY KEY REFERENCES custom_events(id) ON DELETE CASCADE,
+                group_key INTEGER NOT NULL);
             CREATE TABLE custom_event_accounts (
                 event_id INTEGER REFERENCES custom_events(id) ON DELETE CASCADE,
                 genshin_uid TEXT,genshin_server TEXT,sort_order INTEGER,updated_at TEXT,
@@ -236,7 +242,7 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
             recurrence={"type": "none"},
             colour="#7c83ff",
             reminder_minutes=None,
-            progress=[{"target": 3}],
+            progress=[{"title": "Reputation", "target": 3}],
         )
         with patch.object(database, "get_pool", return_value=connection):
             event = await database.create_custom_event(10, **fields)
@@ -254,6 +260,8 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
             shared = await database.create_custom_event(
                 10, **dict(fields, title="Shared", account_scope="all", account_id=None)
             )
+            self.assertEqual(shared["account_scope"], "account")
+            self.assertEqual(shared["account_id"], 1)
             connection.db.execute("DELETE FROM accounts WHERE id = 1")
             self.assertIsNone(
                 connection.db.execute(
@@ -279,9 +287,111 @@ class UIDPersistenceTests(unittest.IsolatedAsyncioTestCase):
             )
             self.assertIsNotNone(await database.get_visible_custom_event(10, event["id"], 4))
             self.assertIsNone(await database.get_visible_custom_event(10, event["id"], 2))
-            self.assertEqual(
-                [row["id"] for row in await database.get_custom_events(10, 2)], [shared["id"]]
+            second_copy = (await database.get_custom_events(10, 2))[0]
+            self.assertNotEqual(second_copy["id"], shared["id"])
+            self.assertEqual(second_copy["title"], "Shared")
+            await database.update_custom_event(
+                10,
+                shared["id"],
+                **dict(
+                    fields,
+                    account_id=4,
+                    title="Only Paragraph",
+                    description="Local notes",
+                    progress=[{"title": "Local", "current": 2, "target": 4}],
+                ),
             )
+            self.assertEqual(
+                (await database.get_custom_event(10, second_copy["id"]))["title"], "Shared"
+            )
+            self.assertIsNone(
+                (await database.get_custom_event(10, second_copy["id"]))["description"]
+            )
+            self.assertEqual(
+                (await database.get_custom_event(10, shared["id"]))["progress"][0]["current"], 2
+            )
+            await database.update_custom_event(
+                10,
+                second_copy["id"],
+                **dict(fields, account_id=2, description="Second account notes"),
+            )
+            await database.change_custom_event_account_progress(10, second_copy["id"], 2, 0, 1, 3)
+            await database.set_custom_event_completion(
+                10, second_copy["id"], fields["start_at"], True, 2
+            )
+            await database.update_custom_event(
+                10,
+                shared["id"],
+                **dict(
+                    fields,
+                    account_scope="all",
+                    account_id=None,
+                    title="Bulk updated",
+                    description="First account notes",
+                    progress=[{"title": "Reputation", "current": 2, "target": 8}],
+                ),
+            )
+            counterpart = await database.get_custom_event(10, second_copy["id"])
+            self.assertEqual(counterpart["title"], "Bulk updated")
+            self.assertEqual(counterpart["description"], "Second account notes")
+            self.assertEqual(counterpart["progress"][0]["current"], 1)
+            self.assertEqual(counterpart["progress"][0]["target"], 8)
+            self.assertEqual(
+                len(await database.get_custom_event_completions(10, second_copy["id"], 2)), 1
+            )
+            self.assertEqual(len(await database.get_custom_events(10, 2)), 1)
+            self.assertFalse(await database.delete_custom_event(10, shared["id"], 2))
+            self.assertTrue(await database.delete_custom_event(10, shared["id"], 4))
+            self.assertIsNotNone(await database.get_custom_event(10, second_copy["id"]))
+            before = len(await database.get_custom_events(10, 4))
+            await database.update_custom_event(
+                10,
+                second_copy["id"],
+                **dict(fields, account_scope="all", account_id=None, title="Remaining copy"),
+            )
+            self.assertEqual(len(await database.get_custom_events(10, 4)), before)
+            self.assertIsNone(await database.get_custom_event(10, shared["id"]))
+
+            # Simulate an older all-account event with distinct saved progress and completions.
+            legacy = await database.create_custom_event(10, **dict(fields, account_id=4))
+            connection.db.execute(
+                "UPDATE custom_events SET account_scope='all',account_id=NULL,genshin_uid=NULL,genshin_server=NULL WHERE id=?",
+                (legacy["id"],),
+            )
+            await events_store.associate(
+                connection,
+                legacy["id"],
+                [{"genshin_uid": "700000002", "genshin_server": "os_euro"}],
+            )
+            await database.change_custom_event_account_progress(10, legacy["id"], 4, 0, 1, 3)
+            await database.change_custom_event_account_progress(10, legacy["id"], 2, 0, 1, 3)
+            await database.change_custom_event_account_progress(10, legacy["id"], 2, 0, 1, 3)
+            await database.set_custom_event_completion(
+                10, legacy["id"], fields["start_at"], True, 4
+            )
+            await events_store.separate_shared_events(connection)
+            before = connection.db.execute("SELECT COUNT(*) FROM custom_events").fetchone()[0]
+            await events_store.separate_shared_events(connection)
+            self.assertEqual(
+                connection.db.execute("SELECT COUNT(*) FROM custom_events").fetchone()[0], before
+            )
+            copies = [
+                row
+                for row in (await database.get_custom_events(10))
+                if row["title"] == "Reputation" and row["id"] != event["id"]
+            ]
+            self.assertEqual(len(copies), 2)
+            for copy in copies:
+                account = copy["account_id"]
+                self.assertEqual(
+                    await database.get_custom_event_account_progress(10, copy["id"], account),
+                    {0: 1 if account == 4 else 2},
+                )
+                self.assertEqual(
+                    len(await database.get_custom_event_completions(10, copy["id"], account)),
+                    1 if account == 4 else 0,
+                )
+
             await database.update_custom_event(
                 10, event["id"], **dict(fields, account_id=4, title="Updated")
             )

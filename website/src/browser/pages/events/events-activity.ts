@@ -36,9 +36,11 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
             }
         });
         document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
-            const cards = group.querySelectorAll(".events-limited-overview-event:not([hidden])");
+            const cards = group.querySelectorAll(
+                ".events-limited-overview-event:not(.upcoming):not([hidden])",
+            );
             const completed = group.querySelectorAll(
-                ".events-limited-overview-event.completed:not([hidden])",
+                ".events-limited-overview-event.completed:not(.upcoming):not([hidden])",
             ).length;
             const count = group.querySelector("[data-limited-account-count]");
             if (count) {
@@ -57,7 +59,12 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
         checkmark.addEventListener("click", async (event) => {
             event.preventDefault();
             event.stopPropagation();
-            if (checkmark.dataset.saving === "true") return;
+            if (
+                checkmark.disabled ||
+                checkmark.closest(".event-limited-item.upcoming") ||
+                checkmark.dataset.saving === "true"
+            )
+                return;
             const { accountId, activityType, eventKey, eventToken } = checkmark.dataset;
             if (!accountId || !activityType) return;
             const buttons = [
@@ -100,6 +107,9 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
                     render(button, data.checked);
                     button.removeAttribute("aria-description");
                 });
+                window.showCyreneToast?.(
+                    data.checked ? "Event marked complete." : "Event marked incomplete.",
+                );
             } catch (error) {
                 previous.forEach(([button, value]) => {
                     render(button, value);
@@ -108,6 +118,7 @@ window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
                         "Could not save completion. Please try again.",
                     );
                 });
+                window.showCyreneToast?.("Could not save completion. Please try again.", "error");
                 console.error("Failed to update activity checkmark:", error);
             } finally {
                 window.eventsActivityRevision = (window.eventsActivityRevision || 0) + 1;

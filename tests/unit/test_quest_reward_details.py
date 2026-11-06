@@ -50,6 +50,17 @@ class QuestRewardTableTests(unittest.TestCase):
             self.assertEqual(details["insight_rewards"][0]["rewards"][1]["amount"], 9)
             self.assertEqual(details["insight_rewards"][0]["task"], "Finish the Quest")
 
+    def test_main_rewards_do_not_require_an_insight_section(self):
+        markup = table([]).split('<tr><th colspan="3">Insight Rewards')[0] + "</table>"
+        markup = markup.replace(
+            card("Primogem", "500"), card("Primogem", "500") + card("Material", "12")
+        )
+        details = parse_quest_reward_table(markup, "Example Quest")
+        self.assertEqual(
+            [reward["name"] for reward in details["rewards"]], ["Primogem", "Material"]
+        )
+        self.assertEqual(details["insight_rewards"], [])
+
     def test_unrelated_or_malformed_tables_are_rejected(self):
         self.assertIsNone(parse_quest_reward_table(table(["One"]), "Another Quest"))
         self.assertIsNone(

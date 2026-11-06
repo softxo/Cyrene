@@ -165,3 +165,46 @@ test("planner API feedback names materials and HoYoLAB syncing", async ({ page }
     release();
     await expect(page.locator("#navigation-loading-status")).toHaveCount(0);
 });
+
+for (const width of [390, 1280]) {
+    test(`update and loading messages do not overlap and older toasts fade at ${width}px`, async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/");
+        // The update confirmation and loading indicator retain separate positions.
+        await page.evaluate(() => {
+            const updated = document.createElement("div");
+            updated.className = "site-update-success";
+            updated.textContent = "Cyrene updated";
+            document.body.append(updated);
+        });
+        let release!: () => void;
+        const pending = new Promise<void>((resolve) => (release = resolve));
+        await page.route("**/api/test", async (route) => {
+            await pending;
+            return route.fulfill({ json: {} });
+        });
+        await page.evaluate(() => {
+            void fetch("/api/test");
+        });
+        await expect(page.locator("#navigation-loading-status")).toBeVisible();
+        const loading = await page.locator("#navigation-loading-status").boundingBox();
+        const updated = await page.locator(".site-update-success").boundingBox();
+        expect(updated!.y).toBeGreaterThan(loading!.y + loading!.height);
+        await page.evaluate(() => {
+            (window as any).showCyreneToast("First");
+            (window as any).showCyreneToast("Second");
+            (window as any).showCyreneToast("Third");
+        });
+        const toasts = page.locator(".cyrene-toast:not([data-dismissing])");
+        await expect(toasts.nth(0)).toHaveCSS("opacity", "0.6");
+        await expect(toasts.nth(1)).toHaveCSS("opacity", "0.8");
+        await expect(toasts.nth(2)).toHaveCSS("opacity", "1");
+        await toasts.nth(2).getByRole("button").click();
+        await expect(toasts.nth(1)).toHaveCSS("opacity", "1");
+        release();
+        await expect(page.locator("#navigation-loading-status")).toHaveCount(0);
+        await expect(page.locator(".site-update-success")).toHaveCSS("top", "16px");
+    });
+}

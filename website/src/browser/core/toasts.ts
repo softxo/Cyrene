@@ -6,6 +6,17 @@ declare global {
     }
 }
 
+function updateToastOpacity(region: HTMLElement): void {
+    const visible = Array.from(
+        region.querySelectorAll<HTMLElement>(".cyrene-toast:not([data-dismissing])"),
+    );
+    visible
+        .reverse()
+        .forEach((toast, index) =>
+            toast.style.setProperty("--toast-opacity", String(Math.max(0.6, 1 - index * 0.2))),
+        );
+}
+
 const toastModalHosts = new WeakSet<HTMLDialogElement>();
 
 function positionToastRegion(region: HTMLElement): void {
@@ -75,6 +86,7 @@ export function showCyreneToast(message: string, kind: ToastKind = "success"): v
         if (toast.dataset.dismissing) return;
         clearTimeout(timeout);
         toast.dataset.dismissing = "true";
+        updateToastOpacity(region);
         toast.inert = true;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             toast.remove();
@@ -106,6 +118,7 @@ export function showCyreneToast(message: string, kind: ToastKind = "success"): v
         visible[0].querySelector<HTMLButtonElement>("button")?.click();
     }
     region.append(toast);
+    updateToastOpacity(region);
     positionToastRegion(region);
     resume();
 }

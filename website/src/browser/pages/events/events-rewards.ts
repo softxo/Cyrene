@@ -35,7 +35,7 @@
     const position = (wrapper: HTMLElement) => {
         const popup = wrapper.querySelector<HTMLElement>(".event-insight-popover");
         const button = wrapper.querySelector<HTMLButtonElement>("button");
-        if (!popup || !button) return;
+        if (!popup || !button || !button.getClientRects().length) return;
         const anchor = button.getBoundingClientRect();
         const content = popup.querySelector<HTMLElement>(".event-insight-content");
         if (content) content.style.maxHeight = `${Math.max(72, innerHeight - 34)}px`;
@@ -70,7 +70,7 @@
         close(true);
         const popup = wrapper.querySelector<HTMLElement>(".event-insight-popover");
         const button = wrapper.querySelector<HTMLButtonElement>("button");
-        if (!popup || !button) return;
+        if (!popup || !button || !button.getClientRects().length) return;
         if (!popup.id) popup.id = `insight-rewards-${++nextId}`;
         button.setAttribute("aria-describedby", popup.id);
         button.setAttribute("aria-expanded", "true");
@@ -91,6 +91,7 @@
         const wrapper = wrapperFor(event.target);
         if (wrapper) {
             clearTimeout(closeTimer);
+            if (wrapper.dataset.popoverActivation === "click") return;
             if (event.relatedTarget instanceof Node && wrapper.contains(event.relatedTarget))
                 return;
             clearTimeout(openTimer);
@@ -104,12 +105,13 @@
             !(event.relatedTarget instanceof Node && wrapper.contains(event.relatedTarget))
         ) {
             clearTimeout(openTimer);
-            closeTimer = setTimeout(() => close(), 180);
+            if (wrapper.dataset.popoverActivation !== "click")
+                closeTimer = setTimeout(() => close(), 180);
         }
     });
     document.addEventListener("focusin", (event) => {
         const wrapper = wrapperFor(event.target);
-        if (wrapper) open(wrapper);
+        if (wrapper && wrapper.dataset.popoverActivation !== "click") open(wrapper);
     });
     document.addEventListener("focusout", (event) => {
         if (
@@ -122,7 +124,8 @@
         const wrapper = wrapperFor(event.target);
         if (wrapper && event.target instanceof Element && event.target.closest("button")) {
             event.preventDefault();
-            open(wrapper);
+            if (active === wrapper && wrapper.dataset.popoverActivation === "click") close();
+            else open(wrapper);
         } else if (!wrapper) close();
     });
     document.addEventListener("keydown", (event) => {
@@ -136,10 +139,7 @@
                 (event.target instanceof Element && event.target.closest(".event-insight-popover"))
             )
                 return;
-            requestAnimationFrame(() => {
-                if (active?.isConnected) position(active);
-                else close();
-            });
+            close(true);
         },
         true,
     );

@@ -32,7 +32,7 @@
                 const style = document.createElement("style");
                 style.id = "limited-event-category-visibility";
                 style.textContent = saved.filter(category => typeof category === "string")
-                    .map(category => `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`).join("\n");
+                    .map(category => category === "Upcoming" ? '.events-page [data-limited-category].upcoming { display: none !important; }' : `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`).join("\n");
                 document.head.append(style);
             } catch {
                 // Category controls still work when browser storage is unavailable.
@@ -42,7 +42,7 @@
 
     <link
         rel="stylesheet"
-        href="/static/build/css/global.css?v=53"
+        href="/static/build/css/global.css?v=54"
     >
 
     {% set page_styles = {
@@ -55,7 +55,7 @@
         '/reminders': '/static/build/css/planner.css?v=24',
         '/verify': '/static/build/css/verification.css?v=15',
         '/codes': '/static/build/css/codes.css?v=7',
-        '/events': '/static/build/css/events.css?v=49',
+        '/events': '/static/build/css/events.css?v=68',
         '/settings': '/static/build/css/settings.css?v=10'
     } %}
 
@@ -243,7 +243,7 @@
     </main>
 
 
-    <script type="module" src="/static/build/js/app.js?v=4.95"></script>
+    <script type="module" src="/static/build/js/app.js?v=5.00"></script>
     <script src="/static/build/browser/core/theme.js"></script>
 
 </body>

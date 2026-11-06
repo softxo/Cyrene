@@ -44,3 +44,41 @@ test("saved categories stay hidden before scripts load and during markup replace
     await page.locator('input[data-limited-filter-category="TCG"]').uncheck();
     await expect(page.locator('[data-limited-category="TCG"]')).toBeHidden();
 });
+
+test("Upcoming filter sits below TCG, combines with categories and persists before paint", async ({
+    page,
+}) => {
+    await page.route("**/events", (route) =>
+        route.fulfill({
+            contentType: "text/html",
+            body: `<html><head><script>${bootstrap}</script></head><body><main class="events-page">
+        <div><button data-limited-filter-button>Show Events</button><div class="events-limited-filter-popup" popover="auto"><div data-limited-filter-options></div></div></div>
+        <article id="active" data-limited-category="Quest">Active quest</article>
+        <article id="upcoming" class="upcoming" data-limited-category="Quest">Upcoming quest</article>
+        </main><script>window.upcomingInitialDisplay = getComputedStyle(document.querySelector('#upcoming')).display;</script></body></html>`,
+        }),
+    );
+    await page.goto("/events");
+    await page.addScriptTag({ content: filters });
+    await page.getByRole("button", { name: "Show Events" }).click();
+    const categories = await page
+        .locator("[data-limited-filter-category]")
+        .evaluateAll((elements) =>
+            elements.map((el) => (el as HTMLInputElement).dataset.limitedFilterCategory),
+        );
+    expect(categories.indexOf("Upcoming")).toBe(categories.indexOf("TCG") + 1);
+    await page.locator('[data-limited-filter-category="Upcoming"]').uncheck();
+    await expect(page.locator("#upcoming")).toBeHidden();
+    await expect(page.locator("#active")).toBeVisible();
+    await page.locator('[data-limited-filter-category="Quest"]').uncheck();
+    await page.locator('[data-limited-filter-category="Upcoming"]').check();
+    await expect(page.locator("#upcoming")).toBeHidden();
+    await page.locator('[data-limited-filter-category="Quest"]').check();
+    await expect(page.locator("#upcoming")).toBeVisible();
+    await page.locator('[data-limited-filter-category="Upcoming"]').uncheck();
+    await page.reload();
+    expect(await page.evaluate(() => (window as any).upcomingInitialDisplay)).toBe("none");
+    await page.addScriptTag({ content: filters });
+    await expect(page.locator("#active")).toBeVisible();
+    await expect(page.locator("#upcoming")).toBeHidden();
+});

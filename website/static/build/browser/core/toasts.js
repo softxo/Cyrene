@@ -1,3 +1,9 @@
+function updateToastOpacity(region) {
+    const visible = Array.from(region.querySelectorAll(".cyrene-toast:not([data-dismissing])"));
+    visible
+        .reverse()
+        .forEach((toast, index) => toast.style.setProperty("--toast-opacity", String(Math.max(0.6, 1 - index * 0.2))));
+}
 const toastModalHosts = new WeakSet();
 function positionToastRegion(region) {
     const modal = document.activeElement?.closest("dialog[open]") ||
@@ -69,6 +75,7 @@ export function showCyreneToast(message, kind = "success") {
             return;
         clearTimeout(timeout);
         toast.dataset.dismissing = "true";
+        updateToastOpacity(region);
         toast.inert = true;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             toast.remove();
@@ -99,6 +106,7 @@ export function showCyreneToast(message, kind = "success") {
         visible[0].querySelector("button")?.click();
     }
     region.append(toast);
+    updateToastOpacity(region);
     positionToastRegion(region);
     resume();
 }

@@ -18,6 +18,69 @@ async def migrate(connection):
     await connection.execute("""CREATE INDEX IF NOT EXISTS idx_custom_event_accounts_uid
             ON custom_event_accounts (genshin_uid, genshin_server, sort_order)""")
 
+    await connection.execute("""CREATE TABLE IF NOT EXISTS custom_event_copy_groups (
+        event_id BIGINT PRIMARY KEY REFERENCES custom_events(id) ON DELETE CASCADE,
+        group_key BIGINT NOT NULL)""")
+    await connection.execute("""CREATE INDEX IF NOT EXISTS idx_custom_event_copy_groups_key
+        ON custom_event_copy_groups(group_key)""")
+    await separate_shared_events(connection)
+    # Earlier independent copies were inserted in one transaction and share its
+    # exact creation timestamp. Retain that family when upgrading those copies.
+    await connection.execute("""INSERT INTO custom_event_copy_groups(event_id,group_key)
+        SELECT id,MIN(id) OVER (PARTITION BY discord_user_id,created_at)
+        FROM custom_events WHERE TRUE ON CONFLICT DO NOTHING""")
+
+
+async def separate_shared_events(c):
+    """Split legacy all-account definitions once, retaining each UID's saved state."""
+    async with c.transaction():
+        result = await c.execute(
+            "SELECT * FROM custom_events WHERE account_scope='all' ORDER BY id FOR UPDATE"
+        )
+        for event in await result.fetchall():
+            rows = await c.execute(
+                "SELECT * FROM custom_event_accounts WHERE event_id=%s ORDER BY genshin_uid,genshin_server",
+                (event["id"],),
+            )
+            accounts = await rows.fetchall()
+            await c.execute(
+                "INSERT INTO custom_event_copy_groups(event_id,group_key) VALUES (%s,%s) ON CONFLICT DO NOTHING",
+                (event["id"], event["id"]),
+            )
+            for index, account in enumerate(accounts):
+                uid, server = account["genshin_uid"], account["genshin_server"]
+                if index == len(accounts) - 1:
+                    await c.execute(
+                        """UPDATE custom_events SET account_scope='account',account_id=NULL,
+                        genshin_uid=%s,genshin_server=%s WHERE id=%s""",
+                        (uid, server, event["id"]),
+                    )
+                    continue
+                clone = await c.execute(
+                    """INSERT INTO custom_events
+                    (discord_user_id,title,description,account_scope,genshin_uid,genshin_server,
+                     start_at,end_at,recurrence,colour,reminder_minutes,progress,icon_url,
+                     sort_order,created_at,updated_at)
+                    SELECT discord_user_id,title,description,'account',%s,%s,start_at,end_at,
+                     recurrence,colour,reminder_minutes,progress,icon_url,sort_order,created_at,updated_at
+                    FROM custom_events WHERE id=%s RETURNING id""",
+                    (uid, server, event["id"]),
+                )
+                clone_id = (await clone.fetchone())["id"]
+                await c.execute(
+                    "INSERT INTO custom_event_copy_groups(event_id,group_key) VALUES (%s,%s) ON CONFLICT DO NOTHING",
+                    (clone_id, event["id"]),
+                )
+                for table in (
+                    "custom_event_accounts",
+                    "custom_event_progress",
+                    "custom_event_completions",
+                ):
+                    await c.execute(
+                        f"UPDATE {table} SET event_id=%s WHERE event_id=%s AND genshin_uid=%s AND genshin_server=%s",
+                        (clone_id, event["id"], uid, server),
+                    )
+
 
 async def identity(c, user, account):
     r = await c.execute(
@@ -117,8 +180,9 @@ async def targets(c, user, scope, account_id):
     if scope not in ("all", "account") or (scope == "account" and account_id is None):
         raise ValueError("Select a valid Genshin account.")
     r = await c.execute(
-        """SELECT DISTINCT genshin_uid,genshin_server FROM accounts
-        WHERE discord_user_id=%s AND (%s::bigint IS NULL OR id=%s)""",
+        """SELECT genshin_uid,genshin_server,MIN(id) AS account_id FROM accounts
+        WHERE discord_user_id=%s AND (%s::bigint IS NULL OR id=%s)
+        GROUP BY genshin_uid,genshin_server ORDER BY genshin_uid,genshin_server""",
         (user, account_id if scope == "account" else None, account_id),
     )
     rows = await r.fetchall()
@@ -155,36 +219,40 @@ async def create_custom_event(
     async with pool.connection() as c:
         async with c.transaction():
             accounts = await targets(c, user, scope, account_id)
-            uid, server = (
-                (accounts[0]["genshin_uid"], accounts[0]["genshin_server"])
-                if scope == "account"
-                else (None, None)
-            )
-            r = await c.execute(
-                """INSERT INTO custom_events
-                (discord_user_id,title,description,account_scope,account_id,genshin_uid,genshin_server,
-                 start_at,end_at,recurrence,colour,reminder_minutes,progress,icon_url)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *""",
-                (
-                    user,
-                    title,
-                    description,
-                    scope,
-                    account_id if scope == "account" else None,
-                    uid,
-                    server,
-                    start,
-                    end,
-                    Jsonb(recurrence),
-                    colour,
-                    reminder,
-                    Jsonb(progress),
-                    icon,
-                ),
-            )
-            e = await r.fetchone()
-            await associate(c, e["id"], accounts)
-            return e
+            first = None
+            for account in accounts:
+                uid, server = account["genshin_uid"], account["genshin_server"]
+                r = await c.execute(
+                    """INSERT INTO custom_events
+                    (discord_user_id,title,description,account_scope,account_id,genshin_uid,genshin_server,
+                     start_at,end_at,recurrence,colour,reminder_minutes,progress,icon_url)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *""",
+                    (
+                        user,
+                        title,
+                        description,
+                        "account",
+                        account["account_id"],
+                        uid,
+                        server,
+                        start,
+                        end,
+                        Jsonb(recurrence),
+                        colour,
+                        reminder,
+                        Jsonb(progress),
+                        icon,
+                    ),
+                )
+                e = await r.fetchone()
+                await associate(c, e["id"], [account])
+                if first is None:
+                    first = e
+                await c.execute(
+                    "INSERT INTO custom_event_copy_groups(event_id,group_key) VALUES (%s,%s)",
+                    (e["id"], first["id"]),
+                )
+            return first
 
 
 async def update_custom_event(
@@ -205,50 +273,90 @@ async def update_custom_event(
 ):
     async with pool.connection() as c:
         async with c.transaction():
-            if not await visible(c, user, event_id, lock=True):
+            source = await visible(c, user, event_id, account_id, lock=scope != "all")
+            if not source:
                 return None
-            accounts = await targets(c, user, scope, account_id)
-            uid, server = (
-                (accounts[0]["genshin_uid"], accounts[0]["genshin_server"])
-                if scope == "account"
-                else (None, None)
-            )
-            r = await c.execute(
-                """UPDATE custom_events SET title=%s,description=%s,account_scope=%s,
-                account_id=%s,genshin_uid=%s,genshin_server=%s,start_at=%s,end_at=%s,recurrence=%s,
-                colour=%s,reminder_minutes=%s,progress=%s,icon_url=%s,updated_at=NOW()
-                WHERE id=%s RETURNING *""",
-                (
-                    title,
-                    description,
-                    scope,
-                    account_id if scope == "account" else None,
-                    uid,
-                    server,
-                    start,
-                    end,
-                    Jsonb(recurrence),
-                    colour,
-                    reminder,
-                    Jsonb(progress),
-                    icon,
-                    event_id,
-                ),
-            )
-            e = await r.fetchone()
-            if scope == "account":
-                await c.execute(
-                    "DELETE FROM custom_event_accounts WHERE event_id=%s AND (genshin_uid<>%s OR genshin_server<>%s)",
-                    (event_id, uid, server),
+            copies = [source]
+            if scope == "all":
+                group = await c.execute(
+                    "SELECT group_key FROM custom_event_copy_groups WHERE event_id=%s", (event_id,)
                 )
-            await associate(c, event_id, accounts)
-            return e
+                row = await group.fetchone()
+                group_key = row["group_key"] if row else event_id
+                result = await c.execute(
+                    """SELECT e.* FROM custom_events e
+                    JOIN custom_event_copy_groups g ON g.event_id=e.id
+                    WHERE g.group_key=%s AND EXISTS (
+                        SELECT 1 FROM custom_event_accounts s JOIN accounts a
+                        ON a.genshin_uid=s.genshin_uid AND a.genshin_server=s.genshin_server
+                        WHERE s.event_id=e.id AND a.discord_user_id=%s)
+                    ORDER BY e.id FOR UPDATE OF e""",
+                    (group_key, user),
+                )
+                copies = await result.fetchall() or [source]
+                if not any(copy["id"] == event_id for copy in copies):
+                    return None
+            saved = None
+            for copy in copies:
+                local_progress = progress
+                local_description = description
+                if copy["id"] != event_id:
+                    # Bulk changes update the definition, retaining local notes and progress.
+                    local_description = copy["description"]
+                    values = await c.execute(
+                        """SELECT objective_index,current FROM custom_event_progress
+                        WHERE event_id=%s AND genshin_uid=%s AND genshin_server=%s""",
+                        (copy["id"], copy["genshin_uid"], copy["genshin_server"]),
+                    )
+                    currents = {
+                        row["objective_index"]: row["current"] for row in await values.fetchall()
+                    }
+                    previous = copy["progress"]
+                    local_progress = []
+                    for objective in progress:
+                        match = next(
+                            (
+                                (index, old)
+                                for index, old in enumerate(previous)
+                                if old.get("title") == objective.get("title")
+                            ),
+                            None,
+                        )
+                        current = currents.get(match[0], match[1].get("current", 0)) if match else 0
+                        local_progress.append(
+                            dict(objective, current=max(0, min(objective["target"], current)))
+                        )
+                result = await c.execute(
+                    """UPDATE custom_events SET title=%s,description=%s,start_at=%s,end_at=%s,
+                    recurrence=%s,colour=%s,reminder_minutes=%s,progress=%s,icon_url=%s,updated_at=NOW()
+                    WHERE id=%s RETURNING *""",
+                    (
+                        title,
+                        local_description,
+                        start,
+                        end,
+                        Jsonb(recurrence),
+                        colour,
+                        reminder,
+                        Jsonb(local_progress),
+                        icon,
+                        copy["id"],
+                    ),
+                )
+                updated = await result.fetchone()
+                await c.execute(
+                    "DELETE FROM custom_event_progress WHERE event_id=%s", (copy["id"],)
+                )
+                if copy["id"] == event_id:
+                    updated["account_id"] = source["viewer_account_id"]
+                    saved = updated
+            return saved
 
 
-async def delete_custom_event(pool, user, event_id):
+async def delete_custom_event(pool, user, event_id, account_id=None):
     async with pool.connection() as c:
         async with c.transaction():
-            if not await visible(c, user, event_id, lock=True):
+            if not await visible(c, user, event_id, account_id, lock=True):
                 return False
             r = await c.execute("DELETE FROM custom_events WHERE id=%s RETURNING id", (event_id,))
             return await r.fetchone() is not None

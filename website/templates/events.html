@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 
+{% macro event_reward_icon(reward, double_reward=false) %}
+{% set amount = 2 if double_reward else reward.amount %}
+<span class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
+    role="img" title="{{ reward.name }}{% if amount %} &times;{{ amount }}{% endif %}" aria-label="{{ reward.name }}{% if amount %} &times;{{ amount }}{% endif %}">
+    {% if reward.icon %}<img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">{% else %}{{ reward.name }}{% endif %}
+    {% if amount %}<strong class="event-limited-reward-amount">&times;{{ amount }}</strong>{% endif %}
+</span>
+{% endmacro %}
+
+{% macro event_timer_help(event=none) %}
+<button type="button" class="event-manual-completion-trigger event-upcoming-help" aria-label="Event opening information" aria-haspopup="dialog" aria-expanded="false">
+    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="12" r=".85" fill="currentColor"/></svg>
+</button>
+<div class="event-insight-popover event-opening-popover" popover="manual" role="dialog" aria-label="Event opening information">
+    <div class="event-insight-content">
+        <div class="event-insight-heading"><div><span>Upcoming event</span><strong>Opens soon</strong></div></div>
+        <p data-opening-explanation>This countdown shows when the event becomes available. Progress and daily resets begin once it opens.</p>
+        {% if event and event.opening_source %}<a href="{{ event.opening_source }}" target="_blank" rel="noopener noreferrer">Schedule details</a>{% endif %}
+    </div>
+</div>
+{% endmacro %}
+
 {% macro insight_reward_icons(event) %}
 {% for insight in event.insight_rewards %}
 <div class="event-insight">
@@ -19,7 +41,7 @@
             <div class="event-insight-item">
                 <span class="event-limited-reward rarity-{{ reward.rarity }}">
                     <img src="{{ reward.icon }}" alt="" loading="lazy">
-                    <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
+                    <strong class="event-limited-reward-amount">×{{ amount }}</strong>
                 </span>
                 <span>{{ reward.name }}</span>
             </div>
@@ -73,7 +95,8 @@
     data-event-token="{{ event.completion_token }}"
     data-account-id="{{ account.id }}"
     data-account-profile-aria="{{ account.genshin_uid }}" data-account-profile-old-name="{{ account.nickname }}" aria-label="Mark rewards claimed for {{ event.name }} for {{ account.nickname }}"
-    title="Track claimed rewards manually"
+    {% if event.is_upcoming %}disabled{% endif %}
+    title="{{ 'Available when the event opens' if event.is_upcoming else 'Track claimed rewards manually' }}"
     aria-pressed="{{ 'true' if event.manual_checked else 'false' }}"
 ></button>
 {% endmacro %}
@@ -90,7 +113,7 @@
             <div class="event-list-check">{{ limited_event_check(event, account) }}</div>
             <div class="event-list-icon event-limited-icon">
                 <img
-                    src="{{ event.icon or '/static/images/ui/ui_icons/Events.png' }}"
+                    src="{{ event.icon or '/static/images/ui/ui_icons/unused/Icon_Event_Quest.webp' }}"
                     alt=""
                     loading="lazy"
                 >
@@ -116,6 +139,7 @@
                                     {% else %}
                                     <p>HoYoLAB reports event completion, not whether you've claimed the rewards. Use the manual checkmark to track claimed rewards. Unchecking it keeps automatic completion.</p>
                                     {% endif %}
+                                    {% if event.reward_preview_note %}<p>{{ event.reward_preview_note }}</p><a href="{{ event.reward_source }}" target="_blank" rel="noopener noreferrer">Reward details</a>{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -126,27 +150,26 @@
 
         {% if event.rewards %}
         <div class="event-limited-rewards" aria-label="Event rewards">
-            {% for reward in event.rewards %}
-            <span
-                class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
-                role="img" aria-label="{{ reward.name }}{% if reward.amount %} ×{{ reward.amount }}{% endif %}"
-            >
-                {% if reward.icon %}
-                <img src="{{ reward.icon }}" alt="{{ reward.name }}" loading="lazy">
-                {% else %}
-                {{ reward.name }}
-                {% endif %}
-                {% if reward.amount %}
-                <strong class="event-limited-reward-amount">×{{ reward.amount }}</strong>
-                {% endif %}
-            </span>
-            {% endfor %}
+            {% for reward in event.rewards[:10] %}{{ event_reward_icon(reward, event.name|replace('-', ' ') == 'Ley Line Overflow') }}{% endfor %}
+            {% if event.rewards|length > 4 %}
+            <div class="event-insight event-all-rewards{% if event.rewards|length <= 10 %} event-rewards-responsive-more{% endif %}{% if event.rewards|length <= 5 %} event-rewards-mobile-more{% endif %}" data-popover-activation="click">
+                <button type="button" class="cyrene-button event-rewards-more" aria-label="Show all rewards for {{ event.name }}" aria-haspopup="dialog" aria-expanded="false">Show more</button>
+                <div class="event-insight-popover" popover="manual" role="dialog" aria-label="All rewards for {{ event.name }}">
+                    <div class="event-insight-content">
+                        <div class="event-insight-heading"><div><span>All rewards</span><strong>{{ event.name }}</strong></div></div>
+                        <div class="event-all-reward-grid">
+                            {% for reward in event.rewards %}<div class="event-insight-item">{{ event_reward_icon(reward, event.name|replace('-', ' ') == 'Ley Line Overflow') }}<span>{{ reward.name }}</span></div>{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             {{ insight_reward_icons(event) }}
         </div>
         {% endif %}
 
         <div class="event-list-right">
-            {% if event.daily_reset_time %}
+            {% if event.daily_reset_time and not event.is_upcoming %}
             <span class="event-daily-reset" data-daily-event-reset
                 data-start-time="{{ event.start_time }}" data-end-time="{{ event.daily_reset_time }}"
                 data-event-end-time="{{ event.end_time }}" title="Daily reset">Calculating...</span>
@@ -161,15 +184,13 @@
             </span>
             {% endif %}
             <div
-                class="event-time-left{% if event.is_upcoming %} upcoming{% endif %}"
+                class="event-insight event-time-left{% if event.is_upcoming %} upcoming{% endif %}"
                 data-start-time="{{ event.start_time }}"
                 data-end-time="{{ event.end_time }}"
+                {% if event.opening_date %}data-opening-date="{{ event.opening_date }}" data-opening-date-time="{{ event.opening_date_timestamp }}"{% endif %}
             >
-                {% if event.is_unscheduled_upcoming %}
-                Upcoming
-                {% else %}
-                Calculating...
-                {% endif %}
+                <span data-timer-value>{{ 'Soon' if event.is_unscheduled_upcoming else 'Calculating...' }}</span>
+                {{ event_timer_help(event) }}
             </div>
         </div>
     </div>
@@ -215,6 +236,53 @@
         </div>
     </div>
 </article>
+{% endif %}
+{% endmacro %}
+
+
+{% macro wish_banner_card(banner) %}
+<div class="wish-banner-card{% if banner.is_upcoming %} wish-banner-upcoming{% endif %}{% if not banner.image and banner.preview_art %} wish-banner-preview{% endif %}" data-wish-banner="{{ banner.banner_id }}" data-banner-type="{{ banner.banner_type }}">
+    {% if banner.image %}
+    <div class="wish-banner-media"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="wish-banner-image" loading="lazy"></div>
+    {% elif banner.preview_art %}
+    <div class="wish-banner-preview-art{% if banner.banner_type == 302 %} wish-preview-weapons{% elif banner.preview_kind == 'weapons' %} wish-preview-chronicled wish-preview-chronicled-weapons{% elif banner.banner_type == 500 %} wish-preview-chronicled{% else %} wish-preview-character{% endif %}" aria-label="Featured 5-star artwork">
+        {% for art in banner.preview_art %}<div class="wish-preview-panel"><img src="{{ art.icon }}" alt="{{ art.name }}" loading="lazy"></div>{% endfor %}
+    </div>
+    {% endif %}
+    <div class="wish-banner-overlay"></div>
+    <div class="wish-banner-content">
+        <div class="wish-banner-type">{% if banner.is_upcoming %}Upcoming &middot; {% endif %}{% if banner.banner_type == 500 %}Chronicled Wish{% if banner.preview_kind == 'weapons' %} &middot; Weapons{% endif %}{% elif banner.banner_type == 302 %}Weapon Event Wish{% else %}Character Event Wish{% endif %}</div>
+        <h3 class="wish-banner-title">&quot;{{ banner.title | replace("Event Event Wish ", "") | replace("Event Wish ", "") }}&quot;</h3>
+        {% if not banner.image and banner.preview_art %}
+        <div class="wish-preview-names" aria-label="Featured characters or weapons">
+            {% for item in banner.r5_up_items %}<span class="wish-preview-name">{{ item.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        {% for rarity, items in [(5, banner.r5_up_items), (4, banner.r4_up_items)] %}
+        {% if items %}
+        <div class="wish-banner-featured{% if rarity == 4 %} wish-banner-four-star{% endif %}">
+            <span class="wish-banner-label" aria-label="{{ rarity }}-star rarity">{{ rarity }}<span class="cyrene-rarity-star" data-rarity="{{ rarity }}" aria-hidden="true"></span></span>
+            <div class="wish-banner-items">{% for item in items %}<div class="wish-banner-item"><img src="{{ item.icon }}" alt="{{ item.name }}" title="{{ item.name }}" loading="lazy"><span{% if banner.banner_type == 302 and item.name|length > 18 %} class="wish-banner-name-long"{% endif %}>{{ item.name }}</span></div>{% endfor %}</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="wish-banner-time event-time-left{% if banner.is_upcoming %} upcoming{% endif %}" data-countdown-kind="long-event" data-start-time="{{ banner.start_time }}" data-end-time="{{ banner.end_time }}" title="{{ 'Starts in' if banner.is_upcoming else 'Ends in' }}">Calculating...</div>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro wish_banner_sections(banners) %}
+{% set current = banners | rejectattr('is_upcoming') | list %}
+{% set upcoming = banners | selectattr('is_upcoming') | list %}
+{% if current %}
+<div class="wish-banners" data-wish-section="current">{% for banner in current %}{{ wish_banner_card(banner) }}{% endfor %}</div>
+{% else %}<div class="wish-banners-empty">No Active Banners</div>{% endif %}
+{% if upcoming %}
+<section class="wish-upcoming-section" aria-label="Upcoming Event Wishes">
+    <div class="events-list-header"><h2>Upcoming Event Wishes</h2></div>
+    <div class="wish-banners" data-wish-section="upcoming">{% for banner in upcoming %}{{ wish_banner_card(banner) }}{% endfor %}</div>
+</section>
 {% endif %}
 {% endmacro %}
 
@@ -387,7 +455,7 @@
                             type="button"
                         >
                             <span class="custom-select-value">
-                                <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="nickname">{{ selected_account.nickname }}</span>
+                                <span data-account-profile-name="{{ selected_account.genshin_uid }}" data-account-profile-field="display">{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span>
                                 ·
                                 {{ selected_account.genshin_uid }}
                             </span>
@@ -408,7 +476,7 @@
                                     type="button"
                                     data-account-id="{{ account.id }}"
                                 >
-                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.nickname }}</span>
+                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span>
                                     ·
                                     {{ account.genshin_uid }}
                                 </button>
@@ -973,10 +1041,10 @@
                         <div class="event-featured-header-right">
 
                             <div
-                                class="event-time-left stygian-reset-timer"
-                                data-countdown-kind="long-event" data-end-time="{{ stygian.end_time }}"
+                                class="event-insight event-time-left stygian-reset-timer"
+                                data-countdown-kind="long-event" data-start-time="{{ stygian.start_time or 0 }}" data-end-time="{{ stygian.end_time }}"
                             >
-                                Calculating...
+                                <span data-timer-value>Calculating...</span>{{ event_timer_help() }}
                             </div>
 
                             <button
@@ -1511,138 +1579,7 @@
                 <h2>Event Wishes</h2>
             </div>
 
-            {% if wish_banners %}
-
-                <div class="wish-banners">
-
-                    {% for banner in wish_banners %}
-
-                        {% if banner.banner_type in [301, 400, 302, 500] %}
-
-                        <div class="wish-banner-card" data-banner-type="{{ banner.banner_type }}">
-
-                            <img
-                                src="{{ banner.image }}"
-                                alt="{{ banner.title }}"
-                                class="wish-banner-image"
-                            >
-
-                            <div class="wish-banner-overlay"></div>
-
-                            <div class="wish-banner-content">
-
-                                <div class="wish-banner-type">
-                                    {% if banner.banner_type == 500 %}
-                                        Chronicled Wish
-                                    {% elif banner.banner_type == 302 %}
-                                        Weapon Event Wish
-                                    {% else %}
-                                        Character Event Wish
-                                    {% endif %}
-                                </div>
-
-                                <h3 class="wish-banner-title">
-                                    {{ banner.title
-                                        | replace("Event Event Wish ", "")
-                                        | replace("Event Wish ", "")
-                                    }}
-                                </h3>
-
-
-                                {% if banner.r5_up_items %}
-
-                                <div class="wish-banner-featured">
-
-                                    <span class="wish-banner-label">
-                                        5★
-                                    </span>
-
-                                    <div class="wish-banner-items">
-
-                                        {% for item in banner.r5_up_items %}
-
-                                        <div class="wish-banner-item">
-
-                                            <img
-                                                src="{{ item.icon }}"
-                                                alt="{{ item.name }}"
-                                                title="{{ item.name }}"
-                                            >
-
-                                            <span>
-                                                {{ item.name }}
-                                            </span>
-
-                                        </div>
-
-                                        {% endfor %}
-
-                                    </div>
-
-                                </div>
-
-                                {% endif %}
-
-
-                                {% if banner.r4_up_items %}
-
-                                <div class="wish-banner-featured wish-banner-four-star">
-
-                                    <span class="wish-banner-label">
-                                        4★
-                                    </span>
-
-                                    <div class="wish-banner-items">
-
-                                        {% for item in banner.r4_up_items %}
-
-                                        <div class="wish-banner-item">
-
-                                            <img
-                                                src="{{ item.icon }}"
-                                                alt="{{ item.name }}"
-                                                title="{{ item.name }}"
-                                            >
-
-                                            <span>
-                                                {{ item.name }}
-                                            </span>
-
-                                        </div>
-
-                                        {% endfor %}
-
-                                    </div>
-
-                                </div>
-
-                                {% endif %}
-
-
-                                <div
-                                    class="wish-banner-time event-time-left"
-                                    data-countdown-kind="long-event" data-end-time="{{ banner.end_time }}"
-                                >
-                                    Calculating...
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                </div>
-
-            {% else %}
-
-                <div class="wish-banners-empty">
-                    No Active Banners
-                </div>
-
-            {% endif %}
+            {{ wish_banner_sections(wish_banners) }}
 
         </section>
 
@@ -1709,7 +1646,10 @@
 
     {% endif %}
 
-        <div
+        {% with delete_dialog_class='events-custom-delete-dialog', delete_prefix='custom-event-delete', delete_title='Delete event?', delete_cancel='Keep event', delete_confirm='Delete event' %}
+    {% include 'components/deletion_confirmation.html' %}
+    {% endwith %}
+    <div
             data-modal-shell class="events-custom-modal"
             data-custom-modal
             hidden
@@ -1771,12 +1711,11 @@
                             >
 
                             <div class="events-custom-icon-controls">
-                                <label
-                                    for="custom-event-icon-file"
-                                    class="events-custom-icon-button"
-                                >
-                                    Choose Image
-                                </label>
+                                <button
+                                    type="button"
+                                    class="cyrene-button events-custom-icon-button"
+                                    data-custom-icon-choose
+                                >Choose image</button>
 
                                 <input
                                     type="file"
@@ -1793,7 +1732,7 @@
                                     data-custom-icon-remove
                                     hidden
                                 >
-                                    Remove Icon
+                                    Remove icon
                                 </button>
 
                                 <span
@@ -1829,7 +1768,6 @@
                                     type="radio"
                                     name="account_scope"
                                     value="all"
-                                    checked
                                 >
                                 <span>All accounts</span>
                             </label>
@@ -1839,10 +1777,12 @@
                                     type="radio"
                                     name="account_scope"
                                     value="account"
+                                    checked
                                 >
                                 <span>One account</span>
                             </label>
                         </div>
+                        <p class="events-custom-field-hint events-custom-scope-hint"><strong>"All accounts"</strong> <span data-custom-scope-description>creates a separate event for each linked account. Edits, progress and deletion stay with that account.</span></p>
                     </div>
 
                     <label class="events-custom-field" data-custom-account-field hidden>
@@ -1868,7 +1808,7 @@
                                     data-account-id="{{ account.id }}"
                                     aria-selected="{{ 'true' if loop.first else 'false' }}"
                                 >
-                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="nickname">{{ account.nickname or account.genshin_uid }}</span> · {{ account.genshin_uid }}
+                                    <span data-account-profile-name="{{ account.genshin_uid }}" data-account-profile-field="display">{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span> · {{ account.genshin_uid }}
                                 </button>
                                 {% endfor %}
                             </div>
@@ -2165,7 +2105,7 @@
                     data-automatic-complete="{{ 'true' if item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward else 'false' }}">
 
                     <div class="overview-account-name">
-                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
 
@@ -2201,6 +2141,8 @@
                                         {% endif %}
                                     </span>
                                 </span>
+
+                                <span class="event-time-left event-daily-reset" data-end-time="{{ item.daily.reset_time }}" title="Daily reset">Calculating...</span>
 
                                 <button
                                     type="button"
@@ -2247,7 +2189,7 @@
                     <div class="overview-account-name">
 
                         <strong>
-                            <span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span>
+                            <span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span>
                         </strong>
 
                         <span>
@@ -2336,7 +2278,7 @@
             <details open id="permanent-account-{{ item.account.id }}" class="events-custom-account-group" data-permanent-account-group data-account-id="{{ item.account.id }}">
                 <summary class="events-custom-account-heading">
                     <div class="events-custom-account-info overview-account-name">
-                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
                     <span class="events-custom-account-count{% if complete_count == 2 %} event-completion-pill{% endif %}" data-permanent-account-count>{{ complete_count }}/2 complete</span>
@@ -2371,7 +2313,7 @@
                 <div class="overview-account-row overview-endgame-row">
 
                     <div class="overview-account-name">
-                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
 
@@ -2561,127 +2503,7 @@
                 {% endif %}
             {% endfor %}
 
-            {% if banner_data.items %}
-
-                <div class="wish-banners">
-
-                    {% for banner in banner_data.items %}
-
-                        {% if banner.banner_type in [301, 400, 302, 500] %}
-
-                            <div class="wish-banner-card" data-banner-type="{{ banner.banner_type }}">
-
-                                <img 
-                                    src="{{ banner.image }}"
-                                    alt="{{ banner.title }}"
-                                    class="wish-banner-image"
-                                >
-
-                                <div class="wish-banner-overlay"></div>
-
-                                <div class="wish-banner-content">
-
-                                    <div class="wish-banner-type">
-                                        {% if banner.banner_type == 500 %}
-                                        Chronicled Wish
-                                    {% elif banner.banner_type == 302 %}
-                                            Weapon Event Wish
-                                        {% else %}
-                                            Character Event Wish
-                                        {% endif %}
-                                    </div>
-
-                                    <h3 class="wish-banner-title">
-                                        {{ banner.title
-                                            | replace("Event Event Wish ", "")
-                                            | replace("Event Wish ", "")
-                                        }}
-                                    </h3>
-
-                                    {% if banner.r5_up_items %}
-
-                                        <div class="wish-banner-featured">
-
-                                            <span class="wish-banner-label">5★</span>
-
-                                            <div class="wish-banner-items">
-
-                                                {% for item in banner.r5_up_items %}
-
-                                                    <div class="wish-banner-item">
-
-                                                        <img
-                                                            src="{{ item.icon }}"
-                                                            alt="{{ item.name }}"
-                                                            title="{{ item.name }}"
-                                                        >
-
-                                                        <span>{{ item.name }}</span>
-
-                                                    </div>
-
-                                                {% endfor %}
-
-                                            </div>
-
-                                        </div>
-
-                                    {% endif %}
-
-                                    {% if banner.r4_up_items %}
-
-                                        <div class="wish-banner-featured wish-banner-four-star">
-
-                                            <span class="wish-banner-label">4★</span>
-
-                                            <div class="wish-banner-items">
-
-                                                {% for item in banner.r4_up_items %}
-
-                                                    <div class="wish-banner-item">
-
-                                                        <img
-                                                            src="{{ item.icon }}"
-                                                            alt="{{ item.name }}"
-                                                            title="{{ item.name }}"
-                                                        >
-
-                                                        <span>{{ item.name }}</span>
-
-                                                    </div>
-
-                                                {% endfor %}
-
-                                            </div>
-
-                                        </div>
-
-                                    {% endif %}
-
-                                    <div
-                                        class="wish-banner-time event-time-left"
-                                        data-countdown-kind="long-event" data-end-time="{{ banner.end_time }}"
-                                    >
-                                        Calculating...
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                </div>
-
-            {% else %}
-
-                <div class="wish-banners-empty">
-                    No Active Banners
-                </div>
-
-            {% endif %}
+            {{ wish_banner_sections(banner_data.items) }}
 
         </div>
 
@@ -2694,10 +2516,11 @@
             <details open class="events-custom-account-group" data-limited-account-group data-account-id="{{ item.account.id }}" data-account-uid="{{ item.account.genshin_uid }}">
                 <summary class="events-custom-account-heading">
                     <div class="events-custom-account-info overview-account-name">
-                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
+                        <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span></strong>
                         <span>{{ item.account.genshin_uid }}</span>
                     </div>
-                    <span class="events-custom-account-count{% if item.limited_events and (item.limited_events | selectattr('is_finished') | list | length) == (item.limited_events | length) %} event-completion-pill{% endif %}" data-limited-account-count>{{ item.limited_events | selectattr('is_finished') | list | length }}/{{ item.limited_events | length }} complete</span>
+                    {% set active_events = item.limited_events | rejectattr('is_upcoming') | list %}
+                    <span class="events-custom-account-count{% if active_events and (active_events | selectattr('is_finished') | list | length) == (active_events | length) %} event-completion-pill{% endif %}" data-limited-account-count>{{ active_events | selectattr('is_finished') | list | length }}/{{ active_events | length }} complete</span>
                 </summary>
                 <div class="events-custom-list">
                     {% for event in item.limited_events %}
@@ -2745,7 +2568,7 @@
                     >
                         <summary class="events-custom-account-heading">
                             <div class="events-custom-account-info overview-account-name">
-                                <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="nickname">{{ item.account.nickname }}</span></strong>
+                                <strong><span data-account-profile-name="{{ item.account.genshin_uid }}" data-account-profile-field="display">{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span></strong>
                                 <span>{{ item.account.genshin_uid }}</span>
                             </div>
                             <span class="events-custom-account-count" data-custom-account-count>Loading...</span>

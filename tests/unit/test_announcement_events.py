@@ -6,6 +6,7 @@ from utils.web.announcement_events import (
     announcement_reward_events,
     announcement_rewards,
     merge_announcement_events,
+    notice_event_schedule,
 )
 
 
@@ -45,6 +46,17 @@ class AnnouncementEventsTests(unittest.TestCase):
             [update(), *notices], server, self.now if now is None else now
         )
 
+    def test_calendar_schedule_uses_explicit_notice_event_duration(self):
+        announcement = notice(
+            content='<p>\u3013Event Duration\u3013</p><t class="t_lc">2026/11/10 10:00</t> - <t class="t_lc">2026/11/20 03:59</t><p>\u3013Eligibility\u3013</p>'
+        )
+        start, end = notice_event_schedule(announcement, "os_euro")
+        self.assertEqual(
+            start, int(datetime.fromisoformat("2026-11-10T10:00:00+01:00").timestamp())
+        )
+        self.assertEqual(end, int(datetime.fromisoformat("2026-11-20T03:59:59+01:00").timestamp()))
+        self.assertIsNone(notice_event_schedule(notice(), "os_euro"))
+
     def test_extracts_only_documented_rewards_and_amounts(self):
         rewards = announcement_rewards(
             "<p>Obtain an additional reward of <span>Primogems ×400</span>.</p>"
@@ -60,8 +72,21 @@ class AnnouncementEventsTests(unittest.TestCase):
             announcement_rewards("No rewards listed. 〓Eligibility〓 Primogems ×100"), []
         )
 
+    def test_grouped_campaign_resolves_target_from_update_story_section(self):
+        details = update()
+        details.content += (
+            '<p>New Archon Quest</p><p>Chapter VII: Act V - "Example"</p><p>New World Quests</p>'
+        )
+        campaign = notice(
+            content=notice().content
+            + '<p>Archon Quests Chapter VII: Act V and Act VI will be permanently available.</p><p>Complete Archon Quest Chapter VII: Act IV "Prerequisite"</p>'
+        )
+        event = announcement_reward_events([details, campaign], "os_euro", self.now)[0]
+        self.assertEqual(event["quest_chapter"], "Chapter VII: Act V")
+        self.assertTrue(event["quest_is_mainline"])
+
     def test_mainline_metadata_requires_the_target_chapter_not_only_prerequisites(self):
-        chapter = '<p>Complete Archon Quest Chapter VII: Act IV "Example".</p>'
+        chapter = '<p>Complete Archon Quest Chapter VII: Act IV - "Example".</p>'
         extracted = self.extract(notice(content=notice().content + chapter))[0]
         self.assertEqual(extracted["quest_type"], "archon")
         self.assertTrue(extracted["quest_is_mainline"])
@@ -102,7 +127,7 @@ class AnnouncementEventsTests(unittest.TestCase):
                 content=notice().content.replace("7.1", "7.0"),
             )
         )[0]
-        self.assertEqual(event["category"], "World Exploration")
+        self.assertEqual(event["category"], "Exploration")
         self.assertEqual(event["start_time"], 0)
         self.assertFalse(event["is_upcoming"])
 

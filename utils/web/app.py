@@ -105,7 +105,11 @@ from utils.hoyolab.errors import (
 from utils.hoyolab.expedition_icons import EXPEDITION_ICONS
 from utils.hoyolab.gift_code_worker import request_gift_code_check
 from utils.hoyolab.login import login_with_password
-from utils.web.announcement_events import announcement_reward_events, merge_announcement_events
+from utils.web.announcement_events import (
+    announcement_reward_events,
+    merge_announcement_events,
+    notice_event_schedule,
+)
 from utils.web.auth import (
     create_verification,
     create_web_session,
@@ -120,6 +124,7 @@ from utils.web.changelog import router as changelog_router
 from utils.web.content_metadata import character_content_metadata, character_weapon_type
 from utils.web.discord_oauth import refresh_profile as refresh_discord_profile
 from utils.web.discord_oauth import router as discord_oauth_router
+from utils.web.event_supplements import apply_reviewed_event_details, apply_reviewed_stygian_opening
 from utils.web.limited_event_checks import (
     annotate_daily_events,
     apply_archon_quest_progress,
@@ -137,6 +142,8 @@ from utils.web.site_updates import router as site_updates_router
 from utils.web.site_updates import site_version
 from utils.web.temper_thyself import build_temper_thyself, is_temper_thyself
 from utils.web.theater_elements import get_theater_season
+from utils.web.wiki_event_details import enrich_upcoming_events
+from utils.web.wish_previews import clean_wish_title, enrich_wish_previews
 
 app = FastAPI(
     title="Cyrene Authentication",
@@ -1739,6 +1746,7 @@ async def get_single_account_events(
                 "max_progress": 0,
             }
 
+            stygian_calendar_events = []
             try:
                 stygian_calendar_events = [
                     event
@@ -1880,6 +1888,15 @@ async def get_single_account_events(
                 if not icon and calendar_event.rewards:
                     icon = calendar_event.rewards[0].icon
 
+                start_time = calendar_event.start_timestamp
+                end_time = calendar_event.end_timestamp
+                schedule = notice_event_schedule(matching_announcement, account["genshin_server"])
+                if schedule:
+                    start_time = start_time or schedule[0]
+                    end_time = end_time or schedule[1]
+                if not start_time and not end_time and calendar_event.countdown_seconds > 0:
+                    start_time = now_timestamp + calendar_event.countdown_seconds
+
                 all_rewards = [
                     {
                         "id": reward.id,
@@ -1900,16 +1917,10 @@ async def get_single_account_events(
                         "icon": icon,
                         "is_tcg": is_tcg,
                         "is_finished": calendar_event.is_finished,
-                        "is_upcoming": (
-                            calendar_event.start_timestamp > now_timestamp
-                            or calendar_event.end_timestamp <= 0
-                        ),
-                        "is_unscheduled_upcoming": (
-                            calendar_event.start_timestamp <= 0
-                            and calendar_event.end_timestamp <= 0
-                        ),
-                        "start_time": calendar_event.start_timestamp,
-                        "end_time": calendar_event.end_timestamp,
+                        "is_upcoming": (start_time > now_timestamp or end_time <= 0),
+                        "is_unscheduled_upcoming": (start_time <= 0 and end_time <= 0),
+                        "start_time": start_time,
+                        "end_time": end_time,
                         "rewards": all_rewards,
                     }
                 )
@@ -1923,6 +1934,8 @@ async def get_single_account_events(
             ]
             apply_archon_quest_progress(limited_events, notes, now_timestamp)
             await enrich_quest_rewards(limited_events)
+            apply_reviewed_event_details(limited_events, account["genshin_server"], now_timestamp)
+            await enrich_upcoming_events(limited_events, account["genshin_server"], now_timestamp)
 
             def find_wish_announcement(names):
                 """
@@ -1952,10 +1965,10 @@ async def get_single_account_events(
             # -----------------------------------------
 
             for banner in event_calendar.character_banners:
-                if banner.pool_status != 2:
+                if banner.pool_status != 2 and banner.start_timestamp <= now_timestamp:
                     continue
 
-                if banner.end_timestamp <= now_timestamp:
+                if banner.end_timestamp > 0 and banner.end_timestamp <= now_timestamp:
                     continue
 
                 featured_5star_names = [
@@ -2008,10 +2021,10 @@ async def get_single_account_events(
             # -----------------------------------------
 
             for banner in event_calendar.weapon_banners:
-                if banner.pool_status != 2:
+                if banner.pool_status != 2 and banner.start_timestamp <= now_timestamp:
                     continue
 
-                if banner.end_timestamp <= now_timestamp:
+                if banner.end_timestamp > 0 and banner.end_timestamp <= now_timestamp:
                     continue
 
                 featured_5star_names = [
@@ -2058,6 +2071,48 @@ async def get_single_account_events(
                         "r4_up_items": featured_4stars,
                     }
                 )
+
+            # Keep Chronicled previews on the same path when the calendar opens them.
+            for banner in getattr(event_calendar, "chronicled_banners", []):
+                if banner.pool_status != 2 and banner.start_timestamp <= now_timestamp:
+                    continue
+                if banner.end_timestamp > 0 and banner.end_timestamp <= now_timestamp:
+                    continue
+                featured = [
+                    {"name": character.name, "icon": character.icon}
+                    for character in banner.characters
+                    if character.rarity == 5
+                ]
+                if not featured:
+                    continue
+                announcement = find_wish_announcement([item["name"] for item in featured])
+                wish_banners.append(
+                    {
+                        "banner_id": banner.id,
+                        "banner_type": 500,
+                        "title": clean_banner_title(announcement.subtitle)
+                        if announcement
+                        else (banner.name or "Chronicled Wish"),
+                        "image": announcement.banner if announcement else None,
+                        "start_time": banner.start_timestamp,
+                        "end_time": banner.end_timestamp,
+                        "chronicled_weapons": [
+                            {"name": weapon.name, "icon": weapon.icon}
+                            for weapon in banner.weapons
+                            if weapon.rarity == 5
+                        ],
+                        "r5_up_items": featured,
+                        "r4_up_items": [
+                            {"name": character.name, "icon": character.icon}
+                            for character in banner.characters
+                            if character.rarity == 4
+                        ],
+                    }
+                )
+
+            await enrich_wish_previews(
+                wish_banners, announcements, account["genshin_server"], now_timestamp
+            )
 
             # =========================================
             # DAILY COMMISSIONS
@@ -2251,6 +2306,7 @@ async def get_single_account_events(
                 stygian_data = {
                     "has_data": current_stygian["single"]["has_data"],
                     "end_time": int(current_stygian["schedule"]["end_time"]),
+                    "start_time": int(current_stygian["schedule"].get("start_time", 0)),
                     "difficulty": (record["difficulty"] if record else 0),
                     "difficulty_icon": (
                         "SO_Diff_VI_180.png"
@@ -2263,6 +2319,11 @@ async def get_single_account_events(
 
             # Attach Dire Prestige data after the Stygian dictionary has been fully constructed.
             stygian_data["dire_prestige"] = dire_prestige_data
+            for calendar_entry in stygian_calendar_events:
+                if calendar_entry.start_timestamp > now_timestamp:
+                    stygian_data["start_time"] = calendar_entry.start_timestamp
+                    break
+            apply_reviewed_stygian_opening(stygian_data, account["genshin_server"], now_timestamp)
 
             # =========================================
             # IMAGINARIUM THEATER
@@ -2323,6 +2384,9 @@ async def get_single_account_events(
             limited_events, await get_limited_event_checks(user_id, account["genshin_uid"])
         )
         for event in limited_events:
+            if event.get("is_upcoming"):
+                event["completion_token"] = ""
+                continue
             expires = min(
                 event["end_time"] or int(time.time()) + 7 * 86400, int(time.time()) + 7 * 86400
             )
@@ -2479,7 +2543,7 @@ async def get_events_data(
 
 
 def clean_banner_title(title: str) -> str:
-    return re.sub(r"<color=.*?>(.*?)</color>", r"\1", title)
+    return clean_wish_title(title)
 
 
 def get_daily_reset_timestamp(genshin_server: str) -> int:
@@ -4295,6 +4359,11 @@ async def api_update_custom_event(
 
     fields = await validate_custom_event_payload(user_id, data)
 
+    if fields["account_scope"] == "account" and not await get_visible_custom_event(
+        user_id, event_id, fields["account_id"]
+    ):
+        raise HTTPException(status_code=404, detail="Custom event not found for this account.")
+
     event = await update_custom_event(
         discord_user_id=user_id,
         event_id=event_id,
@@ -4320,11 +4389,12 @@ async def api_update_custom_event(
 @app.delete("/api/custom-events/{event_id}")
 async def api_delete_custom_event(
     event_id: int,
+    account_id: int | None = None,
     cyrene_session: str | None = Cookie(default=None),
 ):
     user_id = await get_authenticated_user(cyrene_session)
 
-    deleted = await delete_custom_event(user_id, event_id)
+    deleted = await delete_custom_event(user_id, event_id, account_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Custom event not found.")
 

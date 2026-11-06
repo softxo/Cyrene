@@ -27,6 +27,8 @@
     box-shadow: 0 10px 32px rgb(0 0 0 / 24%);
     color: var(--text);
     pointer-events: auto;
+    opacity: var(--toast-opacity, 1);
+    transition: opacity 180ms ease-in-out;
     animation: cyrene-toast-enter 180ms ease-out;
 }
 .cyrene-toast svg {
@@ -68,7 +70,7 @@
         transform: translateY(6px);
     }
     to {
-        opacity: 1;
+        opacity: var(--toast-opacity, 1);
         transform: translateY(0);
     }
 }
@@ -81,6 +83,7 @@
 @media (prefers-reduced-motion: reduce) {
     .cyrene-toast {
         animation: none;
+        transition: none;
     }
 }
 

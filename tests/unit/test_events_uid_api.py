@@ -1,4 +1,5 @@
 import unittest
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 from utils.web import app as web
@@ -28,3 +29,19 @@ class EventsUidApiTests(unittest.IsolatedAsyncioTestCase):
         ):
             response = await web.api_get_custom_events("session", 93)
         self.assertEqual(response["events"][0]["progress"][0]["current"], 2)
+
+    async def test_all_account_edit_is_forwarded_without_creating_duplicates(self):
+        fields = {"account_scope": "all", "account_id": None}
+        update = AsyncMock(return_value={"id": 71})
+        with (
+            patch.object(web, "get_authenticated_user", AsyncMock(return_value=20)),
+            patch.object(web, "get_custom_event", AsyncMock(return_value={"id": 71})),
+            patch.object(web, "validate_custom_event_payload", AsyncMock(return_value=fields)),
+            patch.object(web, "update_custom_event", update),
+            patch.object(web, "get_custom_event_completions", AsyncMock(return_value=[])),
+        ):
+            result = await web.api_update_custom_event(
+                71, SimpleNamespace(json=AsyncMock(return_value=fields)), "session"
+            )
+        self.assertTrue(result["success"])
+        update.assert_awaited_once_with(discord_user_id=20, event_id=71, **fields)

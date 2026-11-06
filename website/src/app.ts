@@ -4,6 +4,7 @@ import "./browser/core/toasts";
 import { initialiseSiteUpdates } from "./site-updates";
 import { initialiseButtonMotion } from "./browser/core/button-motion";
 import { initialiseSearchControls } from "./browser/core/search-controls";
+import { initialiseColourPickers } from "./browser/core/colour-pickers";
 import { initialiseSelectControls } from "./browser/core/select-controls";
 
 /**
@@ -79,6 +80,7 @@ initialiseHoverEffects();
 initialiseButtonMotion();
 initialiseSearchControls();
 initialiseSelectControls();
+initialiseColourPickers();
 initialiseSiteUpdates();
 
 /* =========================================================
@@ -89,7 +91,7 @@ const pageScripts: Record<string, string | string[]> = {
     "/": "/static/build/browser/pages/home.js?v=26",
     "/weapons": [
         "/static/build/browser/core/planner-materials.js?v=1",
-        "/static/build/browser/pages/events/events-rewards.js?v=4",
+        "/static/build/browser/pages/events/events-rewards.js?v=6",
         "/static/build/browser/pages/weapon-planner.js?v=10",
         "/static/build/browser/pages/weapons.js?v=23",
     ],
@@ -112,12 +114,12 @@ const pageScripts: Record<string, string | string[]> = {
         "/static/build/browser/pages/events/events-dropdown.js?v=2",
         "/static/build/browser/pages/events/events-tabs.js?v=2",
         "/static/build/browser/pages/events/events-cards.js",
-        "/static/build/browser/pages/events/events-rewards.js?v=4",
-        "/static/build/browser/pages/events/events-filters.js?v=8",
-        "/static/build/browser/pages/events/events-timers.js?v=6",
-        "/static/build/browser/pages/events/events-activity.js?v=10",
+        "/static/build/browser/pages/events/events-rewards.js?v=6",
+        "/static/build/browser/pages/events/events-filters.js?v=11",
+        "/static/build/browser/pages/events/events-timers.js?v=10",
+        "/static/build/browser/pages/events/events-activity.js?v=13",
         "/static/build/browser/pages/events/events-refresh.js?v=8",
-        "/static/build/browser/pages/events/events-custom.js?v=10",
+        "/static/build/browser/pages/events/events-custom.js?v=15",
         "/static/build/browser/pages/events/events.js",
     ],
 
@@ -134,7 +136,7 @@ const pageStyles: Record<string, string> = {
     "/reminders": "/static/build/css/planner.css?v=24",
     "/verify": "/static/build/css/verification.css?v=15",
     "/codes": "/static/build/css/codes.css?v=7",
-    "/events": "/static/build/css/events.css?v=49",
+    "/events": "/static/build/css/events.css?v=68",
     "/settings": "/static/build/css/settings.css?v=10",
 };
 

@@ -835,18 +835,6 @@ async def save_account(
             ),
         )
 
-        # Attach existing all-account events directly to the newly linked UID.
-        # Existing associations and ordering survive reconnects and are left intact.
-        await connection.execute(
-            """INSERT INTO custom_event_accounts(event_id,genshin_uid,genshin_server,sort_order)
-            SELECT e.id,%s,%s,COALESCE((SELECT MAX(sort_order) FROM custom_event_accounts
-                WHERE genshin_uid=%s AND genshin_server=%s),0)
-                + ROW_NUMBER() OVER(ORDER BY e.sort_order,e.start_at,e.id)
-            FROM custom_events e WHERE e.discord_user_id=%s AND e.account_scope='all'
-            ON CONFLICT DO NOTHING""",
-            (genshin_uid, genshin_server, genshin_uid, genshin_server, discord_user_id),
-        )
-
 
 async def update_account_cookie_token(
     discord_user_id: int,
@@ -1444,8 +1432,9 @@ async def update_custom_event(
 async def delete_custom_event(
     discord_user_id: int,
     event_id: int,
+    account_id: int | None = None,
 ) -> bool:
-    return await events_store.delete_custom_event(get_pool(), discord_user_id, event_id)
+    return await events_store.delete_custom_event(get_pool(), discord_user_id, event_id, account_id)
 
 
 async def set_custom_event_completion(

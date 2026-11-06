@@ -26,11 +26,50 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
             return;
         const endTime = Number(timer.dataset.endTime);
         const startTime = Number(timer.dataset.startTime);
-        if (!endTime) {
+        const row = timer.closest(".event-limited-item");
+        const value = timer.querySelector("[data-timer-value]") || timer;
+        const unscheduled = !startTime && !endTime && timer.classList.contains("upcoming");
+        const wish = timer.closest("[data-wish-banner]");
+        if (wish && startTime) {
+            timer.title = startTime > now ? "Starts in" : "Ends in";
+            if (startTime <= now && wish.classList.contains("wish-banner-upcoming")) {
+                wish.classList.remove("wish-banner-upcoming");
+                timer.classList.remove("upcoming");
+                window.refreshEvents?.();
+            }
+            if (startTime <= now && !endTime) {
+                value.textContent = "Available";
+                timer.title = "Banner is available";
+                return;
+            }
+        }
+        if (timer.hasAttribute("data-daily-event-reset") &&
+            (startTime > now || (!startTime && row?.classList.contains("upcoming")))) {
+            timer.hidden = true;
             return;
         }
+        if (timer.hasAttribute("data-daily-event-reset"))
+            timer.hidden = false;
+        if (unscheduled) {
+            const openingDateTime = Number(timer.dataset.openingDateTime);
+            const days = openingDateTime ? Math.ceil((openingDateTime - now) / 86400) : 0;
+            value.textContent = openingDateTime && days > 0 ? `~${days}d` : "Soon";
+            row?.classList.add("upcoming");
+            row?.querySelector(".event-checkmark")?.setAttribute("disabled", "");
+            const explanation = timer.querySelector("[data-opening-explanation]");
+            if (explanation) {
+                explanation.textContent = openingDateTime
+                    ? `The official calendar lists ${timer.dataset.openingDate}. The exact opening hour has not been announced, so this countdown is approximate and shows days only. Progress tracking and daily timers stay unavailable until the event opens.`
+                    : "This event has not opened yet. Its opening time has not been published by HoYoLAB. Progress tracking and daily timers become available once it opens.";
+            }
+            return;
+        }
+        if (!endTime && !startTime)
+            return;
         if (startTime && startTime > now) {
-            timer.textContent = `Starts in ${formatCountdown(startTime - now)}`;
+            value.textContent = formatCountdown(startTime - now);
+            row?.classList.add("upcoming");
+            row?.querySelector(".event-checkmark")?.setAttribute("disabled", "");
             timer.classList.add("upcoming");
             timer.classList.remove("expired", "warning", "danger");
             return;
@@ -38,16 +77,21 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         timer.classList.remove("upcoming");
         const eventItem = timer.closest(".event-limited-item");
         eventItem?.classList.remove("upcoming");
+        if (eventItem) {
+            const checkmark = eventItem.querySelector(".event-checkmark");
+            if (checkmark?.dataset.saving !== "true")
+                checkmark?.removeAttribute("disabled");
+        }
         eventItem?.querySelector(".event-limited-upcoming-label")?.remove();
         const originalRemaining = endTime - now;
         if (timer.hasAttribute("data-daily-event-reset")) {
             const eventEnd = Number(timer.dataset.eventEndTime);
             timer.classList.remove("warning", "danger", "expired");
             if (eventEnd && eventEnd <= now) {
-                timer.textContent = "Ended";
+                value.textContent = "Ended";
             }
             else if (originalRemaining <= 0) {
-                timer.textContent = "Resetting...";
+                value.textContent = "Resetting...";
                 // Refresh completion identity as well as the timer at the daily boundary.
                 if (now >= Number(timer.dataset.nextResetRefresh || 0)) {
                     timer.dataset.nextResetRefresh = String(now + 60);
@@ -55,7 +99,7 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
                 }
             }
             else {
-                timer.textContent = formatCountdown(originalRemaining);
+                value.textContent = formatCountdown(originalRemaining);
                 updateDailyUrgency(timer, originalRemaining);
             }
             return;
@@ -64,7 +108,7 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // EXPIRED
         // -----------------------------------------
         if (originalRemaining <= 0) {
-            timer.textContent = timer.classList.contains("stygian-reset-timer")
+            value.textContent = timer.classList.contains("stygian-reset-timer")
                 ? "Resetting..."
                 : "Updating...";
             timer.classList.add("expired");
@@ -75,7 +119,7 @@ window.updateEventTimeLeft = function updateEventTimeLeft() {
         // ACTIVE
         // -----------------------------------------
         timer.classList.remove("expired");
-        timer.textContent = formatCountdown(originalRemaining);
+        value.textContent = formatCountdown(originalRemaining);
         // -----------------------------------------
         // TIME STATUS
         // -----------------------------------------
