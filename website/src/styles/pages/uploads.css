@@ -1,0 +1,344 @@
+/* Uploads: special-only file hosting and the public share page Discord embeds. */
+
+.uploads-page {
+    max-width: 880px;
+}
+
+.uploads-eyebrow {
+    margin: 0 0 6px;
+
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.uploads-intro h1 {
+    margin: 0;
+
+    font-size: clamp(26px, 3.5vw, 34px);
+    letter-spacing: -0.5px;
+}
+
+.uploads-intro p:last-child {
+    margin: 8px 0 22px;
+
+    color: var(--text-muted);
+}
+
+.uploads-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    padding: 34px 20px;
+
+    border: 1.5px dashed var(--accent-border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-inset);
+
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        border-color var(--control-motion),
+        background var(--control-motion);
+}
+
+.uploads-drop strong {
+    color: var(--text);
+    font-size: 15px;
+}
+
+.uploads-drop:hover,
+.uploads-drop:focus-within,
+.uploads-drop[data-dragging="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.uploads-drop[aria-disabled="true"] {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.uploads-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.uploads-drop-icon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 4px;
+
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.uploads-icon,
+.uploads-kind svg,
+.uploads-viewer-icon {
+    width: 16px;
+    height: 16px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.uploads-progress {
+    display: grid;
+    gap: 8px;
+
+    margin-top: 14px;
+    padding: 14px 16px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+}
+
+.uploads-progress[hidden],
+.uploads-empty[hidden] {
+    display: none;
+}
+
+.uploads-progress-text {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    font-size: 13px;
+}
+
+.uploads-progress-text span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uploads-progress progress {
+    width: 100%;
+    height: 6px;
+
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: var(--surface-inset);
+    overflow: hidden;
+}
+
+.uploads-progress progress::-webkit-progress-bar {
+    background: var(--surface-inset);
+}
+
+.uploads-progress progress::-webkit-progress-value {
+    background: var(--accent);
+}
+
+.uploads-progress progress::-moz-progress-bar {
+    background: var(--accent);
+}
+
+.uploads-list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin: 30px 0 12px;
+}
+
+.uploads-list-header h2 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.uploads-total,
+.uploads-empty {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.uploads-list {
+    display: grid;
+    gap: 8px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.uploads-row,
+.uploads-view-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+}
+
+.uploads-kind {
+    display: grid;
+    place-items: center;
+    flex: none;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.uploads-row-text {
+    display: grid;
+    flex: 1;
+    gap: 2px;
+    min-width: 0;
+}
+
+.uploads-row-name,
+.uploads-view-name {
+    overflow: hidden;
+
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uploads-row-name:hover {
+    color: var(--accent);
+}
+
+.uploads-view-name {
+    margin: 0;
+
+    font-size: 16px;
+}
+
+.uploads-row-meta {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.uploads-row-actions {
+    display: flex;
+    flex: none;
+    gap: 8px;
+}
+
+.uploads-viewer {
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 12px;
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: #000;
+}
+
+.uploads-viewer video,
+.uploads-viewer img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+    max-height: 72vh;
+
+    object-fit: contain;
+}
+
+.uploads-viewer[data-kind="audio"],
+.uploads-viewer[data-kind="file"] {
+    padding: 40px 20px;
+
+    background: var(--surface-inset);
+}
+
+.uploads-viewer audio {
+    width: min(100%, 520px);
+}
+
+.uploads-viewer .uploads-viewer-icon {
+    width: 56px;
+    height: 56px;
+
+    color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .uploads-row,
+    .uploads-view-bar {
+        flex-wrap: wrap;
+    }
+
+    .uploads-row-actions {
+        width: 100%;
+    }
+
+    .uploads-row-actions > :first-child {
+        flex: 1;
+    }
+}
+
+.uploads-status {
+    color: var(--accent);
+    font-size: 12px;
+}
+
+.uploads-status[data-upload-status="ready"] {
+    display: none;
+}
+
+.uploads-status[data-upload-status="failed"] {
+    color: var(--error);
+}
+
+.uploads-notice {
+    margin: 0 0 12px;
+    padding: 12px 14px;
+
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-md);
+    background: var(--accent-soft);
+
+    font-size: 13px;
+}
+
+.uploads-delete img {
+    display: block;
+
+    width: 15px;
+    height: 15px;
+
+    object-fit: contain;
+    transition: filter 0.15s ease;
+}
+
+.uploads-delete:hover img {
+    filter: brightness(0) saturate(100%) invert(55%) sepia(45%) saturate(1800%) hue-rotate(325deg)
+        brightness(95%) contrast(95%);
+}

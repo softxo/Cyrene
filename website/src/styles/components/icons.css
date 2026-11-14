@@ -1,0 +1,75 @@
+.cyrene-plus,
+.cyrene-edit,
+.cyrene-sparkle,
+.cyrene-rarity-star {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: 0 0 1em;
+    background: currentColor;
+    vertical-align: middle;
+    mask: var(--cyrene-icon) center / contain no-repeat;
+}
+.cyrene-rarity-star[data-rarity="5"] {
+    color: #e7b65b;
+}
+.cyrene-rarity-star[data-rarity="4"] {
+    color: #b788e2;
+}
+.enka-rarity-star.cyrene-rarity-star {
+    color: #e7b65b;
+    width: 14px;
+    height: 14px;
+}
+.characters-icon-button > .cyrene-rarity-star {
+    width: 19px;
+    height: 19px;
+    flex-basis: 19px;
+}
+.cyrene-plus {
+    --cyrene-icon: url("/static/images/ui/plus.svg");
+}
+.cyrene-edit {
+    --cyrene-icon: url("/static/images/ui/edit.svg");
+}
+.cyrene-sparkle {
+    --cyrene-icon: url("/static/images/ui/sparkle.svg");
+}
+.cyrene-rarity-star {
+    --cyrene-icon: url("/static/images/characters/Rarity_5.webp");
+}
+.cyrene-arrow {
+    display: inline-block;
+    width: var(--arrow-size, 1em);
+    height: var(--arrow-size, 1em);
+    flex: 0 0 var(--arrow-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/arrow-right.svg") center / contain no-repeat;
+}
+
+.cyrene-check {
+    display: inline-block;
+    width: var(--check-size, 1em);
+    height: var(--check-size, 1em);
+    flex: 0 0 var(--check-size, 1em);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/check.svg") center / contain no-repeat;
+}
+.cyrene-arrow--left {
+    rotate: 180deg;
+}
+
+.cyrene-close {
+    display: inline-block;
+    width: var(--close-size, 16px);
+    height: var(--close-size, 16px);
+    flex: 0 0 var(--close-size, 16px);
+    vertical-align: middle;
+    background: currentColor;
+    mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+    -webkit-mask: url("/static/images/ui/close.svg") center / contain no-repeat;
+}

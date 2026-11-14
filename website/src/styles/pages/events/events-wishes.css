@@ -1,0 +1,527 @@
+.events-wishes {
+    margin-top: 30px;
+    margin-bottom: 32px;
+    min-width: 0;
+}
+
+.wish-banners {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --wish-banner-gap: 22px;
+    gap: var(--wish-banner-gap);
+    align-items: stretch;
+}
+
+.wish-banner-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-width: 0;
+    min-height: 390px;
+    overflow: hidden;
+
+    background: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+
+    transition:
+        border-color 140ms ease-in-out,
+        box-shadow 140ms ease-in-out;
+}
+
+.wish-banner-card:hover {
+    border-color: color-mix(in srgb, #38343e 80%, var(--accent) 20%);
+    box-shadow: 0 9px 26px rgba(0, 0, 0, 0.17);
+}
+
+.wish-banner-image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    transform: none;
+}
+
+.wish-banner-card:hover .wish-banner-image {
+    transform: none;
+}
+
+.wish-banner-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(9, 11, 18, 0.96) 0%,
+            rgba(9, 11, 18, 0.86) 34%,
+            rgba(9, 11, 18, 0.56) 66%,
+            rgba(9, 11, 18, 0.18) 100%
+        ),
+        linear-gradient(0deg, rgba(9, 11, 18, 0.62) 0%, transparent 48%);
+}
+
+.wish-banner-content {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    min-width: 0;
+    min-height: 390px;
+    padding: 18px 28px 28px;
+
+    box-sizing: border-box;
+}
+
+.wish-banner-type {
+    align-self: flex-start;
+    margin-bottom: 9px;
+    padding: 6px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(12, 14, 22, 0.52);
+
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.wish-banner-title {
+    max-width: 100%;
+    margin: 0 0 16px;
+
+    color: #fff;
+    font-size: clamp(21px, 2vw, 27px);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.wish-banner-featured {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    width: fit-content;
+    max-width: 100%;
+    border: 1px solid rgba(231, 182, 91, 0.46);
+    box-shadow: 0 0 12px rgba(231, 182, 91, 0.06);
+    border-radius: 13px;
+    background: rgba(15, 17, 24, 0.48);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.wish-banner-featured:not(.wish-banner-four-star) .wish-banner-label {
+    color: #ffbd45;
+}
+
+.wish-banner-four-star .wish-banner-label {
+    color: #c58aff;
+}
+
+.wish-banner-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wish-banner-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 66px;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.3;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.wish-banner-item img {
+    width: 46px;
+    height: 46px;
+    padding: 3px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.wish-banner-four-star {
+    border-color: rgba(183, 136, 226, 0.3);
+    box-shadow: none;
+}
+
+.wish-banner-four-star .wish-banner-item {
+    width: 66px;
+    font-size: 12px;
+}
+
+.wish-banner-four-star .wish-banner-item img {
+    width: 38px;
+    height: 38px;
+}
+
+.wish-banner-time {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    font-variant-numeric: tabular-nums;
+}
+
+.wish-banners-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+    padding: 28px;
+    box-sizing: border-box;
+
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    background: var(--card-background);
+
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+}
+
+@media (max-width: 1000px) {
+    .wish-banners {
+        --wish-banner-gap: 16px;
+        gap: var(--wish-banner-gap);
+    }
+
+    .wish-banner-content {
+        padding: 22px;
+    }
+
+    .wish-banner-featured {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .wish-banner-items {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 760px) {
+    .wish-banners {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .wish-banner-card,
+    .wish-banner-content {
+        min-height: 360px;
+    }
+
+    .wish-banner-content {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 420px) {
+    .wish-banner-card,
+    .wish-banner-content {
+        min-height: 340px;
+    }
+
+    .wish-banner-content {
+        padding: 16px;
+    }
+
+    .wish-banner-title {
+        font-size: 21px;
+    }
+
+    .wish-banner-item {
+        width: 58px;
+        font-size: 12px;
+    }
+
+    .wish-banner-item img {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .wish-banner-four-star .wish-banner-item img {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wish-banner-card,
+    .wish-banner-image,
+    .wish-banner-item img {
+        transition: none;
+    }
+
+    .wish-banner-card:hover,
+    .wish-banner-item:hover img {
+        transform: none;
+    }
+}
+
+@media (min-width: 761px) {
+    .wish-banners > .wish-banner-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        width: calc((100% - var(--wish-banner-gap)) / 2);
+        justify-self: center;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 760px) {
+    .events-overview-panel[data-overview-panel="wishes"]
+        .wish-banners
+        > .wish-banner-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        width: calc((100% - var(--wish-banner-gap)) / 2);
+        justify-self: center;
+    }
+}
+
+.wish-banner-preview-art {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: flex;
+    --wish-preview-warm-background: linear-gradient(140deg, #625044, #363456);
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-panel {
+    position: relative;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+}
+.wish-preview-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+}
+.wish-preview-character img {
+    object-fit: contain;
+    object-position: center top;
+}
+.wish-preview-chronicled .wish-preview-panel + .wish-preview-panel {
+    border-left: 2px solid rgba(255, 255, 255, 0.5);
+}
+.wish-preview-weapons .wish-preview-panel {
+    position: absolute;
+    inset: 0;
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-weapons .wish-preview-panel:first-child {
+    clip-path: polygon(0 0, 60% 0, 40% 100%, 0 100%);
+}
+.wish-preview-weapons .wish-preview-panel:last-child {
+    clip-path: polygon(60% 0, 100% 0, 100% 100%, 40% 100%);
+}
+.wish-preview-weapons .wish-preview-panel img {
+    width: 55%;
+    object-fit: contain;
+    padding: 25px 0 90px;
+    box-sizing: border-box;
+}
+.wish-preview-weapons .wish-preview-panel:last-child img {
+    margin-left: 45%;
+}
+.wish-preview-weapons::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.65);
+    clip-path: polygon(59.8% 0, 60.2% 0, 40.2% 100%, 39.8% 100%);
+}
+.wish-banner-preview .wish-banner-overlay {
+    background: linear-gradient(
+        0deg,
+        rgba(9, 11, 18, 0.96),
+        rgba(9, 11, 18, 0.3) 45%,
+        transparent 75%
+    );
+}
+.wish-banner-preview .wish-banner-content {
+    justify-content: flex-end;
+    padding-top: 64px;
+}
+.wish-banner-preview .wish-banner-featured {
+    display: none;
+}
+.wish-banner-preview .wish-banner-title {
+    margin-bottom: 8px;
+}
+.wish-preview-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.wish-preview-name {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 5px 11px;
+    border: 1px solid rgba(231, 182, 91, 0.3);
+    border-radius: 999px;
+    background: rgba(12, 14, 22, 0.86);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.wish-banner-time.upcoming {
+    min-width: 126px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.wish-upcoming-section {
+    margin-top: 30px;
+    min-width: 0;
+}
+.wish-banner-media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    border-radius: inherit;
+    clip-path: inset(0 round 19px);
+    background: #0c0e16;
+}
+.wish-banner-media .wish-banner-image {
+    z-index: auto;
+    border-radius: 0;
+}
+.wish-banner-overlay,
+.wish-banner-preview-art {
+    border-radius: inherit;
+    overflow: hidden;
+}
+.wish-banner-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    gap: 3px;
+    min-width: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+}
+.wish-preview-chronicled {
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-chronicled .wish-preview-panel {
+    background: var(--wish-preview-warm-background);
+}
+.wish-preview-chronicled .wish-preview-panel img {
+    object-fit: cover;
+    object-position: center top;
+}
+.wish-preview-chronicled-weapons .wish-preview-panel img {
+    object-fit: contain;
+    padding: 24px 2px 100px;
+    box-sizing: border-box;
+}
+
+.wish-banner-card:has(> .wish-banner-media) {
+    display: grid;
+    min-height: 0;
+    align-self: start;
+}
+.wish-banner-card > .wish-banner-media {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    min-width: 0;
+    align-self: stretch;
+}
+.wish-banner-media .wish-banner-image {
+    position: static;
+    display: block;
+    height: auto;
+}
+.wish-banner-card:has(> .wish-banner-media) > .wish-banner-content {
+    grid-area: 1 / 1;
+    min-height: 0;
+    padding: 16px 24px;
+}
+
+.wish-banner-card[data-banner-type="302"] .wish-banner-featured {
+    box-sizing: border-box;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-item,
+.wish-banner-card[data-banner-type="302"] .wish-banner-four-star .wish-banner-item {
+    width: 100px;
+}
+@media (max-width: 1100px) {
+    .wish-banner-card > .wish-banner-media {
+        grid-area: 1 / 1;
+        align-self: start;
+    }
+    .wish-banner-card:has(> .wish-banner-media) > .wish-banner-content {
+        grid-area: 2 / 1;
+    }
+    .wish-banner-card:has(> .wish-banner-media) .wish-banner-time {
+        top: 12px;
+        right: 12px;
+    }
+}
+
+.wish-banner-card {
+    background-clip: padding-box;
+    border-color: #38343e;
+}
+.wish-banner-card > .wish-banner-media,
+.wish-banner-card > .wish-banner-overlay,
+.wish-banner-card > .wish-banner-preview-art {
+    border-radius: 0;
+    clip-path: none;
+}
+
+.wish-banner-card[data-banner-type="302"] .wish-banner-title {
+    margin-bottom: 4px;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-featured {
+    margin-top: 14px;
+    padding: 8px 14px;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-name-long {
+    font-size: 12px;
+    line-height: 1.25;
+}
+.wish-banner-card[data-banner-type="302"] .wish-banner-four-star .wish-banner-name-long {
+    font-size: 11.5px;
+}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Uploads | Cyrene{% endblock %}
+
+{% macro upload_row(item) %}
+<li class="uploads-row" data-upload-id="{{ item.id }}">
+    <span class="uploads-kind" data-kind="{{ item.kind }}" aria-hidden="true">
+        <svg viewBox="0 0 16 16">
+            <path d="M4 1.5h5.5L13 5v9.5H4z" />
+            <path d="M9.5 1.5V5H13" />
+        </svg>
+    </span>
+    <span class="uploads-row-text">
+        <a class="uploads-row-name" href="/f/{{ item.id }}" data-upload-name
+            >{{ item.filename }}</a
+        >
+        <span class="uploads-row-meta" data-upload-meta
+            >{{ item.size_label }} · {{ item.created_label }} UTC</span
+        >
+        <span class="uploads-status" data-upload-status="{{ item.status }}"
+            >{% if item.status == "processing" %}Converting for Discord…{% elif item.status ==
+            "failed" %}Couldn't
+            convert; the original file is kept.{% endif %}</span
+        >
+    </span>
+    <span class="uploads-row-actions">
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--compact"
+            data-upload-copy="{{ item.page_url }}"
+        >
+            <svg class="uploads-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                <path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2" />
+            </svg>
+            Copy link
+        </button>
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--icon cyrene-button--danger uploads-delete"
+            data-upload-delete
+            aria-label="Delete {{ item.filename }}"
+        >
+            <img src="/static/images/ui/ui_buttons/Delete.png" alt="" />
+        </button>
+    </span>
+</li>
+{% endmacro %}
+
+{% block content %}
+<div class="page uploads-page">
+    <header class="uploads-intro">
+        <p class="uploads-eyebrow">Special</p>
+        <h1>Uploads</h1>
+        <p>
+            Host files over Discord's upload limit. Paste the link in Discord: videos play in the
+            embed, other files open here.
+        </p>
+    </header>
+
+    <label class="uploads-drop" data-upload-drop>
+        <input type="file" class="uploads-input" data-upload-input />
+        <svg class="uploads-drop-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10v3.5h11V10" />
+        </svg>
+        <strong>Choose a file or drop it here</strong>
+        <span>Up to {{ limit_label }}. MP4 or WebM videos play best in Discord.</span>
+    </label>
+
+    <div class="uploads-progress" data-upload-progress hidden>
+        <span class="uploads-progress-text">
+            <span data-upload-progress-name></span>
+            <span data-upload-progress-value>0%</span>
+        </span>
+        <progress max="100" value="0" data-upload-progress-bar></progress>
+    </div>
+
+    <div class="uploads-list-header">
+        <h2>Your files</h2>
+        <span class="uploads-total">{{ total_label }} used</span>
+    </div>
+
+    <ul class="uploads-list" data-upload-list>
+        {% for item in uploads %}{{ upload_row(item) }}{% endfor %}
+    </ul>
+    <p class="uploads-empty" data-upload-empty {% if uploads %}hidden{% endif %}>
+        Nothing uploaded yet.
+    </p>
+
+    <template data-upload-template> {{ upload_row({"id": "", "kind": "file", "filename": "", "size_label": "", "created_label": "", "page_url": "", "status": "ready"}) }} </template>
+</div>
+
+{% with delete_dialog_class='uploads-delete-dialog', delete_prefix='uploads-delete', delete_title='Delete file?', delete_cancel='Keep file', delete_confirm='Delete file' %}
+{% include "components/deletion_confirmation.html" %}
+{% endwith %}
+{% endblock %}

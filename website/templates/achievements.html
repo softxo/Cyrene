@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Achievements{% endblock %}
+
+{% block content %}
+
+<div class="page achievements-page" data-achievement-account-id="{{ selected_account.id if selected_account else '' }}">
+    <section class="page-header achievements-page-header">
+        <div>
+            <span class="eyebrow"> PROGRESSION </span>
+
+            <h1>Achievements</h1>
+
+            <p>Track your progress across all Genshin Impact achievements.</p>
+        </div>
+
+        {% if accounts %}
+        <form method="get" action="/achievements" class="achievements-account-form">
+            <label for="achievements-account-button">Account</label>
+            <div class="custom-select achievements-account-select">
+                <button
+                    id="achievements-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        <span
+                            data-account-profile-name="{{ selected_account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ selected_account.get("cyrene_nickname") or selected_account.get("nickname") or selected_account.genshin_uid }}</span
+                        >
+                        · {{ selected_account.genshin_uid }}
+                    </span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if account.id == selected_account.id else 'false' }}"
+                    >
+                        <span
+                            data-account-profile-name="{{ account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ account.get("cyrene_nickname") or account.get("nickname") or account.genshin_uid }}</span
+                        >
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="account_id" value="{{ selected_account.id }}" />
+            </div>
+        </form>
+        {% endif %}
+    </section>
+
+    {% if not accounts %}
+    {% include 'components/no_accounts.html' %}
+    {% endif %}
+
+    <section id="achievement-load-error" class="achievement-empty-state" role="alert" hidden>
+        <h2>Achievements could not be loaded</h2>
+        <p id="achievement-load-error-message"></p>
+        <button type="button" onclick="window.location.reload()">Retry</button>
+    </section>
+
+    <section class="achievement-overview">
+        <div class="achievement-overview-header">
+            <div>
+                <span class="achievement-overview-label"> Overall Progress </span>
+
+                <strong id="achievement-overall-count"> 0 / 0 </strong>
+            </div>
+
+            <span class="achievement-overview-percent" id="achievement-overall-percent"> 0% </span>
+        </div>
+
+        <div class="achievement-progress">
+            <div
+                class="achievement-progress-fill"
+                id="achievement-overall-progress-fill"
+                style="width: 0%"
+            ></div>
+        </div>
+    </section>
+
+    <section class="achievement-categories-section" id="achievement-categories">
+        <div class="section-header">
+            <div>
+                <h2>Categories</h2>
+
+                <p>Select a category to view its achievements.</p>
+            </div>
+        </div>
+
+        <div class="achievement-category-controls">
+            <div class="achievement-search-wrapper">
+                <span class="achievement-search-icon">
+                    <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M4.47487 4.4749C2.32698 6.62279 2.32698 10.1052 4.47487 12.2531C6.62275 14.401 10.1052 14.401 12.253 12.2531C14.4009 10.1052 14.4009 6.62279 12.253 4.4749C10.1052 2.32702 6.62275 2.32702 4.47487 4.4749ZM10.8388 10.8389C9.47199 12.2057 7.25591 12.2057 5.88908 10.8389C4.52224 9.47203 4.52224 7.25595 5.88908 5.88912C7.25591 4.52228 9.47199 4.52228 10.8388 5.88912C12.2057 7.25595 12.2057 9.47203 10.8388 10.8389Z"
+                            fill="currentColor"
+                        />
+                        <path
+                            d="M11.1924 13.3137C10.6066 12.7279 10.6066 11.7782 11.1924 11.1924C11.7782 10.6066 12.7279 10.6066 13.3137 11.1924L16.8492 14.7279C17.435 15.3137 17.435 16.2635 16.8492 16.8492C16.2635 17.435 15.3135 17.435 14.7279 16.8492L11.1924 13.3137Z"
+                            fill="currentColor"
+                        />
+                    </svg>
+                </span>
+
+                <input
+                    type="search"
+                    id="achievement-search"
+                    data-achievement-search
+                    class="cyrene-input achievement-search"
+                    placeholder="Search achievements..."
+                    autocomplete="off"
+                />
+            </div>
+
+            <div
+                class="custom-select achievement-version-select"
+                id="achievement-version-select"
+                data-achievement-version-select
+            >
+                <button
+                    type="button"
+                    class="custom-select-button achievement-version-button"
+                    id="achievement-version-button"
+                >
+                    <span class="custom-select-value"> All Versions </span>
+
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div class="custom-select-menu" id="achievement-version-menu">
+                    <button
+                        type="button"
+                        class="custom-select-option selected"
+                        data-value="all"
+                        role="option"
+                        aria-selected="true"
+                    >
+                        All Versions
+                    </button>
+                </div>
+            </div>
+
+            <input type="hidden" id="achievement-version" value="all" />
+
+            <label class="checkbox-control">
+                <input
+                    type="checkbox"
+                    id="achievement-hide-completed"
+                    data-achievement-hide-completed
+                />
+
+                <span> Hide Completed </span>
+            </label>
+
+            <button
+                type="button"
+                class="cyrene-button achievement-import-button cyrene-import-button"
+                id="achievement-import-button"
+            >
+                Import
+            </button>
+            <span class="import-date" data-import-date="achievements" role="status" hidden></span>
+
+            <input
+                type="file"
+                id="achievement-import-input"
+                accept=".json,application/json"
+                hidden
+            />
+        </div>
+
+        <div class="achievement-category-grid" id="achievement-category-grid"></div>
+    </section>
+
+    <section class="achievement-browser" id="achievement-browser" hidden>
+        <aside class="achievement-sidebar">
+            <div class="achievement-sidebar-header">
+                <button
+                    type="button"
+                    class="achievement-back"
+                    id="achievement-back"
+                    aria-label="Back to categories"
+                >
+                    <span class="cyrene-arrow cyrene-arrow--left" aria-hidden="true"></span>
+                </button>
+
+                <span>Categories</span>
+            </div>
+
+            <div class="achievement-sidebar-list" id="achievement-sidebar-list"></div>
+        </aside>
+
+        <div class="achievement-content">
+            <div class="achievement-content-header">
+                <span class="eyebrow"> CATEGORY </span>
+
+                <div class="achievement-category-title-row">
+                    <h2 id="achievement-category-title">Wonders of the World</h2>
+
+                    <span id="achievement-category-percent"> 0% (0/0) </span>
+                </div>
+
+                <div class="achievement-category-progress">
+                    <div
+                        class="achievement-category-progress-fill"
+                        id="achievement-category-progress-fill"
+                        style="width: 0%"
+                    ></div>
+                </div>
+            </div>
+
+            <div class="achievement-category-controls achievement-browser-controls">
+                <div class="achievement-search-wrapper">
+                    <span class="achievement-search-icon">
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M4.47487 4.4749C2.32698 6.62279 2.32698 10.1052 4.47487 12.2531C6.62275 14.401 10.1052 14.401 12.253 12.2531C14.4009 10.1052 14.4009 6.62279 12.253 4.4749C10.1052 2.32702 6.62275 2.32702 4.47487 4.4749ZM10.8388 10.8389C9.47199 12.2057 7.25591 12.2057 5.88908 10.8389C4.52224 9.47203 4.52224 7.25595 5.88908 5.88912C7.25591 4.52228 9.47199 4.52228 10.8388 5.88912C12.2057 7.25595 12.2057 9.47203 10.8388 10.8389Z"
+                                fill="currentColor"
+                            />
+                            <path
+                                d="M11.1924 13.3137C10.6066 12.7279 10.6066 11.7782 11.1924 11.1924C11.7782 10.6066 12.7279 10.6066 13.3137 11.1924L16.8492 14.7279C17.435 15.3137 17.435 16.2635 16.8492 16.8492C16.2635 17.435 15.3135 17.435 14.7279 16.8492L11.1924 13.3137Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </span>
+                    <input
+                        type="search"
+                        class="cyrene-input achievement-search"
+                        data-achievement-search
+                        placeholder="Search achievements..."
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div
+                    class="custom-select achievement-version-select"
+                    data-achievement-version-select
+                >
+                    <button
+                        type="button"
+                        class="custom-select-button achievement-version-button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                    >
+                        <span class="custom-select-value">All Versions</span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox"></div>
+                </div>
+
+                <label class="checkbox-control">
+                    <input type="checkbox" data-achievement-hide-completed />
+                    <span>Hide Completed</span>
+                </label>
+            </div>
+
+            <div class="achievement-list" id="achievement-list"></div>
+        </div>
+    </section>
+</div>
+
+<div
+    data-modal-shell
+    class="achievement-import-success"
+    id="achievement-import-success"
+    role="status"
+    aria-live="polite"
+    hidden
+>
+    <div class="achievement-import-success-backdrop"></div>
+
+    <div data-modal-panel class="achievement-import-success-panel">
+        <div class="achievement-import-verified-icon" aria-hidden="true">
+            <span class="achievement-import-corner top-left"></span>
+            <span class="achievement-import-corner top-right"></span>
+            <span class="achievement-import-corner bottom-left"></span>
+            <span class="achievement-import-corner bottom-right"></span>
+            <span class="achievement-import-scan-line"></span>
+
+            <svg class="achievement-import-check" viewBox="0 0 24 24" focusable="false">
+                <use href="/static/images/ui/check.svg#check"></use>
+            </svg>
+        </div>
+
+        <h2>Imported</h2>
+        <p id="achievement-import-success-message">Achievement progress imported successfully.</p>
+    </div>
+</div>
+
+<div data-modal-shell class="achievement-notes-modal" id="achievement-notes-modal" hidden>
+    <div class="achievement-notes-modal-backdrop" id="achievement-notes-modal-backdrop"></div>
+
+    <div
+        class="achievement-notes-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="achievement-notes-modal-title"
+    >
+        <div class="achievement-notes-modal-header">
+            <h3 id="achievement-notes-modal-title">Add Note</h3>
+
+            <button
+                type="button"
+                class="achievement-notes-modal-close"
+                id="achievement-notes-modal-close"
+                aria-label="Close"
+                title="Close"
+            >
+                <span class="cyrene-close" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <div class="achievement-notes-modal-body">
+            <textarea
+                id="achievement-notes-input"
+                class="achievement-notes-input"
+                placeholder="Enter your note..."
+                rows="4"
+            ></textarea>
+        </div>
+
+        <div class="achievement-notes-modal-footer">
+            <button type="button" class="cyrene-button button" id="achievement-notes-cancel">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button button achievement-notes-add"
+                id="achievement-notes-add"
+            >
+                Add Note
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

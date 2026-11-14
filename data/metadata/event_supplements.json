@@ -1,0 +1,60 @@
+{
+    "calendar_source": "https://www.hoyolab.com/article/47177975",
+    "valid_from": "2026-11-04",
+    "valid_until": "2026-12-16",
+    "stygian": {
+        "opens": "2026-11-11 10:00:00",
+        "period_end_date": "2026-12-15",
+        "source": "https://www.hoyolab.com/article/47284233"
+    },
+    "opening_dates": {
+        "Stress Block Smashing Project": "2026-11-20",
+        "Frames of Fierce Splendor": "2026-11-27",
+        "Ley Line Overflow": "2026-12-07"
+    },
+    "quests": {
+        "Hour of Ruin": {
+            "period_end": "2026-12-15 14:59:59",
+            "source": "https://www.hoyolab.com/article/47284233",
+            "material_source": "https://www.hoyolab.com/article/47218636",
+            "note": "The official preview confirms 560 Primogems and these Mitya ascension material types. It does not itemise their quantities. Material rewards also require completing Test Run and Archon Quest Chapter VII: Act VI within the reward period.",
+            "rewards": [
+                {
+                    "id": 201,
+                    "name": "Primogems",
+                    "icon": "/static/images/misc/Primogem.webp",
+                    "amount": 560,
+                    "rarity": 5
+                },
+                {
+                    "id": "vajrada-amethyst",
+                    "name": "Vajrada Amethyst materials",
+                    "icon": "/static/images/events/reward-previews/104142.png",
+                    "amount": null,
+                    "rarity": 3
+                },
+                {
+                    "id": 113093,
+                    "name": "Shattered Stability Anchor",
+                    "icon": "/static/images/events/reward-previews/113093.png",
+                    "amount": null,
+                    "rarity": 4
+                },
+                {
+                    "id": 101274,
+                    "name": "Kristallfold",
+                    "icon": "/static/images/events/reward-previews/101274.png",
+                    "amount": null,
+                    "rarity": 0
+                },
+                {
+                    "id": "chimeric-materials",
+                    "name": "Chimeric Core materials",
+                    "icon": "/static/images/events/reward-previews/112149.png",
+                    "amount": null,
+                    "rarity": 1
+                }
+            ]
+        }
+    }
+}

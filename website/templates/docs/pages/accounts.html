@@ -1,0 +1,100 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout, both_ways with context %}
+
+{% block docs_body %}
+{{ topic("two-connections") }}
+<p>Cyrene uses two separate connections. It helps to know which is which:</p>
+<div class="docs-split">
+    <div class="docs-panel">
+        <h3>Discord {{ both_ways() }} website</h3>
+        <p>
+            Proves to the website which Discord user you are, so it can show your accounts and
+            nobody else's. You do this once per browser.
+        </p>
+    </div>
+    <div class="docs-panel">
+        <h3>Cyrene {{ both_ways() }} HoYoLAB</h3>
+        <p>
+            Lets Cyrene read your Genshin data (Resin, roster, events) from HoYoLAB. You can link
+            several Genshin accounts.
+        </p>
+    </div>
+</div>
+
+{{ topic("connect-discord") }}
+<p>Open <a href="/verify">Connect Discord</a> in the website sidebar, then choose one of these:</p>
+<ul class="docs-list">
+    <li>
+        <strong>Sign in with Discord.</strong> Authorise Cyrene in the Discord window that opens.
+    </li>
+    <li>
+        <strong>Use a code.</strong> Copy the code shown on the page and run
+        <code>/verify code:YOURCODE</code> in Discord. Codes expire and work once. If one is
+        rejected, press <strong>Generate a new code</strong>.
+    </li>
+</ul>
+<p>
+    To switch to another Discord account later, use
+    <strong>Connect to a different Discord account</strong> on the same page. You stay connected as
+    before until the new one succeeds.
+</p>
+
+{{ topic("link-hoyolab") }}
+<p>
+    Run <code>/link-account</code> in Discord, or open <a href="/settings">Settings</a> and choose
+    <strong>Add HoYoLAB account</strong>. In Discord you can pick how to sign in:
+</p>
+<ol class="docs-steps">
+    <li>
+        <h3>Discord Login</h3>
+        <p>
+            Enter your HoYoLAB email or username and password in the form. Your password goes
+            straight to HoYoLAB to sign in, and Cyrene never stores it.
+        </p>
+    </li>
+    <li>
+        <h3>Cookie Login</h3>
+        <p>
+            For advanced users. Paste your HoYoLAB cookies across two short forms. Adding the
+            optional
+            <code>stoken</code> lets Cyrene refresh the login on its own.
+        </p>
+    </li>
+</ol>
+<p>
+    If HoYoLAB asks for extra verification, Cyrene sends a
+    <strong>Complete verification</strong> link. Once signed in, choose which Genshin account on
+    that HoYoLAB profile to link.
+</p>
+
+{% call callout("Can't see your characters?", "tip") %}
+Some data only appears if your Battle Chronicle is public. In HoYoLAB, make your character details
+visible in the Battle Chronicle settings.
+{% endcall %}
+
+{{ topic("manage-accounts") }}
+<p>Run <code>/accounts</code> to see every linked account. Choose one from the menu, then:</p>
+<ul class="docs-list">
+    <li><strong>Add Account</strong> links another one.</li>
+    <li>
+        <strong>Edit Nickname</strong> renames it inside Cyrene, which helps if you have several. It
+        does not change anything in game.
+    </li>
+    <li><strong>Remove Account</strong> unlinks it.</li>
+</ul>
+<p>
+    You can do the same from <a href="/settings">Settings</a> on the website, or remove an account
+    by UID with <code>/unlink-account</code>. Removing an account unlinks it from both Discord and
+    the website.
+</p>
+
+{{ topic("privacy") }}
+<ul class="docs-list">
+    <li>Account pages and commands only ever show accounts linked to your own Discord account.</li>
+    <li>
+        In a server, slash commands about your account reply privately. The prefix versions, such as
+        <code>{{ prefix }}resin</code>, reply in the channel for everyone to see.
+    </li>
+    <li>Your HoYoLAB password is never stored. Saved login cookies are stored encrypted.</li>
+</ul>
+{% endblock %}

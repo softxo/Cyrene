@@ -1,0 +1,41 @@
+{
+    "name": "cyrene-frontend",
+    "private": true,
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "typecheck": "tsc --noEmit",
+        "build": "vite build --config config/vite.config.ts && npm run build:scripts",
+        "build:scripts": "tsc -p config/tsconfig.scripts.json && node scripts/minify-browser-scripts.mjs"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^21.2.4",
+        "@commitlint/config-conventional": "^21.2.4",
+        "@eslint/js": "^10.0.1",
+        "@playwright/test": "^1.64.1",
+        "@types/node": "^26.6.5",
+        "eslint": "^10.14.0",
+        "globals": "^17.13.0",
+        "husky": "^9.1.7",
+        "knip": "^6.43.0",
+        "lint-staged": "^17.6.0",
+        "prettier": "^3.9.10",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.72.1",
+        "vite": "^8.3.4"
+    },
+    "dependencies": {
+        "zod": "^4.6.7"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "tabWidth": 4,
+        "useTabs": false,
+        "semi": true,
+        "singleQuote": false,
+        "trailingComma": "all"
+    },
+    "overrides": {
+        "minimatch": "^11.0.1"
+    }
+}

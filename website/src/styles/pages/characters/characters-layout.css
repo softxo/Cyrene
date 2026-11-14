@@ -1,0 +1,206 @@
+.characters-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    min-width: 0;
+}
+
+.characters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.characters-header h1 {
+    margin: 5px 0 0;
+    font-size: clamp(32px, 4vw, 44px);
+    letter-spacing: -1.4px;
+}
+
+.characters-header p {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.characters-page-heading .eyebrow {
+    margin-bottom: 0;
+}
+
+.characters-account-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.characters-account-form > label {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.characters-account-select {
+    width: 260px;
+    max-width: 100%;
+}
+
+.characters-account-select .custom-select-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-account-select .custom-select-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.characters-account-select .custom-select-option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.characters-navigation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.characters-navigation-primary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.characters-summary {
+    width: max-content;
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.characters-page-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface-inset);
+
+    box-shadow: inset 0 1px 0 var(--surface-sheen);
+}
+
+.characters-page-tab {
+    min-height: 38px;
+    padding: 0.55rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.characters-page-tab:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.characters-page-tab.active {
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 92%, white),
+        var(--accent)
+    );
+    border-color: var(--accent-border);
+    color: var(--background);
+
+    box-shadow: 0 7px 18px var(--accent-glow);
+}
+
+.characters-panel[hidden],
+.planner-picker[hidden],
+.planner-editor[hidden],
+.planner-character-grid[hidden],
+.planner-empty-state[hidden],
+.planner-picker-character[hidden],
+.planner-picker-empty[hidden] {
+    display: none !important;
+}
+
+.characters-panel.active {
+    margin-top: -6px;
+}
+
+@media (max-width: 600px) {
+    .characters-header {
+        align-items: stretch;
+    }
+
+    .characters-page {
+        gap: 22px;
+    }
+
+    .characters-page-tabs {
+        width: 100%;
+    }
+
+    .characters-navigation-primary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-page-tab {
+        flex: 1;
+    }
+
+    .characters-account-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .characters-navigation-row {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .characters-account-select {
+        width: 100%;
+    }
+
+    .character-card-info {
+        padding: 7px;
+    }
+
+    .character-card-info h2 {
+        font-size: 0.82rem;
+    }
+
+    .character-card-meta,
+    .character-card-footer {
+        font-size: 0.68rem;
+    }
+}

@@ -1,0 +1,120 @@
+.events-hero {
+    padding: 28px 32px;
+    margin-bottom: 28px;
+}
+
+.events-hero .hero-content {
+    max-width: 760px;
+}
+
+.events-hero h1 {
+    margin: 6px 0 8px;
+}
+
+.events-hero p {
+    margin: 0;
+}
+
+.events-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+}
+
+.events-account-tabs,
+.events-overview-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.events-account-tab,
+.events-overview-tab {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 36px;
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+.events-controls-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.events-account-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.events-account-selector .custom-select {
+    min-width: 260px;
+}
+
+.events-layout-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 14px;
+    box-sizing: border-box;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.events-section {
+    margin-bottom: 40px;
+}
+
+.events-section .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+.events-section .section-header h2 {
+    margin: 5px 0 0;
+}
+
+.events-account-selector .custom-select-value {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.events-account-selector {
+    --dropdown-height: 36px;
+}

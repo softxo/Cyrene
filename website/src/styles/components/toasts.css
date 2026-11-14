@@ -1,0 +1,102 @@
+.cyrene-toasts {
+    top: auto;
+    left: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    position: fixed;
+    z-index: 11000;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    display: grid;
+    gap: 10px;
+    width: min(380px, calc(100vw - 32px));
+    pointer-events: none;
+}
+.cyrene-toast {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 14px;
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--surface) 94%, var(--accent) 6%);
+    box-shadow: 0 10px 32px rgb(0 0 0 / 24%);
+    color: var(--text);
+    pointer-events: auto;
+    opacity: var(--toast-opacity, 1);
+    transition: opacity 180ms ease-in-out;
+    animation: cyrene-toast-enter 180ms ease-out;
+}
+.cyrene-toast svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.cyrene-toast-icon {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+.cyrene-toast-message {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.cyrene-toast-close {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+    --control-radius: 9px;
+    color: var(--text-muted);
+}
+.cyrene-toast-close svg {
+    width: 16px;
+    height: 16px;
+}
+@keyframes cyrene-toast-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: var(--toast-opacity, 1);
+        transform: translateY(0);
+    }
+}
+@media (max-width: 520px) {
+    .cyrene-toasts {
+        right: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cyrene-toast {
+        animation: none;
+        transition: none;
+    }
+}
+
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) {
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+    background: color-mix(in srgb, var(--error) 3%, var(--surface));
+    color: var(--error);
+}
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) .cyrene-toast-icon {
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+    background: color-mix(in srgb, var(--error) 8%, transparent);
+    color: var(--error);
+}
+.cyrene-toast:is([data-kind="warning"], [data-kind="error"]) .cyrene-toast-close {
+    color: var(--error);
+}

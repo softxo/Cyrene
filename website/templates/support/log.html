@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Ticket #{{ ticket.id }} | Cyrene support logs{% endblock %}
+
+{% block content %}
+<div class="page support-log-page">
+    <a class="support-log-back" href="/support/logs">
+        <span class="cyrene-arrow cyrene-arrow--left" aria-hidden="true"></span>
+        All logs
+    </a>
+
+    <header class="support-log-card">
+        <div class="support-log-card-title">
+            <p class="support-log-eyebrow">Ticket #{{ ticket.id }}</p>
+            <h1>{{ topic }}</h1>
+            <span class="support-status" data-status="{{ ticket.status }}"
+                >{{ ticket.status | capitalize }}</span
+            >
+        </div>
+        <dl class="support-log-facts">
+            <div>
+                <dt>From</dt>
+                <dd class="support-log-person">
+                    {% if author and author.avatar %}
+                    <img
+                        class="support-avatar"
+                        src="{{ author.avatar }}"
+                        alt=""
+                        referrerpolicy="no-referrer"
+                    />
+                    {% else %}
+                    <span class="support-avatar" aria-hidden="true">{{ ticket.author_name[:1] | upper }}</span>
+                    {% endif %}
+                    {{ ticket.author_name }}
+                </dd>
+            </div>
+            <div>
+                <dt>Opened</dt>
+                <dd>{{ ticket.created_at.strftime('%d %b %Y, %H:%M') }} UTC</dd>
+            </div>
+            <div>
+                <dt>{{ 'Open for' if ticket.status == 'open' else 'Lasted' }}</dt>
+                <dd>{{ lasted }}</dd>
+            </div>
+            <div>
+                <dt>Messages</dt>
+                <dd>{{ messages | length }}</dd>
+            </div>
+            <div>
+                <dt>Staff</dt>
+                <dd>{{ staff | join(', ') if staff else 'No staff replies' }}</dd>
+            </div>
+        </dl>
+    </header>
+
+    <ol class="support-messages support-log-messages" data-support-people="{{ people | tojson | forceescape }}">
+        {% for message in messages %}
+        {% if message.day %}
+        <li class="support-day">{{ message.day }}</li>
+        {% endif %}
+        <li
+            class="support-message"
+            data-mine="{{ 'true' if message.from_staff else 'false' }}"
+            data-staff="{{ 'true' if message.from_staff else 'false' }}"
+            data-grouped="{{ 'true' if message.grouped else 'false' }}"
+        >
+            {% if message.avatar %}
+            <img
+                class="support-avatar"
+                src="{{ message.avatar }}"
+                alt=""
+                referrerpolicy="no-referrer"
+            />
+            {% else %}
+            <span class="support-avatar" aria-hidden="true">{{ message.author_name[:1] | upper }}</span>
+            {% endif %}
+            <div class="support-message-content">
+                {% if not message.grouped %}
+                <span class="support-message-meta">
+                    <strong>{{ message.author_name }}</strong>
+                    {% for badge in message.badges %}
+                    <span class="discord-account-type"
+                        ><b class="discord-account-{{ badge }}"
+                            >{{ badge | capitalize }}</b
+                        ></span
+                    >
+                    {% endfor %}
+                    <time datetime="{{ message.created_at.isoformat() }}">{{ message.created_at.strftime('%H:%M') }}</time>
+                </span>
+                {% endif %}
+                {% if message.body %}
+                <div class="support-message-body" data-support-render="{{ message.body }}"></div>
+                {% endif %}
+                {% if message.images %}
+                <div class="support-images">
+                    {% for image in message.images %}
+                    <a href="{{ image }}" target="_blank" rel="noopener"
+                        ><img src="{{ image }}" alt="Attached image" loading="lazy"
+                    /></a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+{% endblock %}

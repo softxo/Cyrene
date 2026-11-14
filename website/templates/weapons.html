@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+{% block title %}Cyrene · Weapons{% endblock %}
+{% block content %}
+{% set weapons_tab = request.query_params.get('tab', 'owned') %}
+{% if weapons_tab not in ['owned', 'catalogue', 'planner'] %}{% set weapons_tab = 'owned' %}{% endif %}
+<div
+    class="page characters-page weapons-page"
+    data-weapons-page
+    data-account-profile-weapon="{{ selected_account.genshin_uid if selected_account else '' }}"
+    data-account-nickname="{{ selected_account.get('nickname', '') if selected_account else '' }}"
+    data-account-id="{{ selected_account.id if selected_account else '' }}"
+>
+    <header class="characters-header">
+        <div class="characters-page-heading">
+            <span class="eyebrow">ARMOURY</span>
+            <h1>Weapons</h1>
+            <p>Your weapon inventory and the complete weapon catalogue.</p>
+        </div>
+    </header>
+    {% if not accounts %}
+    {% include 'components/no_accounts.html' %}
+    {% else %}
+    <div class="characters-navigation-row">
+        <div class="characters-navigation-primary">
+            <div class="characters-page-tabs" role="tablist" aria-label="Weapon collection">
+                <button
+                    class="characters-page-tab{% if weapons_tab == 'owned' %} active{% endif %}"
+                    type="button"
+                    role="tab"
+                    id="weapons-owned-tab"
+                    aria-controls="weapons-results"
+                    aria-selected="{{ 'true' if weapons_tab == 'owned' else 'false' }}"
+                    tabindex="{{ '0' if weapons_tab == 'owned' else '-1' }}"
+                    data-weapons-tab="owned"
+                >
+                    Owned
+                </button>
+                <button
+                    class="characters-page-tab{% if weapons_tab == 'catalogue' %} active{% endif %}"
+                    type="button"
+                    role="tab"
+                    id="weapons-catalogue-tab"
+                    aria-controls="weapons-results"
+                    aria-selected="{{ 'true' if weapons_tab == 'catalogue' else 'false' }}"
+                    tabindex="{{ '0' if weapons_tab == 'catalogue' else '-1' }}"
+                    data-weapons-tab="catalogue"
+                >
+                    Catalogue
+                </button>
+                <button
+                    class="characters-page-tab{% if weapons_tab == 'planner' %} active{% endif %}"
+                    type="button"
+                    role="tab"
+                    id="weapons-planner-tab"
+                    aria-controls="weapons-planner"
+                    aria-selected="{{ 'true' if weapons_tab == 'planner' else 'false' }}"
+                    tabindex="{{ '0' if weapons_tab == 'planner' else '-1' }}"
+                    data-weapons-tab="planner"
+                >
+                    Planner
+                </button>
+            </div>
+        </div>
+        <div class="weapons-account-actions">
+            <form action="/weapons" method="get" class="characters-account-form">
+                <input
+                    type="hidden"
+                    name="tab"
+                    value="{{ weapons_tab }}"
+                    data-weapons-tab-input
+                />
+                <label id="weapons-account-label">Account</label>
+                <div class="custom-select characters-account-select" data-weapons-select>
+                    <button
+                        class="custom-select-button"
+                        type="button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-labelledby="weapons-account-label weapons-account-value"
+                    >
+                        <span class="custom-select-value" id="weapons-account-value"
+                            ><span
+                                data-account-profile-name="{{ selected_account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span
+                            >
+                            &middot; {{ selected_account.genshin_uid }}</span
+                        ><span class="custom-select-arrow"></span>
+                    </button>
+                    <div
+                        class="custom-select-menu"
+                        role="listbox"
+                        aria-labelledby="weapons-account-label"
+                    >
+                        {% for account in accounts %}<button
+                            type="button"
+                            class="custom-select-option{% if selected_account.id == account.id %} selected{% endif %}"
+                            role="option"
+                            aria-selected="{{ 'true' if selected_account.id == account.id else 'false' }}"
+                            data-value="{{ account.id }}"
+                        >
+                            <span
+                                data-account-profile-name="{{ account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                            >
+                            &middot; {{ account.genshin_uid }}</button
+                        >{% endfor %}
+                    </div>
+                    <input
+                        type="hidden"
+                        name="account_id"
+                        value="{{ selected_account.id }}"
+                        data-weapons-account
+                    />
+                </div>
+            </form>
+            <button class="cyrene-button cyrene-import-button" type="button" data-weapons-import>
+                Import
+            </button>
+            <button class="cyrene-button cyrene-button--danger" type="button" data-weapons-reset>
+                Reset
+            </button>
+            <input type="file" accept=".json,application/json" hidden data-weapons-import-file />
+        </div>
+    </div>
+    <div
+        class="characters-toolbar weapons-toolbar"
+        {% if weapons_tab == "planner" %}
+        hidden{% endif %}
+    >
+        <div class="characters-search">
+            <label for="weapons-search">Search weapons</label
+            ><input
+                id="weapons-search"
+                type="search"
+                placeholder="Search by name..."
+                data-weapons-search
+                class="cyrene-input"
+            />
+        </div>
+        <div class="characters-filter weapons-tag-filter">
+            <label id="weapons-tag-label">Tags</label>
+            <div class="custom-select" data-weapons-select>
+                <button
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="weapons-tag-label weapons-tag-value"
+                >
+                    <span class="custom-select-value" id="weapons-tag-value">All tags</span
+                    ><span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox" aria-labelledby="weapons-tag-label">
+                    {% for value, label in [('', 'All tags'), ('signature', 'Signature'), ('Gacha', 'Gacha'), ('Event', 'Event'), ('BP', 'BP'), ('Craftable', 'Craftable'), ('Fishing Association', 'Fishing Association'), ('Exploration', 'Exploration'), ('Starglitter Exchange', 'Starglitter Exchange'), ('Quest', 'Quest'), ('Promotional', 'Promotional')] %}
+                    <button
+                        type="button"
+                        class="custom-select-option{% if not value %} selected{% endif %}"
+                        role="option"
+                        aria-selected="{{ 'true' if not value else 'false' }}"
+                        data-value="{{ value }}"
+                    >
+                        {{ label }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" data-weapons-tag value="" />
+            </div>
+        </div>
+        <div class="characters-filter characters-icon-filter">
+            <label id="weapons-type-label">Weapon type</label>
+            <div
+                class="characters-icon-buttons"
+                role="group"
+                aria-labelledby="weapons-type-label"
+                data-weapons-icon-filter="type"
+            >
+                <button
+                    class="characters-icon-button selected"
+                    type="button"
+                    data-value=""
+                    aria-pressed="true"
+                    aria-label="All weapon types"
+                    title="All weapon types"
+                >
+                    <span>All</span>
+                </button>
+                {% for type in ['Sword', 'Claymore', 'Polearm', 'Bow', 'Catalyst'] %}
+                <button
+                    class="characters-icon-button"
+                    type="button"
+                    data-value="{{ type }}"
+                    aria-pressed="false"
+                    aria-label="{{ type }}"
+                    title="{{ type }}"
+                >
+                    <img src="/static/images/characters/{{ type }}.webp" alt="" />
+                </button>
+                {% endfor %}
+            </div>
+            <input type="hidden" data-weapons-type value="" />
+        </div>
+        <div class="characters-filter characters-icon-filter">
+            <label id="weapons-rarity-label">Rarity</label>
+            <div
+                class="characters-icon-buttons"
+                role="group"
+                aria-labelledby="weapons-rarity-label"
+                data-weapons-icon-filter="rarity"
+            >
+                <button
+                    class="characters-icon-button selected"
+                    type="button"
+                    data-value=""
+                    aria-pressed="true"
+                    aria-label="All rarities"
+                    title="All rarities"
+                >
+                    <span>All</span>
+                </button>
+                {% for rarity in [5,4,3,2,1] %}
+                <button
+                    class="characters-icon-button"
+                    type="button"
+                    data-value="{{ rarity }}"
+                    aria-pressed="false"
+                    aria-label="{{ rarity }}-star weapons"
+                    title="{{ rarity }}-star weapons"
+                >
+                    <span
+                        class="weapon-rarity-star"
+                        data-rarity="{{ rarity }}"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+                {% endfor %}
+            </div>
+            <input type="hidden" data-weapons-rarity value="" />
+        </div>
+        <button class="cyrene-button characters-reset-filters" type="button" data-weapons-retry>
+            Refresh
+        </button>
+    </div>
+    <div class="weapons-summary-row" {% if weapons_tab == "planner" %} hidden{% endif %}>
+        <span class="characters-summary" data-weapons-count>Loading weapons...</span>
+        <span class="import-date" data-import-date="weapons" role="status" hidden></span>
+        <div class="weapons-help event-insight" data-popover-placement="top">
+            <button
+                type="button"
+                class="weapons-help-trigger"
+                aria-label="About weapon data"
+                aria-describedby="weapons-data-help"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+            >
+                <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                    <path
+                        d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                    />
+                    <circle cx="8" cy="12" r=".85" fill="currentColor" />
+                </svg>
+            </button>
+            <div
+                id="weapons-data-help"
+                class="event-insight-popover"
+                popover="manual"
+                role="dialog"
+                aria-label="Weapon data"
+            >
+                <div class="event-insight-content">
+                    <div class="event-insight-heading">
+                        <div><span>WEAPON DATA</span><strong>Your Weapon Inventory</strong></div>
+                    </div>
+                    <p data-weapons-note>
+                        Only equipped weapons sync from HoYoLAB. Use <strong>Import</strong> to load
+                        your scanned inventory, or add weapons and copies from
+                        <strong>Catalogue</strong>. HoYoLAB takes priority for matched equipped
+                        copies.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section
+        id="weapons-results"
+        role="tabpanel"
+        aria-labelledby="weapons-{{ weapons_tab if weapons_tab != 'planner' else 'owned' }}-tab"
+        {% if weapons_tab == "planner" %}
+        hidden{% endif %}
+    >
+        <p data-weapons-status role="status">Loading weapons from HoYoLAB…</p>
+        <p class="weapons-note" data-weapons-manual-status role="status"></p>
+        <div class="weapons-grid" data-weapons-grid></div>
+    </section>
+    {% include 'components/weapon_planner.html' %}
+    <dialog
+        class="weapon-add-dialog"
+        data-weapons-reset-dialog
+        aria-labelledby="weapons-reset-title"
+    >
+        <h2 id="weapons-reset-title">Reset weapon inventory?</h2>
+        <p class="weapons-note">
+            This deletes all imported weapons and manually added copies for UID
+            {{ selected_account.genshin_uid }}. This also affects other Discord accounts linked to this UID.
+        </p>
+        <p class="weapons-note">Your HoYoLAB weapons and saved plans are kept.</p>
+        <p class="weapons-note" role="status" data-weapons-reset-status></p>
+        <div class="weapon-add-actions">
+            <button class="cyrene-button" type="button" data-weapons-reset-cancel>Cancel</button
+            ><button
+                class="cyrene-button cyrene-button--danger"
+                type="button"
+                data-weapons-reset-confirm
+            >
+                Reset inventory
+            </button>
+        </div>
+    </dialog>
+    <dialog class="weapon-add-dialog" data-weapon-dialog aria-labelledby="weapon-add-title">
+        <form data-weapon-add-form>
+            <header class="weapon-add-header">
+                <div class="weapon-add-art"><img data-weapon-add-icon alt="" /></div>
+                <div>
+                    <span class="eyebrow">YOUR ARMOURY</span>
+                    <h2 id="weapon-add-title">Add weapon</h2>
+                    <p data-weapon-add-name></p>
+                </div>
+            </header>
+            <p class="weapons-note">
+                Add an unequipped copy to this account. Equipped weapons sync automatically.
+            </p>
+            <div class="weapon-add-fields">
+                {% for field, label, prefix in [('level', 'Level', 'Lv.'), ('refinement', 'Refinement', 'R')] %}
+                <div class="weapon-add-field">
+                    <span id="weapon-add-{{ field }}-label">{{ label }}</span>
+                    <input
+                        id="weapon-add-{{ field }}"
+                        name="{{ field }}"
+                        type="hidden"
+                        value="1"
+                    />
+                    <button
+                        class="planner-choice-trigger"
+                        type="button"
+                        data-weapon-choice="{{ field }}"
+                        aria-haspopup="dialog"
+                        aria-expanded="false"
+                        aria-controls="weapon-choice-popup"
+                        aria-labelledby="weapon-add-{{ field }}-label weapon-add-{{ field }}-value"
+                    >
+                        <span
+                            class="planner-choice-value"
+                            id="weapon-add-{{ field }}-value"
+                            >{{ prefix }}{{ ' 1' if field == 'level' else '1' }}</span
+                        ><span class="planner-choice-arrow" aria-hidden="true"></span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            <div
+                id="weapon-choice-popup"
+                class="planner-choice-menu weapon-choice-menu"
+                role="dialog"
+                aria-label="Choose a value"
+                popover="auto"
+            >
+                <div class="planner-choice-grid" data-weapon-choice-grid></div>
+            </div>
+            <p class="weapons-note" data-weapon-save-status role="status"></p>
+            <div class="weapon-add-actions">
+                <button
+                    class="cyrene-button characters-reset-filters"
+                    type="button"
+                    data-weapon-cancel
+                >
+                    Cancel</button
+                ><button
+                    class="cyrene-button characters-reset-filters weapon-add-submit"
+                    type="submit"
+                >
+                    Add to Owned
+                </button>
+            </div>
+        </form>
+    </dialog>
+    <dialog
+        class="weapon-add-dialog weapon-import-dialog"
+        data-weapon-import-dialog
+        aria-labelledby="weapon-import-title"
+    >
+        <h2 id="weapon-import-title">Import weapon inventory</h2>
+        <ol class="weapons-note weapon-import-instructions">
+            <li>
+                Download and extract the latest Cyrene Scanner from
+                <a
+                    href="https://github.com/softxo/Cyrene/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Cyrene Releases on GitHub</a
+                >.
+            </li>
+            <li>
+                Open Genshin Impact on Windows in English, windowed, with HDR disabled. Open
+                Inventory → Weapons and clear your filters.
+            </li>
+            <li>
+                Choose Weapon Scanner and enter your weapon count. Your UID fills in automatically
+                when detected, and <strong>Auto-calibrate</strong> sets up the grid and details
+                panel. Then run the scan.
+            </li>
+            <li>
+                Review the results and save the weapon export. Select the matching account here,
+                then choose your exported JSON file (up to 4 MB).
+            </li>
+        </ol>
+        <button class="cyrene-button cyrene-import-button" type="button" data-weapon-import-choose>
+            Choose JSON file
+        </button>
+        <p class="weapons-note" data-weapon-import-summary hidden></p>
+        <p class="weapons-note">
+            This replaces the previous scan for this account. Manually added copies stay separate.
+            Equipped weapons are matched with HoYoLAB so they appear once.
+        </p>
+        <p class="weapons-note" role="status" data-weapon-import-status></p>
+        <div class="weapon-add-actions">
+            <button
+                class="cyrene-button characters-reset-filters"
+                type="button"
+                data-weapon-import-cancel
+            >
+                Cancel</button
+            ><button
+                class="cyrene-button weapon-add-submit cyrene-import-button"
+                type="button"
+                data-weapon-import-confirm
+                disabled
+            >
+                Import
+            </button>
+        </div>
+    </dialog>
+    <dialog
+        class="weapon-add-dialog weapon-delete-dialog"
+        data-weapon-delete-dialog
+        aria-labelledby="weapon-delete-title"
+    >
+        <h2 id="weapon-delete-title">Delete weapon?</h2>
+        <p class="weapons-note" data-weapon-delete-name></p>
+        <p class="weapons-note" data-weapon-delete-status role="status"></p>
+        <div class="weapon-add-actions">
+            <button
+                class="cyrene-button characters-reset-filters"
+                type="button"
+                data-weapon-delete-cancel
+            >
+                Cancel
+            </button>
+            <button
+                class="cyrene-button cyrene-button--danger characters-reset-filters weapon-delete-confirm"
+                type="button"
+                data-weapon-delete-confirm
+            >
+                Delete weapon
+            </button>
+        </div>
+    </dialog>
+    {% endif %}
+</div>
+{% endblock %}

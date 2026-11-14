@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Reminders{% endblock %}
+
+{% block content %}
+
+<div class="page">
+    <section class="hero reminders-hero">
+        <div class="hero-content">
+            <span class="eyebrow"> REMINDERS </span>
+
+            <h1>Your <span>Reminders</span></h1>
+
+            <p>Keep track of your Genshin accounts, Resin, and active reminders.</p>
+        </div>
+    </section>
+
+    <div id="reminders-loading" class="reminders-state">Loading reminders...</div>
+
+    <div id="reminders-error" class="reminders-state reminders-error" hidden>
+        Failed to load reminders.
+    </div>
+
+    <div id="reminders-content" hidden>
+        <div class="reminders-tabs" role="tablist" aria-label="Reminders categories">
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab reminders-tab active"
+                id="reminders-tab-resin"
+                role="tab"
+                aria-controls="reminders-panel-resin"
+                aria-selected="true"
+                tabindex="0"
+                data-reminders-tab="resin"
+            >
+                Resin
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab reminders-tab"
+                id="reminders-tab-expeditions"
+                role="tab"
+                aria-controls="reminders-panel-expeditions"
+                aria-selected="false"
+                tabindex="-1"
+                data-reminders-tab="expeditions"
+            >
+                Expeditions
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab reminders-tab"
+                id="reminders-tab-teapot"
+                role="tab"
+                aria-controls="reminders-panel-teapot"
+                aria-selected="false"
+                tabindex="-1"
+                data-reminders-tab="teapot"
+            >
+                Serenitea Pot
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab reminders-tab"
+                id="reminders-tab-transformer"
+                role="tab"
+                aria-controls="reminders-panel-transformer"
+                aria-selected="false"
+                tabindex="-1"
+                data-reminders-tab="transformer"
+            >
+                Parametric Transformer
+            </button>
+        </div>
+
+        <section
+            class="reminders-tab-panel"
+            id="reminders-panel-resin"
+            role="tabpanel"
+            aria-labelledby="reminders-tab-resin"
+            data-reminders-panel="resin"
+            tabindex="0"
+        >
+            <section class="reminders-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow"> RESIN </span>
+
+                        <h2>Your Resin</h2>
+                    </div>
+                </div>
+
+                <div id="accounts" class="reminders-grid reminders-account-grid"></div>
+            </section>
+
+            <section class="reminders-section" id="resin-reminder-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow"> REMINDERS </span>
+
+                        <h2>Resin Reminders</h2>
+
+                        <p>
+                            Reminders are shared per Genshin account. Notifications go to every
+                            Discord account currently linked to it.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="cyrene-button reminders-button"
+                        id="add-reminder-button"
+                    >
+                        + Add Reminder
+                    </button>
+                </div>
+
+                <div id="reminder-panel" class="reminder-panel" hidden>
+                    <div class="reminder-panel-header">
+                        <div>
+                            <span class="eyebrow"> NEW REMINDER </span>
+
+                            <h3>Add Reminder</h3>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="reminder-close-button"
+                            id="reminder-close-button"
+                            aria-label="Close"
+                        >
+                            <span class="cyrene-close" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+                    <div class="reminder-form">
+                        <label>
+                            Reminder Type
+
+                            <div class="custom-select" id="reminder-type-select">
+                                <button
+                                    type="button"
+                                    class="custom-select-button"
+                                    id="reminder-type-button"
+                                >
+                                    <span>Resin</span>
+
+                                    <span class="custom-select-arrow"></span>
+                                </button>
+
+                                <div class="custom-select-menu" id="reminder-type-menu">
+                                    <button
+                                        type="button"
+                                        class="custom-select-option selected"
+                                        data-value="resin"
+                                    >
+                                        Resin
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="custom-select-option"
+                                        data-value="expedition"
+                                    >
+                                        Expedition
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="custom-select-option"
+                                        data-value="teapot"
+                                    >
+                                        Serenitea Pot
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="custom-select-option"
+                                        data-value="transformer"
+                                    >
+                                        Parametric Transformer
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="custom-select-option disabled"
+                                        data-value="custom"
+                                        disabled
+                                    >
+                                        Custom
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="reminder-type" value="resin" />
+                        </label>
+
+                        <label>
+                            Account
+
+                            <div class="custom-select" id="reminder-account-select">
+                                <button
+                                    type="button"
+                                    class="custom-select-button"
+                                    id="reminder-account-button"
+                                >
+                                    <span id="reminder-account-value"> Select Account </span>
+
+                                    <span class="custom-select-arrow"></span>
+                                </button>
+
+                                <div class="custom-select-menu" id="reminder-account-menu"></div>
+                            </div>
+
+                            <input type="hidden" id="reminder-account" />
+                        </label>
+
+                        <label>
+                            Mode
+                            <div class="custom-select" id="reminder-create-mode-select">
+                                <button
+                                    type="button"
+                                    class="custom-select-button"
+                                    aria-haspopup="listbox"
+                                    aria-expanded="false"
+                                    aria-describedby="reminder-mode-help"
+                                >
+                                    <span>Automatic</span><span class="custom-select-arrow"></span>
+                                </button>
+                                <div class="custom-select-menu" role="listbox">
+                                    <button
+                                        type="button"
+                                        class="custom-select-option selected"
+                                        data-value="automatic"
+                                        role="option"
+                                    >
+                                        Automatic
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="custom-select-option"
+                                        data-value="manual"
+                                        role="option"
+                                    >
+                                        Manual
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="reminder-create-mode" value="automatic" />
+                        </label>
+
+                        <div class="reminder-form-configuration" id="reminder-form-configuration">
+                            <label id="reminder-resin-configuration">
+                                Notify me at
+
+                                <div class="custom-input-wrapper">
+                                    <img
+                                        src="/static/images/misc/Original_Resin.webp"
+                                        alt="Resin"
+                                    />
+
+                                    <input
+                                        type="number"
+                                        id="reminder-amount"
+                                        min="1"
+                                        max="200"
+                                        value="160"
+                                    />
+
+                                    <span id="reminder-currency-label">Resin</span>
+
+                                    <div class="number-spinner">
+                                        <button
+                                            type="button"
+                                            class="number-spinner-button"
+                                            data-direction="up"
+                                            aria-label="Increase Resin"
+                                        >
+                                            <span class="spinner-arrow"></span>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="number-spinner-button"
+                                            data-direction="down"
+                                            aria-label="Decrease Resin"
+                                        >
+                                            <span class="spinner-arrow"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <p
+                                class="reminder-expedition-note"
+                                id="reminder-expedition-note"
+                                hidden
+                            >
+                                You’ll be notified when one of this account’s Expeditions finishes.
+                            </p>
+                        </div>
+
+                        <p
+                            id="reminder-mode-help"
+                            class="reminder-mode-help"
+                            aria-live="polite"
+                        ></p>
+
+                        <div class="reminder-form-actions">
+                            <button
+                                type="button"
+                                class="cyrene-button reminders-button"
+                                id="reminder-cancel-button"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                class="cyrene-button reminders-button reminder-save-button"
+                                id="reminder-save-button"
+                            >
+                                Add Reminder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reminders" class="reminders-list"></div>
+            </section>
+        </section>
+
+        <section
+            class="reminders-tab-panel"
+            id="reminders-panel-expeditions"
+            role="tabpanel"
+            aria-labelledby="reminders-tab-expeditions"
+            data-reminders-panel="expeditions"
+            tabindex="0"
+            hidden
+        >
+            <section class="reminders-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">EXPEDITIONS</span>
+                        <h2>Your Expeditions</h2>
+                    </div>
+                </div>
+
+                <div id="expedition-accounts" class="reminders-grid reminders-account-grid"></div>
+            </section>
+
+            <section class="reminders-section" id="expedition-reminder-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">REMINDERS</span>
+                        <h2>Expedition Reminders</h2>
+                        <p>
+                            Reminders are shared per Genshin account. Notifications go to every
+                            Discord account currently linked to it.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="cyrene-button reminders-button"
+                        id="add-expedition-reminder-button"
+                    >
+                        + Add Reminder
+                    </button>
+                </div>
+
+                <div id="expedition-reminders" class="reminders-list"></div>
+            </section>
+        </section>
+
+        <section
+            class="reminders-tab-panel"
+            id="reminders-panel-teapot"
+            role="tabpanel"
+            aria-labelledby="reminders-tab-teapot"
+            data-reminders-panel="teapot"
+            tabindex="0"
+            hidden
+        >
+            <section class="reminders-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">SERENITEA POT</span>
+                        <h2>Your Realm Currency</h2>
+                    </div>
+                </div>
+                <div id="teapot-accounts" class="reminders-grid reminders-account-grid"></div>
+            </section>
+            <section class="reminders-section" id="teapot-reminder-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">REMINDERS</span>
+                        <h2>Serenitea Pot Reminders</h2>
+                        <p>
+                            Reminders are shared per Genshin account. Notifications go to every
+                            Discord account currently linked to it.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="cyrene-button reminders-button"
+                        id="add-teapot-reminder-button"
+                    >
+                        + Add Reminder
+                    </button>
+                </div>
+                <div id="teapot-reminders" class="reminders-list"></div>
+            </section>
+        </section>
+
+        <section
+            class="reminders-tab-panel"
+            id="reminders-panel-transformer"
+            role="tabpanel"
+            aria-labelledby="reminders-tab-transformer"
+            data-reminders-panel="transformer"
+            tabindex="0"
+            hidden
+        >
+            <section class="reminders-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">PARAMETRIC TRANSFORMER</span>
+                        <h2>Your Parametric Transformer</h2>
+                    </div>
+                </div>
+                <div id="transformer-accounts" class="reminders-grid reminders-account-grid"></div>
+            </section>
+            <section class="reminders-section" id="transformer-reminder-section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">REMINDERS</span>
+                        <h2>Parametric Transformer Reminders</h2>
+                        <p>
+                            Reminders are shared per Genshin account. Notifications go to every
+                            Discord account currently linked to it.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="cyrene-button reminders-button"
+                        id="add-transformer-reminder-button"
+                    >
+                        + Add Reminder
+                    </button>
+                </div>
+                <div id="transformer-reminders" class="reminders-list"></div>
+            </section>
+        </section>
+    </div>
+</div>
+
+{% endblock %}

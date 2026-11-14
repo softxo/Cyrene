@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Settings{% endblock %}
+
+{% block content %}
+
+<div class="page">
+    <section class="section-header">
+        <h2>Settings</h2>
+        <p>Customise your Cyrene experience.</p>
+    </section>
+
+    <div class="settings-panel">
+        <section class="settings-group account-link-section">
+            <div class="settings-section-header">
+                <h3>HoYoLAB Accounts</h3>
+                <p>
+                    Add an account here or through Discord. Both methods link it to the same Cyrene
+                    profile.
+                </p>
+            </div>
+
+            <button id="open-account-link" class="cyrene-button account-link-open" type="button">
+                Add HoYoLAB account
+            </button>
+
+            <div id="linked-account-list" class="linked-account-list" aria-live="polite"></div>
+        </section>
+
+        <section class="settings-group">
+            <div class="settings-section-header">
+                <h3>Appearance</h3>
+                <p>Choose the colour palette used throughout Cyrene.</p>
+            </div>
+
+            <div class="theme-options">
+                <button class="theme-option" data-theme-option="blue" onclick="setTheme('blue')">
+                    <div class="theme-preview theme-preview-blue">
+                        <span></span>
+                    </div>
+
+                    <div class="theme-option-info">
+                        <strong>Midnight Blue</strong>
+                        <span>Dark blue palette</span>
+                    </div>
+
+                    <div class="theme-check"></div>
+                </button>
+
+                <button class="theme-option" data-theme-option="pink" onclick="setTheme('pink')">
+                    <div class="theme-preview theme-preview-pink">
+                        <span></span>
+                    </div>
+
+                    <div class="theme-option-info">
+                        <strong>Cyrene Pink</strong>
+                        <span>Dark pink palette</span>
+                    </div>
+
+                    <div class="theme-check"></div>
+                </button>
+
+                <button
+                    class="theme-option"
+                    data-theme-option="light-blue"
+                    onclick="setTheme('light-blue')"
+                >
+                    <div class="theme-preview theme-preview-light-blue">
+                        <span></span>
+                    </div>
+
+                    <div class="theme-option-info">
+                        <strong>Daylight Blue</strong>
+                        <span>Light blue palette</span>
+                    </div>
+
+                    <div class="theme-check"></div>
+                </button>
+
+                <button
+                    class="theme-option"
+                    data-theme-option="light-pink"
+                    onclick="setTheme('light-pink')"
+                >
+                    <div class="theme-preview theme-preview-light-pink">
+                        <span></span>
+                    </div>
+
+                    <div class="theme-option-info">
+                        <strong>Rose Light</strong>
+                        <span>Light pink palette</span>
+                    </div>
+
+                    <div class="theme-check"></div>
+                </button>
+            </div>
+        </section>
+
+        <section class="settings-group">
+            <div class="settings-section-header">
+                <h3>Interface</h3>
+                <p>Control visual effects and interface behaviour.</p>
+            </div>
+
+            <div class="settings-toggle">
+                <div class="settings-toggle-info">
+                    <strong>Hover Effects</strong>
+                    <span>Enable the floating effect when hovering over elements.</span>
+                </div>
+
+                <button
+                    type="button"
+                    class="settings-toggle-switch"
+                    id="hover-effects-toggle"
+                    aria-label="Toggle hover effects"
+                    aria-pressed="true"
+                ></button>
+            </div>
+
+            <div class="settings-toggle">
+                <div class="settings-toggle-info">
+                    <strong>Show Unreleased content</strong
+                    ><span
+                        >Show announced characters and other preview content. Material data may be
+                        unavailable before release.</span
+                    >
+                </div>
+                <button
+                    type="button"
+                    class="settings-toggle-switch"
+                    id="show-unreleased-toggle"
+                    aria-label="Show Unreleased content"
+                    aria-pressed="false"
+                ></button>
+            </div>
+        </section>
+
+        {% if is_special %}
+        <section class="settings-group">
+            <div class="settings-section-header">
+                <h3>Tools</h3>
+                <p>Extra tools for special accounts.</p>
+            </div>
+
+            <div class="settings-toggle">
+                <div class="settings-toggle-info">
+                    <strong>Uploads</strong>
+                    <span>Host files and videos over Discord's limit and share them by link.</span>
+                </div>
+
+                <a class="cyrene-button" href="/uploads">
+                    <svg class="settings-tool-icon" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10v3.5h11V10" />
+                    </svg>
+                    Upload
+                </a>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <div id="account-link-modal" data-modal-shell class="settings-modal" hidden>
+        <div class="settings-modal-backdrop" data-close-account-modal></div>
+
+        <section
+            class="settings-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="account-link-title"
+        >
+            <button
+                type="button"
+                class="settings-modal-close"
+                data-close-account-modal
+                aria-label="Close"
+            >
+                <span class="cyrene-close" aria-hidden="true"></span>
+            </button>
+
+            <div id="account-link-modal-content">
+                <h3 id="account-link-title">Add HoYoLAB account</h3>
+                <p class="settings-modal-description">
+                    Sign in to choose which Genshin account to add.
+                </p>
+
+                <form id="account-link-form" class="account-link-form">
+                    <label>
+                        <span>Email or username</span>
+                        <input
+                            class="cyrene-input"
+                            id="hoyolab-account"
+                            name="account"
+                            type="text"
+                            autocomplete="username"
+                            maxlength="100"
+                            required
+                        />
+                    </label>
+
+                    <label>
+                        <span>Password</span>
+                        <input
+                            class="cyrene-input"
+                            id="hoyolab-password"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            maxlength="100"
+                            required
+                        />
+                    </label>
+
+                    <p class="account-link-privacy">
+                        Your password is sent directly to HoYoLAB for authentication and is never
+                        stored by Cyrene.
+                    </p>
+
+                    <button id="account-link-submit" type="submit" class="cyrene-button">
+                        Continue
+                    </button>
+                </form>
+
+                <div id="account-link-result" class="account-link-result" aria-live="polite"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="account-manage-modal" data-modal-shell class="settings-modal" hidden>
+        <div class="settings-modal-backdrop" data-close-manage-modal></div>
+
+        <section
+            class="settings-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="account-manage-title"
+        >
+            <button
+                type="button"
+                class="settings-modal-close"
+                data-close-manage-modal
+                aria-label="Close"
+            >
+                <span class="cyrene-close" aria-hidden="true"></span>
+            </button>
+
+            <h3 id="account-manage-title">Manage account</h3>
+            <p id="account-manage-details" class="settings-modal-description"></p>
+
+            <form id="account-rename-form" class="account-link-form">
+                <label>
+                    <span>Cyrene nickname</span>
+                    <input
+                        class="cyrene-input"
+                        id="account-manage-nickname"
+                        type="text"
+                        maxlength="50"
+                        placeholder="Use the HoYoLAB nickname"
+                    />
+                </label>
+
+                <button type="submit" class="cyrene-button account-save-nickname">
+                    Save nickname
+                </button>
+            </form>
+
+            <p
+                id="account-manage-status"
+                class="account-link-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="account-danger-zone">
+                <div>
+                    <strong>Remove account</strong>
+                    <span>This unlinks it from both the site and Discord.</span>
+                </div>
+
+                <button
+                    id="account-delete-button"
+                    type="button"
+                    class="cyrene-button cyrene-button--danger"
+                >
+                    Remove
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% with delete_dialog_class='settings-delete-dialog', delete_prefix='settings-delete', delete_title='Remove account?', delete_cancel='Keep account', delete_confirm='Remove account' %}
+{% include "components/deletion_confirmation.html" %}
+{% endwith %}
+{% endblock %}

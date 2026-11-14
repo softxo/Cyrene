@@ -1,0 +1,14 @@
+.env
+.env.*
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+*.log
+*.sqlite*
+*.db
+data/misc/
+website/static/cache/
+*.tsbuildinfo
+website/static/build/

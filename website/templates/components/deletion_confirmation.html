@@ -1,0 +1,30 @@
+<dialog
+    class="cyrene-delete-dialog {{ delete_dialog_class }}"
+    aria-labelledby="{{ delete_prefix }}-title"
+    aria-describedby="{{ delete_prefix }}-description"
+>
+    <div class="cyrene-delete-heading">
+        <div class="cyrene-delete-icon" aria-hidden="true">
+            <img src="/static/images/ui/ui_misc/Deletion.png" alt="" />
+        </div>
+        <h2 id="{{ delete_prefix }}-title">{{ delete_title }}</h2>
+    </div>
+    <p id="{{ delete_prefix }}-description" data-delete-description>
+        {% if delete_date | default(false) %}The changelog for <strong data-delete-date></strong> will be
+        removed for everyone. This cannot be undone.{% else %}Remove this
+        character's saved plan from your Character Planner?{% endif %}
+    </p>
+    <div class="cyrene-delete-actions">
+        <button
+            type="button"
+            data-delete-cancel
+            autofocus
+            class="cyrene-button cyrene-button--compact"
+        >
+            {{ delete_cancel }}
+        </button>
+        <button type="button" data-delete-confirm class="cyrene-button cyrene-button--danger">
+            {{ delete_confirm }}
+        </button>
+    </div>
+</dialog>

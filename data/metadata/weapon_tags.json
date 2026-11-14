@@ -1,0 +1,1366 @@
+{
+    "sources": [
+        "https://github.com/genshindev/api/tree/mistress/assets/data/weapons",
+        "https://github.com/theBowja/genshin-db/tree/main/src/data/English/weapons",
+        "https://wiki.hoyolab.com/pc/genshin/aggregate/4?lang=en-us",
+        "https://www.hoyolab.com/article/47230963"
+    ],
+    "notes": "Acquisition categories include reviewed corrections and additions to the upstream dataset. Signature associations are explicit; standard-banner weapons such as Wolf's Gravestone retain their acquisition tag. Unknown future IDs must not be guessed.",
+    "weapons": {
+        "12517": {
+            "name": "Torrents of Spring",
+            "signature": "Danica"
+        },
+        "15517": {
+            "name": "Silverdawn",
+            "signature": "Anastasya"
+        },
+        "12438": {
+            "name": "Blazing Lionfang",
+            "source": "Event"
+        },
+        "11101": {
+            "name": "Dull Blade",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "11201": {
+            "name": "Silver Sword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "11301": {
+            "name": "Cool Steel",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11302": {
+            "name": "Harbinger of Dawn",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11303": {
+            "name": "Traveler's Handy Sword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "11304": {
+            "name": "Dark Iron Sword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "11305": {
+            "name": "Fillet Blade",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "11306": {
+            "name": "Skyrider Sword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11401": {
+            "name": "Favonius Sword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11402": {
+            "name": "The Flute",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11403": {
+            "name": "Sacrificial Sword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11404": {
+            "name": "Royal Longsword",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "11405": {
+            "name": "Lion's Roar",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11406": {
+            "name": "Prototype Rancour",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "11407": {
+            "name": "Iron Sting",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "11408": {
+            "name": "Blackcliff Longsword",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "11409": {
+            "name": "The Black Sword",
+            "source": "BP",
+            "release_version": "1.0"
+        },
+        "11410": {
+            "name": "The Alley Flash",
+            "source": "Gacha",
+            "release_version": "1.4"
+        },
+        "11412": {
+            "name": "Sword of Descension",
+            "source": "Promotional",
+            "release_version": "1.0"
+        },
+        "11413": {
+            "name": "Festering Desire",
+            "source": "Event",
+            "release_version": "1.2"
+        },
+        "11414": {
+            "name": "Amenoma Kageuchi",
+            "source": "Craftable",
+            "release_version": "2.0"
+        },
+        "11415": {
+            "name": "Cinnabar Spindle",
+            "source": "Event",
+            "release_version": "2.3"
+        },
+        "11416": {
+            "name": "Kagotsurube Isshin",
+            "source": "Quest",
+            "release_version": "2.8"
+        },
+        "11417": {
+            "name": "Sapwood Blade",
+            "source": "Craftable",
+            "release_version": "3.0"
+        },
+        "11418": {
+            "name": "Xiphos' Moonlight",
+            "source": "Gacha",
+            "release_version": "3.1"
+        },
+        "11419": {
+            "name": "Prized Isshin Blade",
+            "source": "Quest",
+            "release_version": "2.8"
+        },
+        "11420": {
+            "name": "Prized Isshin Blade",
+            "source": "Quest",
+            "release_version": "2.8"
+        },
+        "11421": {
+            "name": "Prized Isshin Blade",
+            "source": "Quest",
+            "release_version": "2.8"
+        },
+        "11422": {
+            "name": "Toukabou Shigure",
+            "source": "Event",
+            "release_version": "3.3"
+        },
+        "11424": {
+            "name": "Wolf-Fang",
+            "source": "BP",
+            "release_version": "4.0"
+        },
+        "11425": {
+            "name": "Finale of the Deep",
+            "source": "Craftable",
+            "release_version": "4.0"
+        },
+        "11426": {
+            "name": "Fleuve Cendre Ferryman",
+            "source": "Fishing Association",
+            "release_version": "4.0"
+        },
+        "11427": {
+            "name": "The Dockhand's Assistant",
+            "source": "Gacha",
+            "release_version": "4.1"
+        },
+        "11428": {
+            "name": "Sword of Narzissenkreuz",
+            "source": "Quest",
+            "release_version": "4.2"
+        },
+        "11430": {
+            "name": "Sturdy Bone",
+            "source": "Gacha",
+            "release_version": "5.1"
+        },
+        "11431": {
+            "name": "Flute of Ezpitzal",
+            "source": "Craftable",
+            "release_version": "5.0"
+        },
+        "11432": {
+            "name": "Calamity of Eshu",
+            "source": "Event",
+            "release_version": "5.2"
+        },
+        "11433": {
+            "name": "Serenity's Call",
+            "source": "Craftable",
+            "release_version": "6.0"
+        },
+        "11434": {
+            "name": "Moonweaver's Dawn",
+            "source": "Gacha",
+            "release_version": "6.0"
+        },
+        "11435": {
+            "name": "Heretic's Molten Blade",
+            "source": "BP",
+            "release_version": "7.0"
+        },
+        "11436": {
+            "name": "Emberwell",
+            "source": "Craftable",
+            "release_version": "7.0"
+        },
+        "11437": {
+            "name": "New Bough",
+            "source": "Gacha",
+            "release_version": "7.1"
+        },
+        "11438": {
+            "name": "Silver Light",
+            "source": "Event",
+            "release_version": "7.1"
+        },
+        "11501": {
+            "name": "Aquila Favonia",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11502": {
+            "name": "Skyward Blade",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "11503": {
+            "name": "Freedom-Sworn",
+            "source": "Gacha",
+            "signature": "Kaedehara Kazuha",
+            "release_version": "1.6"
+        },
+        "11504": {
+            "name": "Summit Shaper",
+            "source": "Gacha",
+            "release_version": "1.2"
+        },
+        "11505": {
+            "name": "Primordial Jade Cutter",
+            "source": "Gacha",
+            "release_version": "1.3"
+        },
+        "11509": {
+            "name": "Mistsplitter Reforged",
+            "source": "Gacha",
+            "signature": "Kamisato Ayaka",
+            "release_version": "2.0"
+        },
+        "11510": {
+            "name": "Haran Geppaku Futsu",
+            "source": "Gacha",
+            "signature": "Kamisato Ayato",
+            "release_version": "2.6"
+        },
+        "11511": {
+            "name": "Key of Khaj-Nisut",
+            "source": "Gacha",
+            "signature": "Nilou",
+            "release_version": "3.1"
+        },
+        "11512": {
+            "name": "Light of Foliar Incision",
+            "source": "Gacha",
+            "signature": "Alhaitham",
+            "release_version": "3.4"
+        },
+        "11513": {
+            "name": "Splendor of Tranquil Waters",
+            "source": "Gacha",
+            "signature": "Furina",
+            "release_version": "4.2"
+        },
+        "11514": {
+            "name": "Uraku Misugiri",
+            "source": "Gacha",
+            "signature": "Chiori",
+            "release_version": "4.5"
+        },
+        "11515": {
+            "name": "Absolution",
+            "source": "Gacha",
+            "signature": "Clorinde",
+            "release_version": "4.7"
+        },
+        "11516": {
+            "name": "Peak Patrol Song",
+            "source": "Gacha",
+            "signature": "Xilonen",
+            "release_version": "5.1"
+        },
+        "11517": {
+            "name": "Azurelight",
+            "source": "Gacha",
+            "signature": "Skirk",
+            "release_version": "5.7"
+        },
+        "11518": {
+            "name": "Athame Artis",
+            "source": "Gacha",
+            "signature": "Durin",
+            "release_version": "6.2"
+        },
+        "11519": {
+            "name": "Lightbearing Moonshard",
+            "source": "Gacha",
+            "signature": "Zibai",
+            "release_version": "6.3"
+        },
+        "11520": {
+            "name": "Whitelake Frostfeather",
+            "source": "Gacha",
+            "signature": "Odette",
+            "release_version": "7.0"
+        },
+        "11521": {
+            "name": "Exaiphanes Blade",
+            "source": "Quest",
+            "signature": "Traveler",
+            "release_version": "7.0"
+        },
+        "11522": {
+            "name": "Beyond the Chrysalis",
+            "source": "Gacha",
+            "signature": "Vesna",
+            "release_version": "7.1"
+        },
+        "12101": {
+            "name": "Waster Greatsword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "12201": {
+            "name": "Old Merc's Pal",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "12301": {
+            "name": "Ferrous Shadow",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12302": {
+            "name": "Bloodtainted Greatsword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12303": {
+            "name": "White Iron Greatsword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "12305": {
+            "name": "Debate Club",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12306": {
+            "name": "Skyrider Greatsword",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "12401": {
+            "name": "Favonius Greatsword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12402": {
+            "name": "The Bell",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12403": {
+            "name": "Sacrificial Greatsword",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12404": {
+            "name": "Royal Greatsword",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "12405": {
+            "name": "Rainslasher",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12406": {
+            "name": "Prototype Archaic",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "12407": {
+            "name": "Whiteblind",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "12408": {
+            "name": "Blackcliff Slasher",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "12409": {
+            "name": "Serpent Spine",
+            "source": "BP",
+            "release_version": "1.0"
+        },
+        "12410": {
+            "name": "Lithic Blade",
+            "source": "Gacha",
+            "release_version": "1.3"
+        },
+        "12411": {
+            "name": "Snow-Tombed Starsilver",
+            "source": "Craftable",
+            "release_version": "1.2"
+        },
+        "12412": {
+            "name": "Luxurious Sea-Lord",
+            "source": "Event",
+            "release_version": "2.1"
+        },
+        "12414": {
+            "name": "Katsuragikiri Nagamasa",
+            "source": "Craftable",
+            "release_version": "2.0"
+        },
+        "12415": {
+            "name": "Makhaira Aquamarine",
+            "source": "Gacha",
+            "release_version": "3.1"
+        },
+        "12416": {
+            "name": "Akuoumaru",
+            "source": "Gacha",
+            "release_version": "2.2"
+        },
+        "12417": {
+            "name": "Forest Regalia",
+            "source": "Craftable",
+            "release_version": "3.0"
+        },
+        "12418": {
+            "name": "Mailed Flower",
+            "source": "Event",
+            "release_version": "3.5"
+        },
+        "12424": {
+            "name": "Talking Stick",
+            "source": "BP",
+            "release_version": "4.0"
+        },
+        "12425": {
+            "name": "Tidal Shadow",
+            "source": "Craftable",
+            "release_version": "4.0"
+        },
+        "12426": {
+            "name": "\"Ultimate Overlord's Mega Magic Sword\"",
+            "source": "Event",
+            "release_version": "4.3"
+        },
+        "12427": {
+            "name": "Portable Power Saw",
+            "source": "Gacha",
+            "release_version": "4.1"
+        },
+        "12430": {
+            "name": "Fruitful Hook",
+            "source": "Gacha",
+            "release_version": "5.1"
+        },
+        "12431": {
+            "name": "Earth Shaker",
+            "source": "Craftable",
+            "release_version": "5.0"
+        },
+        "12432": {
+            "name": "Flame-Forged Insight",
+            "source": "Event",
+            "release_version": "5.8"
+        },
+        "12433": {
+            "name": "Master Key",
+            "source": "Craftable",
+            "release_version": "6.0"
+        },
+        "12435": {
+            "name": "Forged by the Golden Melody",
+            "source": "BP",
+            "release_version": "7.0"
+        },
+        "12436": {
+            "name": "Blade of Atonement",
+            "source": "Craftable",
+            "release_version": "7.0"
+        },
+        "12501": {
+            "name": "Skyward Pride",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12502": {
+            "name": "Wolf's Gravestone",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "12503": {
+            "name": "Song of Broken Pines",
+            "source": "Gacha",
+            "signature": "Eula",
+            "release_version": "1.5"
+        },
+        "12504": {
+            "name": "The Unforged",
+            "source": "Gacha",
+            "release_version": "1.1"
+        },
+        "12510": {
+            "name": "Redhorn Stonethresher",
+            "source": "Gacha",
+            "signature": "Arataki Itto",
+            "release_version": "2.3"
+        },
+        "12511": {
+            "name": "Beacon of the Reed Sea",
+            "source": "Gacha",
+            "signature": "Dehya",
+            "release_version": "3.5"
+        },
+        "12512": {
+            "name": "Verdict",
+            "source": "Gacha",
+            "signature": "Navia",
+            "release_version": "4.3"
+        },
+        "12513": {
+            "name": "Fang of the Mountain King",
+            "source": "Gacha",
+            "signature": "Kinich",
+            "release_version": "5.0"
+        },
+        "12514": {
+            "name": "A Thousand Blazing Suns",
+            "source": "Gacha",
+            "signature": "Mavuika",
+            "release_version": "5.3"
+        },
+        "12515": {
+            "name": "Gest of the Mighty Wolf",
+            "source": "Gacha",
+            "signature": "Varka",
+            "release_version": "6.4"
+        },
+        "12516": {
+            "name": "A Teaspoon of Transcendence",
+            "source": "Gacha",
+            "signature": "Sandrone",
+            "release_version": "6.7"
+        },
+        "13101": {
+            "name": "Beginner's Protector",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "13201": {
+            "name": "Iron Point",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "13301": {
+            "name": "White Tassel",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "13302": {
+            "name": "Halberd",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "13303": {
+            "name": "Black Tassel",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "13401": {
+            "name": "Dragon's Bane",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "13402": {
+            "name": "Prototype Starglitter",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "13403": {
+            "name": "Crescent Pike",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "13404": {
+            "name": "Blackcliff Pole",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "13405": {
+            "name": "Deathmatch",
+            "source": "BP",
+            "release_version": "1.0"
+        },
+        "13406": {
+            "name": "Lithic Spear",
+            "source": "Gacha",
+            "release_version": "1.3"
+        },
+        "13407": {
+            "name": "Favonius Lance",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "13408": {
+            "name": "Royal Spear",
+            "source": "Starglitter Exchange",
+            "release_version": "1.1"
+        },
+        "13409": {
+            "name": "Dragonspine Spear",
+            "source": "Craftable",
+            "release_version": "1.2"
+        },
+        "13414": {
+            "name": "Kitain Cross Spear",
+            "source": "Craftable",
+            "release_version": "2.0"
+        },
+        "13415": {
+            "name": "\"The Catch\"",
+            "source": "Fishing Association",
+            "release_version": "2.1"
+        },
+        "13416": {
+            "name": "Wavebreaker's Fin",
+            "source": "Gacha",
+            "release_version": "2.2"
+        },
+        "13417": {
+            "name": "Moonpiercer",
+            "source": "Craftable",
+            "release_version": "3.0"
+        },
+        "13419": {
+            "name": "Missive Windspear",
+            "source": "Event",
+            "release_version": "3.1"
+        },
+        "13424": {
+            "name": "Ballad of the Fjords",
+            "source": "BP",
+            "release_version": "4.0"
+        },
+        "13425": {
+            "name": "Rightful Reward",
+            "source": "Craftable",
+            "release_version": "4.0"
+        },
+        "13426": {
+            "name": "Dialogues of the Desert Sages",
+            "source": "Event",
+            "release_version": "4.5"
+        },
+        "13427": {
+            "name": "Prospector's Drill",
+            "source": "Gacha",
+            "release_version": "4.1"
+        },
+        "13430": {
+            "name": "Mountain-Bracing Bolt",
+            "source": "Gacha",
+            "release_version": "5.1"
+        },
+        "13431": {
+            "name": "Footprint of the Rainbow",
+            "source": "Craftable",
+            "release_version": "5.0"
+        },
+        "13432": {
+            "name": "Tamayuratei no Ohanashi",
+            "source": "Event",
+            "release_version": "5.4"
+        },
+        "13433": {
+            "name": "Prospector's Shovel",
+            "source": "Craftable",
+            "release_version": "6.0"
+        },
+        "13434": {
+            "name": "Sacrificer's Staff",
+            "source": "Gacha",
+            "release_version": "6.1"
+        },
+        "13435": {
+            "name": "Frostbreath",
+            "source": "BP",
+            "release_version": "7.0"
+        },
+        "13436": {
+            "name": "Song of the Vigil",
+            "source": "Craftable",
+            "release_version": "7.0"
+        },
+        "13501": {
+            "name": "Staff of Homa",
+            "source": "Gacha",
+            "signature": "Hu Tao",
+            "release_version": "1.3"
+        },
+        "13502": {
+            "name": "Skyward Spine",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "13504": {
+            "name": "Vortex Vanquisher",
+            "source": "Gacha",
+            "signature": "Zhongli",
+            "release_version": "1.1"
+        },
+        "13505": {
+            "name": "Primordial Jade Winged-Spear",
+            "source": "Gacha",
+            "signature": "Xiao",
+            "release_version": "1.0"
+        },
+        "13507": {
+            "name": "Calamity Queller",
+            "source": "Gacha",
+            "signature": "Shenhe",
+            "release_version": "2.4"
+        },
+        "13509": {
+            "name": "Engulfing Lightning",
+            "source": "Gacha",
+            "signature": "Raiden Shogun",
+            "release_version": "2.1"
+        },
+        "13511": {
+            "name": "Staff of the Scarlet Sands",
+            "source": "Gacha",
+            "signature": "Cyno",
+            "release_version": "3.1"
+        },
+        "13512": {
+            "name": "Crimson Moon's Semblance",
+            "source": "Gacha",
+            "signature": "Arlecchino",
+            "release_version": "4.6"
+        },
+        "13513": {
+            "name": "Lumidouce Elegy",
+            "source": "Gacha",
+            "signature": "Emilie",
+            "release_version": "4.8"
+        },
+        "13514": {
+            "name": "Symphonist of Scents",
+            "source": "Gacha",
+            "signature": "Escoffier",
+            "release_version": "5.6"
+        },
+        "13515": {
+            "name": "Fractured Halo",
+            "source": "Gacha",
+            "signature": "Ineffa",
+            "release_version": "5.8"
+        },
+        "13516": {
+            "name": "Bloodsoaked Ruins",
+            "source": "Gacha",
+            "signature": "Flins",
+            "release_version": "6.0"
+        },
+        "13517": {
+            "name": "Disaster and Remorse",
+            "source": "Gacha",
+            "signature": "Lohen",
+            "release_version": "6.6"
+        },
+        "14101": {
+            "name": "Apprentice's Notes",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "14201": {
+            "name": "Pocket Grimoire",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "14301": {
+            "name": "Magic Guide",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14302": {
+            "name": "Thrilling Tales of Dragon Slayers",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14303": {
+            "name": "Otherworldly Story",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "14304": {
+            "name": "Emerald Orb",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14305": {
+            "name": "Twin Nephrite",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "14401": {
+            "name": "Favonius Codex",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14402": {
+            "name": "The Widsith",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14403": {
+            "name": "Sacrificial Fragments",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14404": {
+            "name": "Royal Grimoire",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "14405": {
+            "name": "Solar Pearl",
+            "source": "BP",
+            "release_version": "1.0"
+        },
+        "14406": {
+            "name": "Prototype Amber",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "14407": {
+            "name": "Mappa Mare",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "14408": {
+            "name": "Blackcliff Agate",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "14409": {
+            "name": "Eye of Perception",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14410": {
+            "name": "Wine and Song",
+            "source": "Gacha",
+            "release_version": "1.4"
+        },
+        "14412": {
+            "name": "Frostbearer",
+            "source": "Craftable",
+            "release_version": "1.2"
+        },
+        "14413": {
+            "name": "Dodoco Tales",
+            "source": "Event",
+            "release_version": "1.6"
+        },
+        "14414": {
+            "name": "Hakushin Ring",
+            "source": "Craftable",
+            "release_version": "2.0"
+        },
+        "14415": {
+            "name": "Oathsworn Eye",
+            "source": "Event",
+            "release_version": "2.5"
+        },
+        "14416": {
+            "name": "Wandering Evenstar",
+            "source": "Gacha",
+            "release_version": "3.1"
+        },
+        "14417": {
+            "name": "Fruit of Fulfillment",
+            "source": "Craftable",
+            "release_version": "3.0"
+        },
+        "14424": {
+            "name": "Sacrificial Jade",
+            "source": "BP",
+            "release_version": "4.0"
+        },
+        "14425": {
+            "name": "Flowing Purity",
+            "source": "Craftable",
+            "release_version": "4.0"
+        },
+        "14426": {
+            "name": "Ballad of the Boundless Blue",
+            "source": "Event",
+            "release_version": "4.1"
+        },
+        "14427": {
+            "name": "Ash-Graven Drinking Horn",
+            "source": "Event",
+            "release_version": "5.0"
+        },
+        "14430": {
+            "name": "Waveriding Whirl",
+            "source": "Gacha",
+            "release_version": "5.2"
+        },
+        "14431": {
+            "name": "Ring of Yaxche",
+            "source": "Craftable",
+            "release_version": "5.0"
+        },
+        "14432": {
+            "name": "Etherlight Spindlelute",
+            "source": "Event",
+            "release_version": "6.0"
+        },
+        "14433": {
+            "name": "Blackmarrow Lantern",
+            "source": "Craftable",
+            "release_version": "6.0"
+        },
+        "14434": {
+            "name": "Dawning Frost",
+            "source": "Gacha",
+            "release_version": "6.1"
+        },
+        "14435": {
+            "name": "Clash of Kings",
+            "source": "BP",
+            "release_version": "7.0"
+        },
+        "14436": {
+            "name": "Echoes of the Heart",
+            "source": "Craftable",
+            "release_version": "7.0"
+        },
+        "14437": {
+            "name": "Winter's Heavy Heart",
+            "source": "Gacha",
+            "release_version": "7.1"
+        },
+        "14501": {
+            "name": "Skyward Atlas",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14502": {
+            "name": "Lost Prayer to the Sacred Winds",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "14504": {
+            "name": "Memory of Dust",
+            "source": "Gacha",
+            "release_version": "1.1"
+        },
+        "14505": {
+            "name": "Jadefall's Splendor",
+            "source": "Gacha",
+            "signature": "Baizhu",
+            "release_version": "3.6"
+        },
+        "14506": {
+            "name": "Everlasting Moonglow",
+            "source": "Gacha",
+            "signature": "Sangonomiya Kokomi",
+            "release_version": "2.1"
+        },
+        "14509": {
+            "name": "Kagura's Verity",
+            "source": "Gacha",
+            "signature": "Yae Miko",
+            "release_version": "2.5"
+        },
+        "14511": {
+            "name": "A Thousand Floating Dreams",
+            "source": "Gacha",
+            "signature": "Nahida",
+            "release_version": "3.2"
+        },
+        "14512": {
+            "name": "Tulaytullah's Remembrance",
+            "source": "Gacha",
+            "signature": "Wanderer",
+            "release_version": "3.3"
+        },
+        "14513": {
+            "name": "Cashflow Supervision",
+            "source": "Gacha",
+            "signature": "Wriothesley",
+            "release_version": "4.1"
+        },
+        "14514": {
+            "name": "Tome of the Eternal Flow",
+            "source": "Gacha",
+            "signature": "Neuvillette",
+            "release_version": "4.1"
+        },
+        "14515": {
+            "name": "Crane's Echoing Call",
+            "source": "Gacha",
+            "signature": "Xianyun",
+            "release_version": "4.4"
+        },
+        "14516": {
+            "name": "Surf's Up",
+            "source": "Gacha",
+            "signature": "Mualani",
+            "release_version": "5.0"
+        },
+        "14517": {
+            "name": "Starcaller's Watch",
+            "source": "Gacha",
+            "signature": "Citlali",
+            "release_version": "5.3"
+        },
+        "14518": {
+            "name": "Sunny Morning Sleep-In",
+            "source": "Gacha",
+            "signature": "Yumemizuki Mizuki",
+            "release_version": "5.4"
+        },
+        "14519": {
+            "name": "Vivid Notions",
+            "source": "Gacha",
+            "signature": "Varesa",
+            "release_version": "5.5"
+        },
+        "14520": {
+            "name": "Nightweaver's Looking Glass",
+            "source": "Gacha",
+            "signature": "Lauma",
+            "release_version": "6.0"
+        },
+        "14521": {
+            "name": "Reliquary of Truth",
+            "source": "Gacha",
+            "signature": "Nefer",
+            "release_version": "6.1"
+        },
+        "14522": {
+            "name": "Nocturne's Curtain Call",
+            "source": "Gacha",
+            "signature": "Columbina",
+            "release_version": "6.3"
+        },
+        "14523": {
+            "name": "Angelos' Heptades",
+            "source": "Gacha",
+            "signature": "Nicole",
+            "release_version": "6.6"
+        },
+        "14524": {
+            "name": "Hymn of the Maelstrom",
+            "source": "Gacha",
+            "signature": "Vodyanitsa",
+            "release_version": "7.1"
+        },
+        "15101": {
+            "name": "Hunter's Bow",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "15201": {
+            "name": "Seasoned Hunter's Bow",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "15301": {
+            "name": "Raven Bow",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15302": {
+            "name": "Sharpshooter's Oath",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15303": {
+            "name": "Recurve Bow",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "15304": {
+            "name": "Slingshot",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15305": {
+            "name": "Messenger",
+            "source": "Exploration",
+            "release_version": "1.0"
+        },
+        "15401": {
+            "name": "Favonius Warbow",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15402": {
+            "name": "The Stringless",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15403": {
+            "name": "Sacrificial Bow",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15404": {
+            "name": "Royal Bow",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "15405": {
+            "name": "Rust",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15406": {
+            "name": "Prototype Crescent",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "15407": {
+            "name": "Compound Bow",
+            "source": "Craftable",
+            "release_version": "1.0"
+        },
+        "15408": {
+            "name": "Blackcliff Warbow",
+            "source": "Starglitter Exchange",
+            "release_version": "1.0"
+        },
+        "15409": {
+            "name": "The Viridescent Hunt",
+            "source": "BP",
+            "release_version": "1.0"
+        },
+        "15410": {
+            "name": "Alley Hunter",
+            "source": "Gacha",
+            "release_version": "1.4"
+        },
+        "15411": {
+            "name": "Fading Twilight",
+            "source": "Event",
+            "release_version": "2.7"
+        },
+        "15412": {
+            "name": "Mitternachts Waltz",
+            "source": "Gacha",
+            "release_version": "1.6"
+        },
+        "15413": {
+            "name": "Windblume Ode",
+            "source": "Event",
+            "release_version": "1.4"
+        },
+        "15414": {
+            "name": "Hamayumi",
+            "source": "Craftable",
+            "release_version": "2.0"
+        },
+        "15415": {
+            "name": "Predator",
+            "source": "Promotional",
+            "release_version": "2.1"
+        },
+        "15416": {
+            "name": "Mouun's Moon",
+            "source": "Gacha",
+            "release_version": "2.2"
+        },
+        "15417": {
+            "name": "King's Squire",
+            "source": "Craftable",
+            "release_version": "3.0"
+        },
+        "15418": {
+            "name": "End of the Line",
+            "source": "Fishing Association",
+            "release_version": "3.0"
+        },
+        "15419": {
+            "name": "Ibis Piercer",
+            "source": "Event",
+            "release_version": "3.7"
+        },
+        "15424": {
+            "name": "Scion of the Blazing Sun",
+            "source": "BP",
+            "release_version": "4.0"
+        },
+        "15425": {
+            "name": "Song of Stillness",
+            "source": "Craftable",
+            "release_version": "4.0"
+        },
+        "15426": {
+            "name": "Cloudforged",
+            "source": "Event",
+            "release_version": "4.7"
+        },
+        "15427": {
+            "name": "Range Gauge",
+            "source": "Gacha",
+            "release_version": "4.1"
+        },
+        "15430": {
+            "name": "Flower-Wreathed Feathers",
+            "source": "Gacha",
+            "release_version": "5.2"
+        },
+        "15431": {
+            "name": "Chain Breaker",
+            "source": "Craftable",
+            "release_version": "5.0"
+        },
+        "15432": {
+            "name": "Sequence of Solitude",
+            "source": "Event",
+            "release_version": "5.6"
+        },
+        "15433": {
+            "name": "Snare Hook",
+            "source": "Craftable",
+            "release_version": "6.0"
+        },
+        "15434": {
+            "name": "Rainbow Serpent's Rain Bow",
+            "source": "Event",
+            "release_version": "6.2"
+        },
+        "15435": {
+            "name": "Jade Vista",
+            "source": "BP",
+            "release_version": "7.0"
+        },
+        "15436": {
+            "name": "Covenant of Frost and Snow",
+            "source": "Craftable",
+            "release_version": "7.0"
+        },
+        "15437": {
+            "name": "Breezeborne Refrain",
+            "source": "Gacha",
+            "release_version": "7.1"
+        },
+        "15501": {
+            "name": "Skyward Harp",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15502": {
+            "name": "Amos' Bow",
+            "source": "Gacha",
+            "release_version": "1.0"
+        },
+        "15503": {
+            "name": "Elegy for the End",
+            "source": "Gacha",
+            "signature": "Venti",
+            "release_version": "1.4"
+        },
+        "15507": {
+            "name": "Polar Star",
+            "source": "Gacha",
+            "signature": "Tartaglia",
+            "release_version": "2.2"
+        },
+        "15508": {
+            "name": "Aqua Simulacra",
+            "source": "Gacha",
+            "signature": "Yelan",
+            "release_version": "2.7"
+        },
+        "15509": {
+            "name": "Thundering Pulse",
+            "source": "Gacha",
+            "signature": "Yoimiya",
+            "release_version": "2.0"
+        },
+        "15511": {
+            "name": "Hunter's Path",
+            "source": "Gacha",
+            "signature": "Tighnari",
+            "release_version": "3.0"
+        },
+        "15512": {
+            "name": "The First Great Magic",
+            "source": "Gacha",
+            "signature": "Lyney",
+            "release_version": "4.0"
+        },
+        "15513": {
+            "name": "Silvershower Heartstrings",
+            "source": "Gacha",
+            "signature": "Sigewinne",
+            "release_version": "4.7"
+        },
+        "15514": {
+            "name": "Astral Vulture's Crimson Plumage",
+            "source": "Gacha",
+            "signature": "Chasca",
+            "release_version": "5.2"
+        },
+        "15515": {
+            "name": "The Daybreak Chronicles",
+            "source": "Gacha",
+            "signature": "Venti",
+            "release_version": "6.2"
+        },
+        "15516": {
+            "name": "Golden Frostbound Oath",
+            "source": "Gacha",
+            "signature": "Linnea",
+            "release_version": "6.5"
+        },
+        "14525": {
+            "name": "Starsealed Edict",
+            "source": "Gacha",
+            "signature": "Mitya",
+            "release_version": "7.2"
+        }
+    }
+}

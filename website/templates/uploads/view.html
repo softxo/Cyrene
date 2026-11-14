@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ upload.filename }} | Cyrene{% endblock %}
+
+{% block social_meta %}
+<meta property="og:site_name" content="Cyrene" />
+<meta property="og:title" content="{{ upload.filename }}" />
+<meta property="og:url" content="{{ upload.page_url }}" />
+{% if upload.status == "processing" %}
+<meta
+    property="og:description"
+    content="Still converting for Discord. Check back in a few minutes."
+/>
+<meta property="og:type" content="website" />
+<meta property="og:image" content="{{ upload.thumbnail_url or 'https://cyrene-teyvat.xyz/static/images/ui/ui_icons/Cyrene.png' }}" />
+<meta name="twitter:card" content="summary" />
+{% else %}
+<meta property="og:description" content="{{ upload.size_label }}" />
+{% endif %}
+{% if upload.status == "processing" %}
+{% elif upload.kind == "video" %}
+<meta property="og:type" content="video.other" />
+<meta property="og:video" content="{{ upload.file_url }}" />
+<meta property="og:video:secure_url" content="{{ upload.file_url }}" />
+<meta property="og:video:type" content="{{ upload.content_type }}" />
+{% if upload.width and upload.height %}
+<meta property="og:video:width" content="{{ upload.width }}" />
+<meta property="og:video:height" content="{{ upload.height }}" />
+{% endif %}
+<meta property="og:image" content="{{ upload.thumbnail_url or 'https://cyrene-teyvat.xyz/static/images/ui/ui_icons/Cyrene.png' }}" />
+<meta name="twitter:card" content="player" />
+{% elif upload.kind == "image" %}
+<meta property="og:type" content="website" />
+<meta property="og:image" content="{{ upload.file_url }}" />
+<meta name="twitter:card" content="summary_large_image" />
+{% else %}
+<meta property="og:type" content="website" />
+<meta
+    property="og:image"
+    content="https://cyrene-teyvat.xyz/static/images/ui/ui_icons/Cyrene.png"
+/>
+<meta name="twitter:card" content="summary" />
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="page uploads-page uploads-view">
+    <div class="uploads-viewer" data-kind="{{ upload.kind }}">
+        {% if upload.kind == "video" %}
+        <video
+            controls
+            preload="metadata"
+            src="{{ upload.file_path }}"
+            {% if upload.thumbnail_url %}poster="/f/{{ upload.id }}/thumbnail.jpg"
+            {% endif %}
+            {% if upload.width and upload.height %}width="{{ upload.width }}"
+            height="{{ upload.height }}"
+            {% endif %}
+        ></video>
+        {% elif upload.kind == "image" %}
+        <img src="{{ upload.file_path }}" alt="{{ upload.filename }}" />
+        {% elif upload.kind == "audio" %}
+        <audio controls preload="metadata" src="{{ upload.file_path }}"></audio>
+        {% else %}
+        <svg class="uploads-viewer-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 1.5h5.5L13 5v9.5H4z" />
+            <path d="M9.5 1.5V5H13" />
+        </svg>
+        {% endif %}
+    </div>
+
+    {% if upload.status == "processing" %}
+    <p class="uploads-notice">
+        Converting this video so it plays in Discord. It can take a few minutes; refresh to check.
+        Paste the link in Discord once it's done.
+    </p>
+    {% endif %}
+
+    <div class="uploads-view-bar">
+        <span class="uploads-row-text">
+            <h1 class="uploads-view-name">{{ upload.filename }}</h1>
+            <span class="uploads-row-meta">{{ upload.size_label }} · {{ upload.created_at.strftime('%d %b %Y') }}</span>
+        </span>
+        <span class="uploads-row-actions">
+            <a class="cyrene-button" href="{{ upload.file_path }}" target="_blank" rel="noopener">
+                Open
+            </a>
+            <a class="cyrene-button" href="/f/{{ upload.id }}/file?download=1" download>
+                <svg class="uploads-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11" />
+                </svg>
+                Download
+            </a>
+        </span>
+    </div>
+</div>
+{% endblock %}

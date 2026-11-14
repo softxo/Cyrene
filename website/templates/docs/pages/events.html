@@ -1,0 +1,45 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("event-tabs") }}
+<p><a href="/events">Events</a> brings together everything time-limited in one place:</p>
+<ul class="docs-list">
+    <li>
+        <strong>Limited-Time Events</strong>, with rewards, countdowns and categories you can hide
+        if you don't care about them.
+    </li>
+    <li>
+        <strong>Permanent Events</strong> and the endgame modes: Spiral Abyss, Imaginarium Theater
+        and Stygian Onslaught, with your progress for the current cycle.
+    </li>
+    <li><strong>Event Wishes</strong>, showing the current and upcoming banners.</li>
+    <li><strong>Custom Events</strong>, your own activities and schedules.</li>
+</ul>
+<p>
+    Events that haven't opened yet show a countdown to when they become available. Progress and
+    daily resets begin once they open.
+</p>
+
+{{ topic("tracking") }}
+<p>
+    Where HoYoLAB reports it, Cyrene marks events as completed for you. HoYoLAB only reports
+    completion, not whether you have claimed the rewards, so each event also has a manual checkmark.
+    Tick it once you have claimed everything. Unticking it later returns the event to automatic
+    tracking.
+</p>
+<p>
+    Some events can't be tracked automatically on every account. In that case, use the checkmark on
+    its own.
+</p>
+
+{{ topic("custom-events") }}
+<p>
+    Use <strong>Create Event</strong> to add your own activity, such as a weekly routine or a
+    personal goal. You can add an image (PNG, JPG or WebP, up to 2 MB).
+</p>
+{% call callout("Several accounts?") %}
+Creating a custom event for several accounts makes a separate copy for each one. Edits, progress and
+deletion then stay with that account.
+{% endcall %}
+{% endblock %}

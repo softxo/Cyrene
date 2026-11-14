@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation | Cyrene{% endblock %}
+{% block description %}Guides and command references for the Cyrene Discord bot and website.{% endblock %}
+
+{% block content %}
+<div class="page docs-page docs-page-index" data-docs-page>
+    {% include 'docs/nav.html' %}
+
+    <div class="docs-article">
+        <section class="docs-hero">
+            <p class="docs-eyebrow">Documentation</p>
+            <h1>Learn how to use Cyrene</h1>
+            <p class="docs-lead">
+                Cyrene is a Genshin Impact companion with two halves: a Discord bot for quick
+                lookups and notifications, and this website for planning and tracking. They share
+                the same accounts, so you only set things up once.
+            </p>
+            <div class="docs-hero-actions">
+                <a class="cyrene-button" href="/docs/getting-started">Get started</a>
+                <a class="cyrene-button docs-button-quiet" href="/docs/game-info"
+                    >Browse commands</a
+                >
+            </div>
+        </section>
+
+        <h2 class="docs-section-title">What do you want to do?</h2>
+        <div class="docs-tasks">
+            <a class="docs-task" href="/docs/accounts#link-hoyolab">
+                <strong>Link my Genshin account</strong>
+                <span>Connect HoYoLAB so Cyrene can read your game data.</span>
+            </a>
+            <a class="docs-task" href="/docs/codes-reminders#reminders">
+                <strong>Get notified when Resin is full</strong>
+                <span>Set a reminder that pings you in Discord.</span>
+            </a>
+            <a class="docs-task" href="/docs/characters-weapons#planner">
+                <strong>Plan a character build</strong>
+                <span>See every material a character needs.</span>
+            </a>
+            <a class="docs-task" href="/docs/codes-reminders#gift-codes">
+                <strong>Claim codes automatically</strong>
+                <span>Redeem gift codes and daily check-in without lifting a finger.</span>
+            </a>
+            <a class="docs-task" href="/docs/game-info#characters">
+                <strong>Look something up in Discord</strong>
+                <span>Characters, weapons, artifacts and enemies.</span>
+            </a>
+        </div>
+
+        {% for section in sections %}
+        <h2 class="docs-section-title">{{ section.title }}</h2>
+        <div class="docs-cards">
+            {% for item in section.pages %}
+            <a class="docs-card" href="/docs/{{ item.slug }}">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.summary }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

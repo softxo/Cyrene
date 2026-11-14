@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Cyrene • Inventory{% endblock %}
+
+{% block content %}
+<div class="page inventory-page">
+    <header class="inventory-header">
+        <div>
+            <h1>Inventory</h1>
+            <p>Your Genshin Impact materials, synced from HoYoLAB.</p>
+        </div>
+
+        {% if accounts %}
+        <form
+            method="get"
+            action="/inventory"
+            class="inventory-account-form"
+            data-inventory-account-form
+        >
+            <label for="inventory-account-button">Account</label>
+
+            <div class="custom-select inventory-account-select">
+                <button
+                    id="inventory-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        {% if selected_account %}
+                        <span
+                            data-account-profile-name="{{ selected_account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span
+                        >
+                        · {{ selected_account.genshin_uid }}
+                        {% else %}
+                        Select an account
+                        {% endif %}
+                    </span>
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if selected_account and account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
+                    >
+                        <span
+                            data-account-profile-name="{{ account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                        >
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" name="account_id" value="{{ selected_account.id if selected_account else '' }}" />
+            </div>
+        </form>
+        {% endif %}
+    </header>
+
+    {% if not accounts %}
+    {% include 'components/no_accounts.html' %}
+
+    {% else %}
+    <section
+        class="inventory-message inventory-loading"
+        data-inventory-loading
+        data-account-id="{{ selected_account.id }}"
+        aria-live="polite"
+    >
+        <span class="inventory-loading-spinner" aria-hidden="true"></span>
+        <h2>Loading inventory</h2>
+        <p>The page is ready while HoYoLAB syncs your materials.</p>
+    </section>
+
+    <section class="inventory-toolbar" aria-label="Inventory controls" hidden>
+        <div class="inventory-search">
+            <label for="inventory-search">Search materials</label>
+            <input
+                id="inventory-search"
+                type="search"
+                placeholder="Search by name..."
+                autocomplete="off"
+                data-inventory-search
+                class="cyrene-input"
+            />
+        </div>
+
+        {% for key, label, all_label in [('rarity', 'Rarity', 'All rarities'), ('kind', 'Type', 'All types')] %}
+        <div class="inventory-filter">
+            <label id="inventory-{{ key }}-label">{{ label }}</label>
+            <div class="custom-select" data-inventory-select="{{ key }}">
+                <button
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="inventory-{{ key }}-label inventory-{{ key }}-value"
+                >
+                    <span class="custom-select-value" id="inventory-{{ key }}-value"
+                        >{{ all_label }}</span
+                    >
+                    <span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div
+                    class="custom-select-menu"
+                    role="listbox"
+                    aria-labelledby="inventory-{{ key }}-label"
+                ></div>
+                <input type="hidden" data-inventory-{{ key }} value="" />
+            </div>
+        </div>
+        {% endfor %}
+        <button type="button" class="cyrene-button" data-inventory-reset disabled>
+            Reset filters
+        </button>
+
+        <p class="inventory-summary" aria-live="polite">
+            <span data-inventory-count>0</span>
+            materials
+        </p>
+    </section>
+
+    <section class="inventory-grid" data-inventory-grid hidden></section>
+
+    <p class="inventory-empty-filter" data-inventory-empty hidden>
+        No materials match your filters.
+    </p>
+
+    <p class="inventory-note" data-inventory-note hidden>
+        HoYoLAB provides development materials through its Enhancement Progression Calculator.
+        Artifacts, food, gadgets, and quest items are not included, as well as some materials such
+        as Dream Solvent, Adventurer's Experience etc.
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

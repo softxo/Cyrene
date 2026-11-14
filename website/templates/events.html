@@ -1,0 +1,2572 @@
+{% extends "base.html" %}
+
+{% macro event_reward_icon(reward, double_reward=false) %}
+{% set amount = 2 if double_reward else reward.amount %}
+<span
+    class="event-limited-reward{% if reward.icon %} rarity-{{ reward.rarity }}{% else %} event-limited-reward-label{% endif %}"
+    role="img"
+    title="{{ reward.name }}{% if amount %} &times;{{ amount }}{% endif %}"
+    aria-label="{{ reward.name }}{% if amount %} &times;{{ amount }}{% endif %}"
+>
+    {% if reward.icon %}<img
+        src="{{ reward.icon }}"
+        alt="{{ reward.name }}"
+        loading="lazy"
+    />{% else %}{{ reward.name }}{% endif %}
+    {% if amount %}<strong class="event-limited-reward-amount"
+        >&times;{{ amount }}</strong
+    >{% endif %}
+</span>
+{% endmacro %}
+
+{% macro event_timer_help(event=none) %}
+<button
+    type="button"
+    class="event-manual-completion-trigger event-upcoming-help"
+    aria-label="Event opening information"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+>
+    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+        <path
+            d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+        />
+        <circle cx="8" cy="12" r=".85" fill="currentColor" />
+    </svg>
+</button>
+<div
+    class="event-insight-popover event-opening-popover"
+    popover="manual"
+    role="dialog"
+    aria-label="Event opening information"
+>
+    <div class="event-insight-content">
+        <div class="event-insight-heading">
+            <div><span>Upcoming event</span><strong>Opens soon</strong></div>
+        </div>
+        <p data-opening-explanation>
+            This countdown shows when the event becomes available. Progress and daily resets begin
+            once it opens.
+        </p>
+        {% if event and event.opening_source %}<a
+            href="{{ event.opening_source }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Schedule details</a
+        >{% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro insight_reward_icons(event) %}
+{% for insight in event.insight_rewards %}
+<div class="event-insight">
+    <button
+        type="button"
+        class="event-limited-reward event-insight-trigger"
+        aria-label="{{ insight.character }} Insight rewards"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+    >
+        <img src="{{ insight.icon }}" alt="{{ insight.character }}" loading="lazy" />
+    </button>
+    <div
+        class="event-insight-popover"
+        popover="manual"
+        role="dialog"
+        aria-label="{{ insight.character }} Insight rewards"
+    >
+        <div class="event-insight-content">
+            <div class="event-insight-heading">
+                <img src="{{ insight.icon }}" alt="" loading="lazy" />
+                <div><span>Insight Rewards</span><strong>{{ insight.character }}</strong></div>
+            </div>
+            <p>{{ insight.task }}</p>
+            <div class="event-insight-items">
+                {% for reward in insight.rewards %}
+                <div class="event-insight-item">
+                    <span class="event-limited-reward rarity-{{ reward.rarity }}">
+                        <img src="{{ reward.icon }}" alt="" loading="lazy" />
+                        <strong class="event-limited-reward-amount">×{{ amount }}</strong>
+                    </span>
+                    <span>{{ reward.name }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <a href="{{ event.reward_source }}" target="_blank" rel="noopener noreferrer"
+                >Reward details · Genshin Impact Wiki</a
+            >
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endmacro %}
+
+{% macro theater_opening_cast(theater) %}
+<div class="it-opening-cast">
+    <span class="event-stat-label">Opening Characters</span>
+    <div class="it-opening-cast-grid" role="list" aria-label="Opening Characters">
+        {% for character in theater.opening_cast %}
+        <div class="it-opening-character" role="listitem">
+            <div class="it-opening-portrait rarity-{{ character.rarity }}">
+                <img src="{{ character.icon }}" alt="" loading="lazy" width="52" height="52" />
+                {% if character.element %}
+                <img
+                    class="it-opening-element"
+                    src="/static/images/events/imaginarium_theatre/elements/{{ character.element }}.webp"
+                    alt="{{ character.element }}"
+                    loading="lazy"
+                    width="18"
+                    height="18"
+                />
+                {% endif %}
+            </div>
+            <span>{{ character.name }}</span>
+        </div>
+        {% else %}
+        <span class="event-no-record">Opening Characters unavailable</span>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro limited_event_filters() %}
+<div class="events-limited-filter">
+    <button
+        type="button"
+        class="cyrene-button events-limited-filter-button"
+        data-limited-filter-button
+        aria-label="Choose Limited event categories"
+        aria-expanded="false"
+    >
+        <svg
+            viewBox="0 0 24 24"
+            width="19"
+            height="19"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+        >
+            <path
+                d="M18.86 9.23L21.29 10.02L21.29 13.98L18.86 14.77L17.83 16.56L18.36 19.06L14.94 21.04L13.03 19.33L10.97 19.33L9.06 21.04L5.64 19.06L6.17 16.56L5.14 14.77L2.71 13.98L2.71 10.02L5.14 9.23L6.17 7.44L5.64 4.94L9.06 2.96L10.97 4.67L13.03 4.67L14.94 2.96L18.36 4.94L17.83 7.44Z"
+            />
+            <circle cx="12" cy="12" r="3.2" />
+        </svg>
+    </button>
+    <div
+        class="cyrene-popover events-limited-filter-popup"
+        popover="auto"
+        role="dialog"
+        aria-label="Limited event categories"
+    >
+        <strong>Show events</strong>
+        <div data-limited-filter-options></div>
+        <small>Applies to Normal and Overview.</small>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro limited_event_check(event, account) %}
+<button
+    type="button"
+    class="event-checkmark{% if not event.manual_checked %} event-checkmark-empty{% endif %}"
+    data-activity-type="limited_event"
+    data-event-key="{{ event.completion_key }}"
+    data-event-token="{{ event.completion_token }}"
+    data-account-id="{{ account.id }}"
+    data-account-profile-aria="{{ account.genshin_uid }}"
+    data-account-profile-old-name="{{ account.nickname }}"
+    aria-label="Mark rewards claimed for {{ event.name }} for {{ account.nickname }}"
+    {% if event.is_upcoming %}disabled{% endif %}
+    title="{{ 'Available when the event opens' if event.is_upcoming else 'Track claimed rewards manually' }}"
+    aria-pressed="{{ 'true' if event.manual_checked else 'false' }}"
+></button>
+{% endmacro %}
+
+{% macro limited_event_card(event, account, overview_card=false) %}
+<article
+    class="event-list-item event-limited-item{% if overview_card %} events-limited-overview-event{% endif %}{% if event.is_upcoming %} upcoming{% endif %}{% if event.is_finished %} completed{% endif %}"
+    data-limited-event-id="{{ event.id }}"
+    data-automatic-complete="{{ 'true' if event.automatic_finished else 'false' }}"
+    data-limited-category="{{ 'TCG' if event.is_tcg else (event.category or 'Other Events') }}"
+>
+    <div class="event-limited-main">
+        <div class="event-list-left">
+            <div class="event-list-check">{{ limited_event_check(event, account) }}</div>
+            <div class="event-list-icon event-limited-icon">
+                <img src="{{ event.icon or '/static/images/ui/ui_icons/unused/Icon_Event_Quest.webp' }}" alt="" loading="lazy" />
+            </div>
+            <div class="event-limited-title">
+                <div class="event-limited-name-line">
+                    {% if event.category %}
+                    <span class="event-limited-pill event-limited-category"
+                        >{{ event.category }}</span
+                    >
+                    {% endif %}
+                    {% if event.is_tcg %}
+                    <span class="event-limited-pill event-limited-category">TCG</span>
+                    {% endif %}
+                    <div class="event-limited-name-with-help">
+                        <div class="event-list-name">{{ event.name }}</div>
+                        <div
+                            class="event-insight event-manual-completion"
+                            data-popover-placement="top"
+                        >
+                            <button
+                                type="button"
+                                class="event-manual-completion-trigger{% if event.progress_available is sameas false %} event-fully-manual{% endif %}"
+                                aria-label="{{ 'Manual completion and reward tracking' if event.progress_available is sameas false else 'Manual reward tracking' }}"
+                                aria-haspopup="dialog"
+                                aria-expanded="false"
+                            >
+                                <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                                    <path
+                                        d="M5.5 5.5a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 3.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                    />
+                                    <circle cx="8" cy="12" r=".85" fill="currentColor" />
+                                </svg>
+                            </button>
+                            <div
+                                class="event-insight-popover"
+                                popover="manual"
+                                role="dialog"
+                                aria-label="Event completion and rewards"
+                            >
+                                <div class="event-insight-content">
+                                    <div class="event-insight-heading">
+                                        <div>
+                                            <span>Event progress</span
+                                            ><strong>{{ 'Manual tracking required' if event.progress_available is sameas false else 'Track claimed rewards manually' }}</strong>
+                                        </div>
+                                    </div>
+                                    {% if event.progress_available is sameas false %}
+                                    <p>
+                                        Automatic completion is unavailable for this event on this
+                                        account. Use the manual checkmark once you've completed it
+                                        and claimed its rewards.
+                                    </p>
+                                    {% else %}
+                                    <p>
+                                        HoYoLAB reports event completion, not whether you've claimed
+                                        the rewards. Use the manual checkmark to track claimed
+                                        rewards. Unchecking it keeps automatic completion.
+                                    </p>
+                                    {% endif %}
+                                    {% if event.reward_preview_note %}
+                                    <p>{{ event.reward_preview_note }}</p>
+                                    <a
+                                        href="{{ event.reward_source }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        >Reward details</a
+                                    >{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if event.rewards %}
+        <div class="event-limited-rewards" aria-label="Event rewards">
+            {% for reward in event.rewards[:10] %}{{ event_reward_icon(reward, event.name|replace('-', ' ') == 'Ley Line Overflow') }}{% endfor %}
+            {% if event.rewards|length > 4 %}
+            <div
+                class="event-insight event-all-rewards{% if event.rewards|length <= 10 %} event-rewards-responsive-more{% endif %}{% if event.rewards|length <= 5 %} event-rewards-mobile-more{% endif %}"
+                data-popover-activation="click"
+            >
+                <button
+                    type="button"
+                    class="cyrene-button event-rewards-more"
+                    aria-label="Show all rewards for {{ event.name }}"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                >
+                    Show more
+                </button>
+                <div
+                    class="event-insight-popover"
+                    popover="manual"
+                    role="dialog"
+                    aria-label="All rewards for {{ event.name }}"
+                >
+                    <div class="event-insight-content">
+                        <div class="event-insight-heading">
+                            <div>
+                                <span>All rewards</span><strong>{{ event.name }}</strong>
+                            </div>
+                        </div>
+                        <div class="event-all-reward-grid">
+                            {% for reward in event.rewards %}
+                            <div class="event-insight-item">
+                                {{ event_reward_icon(reward, event.name|replace('-', ' ') == 'Ley Line Overflow') }}<span>{{ reward.name }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {{ insight_reward_icons(event) }}
+        </div>
+        {% endif %}
+
+        <div class="event-list-right">
+            {% if event.daily_reset_time and not event.is_upcoming %}
+            <span
+                class="event-daily-reset"
+                data-daily-event-reset
+                data-start-time="{{ event.start_time }}"
+                data-end-time="{{ event.daily_reset_time }}"
+                data-event-end-time="{{ event.end_time }}"
+                title="Daily reset"
+                >Calculating...</span
+            >
+            {% else %}
+            <span
+                data-limited-status
+                data-base-status="{{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}"
+                class="event-list-status{% if event.is_finished %} event-limited-completed event-completion-pill{% endif %}"
+            >
+                {% if event.is_finished %}
+                Completed
+                {% else %}
+                {{ 'Bonus' if event.progress_available is sameas false else 'Limited' }}
+                {% endif %}
+            </span>
+            {% endif %}
+            <div
+                class="event-insight event-time-left{% if event.is_upcoming %} upcoming{% endif %}"
+                data-start-time="{{ event.start_time }}"
+                data-end-time="{{ event.end_time }}"
+                {% if event.opening_date %}data-opening-date="{{ event.opening_date }}"
+                data-opening-date-time="{{ event.opening_date_timestamp }}"
+                {% endif %}
+            >
+                <span data-timer-value>{{ 'Soon' if event.is_unscheduled_upcoming else 'Calculating...' }}</span>
+                {{ event_timer_help(event) }}
+            </div>
+        </div>
+    </div>
+</article>
+{% endmacro %}
+
+{% macro limited_event_overview_card(event, account) %}
+{{ limited_event_card(event, account, true) }}
+{% endmacro %}
+
+{% macro temper_thyself_card(event, account, show_account=false) %}
+{% if event %}
+<article
+    id="temper-thyself-{{ account.id }}"
+    class="event-list-item event-temper-item{% if event.checked %} completed{% endif %}"
+    data-permanent-event="temper-thyself"
+    data-account-id="{{ account.id }}"
+>
+    <div class="event-list-left">
+        <div class="event-list-check">
+            <button
+                type="button"
+                class="event-checkmark{% if not event.checked %} event-checkmark-empty{% endif %}"
+                data-activity-type="temper_thyself"
+                data-account-id="{{ account.id }}"
+                data-account-profile-aria="{{ account.genshin_uid }}"
+                data-account-profile-old-name="{{ account.nickname }}"
+                aria-label="Mark {{ event.name }} complete{% if show_account %} for {{ account.nickname }}{% endif %}"
+                aria-pressed="{{ 'true' if event.checked else 'false' }}"
+            ></button>
+        </div>
+        <div class="event-list-icon">
+            <img src="{{ event.icon }}" alt="" width="36" height="36" />
+        </div>
+        <strong class="event-list-name">{{ event.name }}</strong>
+    </div>
+    <div class="event-list-right">
+        {% if event.has_data and event.days_completed is not none %}
+        <div
+            class="event-temper-progress-box{% if event.weekly_finished %} event-completion-pill{% endif %}"
+        >
+            <span
+                ><strong>{{ event.days_completed }}/{{ event.days_total }}</strong> Weekly
+                <small>({{ event.days_required }} required)</small></span
+            >
+            <div
+                class="event-temper-day-track"
+                role="meter"
+                aria-label="Completed training days this week"
+                aria-valuemin="0"
+                aria-valuemax="7"
+                aria-valuenow="{{ event.days_completed }}"
+            >
+                {% for day in range(7) %}<span
+                    class="{% if day < event.days_completed %}filled{% endif %}"
+                    aria-hidden="true"
+                ></span
+                >{% endfor %}
+            </div>
+        </div>
+        <div
+            class="event-temper-progress-box{% if event.weeks_completed >= event.weeks_required %} event-completion-pill{% endif %}"
+        >
+            <span
+                ><strong>{{ event.weeks_completed }}/{{ event.weeks_required }}</strong> Cycle
+                <small>(for Stella Fortuna)</small></span
+            >
+            <div
+                class="event-temper-day-track"
+                role="meter"
+                aria-label="Completed weekly goals this cycle"
+                aria-valuemin="0"
+                aria-valuemax="{{ event.weeks_required }}"
+                aria-valuenow="{{ event.weeks_completed }}"
+            >
+                {% for week in range(event.weeks_required) %}<span
+                    class="{% if week < event.weeks_completed %}filled{% endif %}"
+                    aria-hidden="true"
+                ></span
+                >{% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <span
+            class="event-list-status{% if event.checked %} event-completion-pill{% endif %}"
+            data-temper-status
+            data-base-status="{% if event.is_locked %}Not unlocked{% elif not event.is_active_period %}Between cycles{% elif event.is_upcoming %}Upcoming{% elif event.has_data %}In progress{% else %}Progress unavailable{% endif %}"
+            >{% if event.checked %}Completed{% elif event.is_locked %}Not unlocked{% elif not event.is_active_period %}Between
+            cycles{% elif event.is_upcoming %}Upcoming{% elif event.has_data %}In progress{% else %}Progress
+            unavailable{% endif %}</span
+        >
+        <div class="event-temper-durations">
+            {% if event.weekly_end and event.has_data %}
+            <span
+                ><time
+                    aria-label="Weekly reset"
+                    title="Weekly reset"
+                    class="event-time-left"
+                    data-daily-event-reset
+                    data-end-time="{{ event.weekly_end }}"
+                    >Calculating...</time
+                ></span
+            >
+            {% endif %}
+            {% if event.end_time %}
+            <span
+                ><time
+                    aria-label="Cycle end"
+                    title="Cycle end"
+                    class="event-time-left"
+                    data-countdown-kind="long-event"
+                    data-start-time="{{ event.start_time }}"
+                    data-end-time="{{ event.end_time }}"
+                    >Calculating...</time
+                ></span
+            >
+            {% else %}<span class="event-temper-permanent"
+                >Cycle duration unavailable</span
+            >{% endif %}
+        </div>
+    </div>
+</article>
+{% endif %}
+{% endmacro %}
+
+{% macro wish_banner_card(banner) %}
+<div
+    class="wish-banner-card{% if banner.is_upcoming %} wish-banner-upcoming{% endif %}{% if not banner.image and banner.preview_art %} wish-banner-preview{% endif %}"
+    data-wish-banner="{{ banner.banner_id }}"
+    data-banner-type="{{ banner.banner_type }}"
+>
+    {% if banner.image %}
+    <div class="wish-banner-media">
+        <img
+            src="{{ banner.image }}"
+            alt="{{ banner.title }}"
+            class="wish-banner-image"
+            loading="lazy"
+        />
+    </div>
+    {% elif banner.preview_art %}
+    <div
+        class="wish-banner-preview-art{% if banner.banner_type == 302 %} wish-preview-weapons{% elif banner.preview_kind == 'weapons' %} wish-preview-chronicled wish-preview-chronicled-weapons{% elif banner.banner_type == 500 %} wish-preview-chronicled{% else %} wish-preview-character{% endif %}"
+        aria-label="Featured 5-star artwork"
+    >
+        {% for art in banner.preview_art %}
+        <div class="wish-preview-panel">
+            <img src="{{ art.icon }}" alt="{{ art.name }}" loading="lazy" />
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="wish-banner-overlay"></div>
+    <div class="wish-banner-content">
+        <div class="wish-banner-type">
+            {% if banner.is_upcoming %}Upcoming &middot;
+            {% endif %}{% if banner.banner_type == 500 %}Chronicled Wish{% if banner.preview_kind == 'weapons' %}
+            &middot; Weapons{% endif %}{% elif banner.banner_type == 302 %}Weapon Event
+            Wish{% else %}Character Event Wish{% endif %}
+        </div>
+        <h3 class="wish-banner-title">&quot;{{ banner.title | replace("Event Event Wish ", "") | replace("Event Wish ", "") }}&quot;</h3>
+        {% if not banner.image and banner.preview_art %}
+        <div class="wish-preview-names" aria-label="Featured characters or weapons">
+            {% for item in banner.r5_up_items %}<span class="wish-preview-name"
+                >{{ item.name }}</span
+            >{% endfor %}
+        </div>
+        {% endif %}
+        {% for rarity, items in [(5, banner.r5_up_items), (4, banner.r4_up_items)] %}
+        {% if items %}
+        <div
+            class="wish-banner-featured{% if rarity == 4 %} wish-banner-four-star{% endif %}"
+        >
+            <span class="wish-banner-label" aria-label="{{ rarity }}-star rarity"
+                >{{ rarity }}<span
+                    class="cyrene-rarity-star"
+                    data-rarity="{{ rarity }}"
+                    aria-hidden="true"
+                ></span
+            ></span>
+            <div class="wish-banner-items">
+                {% for item in items %}
+                <div class="wish-banner-item">
+                    <img
+                        src="{{ item.icon }}"
+                        alt="{{ item.name }}"
+                        title="{{ item.name }}"
+                        loading="lazy"
+                    /><span
+                        {% if banner.banner_type == 302 and item.name|length > 18 %}
+                        class="wish-banner-name-long"
+                        {% endif %}
+                        >{{ item.name }}</span
+                    >
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div
+            class="wish-banner-time event-time-left{% if banner.is_upcoming %} upcoming{% endif %}"
+            data-countdown-kind="long-event"
+            data-start-time="{{ banner.start_time }}"
+            data-end-time="{{ banner.end_time }}"
+            title="{{ 'Starts in' if banner.is_upcoming else 'Ends in' }}"
+        >
+            Calculating...
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro wish_banner_sections(banners) %}
+{% set current = banners | rejectattr('is_upcoming') | list %}
+{% set upcoming = banners | selectattr('is_upcoming') | list %}
+{% if current %}
+<div class="wish-banners" data-wish-section="current">
+    {% for banner in current %}{{ wish_banner_card(banner) }}{% endfor %}
+</div>
+{% else %}
+<div class="wish-banners-empty">No Active Banners</div>
+{% endif %}
+{% if upcoming %}
+<section class="wish-upcoming-section" aria-label="Upcoming Event Wishes">
+    <div class="events-list-header"><h2>Upcoming Event Wishes</h2></div>
+    <div class="wish-banners" data-wish-section="upcoming">
+        {% for banner in upcoming %}{{ wish_banner_card(banner) }}{% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+{% block title %}Cyrene • Events{% endblock %}
+
+{% block content %}
+
+<div
+    class="page events-page"
+    data-previews-pending="{{ 'true' if previews_pending else 'false' }}"
+    data-overview="{{ 'true' if overview else 'false' }}"
+    data-account-id="{{ selected_account.id if selected_account else '' }}"
+>
+    <section class="hero events-hero">
+        <div class="hero-content">
+            <span class="eyebrow"> ACTIVITIES </span>
+
+            <h1>Your <span>Events</span></h1>
+
+            <p>View your progress and records across Genshin Impact's major activities.</p>
+        </div>
+    </section>
+
+    {% if accounts %}
+
+    <section class="events-section events-controls">
+        {% if not overview %}
+
+        <div class="events-account-tabs">
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'all' %}active{% endif %}"
+                data-account-tab="all"
+            >
+                All
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'permanent' %}active{% endif %}"
+                data-account-tab="permanent"
+            >
+                Permanent
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'events' %}active{% endif %}"
+                data-account-tab="events"
+            >
+                Limited
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'endgame' %}active{% endif %}"
+                data-account-tab="endgame"
+            >
+                Endgame
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'wishes' %}active{% endif %}"
+                data-account-tab="wishes"
+            >
+                Wishes
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-account-tab {% if tab == 'custom' %}active{% endif %}"
+                data-account-tab="custom"
+            >
+                Custom
+            </button>
+        </div>
+
+        {% else %}
+
+        <div class="events-overview-tabs">
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab active"
+                data-overview-tab="daily"
+            >
+                Daily
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="resin"
+            >
+                Resin
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="permanent"
+            >
+                Permanent
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="events"
+            >
+                Limited
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="endgame"
+            >
+                Endgame
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="wishes"
+            >
+                Wishes
+            </button>
+
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--tab events-overview-tab"
+                data-overview-tab="custom"
+            >
+                Custom
+            </button>
+        </div>
+
+        {% endif %}
+
+        <div class="events-controls-right">
+            {% if not overview %}
+
+            <div class="events-account-selector">
+                <div class="custom-select" id="events-account">
+                    <button class="custom-select-button" type="button">
+                        <span class="custom-select-value">
+                            <span
+                                data-account-profile-name="{{ selected_account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span
+                            >
+                            · {{ selected_account.genshin_uid }}
+                        </span>
+
+                        <span class="custom-select-arrow"></span>
+                    </button>
+
+                    <div class="custom-select-menu">
+                        {% for account in accounts %}
+
+                        <button
+                            class="custom-select-option {% if selected_account.id == account.id %} active {% endif %}"
+                            type="button"
+                            data-account-id="{{ account.id }}"
+                        >
+                            <span
+                                data-account-profile-name="{{ account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                            >
+                            · {{ account.genshin_uid }}
+                        </button>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+
+            <a
+                class="cyrene-button events-layout-switch"
+                href="{% if overview %}/events?account_id={{ selected_account.id }}{% else %}/events?overview=true&account_id={{ selected_account.id }}{% endif %}"
+            >
+                Switch Layout
+            </a>
+        </div>
+    </section>
+
+    {% endif %}
+
+    {% if not overview %}
+
+    <section
+        class="events-featured"
+        data-account-category="endgame"
+        {% if request.query_params.get('tab', 'all') not in ['all', 'endgame'] %}hidden{% endif %}
+    >
+        <div class="event-featured-card collapsed" data-event-type="abyss">
+            <img
+                src="/static/images/events/Abyss.png"
+                alt="Spiral Abyss"
+                class="event-featured-image"
+            />
+
+            <div class="event-featured-overlay"></div>
+
+            <div class="event-featured-content">
+                <div class="event-featured-header">
+                    <div class="event-featured-title">
+                        <img
+                            src="/static/images/events/spiral_abyss/Spiral_Abyss.png"
+                            alt=""
+                            class="event-featured-icon"
+                        />
+
+                        <div class="event-featured-name">Spiral Abyss</div>
+                    </div>
+
+                    <div class="event-featured-header-right">
+                        <div
+                            class="event-time-left"
+                            data-countdown-kind="long-event"
+                            data-end-time="{{ abyss.end_time }}"
+                        >
+                            Calculating...
+                        </div>
+
+                        <button
+                            type="button"
+                            class="event-featured-toggle"
+                            aria-label="Expand Spiral Abyss"
+                            aria-expanded="false"
+                        >
+                            <span class="event-toggle-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="event-featured-collapsed">
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Deepest Descent </span>
+
+                        <strong> {{ abyss.max_floor if abyss and abyss.has_data else "—" }} </strong>
+                    </div>
+
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Abyssal Stars </span>
+
+                        <div class="event-collapsed-value">
+                            <img
+                                src="/static/images/events/spiral_abyss/Abyssal_Star.png"
+                                alt="Abyssal Stars"
+                            />
+
+                            <strong> {{ abyss.total_stars if abyss and abyss.has_data else "—" }} </strong>
+
+                            {% if abyss and abyss.has_data %}
+                            <span class="event-stat-max">/ 36</span>
+                            {% endif %}
+                        </div>
+
+                        {% if abyss and abyss.has_data %}
+                        <span
+                            class="event-meter"
+                            style="--meter: {{ [abyss.total_stars * 100 // 36, 100] | min }}%"
+                            aria-hidden="true"
+                        ></span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="event-featured-panel">
+                    {% if abyss and abyss.has_data %}
+
+                    <div class="abyss-summary">
+                        <div class="abyss-stat">
+                            <span class="event-stat-label"> Deepest Descent </span>
+
+                            <div class="event-stat-value">
+                                <strong>{{ abyss.max_floor }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="abyss-stat">
+                            <span class="event-stat-label"> Abyssal Stars </span>
+
+                            <div class="event-stat-value">
+                                <div class="abyss-stars-value">
+                                    <img
+                                        src="/static/images/events/spiral_abyss/Abyssal_Star.png"
+                                        alt="Abyssal Stars"
+                                    />
+
+                                    <strong>{{ abyss.total_stars }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="abyss-teams">
+                        <span class="event-stat-label"> Teams </span>
+
+                        <div class="abyss-teams-box">
+                            {% for chamber in abyss.chambers %}
+
+                            <div class="abyss-chamber">
+                                <div
+                                    class="abyss-team abyss-team-first"
+                                    aria-label="First half team"
+                                >
+                                    {% for battle in chamber.battles %}
+
+                                    {% if battle.half == 1 %}
+
+                                    {% for character in battle.characters %}
+
+                                    <img
+                                        src="{{ character.icon }}"
+                                        alt="{{ character.name }}"
+                                        title="{{ character.name }}"
+                                        class="abyss-character-icon"
+                                    />
+
+                                    {% endfor %}
+
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+
+                                <strong aria-label="Chamber {{ chamber.chamber }}">
+                                    <small>Chamber</small>
+                                    <span>{{ chamber.chamber }}</span>
+                                </strong>
+
+                                <div
+                                    class="abyss-team abyss-team-second"
+                                    aria-label="Second half team"
+                                >
+                                    {% for battle in chamber.battles %}
+
+                                    {% if battle.half == 2 %}
+
+                                    {% for character in battle.characters %}
+
+                                    <img
+                                        src="{{ character.icon }}"
+                                        alt="{{ character.name }}"
+                                        title="{{ character.name }}"
+                                        class="abyss-character-icon"
+                                    />
+
+                                    {% endfor %}
+
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% else %}
+
+                    <div class="event-no-record">No Record</div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="event-featured-card collapsed" data-event-type="theater">
+            <img
+                src="/static/images/events/IT.png"
+                alt="Imaginarium Theater"
+                class="event-featured-image"
+            />
+
+            <div class="event-featured-overlay"></div>
+
+            <div class="event-featured-content">
+                <div class="event-featured-header">
+                    <div class="event-featured-title">
+                        <img
+                            src="/static/images/events/imaginarium_theatre/Imaginarium_Theatre.png"
+                            alt=""
+                            class="event-featured-icon"
+                        />
+
+                        <div class="event-featured-name">Imaginarium Theater</div>
+                    </div>
+
+                    <div class="event-featured-header-right">
+                        <div
+                            class="event-time-left"
+                            id="theater-time-left"
+                            data-countdown-kind="long-event"
+                            data-end-time="{{ theater.end_time }}"
+                        >
+                            Calculating...
+                        </div>
+
+                        <button
+                            type="button"
+                            class="event-featured-toggle"
+                            aria-label="Expand Imaginarium Theater"
+                            aria-expanded="false"
+                        >
+                            <span class="event-toggle-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="event-featured-collapsed">
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Best Record </span>
+
+                        <div class="event-collapsed-value">
+                            {% if theater and theater.best_round > 0 %}
+
+                            <img
+                                src="/static/images/events/imaginarium_theatre/IT_Act_{{ theater.best_round }}.png"
+                                alt="Act {{ theater.best_round }}"
+                                class="it-act-icon"
+                            />
+
+                            <strong> Act {{ theater.best_round }} </strong>
+
+                            {% else %}
+
+                            <strong>—</strong>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Stellas Earned </span>
+
+                        <div class="event-collapsed-value">
+                            {% if theater and theater.best_round > 0 %}
+
+                            <img
+                                src="/static/images/events/imaginarium_theatre/IT_Stella.png"
+                                alt="Stella"
+                                title="Stellas Earned"
+                                class="it-stella"
+                            />
+
+                            <strong>{{ theater.medals }}</strong>
+
+                            {% else %}
+
+                            <strong>—</strong>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-featured-panel">
+                    {% if theater and theater.best_round > 0 %}
+
+                    <div class="it-best-record">
+                        <span class="event-stat-label"> Best Record </span>
+
+                        <div class="event-stat-value">
+                            <div class="it-record">
+                                <img
+                                    src="/static/images/events/imaginarium_theatre/IT_Act_{{ theater.best_round }}.png"
+                                    alt="Act {{ theater.best_round }}"
+                                    class="it-act-icon"
+                                />
+
+                                <strong> Act {{ theater.best_round }} </strong>
+
+                                {% if theater.arcanums > 0 %}
+
+                                <span class="event-stat-separator"> | </span>
+
+                                <strong> {{ theater.arcanums }} </strong>
+
+                                <img
+                                    src="/static/images/events/imaginarium_theatre/IT_Arcanum_{{ theater.arcanums }}.webp"
+                                    alt="{{ theater.arcanums }} Arcanums"
+                                    class="it-arcanum-icon"
+                                />
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="it-stellas">
+                        <span class="event-stat-label"> Stellas </span>
+
+                        <div class="it-stella-box">
+                            <div class="it-stella-row">
+                                {% for i in range(theater.best_round) %}
+
+                                <img
+                                    src="/static/images/events/imaginarium_theatre/IT_Stella.png"
+                                    alt="Stella"
+                                    class="it-stella{% if i >= theater.medals %} it-stella-inactive{% endif %}"
+                                />
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% else %}
+
+                    <div class="event-no-record">No Record</div>
+
+                    {% endif %}
+
+                    <div class="it-elements">
+                        <span class="event-stat-label"> Elements </span>
+
+                        <div class="it-elements-box">
+                            {% for element in theater.elements %}
+
+                            <div class="it-element">
+                                <img
+                                    src="/static/images/events/imaginarium_theatre/elements/{{ element }}.webp"
+                                    alt="{{ element }}"
+                                    class="it-element-icon"
+                                />
+                            </div>
+
+                            {% else %}
+                            <span class="event-no-record">Elements unavailable</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {{ theater_opening_cast(theater) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="event-featured-card collapsed" data-event-type="stygian">
+            <img
+                src="/static/images/events/Stygian.png"
+                alt="Stygian Onslaught"
+                class="event-featured-image"
+            />
+
+            <div class="event-featured-overlay"></div>
+
+            <div class="event-featured-content">
+                <div class="event-featured-header">
+                    <div class="event-featured-title">
+                        <img
+                            src="/static/images/events/stygian_onslaught/Stygian_Onslaught.png"
+                            alt=""
+                            class="event-featured-icon"
+                        />
+
+                        <div class="event-featured-name">Stygian Onslaught</div>
+                    </div>
+
+                    <div class="event-featured-header-right">
+                        <div
+                            class="event-insight event-time-left stygian-reset-timer"
+                            data-countdown-kind="long-event"
+                            data-start-time="{{ stygian.start_time or 0 }}"
+                            data-end-time="{{ stygian.end_time }}"
+                        >
+                            <span data-timer-value>Calculating...</span>{{ event_timer_help() }}
+                        </div>
+
+                        <button
+                            type="button"
+                            class="event-featured-toggle"
+                            aria-label="Expand Stygian Onslaught"
+                            aria-expanded="false"
+                        >
+                            <span class="event-toggle-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="event-featured-collapsed">
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Best Record </span>
+
+                        <div class="event-collapsed-value">
+                            {% if stygian.has_data %}
+
+                            {% if stygian.difficulty_icon %}
+                            <img
+                                src="/static/images/events/stygian_onslaught/{{ stygian.difficulty_icon }}"
+                                alt="Difficulty {{ stygian.difficulty }}"
+                                class="stygian-difficulty-icon"
+                            />
+                            {% endif %}
+
+                            <strong>
+                                {% if stygian.difficulty == 1 %}
+                                Easy
+                                {% elif stygian.difficulty == 2 %}
+                                Normal
+                                {% elif stygian.difficulty == 3 %}
+                                Hard
+                                {% elif stygian.difficulty == 4 %}
+                                Menacing
+                                {% elif stygian.difficulty == 5 %}
+                                Fearless
+                                {% elif stygian.difficulty == 6 %}
+                                Dire
+                                {% else %}
+                                Difficulty {{ stygian.difficulty }}
+                                {% endif %}
+                            </strong>
+
+                            <span class="event-stat-separator"> | </span>
+
+                            <strong> {{ stygian.best_time }}s </strong>
+
+                            {% else %}
+
+                            <strong>—</strong>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="event-collapsed-stat">
+                        <span class="event-stat-label"> Dire Prestige </span>
+
+                        <div class="event-collapsed-value stygian-prestige-value">
+                            {% if stygian.dire_prestige.available and stygian.dire_prestige.active %}
+
+                            <img
+                                src="/static/images/events/stygian_onslaught/Dire_Prestige.png"
+                                alt="Dire Prestige"
+                                title="Dire Prestige"
+                            />
+
+                            <strong> {{ stygian.dire_prestige.progress }} / {{ stygian.dire_prestige.max_progress }} </strong>
+
+                            {% elif stygian.dire_prestige.available %}
+
+                            <strong>Inactive</strong>
+
+                            {% else %}
+
+                            <strong>—</strong>
+
+                            {% endif %}
+                        </div>
+
+                        {% if stygian.dire_prestige.available and stygian.dire_prestige.active and stygian.dire_prestige.max_progress %}
+                        <span
+                            class="event-meter"
+                            style="--meter: {{ [stygian.dire_prestige.progress * 100 // stygian.dire_prestige.max_progress, 100] | min }}%"
+                            aria-hidden="true"
+                        ></span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="event-featured-panel">
+                    {% if stygian.has_data %}
+
+                    <div class="stygian-best-record">
+                        <span class="event-stat-label"> Best Record </span>
+
+                        <div class="event-stat-value">
+                            <div class="stygian-record">
+                                {% if stygian.difficulty_icon %}
+                                <img
+                                    src="/static/images/events/stygian_onslaught/{{ stygian.difficulty_icon }}"
+                                    alt="Difficulty {{ stygian.difficulty }}"
+                                    class="stygian-difficulty-icon"
+                                />
+                                {% endif %}
+
+                                <strong>
+                                    {% if stygian.difficulty == 1 %}
+                                    Easy
+                                    {% elif stygian.difficulty == 2 %}
+                                    Normal
+                                    {% elif stygian.difficulty == 3 %}
+                                    Hard
+                                    {% elif stygian.difficulty == 4 %}
+                                    Menacing
+                                    {% elif stygian.difficulty == 5 %}
+                                    Fearless
+                                    {% elif stygian.difficulty == 6 %}
+                                    Dire
+                                    {% else %}
+                                    Difficulty {{ stygian.difficulty }}
+                                    {% endif %}
+                                </strong>
+
+                                <span class="event-stat-separator"> | </span>
+
+                                <strong> {{ stygian.best_time }}s </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stygian-bosses">
+                        <span class="event-stat-label"> Teams </span>
+
+                        <div class="stygian-teams-box">
+                            <div class="stygian-bosses-row">
+                                {% for boss in stygian.bosses %}
+
+                                <div class="stygian-boss">
+                                    <strong> {{ boss.name }} </strong>
+
+                                    <img
+                                        src="{{ boss.icon }}"
+                                        alt="{{ boss.name }}"
+                                        class="stygian-boss-icon"
+                                    />
+
+                                    <span class="stygian-boss-time"> {{ boss.time }}s </span>
+
+                                    <div class="stygian-team">
+                                        {% for character in boss.characters %}
+
+                                        <img
+                                            src="{{ character.icon }}"
+                                            alt="{{ character.name }}"
+                                            title="{{ character.name }}"
+                                            class="stygian-character-icon"
+                                        />
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% else %}
+
+                    <div class="event-no-record">No Record</div>
+
+                    {% endif %}
+
+                    {% if stygian.dire_prestige.available %}
+
+                    <div class="stygian-dire-prestige">
+                        <div class="stygian-dire-prestige-header">
+                            <div class="stygian-dire-prestige-title">
+                                <strong>Dire Prestige</strong>
+
+                                <span> Disturbance Outbreak </span>
+                            </div>
+
+                            <span
+                                class="stygian-dire-prestige-status {% if stygian.dire_prestige.active %}active{% else %}inactive{% endif %}"
+                            >
+                                {% if stygian.dire_prestige.active %}
+                                Active
+                                {% else %}
+                                Inactive
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        {% if stygian.dire_prestige.active %}
+
+                        <div class="stygian-dire-prestige-progress">
+                            <div class="stygian-dire-prestige-progress-labels">
+                                <span>Progress</span>
+
+                                <strong> {{ stygian.dire_prestige.progress }} / {{ stygian.dire_prestige.max_progress }} </strong>
+                            </div>
+
+                            <div
+                                class="stygian-dire-prestige-track"
+                                role="progressbar"
+                                aria-label="Dire Prestige progress"
+                                aria-valuemin="0"
+                                aria-valuemax="{{ stygian.dire_prestige.max_progress }}"
+                                aria-valuenow="{{ stygian.dire_prestige.progress }}"
+                            >
+                                <div
+                                    class="stygian-dire-prestige-fill"
+                                    style="width: {{ ((stygian.dire_prestige.progress / stygian.dire_prestige.max_progress) * 100) if stygian.dire_prestige.max_progress > 0 else 0 }}%"
+                                ></div>
+                            </div>
+                        </div>
+
+                        {% else %}
+
+                        <p class="stygian-dire-prestige-message">
+                            Disturbance Outbreak is not currently active.
+                        </p>
+
+                        {% endif %}
+                    </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section
+        class="events-list"
+        data-account-category="permanent"
+        {% if request.query_params.get('tab', 'all') not in ['all', 'permanent'] %}hidden{% endif %}
+    >
+        <div class="events-list-header">
+            <h2>Permanent Events</h2>
+        </div>
+
+        <div
+            id="daily-commissions"
+            class="event-list-item event-daily-item{% if daily and (daily.checked or (daily.has_data and daily.completed >= daily.total and daily.claimed_reward)) %} completed{% endif %}"
+            data-automatic-complete="{{ 'true' if daily and daily.has_data and daily.completed >= daily.total and daily.claimed_reward else 'false' }}"
+            data-account-id="{{ selected_account.id if selected_account else '' }}"
+        >
+            <div class="event-list-left">
+                <div class="event-list-check">
+                    <button
+                        type="button"
+                        id="daily-commissions-check"
+                        class="event-checkmark{% if not (daily and daily.checked) %} event-checkmark-empty{% endif %}"
+                        data-activity-type="daily_commissions"
+                        data-account-id="{{ selected_account.id if selected_account else '' }}"
+                        aria-label="Mark Daily Commissions complete"
+                        aria-pressed="{{ 'true' if daily and daily.checked else 'false' }}"
+                    ></button>
+                </div>
+
+                <div class="event-list-icon">
+                    <img
+                        src="/static/images/events/permanent/daily_commissions.webp"
+                        alt="Daily Commissions"
+                    />
+                </div>
+
+                <div class="event-list-name">Daily Commissions</div>
+
+                <div class="event-encounter-points">
+                    <span
+                        role="img"
+                        aria-label="Encounter Points"
+                        class="event-encounter-points-icon"
+                    ></span>
+
+                    <span class="event-encounter-points-value">
+                        {% if daily and daily.has_data %}
+                        {{ daily.encounter_points }}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="event-list-right">
+                <span
+                    class="event-list-status event-list-status-with-claim {% if daily and daily.has_data and daily.completed >= daily.total %} {{ daily.reward_state }} {% endif %}"
+                    id="daily-commissions-status"
+                >
+                    {% if daily and daily.has_data %}
+
+                    {{ daily.completed }} / {{ daily.total }}
+
+                    <span class="event-list-status-divider">&nbsp;|&nbsp;</span>
+
+                    <span class="event-list-status-claim">
+                        {% if daily.reward_state in ["claimed", "handbook-claimed"] %}
+                        Claimed
+                        {% else %}
+                        Unclaimed
+                        {% endif %}
+                    </span>
+
+                    {% else %}
+
+                    —
+
+                    {% endif %}
+                </span>
+
+                <div
+                    class="event-time-left event-daily-reset"
+                    data-end-time="{{ daily.reset_time }}"
+                >
+                    Calculating...
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="trounce-domains"
+            class="event-list-item event-trounce-item{% if trounce and (trounce.checked or (trounce.has_data and trounce.remaining <= 0)) %} completed{% endif %}"
+            data-automatic-complete="{{ 'true' if trounce and trounce.has_data and trounce.remaining <= 0 else 'false' }}"
+        >
+            <div class="event-list-left">
+                <div class="event-list-check">
+                    <button
+                        type="button"
+                        id="trounce-domains-check"
+                        class="event-checkmark{% if not trounce.checked %} event-checkmark-empty{% endif %}"
+                        data-activity-type="trounce_domains"
+                        data-account-id="{{ selected_account.id if selected_account else '' }}"
+                        aria-label="Mark Trounce Domains as complete"
+                        aria-pressed="{{ 'true' if trounce.checked else 'false' }}"
+                    ></button>
+                </div>
+
+                <div class="event-list-icon">
+                    <img
+                        src="/static/images/events/permanent/Trounce_Domains.png"
+                        alt="Trounce Domains"
+                    />
+                </div>
+
+                <div class="event-list-name">Trounce Domains</div>
+            </div>
+
+            <div class="event-list-right">
+                <span
+                    class="event-list-status{% if trounce and (trounce.checked or (trounce.has_data and trounce.remaining <= 0)) %} event-completion-pill{% endif %}"
+                >
+                    {% if trounce and trounce.has_data %}
+
+                    {{ trounce.total - trounce.remaining }} / {{ trounce.total }}
+
+                    {% else %}
+
+                    —
+
+                    {% endif %}
+                </span>
+
+                <div
+                    class="event-time-left event-trounce-reset"
+                    data-end-time="{{ trounce.reset_time if trounce else 0 }}"
+                >
+                    Calculating...
+                </div>
+            </div>
+        </div>
+
+        {{ temper_thyself_card(temper_thyself, selected_account) }}
+    </section>
+
+    <section
+        class="events-wishes"
+        data-account-category="wishes"
+        {% if request.query_params.get('tab', 'all') != 'wishes' %}hidden{% endif %}
+    >
+        <div class="events-list-header">
+            <h2>Event Wishes</h2>
+        </div>
+
+        {{ wish_banner_sections(wish_banners) }}
+    </section>
+
+    <section
+        class="events-list events-limited"
+        data-account-category="events"
+        {% if request.query_params.get('tab', 'all') not in ['all', 'events'] %}hidden{% endif %}
+    >
+        <div class="events-list-header">
+            <h2>Limited-Time Events</h2>
+            {{ limited_event_filters() }}
+        </div>
+
+        {% if limited_events %}
+        <div class="events-limited-list">
+            {% for event in limited_events %}
+            {{ limited_event_card(event, selected_account) }}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="events-account-empty-content">
+            <span class="events-account-empty-title">No Active Events</span>
+            <span class="events-account-empty-description">
+                Limited-time events will appear here.
+            </span>
+        </div>
+        {% endif %}
+    </section>
+
+    <section
+        class="events-custom-section"
+        data-account-category="custom"
+        {% if request.query_params.get('tab', 'all') not in ['all', 'custom'] %}hidden{% endif %}
+    >
+        <div class="events-custom-header">
+            <div>
+                <h2 class="events-custom-title">Custom Events</h2>
+                <p class="events-custom-description">
+                    Create and manage your own activities and schedules.
+                </p>
+            </div>
+
+            <button type="button" class="cyrene-button events-custom-create" data-custom-create>
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                >
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                Create Event
+            </button>
+        </div>
+
+        <div class="events-custom-list" data-custom-event-list>
+            <div class="events-custom-empty">
+                <span class="events-custom-empty-title"> Loading Custom Events… </span>
+                <span class="events-custom-empty-description"> Your events will appear here. </span>
+            </div>
+        </div>
+    </section>
+
+    {% endif %}
+
+    {% with delete_dialog_class='events-custom-delete-dialog', delete_prefix='custom-event-delete', delete_title='Delete event?', delete_cancel='Keep event', delete_confirm='Delete event' %}
+    {% include 'components/deletion_confirmation.html' %}
+    {% endwith %}
+    <div data-modal-shell class="events-custom-modal" data-custom-modal hidden>
+        <div class="events-custom-modal-backdrop" data-custom-close></div>
+
+        <section
+            class="events-custom-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="custom-event-form-title"
+        >
+            <div class="events-custom-dialog-header">
+                <div>
+                    <span class="events-custom-eyebrow"> EVENT MANAGER </span>
+                    <h2 id="custom-event-form-title">Create Event</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="cyrene-button events-custom-close"
+                    data-custom-close
+                    aria-label="Close"
+                >
+                    <span class="cyrene-close" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <form data-custom-form>
+                <input type="hidden" name="event_id" />
+
+                <label class="events-custom-field">
+                    <span>Event name</span>
+                    <input
+                        type="text"
+                        name="title"
+                        maxlength="120"
+                        placeholder="e.g. Spiral Abyss reset"
+                        required
+                    />
+                </label>
+
+                <div class="events-custom-field">
+                    <span>Custom icon <small>(optional)</small></span>
+
+                    <div class="events-custom-icon-upload">
+                        <img
+                            class="events-custom-icon-preview"
+                            src=""
+                            alt="Custom event icon preview"
+                            data-custom-icon-image
+                            hidden
+                        />
+
+                        <div class="events-custom-icon-controls">
+                            <button
+                                type="button"
+                                class="cyrene-button events-custom-icon-button"
+                                data-custom-icon-choose
+                            >
+                                Choose image
+                            </button>
+
+                            <input
+                                type="file"
+                                id="custom-event-icon-file"
+                                name="icon_file"
+                                accept="image/png,image/jpeg,image/webp"
+                                data-custom-icon-file
+                                hidden
+                            />
+
+                            <button
+                                type="button"
+                                class="cyrene-button events-custom-icon-remove"
+                                data-custom-icon-remove
+                                hidden
+                            >
+                                Remove icon
+                            </button>
+
+                            <span class="events-custom-icon-filename" data-custom-icon-filename>
+                                No image selected
+                            </span>
+                        </div>
+                    </div>
+
+                    <small class="events-custom-field-hint">
+                        PNG, JPG or WebP · Maximum 2 MB
+                    </small>
+                </div>
+
+                <label class="events-custom-field">
+                    <span>Description <small>(optional)</small></span>
+                    <textarea
+                        name="description"
+                        maxlength="2000"
+                        rows="3"
+                        placeholder="Add notes or objectives…"
+                    ></textarea>
+                </label>
+
+                <div class="events-custom-field">
+                    <span>Applies to</span>
+
+                    <div class="events-custom-scope">
+                        <label>
+                            <input type="radio" name="account_scope" value="all" />
+                            <span>All accounts</span>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="account_scope" value="account" checked />
+                            <span>One account</span>
+                        </label>
+                    </div>
+                    <p class="events-custom-field-hint events-custom-scope-hint">
+                        <strong>"All accounts"</strong>
+                        <span data-custom-scope-description
+                            >creates a separate event for each linked account. Edits, progress and
+                            deletion stay with that account.</span
+                        >
+                    </p>
+                </div>
+
+                <label class="events-custom-field" data-custom-account-field hidden>
+                    <span>Account</span>
+
+                    <div
+                        class="custom-select events-custom-account-select"
+                        data-custom-account-select
+                    >
+                        <button
+                            class="custom-select-button"
+                            type="button"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                        >
+                            <span class="custom-select-value">Select an account</span>
+                            <span class="custom-select-arrow"></span>
+                        </button>
+
+                        <div class="custom-select-menu" role="listbox">
+                            {% for account in accounts %}
+                            <button
+                                class="custom-select-option{% if loop.first %} active{% endif %}"
+                                type="button"
+                                role="option"
+                                data-account-id="{{ account.id }}"
+                                aria-selected="{{ 'true' if loop.first else 'false' }}"
+                            >
+                                <span
+                                    data-account-profile-name="{{ account.genshin_uid }}"
+                                    data-account-profile-field="display"
+                                    >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                                >
+                                · {{ account.genshin_uid }}
+                            </button>
+                            {% endfor %}
+                        </div>
+
+                        <input type="hidden" name="account_id" value="{{ accounts[0].id if accounts else '' }}" />
+                    </div>
+                </label>
+
+                <div class="events-custom-form-row">
+                    <label class="events-custom-field">
+                        <span>Starts</span>
+                        <input type="datetime-local" name="start_at" required />
+                    </label>
+
+                    <label class="events-custom-field">
+                        <span>Ends <small>(optional)</small></span>
+                        <input type="datetime-local" name="end_at" />
+                    </label>
+                </div>
+
+                <div class="events-custom-form-row">
+                    <div class="events-custom-field">
+                        <span>Schedule</span>
+
+                        <div
+                            class="custom-select events-custom-field-select"
+                            data-custom-dropdown="recurrence_type"
+                        >
+                            <button
+                                class="custom-select-button"
+                                type="button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                            >
+                                <span class="custom-select-value">One-time</span>
+                                <span class="custom-select-arrow"></span>
+                            </button>
+
+                            <div class="custom-select-menu" role="listbox">
+                                <button
+                                    type="button"
+                                    class="custom-select-option active"
+                                    role="option"
+                                    data-value="none"
+                                    aria-selected="true"
+                                >
+                                    One-time
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="daily"
+                                    aria-selected="false"
+                                >
+                                    Daily
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="weekly"
+                                    aria-selected="false"
+                                >
+                                    Weekly
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="monthly"
+                                    aria-selected="false"
+                                >
+                                    Monthly
+                                </button>
+                            </div>
+
+                            <input type="hidden" name="recurrence_type" value="none" />
+                        </div>
+                    </div>
+
+                    <label class="events-custom-field" data-custom-interval-field>
+                        <span>Repeat every</span>
+                        <input
+                            type="number"
+                            name="recurrence_interval"
+                            min="1"
+                            max="365"
+                            step="1"
+                            value="1"
+                            required
+                        />
+                    </label>
+                </div>
+
+                <div class="events-custom-field" data-custom-weekdays-field hidden>
+                    <span>Repeat on</span>
+
+                    <div class="events-custom-weekdays" data-custom-weekdays>
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="0" />
+                            <span>Mon</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="1" />
+                            <span>Tue</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="2" />
+                            <span>Wed</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="3" />
+                            <span>Thu</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="4" />
+                            <span>Fri</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="5" />
+                            <span>Sat</span>
+                        </label>
+
+                        <label class="events-custom-day">
+                            <input type="checkbox" name="recurrence_weekdays" value="6" />
+                            <span>Sun</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="events-custom-form-row">
+                    <div class="events-custom-field">
+                        <span>Reminder</span>
+
+                        <div
+                            class="custom-select events-custom-field-select"
+                            data-custom-dropdown="reminder_minutes"
+                        >
+                            <button
+                                class="custom-select-button"
+                                type="button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                            >
+                                <span class="custom-select-value">No reminder</span>
+                                <span class="custom-select-arrow"></span>
+                            </button>
+
+                            <div class="custom-select-menu" role="listbox">
+                                <button
+                                    type="button"
+                                    class="custom-select-option active"
+                                    role="option"
+                                    data-value=""
+                                    aria-selected="true"
+                                >
+                                    No reminder
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="0"
+                                    aria-selected="false"
+                                >
+                                    At start
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="5"
+                                    aria-selected="false"
+                                >
+                                    5 minutes before
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="15"
+                                    aria-selected="false"
+                                >
+                                    15 minutes before
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="30"
+                                    aria-selected="false"
+                                >
+                                    30 minutes before
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="60"
+                                    aria-selected="false"
+                                >
+                                    1 hour before
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="custom-select-option"
+                                    role="option"
+                                    data-value="1440"
+                                    aria-selected="false"
+                                >
+                                    1 day before
+                                </button>
+                            </div>
+
+                            <input type="hidden" name="reminder_minutes" value="" />
+                        </div>
+                    </div>
+
+                    <label class="events-custom-field">
+                        <span>Event colour</span>
+                        <input type="color" name="colour" value="#7c83ff" />
+                    </label>
+                </div>
+
+                <div class="events-custom-field">
+                    <div class="events-custom-progress-heading">
+                        <span>Progress objectives</span>
+                        <button
+                            type="button"
+                            class="cyrene-button events-custom-add-objective"
+                            data-custom-add-objective
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
+                            Add Objective
+                        </button>
+                    </div>
+
+                    <div data-custom-objectives></div>
+                </div>
+
+                <p class="events-custom-error" data-custom-error role="alert" hidden></p>
+
+                <div class="events-custom-form-actions">
+                    <button
+                        type="button"
+                        class="cyrene-button events-custom-cancel"
+                        data-custom-close
+                    >
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="cyrene-button events-custom-save">
+                        Save Event
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    {% if overview %}
+
+    <section class="events-overview">
+        <div class="events-overview-panel" data-overview-panel="daily">
+            {% for item in overview_data %}
+            <div
+                class="overview-account-row overview-daily-row{% if item.daily.checked or (item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward) %} completed{% endif %}"
+                data-automatic-complete="{{ 'true' if item.daily.has_data and item.daily.completed >= item.daily.total and item.daily.claimed_reward else 'false' }}"
+            >
+                <div class="overview-account-name">
+                    <strong
+                        ><span
+                            data-account-profile-name="{{ item.account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                        ></strong
+                    >
+                    <span>{{ item.account.genshin_uid }}</span>
+                </div>
+
+                {% if item.daily.has_data %}
+
+                <div class="overview-encounter-points">
+                    <span
+                        role="img"
+                        aria-label="Encounter Points"
+                        class="overview-encounter-points-icon"
+                    ></span>
+
+                    <span class="overview-encounter-points-value"> {{ item.daily.encounter_points }} </span>
+                </div>
+
+                <div class="overview-account-status">
+                    <div class="overview-daily-progress">
+                        <span
+                            class="event-list-status event-list-status-with-claim {% if item.daily.has_data and item.daily.completed >= item.daily.total %} {{ item.daily.reward_state }} {% endif %}"
+                        >
+                            {{ item.daily.completed }} / {{ item.daily.total }}
+
+                            <span class="event-list-status-divider">&nbsp;|&nbsp;</span>
+
+                            <span class="event-list-status-claim">
+                                {% if item.daily.reward_state in ["claimed", "handbook-claimed"] %}
+                                Claimed
+                                {% else %}
+                                Unclaimed
+                                {% endif %}
+                            </span>
+                        </span>
+
+                        <span
+                            class="event-time-left event-daily-reset"
+                            data-end-time="{{ item.daily.reset_time }}"
+                            title="Daily reset"
+                            >Calculating...</span
+                        >
+
+                        <button
+                            type="button"
+                            class="event-checkmark{% if not item.daily.checked %} event-checkmark-empty{% endif %}"
+                            data-activity-type="daily_commissions"
+                            data-account-id="{{ item.account.id }}"
+                            data-account-profile-aria="{{ item.account.genshin_uid }}"
+                            data-account-profile-old-name="{{ item.account.nickname }}"
+                            aria-label="Mark Daily Commissions complete for {{ item.account.nickname }}"
+                            aria-pressed="{{ 'true' if item.daily.checked else 'false' }}"
+                        ></button>
+                    </div>
+                </div>
+
+                {% else %}
+
+                <div class="overview-encounter-points overview-encounter-points-empty">—</div>
+
+                <div class="overview-account-status">
+                    <span>No Data</span>
+                </div>
+
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="events-overview-panel" data-overview-panel="resin">
+            {% for item in overview_data %}
+
+            <div class="overview-account-row">
+                <div class="overview-account-name">
+                    <strong>
+                        <span
+                            data-account-profile-name="{{ item.account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                        >
+                    </strong>
+
+                    <span> {{ item.account.genshin_uid }} </span>
+                </div>
+
+                <div class="overview-resin-status">
+                    {% if item.resin.has_data %}
+
+                    <div class="overview-resin-value">
+                        <img
+                            src="/static/images/misc/Original_Resin.webp"
+                            alt="Resin"
+                            class="overview-resin-icon"
+                        />
+
+                        <strong>
+                            <span class="resin-current"> {{ item.resin.current }} </span>
+
+                            <span class="resin-maximum"> / {{ item.resin.maximum }} </span>
+                        </strong>
+                    </div>
+
+                    <div class="overview-resin-countdowns">
+                        <span>
+                            Next:
+                            <span
+                                class="overview-resin-timer"
+                                data-resin-kind="next"
+                                data-resin-timestamp="{{ item.resin.next_resin_at or '' }}"
+                            >
+                                {% if item.resin.next_resin_at %}
+                                Calculating...
+                                {% else %}
+                                Full
+                                {% endif %}
+                            </span>
+                        </span>
+
+                        <span>
+                            Full:
+                            <span
+                                class="overview-resin-timer"
+                                data-resin-kind="full"
+                                data-resin-timestamp="{{ item.resin.full_resin_at or '' }}"
+                            >
+                                {% if item.resin.full_resin_at %}
+                                Calculating...
+                                {% else %}
+                                Full
+                                {% endif %}
+                            </span>
+                        </span>
+                    </div>
+
+                    {% else %}
+
+                    <span>No Data</span>
+
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div
+            class="events-overview-panel events-custom-overview events-permanent-overview"
+            data-overview-panel="permanent"
+        >
+            {% for item in overview_data %}
+            {% set trounce_complete = item.trounce.checked or (item.trounce.has_data and item.trounce.remaining <= 0) %}
+            {% set complete_count = (1 if trounce_complete else 0) + (1 if item.temper_thyself.checked else 0) %}
+            <details
+                open
+                id="permanent-account-{{ item.account.id }}"
+                class="events-custom-account-group"
+                data-permanent-account-group
+                data-account-id="{{ item.account.id }}"
+            >
+                <summary class="events-custom-account-heading">
+                    <div class="events-custom-account-info overview-account-name">
+                        <strong
+                            ><span
+                                data-account-profile-name="{{ item.account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                            ></strong
+                        >
+                        <span>{{ item.account.genshin_uid }}</span>
+                    </div>
+                    <span
+                        class="events-custom-account-count{% if complete_count == 2 %} event-completion-pill{% endif %}"
+                        data-permanent-account-count
+                        >{{ complete_count }}/2 complete</span
+                    >
+                </summary>
+                <div class="events-custom-list">
+                    <article
+                        class="event-list-item event-trounce-item{% if trounce_complete %} completed{% endif %}"
+                        data-automatic-complete="{{ 'true' if item.trounce.has_data and item.trounce.remaining <= 0 else 'false' }}"
+                    >
+                        <div class="event-list-left">
+                            <div class="event-list-check">
+                                <button
+                                    type="button"
+                                    class="event-checkmark{% if not item.trounce.checked %} event-checkmark-empty{% endif %}"
+                                    data-activity-type="trounce_domains"
+                                    data-account-id="{{ item.account.id }}"
+                                    data-account-profile-aria="{{ item.account.genshin_uid }}"
+                                    data-account-profile-old-name="{{ item.account.nickname }}"
+                                    aria-label="Mark Trounce Domains complete for {{ item.account.nickname }}"
+                                    aria-pressed="{{ 'true' if item.trounce.checked else 'false' }}"
+                                ></button>
+                            </div>
+                            <div class="event-list-icon">
+                                <img
+                                    src="/static/images/events/permanent/Trounce_Domains.png"
+                                    alt=""
+                                    width="36"
+                                    height="36"
+                                />
+                            </div>
+                            <strong class="event-list-name">Trounce Domains</strong>
+                        </div>
+                        <div class="event-list-right">
+                            <span
+                                class="event-list-status{% if trounce_complete %} event-completion-pill{% endif %}"
+                                >{% if item.trounce.has_data %}{{ item.trounce.total - item.trounce.remaining }} /
+                                {{ item.trounce.total }}{% else %}No Data{% endif %}</span
+                            >
+                            {% if item.trounce.reset_time %}<time
+                                class="event-time-left event-trounce-reset"
+                                data-end-time="{{ item.trounce.reset_time }}"
+                                >Calculating...</time
+                            >{% endif %}
+                        </div>
+                    </article>
+                    {{ temper_thyself_card(item.temper_thyself, item.account, true) }}
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+
+        <div class="events-overview-panel" data-overview-panel="endgame">
+            {% for item in overview_data %}
+
+            <div class="overview-account-row overview-endgame-row">
+                <div class="overview-account-name">
+                    <strong
+                        ><span
+                            data-account-profile-name="{{ item.account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                        ></strong
+                    >
+                    <span>{{ item.account.genshin_uid }}</span>
+                </div>
+
+                <div class="overview-endgame-cards">
+                    <div class="overview-endgame-card overview-abyss-card">
+                        <div class="overview-endgame-card-value">
+                            {% if item.abyss.has_data %}
+
+                            <strong>{{ item.abyss.max_floor }}</strong>
+
+                            <span class="overview-endgame-separator">|</span>
+
+                            <strong>{{ item.abyss.total_stars }}</strong>
+
+                            <img
+                                src="/static/images/events/spiral_abyss/Abyssal_Star.png"
+                                alt="Abyssal Stars"
+                                title="Abyssal Stars"
+                            />
+
+                            {% else %}
+
+                            <span class="overview-endgame-card-empty"> No Record </span>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="overview-endgame-card overview-theater-card">
+                        <div class="overview-endgame-card-value">
+                            {% if item.theater.best_round > 0 %}
+
+                            <img
+                                src="/static/images/events/imaginarium_theatre/IT_Act_{{ item.theater.best_round }}.png"
+                                alt="Act {{ item.theater.best_round }}"
+                                title="Act {{ item.theater.best_round }}"
+                            />
+
+                            <strong>Act {{ item.theater.best_round }}</strong>
+
+                            <span class="overview-endgame-separator">|</span>
+
+                            <strong>{{ item.theater.medals }}</strong>
+
+                            <img
+                                src="/static/images/events/imaginarium_theatre/IT_Stella.png"
+                                alt="Stellas"
+                                title="Stellas"
+                            />
+
+                            {% else %}
+
+                            <span class="overview-endgame-card-empty"> No Record </span>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="overview-endgame-card overview-stygian-card">
+                        <div class="overview-endgame-card-value">
+                            {% if item.stygian.has_data %}
+
+                            {% if item.stygian.difficulty_icon %}
+                            <img
+                                src="/static/images/events/stygian_onslaught/{{ item.stygian.difficulty_icon }}"
+                                alt=""
+                                title="Difficulty"
+                            />
+                            {% endif %}
+
+                            <strong>
+                                {% if item.stygian.difficulty == 1 %}
+                                Easy
+                                {% elif item.stygian.difficulty == 2 %}
+                                Normal
+                                {% elif item.stygian.difficulty == 3 %}
+                                Hard
+                                {% elif item.stygian.difficulty == 4 %}
+                                Menacing
+                                {% elif item.stygian.difficulty == 5 %}
+                                Fearless
+                                {% elif item.stygian.difficulty == 6 %}
+                                Dire
+                                {% else %}
+                                Difficulty {{ item.stygian.difficulty }}
+                                {% endif %}
+                            </strong>
+
+                            <span class="overview-endgame-separator">|</span>
+
+                            <strong>{{ item.stygian.best_time }}s</strong>
+
+                            {% else %}
+
+                            <span class="overview-endgame-card-empty"> No Record </span>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="overview-endgame-card overview-prestige-card">
+                        <div class="overview-endgame-card-value">
+                            {% if item.stygian.dire_prestige.ended %}
+
+                            <span class="overview-endgame-card-empty"> Outbreak Ended </span>
+
+                            {% elif item.stygian.dire_prestige.available
+                                    and item.stygian.dire_prestige.active %}
+
+                            <img
+                                src="/static/images/events/stygian_onslaught/Dire_Prestige.png"
+                                alt="Dire Prestige"
+                                title="Dire Prestige"
+                            />
+
+                            <strong> {{ item.stygian.dire_prestige.progress }}/{{ item.stygian.dire_prestige.max_progress }} </strong>
+
+                            {% elif item.stygian.dire_prestige.available %}
+
+                            <strong>Inactive</strong>
+
+                            {% else %}
+
+                            <strong>—</strong>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="events-overview-panel" data-overview-panel="wishes">
+            {% set banner_data = namespace(items=[]) %}
+
+            {% for item in overview_data %}
+            {% if not banner_data.items and item.wish_banners %}
+            {% set banner_data.items = item.wish_banners %}
+            {% endif %}
+            {% endfor %}
+
+            {{ wish_banner_sections(banner_data.items) }}
+        </div>
+
+        <div
+            class="events-overview-panel events-custom-overview events-limited-overview"
+            data-overview-panel="events"
+        >
+            <div class="events-list-header events-limited-filter-header">
+                <h2>Limited-Time Events</h2>
+                {{ limited_event_filters() }}
+            </div>
+            {% for item in overview_data %}
+            <details
+                open
+                class="events-custom-account-group"
+                data-limited-account-group
+                data-account-id="{{ item.account.id }}"
+                data-account-uid="{{ item.account.genshin_uid }}"
+            >
+                <summary class="events-custom-account-heading">
+                    <div class="events-custom-account-info overview-account-name">
+                        <strong
+                            ><span
+                                data-account-profile-name="{{ item.account.genshin_uid }}"
+                                data-account-profile-field="display"
+                                >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                            ></strong
+                        >
+                        <span>{{ item.account.genshin_uid }}</span>
+                    </div>
+                    {% set active_events = item.limited_events | rejectattr('is_upcoming') | list %}
+                    <span
+                        class="events-custom-account-count{% if active_events and (active_events | selectattr('is_finished') | list | length) == (active_events | length) %} event-completion-pill{% endif %}"
+                        data-limited-account-count
+                        >{{ active_events | selectattr('is_finished') | list | length }}/{{ active_events | length }} complete</span
+                    >
+                </summary>
+                <div class="events-custom-list">
+                    {% for event in item.limited_events %}
+                    {{ limited_event_overview_card(event, item.account) }}
+                    {% else %}
+                    <div class="wish-banners-empty">No Active Events</div>
+                    {% endfor %}
+                </div>
+            </details>
+            {% else %}
+            <div class="wish-banners-empty">No linked accounts</div>
+            {% endfor %}
+        </div>
+
+        <div class="events-overview-panel" data-overview-panel="custom">
+            <section class="events-custom-section events-custom-overview">
+                <div class="events-custom-header">
+                    <div>
+                        <h2 class="events-custom-title">Custom Events</h2>
+                        <p class="events-custom-description">
+                            Your custom activities across all accounts.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="cyrene-button events-custom-create"
+                        data-custom-create
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Create Event
+                    </button>
+                </div>
+
+                {% for item in overview_data %}
+                <details
+                    open
+                    class="events-custom-account-group"
+                    data-custom-account-group
+                    data-account-id="{{ item.account.id }}"
+                >
+                    <summary class="events-custom-account-heading">
+                        <div class="events-custom-account-info overview-account-name">
+                            <strong
+                                ><span
+                                    data-account-profile-name="{{ item.account.genshin_uid }}"
+                                    data-account-profile-field="display"
+                                    >{{ item.account.cyrene_nickname or item.account.nickname or item.account.genshin_uid }}</span
+                                ></strong
+                            >
+                            <span>{{ item.account.genshin_uid }}</span>
+                        </div>
+                        <span class="events-custom-account-count" data-custom-account-count
+                            >Loading...</span
+                        >
+                    </summary>
+
+                    <div
+                        class="events-custom-list"
+                        data-custom-event-list
+                        data-account-id="{{ item.account.id }}"
+                    ></div>
+                </details>
+                {% else %}
+                <div class="events-custom-empty-accounts">
+                    <p>No Genshin accounts are linked yet.</p>
+                </div>
+                {% endfor %}
+            </section>
+        </div>
+    </section>
+
+    {% endif %}
+</div>
+
+{% endblock %}

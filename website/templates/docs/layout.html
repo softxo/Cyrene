@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "docs/macros.html" import arrow %}
+
+{% block title %}{{ page.title }} | Cyrene Docs{% endblock %}
+{% block description %}{{ page.summary }}{% endblock %}
+
+{% block content %}
+<div class="page docs-page" data-docs-page>
+    {% include 'docs/nav.html' %}
+
+    <article class="docs-article">
+        <nav class="docs-breadcrumb" aria-label="Breadcrumb">
+            <a href="/docs">Docs</a>
+            <span aria-hidden="true">/</span>
+            <span>{{ page.section }}</span>
+        </nav>
+
+        <h1>{{ page.title }}</h1>
+        <p class="docs-lead">{{ page.summary }}</p>
+
+        {% block docs_body %}{% endblock %}
+
+        <nav class="docs-pager" aria-label="Previous and next pages">
+            {% if previous_page %}
+            <a class="docs-pager-link" href="/docs/{{ previous_page.slug }}">
+                <span>{{ arrow("left") }} Previous</span>
+                <strong>{{ previous_page.title }}</strong>
+            </a>
+            {% endif %}
+            {% if next_page %}
+            <a class="docs-pager-link docs-pager-next" href="/docs/{{ next_page.slug }}">
+                <span>Next {{ arrow() }}</span>
+                <strong>{{ next_page.title }}</strong>
+            </a>
+            {% endif %}
+        </nav>
+    </article>
+
+    <aside class="docs-toc" aria-label="On this page">
+        <p class="docs-toc-heading">On this page</p>
+        {% for anchor, title in page.topics %}
+        <a href="#{{ anchor }}" class="docs-toc-link" data-docs-toc="{{ anchor }}"
+            >{{ title }}</a
+        >
+        {% endfor %}
+    </aside>
+</div>
+{% endblock %}

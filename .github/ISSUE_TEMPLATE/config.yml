@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Security issue
+      url: https://discord.gg/KpkggK4UqB
+      about: Report security problems privately to Cyrene Staff on Discord.
+    - name: Questions and help
+      url: https://discord.gg/KpkggK4UqB
+      about: Ask on the Discord server.

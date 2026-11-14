@@ -1,0 +1,1176 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set planner_active = request.query_params.get('tab') == 'planner' %}
+<div class="page characters-page">
+    <header class="characters-header">
+        <div class="characters-page-heading">
+            <span class="eyebrow">ROSTER</span>
+            <h1>Characters</h1>
+            <p>Your Genshin Impact character roster.</p>
+        </div>
+    </header>
+
+    <div class="characters-navigation-row">
+        <div class="characters-navigation-primary">
+            <nav class="characters-page-tabs" aria-label="Character pages">
+                <button
+                    type="button"
+                    class="characters-page-tab{% if not planner_active %} active{% endif %}"
+                    data-characters-tab="characters"
+                    aria-pressed="{{ 'false' if planner_active else 'true' }}"
+                >
+                    Characters
+                </button>
+
+                <button
+                    type="button"
+                    class="characters-page-tab{% if planner_active %} active{% endif %}"
+                    data-characters-tab="planner"
+                    aria-pressed="{{ 'true' if planner_active else 'false' }}"
+                >
+                    Planner
+                </button>
+            </nav>
+
+            {% if accounts and not character_error %}
+            <div class="characters-summary" {% if planner_active %} hidden{% endif %}>
+                <span data-character-count>
+                    {% set public_characters = characters | rejectattr("unreleased") | list %}
+                    {% set owned_count = public_characters | selectattr("owned") | list | length %}
+                    Showing <strong data-count-shown>{{ owned_count }}</strong> of
+                    <strong data-count-base>{{ owned_count }}</strong> characters
+                    <span class="characters-count-divider" aria-hidden="true">|</span>
+                    <strong data-count-total>{{ public_characters | length }}</strong> Total characters
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if accounts %}
+        <form
+            method="get"
+            action="/characters"
+            class="characters-account-form"
+            data-characters-account-form
+        >
+            <label for="characters-account-button">Account</label>
+
+            <div class="custom-select characters-account-select">
+                <button
+                    id="characters-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">
+                        {% if selected_account %}
+                        <span
+                            data-account-profile-name="{{ selected_account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span
+                        >
+                        · {{ selected_account.genshin_uid }}
+                        {% else %}
+                        Select an account
+                        {% endif %}
+                    </span>
+
+                    <span class="custom-select-arrow"></span>
+                </button>
+
+                <div class="custom-select-menu" role="listbox">
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if selected_account and account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
+                    >
+                        <span
+                            data-account-profile-name="{{ account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                        >
+                        · {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" name="account_id" value="{{ selected_account.id if selected_account else '' }}" />
+                <input
+                    type="hidden"
+                    name="tab"
+                    value="{{ 'planner' if planner_active else 'characters' }}"
+                    data-characters-tab-input
+                />
+            </div>
+        </form>
+        {% endif %}
+    </div>
+
+    <section
+        class="characters-panel{% if not planner_active %} active{% endif %}"
+        data-characters-panel="characters"
+        {% if planner_active %}hidden{% endif %}
+    >
+        {% if not accounts %}
+        {% include 'components/no_accounts.html' %}
+
+        {% elif character_error %}
+        <div class="characters-message characters-message-error">
+            <h2>Unable to load characters</h2>
+            <p>{{ character_error }}</p>
+        </div>
+
+        {% elif not characters %}
+        <div class="characters-message">
+            <h2>No characters found</h2>
+            <p>
+                Make sure your character details are visible in your Genshin Impact Battle
+                Chronicle.
+            </p>
+        </div>
+
+        {% else %}
+        <div class="characters-toolbar" data-character-filters>
+            <div class="characters-search">
+                <label for="character-search">Search characters</label>
+                <input
+                    id="character-search"
+                    type="search"
+                    placeholder="Search by name..."
+                    autocomplete="off"
+                    data-character-search
+                    class="cyrene-input"
+                />
+            </div>
+
+            <div class="characters-filter">
+                <label id="character-sort-label">Sort by</label>
+                <div class="custom-select" data-character-sort>
+                    <button
+                        type="button"
+                        class="custom-select-button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-labelledby="character-sort-label character-sort-value"
+                    >
+                        <span class="custom-select-value" id="character-sort-value">
+                            Level (highest first)
+                        </span>
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button
+                            type="button"
+                            class="custom-select-option selected"
+                            data-value="level"
+                            role="option"
+                            aria-selected="true"
+                        >
+                            Level (highest first)
+                        </button>
+                        <button
+                            type="button"
+                            class="custom-select-option"
+                            data-value="name"
+                            role="option"
+                            aria-selected="false"
+                        >
+                            Name (A–Z)
+                        </button>
+                        <button
+                            type="button"
+                            class="custom-select-option"
+                            data-value="rarity"
+                            role="option"
+                            aria-selected="false"
+                        >
+                            Rarity (highest first)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="characters-filter characters-icon-filter">
+                <label id="character-rarity-label">Rarity</label>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-rarity
+                    role="group"
+                    aria-labelledby="character-rarity-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All rarities"
+                        title="All rarities"
+                    >
+                        <span>All</span>
+                    </button>
+
+                    {% for rarity in [5, 4] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ rarity }}"
+                        aria-pressed="false"
+                        aria-label="{{ rarity }}-star characters"
+                        title="{{ rarity }}-star characters"
+                    >
+                        <span
+                            class="cyrene-rarity-star"
+                            data-rarity="{{ rarity }}"
+                            aria-hidden="true"
+                        ></span>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="characters-filter characters-icon-filter">
+                <label id="character-element-label">Element</label>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-element
+                    role="group"
+                    aria-labelledby="character-element-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All elements"
+                        title="All elements"
+                    >
+                        <span>All</span>
+                    </button>
+
+                    {% for element in [
+                        "Anemo", "Geo", "Electro", "Dendro",
+                        "Hydro", "Pyro", "Cryo"
+                    ] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ element | lower }}"
+                        aria-pressed="false"
+                        aria-label="{{ element }}"
+                        title="{{ element }}"
+                    >
+                        <img
+                            src="/static/images/characters/Element_{{ element }}.webp"
+                            alt=""
+                        />
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="characters-filter characters-icon-filter">
+                <label id="character-weapon-label">Weapon</label>
+
+                <div
+                    class="characters-icon-buttons"
+                    data-character-weapon
+                    role="group"
+                    aria-labelledby="character-weapon-label"
+                >
+                    <button
+                        type="button"
+                        class="characters-icon-button selected"
+                        data-value="all"
+                        aria-pressed="true"
+                        aria-label="All weapons"
+                        title="All weapons"
+                    >
+                        <span>All</span>
+                    </button>
+
+                    {% for weapon in [
+                        "Sword", "Claymore", "Polearm", "Bow", "Catalyst"
+                    ] %}
+                    <button
+                        type="button"
+                        class="characters-icon-button"
+                        data-value="{{ weapon | lower }}"
+                        aria-pressed="false"
+                        aria-label="{{ weapon }}"
+                        title="{{ weapon }}"
+                    >
+                        <img src="/static/images/characters/{{ weapon }}.webp" alt="" />
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="characters-filter">
+                <label id="character-ownership-label">Ownership</label>
+                <div class="custom-select" data-character-ownership>
+                    <button
+                        type="button"
+                        class="custom-select-button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-labelledby="character-ownership-label character-ownership-value"
+                    >
+                        <span class="custom-select-value" id="character-ownership-value"
+                            >All characters</span
+                        >
+                        <span class="custom-select-arrow"></span>
+                    </button>
+                    <div class="custom-select-menu" role="listbox">
+                        <button
+                            type="button"
+                            class="custom-select-option selected"
+                            data-value="all"
+                            role="option"
+                            aria-selected="true"
+                        >
+                            All characters
+                        </button>
+                        <button
+                            type="button"
+                            class="custom-select-option"
+                            data-value="owned"
+                            role="option"
+                            aria-selected="false"
+                        >
+                            Owned
+                        </button>
+                        <button
+                            type="button"
+                            class="custom-select-option"
+                            data-value="unowned"
+                            role="option"
+                            aria-selected="false"
+                        >
+                            Unowned
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="cyrene-button characters-reset-filters"
+                data-character-reset
+            >
+                Reset filters
+            </button>
+        </div>
+
+        <div class="characters-grid">
+            {% for character in characters %}
+            <article
+                class="character-card{% if not character.owned %} character-card-unowned{% endif %}"
+                data-character-id="{{ character.id }}"
+                data-name="{{ character.name | lower }}"
+                data-level="{{ character.level if character.level is not none else '' }}"
+                data-element="{{ character.element | lower }}"
+                data-weapon="{{ character.weapon | lower }}"
+                data-rarity="{{ character.rarity }}"
+                data-owned="{{ 'true' if character.owned else 'false' }}"
+                data-unreleased="{{ 'true' if character.unreleased else 'false' }}"
+                data-release-date="{{ character.release_date }}"
+            >
+                <div class="character-card-image">
+                    <img src="{{ character.icon }}" alt="{{ character.name }}" loading="lazy" />
+
+                    {% if character.unreleased %}<span
+                        class="cyrene-unreleased-badge character-release-badge"
+                        >Unreleased</span
+                    >{% endif %}
+                    {% if character.owned %}
+                    <span class="character-level">Lv. {{ character.level }}</span>
+                    {% elif not character.unreleased %}
+                    <span class="character-unowned-label">Not owned</span>
+                    {% endif %}
+                </div>
+
+                <div class="character-card-info">
+                    <h2>{{ character.name }}</h2>
+
+                    <div class="character-card-meta">
+                        <span class="character-element">
+                            <img
+                                src="/static/images/characters/Element_{{ character.element }}.webp"
+                                alt="{{ character.element }}"
+                                title="{{ character.element }}"
+                            />
+                            <span>{{ character.element }}</span>
+                        </span>
+
+                        <span class="character-rarity">
+                            {{ character.rarity }}
+                            <span
+                                class="cyrene-rarity-star"
+                                data-rarity="{{ character.rarity }}"
+                                aria-label="{{ character.rarity }}-star rarity"
+                            ></span>
+                        </span>
+                    </div>
+
+                    <div class="character-card-footer">
+                        {% if character.owned %}
+                        <span class="character-friendship">
+                            <img
+                                src="/static/images/characters/Friendship.webp"
+                                alt="Friendship"
+                                title="Friendship"
+                            />
+                            <span>{{ character.friendship }}</span>
+                        </span>
+
+                        <span class="character-constellation">
+                            C{{ character.constellation }}
+                            <img
+                                src="/static/images/characters/Constellation_{{ character.rarity }}.webp"
+                                alt="Constellation"
+                                title="Constellation {{ character.constellation }}"
+                            />
+                        </span>
+                        {% else %}
+                        <span class="character-unowned-status">Not owned</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div
+            data-modal-shell
+            class="character-showcase"
+            data-character-showcase
+            data-account-id="{{ selected_account.id if selected_account else '' }}"
+            aria-hidden="true"
+            hidden
+        >
+            <div class="character-showcase-backdrop" data-showcase-close></div>
+
+            <section
+                class="character-showcase-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="showcase-character-name"
+                tabindex="-1"
+            >
+                <button
+                    type="button"
+                    class="character-showcase-close"
+                    data-showcase-close
+                    aria-label="Close character showcase"
+                >
+                    <span class="cyrene-close" aria-hidden="true"></span>
+                </button>
+
+                <div class="enka-build-card" data-showcase-card data-element="">
+                    <video
+                        class="enka-element-background"
+                        data-showcase-background
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        aria-hidden="true"
+                    ></video>
+
+                    <div class="enka-character-layout">
+                        <section
+                            class="enka-character-visual"
+                            aria-label="Character talents and constellations"
+                        >
+                            <div class="enka-talent-column" data-showcase-talents></div>
+
+                            <div class="enka-artwork-stage">
+                                <img
+                                    class="enka-character-art"
+                                    data-showcase-portrait
+                                    src=""
+                                    alt=""
+                                />
+                            </div>
+
+                            <div
+                                class="enka-constellation-orbit"
+                                data-showcase-constellations
+                            ></div>
+                        </section>
+
+                        <section class="enka-character-details">
+                            <header class="enka-character-identity">
+                                <div class="enka-character-element-row">
+                                    <span
+                                        class="enka-character-element-icon"
+                                        data-showcase-element-icon
+                                    ></span>
+                                    <p class="enka-character-element" data-showcase-element></p>
+                                </div>
+
+                                <h2 id="showcase-character-name">Character name</h2>
+                                <p class="enka-character-level" data-showcase-level></p>
+                                <div class="enka-character-rarity" data-showcase-rarity></div>
+                            </header>
+
+                            <section class="enka-stats-panel" aria-label="Character stats">
+                                <h3>Character Stats</h3>
+                                <div class="enka-stat-grid" data-showcase-stats></div>
+                            </section>
+
+                            <section class="enka-weapon-panel" aria-label="Equipped weapon">
+                                <h3>Weapon</h3>
+                                <div data-showcase-weapon></div>
+                            </section>
+                        </section>
+                    </div>
+
+                    <section class="enka-artifacts-panel" aria-label="Equipped artefacts">
+                        <div class="enka-artifacts-heading">
+                            <h3>Artifacts</h3>
+                            <div class="enka-artifact-sets" data-showcase-sets></div>
+                        </div>
+
+                        <div class="enka-artifact-grid" data-showcase-artifacts></div>
+                    </section>
+
+                    <p
+                        class="enka-card-status"
+                        data-showcase-status
+                        role="status"
+                        aria-live="polite"
+                    >
+                        Select a character to load their build.
+                    </p>
+                    <div class="enka-card-error" data-showcase-error hidden></div>
+                </div>
+            </section>
+        </div>
+
+        {% endif %}
+    </section>
+
+    <dialog
+        class="planner-picker-dialog planner-weapon-picker"
+        data-planner-weapon-picker
+        aria-labelledby="planner-weapon-picker-title"
+    >
+        <button
+            type="button"
+            class="planner-modal-close"
+            data-planner-weapon-picker-close
+            aria-label="Close weapon picker"
+        >
+            <span class="cyrene-close" aria-hidden="true"></span>
+        </button>
+        <h2 id="planner-weapon-picker-title">Choose weapon</h2>
+        <p class="planner-weapon-picker-description" data-planner-weapon-picker-description></p>
+        <div class="planner-weapon-picker-filters">
+            <label class="characters-search"
+                ><input
+                    type="search"
+                    data-planner-weapon-search
+                    placeholder="Search weapons or signature..."
+                    aria-label="Search weapons"
+            /></label>
+            <div class="custom-select planner-weapon-rarity" data-planner-weapon-rarity-control>
+                <select data-planner-weapon-rarity aria-label="Weapon rarity" hidden>
+                    <option value="">All rarities</option>
+                    {% for rarity in [5,4,3,2,1] %}
+                    <option value="{{ rarity }}">{{ rarity }}-star</option>
+                    {% endfor %}
+                </select>
+                <button
+                    type="button"
+                    class="custom-select-button"
+                    aria-label="Weapon rarity"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+                    <span class="custom-select-value">All rarities</span
+                    ><span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox" aria-label="Weapon rarity">
+                    <button
+                        type="button"
+                        class="custom-select-option selected"
+                        role="option"
+                        data-value=""
+                        aria-selected="true"
+                    >
+                        All rarities
+                    </button>
+                    {% for rarity in [5,4,3,2,1] %}<button
+                        type="button"
+                        class="custom-select-option"
+                        role="option"
+                        data-value="{{ rarity }}"
+                        aria-selected="false"
+                    >
+                        {{ rarity }}-star</button
+                    >{% endfor %}
+                </div>
+            </div>
+            <button type="button" class="cyrene-button" data-planner-weapon-reset>Reset</button>
+            <button type="button" class="cyrene-button" data-planner-weapon-clear>No weapon</button>
+        </div>
+        <p
+            class="characters-summary planner-weapon-status"
+            data-planner-weapon-picker-status
+            role="status"
+        ></p>
+        <button type="button" class="cyrene-button" data-planner-weapon-retry hidden>Retry</button>
+        <div class="weapons-grid planner-weapon-picker-grid" data-planner-weapon-grid></div>
+    </dialog>
+
+    <section
+        class="characters-panel{% if planner_active %} active{% endif %}"
+        data-characters-panel="planner"
+        {% if not planner_active %}hidden{% endif %}
+    >
+        <header class="planner-header">
+            <button type="button" class="cyrene-button planner-add-button" data-planner-add>
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                >
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                Add Character
+            </button>
+        </header>
+
+        <p class="planner-loading" data-planner-loading role="status">Loading your plans&#8230;</p>
+        <div class="planner-empty-state" data-planner-empty hidden>
+            <div class="planner-empty-icon" aria-hidden="true">
+                <span class="cyrene-sparkle"></span>
+            </div>
+            <h3>No characters planned yet</h3>
+            <p>
+                Add any character to start planning their levels, talents, weapon and required
+                materials.
+            </p>
+
+            <button type="button" class="cyrene-button planner-add-button" data-planner-add>
+                Add your first character
+            </button>
+        </div>
+
+        <div class="planner-character-grid" data-planner-grid hidden></div>
+    </section>
+
+    <div
+        data-modal-shell
+        class="planner-picker"
+        data-planner-picker
+        data-planner-user-id="{{ planner_user_id }}"
+        data-planner-account-uid="{{ selected_account.genshin_uid if selected_account else '' }}"
+        data-account-id="{{ selected_account.id if selected_account else '' }}"
+        aria-hidden="true"
+        hidden
+    >
+        <div class="planner-picker-backdrop" data-planner-picker-close></div>
+
+        <section
+            class="planner-picker-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="planner-picker-title"
+            tabindex="-1"
+        >
+            <button
+                type="button"
+                class="planner-modal-close"
+                data-planner-picker-close
+                aria-label="Close character picker"
+            >
+                <span class="cyrene-close" aria-hidden="true"></span>
+            </button>
+
+            <header class="planner-picker-heading">
+                <span class="planner-picker-heading-icon" aria-hidden="true"></span>
+                <div>
+                    <span class="eyebrow">BUILD YOUR NEXT CHARACTER</span>
+                    <h2 id="planner-picker-title">Add Character</h2>
+                    <p>Choose a character and start planning their progression.</p>
+                </div>
+            </header>
+            <div class="planner-picker-filters">
+                {% for key, title, options in [
+                    ('element', 'Element', ['Anemo', 'Geo', 'Electro', 'Dendro', 'Hydro', 'Pyro', 'Cryo']),
+                    ('weapon', 'Weapon', ['Sword', 'Claymore', 'Polearm', 'Bow', 'Catalyst']),
+                    ('rarity', 'Rarity', ['5', '4'])
+                ] %}
+                <div class="planner-picker-filter">
+                    <span id="planner-picker-{{ key }}-label"
+                        >{{ title }}</span
+                    >
+                    <div
+                        class="characters-icon-buttons"
+                        data-planner-filter="{{ key }}"
+                        role="group"
+                        aria-labelledby="planner-picker-{{ key }}-label"
+                    >
+                        <button
+                            type="button"
+                            class="characters-icon-button selected"
+                            data-value="all"
+                            aria-pressed="true"
+                            aria-label="All {{ title | lower }} types"
+                        >
+                            All
+                        </button>
+                        {% for option in options %}
+                        <button
+                            type="button"
+                            class="characters-icon-button"
+                            data-value="{{ option | lower }}"
+                            aria-pressed="false"
+                            aria-label="{{ option }}{{ '-star' if key == 'rarity' else '' }}"
+                            title="{{ option }}{{ '-star' if key == 'rarity' else '' }}"
+                        >
+                            {% if key == 'rarity' %}<span
+                                class="cyrene-rarity-star"
+                                data-rarity="{{ option }}"
+                                aria-hidden="true"
+                            ></span
+                            >{% else %}
+                            <img
+                                src="/static/images/characters/{{ 'Element_' if key == 'element' else '' }}{{ option }}.webp"
+                                alt=""
+                            />
+                            {% endif %}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <button
+                    type="button"
+                    class="cyrene-button characters-reset-filters"
+                    data-planner-filter-reset
+                >
+                    Reset filters
+                </button>
+                <label class="planner-picker-search" for="planner-character-search">
+                    <span>Search characters</span>
+                    <input
+                        id="planner-character-search"
+                        type="search"
+                        placeholder="Search by name..."
+                        autocomplete="off"
+                        data-planner-character-search
+                    />
+                </label>
+            </div>
+            <div class="planner-picker-results">
+                <span class="characters-summary" data-planner-picker-count aria-live="polite"
+                    >Showing <strong data-count-shown>0</strong> of
+                    <strong data-count-base>{{ characters | length }}</strong> characters
+                    <span class="characters-count-divider" aria-hidden="true">|</span>
+                    <strong data-count-owned>{{ characters | selectattr('owned') | list | length }}</strong> owned
+                    <span class="characters-count-divider" aria-hidden="true">|</span>
+                    <strong data-count-total>{{ characters | length }}</strong> Total</span
+                >
+                <div class="planner-picker-ownership">
+                    <span id="planner-ownership-label">Ownership</span>
+                    <div class="custom-select" data-planner-ownership-control>
+                        <button
+                            type="button"
+                            class="custom-select-button"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                            aria-labelledby="planner-ownership-label planner-ownership-value"
+                        >
+                            <span class="custom-select-value" id="planner-ownership-value"
+                                >All characters</span
+                            ><span class="custom-select-arrow"></span>
+                        </button>
+                        <div
+                            class="custom-select-menu"
+                            role="listbox"
+                            aria-labelledby="planner-ownership-label"
+                        >
+                            {% for value, label in [('all', 'All characters'), ('owned', 'Owned'), ('unowned', 'Not owned')] %}
+                            <button
+                                type="button"
+                                class="custom-select-option{{ ' selected' if value == 'all' else '' }}"
+                                data-value="{{ value }}"
+                                role="option"
+                                aria-selected="{{ 'true' if value == 'all' else 'false' }}"
+                            >
+                                {{ label }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" data-planner-ownership value="all" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="planner-picker-grid" data-planner-picker-grid>
+                {% for character in characters %}
+                <button
+                    type="button"
+                    class="planner-picker-character"
+                    data-planner-character-id="{{ character.id }}"
+                    data-planner-character-name="{{ character.name }}"
+                    data-planner-character-element="{{ character.element }}"
+                    data-planner-character-rarity="{{ character.rarity }}"
+                    data-planner-character-weapon="{{ character.weapon | lower }}"
+                    data-planner-character-release="{{ character.release_date }}"
+                    data-unreleased="{{ 'true' if character.unreleased else 'false' }}"
+                    data-planner-character-ownership="{{ 'owned' if character.owned else 'unowned' }}"
+                    data-planner-character-icon="{{ character.icon }}"
+                    data-planner-character-level="{{ character.level if character.level is not none else '' }}"
+                    data-planner-character-constellation="{{ character.constellation if character.constellation is not none else 0 }}"
+                >
+                    <span class="planner-picker-portrait">
+                        {% if character.unreleased %}<span
+                            class="cyrene-unreleased-badge character-release-badge"
+                            >Unreleased</span
+                        >{% endif %}
+                        <img src="{{ character.icon }}" alt="" loading="lazy" />
+                        <span
+                            class="planner-picker-rarity"
+                            aria-label="{{ character.rarity }}-star character"
+                        >
+                            {{ character.rarity }}
+                            <span class="cyrene-rarity-star" aria-hidden="true"></span>
+                        </span>
+                    </span>
+                    <span class="planner-picker-character-info">
+                        <strong>{{ character.name }}</strong>
+                        <span class="planner-picker-element">
+                            <img
+                                src="/static/images/characters/Element_{{ character.element }}.webp"
+                                alt=""
+                            />
+                            {{ character.element }}
+                        </span>
+                        {% if not character.owned %}<span class="character-unowned-status"
+                            >Not owned</span
+                        >{% endif %}
+                    </span>
+                </button>
+                {% endfor %}
+            </div>
+
+            <p class="planner-picker-empty" data-planner-picker-empty hidden>
+                No matching characters found.
+            </p>
+        </section>
+    </div>
+
+    <div data-modal-shell class="planner-editor" data-planner-editor aria-hidden="true" hidden>
+        <div class="planner-editor-backdrop" data-planner-editor-close></div>
+
+        <section
+            class="planner-editor-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="planner-editor-title"
+            tabindex="-1"
+        >
+            <header class="planner-editor-header">
+                <img class="planner-editor-character-icon" src="" alt="" data-planner-editor-icon />
+
+                <div class="planner-editor-identity">
+                    <h2 id="planner-editor-title">Character Plan</h2>
+                    <p data-planner-editor-subtitle></p>
+                </div>
+
+                <button
+                    type="button"
+                    class="planner-editor-close"
+                    data-planner-editor-close
+                    aria-label="Close planner"
+                >
+                    <span class="cyrene-close" aria-hidden="true"></span>
+                </button>
+            </header>
+
+            <form class="planner-editor-form" data-planner-form>
+                <div class="planner-editor-meta">
+                    <label class="planner-notes-field" for="planner-notes">
+                        <span>Notes</span>
+                        <textarea
+                            id="planner-notes"
+                            name="notes"
+                            rows="1"
+                            data-planner-notes
+                            placeholder="Build goals, priorities, reminders..."
+                        ></textarea>
+                    </label>
+
+                    <label class="planner-constellation-field" for="planner-constellation">
+                        <span>Constellation</span>
+                        <select
+                            id="planner-constellation"
+                            name="constellation"
+                            data-planner-constellation
+                        >
+                            {% for constellation in range(7) %}
+                            <option value="{{ constellation }}">C{{ constellation }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+                <nav class="planner-progression-tabs" aria-label="Progression category">
+                    <button
+                        type="button"
+                        class="planner-tab is-active"
+                        data-planner-tab="level"
+                        aria-selected="true"
+                    >
+                        Level
+                    </button>
+
+                    <button
+                        type="button"
+                        class="planner-tab"
+                        data-planner-tab="talents"
+                        aria-selected="false"
+                    >
+                        Talents
+                    </button>
+
+                    <button
+                        type="button"
+                        class="planner-tab"
+                        data-planner-tab="weapon"
+                        aria-selected="false"
+                    >
+                        Weapon
+                    </button>
+                </nav>
+
+                <button
+                    type="button"
+                    class="planner-crafting-toggle"
+                    data-planner-crafting
+                    aria-pressed="false"
+                >
+                    Toggle Crafting
+                </button>
+
+                <section class="planner-progression-panel" data-planner-panel="level">
+                    <div class="planner-level-comparison">
+                        <div class="planner-level-value">
+                            <span>Current</span>
+                            <strong data-planner-current-level>—</strong>
+                        </div>
+
+                        <span class="planner-level-arrow" aria-hidden="true"
+                            ><span class="cyrene-arrow"></span
+                        ></span>
+
+                        <label class="planner-level-value" for="planner-level">
+                            <span>Goal</span>
+                            <select id="planner-level" name="level" data-planner-level>
+                                {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
+                                <option
+                                    value="{{ level }}"
+                                    {% if level == 90 %}selected{% endif %}
+                                >
+                                    Level {{ level }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+
+                    <section class="planner-goal-cost">
+                        <h3>Goal Cost</h3>
+                        <div data-planner-cost="level" aria-live="polite">
+                            <p>Select a goal to see required materials.</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="planner-progression-panel" data-planner-panel="talents" hidden>
+                    <div class="planner-talent-grid">
+                        {% for talent in [
+                                "Normal Attack",
+                                "Elemental Skill",
+                                "Elemental Burst"
+                            ] %}
+                        <div
+                            class="planner-talent-panel"
+                            data-planner-talent-panel="{{ loop.index }}"
+                        >
+                            <h3>{{ talent }}</h3>
+
+                            <div class="planner-talent-levels">
+                                <div class="planner-talent-current">
+                                    <span>Current</span>
+                                    <strong data-planner-current-talent="{{ loop.index }}"
+                                        >—</strong
+                                    >
+                                </div>
+
+                                <span aria-hidden="true"><span class="cyrene-arrow"></span></span>
+
+                                <label for="planner-talent-{{ loop.index }}">
+                                    <span>Goal</span>
+                                    <select
+                                        id="planner-talent-{{ loop.index }}"
+                                        name="talent-{{ loop.index }}"
+                                        data-planner-talent="{{ loop.index }}"
+                                    >
+                                        {% for level in range(1, 14) %}
+                                        <option
+                                            value="{{ level }}"
+                                            {% if level == 1 %}selected{% endif %}
+                                        >
+                                            {{ level }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <section class="planner-goal-cost">
+                        <h3>Goal Cost</h3>
+                        <div data-planner-cost="talents" aria-live="polite">
+                            <p>Select a goal to see required materials.</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="planner-progression-panel" data-planner-panel="weapon" hidden>
+                    <div class="planner-weapon-actions">
+                        <button
+                            type="button"
+                            class="cyrene-button"
+                            data-planner-choose-weapon
+                            aria-haspopup="dialog"
+                        >
+                            Choose weapon
+                        </button>
+                        <button type="button" class="cyrene-button" data-planner-sync-weapon hidden>
+                            Sync from HoYoLAB
+                        </button>
+                    </div>
+                    <p class="planner-weapon-status" data-planner-weapon-status role="status"></p>
+                    <div class="planner-weapon-overview">
+                        <div class="planner-weapon-identity">
+                            <img src="" alt="" data-planner-weapon-icon hidden />
+                            <div>
+                                <h3 data-planner-current-weapon-name>Equipped Weapon</h3>
+                            </div>
+                        </div>
+
+                        <div class="planner-level-comparison">
+                            <div class="planner-level-value planner-current-weapon-level-field">
+                                <span>Current</span>
+                                <select
+                                    id="planner-current-weapon-level"
+                                    name="current_weapon_level"
+                                    data-planner-current-weapon-level-input
+                                    aria-label="Current weapon level"
+                                >
+                                    {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
+                                    <option
+                                        value="{{ level }}"
+                                        {% if level == 1 %}selected{% endif %}
+                                    >
+                                        Lv. {{ level }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <strong data-planner-current-weapon-level>—</strong>
+                            </div>
+
+                            <span class="planner-level-arrow" aria-hidden="true">
+                                <span class="cyrene-arrow"></span>
+                            </span>
+
+                            <label class="planner-level-value" for="planner-weapon-level">
+                                <span>Goal</span>
+                                <select
+                                    id="planner-weapon-level"
+                                    name="weapon_level"
+                                    data-planner-weapon-level
+                                >
+                                    {% for level in [1, 20, 40, 50, 60, 70, 80, 90] %}
+                                    <option
+                                        value="{{ level }}"
+                                        {% if level == 90 %}selected{% endif %}
+                                    >
+                                        Level {{ level }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                    <section class="planner-goal-cost">
+                        <h3>Goal Cost</h3>
+                        <div data-planner-cost="weapon" aria-live="polite">
+                            <p>Select a goal to see required materials.</p>
+                        </div>
+                    </section>
+                </section>
+
+                <footer class="planner-editor-actions">
+                    <button
+                        type="button"
+                        class="cyrene-button planner-secondary-button"
+                        data-planner-editor-close
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="cyrene-button planner-save-button"
+                        data-planner-save
+                    >
+                        Save Plan
+                    </button>
+                </footer>
+            </form>
+        </section>
+
+        <button
+            type="button"
+            class="planner-total-bookmark"
+            data-planner-total
+            aria-expanded="false"
+        >
+            Total
+        </button>
+
+        <aside
+            class="planner-editor-total-panel"
+            data-planner-total-panel
+            aria-hidden="true"
+            hidden
+        >
+            <div class="planner-editor-total-content" data-planner-total-content></div>
+        </aside>
+    </div>
+</div>
+{% with delete_dialog_class='character-plan-delete-dialog', delete_prefix='character-plan-delete', delete_title='Remove character plan?', delete_cancel='Keep plan', delete_confirm='Remove plan' %}
+{% include 'components/deletion_confirmation.html' %}
+{% endwith %}
+{% endblock %}

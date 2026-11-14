@@ -1,0 +1,318 @@
+<section
+    id="weapons-planner"
+    role="tabpanel"
+    aria-labelledby="weapons-planner-tab"
+    {% if weapons_tab|default("owned") != "planner" %}
+    hidden{% endif %}
+>
+    <header class="planner-header">
+        <div>
+            <h2>Planner</h2>
+            <p>Plan your next weapon build and track the resources you'll need.</p>
+        </div>
+        <button type="button" class="cyrene-button planner-add-button" data-wp-add disabled>
+            <span class="cyrene-plus" aria-hidden="true"></span>Add Weapon
+        </button>
+    </header>
+    <p class="planner-loading" data-wp-status role="status">Loading your plans&#8230;</p>
+    <button type="button" class="cyrene-button" data-wp-retry hidden>Retry loading plans</button>
+    <div class="planner-empty-state" data-wp-empty hidden>
+        <div class="planner-empty-icon" aria-hidden="true">
+            <span class="cyrene-sparkle"></span>
+        </div>
+        <h3>No weapons planned yet</h3>
+        <p>Add any weapon to start planning its level, refinements and required materials.</p>
+        <button type="button" class="cyrene-button planner-add-button" data-wp-first>
+            Add your first weapon
+        </button>
+    </div>
+    <div class="planner-character-grid weapon-plan-grid" data-wp-plans hidden></div>
+</section>
+<dialog
+    class="planner-picker-dialog weapon-plan-picker"
+    data-wp-picker
+    aria-labelledby="wp-picker-title"
+>
+    <button
+        type="button"
+        class="planner-modal-close"
+        data-wp-close
+        aria-label="Close weapon selection"
+    >
+        <span class="cyrene-close" aria-hidden="true"></span>
+    </button>
+    <header class="planner-picker-heading">
+        <span class="planner-picker-heading-icon" aria-hidden="true"></span>
+        <div>
+            <span class="eyebrow">BUILD YOUR NEXT WEAPON</span>
+            <h2 id="wp-picker-title">Add Weapon</h2>
+            <p>Choose a weapon and start planning its progression.</p>
+        </div>
+    </header>
+    <div class="planner-picker-filters weapon-plan-picker-filters">
+        {% for key, label, options in [('type', 'Weapon Type', ['Sword', 'Claymore', 'Polearm', 'Bow', 'Catalyst']), ('rarity', 'Rarity', ['5', '4', '3', '2', '1'])] %}
+        <div class="planner-picker-filter">
+            <span id="wp-{{ key }}-label">{{ label }}</span>
+            <div
+                class="characters-icon-buttons"
+                role="group"
+                aria-labelledby="wp-{{ key }}-label"
+                data-wp-filter="{{ key }}"
+            >
+                <button
+                    type="button"
+                    class="characters-icon-button selected"
+                    data-value=""
+                    aria-pressed="true"
+                    aria-label="All {{ label | lower }}"
+                >
+                    All
+                </button>
+                {% for value in options %}<button
+                    type="button"
+                    class="characters-icon-button"
+                    data-value="{{ value }}"
+                    aria-pressed="false"
+                    aria-label="{{ value }}{{ '-star' if key == 'rarity' else '' }}"
+                    title="{{ value }}{{ '-star' if key == 'rarity' else '' }}"
+                >
+                    {% if key == 'rarity' %}<span
+                        class="weapon-rarity-star"
+                        data-rarity="{{ value }}"
+                        aria-hidden="true"
+                    ></span
+                    >{% else %}<img
+                        src="/static/images/characters/{{ value }}.webp"
+                        alt=""
+                    />{% endif %}</button
+                >{% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="planner-picker-filter">
+            <span id="wp-tag-label">Tags</span>
+            <div class="custom-select" data-wp-select="tag">
+                <button
+                    type="button"
+                    class="custom-select-button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="wp-tag-label wp-tag-value"
+                >
+                    <span class="custom-select-value" id="wp-tag-value">All tags</span
+                    ><span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox" aria-labelledby="wp-tag-label">
+                    {% for value, label in [('', 'All tags'), ('signature', 'Signature'), ('Gacha', 'Gacha'), ('Event', 'Event'), ('BP', 'BP'), ('Craftable', 'Craftable'), ('Fishing Association', 'Fishing Association'), ('Exploration', 'Exploration'), ('Starglitter Exchange', 'Starglitter Exchange'), ('Quest', 'Quest'), ('Promotional', 'Promotional')] %}<button
+                        type="button"
+                        class="custom-select-option{% if not value %} selected{% endif %}"
+                        role="option"
+                        aria-selected="{{ 'true' if not value else 'false' }}"
+                        data-value="{{ value }}"
+                    >
+                        {{ label }}</button
+                    >{% endfor %}
+                </div>
+            </div>
+        </div>
+        <button type="button" class="cyrene-button characters-reset-filters" data-wp-filter-reset>
+            Reset filters
+        </button>
+        <label class="planner-picker-search" for="wp-search"
+            ><span>Search weapons</span
+            ><input
+                id="wp-search"
+                type="search"
+                data-wp-search
+                placeholder="Search weapons or signature..."
+                autocomplete="off"
+        /></label>
+    </div>
+    <div class="planner-picker-results">
+        <span class="characters-summary" data-wp-picker-count role="status"></span>
+        <div class="planner-picker-ownership">
+            <span id="wp-ownership-label">Ownership</span>
+            <div class="custom-select" data-wp-select="ownership">
+                <button
+                    type="button"
+                    class="custom-select-button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="wp-ownership-label wp-ownership-value"
+                >
+                    <span class="custom-select-value" id="wp-ownership-value">All weapons</span
+                    ><span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div class="custom-select-menu" role="listbox" aria-labelledby="wp-ownership-label">
+                    {% for value, label in [('all', 'All weapons'), ('owned', 'Owned'), ('unowned', 'Not owned')] %}<button
+                        type="button"
+                        class="custom-select-option{% if value == 'all' %} selected{% endif %}"
+                        role="option"
+                        aria-selected="{{ 'true' if value == 'all' else 'false' }}"
+                        data-value="{{ value }}"
+                    >
+                        {{ label }}</button
+                    >{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="planner-picker-grid" data-wp-picker-grid></div>
+    <p class="planner-picker-empty" data-wp-picker-empty hidden>No matching weapons found.</p>
+</dialog>
+<dialog class="weapon-plan-editor-shell" data-wp-editor aria-labelledby="wp-editor-title">
+    <div class="planner-editor weapon-plan-editor-layout" data-wp-editor-layout>
+        <section class="planner-editor-dialog weapon-plan-editor" data-wp-editor-panel>
+            <header class="planner-editor-header">
+                <img class="planner-editor-character-icon" data-wp-icon alt="" />
+                <div class="planner-editor-identity">
+                    <h2 id="wp-editor-title"></h2>
+                    <p data-wp-progression></p>
+                </div>
+                <button
+                    type="button"
+                    class="planner-editor-close"
+                    data-wp-close
+                    aria-label="Close weapon plan"
+                >
+                    <span class="cyrene-close" aria-hidden="true"></span>
+                </button>
+            </header>
+            <div class="planner-editor-form">
+                <nav
+                    class="planner-progression-tabs weapon-plan-tabs"
+                    role="tablist"
+                    aria-label="Weapon upgrades"
+                >
+                    <button
+                        type="button"
+                        class="planner-tab is-active"
+                        role="tab"
+                        aria-selected="true"
+                        id="wp-level-tab"
+                        aria-controls="wp-level-panel"
+                        data-wp-tab="level"
+                    >
+                        Level
+                    </button>
+                    <button
+                        type="button"
+                        class="planner-tab"
+                        role="tab"
+                        aria-selected="false"
+                        tabindex="-1"
+                        id="wp-refinements-tab"
+                        aria-controls="wp-refinements-panel"
+                        data-wp-tab="refinements"
+                    >
+                        Refinements
+                    </button>
+                </nav>
+                <button
+                    type="button"
+                    class="planner-crafting-toggle"
+                    data-wp-crafting
+                    aria-pressed="false"
+                >
+                    Toggle Crafting
+                </button>
+                {% for section, fields in [('level', [('currentLevel', 'Current'), ('targetLevel', 'Goal')]), ('refinements', [('currentRefinement', 'Current'), ('targetRefinement', 'Goal')])] %}
+                <section
+                    class="planner-progression-panel"
+                    role="tabpanel"
+                    id="wp-{{ section }}-panel"
+                    aria-labelledby="wp-{{ section }}-tab"
+                    data-wp-panel="{{ section }}"
+                    {% if section != 'level' %}
+                    hidden{% endif %}
+                >
+                    <div class="planner-level-comparison">
+                        {% for field, label in fields %}
+                        {% if loop.index == 2 %}<span
+                            class="planner-level-arrow"
+                            aria-hidden="true"
+                            ><span class="cyrene-arrow"></span></span
+                        >{% endif %}
+                        <div class="planner-level-value">
+                            <span id="wp-{{ field }}-label">{{ label }}</span
+                            ><button
+                                type="button"
+                                class="planner-choice-trigger"
+                                data-wp-choice="{{ field }}"
+                                aria-haspopup="dialog"
+                                aria-expanded="false"
+                                aria-controls="wp-choice-popup"
+                                aria-labelledby="wp-{{ field }}-label wp-{{ field }}-value"
+                            >
+                                <span
+                                    class="planner-choice-value"
+                                    id="wp-{{ field }}-value"
+                                ></span
+                                ><span
+                                    class="planner-choice-arrow"
+                                    aria-hidden="true"
+                                ></span></button
+                            ><strong data-wp-readonly="{{ field }}" hidden></strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <section class="planner-goal-cost">
+                        <h3>Goal Cost</h3>
+                        <div data-wp-cost="{{ section }}" aria-live="polite"></div>
+                    </section>
+                </section>
+                {% endfor %}
+                <p class="weapons-note" role="status" data-wp-save-status></p>
+                <footer class="planner-editor-actions">
+                    <button
+                        type="button"
+                        class="cyrene-button planner-secondary-button"
+                        data-wp-close
+                    >
+                        Cancel</button
+                    ><button type="button" class="cyrene-button planner-save-button" data-wp-save>
+                        Save Plan
+                    </button>
+                </footer>
+            </div>
+        </section>
+        <button
+            type="button"
+            class="planner-total-bookmark"
+            data-wp-total-toggle
+            aria-expanded="false"
+            aria-controls="wp-editor-total-panel"
+        >
+            Total
+        </button>
+        <aside
+            id="wp-editor-total-panel"
+            class="planner-editor-total-panel"
+            data-wp-total-panel
+            hidden
+            aria-hidden="true"
+        >
+            <div class="planner-editor-total-content" data-wp-editor-total aria-live="polite"></div>
+        </aside>
+    </div>
+    <div
+        class="planner-choice-menu weapon-choice-menu"
+        id="wp-choice-popup"
+        popover="auto"
+        role="dialog"
+        aria-label="Choose progression"
+    >
+        <div class="planner-choice-grid" data-wp-choices></div>
+    </div>
+</dialog>
+<dialog class="weapon-add-dialog" data-wp-delete-dialog aria-labelledby="wp-delete-title">
+    <h2 id="wp-delete-title">Delete weapon plan?</h2>
+    <p class="weapons-note" data-wp-delete-name></p>
+    <p class="weapons-note" role="status" data-wp-delete-status></p>
+    <div class="weapon-add-actions">
+        <button type="button" class="cyrene-button" data-wp-delete-cancel>Keep plan</button
+        ><button type="button" class="cyrene-button cyrene-button--danger" data-wp-delete-confirm>
+            Delete plan
+        </button>
+    </div>
+</dialog>

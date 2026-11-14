@@ -1,0 +1,647 @@
+.events-featured[hidden],
+.events-list[hidden],
+.events-wishes[hidden],
+.events-account-empty[hidden] {
+    display: none;
+}
+
+.events-overview {
+    margin-top: 28px;
+}
+
+.events-overview-panel {
+    display: none;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.events-overview-panel.active {
+    display: flex;
+}
+
+.overview-account-row {
+    min-height: 64px;
+
+    padding: 12px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--panel-background);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.overview-account-row:hover {
+    background-color: var(--surface-hover);
+
+    border-color: var(--accent);
+
+    transform: translateY(-1px);
+}
+
+.overview-account-row.completed {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: none;
+    opacity: 0.65;
+}
+
+.overview-account-name {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.overview-account-name strong {
+    color: var(--text-primary);
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.overview-account-name span {
+    color: var(--text-secondary);
+
+    opacity: 0.6;
+
+    font-size: 13px;
+}
+
+.overview-account-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.overview-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    min-width: 64px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.overview-status:hover {
+    background: rgba(0, 0, 0, 0.38);
+
+    border-color: rgba(255, 255, 255, 0.16);
+
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.overview-status.event-completion-pill,
+.overview-status.event-completion-pill:hover {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+.overview-daily-progress {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    white-space: nowrap;
+}
+
+.overview-claimed,
+.overview-unclaimed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 100px;
+    height: 32px;
+
+    padding: 6px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    white-space: nowrap;
+    font-weight: 600;
+
+    flex-shrink: 0;
+}
+
+.overview-claimed {
+    background: rgba(93, 231, 151, 0.16);
+    border-color: rgba(93, 231, 151, 0.32);
+    color: #72eea2;
+}
+
+.overview-unclaimed {
+    background: rgba(224, 82, 82, 0.16);
+
+    border-color: rgba(224, 82, 82, 0.32);
+
+    color: #f07171;
+}
+
+.overview-unclaimed.ready {
+    background: rgba(227, 154, 63, 0.2);
+
+    border-color: rgba(227, 154, 63, 0.38);
+
+    color: #f0ad5a;
+}
+
+.overview-encounter-points {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    width: 82px;
+    height: 32px;
+
+    padding: 4px 10px;
+
+    gap: 4px;
+
+    border: 1px solid rgba(157, 130, 230, 0.28);
+    border-radius: 999px;
+
+    background: rgba(117, 90, 190, 0.16);
+
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+}
+
+.overview-encounter-points-icon {
+    background-color: #a87bfa;
+    mask: url("/static/images/events/permanent/encounter_points.png") center / contain no-repeat;
+    -webkit-mask: url("/static/images/events/permanent/encounter_points.png") center / contain
+        no-repeat;
+    width: 18px;
+    height: 18px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+.overview-encounter-points-value {
+    color: #a88eea;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+.overview-resin-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 16px;
+
+    flex: 0 0 auto;
+
+    min-width: 0;
+
+    position: relative;
+    left: 50px;
+}
+
+.overview-resin-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+
+    height: 36px;
+
+    padding: 4px 10px;
+
+    box-sizing: border-box;
+
+    flex: 0 0 120px;
+
+    border-radius: 8px;
+
+    background: rgba(77, 166, 225, 0.14);
+
+    color: #78c5f5;
+
+    white-space: nowrap;
+}
+
+.overview-resin-value strong {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.overview-resin-icon {
+    width: 26px;
+    height: 26px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+.overview-resin-countdowns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 4px;
+
+    min-width: 145px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.overview-resin-timer {
+    color: var(--text-primary);
+
+    font-weight: 600;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.overview-resin-value .resin-current {
+    color: #78c5f5;
+}
+
+.overview-resin-value .resin-maximum {
+    color: #608dac;
+}
+
+.events-overview-panel[data-overview-panel="daily"] .overview-daily-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+    column-gap: 12px;
+}
+
+.events-overview-panel[data-overview-panel="daily"] .overview-encounter-points {
+    position: static;
+    margin-left: auto;
+    flex: 0 0 82px;
+
+    width: 82px;
+    min-width: 82px;
+    max-width: 82px;
+
+    box-sizing: border-box;
+}
+
+.events-overview-panel[data-overview-panel="daily"] .overview-account-status {
+    margin-left: 0;
+    flex: 0 0 auto;
+}
+
+.events-overview-panel[data-overview-panel="daily"] .event-list-status-with-claim {
+    width: 135px;
+    min-width: 135px;
+    max-width: 135px;
+    box-sizing: border-box;
+}
+
+.events-overview-panel[data-overview-panel="daily"]
+    .event-list-status-with-claim:not(.unclaimed):not(.handbook-claimed):not(.claimed) {
+    color: var(--text-secondary);
+    border-color: var(--border);
+    background: var(--surface);
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    min-width: 0;
+    height: 65px;
+    min-height: 65px;
+    margin: 0;
+    padding: 14px 20px;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+
+    flex: 0 0 160px;
+    min-width: 0;
+    margin: 0;
+    transform: none;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-account-name strong {
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-account-name span {
+    color: var(--text-secondary);
+    opacity: 0.6;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
+    display: grid;
+    flex: 1 1 auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+
+    min-width: 0;
+    margin: 0;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+
+    text-align: center;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card:hover {
+    background: rgba(0, 0, 0, 0.38);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+
+    min-width: 0;
+    max-width: 100%;
+
+    color: var(--text);
+    font-size: inherit;
+    line-height: inherit;
+    white-space: nowrap;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value strong {
+    min-width: 0;
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value img {
+    display: block;
+    flex: 0 0 auto;
+
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-separator {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-empty {
+    color: var(--text-muted);
+    font-size: inherit;
+    white-space: nowrap;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    min-width: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header img {
+    display: block;
+    flex: 0 0 auto;
+
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-header strong {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
+        gap: 14px;
+        padding: 12px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
+        flex-basis: 125px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
+        gap: 6px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
+        padding: 7px 4px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card-value {
+        gap: 3px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 650px) {
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-row {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-account-name {
+        flex: 0 0 auto;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-cards {
+        flex: 0 0 auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .events-overview-panel[data-overview-panel="endgame"] .overview-endgame-card {
+        min-height: 58px;
+    }
+}
+
+.events-overview-panel[data-overview-panel="wishes"] {
+    gap: 16px;
+}
+
+.events-overview-panel[data-overview-panel="wishes"] .wish-banners {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.events-overview-panel[data-overview-panel="wishes"] .wish-banner-card {
+    min-width: 0;
+}
+
+@media (max-width: 650px) {
+    .events-overview-panel[data-overview-panel="wishes"] .wish-banners {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-account-status {
+        width: 100%;
+    }
+    .events-overview-panel[data-overview-panel="daily"] .overview-daily-progress {
+        flex-wrap: wrap;
+    }
+}
+
+.events-page .overview-account-name strong,
+.events-page .overview-account-name strong [data-account-profile-name],
+.events-page .overview-account-name > [data-account-profile-name] {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 1;
+}
+.overview-account-name > span:not([data-account-profile-name]) {
+    font-size: 13px;
+    opacity: 0.6;
+}
+.overview-account-row.completed {
+    opacity: 1;
+}
+.overview-account-row.completed .overview-account-status,
+.overview-account-row.completed .overview-encounter-points {
+    opacity: 0.65;
+}

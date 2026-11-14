@@ -1,0 +1,112 @@
+﻿{% extends "base.html" %}
+{% block title %}Cyrene • Exploration{% endblock %}
+{% block content %}
+<div class="page exploration-page" {% if accounts %} hidden{% endif %}>
+    <header class="exploration-header">
+        <div>
+            <h1>Exploration</h1>
+            <p>Your world exploration progress from HoYoLAB.</p>
+        </div>
+        {% if accounts %}
+        <form
+            method="get"
+            action="/exploration"
+            class="exploration-account"
+            data-exploration-account-form
+        >
+            <label id="exploration-account-label" for="exploration-account-button">Account</label>
+            <div class="custom-select exploration-account-select">
+                <button
+                    id="exploration-account-button"
+                    class="custom-select-button"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="exploration-account-label exploration-account-value"
+                >
+                    <span class="custom-select-value" id="exploration-account-value"
+                        ><span
+                            data-account-profile-name="{{ selected_account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ selected_account.cyrene_nickname or selected_account.nickname or selected_account.genshin_uid }}</span
+                        >
+                        &#183; {{ selected_account.genshin_uid }}</span
+                    >
+                    <span class="custom-select-arrow" aria-hidden="true"></span>
+                </button>
+                <div
+                    class="custom-select-menu"
+                    role="listbox"
+                    aria-labelledby="exploration-account-label"
+                >
+                    {% for account in accounts %}
+                    <button
+                        class="custom-select-option{% if selected_account and account.id == selected_account.id %} selected{% endif %}"
+                        type="button"
+                        role="option"
+                        data-value="{{ account.id }}"
+                        aria-selected="{{ 'true' if selected_account and account.id == selected_account.id else 'false' }}"
+                    >
+                        <span
+                            data-account-profile-name="{{ account.genshin_uid }}"
+                            data-account-profile-field="display"
+                            >{{ account.cyrene_nickname or account.nickname or account.genshin_uid }}</span
+                        >
+                        &#183; {{ account.genshin_uid }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="account_id" value="{{ selected_account.id }}" />
+            </div>
+            <div class="exploration-view-toggle" role="group" aria-label="Exploration layout">
+                <button
+                    type="button"
+                    class="cyrene-button cyrene-button--icon"
+                    data-exploration-view="list"
+                    aria-label="List view"
+                    title="List view"
+                    aria-pressed="true"
+                >
+                    <span
+                        class="exploration-view-icon exploration-view-icon-list"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+                <button
+                    type="button"
+                    class="cyrene-button cyrene-button--icon"
+                    data-exploration-view="grid"
+                    aria-label="Grid view"
+                    title="Grid view"
+                    aria-pressed="false"
+                >
+                    <span
+                        class="exploration-view-icon exploration-view-icon-grid"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+            </div>
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--icon exploration-toggle-all"
+                data-exploration-toggle-all
+                aria-label="Expand all"
+                title="Expand all"
+                disabled
+            >
+                <span class="exploration-toggle-all-icon" aria-hidden="true"></span>
+            </button>
+        </form>
+        {% endif %}
+    </header>
+    {% if not accounts %}
+    {% include 'components/no_accounts.html' %}
+    {% else %}
+    <section
+        data-exploration-root
+        data-account-id="{{ selected_account.id }}"
+        aria-live="polite"
+    ></section>
+    {% endif %}
+</div>
+{% endblock %}

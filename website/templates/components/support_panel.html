@@ -1,0 +1,203 @@
+<dialog class="support-panel" data-support-panel aria-labelledby="support-title">
+    <header class="support-header">
+        <svg class="support-header-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path
+                d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5v-2.5h0.5a2 2 0 0 1-2-2z"
+            />
+        </svg>
+        <div class="support-header-text">
+            <h2 id="support-title">Support</h2>
+            <p>Real people from the Cyrene team answer here.</p>
+        </div>
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--icon"
+            data-support-close
+            aria-label="Close support"
+        >
+            <span class="cyrene-close" aria-hidden="true"></span>
+        </button>
+    </header>
+
+    <div class="support-tabs">
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--compact cyrene-button--tab active"
+            data-support-tab="home"
+        >
+            My messages
+        </button>
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--compact cyrene-button--tab"
+            data-support-tab="staff"
+            data-support-staff-tab
+            hidden
+        >
+            Staff <span class="support-count" data-support-waiting hidden></span>
+        </button>
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--compact cyrene-button--tab"
+            data-support-tab="inbox"
+        >
+            Inbox
+        </button>
+    </div>
+
+    <div class="support-thread-header" data-support-thread-header hidden>
+        <button
+            type="button"
+            class="cyrene-button cyrene-button--icon"
+            data-support-back
+            aria-label="Back"
+        >
+            <span class="cyrene-arrow cyrene-arrow--left" aria-hidden="true"></span>
+        </button>
+        <div class="support-thread-title">
+            <strong data-support-thread-title></strong>
+            <span class="support-thread-meta">
+                <span class="support-status" data-support-thread-status></span>
+                <span data-support-thread-meta></span>
+            </span>
+        </div>
+        <div class="support-thread-actions">
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--compact support-solve"
+                data-support-solve
+            >
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="m3.5 8.5 3 3 6-7" />
+                </svg>
+                Mark as solved
+            </button>
+            <button
+                type="button"
+                class="cyrene-button cyrene-button--compact"
+                data-support-status
+            ></button>
+        </div>
+    </div>
+
+    <div class="support-body">
+        <section class="support-view" data-support-view="home">
+            <h3 class="support-heading">Talk to the team</h3>
+            <p class="support-label" id="support-topic-label">What's it about?</p>
+            <div class="support-topics" role="radiogroup" aria-labelledby="support-topic-label">
+                <button
+                    type="button"
+                    class="cyrene-button cyrene-button--compact"
+                    role="radio"
+                    aria-checked="false"
+                    data-support-topic="bug"
+                >
+                    Bug or error
+                </button>
+                <button
+                    type="button"
+                    class="cyrene-button cyrene-button--compact"
+                    role="radio"
+                    aria-checked="false"
+                    data-support-topic="account"
+                >
+                    My account
+                </button>
+                <button
+                    type="button"
+                    class="cyrene-button cyrene-button--compact"
+                    role="radio"
+                    aria-checked="false"
+                    data-support-topic="question"
+                >
+                    A question
+                </button>
+            </div>
+
+            <div class="support-note">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 1.8 13 3.6v4c0 3-2.1 5.4-5 6.6-2.9-1.2-5-3.6-5-6.6v-4z" />
+                </svg>
+                <p data-support-note></p>
+            </div>
+
+            <hr class="support-divider" />
+
+            <h3 class="support-section-title">Your open conversations</h3>
+            <ul class="support-list" data-support-recent></ul>
+            <p class="support-empty" data-support-recent-empty hidden>
+                No open conversations. Solved and closed ones are in your Inbox.
+            </p>
+        </section>
+
+        <section class="support-view" data-support-view="staff" hidden>
+            <div class="support-scope" role="group" aria-label="Conversation state">
+                <button type="button" aria-pressed="true" data-support-state="open">Open</button>
+                <button type="button" aria-pressed="false" data-support-state="done">
+                    Solved &amp; closed
+                </button>
+            </div>
+            <ul class="support-list" data-support-staff></ul>
+            <p class="support-empty" data-support-staff-empty hidden>Nothing here right now.</p>
+            <a class="support-log-link" href="/support/logs" data-support-close-link>
+                View all logs and transcripts
+                <span class="cyrene-arrow" aria-hidden="true"></span>
+            </a>
+        </section>
+
+        <section class="support-view" data-support-view="inbox" hidden>
+            <h3 class="support-section-title">Your solved and closed conversations</h3>
+            <ul class="support-list" data-support-inbox></ul>
+            <p class="support-empty" data-support-inbox-empty hidden>
+                Conversations you've finished will appear here.
+            </p>
+        </section>
+
+        <section class="support-view" data-support-view="thread" hidden>
+            <ol class="support-messages" data-support-messages aria-live="polite"></ol>
+        </section>
+    </div>
+
+    <form class="support-composer" data-support-composer>
+        <label class="support-hidden-label" for="support-message">Message</label>
+        <div class="support-composer-box">
+            <ul
+                class="support-mentions"
+                role="listbox"
+                aria-label="People to mention"
+                data-support-mentions
+                hidden
+            ></ul>
+            <textarea id="support-message" rows="3" maxlength="2000" data-support-text></textarea>
+            <ul class="support-attachments" data-support-attachments hidden></ul>
+            <div class="support-composer-actions">
+                <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/gif,image/webp"
+                    multiple
+                    hidden
+                    data-support-file
+                />
+                <button
+                    type="button"
+                    class="support-attach"
+                    aria-label="Attach images"
+                    title="Attach images"
+                    data-support-attach
+                >
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                            d="m13.5 7.5-5.6 5.6a3.3 3.3 0 0 1-4.7-4.7l5.8-5.8a2.2 2.2 0 0 1 3.1 3.1l-5.8 5.8a1.1 1.1 0 0 1-1.6-1.6l5.3-5.3"
+                        />
+                    </svg>
+                </button>
+                <span class="support-chars" data-support-chars>0 / 2000</span>
+                <button type="submit" class="support-send" aria-label="Send" data-support-send>
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M14 2 7.2 8.8M14 2 9.6 14l-2.4-5.2L2 6.4z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </form>
+</dialog>

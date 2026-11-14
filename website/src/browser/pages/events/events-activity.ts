@@ -1,0 +1,132 @@
+// @ts-nocheck -- Shared legacy Events globals.
+window.initialiseActivityCheckmarks = function initialiseActivityCheckmarks() {
+    function render(button, checked) {
+        button.setAttribute("aria-pressed", String(checked));
+        button.classList.toggle("event-checkmark-empty", !checked);
+        const row = button.closest(".event-list-item, .overview-account-row");
+        const completed =
+            checked ||
+            (["daily_commissions", "trounce_domains", "limited_event"].includes(
+                button.dataset.activityType,
+            ) &&
+                row?.dataset.automaticComplete === "true");
+        row?.classList.toggle("completed", completed);
+        if (button.dataset.activityType === "trounce_domains") {
+            row?.querySelector(".event-list-status, .overview-status")?.classList.toggle(
+                "event-completion-pill",
+                completed,
+            );
+        }
+        const status = row?.querySelector("[data-limited-status], [data-temper-status]");
+        if (status) {
+            status.textContent = completed ? "Completed" : status.dataset.baseStatus;
+            status.classList.toggle("event-completion-pill", completed);
+            status.classList.toggle("event-limited-completed", completed);
+        }
+        document.querySelectorAll("[data-permanent-account-group]").forEach((group) => {
+            const cards = group.querySelectorAll(".event-list-item");
+            const complete = group.querySelectorAll(".event-list-item.completed").length;
+            const count = group.querySelector("[data-permanent-account-count]");
+            if (count) {
+                count.textContent = `${complete}/${cards.length} complete`;
+                count.classList.toggle(
+                    "event-completion-pill",
+                    cards.length > 0 && complete === cards.length,
+                );
+            }
+        });
+        document.querySelectorAll("[data-limited-account-group]").forEach((group) => {
+            const cards = group.querySelectorAll(
+                ".events-limited-overview-event:not(.upcoming):not([hidden])",
+            );
+            const completed = group.querySelectorAll(
+                ".events-limited-overview-event.completed:not(.upcoming):not([hidden])",
+            ).length;
+            const count = group.querySelector("[data-limited-account-count]");
+            if (count) {
+                count.textContent = `${completed}/${cards.length} complete`;
+                count.classList.toggle(
+                    "event-completion-pill",
+                    cards.length > 0 && completed === cards.length,
+                );
+            }
+        });
+    }
+
+    document.querySelectorAll(".event-checkmark[data-activity-type]").forEach((checkmark) => {
+        if (checkmark.dataset.initialised === "true") return;
+        checkmark.dataset.initialised = "true";
+        checkmark.addEventListener("click", async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (
+                checkmark.disabled ||
+                checkmark.closest(".event-limited-item.upcoming") ||
+                checkmark.dataset.saving === "true"
+            )
+                return;
+            const { accountId, activityType, eventKey, eventToken } = checkmark.dataset;
+            if (!accountId || !activityType) return;
+            const buttons = [
+                ...document.querySelectorAll(".event-checkmark[data-activity-type]"),
+            ].filter(
+                (button) =>
+                    button.dataset.accountId === accountId &&
+                    button.dataset.activityType === activityType &&
+                    button.dataset.eventKey === eventKey,
+            );
+            const previous = buttons.map((button) => [
+                button,
+                button.getAttribute("aria-pressed") === "true",
+            ]);
+            const checked = checkmark.getAttribute("aria-pressed") !== "true";
+            window.eventsActivityRevision = (window.eventsActivityRevision || 0) + 1;
+            buttons.forEach((button) => {
+                button.dataset.saving = "true";
+                button.setAttribute("aria-busy", "true");
+                render(button, checked);
+            });
+            try {
+                const response = await fetch("/api/events/activity-check", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    signal: AbortSignal.timeout(15000),
+                    body: JSON.stringify({
+                        account_id: Number(accountId),
+                        activity_type: activityType,
+                        checked,
+                        event_key: eventKey,
+                        event_token: eventToken,
+                    }),
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success || typeof data.checked !== "boolean") {
+                    throw new Error(data.error || "Could not save completion.");
+                }
+                buttons.forEach((button) => {
+                    render(button, data.checked);
+                    button.removeAttribute("aria-description");
+                });
+                window.showCyreneToast?.(
+                    data.checked ? "Event marked complete." : "Event marked incomplete.",
+                );
+            } catch (error) {
+                previous.forEach(([button, value]) => {
+                    render(button, value);
+                    button.setAttribute(
+                        "aria-description",
+                        "Could not save completion. Please try again.",
+                    );
+                });
+                window.showCyreneToast?.("Could not save completion. Please try again.", "error");
+                console.error("Failed to update activity checkmark:", error);
+            } finally {
+                window.eventsActivityRevision = (window.eventsActivityRevision || 0) + 1;
+                buttons.forEach((button) => {
+                    delete button.dataset.saving;
+                    button.removeAttribute("aria-busy");
+                });
+            }
+        });
+    });
+};

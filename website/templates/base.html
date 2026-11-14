@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="cyrene-site-version" content="{{ site_version() }}" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>{% block title %}Cyrene{% endblock %}</title>
+
+        <meta
+            name="description"
+            content="{% block description %}Cyrene is a Genshin Impact companion for Discord and the web: track accounts, plan upgrades and keep up with events.{% endblock %}"
+        />
+        {% block social_meta %}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Cyrene" />
+        <meta
+            property="og:title"
+            content="{% block og_title %}{{ self.title() }}{% endblock %}"
+        />
+        <meta property="og:description" content="{{ self.description() }}" />
+        <meta
+            property="og:image"
+            content="https://cyrene-teyvat.xyz/static/images/ui/ui_icons/Cyrene.png"
+        />
+        <meta name="twitter:card" content="summary" />
+        {% endblock %}
+        <link rel="canonical" href="https://cyrene-teyvat.xyz{{ request.url.path }}" />
+
+        <link rel="icon" type="image/png" href="/static/images/ui/ui_icons/Cyrene.png" />
+
+        <script>
+            const savedTheme = localStorage.getItem("theme") || "blue";
+            document.documentElement.dataset.theme = savedTheme;
+            try {
+                document.documentElement.dataset.showUnreleased =
+                    localStorage.getItem("cyrene-show-unreleased") === "true" ? "true" : "false";
+            } catch {
+                document.documentElement.dataset.showUnreleased = "false";
+            }
+        </script>
+
+        <script id="limited-event-filter-bootstrap">
+            (() => {
+                try {
+                    const saved = JSON.parse(
+                        localStorage.getItem("cyrene-limited-hidden-categories-v1") || "[]",
+                    );
+                    if (!Array.isArray(saved)) return;
+                    const style = document.createElement("style");
+                    style.id = "limited-event-category-visibility";
+                    style.textContent = saved
+                        .filter((category) => typeof category === "string")
+                        .map((category) =>
+                            category === "Upcoming"
+                                ? ".events-page [data-limited-category].upcoming { display: none !important; }"
+                                : `.events-page [data-limited-category="${CSS.escape(category)}"] { display: none !important; }`,
+                        )
+                        .join("\n");
+                    document.head.append(style);
+                } catch {}
+            })();
+        </script>
+
+        <link rel="stylesheet" href="/static/build/css/global.css?v=84" />
+
+        {% set page_styles = {
+        '/weapons': '/static/build/css/weapons.css?v=52',
+        '/': '/static/build/css/home.css?v=41',
+        '/achievements': '/static/build/css/achievements.css?v=16',
+        '/wishes': '/static/build/css/wishes.css?v=17',
+        '/characters': '/static/build/css/characters.css?v=74',
+        '/inventory': '/static/build/css/inventory.css?v=9',
+        '/exploration': '/static/build/css/exploration.css?v=19',
+        '/reminders': '/static/build/css/reminders.css?v=26',
+        '/verify': '/static/build/css/verification.css?v=19',
+        '/codes': '/static/build/css/codes.css?v=7',
+        '/events': '/static/build/css/events.css?v=71',
+        '/settings': '/static/build/css/settings.css?v=14',
+        '/docs': '/static/build/css/docs.css?v=14',
+        '/uploads': '/static/build/css/uploads.css?v=1'
+    } %}
+
+        {% set page_path = '/events' if request.url.path == '/events/refresh' else request.url.path %}
+        {% set page_style = page_styles['/docs'] if page_path.startswith('/docs') else page_styles['/uploads'] if page_path.startswith('/f/') else page_styles.get(page_path) %}
+        {% if page_style %}
+        <link
+            rel="stylesheet"
+            href="{{ page_style }}"
+            data-page-style="{{ page_path }}"
+        />
+        {% endif %}
+    </head>
+
+    <body>
+        <header class="mobile-header">
+            <button
+                class="mobile-menu-button"
+                id="mobile-menu-button"
+                type="button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="mobile-brand">
+                <div class="brand-icon">✦</div>
+                <span>Cyrene</span>
+            </div>
+        </header>
+
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+
+                <div class="brand-name">Cyrene</div>
+            </div>
+
+            <nav class="navigation">
+                <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Home.png" alt="Home" />
+                    </span>
+                    <span>Home</span>
+                </a>
+
+                <a
+                    href="/characters"
+                    class="nav-item {% if request.path == '/characters' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Characters.png" alt="Characters" />
+                    </span>
+                    <span>Characters</span>
+                </a>
+
+                <a
+                    href="/weapons"
+                    class="nav-item {% if request.path == '/weapons' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Weapons.png" alt="Weapons" />
+                    </span>
+                    <span>Weapons</span>
+                </a>
+
+                <a
+                    href="/inventory"
+                    class="nav-item {% if request.path == '/inventory' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Inventory.png" alt="Inventory" />
+                    </span>
+                    <span>Inventory</span>
+                </a>
+
+                <a
+                    href="/reminders"
+                    class="nav-item {% if request.path == '/reminders' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Reminders.png" alt="Reminders" />
+                    </span>
+                    <span>Reminders</span>
+                </a>
+
+                <a href="/events" class="nav-item {% if request.path == '/events' %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Events.png" alt="Events" />
+                    </span>
+                    <span>Events</span>
+                </a>
+
+                <a
+                    href="/achievements"
+                    class="nav-item {% if request.path == '/achievements' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Achievements.png" alt="Achievements" />
+                    </span>
+                    <span>Achievements</span>
+                </a>
+
+                <a href="/wishes" class="nav-item {% if request.path == '/wishes' %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Wishes.png" alt="Wishes" />
+                    </span>
+                    <span>Wishes</span>
+                </a>
+
+                <a
+                    href="/exploration"
+                    class="nav-item {% if request.path == '/exploration' %}active{% endif %}"
+                >
+                    <span class="nav-icon"
+                        ><img src="/static/images/ui/ui_icons/Exploration.png" alt=""
+                    /></span>
+                    <span>Exploration</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-pills">
+                <a href="/invite" class="sidebar-pill" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                        <path d="M8 3v10M3 8h10" />
+                    </svg>
+                    <span>Invite Cyrene</span>
+                </a>
+                <button type="button" class="sidebar-pill" aria-haspopup="dialog" data-support-open>
+                    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                        <path
+                            d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5v-2.5h0.5a2 2 0 0 1-2-2z"
+                        />
+                    </svg>
+                    <span>Support</span>
+                    <span class="sidebar-pill-dot" data-support-dot hidden></span>
+                </button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="/docs" class="nav-item {% if request.url.path.startswith('/docs') %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Docs.png" alt="Docs" />
+                    </span>
+                    <span>Docs</span>
+                </a>
+
+                <a href="/codes" class="nav-item {% if request.path == '/codes' %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Codes.png" alt="Codes" />
+                    </span>
+                    <span>Codes</span>
+                </a>
+
+                <a href="/verify" class="nav-item {% if request.path == '/verify' %}active{% endif %}">
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Discord.png" alt="Discord" />
+                    </span>
+                    <span>Connect Discord</span>
+                </a>
+
+                <a
+                    href="/settings"
+                    class="nav-item {% if request.path == '/settings' %}active{% endif %}"
+                >
+                    <span class="nav-icon">
+                        <img src="/static/images/ui/ui_icons/Settings.png" alt="Settings" />
+                    </span>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            {% if accounts is defined and not accounts and page_path not in ['/settings', '/', '/verify'] %}
+            {% include 'components/no_accounts.html' %}
+            {% else %}
+            {% block content %}
+            {% endblock %}
+            {% endif %}
+        </main>
+
+        {% include 'components/support_panel.html' %}
+
+        <script type="module" src="/static/build/js/app.js?v=6.86"></script>
+        <script src="/static/build/browser/core/theme.js"></script>
+    </body>
+</html>

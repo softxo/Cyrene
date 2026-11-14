@@ -1,0 +1,95 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("what-is-cyrene") }}
+<p>
+    Cyrene helps you keep on top of Genshin Impact without opening the game. It comes in two parts
+    that work together:
+</p>
+<div class="docs-split">
+    <div class="docs-panel">
+        <h3>The Discord bot</h3>
+        <p>
+            Quick lookups for characters, weapons and enemies, live Resin and Expedition checks, and
+            reminders that ping you.
+        </p>
+    </div>
+    <div class="docs-panel">
+        <h3>The website</h3>
+        <p>
+            A bigger space for planning: your character roster, a materials planner, events, wish
+            history, achievements and automatic code claiming.
+        </p>
+    </div>
+</div>
+<p>
+    Lookups such as <code>/character</code> work for everyone straight away. Anything about
+    <em>your</em> account, such as Resin or your roster, needs a linked Genshin account.
+</p>
+
+{{ topic("setup") }}
+<ol class="docs-steps">
+    <li>
+        <h3>Add Cyrene to Discord</h3>
+        <p>
+            <a href="/invite" target="_blank" rel="noopener">Add the bot</a> to a server you manage,
+            or join the
+            <a href="https://discord.gg/KpkggK4UqB" target="_blank" rel="noopener"
+                >Cyrene Discord server</a
+            >
+            to use it there.
+        </p>
+    </li>
+    <li>
+        <h3>Connect Discord to the website</h3>
+        <p>
+            Open <a href="/verify">Connect Discord</a> in the sidebar. Either sign in with Discord,
+            or copy the code shown and run <code>/verify</code> with it. This tells the website who
+            you are.
+        </p>
+    </li>
+    <li>
+        <h3>Link your Genshin account</h3>
+        <p>
+            Run <code>/link-account</code> in Discord, or use
+            <strong>Add HoYoLAB account</strong> in <a href="/settings">Settings</a>. Either way,
+            the account appears in both places.
+        </p>
+    </li>
+</ol>
+
+{% call callout("That's it", "tip") %}
+Try <code>/resin</code> in Discord, or open <a href="/characters">Characters</a> on the website to
+see your roster. <a href="/docs/accounts">Connecting your accounts</a> explains each step in more
+detail.
+{% endcall %}
+
+{{ topic("using-commands") }}
+<p>
+    Type <code>/</code> in Discord to see Cyrene's commands. When a command needs a name, such as a
+    character or weapon, start typing and pick from the suggestions so the spelling is always right.
+</p>
+<p>
+    Most commands also have a shorter text version that starts with a prefix. The default prefix is
+    <code>{{ prefix }}</code>, so <code>{{ prefix }}c Furina</code> does the same as
+    <code>/character character:Furina</code>. Server administrators can change the prefix with
+    <code>/prefix</code>. Each command in this guide lists its prefix shortcuts.
+</p>
+
+{{ topic("next-steps") }}
+<div class="docs-cards docs-cards-compact">
+    <a class="docs-card" href="/docs/game-info">
+        <h3>Game information</h3>
+        <p>Every lookup and calculator command.</p>
+    </a>
+    <a class="docs-card" href="/docs/website">
+        <h3>Website tour</h3>
+        <p>What each page on the website does.</p>
+    </a>
+    <a class="docs-card" href="/docs/codes-reminders">
+        <h3>Codes and reminders</h3>
+        <p>Let Cyrene do the daily chores.</p>
+    </a>
+</div>
+{% endblock %}
