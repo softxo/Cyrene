@@ -1,0 +1,26 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import command_card, callout %}
+
+{% block docs_body %}
+<div class="docs-jump" aria-label="Commands on this page">
+    {% for key in page.groups %}{% for item in command_groups[key].commands %}<a href="#{{ item.anchor }}"
+        ><code>/{{ item.name }}</code></a
+    >{% endfor %}{% endfor %}
+</div>
+
+{% if page.slug == "account-tools" %}
+{% call callout("Most of these need a linked account", "warning") %}
+Follow <a href="/docs/accounts">Connecting your accounts</a> first. Only <code>/verify</code> and
+<code>/link-account</code> work before then.
+{% endcall %}
+{% endif %}
+
+{% for key in page.groups %}
+{% set group = command_groups[key] %}
+<h2 id="{{ key }}" class="docs-anchor">{{ group.title }}</h2>
+<p class="docs-group-intro">{{ group.intro }}</p>
+<div class="docs-commands">
+    {% for item in group.commands %}{{ command_card(item, prefix) }}{% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

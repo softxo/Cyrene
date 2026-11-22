@@ -1,0 +1,2579 @@
+[
+    {
+        "kind": "characters",
+        "data": {
+            "characters": {
+                "id": 10000147,
+                "name": "Danica",
+                "costs": {
+                    "ascend1": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 20000
+                        },
+                        {
+                            "id": 104141,
+                            "name": "Vajrada Amethyst Sliver",
+                            "count": 1
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 3
+                        },
+                        {
+                            "id": 112146,
+                            "name": "Ethereal Glimmershard",
+                            "count": 3
+                        }
+                    ],
+                    "ascend2": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 40000
+                        },
+                        {
+                            "id": 104142,
+                            "name": "Vajrada Amethyst Fragment",
+                            "count": 3
+                        },
+                        {
+                            "id": 113097,
+                            "name": "Damaged Flint",
+                            "count": 2
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 10
+                        },
+                        {
+                            "id": 112146,
+                            "name": "Ethereal Glimmershard",
+                            "count": 15
+                        }
+                    ],
+                    "ascend3": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 60000
+                        },
+                        {
+                            "id": 104142,
+                            "name": "Vajrada Amethyst Fragment",
+                            "count": 6
+                        },
+                        {
+                            "id": 113097,
+                            "name": "Damaged Flint",
+                            "count": 4
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 20
+                        },
+                        {
+                            "id": 112147,
+                            "name": "Ethereal Crystal",
+                            "count": 12
+                        }
+                    ],
+                    "ascend4": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 80000
+                        },
+                        {
+                            "id": 104143,
+                            "name": "Vajrada Amethyst Chunk",
+                            "count": 3
+                        },
+                        {
+                            "id": 113097,
+                            "name": "Damaged Flint",
+                            "count": 8
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 30
+                        },
+                        {
+                            "id": 112147,
+                            "name": "Ethereal Crystal",
+                            "count": 18
+                        }
+                    ],
+                    "ascend5": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 100000
+                        },
+                        {
+                            "id": 104143,
+                            "name": "Vajrada Amethyst Chunk",
+                            "count": 6
+                        },
+                        {
+                            "id": 113097,
+                            "name": "Damaged Flint",
+                            "count": 12
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 45
+                        },
+                        {
+                            "id": 112148,
+                            "name": "Ethereal Crystalscale Stone",
+                            "count": 12
+                        }
+                    ],
+                    "ascend6": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 120000
+                        },
+                        {
+                            "id": 104144,
+                            "name": "Vajrada Amethyst Gemstone",
+                            "count": 6
+                        },
+                        {
+                            "id": 113097,
+                            "name": "Damaged Flint",
+                            "count": 20
+                        },
+                        {
+                            "id": 101276,
+                            "name": "Flockingweed",
+                            "count": 60
+                        },
+                        {
+                            "id": 112148,
+                            "name": "Ethereal Crystalscale Stone",
+                            "count": 24
+                        }
+                    ]
+                },
+                "preview": true,
+                "rarity": 5,
+                "weapon_type_id": 11,
+                "icon": "https://i.gachabase.net/sPYUZN0is_RK7uLDPmw1df2Hqc6UtlDb_8_QHWytRAQ/q:50/f:webp/plain/gi/assets/86c4cbe06ed7831ea555f4545fd62413.png"
+            },
+            "materials": {
+                "202": {
+                    "id": 202,
+                    "name": "Mora",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/7lUACDKA9BGSrMzlKw8bEKLmfswptgsIqkOaS4Z8K24/q:50/f:webp/plain/gi/assets/2271cc9e48a387a1577bb9804c035fb4.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "100062": {
+                    "id": 100062,
+                    "name": "Bird Egg",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/J67jIx6MWrOtJq_jj207FUdWFHpHUPjf6FG9cRBNWd8/q:50/f:webp/plain/gi/assets/94b03da9bc09833d438882f6e8ad3dbf.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "100084": {
+                    "id": 100084,
+                    "name": "Fish",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/UgRE19aqRVOkCFVjRzONqxbzxYQEk2RRLO-L3bh1n78/q:50/f:webp/plain/gi/assets/a4714d57ebe194730b88b2b8847651b6.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "101276": {
+                    "id": 101276,
+                    "name": "Flockingweed",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/xtCM3FhukpgdGJVKhtPYRvSwxe_P3tyvBzi0kf20Ex4/q:50/f:webp/plain/gi/assets/3880f10ae00fcf3a752f4d49a4262e06.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104141": {
+                    "id": 104141,
+                    "name": "Vajrada Amethyst Sliver",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/oBevYaZ7N6fALlDvV4QzW9o5Qmtzkmbab5IvnFbGLoY/q:50/f:webp/plain/gi/assets/6f02e370ef9bbb0603346edc42ef160a.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104142": {
+                    "id": 104142,
+                    "name": "Vajrada Amethyst Fragment",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/R9P-UqP1NmtFdIx2L95EJBi2ZzaOv6CltWHRnyQYGwI/q:50/f:webp/plain/gi/assets/7e6efa7537bb4351784189647430e127.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104143": {
+                    "id": 104143,
+                    "name": "Vajrada Amethyst Chunk",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/NCS0bHgDIaDGqi8iEZPvIuqANIuNCu4DrEQvkq4SpBo/q:50/f:webp/plain/gi/assets/22b767b9f35d38059a74f579dbdf095e.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104144": {
+                    "id": 104144,
+                    "name": "Vajrada Amethyst Gemstone",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/--uiuIqY95tJqws6frEwmiIF44oaZgfqptlj3vQZd04/q:50/f:webp/plain/gi/assets/59871261edc97ad03b30c08ec6934be9.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104319": {
+                    "id": 104319,
+                    "name": "Crown of Insight",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/6WbMVj2uD8e8xBRnSRAY9jatAtqfWMHCDiXoEhh_g80/q:50/f:webp/plain/gi/assets/912cfe340f50bc1da1a26516a99c40a7.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104371": {
+                    "id": 104371,
+                    "name": "Teachings of Glory",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/MYh5gPoa7K4jPBvOtw0-FPldYikYRcOGfyQVEOoYuek/q:50/f:webp/plain/gi/assets/a6bca8756365031d49cea9277b0d2490.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104372": {
+                    "id": 104372,
+                    "name": "Guide to Glory",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/tQtlcUxhz2IvHkBOulFkpcInztuQ5nnCFZXC5EZPEwY/q:50/f:webp/plain/gi/assets/243f5822239ac1acc227d0342902ce59.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104373": {
+                    "id": 104373,
+                    "name": "Philosophies of Glory",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/SPafQOGwPFssxJOjTKntws__1zzpGVOF5T0_5pJxfQg/q:50/f:webp/plain/gi/assets/446f0776e2070dadc3c363e52e695117.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "110001": {
+                    "id": 110001,
+                    "name": "Flour",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/5KHLh4_OcqkGbNUgPfD8Cu4wmUEvkVoAdy4ln4EQ0cM/q:50/f:webp/plain/gi/assets/717b72929d6ffb2216b1e343438cebef.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "110015": {
+                    "id": 110015,
+                    "name": "Smetana",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/fxawjsMwwBGI2FYuNdY1kxC45B5D9PhBfbdhqKvRjWg/q:50/f:webp/plain/gi/assets/c7096d60bc994abee179dde2e4ee4068.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112146": {
+                    "id": 112146,
+                    "name": "Ethereal Glimmershard",
+                    "rarity": 1,
+                    "images": {
+                        "icon": "https://i.gachabase.net/Mn5tYwylKHWJcsbWlOOoUW15nKy4nrjHQghCXb4CXl0/q:50/f:webp/plain/gi/assets/eeb965b8226c1e6d4274c823f3cb24bf.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112147": {
+                    "id": 112147,
+                    "name": "Ethereal Crystal",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/aEVO-Vbamxp_lvyLZanfMrkep2nkXqE4pnL73uDlODM/q:50/f:webp/plain/gi/assets/11dad6737ed7ac31bace42910e854364.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112148": {
+                    "id": 112148,
+                    "name": "Ethereal Crystalscale Stone",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/ySjq3QBJgtvxVXgVhLuN56iKrd624jnpUfRZZqtuUDw/q:50/f:webp/plain/gi/assets/93d0fa367b641705a2c79aa74cd5d500.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "113088": {
+                    "id": 113088,
+                    "name": "Twisted Withered Branch",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/_g5n8Y7mnDh3HSG2VRgu4-YZQ5FxeBSjqOY74QVTxq8/q:50/f:webp/plain/gi/assets/665a676b3d5adade5daab240eb010e2f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "113097": {
+                    "id": 113097,
+                    "name": "Damaged Flint",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/MQ5QZlYgdHTzoUEKDxjFisidj_uGk0rx51H1uy-wL3E/q:50/f:webp/plain/gi/assets/a35ad96d21880eb9aec440abc04424db.png"
+                    },
+                    "inventory_unavailable": true
+                },
+                "132062": {
+                    "id": 132062,
+                    "name": "Unknown material (132062)",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/hyiviqoI23B8kU6GESSwvfHJvvU4XJlq0DHBeBzE2I8/q:50/f:webp/plain/gi/assets/7df1f49582838f09cad86f816a1e6c9b.png"
+                    },
+                    "inventory_unavailable": true
+                },
+                "210305": {
+                    "id": 210305,
+                    "name": "Unknown material (210305)",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/APbgrufc-x4iKIGpPgMr2Bf_mC7Ed5oVnzAFdaHVou8/q:50/f:webp/plain/gi/assets/3d89eb2c7d71d8dfdebf7e213f748d80.png"
+                    },
+                    "inventory_unavailable": true
+                }
+            },
+            "talents": {
+                "id": 10000147,
+                "name": "Danica",
+                "preview": true,
+                "combat1": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104371,
+                                "name": "Teachings of Glory",
+                                "count": 3
+                            },
+                            {
+                                "id": 112146,
+                                "name": "Ethereal Glimmershard",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 2
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 9
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 4
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 6
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 12
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 9
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 16
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 12
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                },
+                "combat2": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104371,
+                                "name": "Teachings of Glory",
+                                "count": 3
+                            },
+                            {
+                                "id": 112146,
+                                "name": "Ethereal Glimmershard",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 2
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 9
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 4
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 6
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 12
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 9
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 16
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 12
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                },
+                "combat3": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104371,
+                                "name": "Teachings of Glory",
+                                "count": 3
+                            },
+                            {
+                                "id": 112146,
+                                "name": "Ethereal Glimmershard",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 2
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104372,
+                                "name": "Guide to Glory",
+                                "count": 9
+                            },
+                            {
+                                "id": 112147,
+                                "name": "Ethereal Crystal",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 4
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 4
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 6
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 6
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 12
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 9
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104373,
+                                "name": "Philosophies of Glory",
+                                "count": 16
+                            },
+                            {
+                                "id": 112148,
+                                "name": "Ethereal Crystalscale Stone",
+                                "count": 12
+                            },
+                            {
+                                "id": 113088,
+                                "name": "Twisted Withered Branch",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "release_confirmed": false
+        }
+    },
+    {
+        "kind": "characters",
+        "data": {
+            "characters": {
+                "id": 10000149,
+                "name": "Anastasya",
+                "costs": {
+                    "ascend1": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 20000
+                        },
+                        {
+                            "id": 104161,
+                            "name": "Shivada Jade Sliver",
+                            "count": 1
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 3
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 3
+                        }
+                    ],
+                    "ascend2": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 40000
+                        },
+                        {
+                            "id": 104162,
+                            "name": "Shivada Jade Fragment",
+                            "count": 3
+                        },
+                        {
+                            "id": 113093,
+                            "name": "Shattered Stability Anchor",
+                            "count": 2
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 10
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 15
+                        }
+                    ],
+                    "ascend3": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 60000
+                        },
+                        {
+                            "id": 104162,
+                            "name": "Shivada Jade Fragment",
+                            "count": 6
+                        },
+                        {
+                            "id": 113093,
+                            "name": "Shattered Stability Anchor",
+                            "count": 4
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 20
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 12
+                        }
+                    ],
+                    "ascend4": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 80000
+                        },
+                        {
+                            "id": 104163,
+                            "name": "Shivada Jade Chunk",
+                            "count": 3
+                        },
+                        {
+                            "id": 113093,
+                            "name": "Shattered Stability Anchor",
+                            "count": 8
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 30
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 18
+                        }
+                    ],
+                    "ascend5": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 100000
+                        },
+                        {
+                            "id": 104163,
+                            "name": "Shivada Jade Chunk",
+                            "count": 6
+                        },
+                        {
+                            "id": 113093,
+                            "name": "Shattered Stability Anchor",
+                            "count": 12
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 45
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 12
+                        }
+                    ],
+                    "ascend6": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 120000
+                        },
+                        {
+                            "id": 104164,
+                            "name": "Shivada Jade Gemstone",
+                            "count": 6
+                        },
+                        {
+                            "id": 113093,
+                            "name": "Shattered Stability Anchor",
+                            "count": 20
+                        },
+                        {
+                            "id": 101273,
+                            "name": "Fairy Wormwood",
+                            "count": 60
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 24
+                        }
+                    ]
+                },
+                "preview": true,
+                "rarity": 5,
+                "weapon_type_id": 12,
+                "icon": "https://i.gachabase.net/MkCoPHsiURszc1S_jfn8sQxfFQ8gGmQLp7FXLyhFBvk/q:50/f:webp/plain/gi/assets/e5337e123927ed861e5863dcaf027702.png"
+            },
+            "materials": {
+                "202": {
+                    "id": 202,
+                    "name": "Mora",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/7lUACDKA9BGSrMzlKw8bEKLmfswptgsIqkOaS4Z8K24/q:50/f:webp/plain/gi/assets/2271cc9e48a387a1577bb9804c035fb4.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "100080": {
+                    "id": 100080,
+                    "name": "Potato",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/a20I0eNFetguzMbY99qHCJCK3jKT6J6HK_Y2fPA4UFQ/q:50/f:webp/plain/gi/assets/75cd121f9e36e2ca81efae4c2802358f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "100084": {
+                    "id": 100084,
+                    "name": "Fish",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/UgRE19aqRVOkCFVjRzONqxbzxYQEk2RRLO-L3bh1n78/q:50/f:webp/plain/gi/assets/a4714d57ebe194730b88b2b8847651b6.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "101273": {
+                    "id": 101273,
+                    "name": "Fairy Wormwood",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/QcuuSYqFgqmCuBGeHDj6yYHiJHQysfBQjFn8mkHAS4I/q:50/f:webp/plain/gi/assets/12a9ad8a77bdd28668ea98fed6267283.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "101280": {
+                    "id": 101280,
+                    "name": "Snowball Flower",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/y5IOser94rJC2PqT2kMk7MPfVscrVNesT4Ev2blITfI/q:50/f:webp/plain/gi/assets/671413c7ed8582f348c92067e7c85b74.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "101281": {
+                    "id": 101281,
+                    "name": "Rimecurrant",
+                    "rarity": 0,
+                    "images": {
+                        "icon": "https://i.gachabase.net/TWptP0saE1QXnpWG130l7W0molmqkfZobtVRCkABlYA/q:50/f:webp/plain/gi/assets/f27faeed3d080cafe15320055e484ad2.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104161": {
+                    "id": 104161,
+                    "name": "Shivada Jade Sliver",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/gUV4hAPRJgU3fngcDx-5cNSr7dcUxNETKq38AnwY25Q/q:50/f:webp/plain/gi/assets/ffd857f65e9ea9d72d374eaade29eef5.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104162": {
+                    "id": 104162,
+                    "name": "Shivada Jade Fragment",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/FUqQg26ioCi_Of7CckMrePTpne4YNQgp691Q-hL0ZCQ/q:50/f:webp/plain/gi/assets/9755a8f3cf4d15351e8e48f7cd21e70e.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104163": {
+                    "id": 104163,
+                    "name": "Shivada Jade Chunk",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/eaF1QJ04XUNClxVbGO9t36gDB8l1rIxitqK7ukLoSvw/q:50/f:webp/plain/gi/assets/47052e62b2bd8ce4dca43d4c4a972e7c.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104164": {
+                    "id": 104164,
+                    "name": "Shivada Jade Gemstone",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/REAxIg9CtbemaiB1ppfGwqgFSazK00lY8A5O81EAWAQ/q:50/f:webp/plain/gi/assets/18803a00c05b617c6df8739f49b325ab.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104319": {
+                    "id": 104319,
+                    "name": "Crown of Insight",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/6WbMVj2uD8e8xBRnSRAY9jatAtqfWMHCDiXoEhh_g80/q:50/f:webp/plain/gi/assets/912cfe340f50bc1da1a26516a99c40a7.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104365": {
+                    "id": 104365,
+                    "name": "Teachings of Charity",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/xnvrY8sAcqpH-dLtBcPvIy40qUrC8GiGrdlPknL-Bo4/q:50/f:webp/plain/gi/assets/d955da76a3c1056ecc1a0376f4e4d3a6.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104366": {
+                    "id": 104366,
+                    "name": "Guide to Charity",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/09Fp_fr-_JgTo_R-sk3uZK7xURRN3jYujFy2314C1Ro/q:50/f:webp/plain/gi/assets/cb863c313fbbf77902dbf1344c53519e.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "104367": {
+                    "id": 104367,
+                    "name": "Philosophies of Charity",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/tRlp2uxGErmHcwmxHLAg-R7DaSCSdjP0CZwvY3DhVZE/q:50/f:webp/plain/gi/assets/ea3fb6e83f163d4c95c1d3400151bcdc.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112149": {
+                    "id": 112149,
+                    "name": "Chimeric Core",
+                    "rarity": 1,
+                    "images": {
+                        "icon": "https://i.gachabase.net/jyUfdDcJ0voGrFcHp2V6tz_bS4e6uBq55E8VI9Kb9jE/q:50/f:webp/plain/gi/assets/435a0f63ffb3b541accbf185a4cf013f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112150": {
+                    "id": 112150,
+                    "name": "Symbiotic Chimeric Nucleus",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qxpbOU4N6lpKiL5BxhRlEHoz09UTtm_ZBDSyaEBcjM8/q:50/f:webp/plain/gi/assets/9660ee1009653e72717acdccc66d8d3d.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112151": {
+                    "id": 112151,
+                    "name": "Prime Chimeric Nexus",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/JwF_xy303yu_6ppZJQWJHGrrTLu7nMnCtpLAb4xBj0o/q:50/f:webp/plain/gi/assets/ce03d8b1555fa7153aa60015a01d6727.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "113093": {
+                    "id": 113093,
+                    "name": "Shattered Stability Anchor",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/YSFZft6oQ7xNq-6jcxrcq_NsIfCyfb8vjIHZ9aqSlKw/q:50/f:webp/plain/gi/assets/e29b25b8b0781014bb2c7500b03d6a2f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "113095": {
+                    "id": 113095,
+                    "name": "Unknown material (113095)",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/o1yhYk02nWSAKSZp5oLwbE5HQEe8HSLbTzXR_CgK9ek/q:50/f:webp/plain/gi/assets/0255126c584ed40c1d055ba8af6cedac.png"
+                    },
+                    "inventory_unavailable": true
+                },
+                "132061": {
+                    "id": 132061,
+                    "name": "Grace of Everwinter",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/geM28DFp5r0dIi2jftUO1Kb_nhV-f-OwQYQLoa50TVk/q:50/f:webp/plain/gi/assets/75c7b0c1f65d3cb9fe4de790816ae6a4.png"
+                    },
+                    "inventory_unavailable": true
+                },
+                "210304": {
+                    "id": 210304,
+                    "name": "Unknown material (210304)",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/Si792X6pgz7S7CV8TBlrJZAlEoM94-aYf2o1LKiLFD0/q:50/f:webp/plain/gi/assets/690f5310c2a17f4c37266bc3b5a56993.png"
+                    },
+                    "inventory_unavailable": true
+                }
+            },
+            "talents": {
+                "id": 10000149,
+                "name": "Anastasya",
+                "preview": true,
+                "combat1": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104365,
+                                "name": "Teachings of Charity",
+                                "count": 3
+                            },
+                            {
+                                "id": 112149,
+                                "name": "Chimeric Core",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 2
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 9
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 4
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 6
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 12
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 9
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 16
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 12
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                },
+                "combat2": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104365,
+                                "name": "Teachings of Charity",
+                                "count": 3
+                            },
+                            {
+                                "id": 112149,
+                                "name": "Chimeric Core",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 2
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 9
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 4
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 6
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 12
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 9
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 16
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 12
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                },
+                "combat3": {
+                    "costs": {
+                        "lvl2": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 12500
+                            },
+                            {
+                                "id": 104365,
+                                "name": "Teachings of Charity",
+                                "count": 3
+                            },
+                            {
+                                "id": 112149,
+                                "name": "Chimeric Core",
+                                "count": 6
+                            }
+                        ],
+                        "lvl3": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 17500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 2
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 3
+                            }
+                        ],
+                        "lvl4": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 25000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 4
+                            }
+                        ],
+                        "lvl5": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 30000
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 6
+                            }
+                        ],
+                        "lvl6": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 37500
+                            },
+                            {
+                                "id": 104366,
+                                "name": "Guide to Charity",
+                                "count": 9
+                            },
+                            {
+                                "id": 112150,
+                                "name": "Symbiotic Chimeric Nucleus",
+                                "count": 9
+                            }
+                        ],
+                        "lvl7": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 120000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 4
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 4
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl8": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 260000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 6
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 6
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 1
+                            }
+                        ],
+                        "lvl9": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 450000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 12
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 9
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            }
+                        ],
+                        "lvl10": [
+                            {
+                                "id": 202,
+                                "name": "Mora",
+                                "count": 700000
+                            },
+                            {
+                                "id": 104367,
+                                "name": "Philosophies of Charity",
+                                "count": 16
+                            },
+                            {
+                                "id": 112151,
+                                "name": "Prime Chimeric Nexus",
+                                "count": 12
+                            },
+                            {
+                                "id": 113095,
+                                "name": "Unknown material (113095)",
+                                "count": 2
+                            },
+                            {
+                                "id": 104319,
+                                "name": "Crown of Insight",
+                                "count": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "release_confirmed": false
+        }
+    },
+    {
+        "kind": "weapons",
+        "data": {
+            "weapons": {
+                "id": 12517,
+                "name": "Torrents of Spring",
+                "costs": {
+                    "ascend1": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 10000
+                        },
+                        {
+                            "id": 114085,
+                            "name": "Rise of the Pale Star Army",
+                            "count": 5
+                        },
+                        {
+                            "id": 112152,
+                            "name": "Accreted Fragment",
+                            "count": 5
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 3
+                        }
+                    ],
+                    "ascend2": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 20000
+                        },
+                        {
+                            "id": 114086,
+                            "name": "Muster of the Pale Star Army",
+                            "count": 5
+                        },
+                        {
+                            "id": 112152,
+                            "name": "Accreted Fragment",
+                            "count": 18
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 12
+                        }
+                    ],
+                    "ascend3": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 30000
+                        },
+                        {
+                            "id": 114086,
+                            "name": "Muster of the Pale Star Army",
+                            "count": 9
+                        },
+                        {
+                            "id": 112153,
+                            "name": "Accreted Mass",
+                            "count": 9
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 9
+                        }
+                    ],
+                    "ascend4": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 45000
+                        },
+                        {
+                            "id": 114087,
+                            "name": "Clarion of the Pale Star Army",
+                            "count": 5
+                        },
+                        {
+                            "id": 112153,
+                            "name": "Accreted Mass",
+                            "count": 18
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 14
+                        }
+                    ],
+                    "ascend5": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 55000
+                        },
+                        {
+                            "id": 114087,
+                            "name": "Clarion of the Pale Star Army",
+                            "count": 9
+                        },
+                        {
+                            "id": 112154,
+                            "name": "Accreted Growth",
+                            "count": 14
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 9
+                        }
+                    ],
+                    "ascend6": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 65000
+                        },
+                        {
+                            "id": 114088,
+                            "name": "Triumph of the Pale Star Army",
+                            "count": 6
+                        },
+                        {
+                            "id": 112154,
+                            "name": "Accreted Growth",
+                            "count": 27
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 18
+                        }
+                    ]
+                },
+                "preview": true,
+                "rarity": 5,
+                "weapon_type_id": 11,
+                "icon": "https://i.gachabase.net/Z-ot9DL1lRXge37MAbzuZN4s-ecWjPH3JBUncomL4tk/q:50/f:webp/plain/gi/assets/8ecd34c310485f3a6f960ce2601eb4bb.png"
+            },
+            "materials": {
+                "202": {
+                    "id": 202,
+                    "name": "Mora",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/7lUACDKA9BGSrMzlKw8bEKLmfswptgsIqkOaS4Z8K24/q:50/f:webp/plain/gi/assets/2271cc9e48a387a1577bb9804c035fb4.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112149": {
+                    "id": 112149,
+                    "name": "Chimeric Core",
+                    "rarity": 1,
+                    "images": {
+                        "icon": "https://i.gachabase.net/jyUfdDcJ0voGrFcHp2V6tz_bS4e6uBq55E8VI9Kb9jE/q:50/f:webp/plain/gi/assets/435a0f63ffb3b541accbf185a4cf013f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112150": {
+                    "id": 112150,
+                    "name": "Symbiotic Chimeric Nucleus",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qxpbOU4N6lpKiL5BxhRlEHoz09UTtm_ZBDSyaEBcjM8/q:50/f:webp/plain/gi/assets/9660ee1009653e72717acdccc66d8d3d.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112151": {
+                    "id": 112151,
+                    "name": "Prime Chimeric Nexus",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/JwF_xy303yu_6ppZJQWJHGrrTLu7nMnCtpLAb4xBj0o/q:50/f:webp/plain/gi/assets/ce03d8b1555fa7153aa60015a01d6727.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112152": {
+                    "id": 112152,
+                    "name": "Accreted Fragment",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/QTtSKwSAvMiJtlia17gxycXqlV30JFlaVg9FY-6SrzQ/q:50/f:webp/plain/gi/assets/7f52cf562b2b3f8bf1c6ad6cc9ec0177.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112153": {
+                    "id": 112153,
+                    "name": "Accreted Mass",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/BSWLTXLAlJLtvUycPM8GmMklLe7oUgDTIkr2m7VOCiQ/q:50/f:webp/plain/gi/assets/bc9f0e64282b05d8f98510b06980b2cd.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112154": {
+                    "id": 112154,
+                    "name": "Accreted Growth",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/xCQuTDcVJzyDQlkKclsQ_n9iUCpT3ffb37wxMPs4G28/q:50/f:webp/plain/gi/assets/08bfa1d0c8ca78fb7fc4099dcb24ece2.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114085": {
+                    "id": 114085,
+                    "name": "Rise of the Pale Star Army",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/VedqrSnZD3hjZV0_JjiE3T3Mqb8qxfLF5JxeofY2T-w/q:50/f:webp/plain/gi/assets/976f772896a3f194f4a7250e01b27284.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114086": {
+                    "id": 114086,
+                    "name": "Muster of the Pale Star Army",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/hNiKifutfVWWoG6rjhBPSe2DBi1pV_dzru5fOx9UKS8/q:50/f:webp/plain/gi/assets/298c566ccab80ad9b8b740e824020d4e.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114087": {
+                    "id": 114087,
+                    "name": "Clarion of the Pale Star Army",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/o4QM1aa4565CMe4PnP37uTeKBnFB3bglF3K8uJ4ZHGs/q:50/f:webp/plain/gi/assets/8ef91a476a011318276f5ff6b1dd3816.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114088": {
+                    "id": 114088,
+                    "name": "Triumph of the Pale Star Army",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/wcyT4dXriB7dfl5CVyMUijMACR61_fNzhjoFOZH8_18/q:50/f:webp/plain/gi/assets/ba074c9d30a71e475d02afea373fd12b.png"
+                    },
+                    "inventory_unavailable": false
+                }
+            },
+            "release_confirmed": false
+        }
+    },
+    {
+        "kind": "weapons",
+        "data": {
+            "weapons": {
+                "id": 15517,
+                "name": "Silverdawn",
+                "costs": {
+                    "ascend1": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 10000
+                        },
+                        {
+                            "id": 114093,
+                            "name": "The Frost Emperor's Revival",
+                            "count": 5
+                        },
+                        {
+                            "id": 112158,
+                            "name": "Snowborn Heartshard",
+                            "count": 5
+                        },
+                        {
+                            "id": 112146,
+                            "name": "Ethereal Glimmershard",
+                            "count": 3
+                        }
+                    ],
+                    "ascend2": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 20000
+                        },
+                        {
+                            "id": 114094,
+                            "name": "The Frost Emperor's Ceremony",
+                            "count": 5
+                        },
+                        {
+                            "id": 112158,
+                            "name": "Snowborn Heartshard",
+                            "count": 18
+                        },
+                        {
+                            "id": 112146,
+                            "name": "Ethereal Glimmershard",
+                            "count": 12
+                        }
+                    ],
+                    "ascend3": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 30000
+                        },
+                        {
+                            "id": 114094,
+                            "name": "The Frost Emperor's Ceremony",
+                            "count": 9
+                        },
+                        {
+                            "id": 112159,
+                            "name": "Snowborn Mirrorheart",
+                            "count": 9
+                        },
+                        {
+                            "id": 112147,
+                            "name": "Ethereal Crystal",
+                            "count": 9
+                        }
+                    ],
+                    "ascend4": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 45000
+                        },
+                        {
+                            "id": 114095,
+                            "name": "The Frost Emperor's Lament",
+                            "count": 5
+                        },
+                        {
+                            "id": 112159,
+                            "name": "Snowborn Mirrorheart",
+                            "count": 18
+                        },
+                        {
+                            "id": 112147,
+                            "name": "Ethereal Crystal",
+                            "count": 14
+                        }
+                    ],
+                    "ascend5": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 55000
+                        },
+                        {
+                            "id": 114095,
+                            "name": "The Frost Emperor's Lament",
+                            "count": 9
+                        },
+                        {
+                            "id": 112160,
+                            "name": "Snowborn Heart of Ignorance",
+                            "count": 14
+                        },
+                        {
+                            "id": 112148,
+                            "name": "Ethereal Crystalscale Stone",
+                            "count": 9
+                        }
+                    ],
+                    "ascend6": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 65000
+                        },
+                        {
+                            "id": 114096,
+                            "name": "The Frost Emperor's Farewell",
+                            "count": 6
+                        },
+                        {
+                            "id": 112160,
+                            "name": "Snowborn Heart of Ignorance",
+                            "count": 27
+                        },
+                        {
+                            "id": 112148,
+                            "name": "Ethereal Crystalscale Stone",
+                            "count": 18
+                        }
+                    ]
+                },
+                "preview": true,
+                "rarity": 5,
+                "weapon_type_id": 12,
+                "icon": "https://i.gachabase.net/tMlqDfo9EDQD3nRIXSposGhUM3jDWyKlg7LhFASSGdU/q:50/f:webp/plain/gi/assets/9c428fdbc855770065d5fe8884442bca.png"
+            },
+            "materials": {
+                "202": {
+                    "id": 202,
+                    "name": "Mora",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/7lUACDKA9BGSrMzlKw8bEKLmfswptgsIqkOaS4Z8K24/q:50/f:webp/plain/gi/assets/2271cc9e48a387a1577bb9804c035fb4.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112146": {
+                    "id": 112146,
+                    "name": "Ethereal Glimmershard",
+                    "rarity": 1,
+                    "images": {
+                        "icon": "https://i.gachabase.net/Mn5tYwylKHWJcsbWlOOoUW15nKy4nrjHQghCXb4CXl0/q:50/f:webp/plain/gi/assets/eeb965b8226c1e6d4274c823f3cb24bf.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112147": {
+                    "id": 112147,
+                    "name": "Ethereal Crystal",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/aEVO-Vbamxp_lvyLZanfMrkep2nkXqE4pnL73uDlODM/q:50/f:webp/plain/gi/assets/11dad6737ed7ac31bace42910e854364.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112148": {
+                    "id": 112148,
+                    "name": "Ethereal Crystalscale Stone",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/ySjq3QBJgtvxVXgVhLuN56iKrd624jnpUfRZZqtuUDw/q:50/f:webp/plain/gi/assets/93d0fa367b641705a2c79aa74cd5d500.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112158": {
+                    "id": 112158,
+                    "name": "Snowborn Heartshard",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qYFhf6rIJf-TsAaxUClzuDlJvm1hoCgrz6P9RRjhXzs/q:50/f:webp/plain/gi/assets/145020e56b2b17d9dad1a81f1d22ff46.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112159": {
+                    "id": 112159,
+                    "name": "Snowborn Mirrorheart",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/f3ts0L6QQmy-wHCALBQVHCs78n4oadUgDMAHxqQvFB0/q:50/f:webp/plain/gi/assets/101a0a0422560be8712ff520f470e3a0.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112160": {
+                    "id": 112160,
+                    "name": "Snowborn Heart of Ignorance",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/3B8LYk6rmvSLQMJVyRVuDfSW7JiMs8kLG0NoIMU_8Lk/q:50/f:webp/plain/gi/assets/11115081511a8d00987d9fff488e29be.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114093": {
+                    "id": 114093,
+                    "name": "The Frost Emperor's Revival",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/WYDGMpLMupoNeBUOZoT7ccr9tnxaCcSQ__sFmTy9_sg/q:50/f:webp/plain/gi/assets/8991599d2c01e2422d659aa1b038c98b.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114094": {
+                    "id": 114094,
+                    "name": "The Frost Emperor's Ceremony",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/hHGyWG8GM7wF87LEYWt5gFOzttoQ5cde1g1o_A5C67o/q:50/f:webp/plain/gi/assets/b5a527adb1e3b9609c0c4b63f9e7717c.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114095": {
+                    "id": 114095,
+                    "name": "The Frost Emperor's Lament",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/VaJDCDWWlj7lA-ogJnVuzSm70EdhJ2SnlZZ6ObjvVQM/q:50/f:webp/plain/gi/assets/0167def4c114b1b54eb18768e36c4c19.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114096": {
+                    "id": 114096,
+                    "name": "The Frost Emperor's Farewell",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qfLPNFPw60baQkb2IpOToMrGXxSZCWF1IA8IJQzIIU8/q:50/f:webp/plain/gi/assets/a26bbd436f1617a4678da947bc663bb0.png"
+                    },
+                    "inventory_unavailable": false
+                }
+            },
+            "release_confirmed": false
+        }
+    },
+    {
+        "kind": "weapons",
+        "data": {
+            "weapons": {
+                "id": 12438,
+                "name": "Blazing Lionfang",
+                "costs": {
+                    "ascend1": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 5000
+                        },
+                        {
+                            "id": 114089,
+                            "name": "Measured Pour of the Cellared Spiritual Nectar",
+                            "count": 3
+                        },
+                        {
+                            "id": 112158,
+                            "name": "Snowborn Heartshard",
+                            "count": 3
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 2
+                        }
+                    ],
+                    "ascend2": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 15000
+                        },
+                        {
+                            "id": 114090,
+                            "name": "Intoxication of the Cellared Spiritual Nectar",
+                            "count": 3
+                        },
+                        {
+                            "id": 112158,
+                            "name": "Snowborn Heartshard",
+                            "count": 12
+                        },
+                        {
+                            "id": 112149,
+                            "name": "Chimeric Core",
+                            "count": 8
+                        }
+                    ],
+                    "ascend3": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 20000
+                        },
+                        {
+                            "id": 114090,
+                            "name": "Intoxication of the Cellared Spiritual Nectar",
+                            "count": 6
+                        },
+                        {
+                            "id": 112159,
+                            "name": "Snowborn Mirrorheart",
+                            "count": 6
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 6
+                        }
+                    ],
+                    "ascend4": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 30000
+                        },
+                        {
+                            "id": 114091,
+                            "name": "Exhilaration of the Cellared Spiritual Nectar",
+                            "count": 3
+                        },
+                        {
+                            "id": 112159,
+                            "name": "Snowborn Mirrorheart",
+                            "count": 12
+                        },
+                        {
+                            "id": 112150,
+                            "name": "Symbiotic Chimeric Nucleus",
+                            "count": 9
+                        }
+                    ],
+                    "ascend5": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 35000
+                        },
+                        {
+                            "id": 114091,
+                            "name": "Exhilaration of the Cellared Spiritual Nectar",
+                            "count": 6
+                        },
+                        {
+                            "id": 112160,
+                            "name": "Snowborn Heart of Ignorance",
+                            "count": 9
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 6
+                        }
+                    ],
+                    "ascend6": [
+                        {
+                            "id": 202,
+                            "name": "Mora",
+                            "count": 45000
+                        },
+                        {
+                            "id": 114092,
+                            "name": "Revelry of the Cellared Spiritual Nectar",
+                            "count": 4
+                        },
+                        {
+                            "id": 112160,
+                            "name": "Snowborn Heart of Ignorance",
+                            "count": 18
+                        },
+                        {
+                            "id": 112151,
+                            "name": "Prime Chimeric Nexus",
+                            "count": 12
+                        }
+                    ]
+                },
+                "preview": true,
+                "rarity": 4,
+                "weapon_type_id": 11,
+                "icon": "https://i.gachabase.net/gcsixxDTWrLxSCm9csOSJhhJvDlM2LHkHgTrT_ycDJM/q:50/f:webp/plain/gi/assets/dcd7a218e4e82730dc36bb1e1aee77bf.png"
+            },
+            "materials": {
+                "202": {
+                    "id": 202,
+                    "name": "Mora",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/7lUACDKA9BGSrMzlKw8bEKLmfswptgsIqkOaS4Z8K24/q:50/f:webp/plain/gi/assets/2271cc9e48a387a1577bb9804c035fb4.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112149": {
+                    "id": 112149,
+                    "name": "Chimeric Core",
+                    "rarity": 1,
+                    "images": {
+                        "icon": "https://i.gachabase.net/jyUfdDcJ0voGrFcHp2V6tz_bS4e6uBq55E8VI9Kb9jE/q:50/f:webp/plain/gi/assets/435a0f63ffb3b541accbf185a4cf013f.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112150": {
+                    "id": 112150,
+                    "name": "Symbiotic Chimeric Nucleus",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qxpbOU4N6lpKiL5BxhRlEHoz09UTtm_ZBDSyaEBcjM8/q:50/f:webp/plain/gi/assets/9660ee1009653e72717acdccc66d8d3d.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112151": {
+                    "id": 112151,
+                    "name": "Prime Chimeric Nexus",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/JwF_xy303yu_6ppZJQWJHGrrTLu7nMnCtpLAb4xBj0o/q:50/f:webp/plain/gi/assets/ce03d8b1555fa7153aa60015a01d6727.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112158": {
+                    "id": 112158,
+                    "name": "Snowborn Heartshard",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/qYFhf6rIJf-TsAaxUClzuDlJvm1hoCgrz6P9RRjhXzs/q:50/f:webp/plain/gi/assets/145020e56b2b17d9dad1a81f1d22ff46.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112159": {
+                    "id": 112159,
+                    "name": "Snowborn Mirrorheart",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/f3ts0L6QQmy-wHCALBQVHCs78n4oadUgDMAHxqQvFB0/q:50/f:webp/plain/gi/assets/101a0a0422560be8712ff520f470e3a0.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "112160": {
+                    "id": 112160,
+                    "name": "Snowborn Heart of Ignorance",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/3B8LYk6rmvSLQMJVyRVuDfSW7JiMs8kLG0NoIMU_8Lk/q:50/f:webp/plain/gi/assets/11115081511a8d00987d9fff488e29be.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114089": {
+                    "id": 114089,
+                    "name": "Measured Pour of the Cellared Spiritual Nectar",
+                    "rarity": 2,
+                    "images": {
+                        "icon": "https://i.gachabase.net/NPGIYFMYahowLmAMv74MBWwFunwBBxrD85l1H6dEFio/q:50/f:webp/plain/gi/assets/49c86aa3bdc53cb16201479dc1bf5805.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114090": {
+                    "id": 114090,
+                    "name": "Intoxication of the Cellared Spiritual Nectar",
+                    "rarity": 3,
+                    "images": {
+                        "icon": "https://i.gachabase.net/xV3HwZbTPIf0A8F3GltgbXugkx2IwXnGE_O95cSOy2s/q:50/f:webp/plain/gi/assets/677cf7ac904f639f5ca644d143ba0252.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114091": {
+                    "id": 114091,
+                    "name": "Exhilaration of the Cellared Spiritual Nectar",
+                    "rarity": 4,
+                    "images": {
+                        "icon": "https://i.gachabase.net/xJhPY5xxSoeEc_wfQbbOoWfG6z2TSwMTlD-EO8COaPM/q:50/f:webp/plain/gi/assets/5b9d82799d1699dff3abd7fd86f963fb.png"
+                    },
+                    "inventory_unavailable": false
+                },
+                "114092": {
+                    "id": 114092,
+                    "name": "Revelry of the Cellared Spiritual Nectar",
+                    "rarity": 5,
+                    "images": {
+                        "icon": "https://i.gachabase.net/hOi2mZk5cqQL-u_UwnwGT26RPx4p_0X7pVRvHyurUCE/q:50/f:webp/plain/gi/assets/d0ee155614b695dcbb5f37d05b73ea97.png"
+                    },
+                    "inventory_unavailable": false
+                }
+            },
+            "release_confirmed": false
+        }
+    }
+]

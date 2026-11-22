@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}Journey Map | Cyrene{% endblock %}
+
+{% macro game_icon(entry, size='') %}
+<img
+    class="jm-game-icon {{ size }}"
+    src="{{ entry.icon }}"
+    alt=""
+    loading="lazy"
+    decoding="async"
+/>
+{% endmacro %}
+
+{% macro mark(state) %}
+<span class="jm-mark jm-mark--{{ 'yes' if state == '1' else 'partial' if state == '-' else 'no' }}" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
+        {% if state == '1' %}
+        <path d="m5 12 4 4L19 6" />
+        {% elif state == '0' %}
+        <path d="m6 6 12 12M18 6 6 18" />
+        {% else %}
+        <path d="M5 12h14" />
+        {% endif %}
+    </svg>
+</span>
+{% endmacro %}
+
+{% macro bar(value, total) %}
+<span class="jm-bar" role="img" aria-label="{{ value }} of {{ total }}">
+    <span class="jm-bar-fill" style="width: {{ (value / total * 100) | round(1) }}%"></span>
+</span>
+{% endmacro %}
+
+{% macro editable_list(kind, heading, records, noun) %}
+<section
+    class="jm-tasks"
+    data-jm-list="{{ kind }}"
+    aria-labelledby="jm-{{ kind }}-heading"
+>
+    <header class="jm-tasks-head">
+        <div>
+            <h3 id="jm-{{ kind }}-heading">{{ heading }}</h3>
+        </div>
+        <button type="button" class="jm-editor-button jm-editor-button--primary" data-jm-todo-add>
+            Add {{ noun }}
+        </button>
+    </header>
+    <div data-jm-todo-list>
+        <ul class="jm-todo" aria-label="{{ heading }}">
+            {% for task in records %}
+            <li data-todo-id="{{ task.id }}" class="{{ 'is-done' if task.done else '' }}">
+                {% if kind == "todos" %}
+                <input
+                    type="checkbox"
+                    data-jm-todo-done
+                    aria-label="Complete {{ task.title }}"
+                    {% if task.done %}
+                    checked{% endif %}
+                />
+                {% endif %}
+                <button
+                    type="button"
+                    class="jm-todo-content"
+                    data-jm-todo-edit
+                    aria-label="Edit {{ task.title }}"
+                >
+                    <strong>{{ task.title }}</strong>
+                    {% if task.detail %}<span data-jm-notes>{{ task.detail }}</span
+                    >{% endif %}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="jm-todo-empty" {% if records %} hidden{% endif %}>
+            No {{ heading | lower }} yet.
+        </p>
+    </div>
+    <p class="jm-editor-error" data-jm-todo-list-error role="alert" hidden></p>
+
+    <dialog
+        class="jm-editor jm-todo-dialog"
+        data-jm-todo-dialog
+        aria-labelledby="jm-{{ kind }}-title"
+    >
+        <form class="jm-editor-form" data-jm-todo-form>
+            <header class="jm-editor-head">
+                <h3 id="jm-{{ kind }}-title">Add {{ noun }}</h3>
+                <button type="button" class="jm-todo-close" data-jm-todo-cancel aria-label="Close">
+                    <span class="cyrene-close" aria-hidden="true"></span>
+                </button>
+            </header>
+            <label class="jm-editor-field"
+                ><span>{{ "Limitation" if kind == "limits" else "Title" }}</span
+                ><input
+                    type="text"
+                    name="title"
+                    maxlength="160"
+                    placeholder="{{ 'What is the limitation?' if kind == 'limits' else 'What would you like to do?' }}"
+                    required
+                    autocomplete="off"
+            /></label>
+            <label class="jm-editor-field"
+                ><span>{{ "Details" if kind == "limits" else "Notes" }} <small>(optional)</small></span
+                ><textarea
+                    name="detail"
+                    maxlength="2000"
+                    rows="4"
+                    placeholder="{{ 'Describe what is affected and when it happens' if kind == 'limits' else 'Add any details to remember' }}"
+                ></textarea>
+            </label>
+            <p class="jm-editor-error" data-jm-todo-error role="alert" hidden></p>
+            <footer class="jm-editor-actions">
+                <button type="button" class="jm-editor-link" data-jm-todo-delete hidden>
+                    Delete
+                </button>
+                <button type="button" class="jm-editor-button" data-jm-todo-cancel>Cancel</button>
+                <button
+                    type="submit"
+                    class="jm-editor-button jm-editor-button--primary"
+                    data-jm-todo-save
+                >
+                    Add {{ noun }}
+                </button>
+            </footer>
+        </form>
+    </dialog>
+    <dialog
+        class="jm-editor"
+        data-jm-todo-confirm
+        aria-labelledby="jm-{{ kind }}-delete-title"
+    >
+        <div class="jm-editor-form">
+            <header class="jm-editor-head">
+                <h3 id="jm-{{ kind }}-delete-title">Delete {{ noun }}?</h3>
+            </header>
+            <p>This will permanently remove this {{ noun }} and its notes.</p>
+            <p class="jm-editor-error" data-jm-todo-delete-error role="alert" hidden></p>
+            <footer class="jm-editor-actions">
+                <button type="button" class="jm-editor-button" data-jm-todo-keep>
+                    Keep {{ noun }}
+                </button>
+                <button type="button" class="jm-editor-button" data-jm-todo-remove>Delete</button>
+            </footer>
+        </div>
+    </dialog>
+</section>
+{% endmacro %}
+
+{% macro key_list(entries) %}
+<h3 class="jm-heading">Keys</h3>
+<ul class="jm-switches">
+    {% for name, keys, description in entries %}
+    <li>
+        <span class="jm-combo"><kbd>{{ keys | join(" + ") }}</kbd></span>
+        <strong>{{ name }}</strong>
+        <span>{{ description }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+{% block content %}
+<div class="page jm-page" data-jm-page>
+    <header class="jm-hero">
+        <p class="jm-eyebrow">Special</p>
+        <h1>Journey Map</h1>
+        <p>My map overlay, the beacons that ride on it, and where both stand.</p>
+    </header>
+
+    <div class="jm-tabs" role="tablist" aria-label="Journey Map sections">
+        <button
+            type="button"
+            class="jm-tab"
+            role="tab"
+            data-jm-tab="map"
+            data-tone="map"
+            aria-selected="true"
+        >
+            <img
+                class="jm-tab-icon"
+                src="/static/images/ui/ui_icons/JM.png"
+                alt=""
+                loading="lazy"
+                decoding="async"
+            />
+            Map
+        </button>
+        <button
+            type="button"
+            class="jm-tab"
+            role="tab"
+            data-jm-tab="beacons"
+            data-tone="beacons"
+            aria-selected="false"
+            tabindex="-1"
+        >
+            <img
+                class="jm-tab-icon"
+                src="/static/images/journey-map/beacon.png"
+                alt=""
+                loading="lazy"
+                decoding="async"
+            />
+            Beacons
+        </button>
+        <button
+            type="button"
+            class="jm-tab"
+            role="tab"
+            data-jm-tab="status"
+            data-tone="status"
+            aria-selected="false"
+            tabindex="-1"
+        >
+            <span
+                class="jm-tab-icon jm-tab-icon--mask"
+                style="--jm-mask: url(&quot;/static/images/ui/check.svg&quot;)"
+            ></span>
+            Status
+        </button>
+    </div>
+
+    <section class="jm-panel" role="tabpanel" data-jm-panel="map" data-tone="map">
+        <div class="jm-banner">
+            <img src="/static/images/ui/ui_icons/JM.png" alt="" loading="lazy" decoding="async" />
+            <div>
+                <h2>
+                    Journey Map <span class="jm-version">{{ versions.map_version }}</span
+                    ><button
+                        type="button"
+                        class="jm-version-edit"
+                        data-jm-versions-open
+                        aria-label="Edit versions"
+                    >
+                        <span
+                            class="jm-tab-icon--mask"
+                            style="--jm-mask: url(&quot;/static/images/ui/edit.svg&quot;)"
+                            aria-hidden="true"
+                        ></span>
+                    </button>
+                </h2>
+                <p>{{ map_categories }} categories across {{ map_tabs | length }} tabs</p>
+            </div>
+        </div>
+
+        <h3 class="jm-heading">Tabs</h3>
+        <ul class="jm-tiles">
+            {% for tab in map_tabs %}
+            <li class="jm-tile">
+                {{ game_icon(tab, 'jm-game-icon--lg') }}
+                <strong>{{ tab.name }}</strong>
+                <span>{{ tab.categories }} categories</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {{ key_list(map_keys) }}
+    </section>
+
+    <section class="jm-panel" role="tabpanel" data-jm-panel="beacons" data-tone="beacons" hidden>
+        <div class="jm-banner">
+            <img
+                src="/static/images/journey-map/beacon.png"
+                alt=""
+                loading="lazy"
+                decoding="async"
+            />
+            <div>
+                <h2>
+                    Journey Beacons <span class="jm-version">{{ versions.beacons_version }}</span
+                    ><button
+                        type="button"
+                        class="jm-version-edit"
+                        data-jm-versions-open
+                        aria-label="Edit versions"
+                    >
+                        <span
+                            class="jm-tab-icon--mask"
+                            style="--jm-mask: url(&quot;/static/images/ui/edit.svg&quot;)"
+                            aria-hidden="true"
+                        ></span>
+                    </button>
+                </h2>
+                <p>{{ hooked_total }} of {{ map_categories }} categories hooked</p>
+            </div>
+        </div>
+
+        {{ key_list(beacon_keys) }}
+
+        <h3 class="jm-heading">Coverage per map tab</h3>
+        <ul class="jm-coverage">
+            {% for tab in map_tabs %}
+            <li class="{{ 'is-full' if tab.hooked == tab.categories else 'is-empty' if tab.hooked == 0 else '' }}">
+                {{ game_icon(tab) }}
+                <strong>{{ tab.name }}</strong>
+                {{ bar(tab.hooked, tab.categories) }}
+                <span class="jm-count">{{ tab.hooked }} / {{ tab.categories }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {{ editable_list("limits", "Limits", beacon_limits, "limit") }}
+    </section>
+
+    <section class="jm-panel" role="tabpanel" data-jm-panel="status" data-tone="status" hidden>
+        <ul class="jm-legend">
+            {% for state, label in states.items() %}
+            <li data-item-state="{{ state }}">
+                <i></i><strong>{{ state_totals[state] }}</strong>{{ label }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h3 class="jm-heading">Every item</h3>
+        <div class="jm-everything">
+            {% for tab in status_tabs %}
+            <details
+                class="jm-category"
+                data-jm-category="{{ tab.name }}"
+                {% if tab.name not in collapsed_tabs %}
+                open{% endif %}
+            >
+                <summary>
+                    <img
+                        class="jm-game-icon"
+                        src="{{ tab.icon }}"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                    />
+                    <strong>{{ tab.name }}</strong>
+                    <span class="jm-category-bar" aria-hidden="true">
+                        {% for state in states %}{% if tab.counts[state] %}<span
+                            data-item-state="{{ state }}"
+                            style="flex: {{ tab.counts[state] }}"
+                        ></span
+                        >{% endif %}{% endfor %}
+                    </span>
+                    <span class="jm-category-count"
+                        >{{ tab['items'] | length - tab.counts.todo - tab.counts.broken }} / {{ tab['items'] | length }}</span
+                    >
+                    <span
+                        class="jm-chevron jm-tab-icon--mask"
+                        style="--jm-mask: url(&quot;/static/images/ui/chevron-down.svg&quot;)"
+                        aria-hidden="true"
+                    ></span>
+                </summary>
+                <ul class="jm-items">
+                    {% for entry in tab['items'] %}
+                    <li
+                        data-item-id="{{ entry.id }}"
+                        data-item-state="{{ entry.state }}"
+                        {% if entry.manual %}
+                        data-item-manual{% endif %}{% if entry.checks %}
+                        data-checks="{{ entry.checks }}"
+                        data-tested-on="{{ entry.tested_on }}"
+                        {% endif %}
+                    >
+                        <button
+                            type="button"
+                            class="jm-item-edit"
+                            aria-describedby="jm-item-details-{{ entry.id }}"
+                        >
+                            <img
+                                src="{{ entry.icon }}"
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                            />
+                            <span>{{ entry.name }}</span>
+                        </button>
+                        <div
+                            class="jm-item-details"
+                            id="jm-item-details-{{ entry.id }}"
+                            role="tooltip"
+                            popover="manual"
+                        >
+                            <div class="jm-working-head">
+                                {{ game_icon(entry, 'jm-game-icon--lg') }}
+                                <div>
+                                    <strong>{{ entry.name }}</strong>
+                                    {% if entry.tested_on %}<span
+                                        >Tested on {{ entry.tested_on }}</span
+                                    >{% endif %}
+                                </div>
+                                {% if entry.checks %}
+                                {% set percent = ((entry.checks.count('1') + entry.checks.count('-') * 0.5) / entry.checks | length * 100) | round | int %}
+                                <span class="jm-percent" data-state="{{ 'good' if percent == 100 else 'bad' if percent == 0 else 'warn' }}"
+                                    >{{ percent }}%</span
+                                >
+                                {% endif %}
+                            </div>
+                            {% if entry.checks %}
+                            <ul class="jm-checks">
+                                {% for label in working_columns %}
+                                <li>{{ mark(entry.checks[loop.index0]) }}{{ label }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="jm-item-untested">No test results recorded.</p>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </details>
+            {% endfor %}
+        </div>
+
+        {{ editable_list("todos", "To-do", todo, "to-do") }}
+
+        <dialog class="jm-editor" data-jm-editor aria-labelledby="jm-editor-title">
+            <form class="jm-editor-form" method="dialog" data-jm-editor-form>
+                <header class="jm-editor-head">
+                    <img
+                        class="jm-game-icon jm-game-icon--lg"
+                        src=""
+                        alt=""
+                        data-jm-editor-icon
+                        loading="lazy"
+                        decoding="async"
+                    />
+                    <h3 id="jm-editor-title" data-jm-editor-name></h3>
+                </header>
+
+                <fieldset class="jm-editor-group">
+                    <legend>Status</legend>
+                    {% for state, label in states.items() %}
+                    <label class="jm-editor-state" data-item-state="{{ state }}">
+                        <input type="radio" name="state" value="{{ state }}" />
+                        <i></i>{{ label }}
+                    </label>
+                    {% endfor %}
+                </fieldset>
+
+                <label class="jm-editor-toggle">
+                    <input type="checkbox" name="working" />
+                    Show test details
+                </label>
+
+                <div class="jm-editor-details" data-jm-editor-details hidden>
+                    <label class="jm-editor-field">
+                        <span>Tested on</span>
+                        <input type="text" name="tested_on" maxlength="80" autocomplete="off" />
+                    </label>
+                    <fieldset class="jm-editor-group">
+                        <legend>Checks</legend>
+                        {% for label in working_columns %}
+                        <label class="jm-check-row">
+                            <span>{{ label }}</span>
+                            <span
+                                class="jm-check-options"
+                                role="group"
+                                aria-label="{{ label }} status"
+                            >
+                                <button
+                                    type="button"
+                                    class="jm-check-choice"
+                                    data-value="1"
+                                    aria-label="Working"
+                                    aria-pressed="false"
+                                >
+                                    ✓
+                                </button>
+                                <button
+                                    type="button"
+                                    class="jm-check-choice"
+                                    data-value="-"
+                                    aria-label="Partly working"
+                                    aria-pressed="false"
+                                >
+                                    −
+                                </button>
+                                <button
+                                    type="button"
+                                    class="jm-check-choice"
+                                    data-value="0"
+                                    aria-label="Not working"
+                                    aria-pressed="true"
+                                >
+                                    ×
+                                </button>
+                            </span>
+                        </label>
+                        {% endfor %}
+                    </fieldset>
+                </div>
+
+                <p class="jm-editor-error" data-jm-editor-error role="alert" hidden></p>
+
+                <footer class="jm-editor-actions">
+                    <button type="button" class="jm-editor-link" data-jm-editor-reset>
+                        Use automatic status
+                    </button>
+                    <button type="button" class="jm-editor-button" data-jm-editor-cancel>
+                        Cancel
+                    </button>
+                    <button type="submit" class="jm-editor-button jm-editor-button--primary">
+                        Save
+                    </button>
+                </footer>
+            </form>
+        </dialog>
+    </section>
+
+    <dialog class="jm-editor" data-jm-versions aria-labelledby="jm-versions-title">
+        <form class="jm-editor-form" method="dialog" data-jm-versions-form>
+            <header class="jm-editor-head">
+                <h3 id="jm-versions-title">Versions</h3>
+            </header>
+            <label class="jm-editor-field">
+                <span>Journey Map version</span>
+                <input
+                    type="text"
+                    name="map_version"
+                    value="{{ versions.map_version }}"
+                    maxlength="24"
+                    required
+                    autocomplete="off"
+                />
+            </label>
+            <label class="jm-editor-field">
+                <span>Journey Beacons version</span>
+                <input
+                    type="text"
+                    name="beacons_version"
+                    value="{{ versions.beacons_version }}"
+                    maxlength="24"
+                    required
+                    autocomplete="off"
+                />
+            </label>
+            <p class="jm-editor-error" data-jm-versions-error role="alert" hidden></p>
+            <footer class="jm-editor-actions">
+                <button type="button" class="jm-editor-button" data-jm-versions-cancel>
+                    Cancel
+                </button>
+                <button type="submit" class="jm-editor-button jm-editor-button--primary">
+                    Save
+                </button>
+            </footer>
+        </form>
+    </dialog>
+</div>
+{% endblock %}

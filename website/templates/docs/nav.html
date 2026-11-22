@@ -1,0 +1,48 @@
+<aside class="docs-nav" aria-label="Documentation">
+    <div class="docs-search" data-docs-search>
+        <label class="docs-search-label" for="docs-search-input">Search the docs</label>
+        <input
+            type="search"
+            id="docs-search-input"
+            class="docs-search-input"
+            placeholder="Search docs"
+            autocomplete="off"
+            aria-controls="docs-search-results"
+        />
+        <ul class="docs-search-results" id="docs-search-results" role="listbox" hidden></ul>
+        <script type="application/json" id="docs-search-index">
+            {{ search_index | tojson }}
+        </script>
+    </div>
+
+    <button
+        type="button"
+        class="docs-nav-toggle"
+        aria-expanded="false"
+        aria-controls="docs-nav-links"
+        data-docs-nav-toggle
+    >
+        <span>{{ page.title if page else "Overview" }}</span>
+        <span class="docs-nav-toggle-hint">All pages</span>
+    </button>
+
+    <nav class="docs-nav-links" id="docs-nav-links">
+        <a href="/docs" class="docs-nav-home {% if not current_slug %}active{% endif %}"
+            >Overview</a
+        >
+        {% for section in sections %}
+        <div class="docs-nav-section">
+            <p class="docs-nav-heading">{{ section.title }}</p>
+            {% for item in section.pages %}
+            <a
+                href="/docs/{{ item.slug }}"
+                class="docs-nav-link {% if item.slug == current_slug %}active{% endif %}"
+                {% if item.slug == current_slug %}aria-current="page"
+                {% endif %}
+                >{{ item.title }}</a
+            >
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </nav>
+</aside>

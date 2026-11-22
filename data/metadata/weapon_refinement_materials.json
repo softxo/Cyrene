@@ -1,0 +1,140 @@
+{
+    "sources": ["https://github.com/theBowja/genshin-db/tree/main/src/data/English/materials"],
+    "weapons": {
+        "13415": {
+            "id": 200107,
+            "name": "Ako's Sake Vessel",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200107.webp"
+        },
+        "11415": {
+            "id": 200108,
+            "name": "Alkahest",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200108.webp"
+        },
+        "15426": {
+            "id": 200121,
+            "name": "Cam and Cables of Law",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200121.webp"
+        },
+        "15432": {
+            "id": 200125,
+            "name": "Composite Bow Tuning Kit",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200125.webp"
+        },
+        "15419": {
+            "id": 200115,
+            "name": "Congealed Pupa Wax",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200115.webp"
+        },
+        "14426": {
+            "id": 200117,
+            "name": "Dandelion Bookmark",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200117.webp"
+        },
+        "12432": {
+            "id": 200126,
+            "name": "Drifter's Crystal Marrow",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200126.webp"
+        },
+        "12412": {
+            "id": 200106,
+            "name": "Emperor's Balsam",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200106.webp"
+        },
+        "13426": {
+            "id": 200120,
+            "name": "\"Exalted Earth\"",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200120.webp"
+        },
+        "11413": {
+            "id": 200103,
+            "name": "Festering Dragon Marrow",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200103.webp"
+        },
+        "14413": {
+            "id": 200105,
+            "name": "\"Fragments of Innocence\"",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200105.webp"
+        },
+        "15411": {
+            "id": 200110,
+            "name": "Glowing Gem",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200110.webp"
+        },
+        "14432": {
+            "id": 200127,
+            "name": "Golden Strings",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200127.webp"
+        },
+        "11426": {
+            "id": 200116,
+            "name": "Martens' Omni-Fix",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200116.webp"
+        },
+        "14415": {
+            "id": 200109,
+            "name": "Ointment of Sight",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200109.webp"
+        },
+        "15418": {
+            "id": 200111,
+            "name": "Original Fish Ointment",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200111.webp"
+        },
+        "11422": {
+            "id": 200113,
+            "name": "Parasol Talcum",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200113.webp"
+        },
+        "13419": {
+            "id": 200112,
+            "name": "Plume of the Changing Winds",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200112.webp"
+        },
+        "15434": {
+            "id": 200128,
+            "name": "Refined Heart",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200128.webp"
+        },
+        "11432": {
+            "id": 200123,
+            "name": "Shuttle of Odara",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200123.webp"
+        },
+        "13432": {
+            "id": 200124,
+            "name": "Smoldering Phosphorescent Flame",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200124.webp"
+        },
+        "12426": {
+            "id": 200119,
+            "name": "Super-Duper Invincible Shining Sparkly Magic Crystal",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200119.webp"
+        },
+        "11428": {
+            "id": 200118,
+            "name": "Surging Sacred Chalice",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200118.webp"
+        },
+        "11438": {
+            "id": 200129,
+            "name": "Tea-Scented Tassel",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200129.webp"
+        },
+        "14427": {
+            "id": 200122,
+            "name": "\"The Sea's Silent Shade\"",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200122.webp"
+        },
+        "15413": {
+            "id": 200104,
+            "name": "\"The Visible Winds\"",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200104.webp"
+        },
+        "12418": {
+            "id": 200114,
+            "name": "Unfading Silky Grace",
+            "icon": "https://static.nanoka.cc/assets/gi/UI_ItemIcon_200114.webp"
+        }
+    }
+}

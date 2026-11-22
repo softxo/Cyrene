@@ -1,0 +1,71 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("verification") }}
+<details class="docs-faq" open>
+    <summary>“That verification code is invalid, expired, or has already been used.”</summary>
+    <p>
+        Codes only work once and expire after a while. Go back to
+        <a href="/verify">Connect Discord</a>, press <strong>Generate a new code</strong> and run
+        <code>/verify</code> with the new one. Copy it exactly, or sign in with Discord instead.
+    </p>
+</details>
+
+{{ topic("hoyolab-data") }}
+<details class="docs-faq">
+    <summary>Characters, events or exploration don't show any data</summary>
+    <p>
+        Open HoYoLAB and make sure your Battle Chronicle details are public. Then reload the page.
+        If it still fails, the login may have expired: remove the account in
+        <a href="/settings">Settings</a> and link it again.
+    </p>
+</details>
+<details class="docs-faq">
+    <summary>Some of my weapons or materials are missing</summary>
+    <p>
+        HoYoLAB only shares equipped weapons and development materials. Import the rest of your
+        weapons with the <a href="/docs/characters-weapons#weapon-scanner">Cyrene Scanner</a>, or
+        add copies by hand. Other items, such as artifacts and food, can't be added.
+    </p>
+</details>
+<details class="docs-faq">
+    <summary>“Cyrene couldn't retrieve your Genshin Resin data from HoYoLAB.”</summary>
+    <p>
+        HoYoLAB might be busy, or your login might have expired. Wait a minute and try again. If it
+        keeps happening, relink the account with <code>/link-account</code>.
+    </p>
+</details>
+
+{{ topic("commands") }}
+<details class="docs-faq">
+    <summary>Prefix commands don't respond</summary>
+    <p>
+        The server may use a different prefix. Slash commands always work, so try
+        <code>/ping</code>. Server administrators can check or change the prefix with
+        <code>/prefix</code>.
+    </p>
+</details>
+<details class="docs-faq">
+    <summary>A name with spaces isn't found in a prefix command</summary>
+    <p>
+        For the calculators, wrap the name in quotes, for example
+        <code>{{ prefix }}cr "Hu Tao" 1 90</code>. Slash commands avoid this entirely,
+        because you pick the name from the suggestions.
+    </p>
+</details>
+<details class="docs-faq">
+    <summary>A command failed and showed an Error ID</summary>
+    <p>
+        Share the Error ID when asking for help, as it points to exactly what went wrong. Server
+        staff with the Manage Server permission can look it up with <code>/error</code>.
+    </p>
+</details>
+
+{{ topic("get-help") }}
+<p>
+    Still stuck? Ask in the
+    <a href="https://discord.gg/KpkggK4UqB" target="_blank" rel="noopener">Cyrene Discord server</a
+    >. Say what you tried, and include the Error ID if you got one.
+</p>
+{% endblock %}

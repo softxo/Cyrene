@@ -1,0 +1,254 @@
+{
+    "achievements": [
+        {
+            "id": [86092],
+            "name": "Continental Explorer: Snow Blanketed Nation (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9089,
+            "stages": 1,
+            "stage1": {
+                "title": "Continental Explorer: Snow Blanketed Nation (II)",
+                "description": "Light up the maps of Novokitezhgrad and Wingspan Peak in Snezhnaya.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86093],
+            "name": "Across the Icebound Snowscape (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9090,
+            "stages": 1,
+            "stage1": {
+                "title": "Across the Icebound Snowscape (II)",
+                "description": "Unlock all Teleport Waypoints in Novokitezhgrad and Wingspan Peak within the Snezhnaya region.",
+                "progress": 40,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86094],
+            "name": "Sanctuary Pilgrim: Snow Blanketed Nation (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9091,
+            "stages": 1,
+            "stage1": {
+                "title": "Sanctuary Pilgrim: Snow Blanketed Nation (II)",
+                "description": "Unlock all the Shrines of Depths in the following areas in Snezhnaya: Novokitezhgrad and Wingspan Peak.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86095],
+            "name": "Bounty of the Shadow Realm: Snow Blanketed Nation (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9092,
+            "stages": 1,
+            "stage1": {
+                "title": "Bounty of the Shadow Realm: Snow Blanketed Nation (II)",
+                "description": "Unlock all Shadow Realm treasure vaults in Novokitezhgrad and Wingspan Peak in the Snezhnaya region.",
+                "progress": 2,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86096, 86097, 86098],
+            "name": "The Tundra Will Guide You Home (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9093,
+            "stages": 3,
+            "stage1": {
+                "title": "The Tundra Will Guide You Home (II)",
+                "description": "Follow {param0} Seelie in Novokitezhgrad and Wingspan Peak to their Seelie Courts.",
+                "progress": 4,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "The Tundra Will Guide You Home (II)",
+                "description": "Follow {param0} Seelie in Novokitezhgrad and Wingspan Peak to their Seelie Courts.",
+                "progress": 9,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "The Tundra Will Guide You Home (II)",
+                "description": "Follow {param0} Seelie in Novokitezhgrad and Wingspan Peak to their Seelie Courts.",
+                "progress": 18,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86099, 86100, 86101],
+            "name": "Glacial Treasure Hunter (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9096,
+            "stages": 3,
+            "stage1": {
+                "title": "Glacial Treasure Hunter (II)",
+                "description": "Open {param0} chests in Novokitezhgrad and Wingspan Peak.",
+                "progress": 45,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Glacial Treasure Hunter (II)",
+                "description": "Open {param0} chests in Novokitezhgrad and Wingspan Peak.",
+                "progress": 90,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Glacial Treasure Hunter (II)",
+                "description": "Open {param0} chests in Novokitezhgrad and Wingspan Peak.",
+                "progress": 180,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86102, 86103, 86104],
+            "name": "Chillwinter Adventurer (II)",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9099,
+            "stages": 3,
+            "stage1": {
+                "title": "Chillwinter Adventurer (II)",
+                "description": "Complete {param0} Open World Time Trial Challenges in Novokitezhgrad and Wingspan Peak.",
+                "progress": 3,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "stage2": {
+                "title": "Chillwinter Adventurer (II)",
+                "description": "Complete {param0} Open World Time Trial Challenges in Novokitezhgrad and Wingspan Peak.",
+                "progress": 7,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "stage3": {
+                "title": "Chillwinter Adventurer (II)",
+                "description": "Complete {param0} Open World Time Trial Challenges in Novokitezhgrad and Wingspan Peak.",
+                "progress": 14,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 20
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86105],
+            "name": "We Shall Not Rise Again, Nor See Each Other",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9102,
+            "stages": 1,
+            "stage1": {
+                "title": "We Shall Not Rise Again, Nor See Each Other",
+                "description": "Witness the end of Grand Duke Alvis of the Domovoy and his daughter Thrud.",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 10
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86106],
+            "name": "The Kantharos Runs Deep",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9103,
+            "stages": 1,
+            "stage1": {
+                "title": "The Kantharos Runs Deep",
+                "description": "Reach maximum Construction Level at the \"Meeting Point: Teplo Oasis.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        },
+        {
+            "id": [86107],
+            "name": "Echoes in Black",
+            "achievementGroupId": 73,
+            "achievementGroupName": "Snezhnaya: Sacred City of Ice and Pale Star (II)",
+            "sortOrder": 9104,
+            "stages": 1,
+            "stage1": {
+                "title": "Echoes in Black",
+                "description": "Reach maximum Construction Level at the \"Meeting Point: Royal Railway Transport Bureau.\"",
+                "progress": 1,
+                "reward": {
+                    "id": 201,
+                    "name": "Primogem",
+                    "count": 5
+                }
+            },
+            "version": "7.2"
+        }
+    ]
+}

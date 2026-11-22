@@ -1,0 +1,653 @@
+{
+    "source": "https://github.com/MadeBaruna/paimon-moe/blob/main/src/data/banners.js",
+    "banners": [
+        {
+            "kind": "character",
+            "start": "2020-09-28 00:00:00",
+            "end": "2020-10-18 18:00:00",
+            "featured": ["venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2020-10-20 18:00:00",
+            "end": "2020-11-10 16:00:00",
+            "featured": ["klee"]
+        },
+        {
+            "kind": "character",
+            "start": "2020-11-11 06:00:00",
+            "end": "2020-12-01 16:00:00",
+            "featured": ["tartaglia"]
+        },
+        {
+            "kind": "character",
+            "start": "2020-12-01 18:00:00",
+            "end": "2020-12-22 15:00:00",
+            "featured": ["zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2020-12-23 06:00:00",
+            "end": "2021-01-12 16:00:00",
+            "featured": ["albedo"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-01-12 18:00:00",
+            "end": "2021-02-02 15:00:00",
+            "featured": ["ganyu"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-02-03 06:00:00",
+            "end": "2021-02-17 16:00:00",
+            "featured": ["xiao"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-02-17 18:00:00",
+            "end": "2021-03-02 16:00:00",
+            "featured": ["keqing"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-03-02 18:00:00",
+            "end": "2021-03-16 15:00:00",
+            "featured": ["hu_tao"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-03-17 06:00:00",
+            "end": "2021-04-06 16:00:00",
+            "featured": ["venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-04-06 18:00:00",
+            "end": "2021-04-27 15:00:00",
+            "featured": ["tartaglia"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-04-28 06:00:00",
+            "end": "2021-05-18 17:59:59",
+            "featured": ["zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-05-18 18:00:00",
+            "end": "2021-06-08 15:00:00",
+            "featured": ["eula"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-06-09 06:00:00",
+            "end": "2021-06-29 17:59:59",
+            "featured": ["klee"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-06-29 18:00:00",
+            "end": "2021-07-20 14:59:59",
+            "featured": ["kaedehara_kazuha"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-07-21 06:00:00",
+            "end": "2021-08-10 17:59:59",
+            "featured": ["kamisato_ayaka"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-08-10 18:00:00",
+            "end": "2021-08-31 14:59:59",
+            "featured": ["yoimiya"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-09-01 06:00:00",
+            "end": "2021-09-21 17:59:59",
+            "featured": ["raiden_shogun"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-09-21 18:00:00",
+            "end": "2021-10-12 14:59:59",
+            "featured": ["sangonomiya_kokomi"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-10-13 06:00:00",
+            "end": "2021-11-02 17:59:59",
+            "featured": ["tartaglia"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-11-02 18:00:00",
+            "end": "2021-11-23 14:59:59",
+            "featured": ["hu_tao"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-11-24 06:00:00",
+            "end": "2021-12-14 17:59:59",
+            "featured": ["albedo", "eula"]
+        },
+        {
+            "kind": "character",
+            "start": "2021-12-14 18:00:00",
+            "end": "2022-01-04 17:59:59",
+            "featured": ["arataki_itto"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-01-05 06:00:00",
+            "end": "2022-01-25 17:59:59",
+            "featured": ["shenhe", "xiao"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-01-25 18:00:00",
+            "end": "2022-02-15 14:59:59",
+            "featured": ["zhongli", "ganyu"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-02-16 06:00:00",
+            "end": "2022-03-08 17:59:59",
+            "featured": ["yae_miko"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-03-08 18:00:00",
+            "end": "2022-03-29 14:59:59",
+            "featured": ["raiden_shogun", "sangonomiya_kokomi"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-03-30 06:00:00",
+            "end": "2022-04-19 17:59:59",
+            "featured": ["kamisato_ayato", "venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-04-19 18:00:00",
+            "end": "2022-05-31 05:59:59",
+            "featured": ["kamisato_ayaka"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-05-31 09:00:00",
+            "end": "2022-06-21 17:59:59",
+            "featured": ["yelan", "xiao"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-06-21 18:00:00",
+            "end": "2022-07-12 14:59:59",
+            "featured": ["arataki_itto"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-07-13 06:00:00",
+            "end": "2022-08-02 17:59:59",
+            "featured": ["kaedehara_kazuha", "klee"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-08-02 18:00:00",
+            "end": "2022-08-23 14:59:59",
+            "featured": ["yoimiya"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-08-24 06:00:00",
+            "end": "2022-09-09 17:59:59",
+            "featured": ["tighnari", "zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-09-09 18:00:00",
+            "end": "2022-09-27 14:59:59",
+            "featured": ["ganyu", "sangonomiya_kokomi"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-09-28 06:00:00",
+            "end": "2022-10-14 17:59:59",
+            "featured": ["cyno", "venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-10-14 18:00:00",
+            "end": "2022-11-01 14:59:59",
+            "featured": ["nilou", "albedo"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-11-02 06:00:00",
+            "end": "2022-11-18 17:59:59",
+            "featured": ["nahida", "yoimiya"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-11-18 18:00:00",
+            "end": "2022-12-06 14:59:59",
+            "featured": ["yae_miko", "tartaglia"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-12-07 06:00:00",
+            "end": "2022-12-27 17:59:59",
+            "featured": ["wanderer", "arataki_itto"]
+        },
+        {
+            "kind": "character",
+            "start": "2022-12-27 18:00:00",
+            "end": "2023-01-17 14:59:59",
+            "featured": ["raiden_shogun", "kamisato_ayato"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-01-18 06:00:00",
+            "end": "2023-02-07 17:59:59",
+            "featured": ["alhaitham", "xiao"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-02-07 18:00:00",
+            "end": "2023-02-28 14:59:59",
+            "featured": ["hu_tao", "yelan"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-03-01 06:00:00",
+            "end": "2023-03-21 17:59:59",
+            "featured": ["dehya", "cyno"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-03-21 18:00:00",
+            "end": "2023-04-11 14:59:59",
+            "featured": ["shenhe", "kamisato_ayaka"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-04-12 06:00:00",
+            "end": "2023-05-02 17:59:59",
+            "featured": ["nahida", "nilou"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-05-02 18:00:00",
+            "end": "2023-05-23 14:59:59",
+            "featured": ["baizhu", "ganyu"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-05-24 06:00:00",
+            "end": "2023-06-13 17:59:59",
+            "featured": ["yoimiya", "yae_miko"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-06-13 18:00:00",
+            "end": "2023-07-04 14:59:59",
+            "featured": ["alhaitham", "kaedehara_kazuha"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-07-05 06:00:00",
+            "end": "2023-07-25 17:59:59",
+            "featured": ["eula", "klee"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-07-25 18:00:00",
+            "end": "2023-08-15 17:59:59",
+            "featured": ["sangonomiya_kokomi", "wanderer"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-08-16 06:00:00",
+            "end": "2023-09-05 17:59:59",
+            "featured": ["lyney", "yelan"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-09-05 18:00:00",
+            "end": "2023-09-26 14:59:59",
+            "featured": ["tartaglia", "zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-09-27 06:00:00",
+            "end": "2023-10-17 17:59:59",
+            "featured": ["neuvillette", "hu_tao"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-10-17 18:00:00",
+            "end": "2023-11-07 14:59:59",
+            "featured": ["wriothesley", "venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-11-08 06:00:00",
+            "end": "2023-11-28 17:59:59",
+            "featured": ["furina", "baizhu"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-11-28 18:00:00",
+            "end": "2023-12-19 14:59:59",
+            "featured": ["cyno", "kamisato_ayato"]
+        },
+        {
+            "kind": "character",
+            "start": "2023-12-20 06:00:00",
+            "end": "2024-01-09 17:59:59",
+            "featured": ["navia", "kamisato_ayaka"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-01-09 18:00:00",
+            "end": "2024-01-30 14:59:00",
+            "featured": ["raiden_shogun", "yoimiya"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-01-31 06:00:00",
+            "end": "2024-02-20 17:59:00",
+            "featured": ["xianyun", "nahida"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-02-20 18:00:00",
+            "end": "2024-03-12 14:59:00",
+            "featured": ["xiao", "yae_miko"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-03-13 06:00:00",
+            "end": "2024-04-02 17:59:00",
+            "featured": ["chiori", "arataki_itto"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-04-02 18:00:00",
+            "end": "2024-04-23 14:59:00",
+            "featured": ["neuvillette", "kaedehara_kazuha"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-04-24 06:00:00",
+            "end": "2024-05-14 17:59:00",
+            "featured": ["arlecchino", "lyney"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-05-14 18:00:00",
+            "end": "2024-06-04 14:59:00",
+            "featured": ["wanderer", "baizhu"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-06-05 06:00:00",
+            "end": "2024-06-25 17:59:00",
+            "featured": ["clorinde", "alhaitham"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-06-25 18:00:00",
+            "end": "2024-07-16 14:59:00",
+            "featured": ["sigewinne", "furina"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-07-17 06:00:00",
+            "end": "2024-08-06 17:59:00",
+            "featured": ["navia", "nilou"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-08-06 18:00:00",
+            "end": "2024-08-27 14:59:00",
+            "featured": ["emilie", "yelan"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-08-28 06:00:00",
+            "end": "2024-09-17 17:59:00",
+            "featured": ["mualani", "kaedehara_kazuha"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-09-17 18:00:00",
+            "end": "2024-10-08 14:59:00",
+            "featured": ["kinich", "raiden_shogun"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-10-09 06:00:00",
+            "end": "2024-10-29 17:59:00",
+            "featured": ["xilonen", "chiori"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-10-29 18:00:00",
+            "end": "2024-11-19 14:59:00",
+            "featured": ["nahida", "hu_tao"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-11-20 06:00:00",
+            "end": "2024-12-10 17:59:00",
+            "featured": ["chasca", "lyney"]
+        },
+        {
+            "kind": "character",
+            "start": "2024-12-10 18:00:00",
+            "end": "2024-12-31 14:59:00",
+            "featured": ["neuvillette", "zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-01-01 06:00:00",
+            "end": "2025-01-21 17:59:00",
+            "featured": ["mavuika", "citlali"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-01-21 18:00:00",
+            "end": "2025-02-11 14:59:00",
+            "featured": ["arlecchino", "clorinde"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-02-12 06:00:00",
+            "end": "2025-03-04 17:59:00",
+            "featured": ["yumemizuki_mizuki", "sigewinne"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-03-04 18:00:00",
+            "end": "2025-03-25 14:59:00",
+            "featured": ["wriothesley", "furina"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-03-26 06:00:00",
+            "end": "2025-04-15 17:59:00",
+            "featured": ["varesa", "xianyun"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-04-15 18:00:00",
+            "end": "2025-05-06 14:59:00",
+            "featured": ["xilonen", "venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-05-07 06:00:00",
+            "end": "2025-05-27 17:59:00",
+            "featured": ["escoffier", "navia"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-05-27 18:00:00",
+            "end": "2025-06-17 14:59:00",
+            "featured": ["kinich", "raiden_shogun"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-06-18 06:00:00",
+            "end": "2025-07-08 17:59:00",
+            "featured": ["skirk", "shenhe"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-07-08 18:00:00",
+            "end": "2025-07-29 14:59:00",
+            "featured": ["mavuika", "emilie"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-07-30 06:00:00",
+            "end": "2025-08-19 17:59:00",
+            "featured": ["ineffa", "citlali"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-08-19 18:00:00",
+            "end": "2025-09-09 14:59:00",
+            "featured": ["mualani", "chasca"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-09-10 06:00:00",
+            "end": "2025-09-30 17:59:00",
+            "featured": ["lauma", "nahida"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-09-30 18:00:00",
+            "end": "2025-10-21 17:59:00",
+            "featured": ["flins", "yelan"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-10-22 06:00:00",
+            "end": "2025-11-11 17:59:00",
+            "featured": ["nefer", "furina"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-11-11 18:00:00",
+            "end": "2025-12-02 14:59:00",
+            "featured": ["arlecchino", "zhongli"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-12-03 06:00:00",
+            "end": "2025-12-23 17:59:00",
+            "featured": ["durin", "venti"]
+        },
+        {
+            "kind": "character",
+            "start": "2025-12-23 18:00:00",
+            "end": "2026-01-13 14:59:00",
+            "featured": ["varesa", "xilonen"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-01-14 06:00:00",
+            "end": "2026-02-03 17:59:00",
+            "featured": ["columbina", "ineffa"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-02-03 18:00:00",
+            "end": "2026-02-24 14:59:00",
+            "featured": ["zibai", "neuvillette"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-02-25 06:00:00",
+            "end": "2026-03-17 17:59:00",
+            "featured": ["varka", "flins"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-03-17 18:00:00",
+            "end": "2026-04-07 14:59:00",
+            "featured": ["skirk", "escoffier"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-04-08 06:00:00",
+            "end": "2026-04-28 17:59:00",
+            "featured": ["linnea", "chasca"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-04-28 18:00:00",
+            "end": "2026-05-19 14:59:00",
+            "featured": ["lauma", "nefer"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-05-20 06:00:00",
+            "end": "2026-06-09 17:59:00",
+            "featured": ["nicole", "durin"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-06-09 18:00:00",
+            "end": "2026-06-30 14:59:00",
+            "featured": ["lohen", "mavuika"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-07-01 06:00:00",
+            "end": "2026-07-21 17:59:00",
+            "featured": ["sandrone", "citlali"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-07-21 18:00:00",
+            "end": "2026-08-11 14:59:00",
+            "featured": ["columbina", "raiden_shogun"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-08-12 06:00:00",
+            "end": "2026-09-01 17:59:00",
+            "featured": ["odette", "arlecchino"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-09-01 18:00:00",
+            "end": "2026-09-22 14:59:00",
+            "featured": ["flins", "ineffa"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-09-23 06:00:00",
+            "end": "2026-10-13 17:59:59",
+            "featured": ["vesna", "vodyanitsa"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-10-13 18:00:00",
+            "end": "2026-11-03 14:59:59",
+            "featured": ["skirk", "escoffier"]
+        },
+        {
+            "kind": "character",
+            "start": "2026-11-04 06:00:00",
+            "end": "2026-11-24 17:59:59",
+            "featured": ["mitya", "furina"]
+        }
+    ]
+}

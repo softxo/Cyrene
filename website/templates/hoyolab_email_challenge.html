@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}HoYoLAB Email Verification · Cyrene{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/build/css/verification.css?v=18" />
+<div class="page verification-page">
+    <section class="verification-panel" id="email-panel">
+        <h1>Check your HoYoLAB email</h1>
+        <p class="verification-description">
+            Enter the six-digit code HoYoLAB sent to your account email to finish connecting your
+            account.
+        </p>
+        <form
+            id="email-verification"
+            class="hoyolab-email-form"
+            data-submission-url="{{ submission_url }}"
+            data-link-token="{{ link_token }}"
+        >
+            <label for="email-code">Verification code</label>
+            <input
+                class="cyrene-input"
+                id="email-code"
+                name="code"
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                pattern="[0-9]{6}"
+                minlength="6"
+                maxlength="6"
+                aria-describedby="verification-result"
+                required
+                autofocus
+            />
+            <button class="cyrene-button" type="submit">Verify code</button>
+        </form>
+        <p
+            id="verification-result"
+            class="verification-status"
+            role="status"
+            aria-live="polite"
+        ></p>
+        <div class="verification-success" role="status" aria-hidden="true">
+            <div class="verified-icon" aria-hidden="true">
+                <span class="verified-corner top-left"></span>
+                <span class="verified-corner top-right"></span>
+                <span class="verified-corner bottom-left"></span>
+                <span class="verified-corner bottom-right"></span>
+                <span class="verified-scan-line"></span>
+                <svg class="verified-check" viewBox="0 0 24 24" focusable="false">
+                    <use href="/static/images/ui/check.svg#check"></use>
+                </svg>
+            </div>
+            <h2>Verified</h2>
+            <p>Returning to your accounts…</p>
+        </div>
+    </section>
+</div>
+<script>
+    const form = document.getElementById("email-verification");
+    const status = document.getElementById("verification-result");
+    const input = document.getElementById("email-code");
+    const button = form.querySelector("button");
+    const token = form.dataset.linkToken;
+    let busy = false;
+    let verified = false;
+
+    async function request(url, options) {
+        const response = await fetch(url, options);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok)
+            throw new Error(data.detail || "The request could not be completed. Please try again.");
+        return data;
+    }
+
+    async function finishLogin() {
+        if (!token) return { heading: "Email verified", next: "/settings" };
+        for (let attempt = 0; attempt < 120; attempt++) {
+            const data = await request(
+                `/api/hoyolab/link/status?token=${encodeURIComponent(token)}`,
+            );
+            if (data.status === "error") throw new Error(data.error);
+            if (data.status === "complete") return { heading: "Account linked", next: "/settings" };
+            if (data.status === "select") {
+                if (data.accounts.length === 1) {
+                    const saved = await request("/api/hoyolab/link/complete", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token, uid: data.accounts[0].game_uid }),
+                    });
+                    return {
+                        heading: saved.reconnected ? "Account reconnected" : "Account linked",
+                        next: "/settings",
+                    };
+                }
+                return {
+                    heading: "Login verified",
+                    next: `/settings?link_attempt=${encodeURIComponent(token)}`,
+                };
+            }
+            if (
+                data.status === "captcha" &&
+                data.challenge_url &&
+                new URL(data.challenge_url, location.origin).pathname !== location.pathname
+            ) {
+                location.replace(data.challenge_url);
+                return null;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+        throw new Error("Login is taking longer than expected. Return to Accounts to continue.");
+    }
+
+    async function submitCode() {
+        if (busy || (!verified && !/^[0-9]{6}$/.test(input.value))) return;
+        busy = true;
+        button.disabled = true;
+        input.readOnly = true;
+        input.removeAttribute("aria-invalid");
+        status.classList.remove("error");
+        status.textContent = verified ? "Finishing account login…" : "Checking verification code…";
+        try {
+            if (!verified) {
+                await request(form.dataset.submissionUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code: input.value }),
+                });
+                verified = true;
+            }
+            status.textContent = "Finishing account login…";
+            const result = await finishLogin();
+            if (!result) return;
+            form.reset();
+            form.hidden = true;
+            const panel = document.getElementById("email-panel");
+            panel.querySelector(".verification-success h2").textContent = result.heading;
+            panel.querySelector(".verification-success").setAttribute("aria-hidden", "false");
+            panel.classList.add("is-verified");
+            window.setTimeout(() => location.replace(result.next), 2200);
+        } catch (error) {
+            status.textContent = error.message;
+            status.classList.add("error");
+            if (!verified) {
+                input.readOnly = false;
+                input.setAttribute("aria-invalid", "true");
+                input.focus();
+                input.select();
+            }
+            button.disabled = false;
+            button.textContent = verified ? "Continue login" : "Verify code";
+        } finally {
+            busy = false;
+        }
+    }
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/[^0-9]/g, "").slice(0, 6);
+        input.removeAttribute("aria-invalid");
+        if (input.value.length === 6) void submitCode();
+    });
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        void submitCode();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("gift-codes") }}
+<p>
+    <a href="/codes">Codes</a> lists the gift codes that are currently active. Choose an account and
+    claim a code with one press, without copying it into the game.
+</p>
+<p>
+    Turn on <strong>Automatic Claiming</strong> and Cyrene checks for new codes and tries to redeem
+    them for that account. It is off by default and set per account, so turn it on for each account
+    you want.
+</p>
+
+{{ topic("daily-check-in") }}
+<p>
+    The HoYoLAB daily check-in gives free rewards each day. Turn on
+    <strong>Daily Check-In</strong> on the Codes page and Cyrene claims it for you automatically.
+</p>
+
+{{ topic("reminders") }}
+<p>
+    Reminders send you a message in Discord when something in game is ready. Set them up on the
+    <a href="/reminders">Reminders</a> page with <strong>Add Reminder</strong>, with
+    <code>/reminders</code> in Discord, or with the buttons under <code>/resin</code>.
+</p>
+<div class="docs-table-wrap">
+    <table class="docs-table">
+        <thead>
+            <tr>
+                <th>Reminder</th>
+                <th>Tells you when</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Resin</td>
+                <td>Your Resin reaches the amount you choose, from 1 to 200.</td>
+            </tr>
+            <tr>
+                <td>Expeditions</td>
+                <td>One of your Expeditions finishes.</td>
+            </tr>
+            <tr>
+                <td>Serenitea Pot</td>
+                <td>Your Realm Currency is ready to collect.</td>
+            </tr>
+            <tr>
+                <td>Parametric Transformer</td>
+                <td>The Parametric Transformer is ready to use again.</td>
+            </tr>
+            <tr>
+                <td>Custom</td>
+                <td>At a time you set yourself.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% call callout("Reminders belong to the Genshin account") %}
+Reminders are shared per Genshin account. Notifications go to every Discord account currently linked
+to it.
+{% endcall %}
+
+{{ topic("reminder-modes") }}
+<div class="docs-split">
+    <div class="docs-panel">
+        <h3>Manual</h3>
+        <p>
+            Fires once, then switches itself off. Good for a one-off, such as Resin before a domain
+            run. Set it again whenever you need it.
+        </p>
+    </div>
+    <div class="docs-panel">
+        <h3>Automatic</h3>
+        <p>
+            Stays on. After it fires, it re-arms and fires again the next time the condition is met.
+            Good for “always tell me when my Resin is nearly full”.
+        </p>
+    </div>
+</div>
+{% endblock %}

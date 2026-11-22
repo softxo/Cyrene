@@ -1,0 +1,87 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("roster") }}
+<p>
+    <a href="/characters">Characters</a> shows every character on your linked account, synced from
+    HoYoLAB. Filter by element, weapon type and rarity, sort by level, or search by name. Select a
+    character to open their showcase: stats, equipped weapon, artifacts, talents and constellations.
+</p>
+
+{% call callout("Characters missing or empty?", "tip") %}
+Make sure your character details are visible in your Genshin Impact Battle Chronicle on HoYoLAB.
+{% endcall %}
+
+{{ topic("planner") }}
+<p>
+    The planner works out exactly what a character needs. Add any character, including ones you
+    don't own yet, then set goals for:
+</p>
+<ul class="docs-list">
+    <li>their level,</li>
+    <li>each talent,</li>
+    <li>and the weapon you plan to give them.</li>
+</ul>
+<p>
+    Cyrene totals every material and the Mora required for those goals. Select a goal to see its
+    materials. In Discord, <code>/character-resources</code> and <code>/materials</code> give quick
+    answers for a single character.
+</p>
+
+{{ topic("weapons") }}
+<p><a href="/weapons">Weapons</a> has three views:</p>
+<ul class="docs-list">
+    <li>
+        <strong>Catalogue</strong> lists every weapon in the game, with filters for type and rarity.
+    </li>
+    <li><strong>Owned</strong> lists the weapons on your account.</li>
+    <li><strong>Planner</strong> plans weapon levels and totals the materials.</li>
+</ul>
+<p>
+    HoYoLAB only shares weapons that are <em>equipped</em> on a character. To include the rest, add
+    an unequipped copy by hand with <strong>Add to Owned</strong>, or import your whole inventory
+    with the scanner below.
+</p>
+
+{{ topic("weapon-scanner") }}
+<p>The Cyrene Scanner is a Windows app that reads your weapon inventory from the game.</p>
+<ol class="docs-steps">
+    <li>
+        <h3>Download the scanner</h3>
+        <p>
+            Get the latest Cyrene Scanner from
+            <a href="https://github.com/softxo/Cyrene/releases" target="_blank" rel="noopener"
+                >Cyrene Releases on GitHub</a
+            >
+            and extract it.
+        </p>
+    </li>
+    <li>
+        <h3>Prepare the game</h3>
+        <p>
+            Open Genshin Impact on Windows in English, in windowed mode, with HDR turned off. Go to
+            Inventory → Weapons and clear any filters.
+        </p>
+    </li>
+    <li>
+        <h3>Run the scan</h3>
+        <p>
+            Choose Weapon Scanner and enter your weapon count. Your UID fills in automatically when
+            Cyrene detects it, and <strong>Auto-calibrate</strong> sets up the grid and details
+            panel for you. Then start the scan, check the results and save the export.
+        </p>
+    </li>
+    <li>
+        <h3>Import it</h3>
+        <p>
+            On the Weapons page, press <strong>Import</strong>, select the matching account and
+            choose the exported JSON file (up to 4 MB).
+        </p>
+    </li>
+</ol>
+<p>
+    A new import replaces the previous scan for that account. Weapons you added by hand are kept
+    separately, and equipped weapons are matched with HoYoLAB so they only appear once.
+</p>
+{% endblock %}

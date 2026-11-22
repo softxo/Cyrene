@@ -1,0 +1,42 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("wishes") }}
+<p>
+    <a href="/wishes">Wishes</a> shows your full wish history across the Character Event, Weapon
+    Event, Standard and Chronicled Wish banners, with stats for each one. Switch between grid and
+    list views, and filter by rarity.
+</p>
+<p>
+    To import your history, use the Cyrene Scanner's Wish Scanner to copy your wish history URL,
+    then press
+    <strong>Import</strong> and paste it.
+</p>
+{% call callout("Is the URL safe to paste?") %}
+The URL contains a temporary key. Cyrene uses it once to import your history and never stores it.
+{% endcall %}
+
+{{ topic("achievements") }}
+<p>
+    <a href="/achievements">Achievements</a> lists every achievement by category, with your
+    progress. Filter by version, add your own notes to any achievement, and press
+    <strong>Import</strong> to load your progress from an exported JSON file.
+</p>
+
+{{ topic("exploration") }}
+<p>
+    <a href="/exploration">Exploration</a> shows your exploration progress for each region, straight
+    from HoYoLAB. Switch between grid and list views, or expand everything at once.
+</p>
+
+{{ topic("inventory") }}
+<p>
+    <a href="/inventory">Inventory</a> lists your development materials, synced from HoYoLAB. The
+    page loads straight away and fills in as the sync finishes.
+</p>
+{% call callout("Why are some items missing?") %}
+HoYoLAB only shares development materials. Artifacts, food, gadgets, quest items and a few
+materials, such as Dream Solvent and Adventurer's Experience, aren't included.
+{% endcall %}
+{% endblock %}

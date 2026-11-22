@@ -1,0 +1,246 @@
+{
+    "sources": [
+        "https://gi.gachabase.net/weapons/14525/starsealed-edict/release?lang=en",
+        "https://www.hoyolab.com/article/47230963"
+    ],
+    "weapons": {
+        "Starsealed Edict": {
+            "id": 14525,
+            "name": "Starsealed Edict",
+            "rarity": 5,
+            "costs": {
+                "ascend1": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 10000
+                    },
+                    {
+                        "id": 114093,
+                        "name": "The Frost Emperor's Revival",
+                        "count": 5
+                    },
+                    {
+                        "id": 112158,
+                        "name": "Snowborn Heartshard",
+                        "count": 5
+                    },
+                    {
+                        "id": 112146,
+                        "name": "Ethereal Glimmershard",
+                        "count": 3
+                    }
+                ],
+                "ascend2": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 20000
+                    },
+                    {
+                        "id": 114094,
+                        "name": "The Frost Emperor's Ceremony",
+                        "count": 5
+                    },
+                    {
+                        "id": 112158,
+                        "name": "Snowborn Heartshard",
+                        "count": 18
+                    },
+                    {
+                        "id": 112146,
+                        "name": "Ethereal Glimmershard",
+                        "count": 12
+                    }
+                ],
+                "ascend3": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 30000
+                    },
+                    {
+                        "id": 114094,
+                        "name": "The Frost Emperor's Ceremony",
+                        "count": 9
+                    },
+                    {
+                        "id": 112159,
+                        "name": "Snowborn Mirrorheart",
+                        "count": 9
+                    },
+                    {
+                        "id": 112147,
+                        "name": "Ethereal Crystal",
+                        "count": 9
+                    }
+                ],
+                "ascend4": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 45000
+                    },
+                    {
+                        "id": 114095,
+                        "name": "The Frost Emperor's Lament",
+                        "count": 5
+                    },
+                    {
+                        "id": 112159,
+                        "name": "Snowborn Mirrorheart",
+                        "count": 18
+                    },
+                    {
+                        "id": 112147,
+                        "name": "Ethereal Crystal",
+                        "count": 14
+                    }
+                ],
+                "ascend5": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 55000
+                    },
+                    {
+                        "id": 114095,
+                        "name": "The Frost Emperor's Lament",
+                        "count": 9
+                    },
+                    {
+                        "id": 112160,
+                        "name": "Snowborn Heart of Ignorance",
+                        "count": 14
+                    },
+                    {
+                        "id": 112148,
+                        "name": "Ethereal Crystalscale Stone",
+                        "count": 9
+                    }
+                ],
+                "ascend6": [
+                    {
+                        "id": 202,
+                        "name": "Mora",
+                        "count": 65000
+                    },
+                    {
+                        "id": 114096,
+                        "name": "The Frost Emperor's Farewell",
+                        "count": 6
+                    },
+                    {
+                        "id": 112160,
+                        "name": "Snowborn Heart of Ignorance",
+                        "count": 27
+                    },
+                    {
+                        "id": 112148,
+                        "name": "Ethereal Crystalscale Stone",
+                        "count": 18
+                    }
+                ]
+            },
+            "preview": true
+        }
+    },
+    "materials": {
+        "Mora": {
+            "id": 202,
+            "name": "Mora",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_202"
+            }
+        },
+        "Ethereal Glimmershard": {
+            "id": 112146,
+            "name": "Ethereal Glimmershard",
+            "rarity": 1,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/eeb965b8226c1e6d4274c823f3cb24bf.png"
+            }
+        },
+        "Ethereal Crystal": {
+            "id": 112147,
+            "name": "Ethereal Crystal",
+            "rarity": 2,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/11dad6737ed7ac31bace42910e854364.png"
+            }
+        },
+        "Ethereal Crystalscale Stone": {
+            "id": 112148,
+            "name": "Ethereal Crystalscale Stone",
+            "rarity": 3,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/93d0fa367b641705a2c79aa74cd5d500.png"
+            }
+        },
+        "Snowborn Heartshard": {
+            "id": 112158,
+            "name": "Snowborn Heartshard",
+            "rarity": 2,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/145020e56b2b17d9dad1a81f1d22ff46.png"
+            }
+        },
+        "Snowborn Mirrorheart": {
+            "id": 112159,
+            "name": "Snowborn Mirrorheart",
+            "rarity": 3,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/101a0a0422560be8712ff520f470e3a0.png"
+            }
+        },
+        "Snowborn Heart of Ignorance": {
+            "id": 112160,
+            "name": "Snowborn Heart of Ignorance",
+            "rarity": 4,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/11115081511a8d00987d9fff488e29be.png"
+            }
+        },
+        "The Frost Emperor's Revival": {
+            "id": 114093,
+            "name": "The Frost Emperor's Revival",
+            "rarity": 2,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/8991599d2c01e2422d659aa1b038c98b.png"
+            }
+        },
+        "The Frost Emperor's Ceremony": {
+            "id": 114094,
+            "name": "The Frost Emperor's Ceremony",
+            "rarity": 3,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/b5a527adb1e3b9609c0c4b63f9e7717c.png"
+            }
+        },
+        "The Frost Emperor's Lament": {
+            "id": 114095,
+            "name": "The Frost Emperor's Lament",
+            "rarity": 4,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/0167def4c114b1b54eb18768e36c4c19.png"
+            }
+        },
+        "The Frost Emperor's Farewell": {
+            "id": 114096,
+            "name": "The Frost Emperor's Farewell",
+            "rarity": 5,
+            "images": {
+                "icon": "https://cdn.gachabase.net/gi/assets/a26bbd436f1617a4678da947bc663bb0.png"
+            }
+        },
+        "Mystic Enhancement Ore": {
+            "id": 104013,
+            "name": "Mystic Enhancement Ore",
+            "rarity": 3,
+            "images": {
+                "filename_icon": "UI_ItemIcon_104013"
+            }
+        }
+    }
+}

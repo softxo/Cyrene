@@ -1,0 +1,74 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+{{ topic("layout") }}
+<p>
+    Every page lives in the sidebar on the left. On a phone, open it with the menu button at the
+    top. The main pages sit at the top of the sidebar, and help, account connection and settings sit
+    at the bottom.
+</p>
+<p>
+    Pages that show your own data need a connected Discord account and a linked Genshin account. If
+    something is missing, the page tells you what to connect first. See
+    <a href="/docs/accounts">Connecting your accounts</a>.
+</p>
+
+{{ topic("pages") }}
+<div class="docs-cards docs-cards-compact">
+    <a class="docs-card" href="/docs/characters-weapons#roster">
+        <h3>Characters</h3>
+        <p>Your roster with builds, talents and constellations, plus a materials planner.</p>
+    </a>
+    <a class="docs-card" href="/docs/characters-weapons#weapons">
+        <h3>Weapons</h3>
+        <p>The full weapon catalogue, your owned weapons and a weapon planner.</p>
+    </a>
+    <a class="docs-card" href="/docs/progress#inventory">
+        <h3>Inventory</h3>
+        <p>Your development materials, synced from HoYoLAB.</p>
+    </a>
+    <a class="docs-card" href="/docs/codes-reminders#reminders">
+        <h3>Reminders</h3>
+        <p>Resin, Expedition, Serenitea Pot, Parametric Transformer and custom reminders.</p>
+    </a>
+    <a class="docs-card" href="/docs/events">
+        <h3>Events</h3>
+        <p>Limited and permanent events, endgame modes, banners and your own events.</p>
+    </a>
+    <a class="docs-card" href="/docs/progress#achievements">
+        <h3>Achievements</h3>
+        <p>Every achievement by category, with your progress and notes.</p>
+    </a>
+    <a class="docs-card" href="/docs/progress#wishes">
+        <h3>Wishes</h3>
+        <p>Import and browse your wish history, with stats for each banner.</p>
+    </a>
+    <a class="docs-card" href="/docs/progress#exploration">
+        <h3>Exploration</h3>
+        <p>Exploration progress for each region.</p>
+    </a>
+    <a class="docs-card" href="/docs/codes-reminders#gift-codes">
+        <h3>Codes</h3>
+        <p>Redeem gift codes, claim new ones automatically and manage daily check-in.</p>
+    </a>
+</div>
+
+{{ topic("account-switching") }}
+<p>
+    If you have linked more than one Genshin account, pages that show account data have an account
+    picker near the top. Switching it changes which account the page shows. Most settings, such as
+    automatic code claiming and reminders, are saved per account.
+</p>
+
+{{ topic("settings") }}
+<p><a href="/settings">Settings</a> has three areas:</p>
+<ul class="docs-list">
+    <li><strong>Appearance</strong> changes the colour palette used across the site.</li>
+    <li>
+        <strong>Interface</strong> turns the hover effects on or off, and can show announced but
+        unreleased characters. Material data for unreleased content may be incomplete.
+    </li>
+    <li><strong>HoYoLAB Accounts</strong> adds, renames and removes linked accounts.</li>
+</ul>
+{% endblock %}

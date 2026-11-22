@@ -1,0 +1,26 @@
+<div
+    class="terms-gate"
+    data-terms-gate="{{ terms_version }}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="terms-gate-title"
+    aria-describedby="terms-gate-description"
+>
+    <section class="terms-gate-panel">
+        <img class="terms-gate-logo" src="/static/images/ui/ui_icons/Cyrene-small.webp" alt="" />
+        <h2 id="terms-gate-title">Welcome to Cyrene</h2>
+        <p id="terms-gate-description">
+            Before you continue, please read and accept the
+            <a href="/docs/terms" target="_blank" rel="noopener">Terms of Service</a>. The
+            <a href="/docs/privacy" target="_blank" rel="noopener">Privacy Policy</a> explains what
+            Cyrene stores and how to delete it.
+        </p>
+        <p class="terms-gate-declined" data-terms-declined role="status" aria-live="polite"></p>
+        <div class="terms-gate-actions">
+            <button type="button" class="cyrene-button" data-terms-decline>Decline</button>
+            <button type="button" class="cyrene-button terms-gate-accept" data-terms-accept>
+                Accept
+            </button>
+        </div>
+    </section>
+</div>

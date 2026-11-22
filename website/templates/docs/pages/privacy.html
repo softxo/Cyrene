@@ -1,0 +1,190 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+<p class="docs-updated">
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3" />
+    </svg>
+    <span>Last updated</span>
+    <time datetime="2026-11-14">14 November 2026</time>
+</p>
+<p>
+    This policy explains what the Cyrene website and Discord bot store about you, why, and how you
+    can see or delete it. It is written to meet the EU General Data Protection Regulation (GDPR).
+</p>
+
+{{ topic("who") }}
+<p>
+    Cyrene is an independent, non-commercial fan project. It is not affiliated with or endorsed by
+    HoYoverse, Cognosphere or Discord. The person who runs Cyrene is the data controller for the
+    personal data described here. For any privacy question or request, contact us through the
+    <a href="https://discord.gg/KpkggK4UqB" target="_blank" rel="noopener">Cyrene Discord server</a>
+    or the support panel on this website.
+</p>
+
+{{ topic("collected") }}
+<h3>From Discord</h3>
+<ul class="docs-list">
+    <li>Your Discord user ID, username, display name and avatar.</li>
+    <li>
+        When you sign in with Discord, the access and refresh tokens Discord issues. Cyrene only
+        asks for the <code>identify</code> permission, which does not include your email address.
+    </li>
+    <li>The ID and name of the server where you linked an account.</li>
+</ul>
+<h3>From HoYoLAB</h3>
+<ul class="docs-list">
+    <li>Your HoYoLAB login cookies and tokens, stored encrypted.</li>
+    <li>Your Genshin UID, server region, in-game nickname and Adventure Rank.</li>
+    <li>
+        Game data fetched for your UID, such as Resin, Expeditions, characters, events and
+        exploration progress.
+    </li>
+</ul>
+<h3>Game progress stored by UID</h3>
+<p>
+    Some progress is saved against the Genshin UID rather than your Discord account, so it is kept
+    if you unlink and link the account again: wish history, achievements, character and weapon
+    plans, scanned weapons, event check-offs, import dates, and gift code and daily check-in
+    results.
+</p>
+<h3>What you create</h3>
+<ul class="docs-list">
+    <li>Account nicknames, reminders, custom events and their progress.</li>
+    <li>
+        Support tickets, including messages and attachments. These are also posted to a private
+        Discord thread so the support team can reply.
+    </li>
+</ul>
+<h3>Technical data</h3>
+<ul class="docs-list">
+    <li>
+        Error reports from the bot, which may include your Discord user, server and channel IDs and
+        the command you ran.
+    </li>
+    <li>
+        Standard server logs, such as IP addresses and the pages requested, kept by our hosting
+        provider.
+    </li>
+</ul>
+
+{{ topic("not-collected") }}
+<ul class="docs-list">
+    <li>
+        Your HoYoLAB password. When you sign in with a password, it passes through Cyrene's server
+        to sign in to HoYoLAB and is never stored.
+    </li>
+    <li>
+        Wish History URLs and their auth keys. They are used once to import your history and are
+        never stored.
+    </li>
+</ul>
+
+{{ topic("purposes") }}
+<ul class="docs-list">
+    <li>
+        <strong>Providing Cyrene</strong> (performance of a contract, GDPR Article 6(1)(b)): showing
+        your accounts and game data, sending reminders, claiming gift codes and daily check-ins you
+        turn on, and keeping your plans and progress.
+    </li>
+    <li><strong>Support</strong> (performance of a contract): answering the tickets you open.</li>
+    <li>
+        <strong>Security and reliability</strong> (legitimate interests, Article 6(1)(f)): keeping
+        sign-ins secure, preventing abuse and fixing errors.
+    </li>
+</ul>
+<p>
+    Cyrene does not sell your data, use it for advertising, or make automated decisions about you.
+</p>
+
+{{ topic("sharing") }}
+<ul class="docs-list">
+    <li>
+        <strong>HoYoLAB (HoYoverse):</strong> Cyrene sends your login details to HoYoLAB to sign you
+        in and fetch your game data. HoYoLAB's own privacy policy applies to what it does with them.
+    </li>
+    <li>
+        <strong>Discord:</strong> for signing in, sending bot messages and reminders, and support
+        threads. Discord may process data in the United States.
+    </li>
+    <li><strong>bot-hosting.cloud:</strong> hosts the website, the bot and the database.</li>
+</ul>
+<p>
+    Cyrene does not share your data with anyone else unless the law requires it. Where data leaves
+    the EU, it relies on the safeguards those services provide, such as the EU-US Data Privacy
+    Framework or Standard Contractual Clauses.
+</p>
+
+{{ topic("retention") }}
+<ul class="docs-list">
+    <li>
+        Your data is kept until you delete it, or until you ask us to. Unlinking an account removes
+        its login cookies but keeps the game progress stored for its UID.
+    </li>
+    <li>Website sign-ins expire after 30 days.</li>
+    <li>
+        After you delete your data, copies in backups are removed when those backups are replaced.
+    </li>
+</ul>
+
+{{ topic("cookies") }}
+<p>Cyrene only uses cookies that the site needs to work, so it does not ask for cookie consent:</p>
+<ul class="docs-list">
+    <li><code>cyrene_session</code> keeps you signed in, for 30 days.</li>
+    <li><code>cyrene_discord_oauth</code> protects the Discord sign-in, for 10 minutes.</li>
+    <li><code>cyrene_support</code> links support tickets to your browser, for one year.</li>
+    <li>
+        <code>cyrene_terms</code> remembers that you accepted the Terms of Service, for one year.
+    </li>
+</ul>
+<p>
+    Your browser's local storage also keeps preferences such as your theme, hover effects and
+    collapsed sections. This never leaves your device.
+</p>
+
+{{ topic("rights") }}
+<p>Under the GDPR you have the right to:</p>
+<ul class="docs-list">
+    <li>access the personal data Cyrene holds about you and get a copy of it;</li>
+    <li>have inaccurate data corrected;</li>
+    <li>have your data erased;</li>
+    <li>restrict or object to how your data is used;</li>
+    <li>receive your data in a portable format.</li>
+</ul>
+<p>
+    To use any of these, contact us through the Discord server. We will reply within one month. You
+    can also complain to the data protection authority in the EU country where you live.
+</p>
+
+{{ topic("delete") }}
+<p>
+    Open <a href="/settings">Settings</a> and choose <strong>Delete my data</strong>. This
+    immediately erases:
+</p>
+<ul class="docs-list">
+    <li>every linked account and its login cookies;</li>
+    <li>your reminders, custom events, nicknames, support tickets;</li>
+    <li>your Discord profile, sign-in tokens and website sessions;</li>
+    <li>game progress for each UID that no other Discord user still has linked.</li>
+</ul>
+<p>
+    Your user ID is also removed from error reports. Messages already posted to Discord support
+    threads stay in Discord. Ask on the Discord server if you want those removed too.
+</p>
+
+{{ topic("security") }}
+<p>
+    HoYoLAB login cookies are encrypted before they are stored, sign-in cookies are secure and
+    HTTP-only, and the site only works over HTTPS. Account pages and commands only ever show data
+    for accounts linked to your own Discord account.
+</p>
+
+{{ topic("policy-changes") }}
+<p>
+    If this policy changes, the date at the top will change, and important changes will be announced
+    on the Discord server. Questions are welcome on the
+    <a href="https://discord.gg/KpkggK4UqB" target="_blank" rel="noopener">Cyrene Discord server</a
+    >.
+</p>
+{% endblock %}

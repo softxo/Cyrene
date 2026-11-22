@@ -1,0 +1,115 @@
+{% extends "docs/layout.html" %}
+{% from "docs/macros.html" import topic, callout with context %}
+
+{% block docs_body %}
+<p class="docs-updated">
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3" />
+    </svg>
+    <span>Last updated</span>
+    <time datetime="2026-11-14">14 November 2026</time>
+</p>
+
+{{ topic("agreement") }}
+<p>
+    These terms apply to the Cyrene website, the Cyrene Discord bot and the Cyrene Scanner. By using
+    any of them, you agree to these terms and to the <a href="/docs/privacy">Privacy Policy</a>.
+    Cyrene is a free, independent fan project. It is not affiliated with or endorsed by HoYoverse,
+    Cognosphere or Discord.
+</p>
+<p>
+    The source code is published under its own open-source licence. That licence covers the code;
+    these terms cover the service we run.
+</p>
+
+{{ topic("eligibility") }}
+<p>
+    You must be allowed to use Discord, and old enough to agree to the processing of your data in
+    the EU country where you live, or have a parent or guardian's permission.
+</p>
+
+{{ topic("hoyolab-access") }}
+<ul class="docs-list">
+    <li>Only link HoYoLAB accounts that belong to you.</li>
+    <li>
+        When you link an account, you allow Cyrene to sign in to HoYoLAB for you and read your game
+        data. If you turn on automatic code claiming or daily check-in, Cyrene also performs those
+        actions on your account.
+    </li>
+    <li>
+        You can unlink an account at any time in <a href="/settings">Settings</a> or with
+        <code>/unlink-account</code>. You can also sign out of HoYoLAB everywhere to cancel the
+        login Cyrene holds.
+    </li>
+</ul>
+
+{{ topic("acceptable-use") }}
+<p>Do not:</p>
+<ul class="docs-list">
+    <li>try to reach other users' accounts or data, or get around sign-in or limits;</li>
+    <li>overload, attack or disrupt the website, the bot or the services they rely on;</li>
+</ul>
+<p>We may suspend access for anyone who breaks these rules.</p>
+
+{{ topic("your-content") }}
+<p>
+    You keep ownership of what you create in Cyrene, such as custom events and support messages. You
+    let Cyrene store and show it only as needed to run the service.
+</p>
+
+{{ topic("scanner") }}
+{% call callout("Use the scanner at your own risk", "warning") %}
+The achievement scan uses YaeAchievement, which reads data from the running game. Third-party tools
+that interact with the game client may break HoYoverse's Terms of Service, and HoYoverse could act
+against your game account, up to a ban. Cyrene cannot rule this out. Only use it if you accept that
+risk.
+{% endcall %}
+<p>
+    Only download Cyrene Scanner from
+    <a href="https://github.com/softxo/Cyrene/releases" target="_blank" rel="noopener"
+        >Cyrene Releases on GitHub</a
+    >. Copies from anywhere else may have been changed.
+</p>
+
+{{ topic("third-parties") }}
+<p>
+    Cyrene relies on HoYoLAB and Discord. They can change, limit or stop what Cyrene can do at any
+    time, and their own terms apply to your use of them. Game names, images and data belong to
+    HoYoverse.
+</p>
+
+{{ topic("availability") }}
+<ul class="docs-list">
+    <li>
+        Cyrene is free, and provided as it is. Features may change, and the service may be
+        unavailable or stop entirely.
+    </li>
+    <li>
+        Game data comes from HoYoLAB and other sources and may be out of date or wrong. Check
+        anything important in game.
+    </li>
+    <li>
+        As far as the law allows, we are not responsible for indirect losses, or for actions
+        HoYoverse or Discord take against your accounts.
+    </li>
+    <li>
+        Nothing in these terms limits liability that the law does not allow to be limited, or takes
+        away rights you have as a consumer in the country where you live.
+    </li>
+</ul>
+
+{{ topic("ending") }}
+<p>
+    You can stop using Cyrene at any time. To erase your data, choose
+    <strong>Delete my data</strong> in <a href="/settings">Settings</a>.
+</p>
+
+{{ topic("changes") }}
+<p>
+    We may update these terms. The date at the top will change, and important changes will be
+    announced on the Discord server. If you keep using Cyrene after a change, the new terms apply.
+    Questions are welcome on the
+    <a href="https://discord.gg/KpkggK4UqB" target="_blank" rel="noopener">Cyrene Discord server</a
+    >.
+</p>
+{% endblock %}

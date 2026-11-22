@@ -1,0 +1,18 @@
+{
+    "sources": [
+        "https://www.hoyolab.com/article/47230963",
+        "https://gi.gachabase.net/weapons/14525/starsealed-edict/release"
+    ],
+    "weapons": [
+        {
+            "id": 14525,
+            "name": "Starsealed Edict",
+            "icon": "https://cdn.gachabase.net/gi/assets/ee784be8d4af1e3b6d8be997f8404434.png",
+            "rarity": 5,
+            "type": "Catalyst",
+            "max_level": 90,
+            "release_date": "2026-11-04",
+            "release_version": "7.2"
+        }
+    ]
+}

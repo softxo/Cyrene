@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Support logs | Cyrene{% endblock %}
+
+{% block content %}
+<div class="page support-log-page">
+    <header class="support-log-intro">
+        <p class="support-log-eyebrow">Staff</p>
+        <h1>Support logs</h1>
+        <p>Every finished conversation, newest first. Open one to read the full transcript.</p>
+    </header>
+
+    <nav class="support-scope support-log-filter" aria-label="Filter logs">
+        <a href="/support/logs" aria-current="{{ 'true' if status == 'all' else 'false' }}">All</a>
+        <a href="/support/logs?status=solved" aria-current="{{ 'true' if status == 'solved' else 'false' }}">Solved</a>
+        <a href="/support/logs?status=closed" aria-current="{{ 'true' if status == 'closed' else 'false' }}">Closed</a>
+    </nav>
+
+    {% if tickets %}
+    <ul class="support-log-list">
+        {% for ticket in tickets %}
+        <li>
+            <a class="support-log-row" href="/support/logs/{{ ticket.id }}">
+                <span class="support-log-row-top">
+                    <strong>#{{ ticket.id }} · {{ topics.get(ticket.topic, ticket.topic) }}</strong>
+                    <span class="support-status" data-status="{{ ticket.status }}"
+                        >{{ ticket.status | capitalize }}</span
+                    >
+                    <span class="support-log-row-time">{{ ticket.updated_at.strftime('%d %b %Y, %H:%M') }} UTC</span>
+                </span>
+                <span class="support-log-row-preview">{{ ticket.preview }}</span>
+                <span class="support-log-row-meta">
+                    From {{ ticket.author_name }} · {{ ticket.message_count }} messages · Lasted
+                    {{ ticket.lasted }} · {{ ticket.staff_names or 'No staff replies' }}
+                </span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="support-empty">No finished conversations yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
